@@ -2,6 +2,11 @@
 
 class UserController extends BaseController
 {
+    public function read()
+    {
+        return Response::json(Auth::user());
+    }
+
     public function login()
     {
         $rememberMe = (Input::get('remember_me') === 'true');
@@ -20,7 +25,7 @@ class UserController extends BaseController
 
         if ($validator->passes()) {
             if (Auth::attempt($credentials, $rememberMe)) {
-                return Response::json('You have successfully logged in', 200);
+                return $this->read();
             } else {
                 return Response::json('Email and password don\'t match', 400);
             }

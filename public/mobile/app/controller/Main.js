@@ -27,6 +27,7 @@ Ext.define('Financial.controller.Main', {
             method: 'post',
             success: function () {
                 mainView.setMasked(false);
+                delete Financial.userData;
                 Financial.app.launch();
             },
             failure: function () {

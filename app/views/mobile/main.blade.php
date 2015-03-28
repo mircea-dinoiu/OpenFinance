@@ -6,7 +6,7 @@
 	<style type="text/css">
 		html, body {
 			height: 100%;
-			background-color: #FFF;
+			background-color: #FFF !important;
 		}
 
 		@-webkit-keyframes spin {

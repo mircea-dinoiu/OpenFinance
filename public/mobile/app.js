@@ -46,25 +46,33 @@ Ext.application({
     },
 
     launch: function () {
-        Ext.Viewport.setMasked({
-            xtype: 'loadmask'
-        });
+        var showMainView = function () {
+            Ext.Viewport.removeAll();
+            Ext.Viewport.add(Ext.create('Financial.view.Main'));
+        };
 
-        Ext.Ajax.request({
-            url: Ext.String.format('{0}/get-data', Financial.baseURL),
-            success: function (response) {
-                Financial.data = response.responseText;
+        if (Financial.userData) {
+            showMainView();
+        } else {
+            Ext.Viewport.setMasked({
+                xtype: 'loadmask'
+            });
 
-                Ext.Viewport.setMasked(false);
-                Ext.Viewport.removeAll();
-                Ext.Viewport.add(Ext.create('Financial.view.Main'));
-            },
-            failure: function (response) {
-                Ext.Viewport.setMasked(false);
-                Ext.Viewport.removeAll();
-                Ext.Viewport.add(Ext.create('Financial.view.Login'));
-            }
-        });
+            Ext.Ajax.request({
+                url: Ext.String.format('{0}/user/read', Financial.baseURL),
+                success: function (response) {
+                    Financial.userData = Ext.JSON.decode(response.responseText);
+
+                    Ext.Viewport.setMasked(false);
+                    showMainView();
+                },
+                failure: function (response) {
+                    Ext.Viewport.setMasked(false);
+                    Ext.Viewport.removeAll();
+                    Ext.Viewport.add(Ext.create('Financial.view.Login'));
+                }
+            });
+        }
     },
 
     onUpdated: function () {

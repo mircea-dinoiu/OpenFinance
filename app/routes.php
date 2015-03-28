@@ -13,11 +13,10 @@
 
 Route::get('/', 'HomeController@getIndex');
 
-Route::get('get-data', ['before' => 'auth', 'uses' => 'HomeController@getData']);
-
 Route::group(['prefix' => 'user'], function () {
     Route::post('login', ['before' => 'guest', 'uses' => 'UserController@login']);
     Route::post('logout', ['before' => 'auth', 'uses' => 'UserController@logout']);
+    Route::get('read', ['before' => 'auth', 'uses' => 'UserController@read']);
 });
 
 Route::group(['prefix' => 'currency'], function () {
@@ -28,6 +27,8 @@ Route::group([
     'prefix' => 'expense',
     'before' => 'auth'
 ], function () {
-    Route::get('list', 'ExpenseController@listExpenses');
-    Route::delete('{id}', 'ExpenseController@delete');
+    Route::get('read', 'ExpenseController@read');
+    Route::delete('delete/{id}', 'ExpenseController@delete');
+    Route::put('update/{id}', 'ExpenseController@update');
+    Route::post('create/{id}', 'ExpenseController@create');
 });

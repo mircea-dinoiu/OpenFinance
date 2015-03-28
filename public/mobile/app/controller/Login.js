@@ -39,13 +39,15 @@ Ext.define('Financial.controller.Login', {
 
         if (true === validationResult) {
             loginView.setMasked({
-                xtype: 'loadmask'
+                xtype: 'loadmask',
+                message: 'Logging in...'
             });
 
             Ext.Ajax.request({
                 url: Ext.String.format('{0}/user/login', Financial.baseURL),
                 params: loginView.getValues(),
-                success: function () {
+                success: function (response) {
+                    Financial.userData = Ext.JSON.decode(response.responseText);
                     loginView.setMasked(false);
                     Financial.app.launch();
                 },
