@@ -14,9 +14,15 @@
 Route::get('/', 'HomeController@getIndex');
 
 Route::group(['prefix' => 'user'], function () {
-    Route::post('login', ['before' => 'guest', 'uses' => 'UserController@login']);
-    Route::post('logout', ['before' => 'auth', 'uses' => 'UserController@logout']);
-    Route::get('read', ['before' => 'auth', 'uses' => 'UserController@read']);
+    Route::group(['before' => 'guest'], function () {
+        Route::post('login', 'UserController@login');
+    });
+
+    Route::group(['before' => 'auth'], function () {
+        Route::post('logout', 'UserController@logout');
+        Route::get('read', 'UserController@read');
+    });
+
 });
 
 Route::group(['prefix' => 'currency'], function () {
