@@ -1,6 +1,6 @@
-/bootstrap/compiled.php
-/vendor
-/app/config/*/*
+bootstrap/compiled.php
+vendor
+app/config/*/*
 .idea
 composer.phar
 composer.lock
@@ -8,4 +8,4 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
-/public/mobile/build
+public/mobile/build
