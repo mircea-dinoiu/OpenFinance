@@ -2,7 +2,7 @@
 
 class ExpenseController extends BaseController
 {
-    public function listExpenses() {
-
+    public function read() {
+        return Response::json(Expense::orderBy('created_at', 'desc')->get());
     }
 }

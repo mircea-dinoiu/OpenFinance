@@ -2,14 +2,6 @@
 
 class HomeController extends BaseController
 {
-    private function isSupported($detect)
-    {
-        return (
-            ($detect->is('iOS') && (float)$detect->version('iOS') >= 7) ||
-            $detect->is('AndroidOS')
-        );
-    }
-
     public function getData()
     {
         $data = [];
@@ -25,10 +17,8 @@ class HomeController extends BaseController
 
     public function getIndex()
     {
-        $detect = new \Detection\MobileDetect();
-
-        if ($this->isSupported($detect)) {
-            if ($detect->isMobile()) {
+        if (PlatformController::isSupported()) {
+            if (PlatformController::isMobile()) {
                 return $this->getMobileIndex();
             } else {
                 return $this->getDesktopIndex();
@@ -45,6 +35,10 @@ class HomeController extends BaseController
 
     public function getDesktopIndex()
     {
-        return View::make('desktop.main');
+        if (!Auth::check()) {
+            return Redirect::to('user/login');
+        } else {
+            return $this->layout->with('content', 'Nothing bitch');
+        }
     }
 }
