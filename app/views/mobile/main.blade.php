@@ -4,11 +4,6 @@
 	<meta charset="UTF-8">
 	<title>Financial</title>
 	<style type="text/css">
-		html, body {
-			height: 100%;
-			background-color: #FFF !important;
-		}
-
 		@-webkit-keyframes spin {
 			from {
 				-webkit-transform: rotate(0deg);
@@ -71,6 +66,13 @@
 
 		#appLoadingIndicator {
 			position: absolute;
+			height: 100%;
+			width: 100%;
+			background-color: #FFF;
+		}
+
+		#appLoadingIndicator .spinner {
+			position: absolute;
 			background: #EEE;
 			width: 100px;
 			height: 100px;
@@ -96,6 +98,8 @@
 	<script id="microloader" type="text/javascript" src="{{ URL('mobile/.sencha/app/microloader/development.js') }}"></script>
 </head>
 <body>
-<div id="appLoadingIndicator"></div>
+<div id="appLoadingIndicator">
+    <div class="spinner"></div>
+</div>
 </body>
 </html>

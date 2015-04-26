@@ -36,7 +36,11 @@ Route::filter('auth', function () {
         if (Request::ajax()) {
             return Response::make('Unauthorized', 401);
         } else {
-            return Redirect::guest('/');
+            if (PlatformController::isDesktop()) {
+                return Redirect::guest('user/login');
+            } else {
+                return Redirect::guest('/');
+            }
         }
     }
 });
