@@ -32,7 +32,7 @@ class CreateCurrenciesTable extends Migration {
 	{
 		Schema::table('currencies', function(Blueprint $table)
 		{
-			$table->drop();
+			$table->dropIfExists();
 		});
 	}
 

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExpensesTable extends Migration {
+class AddCategoryIdColumnToExpensesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -14,13 +14,8 @@ class CreateExpensesTable extends Migration {
 	{
 		Schema::table('expenses', function(Blueprint $table)
 		{
-			$table->create();
-
-			$table->increments('id');
-			$table->float('sum');
-			$table->text('item');
-			$table->timestamps();
-			$table->enum('status', ['finished', 'pending']);
+			$table->integer('category_id')->unsigned();
+			$table->foreign('category_id')->references('id')->on('categories');
 		});
 	}
 
@@ -33,7 +28,7 @@ class CreateExpensesTable extends Migration {
 	{
 		Schema::table('expenses', function(Blueprint $table)
 		{
-			$table->dropIfExists();
+			$table->dropColumn('category_id');
 		});
 	}
 

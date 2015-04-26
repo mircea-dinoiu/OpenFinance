@@ -30,7 +30,7 @@ class CreateCategoriesTable extends Migration {
 	{
 		Schema::table('categories', function(Blueprint $table)
 		{
-			$table->drop();
+			$table->dropIfExists();
 		});
 	}
 
