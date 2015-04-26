@@ -10,4 +10,4 @@ composer.lock
 .DS_Store
 Thumbs.db
 public/mobile/build
-public/mobile/resources/sass/.sass-cache
+public/mobile/resources/sass/.sass-cache/*
