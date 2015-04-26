@@ -1,44 +1,50 @@
 Ext.define('Financial.controller.Main', {
-    extend: 'Ext.app.Controller',
+    extend: 'Financial.controller.Abstract',
+
+    subControllers: [
+        'Financial.controller.main.Login',
+        'Financial.controller.main.TabPanel'
+    ],
 
     config: {
-        control: {
-            logoutButton: {
-                tap: 'logout'
-            }
-        },
         refs: {
-            logoutButton: 'button[itemId="logoutButton"]',
-            main: 'main'
+            mainView: 'main'
         }
     },
 
-    logout: function () {
+    launch: function () {
         var me = this,
-            mainView = me.getMain();
+            mainView = me.getMainView();
 
-        mainView.setMasked({
-            xtype: 'loadmask',
-            message: 'Logging out...'
+        if (Financial.userData) {
+            me.show('tabPanel');
+        } else {
+            mainView.setMasked({
+                xtype: 'loadmask'
+            });
+
+            Ext.Ajax.request({
+                url: Ext.String.format('{0}/user/read', Financial.baseURL),
+                success: function (response) {
+                    Financial.userData = Ext.JSON.decode(response.responseText);
+
+                    mainView.setMasked(false);
+                    me.show('tabPanel');
+                },
+                failure: function (response) {
+                    mainView.setMasked(false);
+                    me.show('login');
+                }
+            });
+        }
+    },
+
+    show: function (item) {
+        var mainView = this.getMainView();
+
+        mainView.removeAll();
+        mainView.add({
+            xtype: Ext.String.format('main-{0}', item)
         });
-
-        Ext.Ajax.request({
-            url: Ext.String.format('{0}/user/logout', Financial.baseURL),
-            method: 'post',
-            success: function () {
-                mainView.setMasked(false);
-                delete Financial.userData;
-                Financial.app.launch();
-            },
-            failure: function () {
-                mainView.setMasked(false);
-
-                Ext.Msg.alert(
-                    'Logout error',
-                    'An error has occurred while trying to log you out',
-                    Ext.emptyFn
-                );
-            }
-        })
     }
 });

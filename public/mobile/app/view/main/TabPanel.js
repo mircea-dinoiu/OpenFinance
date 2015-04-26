@@ -1,10 +1,10 @@
 Ext.define('Financial.view.main.TabPanel', {
     extend: 'Ext.tab.Panel',
-    alias: 'widget.main-tabpanel',
+    alias: 'widget.main-tabPanel',
 
     requires: [
-        'Financial.view.main.tabpanel.Expenses',
-        'Financial.view.main.tabpanel.User'
+        'Financial.view.main.tabPanel.Expenses',
+        'Financial.view.main.tabPanel.User'
     ],
 
     config: {
@@ -28,7 +28,7 @@ Ext.define('Financial.view.main.TabPanel', {
                 cls: 'card',
                 items: [
                     {
-                        xtype: 'main-tabpanel-expenses'
+                        xtype: 'main-tabPanel-expenses'
                     }
                 ]
             },
@@ -48,7 +48,7 @@ Ext.define('Financial.view.main.TabPanel', {
                 iconCls: 'user',
                 items: [
                     {
-                        xtype: 'main-tabpanel-user'
+                        xtype: 'main-tabPanel-user'
                     }
                 ]
             }

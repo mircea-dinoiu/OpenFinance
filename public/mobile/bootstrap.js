@@ -760,10 +760,15 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.viewport.WindowsPhone": [
     "Ext.viewport.WP"
   ],
+  "Financial.controller.Expense": [],
   "Financial.controller.Login": [],
   "Financial.controller.Main": [],
+  "Financial.model.Expense": [],
   "Financial.view.Login": [],
-  "Financial.view.Main": []
+  "Financial.view.Main": [],
+  "Financial.view.main.TabPanel": [],
+  "Financial.view.main.tabPanel.Expenses": [],
+  "Financial.view.main.tabPanel.User": []
 });
 
 Ext.ClassManager.addNameAliasMappings({
@@ -1708,13 +1713,24 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.viewport.Ios": [],
   "Ext.viewport.Viewport": [],
   "Ext.viewport.WindowsPhone": [],
+  "Financial.controller.Expense": [],
   "Financial.controller.Login": [],
   "Financial.controller.Main": [],
+  "Financial.model.Expense": [],
   "Financial.view.Login": [
     "widget.loginview"
   ],
   "Financial.view.Main": [
     "widget.main"
+  ],
+  "Financial.view.main.TabPanel": [
+    "widget.main-tabpanel"
+  ],
+  "Financial.view.main.tabPanel.Expenses": [
+    "widget.main-tabPanel-expenses"
+  ],
+  "Financial.view.main.tabPanel.User": [
+    "widget.main-tabPanel-user"
   ]
 });
 

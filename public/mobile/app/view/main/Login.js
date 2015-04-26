@@ -1,6 +1,6 @@
-Ext.define('Financial.view.Login', {
+Ext.define('Financial.view.main.Login', {
     extend: 'Ext.form.Panel',
-    alias: 'widget.loginview',
+    alias: 'widget.main-login',
 
     requires: [
         'Ext.form.FieldSet',

@@ -1,6 +1,6 @@
-Ext.define('Financial.view.main.tabpanel.User', {
-    extend: 'Ext.Container',
-    alias: 'widget.main-tabpanel-user',
+Ext.define('Financial.view.main.tabPanel.User', {
+    extend: 'Ext.Panel',
+    alias: 'widget.main-tabPanel-user',
 
     config: {
         items: [

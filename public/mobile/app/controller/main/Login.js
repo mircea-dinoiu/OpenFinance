@@ -1,4 +1,4 @@
-Ext.define('Financial.controller.Login', {
+Ext.define('Financial.controller.main.Login', {
     extend: 'Ext.app.Controller',
 
     config: {
@@ -9,7 +9,7 @@ Ext.define('Financial.controller.Login', {
         },
         refs: {
             loginButton: 'button[itemId="loginButton"]',
-            loginView: 'loginview',
+            loginView: 'main-login',
             emailField: 'textfield[name="email"]',
             passwordField: 'textfield[name="password"]'
         }
@@ -49,7 +49,7 @@ Ext.define('Financial.controller.Login', {
                 success: function (response) {
                     Financial.userData = Ext.JSON.decode(response.responseText);
                     loginView.setMasked(false);
-                    Financial.app.launch();
+                    Financial.app.getController('Main').launch()
                 },
                 failure: function (response) {
                     loginView.setMasked(false);

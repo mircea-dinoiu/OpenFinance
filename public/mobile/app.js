@@ -9,7 +9,9 @@
  changes and its generated code, it will produce a "merge conflict" that you
  will need to resolve manually.
  */
-
+Ext.Loader.setConfig({
+    disableCaching: false
+});
 Ext.application({
     name: 'Financial',
 
@@ -18,13 +20,11 @@ Ext.application({
     ],
 
     controllers: [
-        'Main',
-        'Login'
+        'Main'
     ],
 
     views: [
-        'Main',
-        'Login'
+        'Main'
     ],
 
     icon: {
@@ -46,33 +46,8 @@ Ext.application({
     },
 
     launch: function () {
-        var showMainView = function () {
-            Ext.Viewport.removeAll();
-            Ext.Viewport.add(Ext.create('Financial.view.Main'));
-        };
-
-        if (Financial.userData) {
-            showMainView();
-        } else {
-            Ext.Viewport.setMasked({
-                xtype: 'loadmask'
-            });
-
-            Ext.Ajax.request({
-                url: Ext.String.format('{0}/user/read', Financial.baseURL),
-                success: function (response) {
-                    Financial.userData = Ext.JSON.decode(response.responseText);
-
-                    Ext.Viewport.setMasked(false);
-                    showMainView();
-                },
-                failure: function (response) {
-                    Ext.Viewport.setMasked(false);
-                    Ext.Viewport.removeAll();
-                    Ext.Viewport.add(Ext.create('Financial.view.Login'));
-                }
-            });
-        }
+        Ext.fly('appLoadingIndicator').destroy();
+        Ext.Viewport.add(Ext.create('Financial.view.Main'));
     },
 
     onUpdated: function () {
