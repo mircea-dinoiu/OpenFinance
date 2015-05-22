@@ -6,7 +6,8 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"mobiledetect/mobiledetectlib": "~2.8",
-		"barryvdh/laravel-ide-helper": "~1.11"
+		"barryvdh/laravel-ide-helper": "~1.11",
+        "xaoc/laravel-js-localization": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

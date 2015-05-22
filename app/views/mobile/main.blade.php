@@ -2,7 +2,7 @@
 <html manifest="" lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title>Financial</title>
+	<title>{{ Lang::get('general.application_title') }}</title>
 	<style type="text/css">
 		@-webkit-keyframes spin {
 			from {

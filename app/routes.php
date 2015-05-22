@@ -4,7 +4,6 @@ Route::get('/', 'HomeController@getIndex');
 
 Route::group(['prefix' => 'user'], function () {
     Route::group(['before' => 'guest'], function () {
-        Route::get('login', 'UserController@login');
         Route::post('login', 'UserController@login');
     });
 
