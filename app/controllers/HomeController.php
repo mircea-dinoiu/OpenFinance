@@ -35,10 +35,6 @@ class HomeController extends BaseController
 
     public function getDesktopIndex()
     {
-        if (!Auth::check()) {
-            return Redirect::to('user/login');
-        } else {
-            return $this->layout->with('content', 'Nothing bitch');
-        }
+        return View::make('desktop.main');
     }
 }

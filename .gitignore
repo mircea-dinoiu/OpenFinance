@@ -11,3 +11,4 @@ composer.lock
 Thumbs.db
 public/mobile/build
 public/mobile/resources/sass/.sass-cache
+.sass-cache
