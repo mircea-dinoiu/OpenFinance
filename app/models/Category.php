@@ -1,6 +1,6 @@
 <?php
-class Category extends Eloquent {
-    public $timestamps = false;
 
+class Category extends Eloquent
+{
     protected $table = 'categories';
 }

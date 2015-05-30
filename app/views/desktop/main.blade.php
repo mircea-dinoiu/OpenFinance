@@ -5,11 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-    <title>Financial</title>
+    <title>{{ Lang::get('general.application_title') }}</title>
 
-    <!-- The line below must be kept intact for Sencha Cmd to build your application -->
-    <script id="microloader" type="text/javascript" src="{{ url('desktop/bootstrap.js') }}"></script>
+    <script>
+        var Financial = {
+            data: {},
+            debug: {{ var_export(Config::get('app.debug')) }},
+            baseURL: {{ var_export(Config::get('app.url')) }}
+        };
+    </script>
 
+    {{ HTML::style('desktop/ext/packages/ext-theme-neptune/build/resources/ext-theme-neptune-all-debug.css')}}
+    {{ HTML::style('desktop/resources/css/icon.css')}}
+
+    {{ $bootstrapScript }}
+
+    <style>
+        .x-mask {
+            border: none !important;
+        }
+    </style>
 </head>
 <body></body>
 </html>

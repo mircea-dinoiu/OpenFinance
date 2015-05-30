@@ -14,8 +14,7 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 Route::group([
-    'before' => 'auth',
-    'prefix' => 'currency'
+    'before' => 'auth'
 ], function () {
     Route::get('get-currencies', 'CurrencyController@getCurrencies');
 });

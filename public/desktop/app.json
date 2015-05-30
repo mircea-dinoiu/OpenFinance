@@ -157,9 +157,8 @@
    *
    */
   "loader": {
-    "cache": true
+    "cache": false
   },
-
   /**
    * override objects for setting build environment specific
    * settings.

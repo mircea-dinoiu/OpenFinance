@@ -37,5 +37,9 @@ class UserController extends BaseController
     public function logout()
     {
         Auth::logout();
+
+        if (Request::ajax()) {
+            return Response::json();
+        }
     }
 }
