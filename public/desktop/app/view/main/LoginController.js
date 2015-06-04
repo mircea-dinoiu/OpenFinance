@@ -10,7 +10,7 @@ Ext.define('Financial.view.main.LoginController', {
         view.setLoading('Logging in...');
 
         Ext.Ajax.request({
-            url: Ext.String.format('{0}/user/login', Financial.baseURL),
+            url: Financial.routes.user.login,
             params: form.getValues(),
             success: function (response) {
                 Financial.data.user = Ext.JSON.decode(response.responseText);

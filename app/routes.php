@@ -9,7 +9,7 @@ Route::group(['prefix' => 'user'], function () {
 
     Route::group(['before' => 'auth'], function () {
         Route::post('logout', 'UserController@logout');
-        Route::get('read', 'UserController@read');
+        Route::get('list', 'UserController@listUsers');
     });
 });
 
@@ -20,11 +20,15 @@ Route::group([
 });
 
 Route::group([
+    'before' => 'auth',
+    'prefix' => 'category'
+], function () {
+    Route::get('list', 'CategoryController@listCategories');
+});
+
+Route::group([
     'prefix' => 'expense',
     'before' => 'auth'
 ], function () {
-    Route::get('read', 'ExpenseController@read');
-    Route::delete('delete/{id}', 'ExpenseController@delete');
-    Route::put('update/{id}', 'ExpenseController@update');
-    Route::post('create/{id}', 'ExpenseController@create');
+    Route::get('list', 'ExpenseController@listExpenses');
 });

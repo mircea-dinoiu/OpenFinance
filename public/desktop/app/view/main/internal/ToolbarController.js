@@ -2,22 +2,58 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.app-main-internal-toolbar',
 
-    doLogout: function () {
-        var me = this,
-            view = me.getView();
+    applyMonthFilter: function (button) {
+        var mainView = button.up('app-main'),
+            monthPicker = button.down('monthpicker'),
+            value = monthPicker.getValue(),
+            month = value[0],
+            year = value[1];
 
-        view.setLoading('Logging out...');
+        if (!Ext.isDefined(monthPicker.originalValue) || month !== monthPicker.originalValue[0] || year !== monthPicker.originalValue[1]) {
+            monthPicker.originalValue = [month, year];
+            button.setText(Ext.Date.monthNames[month] + ' ' + year);
+
+            var gridStore = mainView.down('app-main-internal-data-expenses-grid').getStore();
+
+            // todo remove
+            month -= 1;
+
+            gridStore.proxy.extraParams = {
+                month: month + 1,
+                year: year
+            };
+            gridStore.load();
+        }
+    },
+
+    navigateToMonth: function (button, getNewValueFn) {
+        var monthPickerButton = button.up('toolbar').down('[itemId="month-picker-button"]'),
+            monthPicker = monthPickerButton.down('monthpicker'),
+            value = monthPicker.getValue();
+
+        monthPicker.setValue(getNewValueFn(value));
+        this.applyMonthFilter(monthPickerButton);
+    },
+
+    /**
+     * Handlers
+     */
+    onLogoutClick: function () {
+        var me = this,
+            mainView = me.getView().up('app-main');
+
+        mainView.setLoading('Logging out...');
 
         Ext.Ajax.request({
-            url: Ext.String.format('{0}/user/logout', Financial.baseURL),
+            url: Financial.routes.user.logout,
             method: 'post',
             success: function () {
-                view.setLoading(false);
+                mainView.setLoading(false);
                 Financial.data = {};
                 Financial.app.show('login');
             },
             failure: function () {
-                view.setLoading(false);
+                mainView.setLoading(false);
 
                 Ext.Msg.alert(
                     'Logout error',
@@ -29,32 +65,46 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
     },
 
     onUserMenuRender: function (button) {
-        var userData = Financial.data.user;
+        var userData = Financial.data.user.current;
 
-        button.setText(userData.first_name + ' ' + userData.last_name);
+        button.setText(userData.full_name);
     },
 
-    syncButtonWithMonthPicker: function (button) {
-        var monthPicker = button.down('monthpicker'),
-            value = monthPicker.getValue(),
-            month = value[0],
-            year = value[1];
+    onPreviousMonthClick: function (button) {
+        this.navigateToMonth(button, function (value) {
+            if (value[0] === 0) {
+                value[1]--;
+                value[0] = 11;
+            } else {
+                value[0]--;
+            }
 
-        monthPicker.originalValue = monthPicker.getValue();
-        button.setText(Ext.Date.monthNames[month] + ' ' + year);
+            return value;
+        });
     },
 
-    onSelectMonthButtonRender: function (button) {
-        this.syncButtonWithMonthPicker(button);
+    onNextMonthClick: function (button) {
+        this.navigateToMonth(button, function (value) {
+            if (value[0] === 11) {
+                value[1]++;
+                value[0] = 0;
+            } else {
+                value[0]++;
+            }
+
+            return value;
+        });
     },
 
-    onMonthPickerCancel: function (monthPicker) {
-        monthPicker.up('menu').hide();
+    onMonthPickerButtonRender: function (button) {
+        this.applyMonthFilter(button);
     },
 
-    onMonthPickerHide: function (monthPicker) {
+    onMonthPickerMenuHide: function (menu) {
+        var monthPicker = menu.down('monthpicker');
+
         if (monthPicker.saveChanges) {
-            this.syncButtonWithMonthPicker(monthPicker.up('button'));
+            this.applyMonthFilter(monthPicker.up('button'));
         } else {
             monthPicker.setValue(monthPicker.originalValue);
         }
@@ -62,9 +112,13 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         monthPicker.saveChanges = false;
     },
 
+    onMonthPickerCancel: function (monthPicker) {
+        monthPicker.up('menu').hide();
+    },
+
     onMonthPickerOK: function (monthPicker) {
         monthPicker.saveChanges = true;
-        menu.hide();
+        monthPicker.up('menu').hide();
     },
 
     onCurrencyRender: function (tbText) {
@@ -75,13 +129,13 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
                 defaultCurrency = currencyData.default,
                 textArr = [];
 
-            Ext.Object.each(currencyData.list, function (ISOCode, currency) {
-                if (ISOCode !== defaultCurrency) {
+            Ext.Object.each(currencyData.map, function (id, currency) {
+                if (id !== defaultCurrency.id) {
                     textArr.push(Ext.String.format(
                         '<strong>{0}</strong>: <i>{1} {2}</i>',
-                        ISOCode,
-                        currency.rates[defaultCurrency],
-                        currencyData.list[defaultCurrency].symbol
+                        currency.iso_code,
+                        currency.rates[defaultCurrency.iso_code],
+                        currencyData.map[defaultCurrency.id].symbol
                     ));
                 }
             });
@@ -94,9 +148,10 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         interval = setInterval(function () {
             if (Financial.data.user) {
                 Ext.Ajax.request({
-                    url: Ext.String.format('{0}/get-currencies', Financial.baseURL),
+                    url: Financial.routes.getCurrencies,
                     success: function (response) {
-                        Financial.data.currency = Ext.JSON.decode(response.responseText);
+                        Financial.app.setCurrency(response);
+
                         setCurrency();
                     }
                 });

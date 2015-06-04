@@ -22,12 +22,22 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             xtype: 'tbfill'
         },
         {
+            iconCls: 'icon-arrow_left',
             listeners: {
-                render: 'onSelectMonthButtonRender'
+                click: 'onPreviousMonthClick'
+            }
+        },
+        {
+            itemId: 'month-picker-button',
+            listeners: {
+                render: 'onMonthPickerButtonRender'
             },
             iconCls: 'icon-calendar',
             menu: {
                 xtype: 'menu',
+                listeners: {
+                    hide: 'onMonthPickerMenuHide'
+                },
                 items: [
                     {
                         xtype: 'monthpicker',
@@ -35,11 +45,16 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         value: new Date(),
                         listeners: {
                             cancelclick: 'onMonthPickerCancel',
-                            okclick: 'onMonthPickerOK',
-                            hide: 'onMonthPickerHide'
+                            okclick: 'onMonthPickerOK'
                         }
                     }
                 ]
+            }
+        },
+        {
+            iconCls: 'icon-arrow_right',
+            listeners: {
+                click: 'onNextMonthClick'
             }
         },
         {
@@ -57,7 +72,7 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         iconCls: 'icon-door_out',
                         text: 'Logout',
                         itemId: 'logout',
-                        handler: 'doLogout'
+                        handler: 'onLogoutClick'
                     }
                 ]
             }

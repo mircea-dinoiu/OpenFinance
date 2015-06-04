@@ -17,14 +17,16 @@ class CurrencyController extends BaseController
             return;
         }
 
-        $list = [];
+        $map = [];
 
         $rawData = DB::table('currencies')->get();
 
+        $allowedISOCodes = [];
+
         foreach ($rawData as $currency) {
-            $list[$currency->iso_code] = [
-                'symbol' => $currency->symbol
-            ];
+            $map[$currency->id] = (array) $currency;
+
+            $allowedISOCodes[] = $currency->iso_code;
         }
 
         $xml = simplexml_load_file('http://www.bnr.ro/nbrfxrates.xml');
@@ -40,30 +42,32 @@ class CurrencyController extends BaseController
         foreach ($body->Cube->Rate as $rate) {
             $key = (string)$rate->attributes();
 
-            if (isset($list[$key])) {
+            if (in_array($key, $allowedISOCodes)) {
                 $rates[$key] = (float)$rate;
             }
         }
 
-        foreach ($list as $ISOCode => $currencyInfo) {
-            $list[$ISOCode]['rates'] = [];
+        foreach ($map as $id => $currencyInfo) {
+            $map[$id]['rates'] = [];
 
             foreach ($rates as $eachISOCode => $eachRate) {
-                $list[$ISOCode]['rates'][$eachISOCode] = round(1 / $rates[$eachISOCode] * $rates[$ISOCode], 4);
+                $map[$id]['rates'][$eachISOCode] = round(1 / $rates[$eachISOCode] * $rates[$currencyInfo['iso_code']], 4);
             }
 
-            unset($list[$ISOCode]['rates'][$ISOCode]);
+            unset($map[$id]['rates'][$currencyInfo['iso_code']]);
         }
 
         self::$data = [
             'default' => self::getDefaultCurrency(),
-            'list' => $list
+            'map' => $map
         ];
     }
 
     public static function getDefaultCurrency() {
         if (self::$defaultCurrency === null) {
-            self::$defaultCurrency = Setting::where('key', '=', 'default_currency')->firstOrFail()->value;
+            self::$defaultCurrency = Currency::where(
+                'iso_code', '=', Setting::where('key', '=', 'default_currency')->firstOrFail()->value
+            )->firstOrFail();
         }
 
         return self::$defaultCurrency;
