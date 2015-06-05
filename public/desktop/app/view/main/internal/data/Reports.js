@@ -15,7 +15,7 @@ Ext.define('Financial.view.main.internal.data.Reports', {
         },
         {
             title: 'Additional Info',
-            //flex: 1
+            text: 'Hi'
         }
     ]
 });

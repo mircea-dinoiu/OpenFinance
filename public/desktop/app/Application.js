@@ -8,6 +8,11 @@ Ext.define('Financial.Application', {
 
     name: 'Financial',
 
+    requires: [
+        'Financial.util.User',
+        'Financial.util.Currency'
+    ],
+
     stores: [
         'Financial.store.Expense',
         'Financial.store.Income',
@@ -26,17 +31,20 @@ Ext.define('Financial.Application', {
         'Financial.model.data.Report'
     ],
 
+    controllers: [
+        'Financial.controller.Data'
+    ],
+
+    views: [
+        'Financial.view.main.Login',
+        'Financial.view.main.Internal'
+    ],
+
     config: {
         refs: {
             appMain: 'app-main'
         }
     },
-
-    requires: [
-        'Financial.util.User',
-        'Financial.view.main.Login',
-        'Financial.view.main.Internal'
-    ],
 
     launch: function () {
         var me = this,
@@ -58,7 +66,7 @@ Ext.define('Financial.Application', {
             Ext.each([
                     {
                         success: function (response) {
-                            me.setCurrency(response);
+                            Financial.util.Currency.setCurrency(response);
                         },
                         url: Financial.routes.getCurrencies
                     },
@@ -124,13 +132,5 @@ Ext.define('Financial.Application', {
         });
 
         appMain.setLoading(false);
-    },
-
-    setCurrency: function (response) {
-        Financial.data.currency = Ext.JSON.decode(response.responseText);
-
-        Financial.data.currency.store = Ext.create('Financial.store.Currency', {
-            data: Ext.Object.getValues(Financial.data.currency.map)
-        });
     }
 });

@@ -3,8 +3,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
     alias: 'controller.app-main-internal-toolbar',
 
     applyMonthFilter: function (button) {
-        var mainView = button.up('app-main'),
-            monthPicker = button.down('monthpicker'),
+        var monthPicker = button.down('monthpicker'),
             value = monthPicker.getValue(),
             month = value[0],
             year = value[1];
@@ -13,18 +12,10 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
             monthPicker.originalValue = [month, year];
             button.setText(Ext.Date.monthNames[month] + ' ' + year);
 
-            var extraParams = {
+            Financial.app.getController('Data').loadData({
                 month: month + 1,
                 year: year
-            };
-
-            var expenseStore = mainView.down('app-main-internal-data-expenses-grid').getStore();
-            expenseStore.proxy.extraParams = extraParams;
-            expenseStore.load();
-
-            var incomeStore = mainView.down('app-main-internal-data-incomes-grid').getStore();
-            incomeStore.proxy.extraParams = extraParams;
-            incomeStore.load();
+            });
         }
     },
 
@@ -152,7 +143,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
                 Ext.Ajax.request({
                     url: Financial.routes.getCurrencies,
                     success: function (response) {
-                        Financial.app.setCurrency(response);
+                        Financial.util.Currency.setCurrency(response);
 
                         setCurrency();
                     }

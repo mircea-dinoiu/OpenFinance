@@ -1,21 +1,16 @@
 Ext.define('Financial.view.main.internal.data.incomes.Grid', {
     extend: 'Ext.grid.Panel',
+    store: 'Financial.store.Income',
+    xtype: 'app-main-internal-data-incomes-grid',
+    autoScroll: true,
+    controller: 'app-main-internal-data-incomes-grid',
+    viewConfig: {
+        loadMask: false
+    },
 
     requires: [
         'Financial.view.main.internal.data.incomes.GridController'
     ],
-
-    store: 'Financial.store.Income',
-
-    xtype: 'app-main-internal-data-incomes-grid',
-
-    autoScroll: true,
-
-    controller: 'app-main-internal-data-incomes-grid',
-
-    viewConfig: {
-        loadingText: undefined
-    },
 
     plugins: {
         ptype: 'rowediting',

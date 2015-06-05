@@ -1,9 +1,8 @@
 Ext.define('Financial.view.main.internal.data.reports.Calculations', {
     extend: 'Ext.grid.Panel',
-
     xtype: 'app-main-internal-data-reports-calculations',
-
     store: 'Financial.store.data.Report',
+    hideHeaders: true,
 
     features: [
         {
@@ -13,8 +12,8 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
                 {
                     formatName: function(type) {
                         switch (type) {
-                            case 'spending':
-                                return 'Spendings';
+                            case 'expense':
+                                return 'Expenses';
                             case 'remaining':
                                 return 'Remaining';
                         }
@@ -23,8 +22,6 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
             ]
         }
     ],
-
-    hideHeaders: true,
 
     columns: [
         {

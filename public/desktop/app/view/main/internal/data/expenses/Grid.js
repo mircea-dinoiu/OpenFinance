@@ -16,7 +16,8 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
     viewConfig: {
         getRowClass: function (record) {
             return record.get('status') + '-expense-row';
-        }
+        },
+        loadMask: false
     },
 
     plugins: {
