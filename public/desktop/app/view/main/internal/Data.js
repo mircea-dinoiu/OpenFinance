@@ -1,7 +1,11 @@
 Ext.define('Financial.view.main.internal.Data', {
     extend: 'Ext.panel.Panel',
 
-    requires: 'Financial.view.main.internal.data.Expenses',
+    requires: [
+        'Financial.view.main.internal.data.Expenses',
+        'Financial.view.main.internal.data.Incomes',
+        'Financial.view.main.internal.data.Reports'
+    ],
 
     xtype: 'app-main-internal-data',
 
@@ -14,7 +18,8 @@ Ext.define('Financial.view.main.internal.Data', {
             title: 'Reports',
             region: 'west',
             width: '20%',
-            collapsible: true
+            collapsible: true,
+            xtype: 'app-main-internal-data-reports'
         },
         {
             title: 'Expenses',
@@ -22,10 +27,11 @@ Ext.define('Financial.view.main.internal.Data', {
             xtype: 'app-main-internal-data-expenses'
         },
         {
-            title: 'Incomings',
+            title: 'Incomes',
             region: 'east',
             width: '20%',
-            collapsible: true
+            collapsible: true,
+            xtype: 'app-main-internal-data-incomes'
         }
     ]
 });

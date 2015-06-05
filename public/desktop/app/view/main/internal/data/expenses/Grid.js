@@ -21,7 +21,6 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
 
     plugins: {
         ptype: 'rowediting',
-        saveBtnText: 'Save',
         listeners: {
             canceledit: 'onCancelRowEditing',
             beforeedit: 'onBeforeRowEditing',
@@ -103,18 +102,6 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                         typeAhead: true,
                         allowBlank: false,
                         forceSelection: true
-                        /*validator: function (value) {
-                         var valid = false;
-
-                         Ext.each(Ext.Object.getValues(Financial.data.currency.map), function (currency) {
-                         if (currency.symbol === value) {
-                         valid = true;
-                         return false;
-                         }
-                         });
-
-                         return valid ? true : 'Invalid currency specified';
-                         }*/
                     },
                     renderer: function (value) {
                         return Financial.data.currency.map[value].symbol;

@@ -1,13 +1,15 @@
-Ext.define('Financial.store.Expense', {
+Ext.define('Financial.store.Income', {
     extend: 'Ext.data.Store',
 
-    model: 'Financial.model.Expense',
+    model: 'Financial.model.Income',
 
     autoDestroy: true,
 
+    groupField: 'user_id',
+
     proxy: {
         type: 'ajax',
-        url: Financial.routes.expense.list,
+        url: Financial.routes.income.list,
         reader: {
             type: 'json'
         }

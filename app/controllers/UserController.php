@@ -2,7 +2,7 @@
 
 class UserController extends BaseController
 {
-    public function listUsers()
+    public function getList()
     {
         return Response::json([
             'current' => Auth::user(),
@@ -28,7 +28,7 @@ class UserController extends BaseController
 
         if ($validator->passes()) {
             if (Auth::attempt(array_merge($credentials, ['deleted_at' => NULL]), $rememberMe)) {
-                return $this->listUsers();
+                return $this->getList();
             } else {
                 return Response::json('Email and password don\'t match', 400);
             }

@@ -3,7 +3,7 @@
 class CategoryController extends \BaseController
 {
 
-    public function listCategories()
+    public function getList()
     {
         return Response::json(Category::all());
     }

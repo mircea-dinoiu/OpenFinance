@@ -13,16 +13,18 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
             monthPicker.originalValue = [month, year];
             button.setText(Ext.Date.monthNames[month] + ' ' + year);
 
-            var gridStore = mainView.down('app-main-internal-data-expenses-grid').getStore();
-
-            // todo remove
-            month -= 1;
-
-            gridStore.proxy.extraParams = {
+            var extraParams = {
                 month: month + 1,
                 year: year
             };
-            gridStore.load();
+
+            var expenseStore = mainView.down('app-main-internal-data-expenses-grid').getStore();
+            expenseStore.proxy.extraParams = extraParams;
+            expenseStore.load();
+
+            var incomeStore = mainView.down('app-main-internal-data-incomes-grid').getStore();
+            incomeStore.proxy.extraParams = extraParams;
+            incomeStore.load();
         }
     },
 

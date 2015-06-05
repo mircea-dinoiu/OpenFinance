@@ -2,7 +2,7 @@
 
 class ExpenseController extends BaseController
 {
-    public function listExpenses()
+    public function getList()
     {
         $data = [
             'month' => Input::get('month'),
@@ -10,8 +10,8 @@ class ExpenseController extends BaseController
         ];
 
         $validationRules = [
-            'month' => 'sometimes|required|min:1|max:12|numeric',
-            'year' => 'sometimes|required|min:1970|max:2100|numeric'
+            'month' => 'sometimes|min:1|max:12|numeric',
+            'year' => 'sometimes|min:1970|max:2100|numeric'
         ];
 
         $validator = Validator::make($data, $validationRules);

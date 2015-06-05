@@ -10,16 +10,20 @@ Ext.define('Financial.Application', {
 
     stores: [
         'Financial.store.Expense',
+        'Financial.store.Income',
         'Financial.store.User',
         'Financial.store.Currency',
-        'Financial.store.Category'
+        'Financial.store.Category',
+        'Financial.store.data.Report'
     ],
 
     models: [
         'Financial.model.Expense',
+        'Financial.model.Income',
         'Financial.model.User',
         'Financial.model.Currency',
-        'Financial.model.Category'
+        'Financial.model.Category',
+        'Financial.model.data.Report'
     ],
 
     config: {
@@ -29,6 +33,7 @@ Ext.define('Financial.Application', {
     },
 
     requires: [
+        'Financial.util.User',
         'Financial.view.main.Login',
         'Financial.view.main.Internal'
     ],

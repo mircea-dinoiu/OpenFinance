@@ -17,7 +17,10 @@
             Financial.debug = ('{{ var_export(Config::get('app.debug')) }}' === 'true');
             Financial.routes = {
                 expense: {
-                    list: baseURL + '/expense/list',
+                    list: baseURL + '/expense/list'
+                },
+                income: {
+                    list: baseURL + '/income/list'
                 },
                 getCurrencies: baseURL + '/get-currencies',
                 user: {
