@@ -3,8 +3,12 @@ Ext.define('Financial.store.Expense', {
 
     model: 'Financial.model.Expense',
 
-    autoDestroy: true,
     autoLoad: false,
+
+    sorters: [{
+        property: 'created_at',
+        direction: 'DESC'
+    }],
 
     proxy: {
         type: 'ajax',
@@ -25,7 +29,7 @@ Ext.define('Financial.store.Expense', {
     },
 
     listeners: {
-        write: function(){
+        write: function () {
             Financial.app.getController('Data').syncReports();
         }
     }

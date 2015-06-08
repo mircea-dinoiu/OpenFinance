@@ -5,6 +5,6 @@ class CategoryController extends \BaseController
 
     public function getList()
     {
-        return Response::json(Category::all());
+        return Response::json(Category::with('expenses')->get());
     }
 }

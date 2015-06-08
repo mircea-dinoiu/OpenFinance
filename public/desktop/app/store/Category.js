@@ -7,5 +7,10 @@ Ext.define('Financial.store.Category', {
         type: 'memory'
     },
 
+    sorters: [{
+        property: 'expenses',
+        direction: 'DESC'
+    }],
+
     autoDestroy: false
 });

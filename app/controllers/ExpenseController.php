@@ -5,7 +5,7 @@ class ExpenseController extends BaseController
     private static function newExpenseQuery() {
         return Expense::with([
             'users' => function ($query) {
-                $query->where('blame', '=', '1')->get();
+                $query->where('blame', '=', '1');
             },
             'categories'
         ]);
@@ -37,7 +37,7 @@ class ExpenseController extends BaseController
             }
 
             return Response::json(
-                $query->orderBy('created_at', 'desc')->get()
+                $query->get()
             );
         } else {
             return Response::json(Lang::get('general.invalid_input_data'), 400);

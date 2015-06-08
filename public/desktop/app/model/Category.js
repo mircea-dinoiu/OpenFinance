@@ -3,6 +3,12 @@ Ext.define('Financial.model.Category', {
 
     fields: [
         {name: 'id', type: 'int'},
-        {name: 'name', type: 'string'}
+        {name: 'name', type: 'string'},
+        {
+            name: 'expenses',
+            convert: function (expenses) {
+                return expenses.length;
+            }
+        }
     ]
 });

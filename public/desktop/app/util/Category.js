@@ -4,7 +4,7 @@ Ext.define('Financial.util.Category', {
     getCategoryById: function (id) {
         var store = this.getStore();
 
-        return store.getAt(store.findExact('id', id));
+        return store.getAt(store.findExact('id', parseInt(id)));
     },
 
     getStore: function () {

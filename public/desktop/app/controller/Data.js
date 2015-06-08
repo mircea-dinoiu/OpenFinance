@@ -65,14 +65,14 @@ Ext.define('Financial.controller.Data', {
         var expenses = [];
 
         Financial.data.user.store.each(function (record) {
-             if (users[record.get('id')]) {
-                 expenses.push({
-                     sum: parseFloat(users[record.get('id')].toFixed(2)),
-                     description: record.get('full_name'),
-                     type: 'expense',
-                     key: 'expenses_for_user:' + record.get('id')
-                 });
-             }
+            if (users[record.get('id')]) {
+                expenses.push({
+                    sum: parseFloat(users[record.get('id')].toFixed(2)),
+                    description: record.get('full_name'),
+                    type: 'expense',
+                    key: 'expenses_for_user:' + record.get('id')
+                });
+            }
         });
 
         return expenses;
@@ -96,12 +96,12 @@ Ext.define('Financial.controller.Data', {
         });
 
         Ext.Object.each(users, function (id, sum) {
-             data.push({
-                 sum: sum,
-                 description: Financial.util.User.getUserById(id).get('full_name'),
-                 type: 'income',
-                 key: 'income:' + id
-             });
+            data.push({
+                sum: sum,
+                description: Financial.util.User.getUserById(id).get('full_name'),
+                type: 'income',
+                key: 'income:' + id
+            });
         });
 
         return data;
@@ -175,7 +175,8 @@ Ext.define('Financial.controller.Data', {
                 sum: sum,
                 description: desc,
                 type: 'category',
-                key: 'category:' + categoryId
+                key: 'category:' + categoryId,
+                localKey: categoryId
             })
         });
 
@@ -188,7 +189,7 @@ Ext.define('Financial.controller.Data', {
                 return 1;
             }
 
-            return a.description < b.description ? -1 : 1;
+            return Financial.util.Category.getCategoryById(a.localKey).get('expenses') > Financial.util.Category.getCategoryById(b.localKey).get('expenses') ? -1 : 1;
         });
 
         return data;
