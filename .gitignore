@@ -12,3 +12,4 @@ Thumbs.db
 public/mobile/build
 public/desktop/build
 .sass-cache
+public/desktop/boostrap.json

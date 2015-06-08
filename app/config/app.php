@@ -25,7 +25,7 @@ return array(
 	| your application so that it is used when running Artisan tasks.
 	|
 	*/
-	'url' => 'http://localhost',
+	'url' => 'http://financial.dinoiu.com',
 
 	/*
 	|--------------------------------------------------------------------------
