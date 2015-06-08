@@ -149,9 +149,9 @@ class ExpenseController extends BaseController
             $validationRules = [
                 'sum' => 'required|numeric|not_in:0',
                 'item' => 'required|string',
+                'users' => 'required|user_ids',
                 'created_at' => 'sometimes|integer',
                 'currency_id' => 'sometimes|currency_id',
-                'users' => 'required|user_ids',
                 'categories' => 'sometimes|category_ids'
             ];
 

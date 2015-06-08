@@ -140,7 +140,6 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                 displayField: 'full_name',
                 multiSelect: true,
                 queryMode: 'local',
-                allowBlank: false,
                 forceSelection: true
             }
         },
