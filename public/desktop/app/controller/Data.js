@@ -145,8 +145,6 @@ Ext.define('Financial.controller.Data', {
             }
 
             if (rCategories.length > 0) {
-                sum /= rCategories.length;
-
                 Ext.each(rCategories, function (categoryId) {
                     if (!categories[categoryId]) {
                         categories[categoryId] = 0;
