@@ -3,17 +3,32 @@ Ext.define('Financial.store.Income', {
 
     model: 'Financial.model.Income',
 
-    autoDestroy: true,
-
     groupField: 'user_id',
+
+    autoLoad: false,
+    autoDestroy: true,
 
     proxy: {
         type: 'ajax',
-        url: Financial.routes.income.list,
         reader: {
             type: 'json'
+        },
+        api: {
+            read: Financial.routes.income.list,
+            create: Financial.routes.income.create,
+            update: Financial.routes.income.update,
+            destroy: Financial.routes.income.destroy
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
         }
     },
 
-    autoLoad: false
+    listeners: {
+        write: function(){
+            Financial.app.getController('Data').syncReports();
+        }
+    }
 });

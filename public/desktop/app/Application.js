@@ -10,7 +10,9 @@ Ext.define('Financial.Application', {
 
     requires: [
         'Financial.util.User',
-        'Financial.util.Currency'
+        'Financial.util.Currency',
+        'Financial.util.Category',
+        'Financial.util.Misc'
     ],
 
     stores: [

@@ -3,8 +3,6 @@ Ext.define('Financial.store.data.Report', {
 
     model: 'Financial.model.data.Report',
 
-    autoDestroy: true,
-
     groupField: 'type',
 
     proxy: {

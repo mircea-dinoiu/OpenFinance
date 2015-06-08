@@ -32,6 +32,9 @@ Route::group([
     'before' => 'auth'
 ], function () {
     Route::get('list', 'ExpenseController@getList');
+    Route::post('update', 'ExpenseController@postUpdate');
+    Route::post('delete', 'ExpenseController@postDelete');
+    Route::post('create', 'ExpenseController@postCreate');
 });
 
 Route::group([
@@ -39,4 +42,7 @@ Route::group([
     'before' => 'auth'
 ], function () {
     Route::get('list', 'IncomeController@getList');
+    Route::post('update', 'IncomeController@postUpdate');
+    Route::post('delete', 'IncomeController@postDelete');
+    Route::post('create', 'IncomeController@postCreate');
 });

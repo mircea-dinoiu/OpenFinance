@@ -4,14 +4,29 @@ Ext.define('Financial.store.Expense', {
     model: 'Financial.model.Expense',
 
     autoDestroy: true,
+    autoLoad: false,
 
     proxy: {
         type: 'ajax',
-        url: Financial.routes.expense.list,
         reader: {
             type: 'json'
+        },
+        api: {
+            read: Financial.routes.expense.list,
+            create: Financial.routes.expense.create,
+            update: Financial.routes.expense.update,
+            destroy: Financial.routes.expense.destroy
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
         }
     },
 
-    autoLoad: false
+    listeners: {
+        write: function(){
+            Financial.app.getController('Data').syncReports();
+        }
+    }
 });

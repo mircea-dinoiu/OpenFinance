@@ -96,7 +96,7 @@
    */
   "js": [
     {
-      "path": "${framework.dir}/build/ext-all.js"
+      "path": "${framework.dir}/build/ext-all-debug.js"
     },
     {
       "path": "app.js",
@@ -306,5 +306,6 @@
    * Uniquely generated id for this application, used as prefix for localStorage keys.
    * Normally you should never change this value.
    */
-  "id": "1f9876ca-738a-483c-96e9-e1d4cab64eaa"
+  "id": "1f9876ca-738a-483c-96e9-e1d4cab64eaa",
+  "locale": "ro"
 }

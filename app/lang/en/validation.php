@@ -88,6 +88,14 @@ return array(
 		),
 	),
 
+    'currency_id' => 'The :attribute field is invalid.',
+    'expense_id' => 'The :attribute field is invalid.',
+    'income_id' => 'The :attribute field is invalid.',
+    'user_id' => 'The :attribute field is invalid.',
+    'category_id' => 'The :attribute field is invalid.',
+    'user_ids' => 'The :attribute field is invalid.',
+    'category_ids' => 'The :attribute field is invalid.',
+
 	/*
 	|--------------------------------------------------------------------------
 	| Custom Validation Attributes

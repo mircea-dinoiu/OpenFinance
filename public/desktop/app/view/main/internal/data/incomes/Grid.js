@@ -2,8 +2,8 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
     extend: 'Ext.grid.Panel',
     store: 'Financial.store.Income',
     xtype: 'app-main-internal-data-incomes-grid',
-    autoScroll: true,
     controller: 'app-main-internal-data-incomes-grid',
+    autoScroll: true,
     viewConfig: {
         loadMask: false
     },
@@ -21,19 +21,10 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
         }
     },
 
-    features: [
-        {
-            groupHeaderTpl: '{name}',
-            hideGroupedHeader: true,
-            showSummaryRow: false,
-            ftype: 'groupingsummary'
-        }
-    ],
-
     tbar: [
         {
             text: 'Add Income',
-            iconCls: 'icon-add',
+            iconCls: 'icon-money_add',
             handler: 'onAddIncomeClick'
         }
     ],
@@ -70,17 +61,22 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
         {
             dataIndex: 'created_at',
             text: 'Date',
-            formatter: "date('D Y-m-d')",
+            formatter: "date('D d-m-Y')",
             width: 115,
             resizable: false,
-            editor: 'datefield'
+            editor: {
+                xtype: 'datefield',
+                format: 'd-m-Y',
+                altFormats: 'd/m/Y|j/n/Y|j/n/y|j/m/y|d/n/y|j/m/Y|d/n/Y|d-m-y|d/m|d-m|dm|dmy|dmY|d|Y-m-d|j-n|j/n',
+                startDay: 1
+            }
         },
         {
             dataIndex: 'user_id',
             text: 'From',
             flex: 1,
             renderer: function (userId) {
-                return Financial.util.User.getUserById(userId).full_name;
+                return Financial.util.User.getUserById(userId).get('full_name');
             },
             editor: {
                 xtype: 'combo',
@@ -95,10 +91,15 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
         },
         {
             xtype: 'actioncolumn',
+            editor: {
+                xtype: 'label',
+                text: ''
+            },
             items: [
                 {
                     iconCls: 'icon-delete',
-                    tooltip: 'Delete'
+                    tooltip: 'Delete',
+                    handler: 'onDeleteIncomeClick'
                 }
             ],
             width: 26

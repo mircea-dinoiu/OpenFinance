@@ -8,7 +8,7 @@ Ext.define('Financial.view.main.internal.Toolbar', {
     xtype: 'app-main-internal-toolbar',
 
     dock: 'top',
-    
+
     layout: 'hbox',
 
     items: [
@@ -22,43 +22,104 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             xtype: 'tbfill'
         },
         {
-            iconCls: 'icon-arrow_left',
+            iconCls: 'icon-date_previous',
+            tooltip: 'Shift back one month',
             listeners: {
                 click: 'onPreviousMonthClick'
             }
         },
         {
-            itemId: 'month-picker-button',
+            iconCls: 'icon-checkbox_checked',
             listeners: {
-                render: 'onMonthPickerButtonRender'
+                click: 'onToggleStartDateButton'
+            }
+        },
+        {
+            itemId: 'start-date-button',
+            listeners: {
+                render: 'applyFilter'
             },
             iconCls: 'icon-calendar',
             menu: {
                 xtype: 'menu',
                 listeners: {
-                    hide: 'onMonthPickerMenuHide'
+                    hide: 'onDatePickerHide'
                 },
                 items: [
                     {
-                        xtype: 'monthpicker',
+                        xtype: 'datepicker',
                         border: 0,
-                        value: new Date(),
+                        startDay: 1,
+                        value: (function () {
+                            var date = new Date();
+
+                            date.setDate(1);
+
+                            return date;
+                        }()),
                         listeners: {
-                            cancelclick: 'onMonthPickerCancel',
-                            okclick: 'onMonthPickerOK'
+                            select: 'onDateSelect'
                         }
                     }
                 ]
             }
         },
         {
-            iconCls: 'icon-arrow_right',
+            xtype: 'tbtext',
+            html: '&mdash;'
+        },
+        {
+            itemId: 'end-date-button',
+            listeners: {
+                render: 'applyFilter'
+            },
+            iconCls: 'icon-calendar',
+            menu: {
+                xtype: 'menu',
+                listeners: {
+                    hide: 'onDatePickerHide'
+                },
+                items: [
+                    {
+                        xtype: 'datepicker',
+                        border: 0,
+                        startDay: 1,
+                        value: (function () {
+                            var date = new Date();
+
+                            date.setMonth(date.getMonth() + 1);
+                            date.setDate(0);
+
+                            return date;
+                        }()),
+                        listeners: {
+                            select: 'onDateSelect'
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            iconCls: 'icon-checkbox_checked',
+            listeners: {
+                click: 'onToggleEndDateButton'
+            }
+        },
+        {
+            iconCls: 'icon-date_next',
+            tooltip: 'Shift forward one month',
             listeners: {
                 click: 'onNextMonthClick'
             }
         },
         {
             xtype: 'tbfill'
+        },
+        {
+            iconCls: 'icon-database_refresh',
+            listeners: {
+                click: 'applyFilter'
+            }
         },
         {
             iconCls: 'icon-user',

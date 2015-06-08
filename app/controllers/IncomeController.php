@@ -5,13 +5,13 @@ class IncomeController extends BaseController
     public function getList()
     {
         $data = [
-            'month' => Input::get('month'),
-            'year' => Input::get('year')
+            'start_date' => Input::get('start_date'),
+            'end_date' => Input::get('end_date')
         ];
 
         $validationRules = [
-            'month' => 'sometimes|min:1|max:12|numeric',
-            'year' => 'sometimes|min:1970|max:2100|numeric'
+            'start_date' => 'sometimes|date_format:Y-m-d',
+            'end_date' => 'sometimes|date_format:Y-m-d'
         ];
 
         $validator = Validator::make($data, $validationRules);
@@ -19,19 +19,113 @@ class IncomeController extends BaseController
         if ($validator->passes()) {
             $query = Income::with('user');
 
-            if ($data['month']) {
-                $query->whereRaw('MONTH(created_at) = ?', [$data['month']]);
+            if ($data['start_date']) {
+                $query->whereRaw('DATE(created_at) >= ?', [$data['start_date']]);
             }
 
-            if ($data['year']) {
-                $query->whereRaw('YEAR(created_at) = ?', [$data['year']]);
+            if ($data['end_date']) {
+                $query->whereRaw('DATE(created_at) <= ?', [$data['end_date']]);
             }
 
             return Response::json(
                 $query->orderBy('created_at', 'desc')->get()
             );
-        } else {
-            return Response::json('Invalid input data', 400);
         }
+
+        return Response::json($validator->messages(), 400);
+    }
+
+    public function postDelete()
+    {
+        $data = Input::get('data');
+
+        if (is_array($data) && !empty($data)) {
+            if (Validator::make($data, ['id' => 'required|income_id'])->passes()) {
+                return Income::destroy($data['id']);
+            }
+        }
+
+        return Response::json(Lang::get('general.invalid_input_data'), 400);
+    }
+
+    public function postUpdate()
+    {
+        $data = Input::get('data');
+
+        if (is_array($data) && !empty($data)) {
+            $validationRules = [
+                'id' => 'required|income_id',
+                'sum' => 'sometimes|numeric|not_in:0',
+                'description' => 'sometimes|string',
+                'user_id' => 'sometimes|user_id',
+                'created_at' => 'sometimes|integer'
+            ];
+
+            $validator = Validator::make($data, $validationRules);
+
+            if ($validator->passes()) {
+                $income = Income::find($data['id']);
+
+                if (isset($data['sum'])) {
+                    $income->sum = $data['sum'];
+                }
+
+                if (isset($data['description'])) {
+                    $income->description = $data['description'];
+                }
+
+                if (isset($data['user_id'])) {
+                    $income->user_id = $data['user_id'];
+                }
+
+                if (isset($data['created_at'])) {
+                    $income->created_at = date('Y-m-d H:i:s', $data['created_at']);
+                }
+
+                $income->save();
+
+                return Response::json($income);
+            } else {
+                return Response::json($validator->messages(), 400);
+            }
+        }
+
+        return Response::json(Lang::get('general.invalid_input_data'), 400);
+    }
+
+    public function postCreate()
+    {
+        $data = Input::get('data');
+
+        if (is_array($data) && !empty($data)) {
+            $validationRules = [
+                'sum' => 'required|numeric|not_in:0',
+                'description' => 'required|string',
+                'user_id' => 'required|user_id',
+                'created_at' => 'sometimes|integer'
+            ];
+
+            $validator = Validator::make($data, $validationRules);
+
+            if ($validator->passes()) {
+                $income = new Income;
+
+                $income->sum = $data['sum'];
+                $income->description = $data['description'];
+                $income->user_id = $data['user_id'];
+
+                if (isset($data['created_at'])) {
+                    $income->created_at = date('Y-m-d H:i:s', $data['created_at']);
+                }
+
+                $income->save();
+
+                return Response::json($income);
+            } else {
+                return Response::json($validator->messages(), 400);
+            }
+        }
+
+        return Response::json(Lang::get('general.invalid_input_data'), 400);
     }
 }

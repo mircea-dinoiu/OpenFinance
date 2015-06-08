@@ -1,8 +1,12 @@
 Ext.define('Financial.view.main.internal.data.reports.Calculations', {
     extend: 'Ext.grid.Panel',
     xtype: 'app-main-internal-data-reports-calculations',
-    store: 'Financial.store.data.Report',
     hideHeaders: true,
+
+    initComponent: function () {
+        this.store = Ext.create('Financial.store.data.Report');
+        this.callParent(arguments);
+    },
 
     features: [
         {
@@ -10,12 +14,14 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
             groupHeaderTpl: [
                 '{name:this.formatName}',
                 {
-                    formatName: function(type) {
+                    formatName: function (type) {
                         switch (type) {
                             case 'expense':
                                 return 'Expenses';
                             case 'remaining':
                                 return 'Remaining';
+                            case 'income':
+                                return 'Incomes';
                         }
                     }
                 }
@@ -39,7 +45,7 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
             renderer: function (value) {
                 return Ext.String.format(
                     '{0} {1}',
-                    value,
+                    value.toFixed(2),
                     Financial.data.currency.default.symbol
                 );
             },
@@ -47,7 +53,7 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
             summaryRenderer: function (value) {
                 return Ext.String.format(
                     '<b>{0} {1}</b>',
-                    value,
+                    value.toFixed(2),
                     Financial.data.currency.default.symbol
                 );
             }

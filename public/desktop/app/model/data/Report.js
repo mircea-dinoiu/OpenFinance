@@ -4,6 +4,7 @@ Ext.define('Financial.model.data.Report', {
     fields: [
         {name: 'sum', type: 'float'},
         {name: 'description', type: 'string'},
-        {name: 'type', type: 'string'}
+        {name: 'type', type: 'string'},
+        {name: 'key', type: 'string'}
     ]
 });

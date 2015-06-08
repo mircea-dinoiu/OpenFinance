@@ -2,15 +2,8 @@ Ext.define('Financial.util.User', {
     singleton: true,
 
     getUserById: function (id) {
-        var ret;
+        var store = Financial.data.user.store;
 
-        Ext.each(Financial.data.user.list, function (user) {
-            if (user.id === parseInt(id)) {
-                ret = user;
-                return false;
-            }
-        });
-
-        return ret;
+        return store.getAt(store.findExact('id', parseInt(id)));
     }
 });

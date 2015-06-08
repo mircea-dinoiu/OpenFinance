@@ -26,7 +26,11 @@ Ext.define('Financial.util.Currency', {
             to = this.getCurrencyByISOCode(to);
         }
 
-        return parseFloat((value * from.rates[to.iso_code]).toFixed(2));
+        if (from.iso_code === to.iso_code) {
+            return value;
+        }
+
+        return value * from.rates[to.iso_code];
     },
 
     convertToDefault: function (value, from) {

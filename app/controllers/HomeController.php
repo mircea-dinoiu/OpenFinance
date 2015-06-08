@@ -35,9 +35,9 @@ class HomeController extends BaseController
 
     public function getDesktopIndex()
     {
-
         $bootstrapScript = file_get_contents(app_path('../public/desktop.html'));
         $bootstrapScript = str_replace('bootstrap.js', url('desktop/bootstrap.js'), $bootstrapScript);
+
         return View::make('desktop.main')->with('bootstrapScript', $bootstrapScript);
     }
 }

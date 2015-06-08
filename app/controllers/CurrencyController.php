@@ -6,14 +6,41 @@ class CurrencyController extends BaseController
 
     private static $defaultCurrency = null;
 
-    public function convert($from, $to)
+    public static function convert($value, $from, $to)
     {
+        static::setupData();
 
+        if (!$from instanceof Currency) {
+            if (is_numeric($from)) {
+                $from = Currency::find($from);
+            } else if (is_string($from)) {
+                $from = Currency::where('iso_code', '=', $from)->firstOrFail();
+            }
+        }
+
+        if (!$to instanceof Currency) {
+            if (is_numeric($to)) {
+                $to = Currency::find($to);
+            } else if (is_string($to)) {
+                $to = Currency::where('iso_code', '=', $to)->firstOrFail();
+            }
+        }
+
+        if ($from->iso_code === $to->iso_code) {
+            return $value;
+        }
+
+        return round($value * static::$data['map'][$from->id]['rates'][$to->iso_code], 2);
+    }
+
+    public static function convertToDefault($value, $from)
+    {
+        return static::convert($value, $from, static::getDefaultCurrency());
     }
 
     private static function setupData()
     {
-        if (self::$data !== null) {
+        if (static::$data !== null) {
             return;
         }
 
@@ -24,7 +51,7 @@ class CurrencyController extends BaseController
         $allowedISOCodes = [];
 
         foreach ($rawData as $currency) {
-            $map[$currency->id] = (array) $currency;
+            $map[$currency->id] = (array)$currency;
 
             $allowedISOCodes[] = $currency->iso_code;
         }
@@ -63,7 +90,8 @@ class CurrencyController extends BaseController
         ];
     }
 
-    public static function getDefaultCurrency() {
+    public static function getDefaultCurrency()
+    {
         if (self::$defaultCurrency === null) {
             self::$defaultCurrency = Currency::where(
                 'iso_code', '=', Setting::where('key', '=', 'default_currency')->firstOrFail()->value

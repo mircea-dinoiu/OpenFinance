@@ -1,17 +1,12 @@
 Ext.define('Financial.view.main.internal.data.expenses.Grid', {
     extend: 'Ext.grid.Panel',
-
+    xtype: 'app-main-internal-data-expenses-grid',
+    store: 'Financial.store.Expense',
+    controller: 'app-main-internal-data-expenses-grid',
+    autoScroll: true,
     requires: [
         'Financial.view.main.internal.data.expenses.GridController'
     ],
-
-    xtype: 'app-main-internal-data-expenses-grid',
-
-    store: 'Financial.store.Expense',
-
-    controller: 'app-main-internal-data-expenses-grid',
-
-    autoScroll: true,
 
     viewConfig: {
         getRowClass: function (record) {
@@ -32,20 +27,8 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
     tbar: [
         {
             text: 'Add Expense',
-            iconCls: 'icon-add',
+            iconCls: 'icon-basket_put',
             handler: 'onAddExpenseClick'
-        },
-        {
-            xtype: 'tbfill'
-        },
-        {
-            xtype: 'textfield',
-            listeners: {
-                keypress: function (textField) {
-                    // todo
-                    //store.filterBy(function (record) { return true; });
-                }
-            }
         }
     ],
 
@@ -78,6 +61,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                     flex: 1,
                     editor: {
                         xtype: 'numberfield',
+                        itemId: 'sum',
                         allowBlank: false,
                         validator: function (value) {
                             if (parseFloat(value) === 0) {
@@ -85,7 +69,8 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                             }
 
                             return true;
-                        }
+                        },
+                        value: ''
                     },
                     minWidth: 85,
                     align: 'right'
@@ -102,7 +87,8 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                         queryMode: 'local',
                         typeAhead: true,
                         allowBlank: false,
-                        forceSelection: true
+                        forceSelection: true,
+                        tabIndex: -1
                     },
                     renderer: function (value) {
                         return Financial.data.currency.map[value].symbol;
@@ -122,10 +108,15 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
         {
             text: 'Date',
             dataIndex: 'created_at',
-            formatter: "date('D Y-m-d')",
+            formatter: "date('D d-m-Y')",
             width: 115,
             resizable: false,
-            editor: 'datefield'
+            editor: {
+                xtype: 'datefield',
+                format: 'd-m-Y',
+                altFormats: 'd/m/Y|j/n/Y|j/n/y|j/m/y|d/n/y|j/m/Y|d/n/Y|d-m-y|d/m|d-m|dm|dmy|dmY|d|Y-m-d|j-n|j/n',
+                startDay: 1
+            }
         },
         {
             text: 'Blame',
@@ -134,9 +125,9 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
             renderer: function (ids) {
                 var ret = [];
 
-                Ext.each(Financial.data.user.list, function (user) {
+                Financial.data.user.store.each(function (user) {
                     if (ids.indexOf(user.id) !== -1) {
-                        ret.push(user.first_name + ' ' + user.last_name.substr(0, 1));
+                        ret.push(user.get('first_name') + ' ' + user.get('last_name').substr(0, 1));
                     }
                 });
 
@@ -160,9 +151,9 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
             renderer: function (ids) {
                 var ret = [];
 
-                Ext.each(Financial.data.category.list, function (category) {
-                    if (ids.indexOf(category.id) !== -1) {
-                        ret.push(category.name);
+                Financial.util.Category.getStore().each(function (category) {
+                    if (ids.indexOf(category.get('id')) !== -1) {
+                        ret.push(category.get('name'));
                     }
                 });
 
@@ -179,21 +170,29 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
         },
         {
             xtype: 'actioncolumn',
+            editor: {
+                xtype: 'label',
+                text: ''
+            },
             items: [
                 {
-                    // Prepend iconCls with space, bug in ExtJS: class is disabledicon-accept when item is disabled
-                    iconCls: ' icon-accept',
                     tooltip: 'Mark as finished',
-                    isDisabled: function (a, b, c, d, record) {
-                        return record.get('status') === 'finished';
-                    }
+                    getClass: function (v, metadata, record) {
+                        return record.get('status') === 'finished' ? ' hidden ' : ' icon-lock ';
+                    },
+                    handler: 'onMarkExpenseAsFinishedClick'
                 },
                 {
-                    iconCls: ' icon-delete',
+                    tooltip: 'Mark as pending',
+                    getClass: function (v, metadata, record) {
+                        return record.get('status') === 'pending' ? ' hidden ' : ' icon-lock_break ';
+                    },
+                    handler: 'onMarkExpenseAsPendingClick'
+                },
+                {
+                    iconCls: ' icon-delete ',
                     tooltip: 'Delete',
-                    isDisabled: function (a, b, c, d, record) {
-                        return record.get('status') === 'finished';
-                    }
+                    handler: 'onDeleteExpenseClick'
                 }
             ],
             width: 16 * 2 + 4 * 2
