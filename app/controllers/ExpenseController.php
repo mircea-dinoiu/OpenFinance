@@ -95,7 +95,7 @@ class ExpenseController extends BaseController
                 /**
                  * Categories
                  */
-                if (isset($data['categories']) && count($data['categories']) > 0) {
+                if (isset($data['categories'])) {
                     DB::table('category_expense')->where('expense_id', '=', $expense->id)->delete();
                     foreach ($data['categories'] as $id) {
                         DB::table('category_expense')->insert([
