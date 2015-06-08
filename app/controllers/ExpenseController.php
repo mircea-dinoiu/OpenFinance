@@ -2,6 +2,15 @@
 
 class ExpenseController extends BaseController
 {
+    private static function newExpenseQuery() {
+        return Expense::with([
+            'users' => function ($query) {
+                $query->where('blame', '=', '1')->get();
+            },
+            'categories'
+        ]);
+    }
+
     public function getList()
     {
         $data = [
@@ -17,12 +26,7 @@ class ExpenseController extends BaseController
         $validator = Validator::make($data, $validationRules);
 
         if ($validator->passes()) {
-            $query = Expense::with([
-                'users' => function ($query) {
-                    $query->where('blame', '=', '1')->get();
-                },
-                'categories'
-            ]);
+            $query = static::newExpenseQuery();
 
             if ($data['start_date']) {
                 $query->whereRaw('DATE(created_at) >= ?', [$data['start_date']]);
@@ -119,7 +123,7 @@ class ExpenseController extends BaseController
                     }
                 }
 
-                return Response::json($expense);
+                return Response::json(static::newExpenseQuery()->find($expense->id));
             } else {
                 return Response::json($validator->messages(), 400);
             }
@@ -194,7 +198,7 @@ class ExpenseController extends BaseController
                     ]);
                 }
 
-                return Response::json($expense);
+                return Response::json(static::newExpenseQuery()->find($expense->id));
             } else {
                 return Response::json($validator->messages(), 400);
             }

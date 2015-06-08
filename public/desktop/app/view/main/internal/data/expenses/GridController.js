@@ -29,6 +29,13 @@ Ext.define('Financial.view.main.internal.data.expenses.GridController', {
 
         delete this.newRecord;
 
+        if (record.get('users').length === 0) {
+            record.set(
+                'users',
+                Financial.util.User.getAllIds()
+            );
+        }
+
         record.store.sync();
     },
 
@@ -49,7 +56,7 @@ Ext.define('Financial.view.main.internal.data.expenses.GridController', {
             message: 'Are you sure you want to delete this expense?',
             buttons: Ext.Msg.YESNO,
             icon: Ext.Msg.QUESTION,
-            fn: function(btn) {
+            fn: function (btn) {
                 if (btn === 'yes') {
                     store.remove(record);
                     store.sync();
