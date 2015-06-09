@@ -1,6 +1,10 @@
 Ext.define('Financial.util.Currency', {
     singleton: true,
 
+    getStore: function () {
+        return Financial.data.currency.store;
+    },
+
     setCurrency: function (response) {
         Financial.data.currency = Ext.JSON.decode(response.responseText);
 
@@ -10,7 +14,7 @@ Ext.define('Financial.util.Currency', {
     },
 
     getDefaultCurrency: function () {
-        return Financial.data.currency.default;
+        return this.getCurrencyById(Financial.data.currency.default);
     },
 
     convert: function (value, from, to) {
@@ -26,11 +30,11 @@ Ext.define('Financial.util.Currency', {
             to = this.getCurrencyByISOCode(to);
         }
 
-        if (from.iso_code === to.iso_code) {
+        if (from.get('iso_code') === to.get('iso_code')) {
             return value;
         }
 
-        return value * from.rates[to.iso_code];
+        return value * from.get('rates')[to.get('iso_code')];
     },
 
     convertToDefault: function (value, from) {
@@ -38,19 +42,14 @@ Ext.define('Financial.util.Currency', {
     },
 
     getCurrencyById: function (id) {
-        return Financial.data.currency.map[id];
+        var store = this.getStore();
+
+        return store.getAt(store.findExact('id', parseInt(id)));
     },
 
     getCurrencyByISOCode: function (ISOCode) {
-        var currency;
+        var store = this.getStore();
 
-        Ext.Object.eachValue(Financial.data.currency.map, function (eachCurrency) {
-            if (eachCurrency.iso_code === ISOCode) {
-                currency = eachCurrency;
-                return false;
-            }
-        });
-
-        return currency;
+        return store.getAt(store.findExact('iso_code', ISOCode));
     }
 });

@@ -15,14 +15,42 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
         loadMask: false
     },
 
-    plugins: {
-        ptype: 'rowediting',
-        listeners: {
-            canceledit: 'onCancelRowEditing',
-            beforeedit: 'onBeforeRowEditing',
-            edit: 'onRowEditing'
+    plugins: [
+        {
+            ptype: 'rowediting',
+            listeners: {
+                canceledit: 'onCancelRowEditing',
+                beforeedit: 'onBeforeRowEditing',
+                edit: 'onRowEditing'
+            }
+        },
+        {
+            ptype: 'rowexpander',
+            rowBodyTpl: [
+                // TODO THIS IS A HACK!? IMPROVE CODE PLEASE
+                '<p><strong>Sum for other currencies: </strong>{currency_id:this.prepareCurrency}{sum:this.getOtherCurrencies}</p>',
+                {
+                    prepareCurrency: function (currencyId) {
+                        this.currencyId = currencyId;
+                        return '';
+                    },
+                    getOtherCurrencies: function (sum) {
+                        var ret = [],
+                            currency = Financial.util.Currency.getCurrencyById(this.currencyId);
+
+                        Ext.Object.each(currency.get('rates'), function (isoCode, multiplier) {
+                            ret.push([
+                                Financial.util.Format.money(sum * multiplier),
+                                Financial.util.Currency.getCurrencyByISOCode(isoCode).get('symbol')
+                            ].join(' '));
+                        });
+
+                        return ret.join(', ');
+                    }
+                }
+            ]
         }
-    },
+    ],
 
     tbar: [
         {
@@ -91,7 +119,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                         tabIndex: -1
                     },
                     renderer: function (value) {
-                        return Financial.data.currency.map[value].symbol;
+                        return Financial.util.Currency.getCurrencyById(value).get('symbol');
                     }
                 }
             ]

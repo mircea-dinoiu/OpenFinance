@@ -46,7 +46,7 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
                 return Ext.String.format(
                     '{0} {1}',
                     Financial.util.Format.money(value),
-                    Financial.data.currency.default.symbol
+                    Financial.util.Currency.getDefaultCurrency().get('symbol')
                 );
             },
             summaryType: 'sum',
@@ -54,7 +54,7 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
                 return Ext.String.format(
                     '<b>{0} {1}</b>',
                     Financial.util.Format.money(value),
-                    Financial.data.currency.default.symbol
+                    Financial.util.Currency.getDefaultCurrency().get('symbol')
                 );
             }
         }

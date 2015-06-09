@@ -35,7 +35,7 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
             text: 'Sum',
             flex: 1,
             renderer: function (value) {
-                return value + ' ' + Financial.data.currency.default.symbol;
+                return value + ' ' + Financial.util.Currency.getDefaultCurrency().get('symbol');
             },
             editor: {
                 xtype: 'numberfield',

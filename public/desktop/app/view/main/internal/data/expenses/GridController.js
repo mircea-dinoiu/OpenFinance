@@ -80,7 +80,7 @@ Ext.define('Financial.view.main.internal.data.expenses.GridController', {
         rowEditing.cancelEdit();
 
         var record = Ext.create('Financial.model.Expense', {
-            currency_id: Financial.data.currency.default.id,
+            currency_id: Financial.util.Currency.getDefaultCurrency().get('id'),
             created_at: Financial.util.Misc.generateEICreationDate(grid),
             users: [Financial.data.user.current.id],
             status: 'pending'
