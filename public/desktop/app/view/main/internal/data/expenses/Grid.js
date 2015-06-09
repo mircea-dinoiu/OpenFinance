@@ -39,10 +39,10 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                             currency = Financial.util.Currency.getCurrencyById(this.currencyId);
 
                         Ext.Object.each(currency.get('rates'), function (isoCode, multiplier) {
-                            ret.push([
+                            ret.push('<i>' + [
                                 Financial.util.Format.money(sum * multiplier),
                                 Financial.util.Currency.getCurrencyByISOCode(isoCode).get('symbol')
-                            ].join(' '));
+                            ].join(' ') + '</i>');
                         });
 
                         return ret.join(', ');
@@ -203,16 +203,16 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
             },
             items: [
                 {
-                    tooltip: 'Mark as finished',
+                    tooltip: 'Flag as finished',
                     getClass: function (v, metadata, record) {
-                        return record.get('status') === 'finished' ? ' hidden ' : ' icon-lock ';
+                        return record.get('status') === 'finished' ? ' hidden ' : ' icon-flag_green ';
                     },
                     handler: 'onMarkExpenseAsFinishedClick'
                 },
                 {
-                    tooltip: 'Mark as pending',
+                    tooltip: 'Flag as pending',
                     getClass: function (v, metadata, record) {
-                        return record.get('status') === 'pending' ? ' hidden ' : ' icon-lock_break ';
+                        return record.get('status') === 'pending' ? ' hidden ' : ' icon-flag_yellow ';
                     },
                     handler: 'onMarkExpenseAsPendingClick'
                 },

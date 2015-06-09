@@ -46,6 +46,7 @@
 
     {{--*/ $theme = 'neptune' /*--}}
     {{ HTML::style("desktop/ext/packages/ext-theme-$theme/build/resources/ext-theme-$theme-all-debug.css")}}
+    {{ HTML::style('desktop/resources/css/icon.css?' . filemtime(app_path('../public/desktop/resources/css/icon.css'))) }}
     {{ HTML::style('desktop/resources/css/extra.css?' . filemtime(app_path('../public/desktop/resources/css/extra.css'))) }}
 
     {{ $bootstrapScript }}
