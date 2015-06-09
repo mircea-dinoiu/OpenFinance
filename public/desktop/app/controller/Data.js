@@ -67,7 +67,7 @@ Ext.define('Financial.controller.Data', {
         Financial.data.user.store.each(function (record) {
             if (users[record.get('id')]) {
                 expenses.push({
-                    sum: parseFloat(users[record.get('id')].toFixed(2)),
+                    sum: users[record.get('id')],
                     description: record.get('full_name'),
                     type: 'expense',
                     key: 'expenses_for_user:' + record.get('id')
@@ -114,7 +114,7 @@ Ext.define('Financial.controller.Data', {
             toolbar = mainView.down('app-main-internal-toolbar');
 
         data.push({
-            sum: (incomesGrid.getStore().sum('sum') - spent).toFixed(2),
+            sum: incomesGrid.getStore().sum('sum') - spent,
             description: toolbar.getController().getDateRangeDisplayValue(),
             type: 'remaining',
             key: 'remaining'

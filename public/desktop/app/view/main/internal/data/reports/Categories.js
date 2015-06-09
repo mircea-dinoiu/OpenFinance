@@ -29,7 +29,7 @@ Ext.define('Financial.view.main.internal.data.reports.Categories', {
             renderer: function (value) {
                 return Ext.String.format(
                     '{0} {1}',
-                    value.toFixed(2),
+                    Financial.util.Format.money(value),
                     Financial.data.currency.default.symbol
                 );
             }

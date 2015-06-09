@@ -45,7 +45,7 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
             renderer: function (value) {
                 return Ext.String.format(
                     '{0} {1}',
-                    value.toFixed(2),
+                    Financial.util.Format.money(value),
                     Financial.data.currency.default.symbol
                 );
             },
@@ -53,7 +53,7 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
             summaryRenderer: function (value) {
                 return Ext.String.format(
                     '<b>{0} {1}</b>',
-                    value.toFixed(2),
+                    Financial.util.Format.money(value),
                     Financial.data.currency.default.symbol
                 );
             }

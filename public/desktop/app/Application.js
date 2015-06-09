@@ -12,6 +12,7 @@ Ext.define('Financial.Application', {
         'Financial.util.User',
         'Financial.util.Currency',
         'Financial.util.Category',
+        'Financial.util.Format',
         'Financial.util.Misc'
     ],
 
