@@ -10,7 +10,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
 
     viewConfig: {
         getRowClass: function (record) {
-            return record.get('status') + '-expense-row';
+            return record.get('status') + '-expense-row expense-row';
         },
         loadMask: false
     },
@@ -27,8 +27,9 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
         {
             ptype: 'rowexpander',
             rowBodyTpl: [
+                '<hr class="expense-details-separator">',
                 // TODO THIS IS A HACK!? IMPROVE CODE PLEASE
-                '<p><strong>Sum for other currencies: </strong>{currency_id:this.prepareCurrency}{sum:this.getOtherCurrencies}</p>',
+                '<div><strong>Sum for other currencies: </strong>{currency_id:this.prepareCurrency}{sum:this.getOtherCurrencies}</div>',
                 {
                     prepareCurrency: function (currencyId) {
                         this.currencyId = currencyId;

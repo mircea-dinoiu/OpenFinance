@@ -1,9 +1,22 @@
-.pending-expense-row {
-  > td:nth-child(4) > .x-grid-cell-inner {
-    border-radius: 4px;
-    padding: 3px 8px 2px 8px;
-    margin: 2px;
-    background: #FCDD26;
+@import "compass";
+
+.expense-row {
+  &.pending-expense-row {
+    > td:nth-child(4) > .x-grid-cell-inner {
+      border-radius: 4px;
+      padding: 3px 8px 2px 8px;
+      margin: 2px;
+      @include background-image(linear_gradient(#FFE73A, #FAC637));
+    }
+  }
+
+  + .x-grid-rowbody-tr .x-grid-rowbody {
+    .expense-details-separator {
+      width: calc(100% + 20px);
+      margin: -4px 0 5px -10px;
+      border: none;
+      border-top: 1px solid #EDEDED;
+    }
   }
 }
 
