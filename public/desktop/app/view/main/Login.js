@@ -21,12 +21,20 @@ Ext.define('Financial.view.main.Login', {
         {
             xtype: 'form',
             title: 'Login',
-
             layout: 'anchor',
             defaults: {
                 anchor: '100%',
                 padding: '5px 20px',
-                xtype: 'textfield'
+                xtype: 'textfield',
+                listeners: {
+                    specialkey: function (field, event) {
+                        if (event.getKey() == event.ENTER) {
+                            if (this.up('form').isValid()) {
+                                this.up('app-main-login').getController().submitLogin();
+                            }
+                        }
+                    }
+                }
             },
 
             items: [
@@ -64,6 +72,5 @@ Ext.define('Financial.view.main.Login', {
                 }
             ]
         }
-
     ]
 });
