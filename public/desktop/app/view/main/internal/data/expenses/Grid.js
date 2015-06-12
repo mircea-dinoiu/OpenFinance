@@ -24,33 +24,35 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                 edit: 'onRowEditing'
             }
         },
-        {
-            ptype: 'rowexpander',
-            rowBodyTpl: [
-                '<hr class="expense-details-separator">',
-                // TODO THIS IS A HACK!? IMPROVE CODE PLEASE
-                '<div><strong>Sum for other currencies: </strong>{currency_id:this.prepareCurrency}{sum:this.getOtherCurrencies}</div>',
-                {
-                    prepareCurrency: function (currencyId) {
-                        this.currencyId = currencyId;
-                        return '';
-                    },
-                    getOtherCurrencies: function (sum) {
-                        var ret = [],
-                            currency = Financial.util.Currency.getCurrencyById(this.currencyId);
+        /*{
+         ptype: 'rowexpander',
+         expandOnDblClick: false,
+         expandOnEnter: false,
+         rowBodyTpl: [
+         '<hr class="expense-details-separator">',
+         // TODO THIS IS A HACK!? IMPROVE CODE PLEASE
+         '<div><strong>Sum for other currencies: </strong>{currency_id:this.prepareCurrency}{sum:this.getOtherCurrencies}</div>',
+         {
+         prepareCurrency: function (currencyId) {
+         this.currencyId = currencyId;
+         return '';
+         },
+         getOtherCurrencies: function (sum) {
+         var ret = [],
+         currency = Financial.util.Currency.getById(this.currencyId);
 
-                        Ext.Object.each(currency.get('rates'), function (isoCode, multiplier) {
-                            ret.push('<i>' + [
-                                Financial.util.Format.money(sum * multiplier),
-                                Financial.util.Currency.getCurrencyByISOCode(isoCode).get('symbol')
-                            ].join(' ') + '</i>');
-                        });
+         Ext.Object.each(currency.get('rates'), function (isoCode, multiplier) {
+         ret.push('<i>' + [
+         Financial.util.Format.money(sum * multiplier),
+         Financial.util.Currency.getCurrencyByISOCode(isoCode).get('symbol')
+         ].join(' ') + '</i>');
+         });
 
-                        return ret.join(', ');
-                    }
-                }
-            ]
-        }
+         return ret.join(', ');
+         }
+         }
+         ]
+         }*/
     ],
 
     tbar: [
@@ -85,6 +87,25 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
             text: 'Sum',
             columns: [
                 {
+                    text: 'Curr.',
+                    dataIndex: 'currency_id',
+                    width: 70,
+                    align: 'right',
+                    editor: {
+                        xtype: 'combo',
+                        valueField: 'id',
+                        displayField: 'symbol',
+                        itemId: 'currency',
+                        queryMode: 'local',
+                        typeAhead: true,
+                        allowBlank: false,
+                        forceSelection: true
+                    },
+                    renderer: function (value) {
+                        return Financial.util.Currency.getById(value).get('symbol');
+                    }
+                },
+                {
                     text: 'Value',
                     dataIndex: 'sum',
                     flex: 1,
@@ -98,29 +119,17 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                             }
 
                             return true;
-                        },
-                        value: ''
+                        }
                     },
                     minWidth: 85,
-                    align: 'right'
-                },
-                {
-                    text: 'Curr.',
-                    dataIndex: 'currency_id',
-                    width: 70,
-                    editor: {
-                        xtype: 'combo',
-                        valueField: 'id',
-                        displayField: 'symbol',
-                        itemId: 'currency',
-                        queryMode: 'local',
-                        typeAhead: true,
-                        allowBlank: false,
-                        forceSelection: true,
-                        tabIndex: -1
-                    },
-                    renderer: function (value) {
-                        return Financial.util.Currency.getCurrencyById(value).get('symbol');
+                    renderer: function (value, metaData, record) {
+                        Financial.util.Misc.anotherCurrenciesTooltip(
+                            metaData,
+                            Financial.util.Currency.getById(record.get('currency_id')),
+                            record
+                        );
+
+                        return value;
                     }
                 }
             ]
@@ -156,7 +165,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
 
                 Financial.data.user.store.each(function (user) {
                     if (ids.indexOf(user.id) !== -1) {
-                        ret.push(user.get('first_name') + ' ' + user.get('last_name').substr(0, 1));
+                        ret.push(user.get('first_name'));
                     }
                 });
 

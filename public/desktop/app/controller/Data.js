@@ -62,20 +62,31 @@ Ext.define('Financial.controller.Data', {
             });
         });
 
-        var expenses = [];
+        var data = [];
 
         Financial.data.user.store.each(function (record) {
             if (users[record.get('id')]) {
-                expenses.push({
+                data.push({
                     sum: users[record.get('id')],
                     description: record.get('full_name'),
                     type: 'expense',
-                    key: 'expenses_for_user:' + record.get('id')
+                    localKey: record.get('id')
                 });
             }
         });
 
-        return expenses;
+        data.push({
+            sum: Ext.Array.map(data, function (each) {
+                return each.sum;
+            }).reduce(function (a, b) {
+                return a + b;
+            }, 0),
+            description: 'TOTAL',
+            type: 'expense',
+            localKey: 'total'
+        });
+
+        return data;
     },
 
     getIncomesData: function () {
@@ -98,33 +109,141 @@ Ext.define('Financial.controller.Data', {
         Ext.Object.each(users, function (id, sum) {
             data.push({
                 sum: sum,
-                description: Financial.util.User.getUserById(id).get('full_name'),
+                description: Financial.util.User.getById(id).get('full_name'),
                 type: 'income',
-                key: 'income:' + id
+                localKey: id
             });
+        });
+
+        data.push({
+            sum: Ext.Array.map(data, function (each) {
+                return each.sum;
+            }).reduce(function (a, b) {
+                return a + b;
+            }, 0),
+            description: 'TOTAL',
+            type: 'income',
+            localKey: 'total'
         });
 
         return data;
     },
 
-    getRemainingData: function (spent) {
+    getRemainingData: function (expenses, incomes) {
         var data = [],
             incomesGrid = Financial.app.getMainView().down(this.selectors.incomesGrid),
             mainView = Financial.app.getMainView(),
-            toolbar = mainView.down('app-main-internal-toolbar');
+            toolbar = mainView.down('app-main-internal-toolbar'),
+            spent,
+            users,
+            totalRemainingByUser = {};
 
+        spent = Ext.Array.map(expenses, function (e) {
+            return e.localKey !== 'total' ? e.sum : 0;
+        }).reduce(function (a, b) {
+            return a + b;
+        }, 0);
+
+        users = Ext.Array.unique(Ext.Array.map(Ext.Array.merge(
+            expenses.filter(function (expense) {
+                return expense.localKey !== 'total';
+            }),
+            incomes.filter(function (income) {
+                return income.localKey !== 'total';
+            })
+        ), function (user) {
+            return parseInt(user.localKey);
+        }));
+
+        /**
+         * Remaining present
+         */
         data.push({
             sum: incomesGrid.getStore().sum('sum') - spent,
             description: toolbar.getController().getDateRangeDisplayValue(),
             type: 'remaining',
-            key: 'remaining'
+            localKey: 'present',
+            hasChildren: true
         });
 
+        Ext.each(users, function (id) {
+            var expensesForUser, incomesForUser;
+
+            expensesForUser = expenses.filter(function (expense) {
+                return expense.localKey == id;
+            })[0];
+
+            incomesForUser = incomes.filter(function (income) {
+                return income.localKey == id;
+            })[0];
+
+            expensesForUser = expensesForUser ? expensesForUser.sum : 0;
+            incomesForUser = incomesForUser ? incomesForUser.sum : 0;
+
+            totalRemainingByUser[id] = incomesForUser - expensesForUser;
+
+            data.push({
+                sum: totalRemainingByUser[id],
+                description: Financial.util.User.getById(id).get('full_name'),
+                type: 'remaining',
+                localKey: id,
+                display: false,
+                parent: 'present'
+            });
+        });
+
+        /**
+         * Remaining past
+         */
         data.push({
-            sum: this.cache.past_remaining,
+            sum: this.cache.past_remaining.sum,
             description: 'Past',
             type: 'remaining',
-            key: 'past_remaining'
+            localKey: 'past',
+            hasChildren: true
+        });
+
+        Ext.Object.each(this.cache.past_remaining.users, function (id, sum) {
+            if (!totalRemainingByUser[id]) {
+                totalRemainingByUser[id] = 0;
+            }
+
+            totalRemainingByUser[id] += sum;
+
+            data.push({
+                sum: sum,
+                description: Financial.util.User.getById(id).get('full_name'),
+                type: 'remaining',
+                localKey: id,
+                display: false,
+                parent: 'past'
+            });
+        });
+
+        /**
+         * Total remaining
+         */
+        data.push({
+            sum: Ext.Array.map(data, function (each) {
+                return !each.parent ? each.sum : 0;
+            }).reduce(function (a, b) {
+                return a + b;
+            }, 0),
+            description: 'TOTAL',
+            type: 'remaining',
+            localKey: 'total',
+            hasChildren: true
+        });
+
+        Ext.Object.each(totalRemainingByUser, function (id, sum) {
+            data.push({
+                sum: sum,
+                description: Financial.util.User.getById(id).get('full_name'),
+                type: 'remaining',
+                localKey: id,
+                display: false,
+                parent: 'total'
+            });
         });
 
         return data;
@@ -138,7 +257,29 @@ Ext.define('Financial.controller.Data', {
 
         expensesGrid.getStore().each(function (record) {
             var rCategories = record.get('categories'),
-                sum = record.get('sum');
+                sum = record.get('sum'),
+                addData = function (categoryId, sum) {
+                    if (!categories[categoryId]) {
+                        categories[categoryId] = {
+                            sum: 0,
+                            users: {}
+                        };
+                    }
+
+                    categories[categoryId].sum += sum;
+
+                    var users = record.get('users');
+
+                    sum /= users.length;
+
+                    Ext.each(users, function (id) {
+                        if (!categories[categoryId]['users'][id]) {
+                            categories[categoryId]['users'][id] = 0;
+                        }
+
+                        categories[categoryId]['users'][id] += sum;
+                    });
+                };
 
             if (record.get('currency_id') !== parseInt(Financial.util.Currency.getDefaultCurrency().id)) {
                 sum = Financial.util.Currency.convertToDefault(sum, record.get('currency_id'));
@@ -146,50 +287,57 @@ Ext.define('Financial.controller.Data', {
 
             if (rCategories.length > 0) {
                 Ext.each(rCategories, function (categoryId) {
-                    if (!categories[categoryId]) {
-                        categories[categoryId] = 0;
-                    }
-
-                    categories[categoryId] += sum;
+                    addData(categoryId, sum);
                 });
             } else {
-                if (!categories[0]) {
-                    categories[0] = 0;
-                }
-
-                categories[0] += sum;
+                addData(0, sum);
             }
         });
 
-        Ext.Object.each(categories, function (key, sum) {
+        var categoryIds = Ext.Array.map(Ext.Object.getKeys(categories), function (id) {
+            return parseInt(id);
+        });
+
+        categoryIds.sort(function (a, b) {
+            if (a == 0) {
+                return -1;
+            }
+
+            if (b == 0) {
+                return 1;
+            }
+
+            return Financial.util.Category.getById(a).get('expenses') > Financial.util.Category.getById(b).get('expenses') ? -1 : 1;
+        });
+
+        Ext.each(categoryIds, function (categoryId) {
             var desc,
-                categoryId = parseInt(key);
+                category = categories[categoryId];
 
             if (categoryId === 0) {
                 desc = '<i>Unclassified</i>';
             } else {
-                desc = Financial.util.Category.getCategoryById(categoryId).get('name');
+                desc = Financial.util.Category.getById(categoryId).get('name');
             }
 
             data.push({
-                sum: sum,
+                sum: category.sum,
                 description: desc,
                 type: 'category',
-                key: 'category:' + categoryId,
-                localKey: categoryId
-            })
-        });
+                localKey: categoryId,
+                hasChildren: true
+            });
 
-        data.sort(function (a, b) {
-            if (a.key === 'category:0') {
-                return -1;
-            }
-
-            if (b.key === 'category:0') {
-                return 1;
-            }
-
-            return Financial.util.Category.getCategoryById(a.localKey).get('expenses') > Financial.util.Category.getCategoryById(b.localKey).get('expenses') ? -1 : 1;
+            Ext.Object.each(category.users, function (id, sum) {
+                data.push({
+                    sum: sum,
+                    description: Financial.util.User.getById(id).get('full_name'),
+                    type: 'category',
+                    localKey: id,
+                    display: false,
+                    parent: categoryId
+                })
+            });
         });
 
         return data;
@@ -197,24 +345,12 @@ Ext.define('Financial.controller.Data', {
 
     getCalculationsData: function () {
         var expenses = this.getExpensesData(),
-            spent;
-
-        spent = Ext.Array.map(
-            expenses,
-            function (expense) {
-                return expense.sum
-            }
-        ).reduce(
-            function (a, b) {
-                return a + b;
-            },
-            0
-        );
+            incomes = this.getIncomesData();
 
         return Ext.Array.merge(
             expenses,
-            this.getRemainingData(spent),
-            this.getIncomesData()
+            incomes,
+            this.getRemainingData(expenses, incomes)
         );
     },
 

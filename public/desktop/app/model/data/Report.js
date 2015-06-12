@@ -5,7 +5,9 @@ Ext.define('Financial.model.data.Report', {
         {name: 'sum', type: 'float'},
         {name: 'description', type: 'string'},
         {name: 'type', type: 'string'},
-        {name: 'key', type: 'string'},
-        {name: 'localKey', type: 'string'}
+        {name: 'localKey'},
+        {name: 'hasChildren', type: 'boolean', defaultValue: false},
+        {name: 'parent', defaultValue: false},
+        {name: 'display', type: 'boolean', defaultValue: true}
     ]
 });

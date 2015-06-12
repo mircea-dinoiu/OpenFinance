@@ -24,3 +24,30 @@
   display: none;
   visibility: hidden;
 }
+
+.fake-expander-grid {
+  .non-expandable-row .x-grid-row-expander {
+    display: none;
+  }
+
+  .x-grid-rowbody {
+    display: none;
+  }
+
+  .child-row {
+    td:first-child {
+      background: #FFF;
+    }
+
+    td:not(:first-child) {
+      background: #EEE;
+      color: #AAA;
+    }
+  }
+}
+
+.report-grid {
+  .total-row {
+    font-weight: bold;
+  }
+}

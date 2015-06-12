@@ -34,9 +34,6 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
             dataIndex: 'sum',
             text: 'Sum',
             flex: 1,
-            renderer: function (value) {
-                return value + ' ' + Financial.util.Currency.getDefaultCurrency().get('symbol');
-            },
             editor: {
                 xtype: 'numberfield',
                 allowBlank: false,
@@ -47,6 +44,17 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
 
                     return true;
                 }
+            },
+            renderer: function(value, metaData, record) {
+                var currency = Financial.util.Currency.getDefaultCurrency();
+
+                Financial.util.Misc.anotherCurrenciesTooltip(
+                    metaData,
+                    currency,
+                    record
+                );
+
+                return value + ' ' + currency.get('symbol');
             }
         },
         {
@@ -76,7 +84,7 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
             text: 'From',
             flex: 1,
             renderer: function (userId) {
-                return Financial.util.User.getUserById(userId).get('full_name');
+                return Financial.util.User.getById(userId).get('full_name');
             },
             editor: {
                 xtype: 'combo',

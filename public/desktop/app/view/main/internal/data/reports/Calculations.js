@@ -1,16 +1,11 @@
 Ext.define('Financial.view.main.internal.data.reports.Calculations', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Financial.view.main.internal.data.reports.AbstractGrid',
     xtype: 'app-main-internal-data-reports-calculations',
-    hideHeaders: true,
-
-    initComponent: function () {
-        this.store = Ext.create('Financial.store.data.Report');
-        this.callParent(arguments);
-    },
 
     features: [
         {
             ftype: 'groupingsummary',
+            showSummaryRow: false,
             groupHeaderTpl: [
                 '{name:this.formatName}',
                 {
@@ -33,26 +28,23 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
         {
             dataIndex: 'description',
             text: 'Description',
-            flex: 1,
-            summaryRenderer: function () {
-                return '<b>TOTAL</b>';
-            }
+            flex: 1
         },
         {
             dataIndex: 'sum',
             text: 'Sum',
             flex: 1,
-            renderer: function (value) {
+            renderer: function(value, metaData, record) {
+                var currency = Financial.util.Currency.getDefaultCurrency();
+
+                Financial.util.Misc.anotherCurrenciesTooltip(
+                    metaData,
+                    currency,
+                    record
+                );
+
                 return Ext.String.format(
                     '{0} {1}',
-                    Financial.util.Format.money(value),
-                    Financial.util.Currency.getDefaultCurrency().get('symbol')
-                );
-            },
-            summaryType: 'sum',
-            summaryRenderer: function (value) {
-                return Ext.String.format(
-                    '<b>{0} {1}</b>',
                     Financial.util.Format.money(value),
                     Financial.util.Currency.getDefaultCurrency().get('symbol')
                 );

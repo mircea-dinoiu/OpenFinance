@@ -1,5 +1,8 @@
 Ext.define('Financial.util.Currency', {
+    extend: 'Financial.util.AbstractStoreUtil',
+
     singleton: true,
+    cache: {},
 
     getStore: function () {
         return Financial.data.currency.store;
@@ -14,18 +17,18 @@ Ext.define('Financial.util.Currency', {
     },
 
     getDefaultCurrency: function () {
-        return this.getCurrencyById(Financial.data.currency.default);
+        return this.getById(Financial.data.currency.default);
     },
 
     convert: function (value, from, to) {
         if (Ext.isNumeric(from)) {
-            from = this.getCurrencyById(from);
+            from = this.getById(from);
         } else if (Ext.isString(from)) {
             from = this.getCurrencyByISOCode(from);
         }
 
         if (Ext.isNumeric(to)) {
-            to = this.getCurrencyById(to);
+            to = this.getById(to);
         } else if (Ext.isString(to)) {
             to = this.getCurrencyByISOCode(to);
         }
@@ -39,12 +42,6 @@ Ext.define('Financial.util.Currency', {
 
     convertToDefault: function (value, from) {
         return this.convert(value, from, this.getDefaultCurrency());
-    },
-
-    getCurrencyById: function (id) {
-        var store = this.getStore();
-
-        return store.getAt(store.findExact('id', parseInt(id)));
     },
 
     getCurrencyByISOCode: function (ISOCode) {
