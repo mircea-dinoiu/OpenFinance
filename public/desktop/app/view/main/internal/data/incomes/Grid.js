@@ -72,6 +72,7 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
             formatter: "date('D d-m-Y')",
             width: 115,
             resizable: false,
+            align: 'center',
             editor: {
                 xtype: 'datefield',
                 format: 'd-m-Y',
