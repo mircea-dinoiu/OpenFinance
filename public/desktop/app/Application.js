@@ -75,14 +75,9 @@ Ext.define('Financial.Application', {
                     },
                     {
                         success: function (response) {
-                            var list = Ext.JSON.decode(response.responseText);
-
-                            Financial.data.category = {
-                                list: list,
-                                store: Ext.create('Financial.store.Category', {
-                                    data: list
-                                })
-                            };
+                            Financial.util.Category.getStore().loadData(
+                                Ext.JSON.decode(response.responseText)
+                            );
                         },
                         url: Financial.routes.category.list
                     }
@@ -113,9 +108,7 @@ Ext.define('Financial.Application', {
                 url: Financial.routes.user.list,
                 success: function (response) {
                     Financial.data.user = Ext.JSON.decode(response.responseText);
-                    Financial.data.user.store = Ext.create('Financial.store.User', {
-                        data: Financial.data.user.list
-                    });
+                    Financial.util.User.getStore().loadData(Financial.data.user.list);
 
                     Financial.app.launch();
                 },

@@ -107,9 +107,6 @@ Ext.define('Financial.view.main.internal.data.expenses.GridController', {
                 this.newRecord === record ? 'Add' : 'Update'
             );
 
-            editor.down('combo[itemId="currency"]').setStore(Financial.data.currency.store);
-            editor.down('combo[itemId="categories"]').setStore(Financial.data.category.store);
-            editor.down('combo[itemId="users"]').setStore(Financial.data.user.store);
             editor.down('datefield').setMinValue(Financial.app.getController('Data').getStartDate());
             editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
         }

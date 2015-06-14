@@ -4,16 +4,13 @@ Ext.define('Financial.util.Currency', {
     singleton: true,
     cache: {},
 
-    getStore: function () {
-        return Financial.data.currency.store;
-    },
+    storeId: 'currency',
+    storeClass: 'Financial.store.Currency',
 
     setCurrency: function (response) {
         Financial.data.currency = Ext.JSON.decode(response.responseText);
 
-        Financial.data.currency.store = Ext.create('Financial.store.Currency', {
-            data: Ext.Object.getValues(Financial.data.currency.map)
-        });
+        Financial.util.Currency.getStore().loadData(Ext.Object.getValues(Financial.data.currency.map));
     },
 
     getDefaultCurrency: function () {

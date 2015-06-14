@@ -34,6 +34,7 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
             dataIndex: 'sum',
             text: 'Sum',
             flex: 1,
+            align: 'right',
             renderer: function(value, metaData, record) {
                 var currency = Financial.util.Currency.getDefaultCurrency();
 

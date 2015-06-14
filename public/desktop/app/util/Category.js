@@ -4,7 +4,6 @@ Ext.define('Financial.util.Category', {
     singleton: true,
     cache: {},
 
-    getStore: function () {
-        return Financial.data.category.store;
-    }
+    storeId: 'category',
+    storeClass: 'Financial.store.Category'
 });

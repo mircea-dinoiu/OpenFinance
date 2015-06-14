@@ -64,7 +64,7 @@ Ext.define('Financial.controller.Data', {
 
         var data = [];
 
-        Financial.data.user.store.each(function (record) {
+        Financial.util.User.getStore().each(function (record) {
             if (users[record.get('id')]) {
                 data.push({
                     sum: users[record.get('id')],
@@ -345,13 +345,19 @@ Ext.define('Financial.controller.Data', {
 
     getCalculationsData: function () {
         var expenses = this.getExpensesData(),
-            incomes = this.getIncomesData();
+            expensesGrid = Financial.app.getMainView().down(this.selectors.expensesGrid);
 
-        return Ext.Array.merge(
-            expenses,
-            incomes,
-            this.getRemainingData(expenses, incomes)
-        );
+        if (expensesGrid.getStore().isFiltered()) {
+            return expenses;
+        } else {
+            var incomes = this.getIncomesData();
+
+            return Ext.Array.merge(
+                expenses,
+                incomes,
+                this.getRemainingData(expenses, incomes)
+            );
+        }
     },
 
     syncReports: function () {

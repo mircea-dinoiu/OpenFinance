@@ -24,6 +24,50 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                 edit: 'onRowEditing'
             }
         },
+        {
+            ptype: 'gridfilters',
+            /*createColumnFilter: function (column) {
+                var me = this,
+                    columnFilter = column.filter,
+                    filter = {
+                        column: column,
+                        grid: me.grid,
+                        owner: me
+                    },
+                    field, model, type;
+
+                if (Ext.isString(columnFilter)) {
+                    filter.type = columnFilter;
+                } else {
+                    Ext.apply(filter, columnFilter);
+                }
+
+                if (!filter.type) {
+                    model = me.store.getModel();
+                    // If no filter type given, first try to get it from the data field.
+                    field = model && model.getField(column.dataIndex);
+                    type = field && field.type;
+
+                    filter.type = (type && me.defaultFilterTypes[type]) ||
+                    column.defaultFilterType || 'string';
+                }
+
+                filter.createFilter = function (config, key) {
+                    var filterCfg = {};//this.getFilterConfig(config, key);
+
+                    console.log(filterCfg);
+
+                    filterCfg.filterFn = function () {
+                        console.log(arguments);
+                        return true;
+                    };
+
+                    return new Ext.util.Filter(filterCfg);
+                };
+
+                column.filter = Ext.Factory.gridFilter(filter);
+            }*/
+        }
         /*{
          ptype: 'rowexpander',
          expandOnDblClick: false,
@@ -90,7 +134,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                     text: 'Curr.',
                     dataIndex: 'currency_id',
                     width: 70,
-                    align: 'right',
+                    align: 'center',
                     editor: {
                         xtype: 'combo',
                         valueField: 'id',
@@ -99,7 +143,14 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                         queryMode: 'local',
                         typeAhead: true,
                         allowBlank: false,
-                        forceSelection: true
+                        forceSelection: true,
+                        store: Financial.util.Currency.getStore()
+                    },
+                    filter: {
+                        type: 'list',
+                        store: Financial.util.Currency.getStore(),
+                        idField: 'id',
+                        labelField: 'iso_code'
                     },
                     renderer: function (value) {
                         return Financial.util.Currency.getById(value).get('symbol');
@@ -109,6 +160,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                     text: 'Value',
                     dataIndex: 'sum',
                     flex: 1,
+                    align: 'right',
                     editor: {
                         xtype: 'numberfield',
                         itemId: 'sum',
@@ -129,7 +181,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                             record
                         );
 
-                        return value;
+                        return Financial.util.Format.money(value);
                     }
                 }
             ]
@@ -141,6 +193,9 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
             editor: {
                 xtype: 'textfield',
                 allowOnlyWhitespace: false
+            },
+            filter: {
+                type: 'string'
             }
         },
         {
@@ -164,7 +219,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
             renderer: function (ids) {
                 var ret = [];
 
-                Financial.data.user.store.each(function (user) {
+                Financial.util.User.getStore().each(function (user) {
                     if (ids.indexOf(user.id) !== -1) {
                         ret.push(user.get('first_name'));
                     }
@@ -179,8 +234,15 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                 displayField: 'full_name',
                 multiSelect: true,
                 queryMode: 'local',
-                forceSelection: true
-            }
+                forceSelection: true,
+                store: Financial.util.User.getStore()
+            },
+            /*filter: {
+                type: 'list',
+                idField: 'id',
+                labelField: 'full_name',
+                store: Financial.util.User.getStore()
+            }*/
         },
         {
             text: 'Categories',
@@ -203,8 +265,15 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                 valueField: 'id',
                 displayField: 'name',
                 multiSelect: true,
-                queryMode: 'local'
-            }
+                queryMode: 'local',
+                store: Financial.util.Category.getStore()
+            },
+            /*filter: {
+                type: 'list',
+                idField: 'id',
+                labelField: 'name',
+                store: Financial.util.Category.getStore()
+            }*/
         },
         {
             xtype: 'actioncolumn',

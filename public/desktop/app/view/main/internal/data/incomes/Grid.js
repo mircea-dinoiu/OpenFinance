@@ -34,6 +34,7 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
             dataIndex: 'sum',
             text: 'Sum',
             flex: 1,
+            align: 'right',
             editor: {
                 xtype: 'numberfield',
                 allowBlank: false,
@@ -54,7 +55,7 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
                     record
                 );
 
-                return value + ' ' + currency.get('symbol');
+                return Financial.util.Format.money(value) + ' ' + currency.get('symbol');
             }
         },
         {
@@ -95,7 +96,8 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
                 queryMode: 'local',
                 typeAhead: true,
                 allowBlank: false,
-                forceSelection: true
+                forceSelection: true,
+                store: Financial.util.User.getStore()
             }
         },
         {

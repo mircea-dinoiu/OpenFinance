@@ -51,6 +51,6 @@ Ext.define('Financial.util.Misc', {
             }
         );
 
-        metaData.tdAttr = 'data-qtip="' + tooltip.join(', ') + '"';
+        metaData.tdAttr = 'data-qtip="' + tooltip.join('<br>') + '"';
     }
 });

@@ -1,4 +1,8 @@
 Ext.define('Financial.util.AbstractStoreUtil', {
+    getStore: function () {
+        return Ext.StoreManager.lookup(this.storeId) || Ext.create(this.storeClass);
+    },
+
     getById: function (id) {
         if (!this.cache[id]) {
             var store = this.getStore();

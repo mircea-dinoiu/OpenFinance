@@ -4,9 +4,8 @@ Ext.define('Financial.util.User', {
     singleton: true,
     cache: {},
 
-    getStore: function () {
-        return Financial.data.user.store;
-    },
+    storeId: 'user',
+    storeClass: 'Financial.store.User',
 
     getAllIds: function () {
         return Ext.Array.map(this.getStore().data.items, function (user) {

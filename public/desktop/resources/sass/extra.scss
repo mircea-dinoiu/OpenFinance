@@ -1,8 +1,12 @@
 @import "compass";
 
+.x-mask {
+  border: none !important;
+}
+
 .expense-row {
   &.pending-expense-row {
-    > td:nth-child(4) > .x-grid-cell-inner {
+    > td:nth-child(3) > .x-grid-cell-inner {
       border-radius: 4px;
       padding: 3px 8px 2px 8px;
       margin: 2px;

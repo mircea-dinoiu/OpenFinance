@@ -42,7 +42,9 @@
         }());
     </script>
 
-    <link rel="icon" type="image/png" href="{{ url('desktop/resources/img/icon/money.png') }}"/>
+    <link rel="icon"
+          type="image/png"
+          href="{{ url(sprintf('desktop/resources/img/icon/%s.png', Config::get('app.debug') ? 'page_gear' : 'money')) }}"/>
 
     {{--*/ $theme = 'neptune' /*--}}
     {{ HTML::style("desktop/ext/packages/ext-theme-$theme/build/resources/ext-theme-$theme-all-debug.css")}}
@@ -50,12 +52,6 @@
     {{ HTML::style('desktop/resources/css/extra.css?' . filemtime(app_path('../public/desktop/resources/css/extra.css'))) }}
 
     {{ $bootstrapScript }}
-
-    <style>
-        .x-mask {
-            border: none !important;
-        }
-    </style>
 </head>
 <body></body>
 </html>
