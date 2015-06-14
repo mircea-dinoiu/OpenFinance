@@ -30,7 +30,9 @@ class HomeController extends BaseController
 
     public function getMobileIndex()
     {
-        return View::make('mobile.main');
+        $bootstrapScript = file_get_contents(app_path('../public/mobile.html'));
+
+        return View::make('mobile.main')->with('bootstrapScript', $bootstrapScript);
     }
 
     public function getDesktopIndex()
