@@ -8,7 +8,6 @@ Ext.define('Financial.view.main.TabPanel', {
     ],
 
     config: {
-        ui: 'light',
         tabBar: {
             layout: {
                 pack: 'center',

@@ -16,7 +16,7 @@ Ext.define('Financial.controller.Main', {
         var me = this,
             mainView = me.getMainView();
 
-        if (Financial.userData) {
+        if (Financial.data.user) {
             me.show('tabPanel');
         } else {
             mainView.setMasked({
@@ -24,14 +24,14 @@ Ext.define('Financial.controller.Main', {
             });
 
             Ext.Ajax.request({
-                url: Ext.String.format('{0}/user/read', Financial.baseURL),
+                url: Financial.routes.user.list,
                 success: function (response) {
-                    Financial.userData = Ext.JSON.decode(response.responseText);
+                    Financial.data.user = Ext.JSON.decode(response.responseText);
 
                     mainView.setMasked(false);
                     me.show('tabPanel');
                 },
-                failure: function (response) {
+                failure: function () {
                     mainView.setMasked(false);
                     me.show('login');
                 }
