@@ -4,6 +4,7 @@ Ext.define('Financial.view.main.TabPanel', {
 
     requires: [
         'Financial.view.main.tabPanel.Expenses',
+        'Financial.view.main.tabPanel.Incomes',
         'Financial.view.main.tabPanel.User'
     ],
 
@@ -26,6 +27,7 @@ Ext.define('Financial.view.main.TabPanel', {
                 title: 'Expenses',
                 iconCls: 'organize',
                 cls: 'card',
+                layout: 'fit',
                 items: [
                     {
                         xtype: 'main-tabPanel-expenses'
@@ -35,7 +37,13 @@ Ext.define('Financial.view.main.TabPanel', {
             {
                 title: 'Incomes',
                 cls: 'card',
-                iconCls: 'organize'
+                iconCls: 'organize',
+                layout: 'fit',
+                items: [
+                    {
+                        xtype: 'main-tabPanel-incomes'
+                    }
+                ]
             },
             {
                 title: 'Settings',

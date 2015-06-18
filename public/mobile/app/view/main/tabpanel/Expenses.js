@@ -3,13 +3,13 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
     alias: 'widget.main-tabPanel-expenses',
 
     requires: [
-        'Ext.SegmentedButton'
+        'Ext.SegmentedButton',
+        'Financial.data.Expense',
+        'Ext.dataview.List'
     ],
 
     config: {
-        layout: {
-            type: 'vbox'
-        },
+        layout: 'fit',
         items: [
             {
                 layout: {
@@ -22,7 +22,7 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
                     {
                         iconCls: 'add'
                     },
-                    {
+                    /*{
                         iconCls: 'compose'
                     },
                     {
@@ -33,83 +33,23 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
                     },
                     {
                         iconCls: 'search'
-                    }
+                    }*/
                 ]
             },
             {
                 xtype: 'list',
-                fullscreen: true,
                 grouped: true,
-                flex: 1,
-                store: Ext.create('Ext.data.Store', {
-                    fields: ['name', 'league', 'division'],
-                    sorters: 'name',
-                    grouper: {
-                        groupFn: function (item) {
-                            return item.get('league') + ' ' + item.get('division');
-                        } // groupFn
-                    }, // grouper
-                    data: [{
-                        name: 'New York Yankees',
-                        league: 'AL',
-                        division: 'East'
-                    }, {
-                        name: 'Tampa Bay',
-                        league: 'AL',
-                        division: 'East'
-                    }, {
-                        name: 'Boston',
-                        league: 'AL',
-                        division: 'East'
-                    }, {
-                        name: 'Toronto',
-                        league: 'AL',
-                        division: 'East'
-                    }, {
-                        name: 'Baltimore',
-                        league: 'AL',
-                        division: 'East'
-                    }, {
-                        name: 'Detroit',
-                        league: 'AL',
-                        division: 'Central'
-                    }, {
-                        name: 'Cleveland',
-                        league: 'AL',
-                        division: 'Central'
-                    }, {
-                        name: 'Chicago White Sox',
-                        league: 'AL',
-                        division: 'Central'
-                    }, {
-                        name: 'Kansas City',
-                        league: 'AL',
-                        division: 'Central'
-                    }, {
-                        name: 'Minnesota',
-                        league: 'AL',
-                        division: 'Central'
-                    }, {
-                        name: 'Texas',
-                        league: 'AL',
-                        division: 'West'
-                    }, {
-                        name: 'Los Angeles Angels',
-                        league: 'AL',
-                        division: 'West'
-                    }, {
-                        name: 'Oakland',
-                        league: 'AL',
-                        division: 'West'
-                    }, {
-                        name: 'Seattle',
-                        league: 'AL',
-                        division: 'West'
-                    }] // data
-                }), // store
-                itemTpl: '{name}'
+                getStore: function () { return Financial.data.Expense.getStore(); },
+                itemTpl: '{item}',
+                initialize: function () {
+                    var me = this;
+                    this.callParent(arguments);
+                    this.getStore().on('refresh', function () {
+                        me.refresh();
+                    });
+                }
             },
-            {
+            /*{
                 layout: {
                     type: 'hbox',
                     pack: 'center'
@@ -133,7 +73,7 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
                         ]
                     }
                 ]
-            }
+            }*/
         ]
     }
 });

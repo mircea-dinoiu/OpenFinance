@@ -23,11 +23,11 @@ Ext.define('Financial.controller.main.tabPanel.User', {
         });
 
         Ext.Ajax.request({
-            url: Ext.String.format('{0}/user/logout', Financial.baseURL),
+            url: Financial.routes.user.logout,
             method: 'post',
             success: function () {
                 mainView.setMasked(false);
-                delete Financial.userData;
+                delete Financial.data.user;
                 me.getApplication().getController('Main').show('login');
             },
             failure: function () {

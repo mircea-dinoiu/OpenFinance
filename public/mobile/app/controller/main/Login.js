@@ -44,12 +44,13 @@ Ext.define('Financial.controller.main.Login', {
             });
 
             Ext.Ajax.request({
-                url: Ext.String.format('{0}/user/login', Financial.baseURL),
+                url: Financial.routes.user.login,
                 params: loginView.getValues(),
                 success: function (response) {
-                    Financial.userData = Ext.JSON.decode(response.responseText);
+                    Financial.data.user = Ext.JSON.decode(response.responseText);
+                    Financial.data.User.getStore().loadData(Financial.data.user.list);
                     loginView.setMasked(false);
-                    Financial.app.getController('Main').launch()
+                    Financial.app.getController('Main').launch();
                 },
                 failure: function (response) {
                     loginView.setMasked(false);
