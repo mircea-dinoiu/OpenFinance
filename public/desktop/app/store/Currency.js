@@ -3,6 +3,8 @@ Ext.define('Financial.store.Currency', {
 
     model: 'Financial.model.Currency',
 
+    storeId: 'currency',
+
     proxy: {
         type: 'memory'
     },

@@ -1,13 +1,9 @@
 Ext.define('Financial.util.Category', {
+    extend: 'Financial.util.AbstractStoreUtil',
+
     singleton: true,
+    cache: {},
 
-    getCategoryById: function (id) {
-        var store = this.getStore();
-
-        return store.getAt(store.findExact('id', parseInt(id)));
-    },
-
-    getStore: function () {
-        return Financial.data.category.store;
-    }
+    storeId: 'category',
+    storeClass: 'Financial.store.Category'
 });

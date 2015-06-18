@@ -7,6 +7,8 @@ Ext.define('Financial.store.Category', {
         type: 'memory'
     },
 
+    storeId: 'category',
+
     sorters: [{
         property: 'expenses',
         direction: 'DESC'

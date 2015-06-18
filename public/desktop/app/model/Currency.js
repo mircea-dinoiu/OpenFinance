@@ -5,6 +5,7 @@ Ext.define('Financial.model.Currency', {
         {name: 'id', type: 'int'},
         {name: 'symbol', type: 'string'},
         {name: 'iso_code', type: 'string'},
-        {name: 'currency', type: 'string'}
+        {name: 'currency', type: 'string'},
+        {name: 'rates'}
     ]
 });

@@ -3,7 +3,7 @@ Ext.define('Financial.model.Expense', {
 
     fields: [
         {name: 'id', type: 'int'},
-        {name: 'sum', type: 'float'},
+        {name: 'sum', type: 'float', defaultValue: ''},
         {name: 'currency_id', type: 'int'},
         {name: 'item', type: 'string'},
         {name: 'created_at', type: 'date'},

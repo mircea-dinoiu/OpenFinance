@@ -1,56 +1,49 @@
 Ext.define('Financial.util.Currency', {
+    extend: 'Financial.util.AbstractStoreUtil',
+
     singleton: true,
+    cache: {},
+
+    storeId: 'currency',
+    storeClass: 'Financial.store.Currency',
 
     setCurrency: function (response) {
         Financial.data.currency = Ext.JSON.decode(response.responseText);
 
-        Financial.data.currency.store = Ext.create('Financial.store.Currency', {
-            data: Ext.Object.getValues(Financial.data.currency.map)
-        });
+        Financial.util.Currency.getStore().loadData(Ext.Object.getValues(Financial.data.currency.map));
     },
 
     getDefaultCurrency: function () {
-        return Financial.data.currency.default;
+        return this.getById(Financial.data.currency.default);
     },
 
     convert: function (value, from, to) {
         if (Ext.isNumeric(from)) {
-            from = this.getCurrencyById(from);
+            from = this.getById(from);
         } else if (Ext.isString(from)) {
             from = this.getCurrencyByISOCode(from);
         }
 
         if (Ext.isNumeric(to)) {
-            to = this.getCurrencyById(to);
+            to = this.getById(to);
         } else if (Ext.isString(to)) {
             to = this.getCurrencyByISOCode(to);
         }
 
-        if (from.iso_code === to.iso_code) {
+        if (from.get('iso_code') === to.get('iso_code')) {
             return value;
         }
 
-        return value * from.rates[to.iso_code];
+        return value * from.get('rates')[to.get('iso_code')];
     },
 
     convertToDefault: function (value, from) {
         return this.convert(value, from, this.getDefaultCurrency());
     },
 
-    getCurrencyById: function (id) {
-        return Financial.data.currency.map[id];
-    },
-
     getCurrencyByISOCode: function (ISOCode) {
-        var currency;
+        var store = this.getStore();
 
-        Ext.Object.eachValue(Financial.data.currency.map, function (eachCurrency) {
-            if (eachCurrency.iso_code === ISOCode) {
-                currency = eachCurrency;
-                return false;
-            }
-        });
-
-        return currency;
+        return store.getAt(store.findExact('iso_code', ISOCode));
     }
 });

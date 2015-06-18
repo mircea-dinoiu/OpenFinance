@@ -1,11 +1,25 @@
-Ext.define('Financial.store.data.Report', {
-    extend: 'Ext.data.Store',
+Ext.define('Financial.store.data.Report', function () {
+    var displayFilter = function (record) {
+        return record.get('display') === true;
+    };
 
-    model: 'Financial.model.data.Report',
+    return {
+        extend: 'Ext.data.Store',
 
-    groupField: 'type',
+        model: 'Financial.model.data.Report',
 
-    proxy: {
-        type: 'memory'
-    }
-});
+        groupField: 'type',
+
+        proxy: {
+            type: 'memory'
+        },
+
+        refreshDisplayed: function () {
+            this.filter(displayFilter);
+        },
+
+        filters: [
+            displayFilter
+        ]
+    };
+}());

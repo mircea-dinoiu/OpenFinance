@@ -1,11 +1,27 @@
-// FamFamFam: Silk Icons v13
-@import "compass/utilities/sprites";
-@import "icon/*.png";
+@import "compass";
 
-@include all-icon-sprites;
+.x-mask {
+  border: none !important;
+}
 
-.pending-expense-row {
-  background: #FCE94F;
+.expense-row {
+  &.pending-expense-row {
+    > td:nth-child(3) > .x-grid-cell-inner {
+      border-radius: 4px;
+      padding: 3px 8px 2px 8px;
+      margin: 2px;
+      @include background-image(linear_gradient(#FFE73A, #FAC637));
+    }
+  }
+
+  + .x-grid-rowbody-tr .x-grid-rowbody {
+    .expense-details-separator {
+      width: calc(100% + 20px);
+      margin: -4px 0 5px -10px;
+      border: none;
+      border-top: 1px solid #EDEDED;
+    }
+  }
 }
 
 .hidden {
@@ -13,21 +29,29 @@
   visibility: hidden;
 }
 
-.icon-checkbox, .icon-checkbox_checked {
-  background: {
-    image: image-url("../../ext/packages/ext-theme-neptune/build/resources/images/form/checkbox.png");
-    position: 0 0;
+.fake-expander-grid {
+  .non-expandable-row .x-grid-row-expander {
+    display: none;
   }
 
-  &:hover {
-    background-position: -15px 0;
+  .x-grid-rowbody {
+    display: none;
   }
 
-  &.icon-checkbox_checked {
-    background-position: 0 -15px;
-
-    &:hover {
-      background-position: -15px -15px;
+  .child-row {
+    td:first-child {
+      background: #FFF;
     }
+
+    td:not(:first-child) {
+      background: #EEE;
+      color: #AAA;
+    }
+  }
+}
+
+.report-grid {
+  .total-row {
+    font-weight: bold;
   }
 }

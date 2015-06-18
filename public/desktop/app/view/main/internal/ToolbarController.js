@@ -224,17 +224,16 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         var interval;
 
         function setCurrency() {
-            var currencyData = Financial.data.currency,
-                defaultCurrency = currencyData.default,
+            var defaultCurrency = Financial.util.Currency.getDefaultCurrency(),
                 textArr = [];
 
-            Ext.Object.each(currencyData.map, function (id, currency) {
-                if (id !== defaultCurrency.id) {
+            Financial.util.Currency.getStore().each(function (currency) {
+                if (currency.get('id') !== defaultCurrency.get('id')) {
                     textArr.push(Ext.String.format(
                         '<strong>{0}</strong>: <i>{1} {2}</i>',
-                        currency.iso_code,
-                        currency.rates[defaultCurrency.iso_code],
-                        currencyData.map[defaultCurrency.id].symbol
+                        currency.get('iso_code'),
+                        currency.get('rates')[defaultCurrency.get('iso_code')],
+                        defaultCurrency.get('symbol')
                     ));
                 }
             });

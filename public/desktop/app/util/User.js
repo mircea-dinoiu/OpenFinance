@@ -1,15 +1,11 @@
 Ext.define('Financial.util.User', {
+    extend: 'Financial.util.AbstractStoreUtil',
+
     singleton: true,
+    cache: {},
 
-    getStore: function () {
-        return Financial.data.user.store;
-    },
-
-    getUserById: function (id) {
-        var store = this.getStore();
-
-        return store.getAt(store.findExact('id', parseInt(id)));
-    },
+    storeId: 'user',
+    storeClass: 'Financial.store.User',
 
     getAllIds: function () {
         return Ext.Array.map(this.getStore().data.items, function (user) {

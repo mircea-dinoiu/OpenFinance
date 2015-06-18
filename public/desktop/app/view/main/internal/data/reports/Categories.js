@@ -1,12 +1,7 @@
 Ext.define('Financial.view.main.internal.data.reports.Categories', {
-    extend: 'Ext.grid.Panel',
     xtype: 'app-main-internal-data-reports-categories',
-    hideHeaders: true,
 
-    initComponent: function () {
-        this.store = Ext.create('Financial.store.data.Report');
-        this.callParent(arguments);
-    },
+    extend: 'Financial.view.main.internal.data.reports.AbstractGrid',
 
     features: [
         {
@@ -26,11 +21,20 @@ Ext.define('Financial.view.main.internal.data.reports.Categories', {
             dataIndex: 'sum',
             text: 'Sum',
             flex: 1,
-            renderer: function (value) {
+            align: 'right',
+            renderer: function(value, metaData, record) {
+                var currency = Financial.util.Currency.getDefaultCurrency();
+
+                Financial.util.Misc.anotherCurrenciesTooltip(
+                    metaData,
+                    currency,
+                    record
+                );
+
                 return Ext.String.format(
                     '{0} {1}',
-                    value.toFixed(2),
-                    Financial.data.currency.default.symbol
+                    Financial.util.Format.money(value),
+                    Financial.util.Currency.getDefaultCurrency().get('symbol')
                 );
             }
         }

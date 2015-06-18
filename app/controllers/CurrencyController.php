@@ -85,7 +85,7 @@ class CurrencyController extends BaseController
         }
 
         self::$data = [
-            'default' => self::getDefaultCurrency(),
+            'default' => self::getDefaultCurrency()->id,
             'map' => $map
         ];
     }

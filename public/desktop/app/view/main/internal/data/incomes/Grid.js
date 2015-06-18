@@ -34,9 +34,7 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
             dataIndex: 'sum',
             text: 'Sum',
             flex: 1,
-            renderer: function (value) {
-                return value + ' ' + Financial.data.currency.default.symbol;
-            },
+            align: 'right',
             editor: {
                 xtype: 'numberfield',
                 allowBlank: false,
@@ -47,6 +45,17 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
 
                     return true;
                 }
+            },
+            renderer: function(value, metaData, record) {
+                var currency = Financial.util.Currency.getDefaultCurrency();
+
+                Financial.util.Misc.anotherCurrenciesTooltip(
+                    metaData,
+                    currency,
+                    record
+                );
+
+                return Financial.util.Format.money(value) + ' ' + currency.get('symbol');
             }
         },
         {
@@ -64,6 +73,7 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
             formatter: "date('D d-m-Y')",
             width: 115,
             resizable: false,
+            align: 'center',
             editor: {
                 xtype: 'datefield',
                 format: 'd-m-Y',
@@ -76,7 +86,7 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
             text: 'From',
             flex: 1,
             renderer: function (userId) {
-                return Financial.util.User.getUserById(userId).get('full_name');
+                return Financial.util.User.getById(userId).get('full_name');
             },
             editor: {
                 xtype: 'combo',
@@ -86,7 +96,8 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
                 queryMode: 'local',
                 typeAhead: true,
                 allowBlank: false,
-                forceSelection: true
+                forceSelection: true,
+                store: Financial.util.User.getStore()
             }
         },
         {

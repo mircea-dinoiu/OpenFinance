@@ -87,15 +87,14 @@
 			animation: spin 1s linear infinite;
 		}
 	</style>
+
+    @include('scripts.setup')
+
 	<script>
-		var Financial = {
-			debug: {{ var_export(Config::get('app.debug')) }},
-			baseURL: {{ var_export(Config::get('app.url')) }},
-			emailRegExp: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
-		};
+		Financial.emailRegExp = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 	</script>
-	<!-- The line below must be kept intact for Sencha Command to build your application -->
-	<script id="microloader" type="text/javascript" src="{{ URL('mobile/.sencha/app/microloader/development.js') }}"></script>
+
+    {{ $bootstrapScript }}
 </head>
 <body>
 <div id="appLoadingIndicator">

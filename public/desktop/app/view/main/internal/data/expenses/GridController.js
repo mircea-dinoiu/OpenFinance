@@ -80,7 +80,7 @@ Ext.define('Financial.view.main.internal.data.expenses.GridController', {
         rowEditing.cancelEdit();
 
         var record = Ext.create('Financial.model.Expense', {
-            currency_id: Financial.data.currency.default.id,
+            currency_id: Financial.util.Currency.getDefaultCurrency().get('id'),
             created_at: Financial.util.Misc.generateEICreationDate(grid),
             users: [Financial.data.user.current.id],
             status: 'pending'
@@ -90,7 +90,7 @@ Ext.define('Financial.view.main.internal.data.expenses.GridController', {
 
         grid.getStore().insert(0, record);
 
-        rowEditing.startEdit(record);
+        rowEditing.startEdit(record, 1);
     },
 
     onBeforeRowEditing: function (rowEditing, context) {
@@ -100,19 +100,15 @@ Ext.define('Financial.view.main.internal.data.expenses.GridController', {
         if (this.newRecord !== record && this.newRecord) {
             this.removeNewRecordFromStore();
             setTimeout(function () {
-                rowEditing.startEdit(record);
+                rowEditing.startEdit(record, 1);
             }, 0);
         } else {
             editor.down('[itemId="update"]').setText(
                 this.newRecord === record ? 'Add' : 'Update'
             );
 
-            editor.down('combo[itemId="currency"]').setStore(Financial.data.currency.store);
-            editor.down('combo[itemId="categories"]').setStore(Financial.data.category.store);
-            editor.down('combo[itemId="users"]').setStore(Financial.data.user.store);
             editor.down('datefield').setMinValue(Financial.app.getController('Data').getStartDate());
             editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
-            editor.down('numberfield[itemId="sum"]').setValue(5);
         }
     }
 });
