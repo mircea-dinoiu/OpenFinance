@@ -60,73 +60,83 @@ class ExpenseController extends BaseController
                 'categories' => 'sometimes|category_ids'
             ];
 
-            $validator = Validator::make($data, $validationRules);
-
-            if ($validator->passes()) {
-                $expense = Expense::find($data['id']);
-
-                if (isset($data['sum'])) {
-                    $expense->sum = $data['sum'];
-                }
-
-                if (isset($data['item'])) {
-                    $expense->item = trim($data['item']);
-                }
-
-                if (isset($data['currency_id'])) {
-                    $expense->currency_id = $data['currency_id'];
-
-                    if ($data['currency_id'] !== CurrencyController::getDefaultCurrency()->id) {
-                        $expense->status = 'pending';
-                    }
-                }
-
-                if (isset($data['status'])) {
-                    $expense->status = $data['status'];
-
-                    if ($expense->status === 'finished') {
-                        $expense->sum = CurrencyController::convertToDefault($expense->sum, $expense->currency_id);
-                        $expense->currency_id = CurrencyController::getDefaultCurrency()->id;
-                    }
-                }
-
-                if (isset($data['created_at'])) {
-                    $expense->created_at = date('Y-m-d H:i:s', $data['created_at']);
-                }
-
-                $expense->save();
-
-                /**
-                 * Categories
-                 */
-                if (isset($data['categories'])) {
-                    DB::table('category_expense')->where('expense_id', '=', $expense->id)->delete();
-                    foreach ($data['categories'] as $id) {
-                        DB::table('category_expense')->insert([
-                            'category_id' => $id,
-                            'expense_id' => $expense->id
-                        ]);
-                    }
-                }
-
-                /**
-                 * Users
-                 */
-                if (isset($data['users'])) {
-                    foreach (User::all() as $user) {
-                        DB::table('expense_user')
-                            ->where('expense_id', '=', $expense->id)
-                            ->where('user_id', '=', $user->id)
-                            ->update([
-                                'blame' => in_array($user->id, $data['users'])
-                            ]);
-                    }
-                }
-
-                return Response::json(static::newExpenseQuery()->find($expense->id));
-            } else {
-                return Response::json($validator->messages(), 400);
+            if (isset($data['id'])) {
+                $data = [$data];
             }
+
+            $output = [];
+
+            foreach ($data as $record) {
+                $validator = Validator::make($record, $validationRules);
+
+                if ($validator->passes()) {
+                    $expense = Expense::find($record['id']);
+
+                    if (isset($record['sum'])) {
+                        $expense->sum = $record['sum'];
+                    }
+
+                    if (isset($record['item'])) {
+                        $expense->item = trim($record['item']);
+                    }
+
+                    if (isset($record['currency_id'])) {
+                        $expense->currency_id = $record['currency_id'];
+
+                        if ($record['currency_id'] !== CurrencyController::getDefaultCurrency()->id) {
+                            $expense->status = 'pending';
+                        }
+                    }
+
+                    if (isset($record['status'])) {
+                        $expense->status = $record['status'];
+
+                        if ($expense->status === 'finished') {
+                            $expense->sum = CurrencyController::convertToDefault($expense->sum, $expense->currency_id);
+                            $expense->currency_id = CurrencyController::getDefaultCurrency()->id;
+                        }
+                    }
+
+                    if (isset($record['created_at'])) {
+                        $expense->created_at = date('Y-m-d H:i:s', $record['created_at']);
+                    }
+
+                    $expense->save();
+
+                    /**
+                     * Categories
+                     */
+                    if (isset($record['categories'])) {
+                        DB::table('category_expense')->where('expense_id', '=', $expense->id)->delete();
+                        foreach ($record['categories'] as $id) {
+                            DB::table('category_expense')->insert([
+                                'category_id' => $id,
+                                'expense_id' => $expense->id
+                            ]);
+                        }
+                    }
+
+                    /**
+                     * Users
+                     */
+                    if (isset($record['users'])) {
+                        foreach (User::all() as $user) {
+                            DB::table('expense_user')
+                                ->where('expense_id', '=', $expense->id)
+                                ->where('user_id', '=', $user->id)
+                                ->update([
+                                    'blame' => in_array($user->id, $record['users'])
+                                ]);
+                        }
+                    }
+
+                    $output[] = static::newExpenseQuery()->find($expense->id);
+                } else {
+                    $output[] = $validator->messages();
+                }
+            }
+
+            return Response::json(count($output) === 1 ? $output[0] : $output);
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
@@ -137,9 +147,26 @@ class ExpenseController extends BaseController
         $data = Input::get('data');
 
         if (is_array($data) && !empty($data)) {
-            if (Validator::make($data, ['id' => 'required|expense_id'])->passes()) {
-                return Expense::destroy($data['id']);
+            $validationRules = ['id' => 'required|expense_id'];
+
+            if (isset($data['id'])) {
+                $data = [$data];
             }
+
+            $output = [];
+
+            foreach ($data as $record) {
+                $validator = Validator::make($record, $validationRules);
+
+                if ($validator->passes()) {
+                    $output[] = Expense::destroy($record['id']);
+                } else {
+                    $output[] = $validator->messages();
+                }
+            }
+
+            return Response::json(count($output) === 1 ? $output[0] : $output);
+
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);

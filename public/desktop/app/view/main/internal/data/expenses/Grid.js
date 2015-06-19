@@ -102,15 +102,25 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
     tbar: [
         {
             text: 'Add Expense',
-            iconCls: 'icon-basket_put',
+            iconCls: 'icon-cart_add',
             handler: 'onAddExpenseClick'
+        },
+        {
+            xtype: 'tbfill'
+        },
+        {
+            text: 'Delete',
+            iconCls: 'icon-delete',
+            handler: 'onDeleteSelectedExpensesClick',
+            itemId: 'delete',
+            disabled: true
         }
     ],
 
     bbar: [
         {
             xtype: 'tbtext',
-            itemId: 'expensesStats'
+            itemId: 'statistics'
         }
     ],
 
@@ -118,12 +128,8 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
         var me = this;
 
         this.callParent(arguments);
-        this.store.on('load', function () {
-            me.down('[itemId="expensesStats"]').setText(Ext.String.format(
-                'Count: {0}',
-                me.store.getCount()
-            ));
-        });
+        this.selectedRecords = {};
+        this.store.on('refresh', me.getController().onStoreRefresh, me.getController());
     },
 
     columns: [
@@ -297,9 +303,10 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                     handler: 'onMarkExpenseAsPendingClick'
                 },
                 {
-                    iconCls: ' icon-delete ',
-                    tooltip: 'Delete',
-                    handler: 'onDeleteExpenseClick'
+                    getClass: function (v, metadata, record) {
+                        return this.up('grid').selectedRecords[record.get('id')] ? ' icon-checkbox_checked ' : ' icon-checkbox ';
+                    },
+                    handler: 'onSelectDeselectRecord'
                 }
             ],
             width: 16 * 2 + 4 * 2
