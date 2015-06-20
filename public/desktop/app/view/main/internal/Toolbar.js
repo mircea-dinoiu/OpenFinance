@@ -122,6 +122,19 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             }
         },
         {
+            iconCls: 'icon-cog',
+            menu: {
+                xtype: 'menu',
+                items: [
+                    {
+                        text: 'Manage Categories',
+                        iconCls: 'icon-folder_edit',
+                        handler: 'onManageCategoriesClick'
+                    }
+                ]
+            }
+        },
+        {
             iconCls: 'icon-user',
             listeners: {
                 render: 'onUserMenuRender'

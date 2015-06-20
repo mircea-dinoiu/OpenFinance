@@ -2,6 +2,8 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.app-main-internal-toolbar',
 
+    requires: 'Financial.view.main.internal.ManageCategories',
+
     dateFormat: 'Y-m-d',
 
     getDateRangeDisplayValue: function () {
@@ -257,5 +259,11 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
                 window.clearInterval(interval);
             }
         }, 60 * 1000);
+    },
+
+    onManageCategoriesClick: function () {
+        var panel = Ext.create('Financial.view.main.internal.ManageCategories');
+
+        panel.show();
     }
 });
