@@ -3,8 +3,6 @@ Ext.define('Financial.store.Income', {
 
     model: 'Financial.model.Income',
 
-    groupField: 'user_id',
-
     autoLoad: false,
     autoDestroy: true,
 
