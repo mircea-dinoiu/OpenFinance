@@ -27,7 +27,9 @@
                 login: baseURL + '/user/login'
             },
             category: {
-                list: baseURL + '/category/list'
+                list: baseURL + '/category/list',
+                create: baseURL + '/category/create',
+                update: baseURL + '/category/update'
             }
         };
     }());
