@@ -7,6 +7,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
     viewConfig: {
         loadMask: false
     },
+    bufferedRenderer: false,
 
     requires: [
         'Financial.view.main.internal.data.incomes.IncomesGridController'
@@ -25,7 +26,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
         {
             text: 'Add Income',
             iconCls: 'icon-money_add',
-            handler: 'onAddIncomeClick'
+            handler: 'addRecord'
         }
     ],
 

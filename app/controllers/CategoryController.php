@@ -51,4 +51,31 @@ class CategoryController extends \BaseController
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
     }
+
+    public function postCreate()
+    {
+        $data = Input::get('data');
+
+        if (is_array($data) && !empty($data)) {
+            $validationRules = [
+                'name' => 'required|string'
+            ];
+
+            $validator = Validator::make($data, $validationRules);
+
+            if ($validator->passes()) {
+                $category = new Category;
+
+                $category->name = trim($data['name']);
+
+                $category->save();
+
+                return Response::json(static::newCategoryQuery()->find($category->id));
+            } else {
+                return Response::json($validator->messages(), 400);
+            }
+        }
+
+        return Response::json(Lang::get('general.invalid_input_data'), 400);
+    }
 }

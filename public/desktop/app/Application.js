@@ -13,7 +13,9 @@ Ext.define('Financial.Application', {
         'Financial.util.Currency',
         'Financial.util.Category',
         'Financial.util.Format',
-        'Financial.util.Misc'
+        'Financial.util.Misc',
+
+        'Financial.base.GridViewController'
     ],
 
     stores: [

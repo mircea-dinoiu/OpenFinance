@@ -27,11 +27,5 @@ Ext.define('Financial.store.Category', {
             writeAllFields: false,
             rootProperty: 'data'
         }
-    },
-
-    listeners: {
-        write: function () {
-            Financial.app.getController('Data').syncReports();
-        }
     }
 });

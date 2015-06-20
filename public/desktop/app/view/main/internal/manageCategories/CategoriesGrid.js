@@ -10,12 +10,21 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
     border: false,
     store: Financial.util.Category.getStore(),
     autoScroll: true,
+    bufferedRenderer: false,
+
+    listeners: {
+        beforedestroy: 'onBeforeDestroy',
+        write: {
+            element: 'store',
+            fn: 'onStoreWrite'
+        }
+    },
 
     tbar: [
         {
             text: 'Add Category',
             iconCls: 'icon-folder_add',
-            handler: 'onAddCategoryClick'
+            handler: 'addRecord'
         }
     ],
 
@@ -23,8 +32,8 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
         {
             ptype: 'rowediting',
             listeners: {
-                canceledit: 'onCancelRowEditing',
                 beforeedit: 'onBeforeRowEditing',
+                canceledit: 'onCancelRowEditing',
                 edit: 'onRowEditing'
             }
         }
@@ -37,7 +46,29 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
             flex: 1,
             editor: {
                 xtype: 'textfield',
-                allowOnlyWhitespace: false
+                allowOnlyWhitespace: false,
+                validator: function (value) {
+                    var valid = true,
+                        id = this.up().getRecord().get('id');
+
+                    function cleanName(name) {
+                        return name.trim().toLowerCase();
+                    }
+
+                    value = cleanName(value);
+
+                    if (value.length) {
+                        Financial.util.Category.getStore().each(function (record) {
+                            if (id !== record.get('id') && cleanName(record.get('name')) === value) {
+                                valid = false;
+                            }
+
+                            return valid;
+                        });
+                    }
+
+                    return valid || 'The value must be unique';
+                }
             }
         }
     ]

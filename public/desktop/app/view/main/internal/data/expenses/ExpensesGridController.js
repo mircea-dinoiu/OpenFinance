@@ -1,20 +1,7 @@
 Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', {
-    extend: 'Ext.app.ViewController',
+    extend: 'Financial.base.GridViewController',
 
     alias: 'controller.app-main-internal-data-expenses-grid',
-
-    newRecord: undefined,
-
-    removeNewRecordFromStore: function () {
-        if (this.newRecord) {
-            var record = this.newRecord,
-                store = record.store;
-
-            delete this.newRecord;
-
-            store && store.remove(record);
-        }
-    },
 
     onStoreRefresh: function () {
         var me = this,
@@ -67,8 +54,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
     onRowEditing: function (rowEditing, context) {
         var record = context.record;
 
-        delete this.newRecord;
-
         if (record.get('users').length === 0) {
             record.set(
                 'users',
@@ -76,15 +61,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
             );
         }
 
-        record.store.sync();
-    },
-
-    onCancelRowEditing: function (rowEditing, context) {
-        var record = context.record;
-
-        if (record === this.newRecord) {
-            this.removeNewRecordFromStore();
-        }
+        this.callParent(arguments);
     },
 
     onDeleteSelectedExpensesClick: function () {
@@ -132,42 +109,24 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         this.markExpenseAs('finished', event);
     },
 
-    onAddExpenseClick: function (button) {
-        var grid = button.up('grid'),
-            rowEditing = grid.getPlugin();
-
-        rowEditing.cancelEdit();
-
-        var record = Ext.create('Financial.model.Expense', {
+    addRecord: function (button) {
+        this.newRecordData = {
             currency_id: Financial.util.Currency.getDefaultCurrency().get('id'),
-            created_at: Financial.util.Misc.generateEICreationDate(grid),
+            created_at: Financial.util.Misc.generateEICreationDate(button.up('grid')),
             users: [Financial.data.user.current.id],
             status: 'pending'
-        });
+        };
+        this.newRecordEditAt = 1;
 
-        this.newRecord = record;
-
-        grid.getStore().insert(0, record);
-
-        rowEditing.startEdit(record, 1);
+        this.callParent(arguments);
     },
 
     onBeforeRowEditing: function (rowEditing, context) {
-        var record = context.record,
-            editor = rowEditing.getEditor();
+        var editor = rowEditing.getEditor();
 
-        if (this.newRecord !== record && this.newRecord) {
-            this.removeNewRecordFromStore();
-            setTimeout(function () {
-                rowEditing.startEdit(record, 1);
-            }, 0);
-        } else {
-            editor.down('[itemId="update"]').setText(
-                this.newRecord === record ? 'Add' : 'Update'
-            );
+        this.callParent(arguments);
 
-            editor.down('datefield').setMinValue(Financial.app.getController('Data').getStartDate());
-            editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
-        }
+        editor.down('datefield').setMinValue(Financial.app.getController('Data').getStartDate());
+        editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
     }
 });

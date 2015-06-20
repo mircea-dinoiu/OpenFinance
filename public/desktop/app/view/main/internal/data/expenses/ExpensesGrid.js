@@ -4,6 +4,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
     store: 'Financial.store.Expense',
     controller: 'app-main-internal-data-expenses-grid',
     autoScroll: true,
+    bufferedRenderer: false,
+
     requires: [
         'Financial.view.main.internal.data.expenses.ExpensesGridController'
     ],
@@ -103,7 +105,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         {
             text: 'Add Expense',
             iconCls: 'icon-cart_add',
-            handler: 'onAddExpenseClick'
+            handler: 'addRecord'
         },
         {
             xtype: 'tbfill'
@@ -124,12 +126,13 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         }
     ],
 
-    initComponent: function () {
-        var me = this;
+    selectedRecords: {},
 
-        this.callParent(arguments);
-        this.selectedRecords = {};
-        this.store.on('refresh', me.getController().onStoreRefresh, me.getController());
+    listeners: {
+        refresh: {
+            element: 'store',
+            fn: 'onStoreRefresh'
+        }
     },
 
     columns: [
