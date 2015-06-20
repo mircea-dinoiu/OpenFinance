@@ -1,4 +1,4 @@
-Ext.define('Financial.view.main.internal.data.expenses.GridController', {
+Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', {
     extend: 'Ext.app.ViewController',
 
     alias: 'controller.app-main-internal-data-expenses-grid',

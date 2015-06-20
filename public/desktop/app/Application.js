@@ -56,7 +56,7 @@ Ext.define('Financial.Application', {
         appMain.setLoading(true);
 
         if (Financial.data.user) {
-            var requestsPending = 0;
+            var requestsPending = 2;
 
             function checkRequestsState() {
                 requestsPending--;
@@ -66,25 +66,17 @@ Ext.define('Financial.Application', {
                 }
             }
 
+            Financial.util.Category.getStore().load(checkRequestsState);
+
             Ext.each([
                     {
                         success: function (response) {
                             Financial.util.Currency.setCurrency(response);
                         },
                         url: Financial.routes.getCurrencies
-                    },
-                    {
-                        success: function (response) {
-                            Financial.util.Category.getStore().loadData(
-                                Ext.JSON.decode(response.responseText)
-                            );
-                        },
-                        url: Financial.routes.category.list
                     }
                 ],
                 function (request) {
-                    requestsPending++;
-
                     Ext.Ajax.request({
                         url: request.url,
                         success: function () {

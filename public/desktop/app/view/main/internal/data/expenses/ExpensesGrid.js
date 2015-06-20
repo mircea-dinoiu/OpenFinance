@@ -1,11 +1,11 @@
-Ext.define('Financial.view.main.internal.data.expenses.Grid', {
+Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
     extend: 'Ext.grid.Panel',
     xtype: 'app-main-internal-data-expenses-grid',
     store: 'Financial.store.Expense',
     controller: 'app-main-internal-data-expenses-grid',
     autoScroll: true,
     requires: [
-        'Financial.view.main.internal.data.expenses.GridController'
+        'Financial.view.main.internal.data.expenses.ExpensesGridController'
     ],
 
     viewConfig: {
@@ -25,7 +25,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
             }
         },
         {
-            ptype: 'gridfilters',
+            ptype: 'gridfilters'
             /*createColumnFilter: function (column) {
                 var me = this,
                     columnFilter = column.filter,
@@ -242,7 +242,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                 queryMode: 'local',
                 forceSelection: true,
                 store: Financial.util.User.getStore()
-            },
+            }
             /*filter: {
                 type: 'list',
                 idField: 'id',
@@ -273,7 +273,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                 multiSelect: true,
                 queryMode: 'local',
                 store: Financial.util.Category.getStore()
-            },
+            }
             /*filter: {
                 type: 'list',
                 idField: 'id',

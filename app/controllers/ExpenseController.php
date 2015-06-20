@@ -2,7 +2,8 @@
 
 class ExpenseController extends BaseController
 {
-    private static function newExpenseQuery() {
+    private static function newExpenseQuery()
+    {
         return Expense::with([
             'users' => function ($query) {
                 $query->where('blame', '=', '1');

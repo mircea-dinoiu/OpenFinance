@@ -1,6 +1,6 @@
 Ext.define('Financial.view.main.internal.ManageCategories', {
     extend: 'Ext.window.Window',
-    requires: 'Financial.view.main.internal.manageCategories.Grid',
+    requires: 'Financial.view.main.internal.manageCategories.CategoriesGrid',
 
     frame: true,
     title: 'Manage Categories',

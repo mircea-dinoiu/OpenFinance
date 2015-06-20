@@ -1,4 +1,4 @@
-Ext.define('Financial.view.main.internal.data.incomes.GridController', {
+Ext.define('Financial.view.main.internal.data.incomes.IncomesGridController', {
     extend: 'Ext.app.ViewController',
 
     alias: 'controller.app-main-internal-data-incomes-grid',

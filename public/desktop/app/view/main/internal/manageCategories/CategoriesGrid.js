@@ -1,9 +1,9 @@
-Ext.define('Financial.view.main.internal.manageCategories.Grid', {
+Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
     extend: 'Ext.grid.Panel',
 
     xtype: 'app-main-internal-manageCategories-grid',
 
-    requires: 'Financial.view.main.internal.manageCategories.GridController',
+    requires: 'Financial.view.main.internal.manageCategories.CategoriesGridController',
 
     controller: 'app-main-internal-manageCategories-grid',
 
@@ -23,9 +23,9 @@ Ext.define('Financial.view.main.internal.manageCategories.Grid', {
         {
             ptype: 'rowediting',
             listeners: {
-                /*canceledit: 'onCancelRowEditing',
-                 beforeedit: 'onBeforeRowEditing',
-                 edit: 'onRowEditing'*/
+                canceledit: 'onCancelRowEditing',
+                beforeedit: 'onBeforeRowEditing',
+                edit: 'onRowEditing'
             }
         }
     ],
