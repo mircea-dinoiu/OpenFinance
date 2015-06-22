@@ -13,9 +13,19 @@ Ext.define('Financial.view.main.internal.Toolbar', {
 
     items: [
         {
-            xtype: 'tbtext',
-            listeners: {
-                render: 'onCurrencyRender'
+            text: 'Exchange rates',
+            iconCls: 'icon-information',
+            menu: {
+                xtype: 'menu',
+                items: [
+                    {
+                        xtype: 'container',
+                        padding: '10px 20px',
+                        listeners: {
+                            afterrender: 'onAfterCurrencyMenuContainerRender'
+                        }
+                    }
+                ]
             }
         },
         {

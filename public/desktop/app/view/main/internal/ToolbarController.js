@@ -222,8 +222,8 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         this.toggleDateButton(button, this.getEndDateButton());
     },
 
-    onCurrencyRender: function (tbText) {
-        var interval;
+    onAfterCurrencyMenuContainerRender: function (container) {
+        window.clearInterval(container.interval);
 
         function setCurrency() {
             var defaultCurrency = Financial.util.Currency.getDefaultCurrency(),
@@ -232,7 +232,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
             Financial.util.Currency.getStore().each(function (currency) {
                 if (currency.get('id') !== defaultCurrency.get('id')) {
                     textArr.push(Ext.String.format(
-                        '<strong>{0}</strong>: <i>{1} {2}</i>',
+                        '<strong>{0}</strong>: {1} <i>{2}</i>',
                         currency.get('iso_code'),
                         currency.get('rates')[defaultCurrency.get('iso_code')],
                         defaultCurrency.get('symbol')
@@ -240,12 +240,12 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
                 }
             });
 
-            tbText.setHtml(textArr.join('; '));
+            container.setHtml(textArr.join('<br>'));
         }
 
         setCurrency();
 
-        interval = setInterval(function () {
+        container.interval = setInterval(function () {
             if (Financial.data.user) {
                 Ext.Ajax.request({
                     url: Financial.routes.getCurrencies,
@@ -256,7 +256,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
                     }
                 });
             } else {
-                window.clearInterval(interval);
+                window.clearInterval(container.interval);
             }
         }, 60 * 1000);
     },
