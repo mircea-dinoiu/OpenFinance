@@ -88,17 +88,22 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
     onSelectDeselectRecord: function (a, b, c, e, event) {
         var grid = this.getView(),
             record = event.record,
-            id = record.get('id');
+            id = record.get('id'),
+            img = event.target,
+            alreadyChecked = !!grid.selectedRecords[id];
 
-        if (grid.selectedRecords[id]) {
+        if (alreadyChecked) {
             delete grid.selectedRecords[id];
         } else {
             grid.selectedRecords[id] = record;
         }
 
-        Ext.defer(function () {
-            grid.store.fireEvent('refresh');
-        });
+        img.className = img.className.replace(
+            /icon-checkbox_checked|icon-checkbox/g,
+            'icon-checkbox' + (alreadyChecked ? '' : '_checked')
+        );
+
+        this.onStoreRefresh();
     },
 
     onMarkExpenseAsPendingClick: function (a, b, c, e, event) {
