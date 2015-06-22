@@ -7,10 +7,8 @@ Ext.define('Financial.model.Category', {
         {name: 'created_at', type: 'date'},
         {
             name: 'expenses',
-            defaultValue: [],
-            convert: function (expenses) {
-                return expenses.length;
-            }
+            defaultValue: 0,
+            type: 'int'
         }
     ]
 });

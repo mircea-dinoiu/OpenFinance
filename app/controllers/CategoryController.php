@@ -2,14 +2,9 @@
 
 class CategoryController extends \BaseController
 {
-    private static function newCategoryQuery()
-    {
-        return Category::with('expenses');
-    }
-
     public function getList()
     {
-        return Response::json(self::newCategoryQuery()->get());
+        return Response::json(Category::get());
     }
 
     public function postUpdate()
@@ -40,7 +35,7 @@ class CategoryController extends \BaseController
 
                     $category->save();
 
-                    $output[] = static::newCategoryQuery()->find($category->id);
+                    $output[] = $category;
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -70,7 +65,7 @@ class CategoryController extends \BaseController
 
                 $category->save();
 
-                return Response::json(static::newCategoryQuery()->find($category->id));
+                return Response::json($category);
             } else {
                 return Response::json($validator->messages(), 400);
             }
