@@ -6,6 +6,17 @@ Ext.define('Financial.store.Income', {
     autoLoad: false,
     autoDestroy: true,
 
+    sorters: [
+        {
+            property: 'created_at',
+            direction: 'DESC'
+        },
+        {
+            property: 'id',
+            direction: 'DESC'
+        }
+    ],
+
     proxy: {
         type: 'ajax',
         reader: {

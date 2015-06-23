@@ -57,7 +57,7 @@ class ExpenseController extends BaseController
                 'created_at' => 'sometimes|integer',
                 'currency_id' => 'sometimes|currency_id',
                 'status' => 'sometimes|string|in:finished,pending',
-                'users' => 'sometimes|user_ids',
+                'users' => 'sometimes|required|user_ids',
                 'categories' => 'sometimes|category_ids'
             ];
 
