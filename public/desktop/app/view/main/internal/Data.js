@@ -17,7 +17,8 @@ Ext.define('Financial.view.main.internal.Data', {
         {
             title: 'Reports',
             region: 'west',
-            width: '20%',
+            minWidth: 250,
+            width: 250,
             collapsible: true,
             xtype: 'app-main-internal-data-reports'
         },
@@ -29,7 +30,8 @@ Ext.define('Financial.view.main.internal.Data', {
         {
             title: 'Incomes',
             region: 'east',
-            width: '20%',
+            minWidth: 500,
+            width: 500,
             collapsed: true,
             collapsible: true,
             xtype: 'app-main-internal-data-incomes'
