@@ -52,11 +52,11 @@ class ExpenseController extends BaseController
         if (is_array($data) && !empty($data)) {
             $validationRules = [
                 'id' => 'required|expense_id',
-                'sum' => 'sometimes|numeric|not_in:0',
-                'item' => 'sometimes|string',
-                'created_at' => 'sometimes|integer',
-                'currency_id' => 'sometimes|currency_id',
-                'status' => 'sometimes|string|in:finished,pending',
+                'sum' => 'sometimes|required|numeric|not_in:0',
+                'item' => 'sometimes|required|string',
+                'created_at' => 'sometimes|required|integer',
+                'currency_id' => 'sometimes|required|currency_id',
+                'status' => 'sometimes|required|string|in:finished,pending',
                 'users' => 'sometimes|required|user_ids',
                 'categories' => 'sometimes|category_ids'
             ];
@@ -182,8 +182,8 @@ class ExpenseController extends BaseController
                 'sum' => 'required|numeric|not_in:0',
                 'item' => 'required|string',
                 'users' => 'required|user_ids',
-                'created_at' => 'sometimes|integer',
-                'currency_id' => 'sometimes|currency_id',
+                'created_at' => 'sometimes|required|integer',
+                'currency_id' => 'sometimes|required|currency_id',
                 'categories' => 'sometimes|category_ids'
             ];
 

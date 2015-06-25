@@ -30,6 +30,7 @@ Ext.define('Financial.view.main.internal.Data', {
             title: 'Incomes',
             region: 'east',
             width: '20%',
+            collapsed: true,
             collapsible: true,
             xtype: 'app-main-internal-data-incomes'
         }

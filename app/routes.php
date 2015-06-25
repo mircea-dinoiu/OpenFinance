@@ -4,11 +4,11 @@ Route::get('/', 'HomeController@getIndex');
 
 Route::group(['prefix' => 'user'], function () {
     Route::group(['before' => 'guest'], function () {
-        Route::post('login', 'UserController@login');
+        Route::post('login', 'UserController@postLogin');
     });
 
     Route::group(['before' => 'auth'], function () {
-        Route::post('logout', 'UserController@logout');
+        Route::post('logout', 'UserController@postLogout');
         Route::get('list', 'UserController@getList');
     });
 });
