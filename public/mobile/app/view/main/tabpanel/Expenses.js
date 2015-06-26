@@ -37,18 +37,26 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
                 ]
             },
             {
-                xtype: 'list',
-                grouped: true,
-                getStore: function () { return Financial.data.Expense.getStore(); },
-                itemTpl: '{item}',
-                initialize: function () {
-                    var me = this;
-                    this.callParent(arguments);
-                    this.getStore().on('refresh', function () {
-                        me.refresh();
-                    });
-                }
-            },
+                xtype: 'container',
+                layout: 'vbox',
+                flex: 1,
+                scrollable: true,
+                items: [
+                    {
+                        xtype: 'list',
+                        scrollable: false,
+                        getStore: function () { return Financial.data.Expense.getStore(); },
+                        itemTpl: '{item}',
+                        initialize: function () {
+                            var me = this;
+                            this.callParent(arguments);
+                            this.getStore().on('refresh', function () {
+                                me.refresh();
+                            });
+                        }
+                    }
+                ]
+            }
             /*{
                 layout: {
                     type: 'hbox',
