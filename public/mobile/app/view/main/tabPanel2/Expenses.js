@@ -3,15 +3,12 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
     alias: 'widget.main-tabPanel-expenses',
 
     requires: [
-        'Ext.SegmentedButton',
-        'Financial.data.Expense',
-        'Ext.dataview.List'
+        'Ext.SegmentedButton'
     ],
 
     config: {
-        layout: 'vbox',
-        defaults: {
-            flex: 1
+        layout: {
+            type: 'vbox'
         },
         items: [
             {
@@ -24,8 +21,8 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
                 items: [
                     {
                         iconCls: 'add'
-                    }
-                    /*{
+                    },
+                    {
                         iconCls: 'compose'
                     },
                     {
@@ -36,7 +33,7 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
                     },
                     {
                         iconCls: 'search'
-                    }*/
+                    }
                 ]
             },
             {
