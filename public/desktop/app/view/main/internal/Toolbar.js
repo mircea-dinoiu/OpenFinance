@@ -13,9 +13,19 @@ Ext.define('Financial.view.main.internal.Toolbar', {
 
     items: [
         {
-            xtype: 'tbtext',
-            listeners: {
-                render: 'onCurrencyRender'
+            text: 'Exchange rates',
+            iconCls: 'icon-information',
+            menu: {
+                xtype: 'menu',
+                items: [
+                    {
+                        xtype: 'container',
+                        padding: '10px 20px',
+                        listeners: {
+                            afterrender: 'onAfterCurrencyMenuContainerRender'
+                        }
+                    }
+                ]
             }
         },
         {
@@ -53,7 +63,11 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         value: (function () {
                             var date = new Date();
 
-                            date.setDate(1);
+                            if (date.getDate() < 15) {
+                                date.setMonth(date.getMonth() - 1);
+                            }
+                            
+                            date.setDate(15);
 
                             return date;
                         }()),
@@ -87,8 +101,12 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         value: (function () {
                             var date = new Date();
 
+                            if (date.getDate() < 15) {
+                                date.setMonth(date.getMonth() - 1);
+                            }
+                            
                             date.setMonth(date.getMonth() + 1);
-                            date.setDate(0);
+                            date.setDate(14);
 
                             return date;
                         }()),
@@ -119,6 +137,19 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             iconCls: 'icon-database_refresh',
             listeners: {
                 click: 'applyFilter'
+            }
+        },
+        {
+            iconCls: 'icon-cog',
+            menu: {
+                xtype: 'menu',
+                items: [
+                    {
+                        text: 'Manage Categories',
+                        iconCls: 'icon-folder_edit',
+                        handler: 'onManageCategoriesClick'
+                    }
+                ]
             }
         },
         {

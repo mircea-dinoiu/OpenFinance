@@ -10,7 +10,7 @@ class UserController extends BaseController
         ]);
     }
 
-    public function login()
+    public function postLogin()
     {
         $rememberMe = (Input::get('remember_me') === 'true');
 
@@ -37,12 +37,14 @@ class UserController extends BaseController
         }
     }
 
-    public function logout()
+    public function postLogout()
     {
         Auth::logout();
 
         if (Request::ajax()) {
             return Response::json();
         }
+
+        return Redirect::to('/');
     }
 }

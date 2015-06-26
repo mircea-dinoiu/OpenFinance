@@ -55,10 +55,10 @@ class IncomeController extends BaseController
         if (is_array($data) && !empty($data)) {
             $validationRules = [
                 'id' => 'required|income_id',
-                'sum' => 'sometimes|numeric|not_in:0',
-                'description' => 'sometimes|string',
-                'user_id' => 'sometimes|user_id',
-                'created_at' => 'sometimes|integer'
+                'sum' => 'sometimes|required|numeric|not_in:0',
+                'description' => 'sometimes|required|string',
+                'user_id' => 'sometimes|required|user_id',
+                'created_at' => 'sometimes|required|integer'
             ];
 
             $validator = Validator::make($data, $validationRules);
@@ -102,7 +102,7 @@ class IncomeController extends BaseController
                 'sum' => 'required|numeric|not_in:0',
                 'description' => 'required|string',
                 'user_id' => 'required|user_id',
-                'created_at' => 'sometimes|integer'
+                'created_at' => 'sometimes|required|integer'
             ];
 
             $validator = Validator::make($data, $validationRules);

@@ -4,11 +4,11 @@ Ext.define('Financial.model.Category', {
     fields: [
         {name: 'id', type: 'int'},
         {name: 'name', type: 'string'},
+        {name: 'created_at', type: 'date'},
         {
             name: 'expenses',
-            convert: function (expenses) {
-                return expenses.length;
-            }
+            defaultValue: 0,
+            type: 'int'
         }
     ]
 });

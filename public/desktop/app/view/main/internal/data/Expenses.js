@@ -1,7 +1,7 @@
 Ext.define('Financial.view.main.internal.data.Expenses', {
     extend: 'Ext.panel.Panel',
 
-    requires: 'Financial.view.main.internal.data.expenses.Grid',
+    requires: 'Financial.view.main.internal.data.expenses.ExpensesGrid',
 
     xtype: 'app-main-internal-data-expenses',
 

@@ -1,4 +1,4 @@
-Ext.define('Financial.view.main.internal.data.incomes.Grid', {
+Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
     extend: 'Ext.grid.Panel',
     store: 'Financial.store.Income',
     xtype: 'app-main-internal-data-incomes-grid',
@@ -7,9 +7,10 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
     viewConfig: {
         loadMask: false
     },
+    bufferedRenderer: false,
 
     requires: [
-        'Financial.view.main.internal.data.incomes.GridController'
+        'Financial.view.main.internal.data.incomes.IncomesGridController'
     ],
 
     plugins: {
@@ -25,7 +26,7 @@ Ext.define('Financial.view.main.internal.data.incomes.Grid', {
         {
             text: 'Add Income',
             iconCls: 'icon-money_add',
-            handler: 'onAddIncomeClick'
+            handler: 'addRecord'
         }
     ],
 

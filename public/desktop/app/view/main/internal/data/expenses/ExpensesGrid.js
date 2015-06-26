@@ -1,11 +1,13 @@
-Ext.define('Financial.view.main.internal.data.expenses.Grid', {
+Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
     extend: 'Ext.grid.Panel',
     xtype: 'app-main-internal-data-expenses-grid',
     store: 'Financial.store.Expense',
     controller: 'app-main-internal-data-expenses-grid',
     autoScroll: true,
+    bufferedRenderer: false,
+
     requires: [
-        'Financial.view.main.internal.data.expenses.GridController'
+        'Financial.view.main.internal.data.expenses.ExpensesGridController'
     ],
 
     viewConfig: {
@@ -25,7 +27,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
             }
         },
         {
-            ptype: 'gridfilters',
+            ptype: 'gridfilters'
             /*createColumnFilter: function (column) {
                 var me = this,
                     columnFilter = column.filter,
@@ -102,28 +104,35 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
     tbar: [
         {
             text: 'Add Expense',
-            iconCls: 'icon-basket_put',
-            handler: 'onAddExpenseClick'
+            iconCls: 'icon-cart_add',
+            handler: 'addRecord'
+        },
+        {
+            xtype: 'tbfill'
+        },
+        {
+            text: 'Delete',
+            iconCls: 'icon-delete',
+            handler: 'onDeleteSelectedExpensesClick',
+            itemId: 'delete',
+            disabled: true
         }
     ],
 
     bbar: [
         {
             xtype: 'tbtext',
-            itemId: 'expensesStats'
+            itemId: 'statistics'
         }
     ],
 
-    initComponent: function () {
-        var me = this;
+    selectedRecords: {},
 
-        this.callParent(arguments);
-        this.store.on('load', function () {
-            me.down('[itemId="expensesStats"]').setText(Ext.String.format(
-                'Count: {0}',
-                me.store.getCount()
-            ));
-        });
+    listeners: {
+        refresh: {
+            element: 'store',
+            fn: 'onStoreRefresh'
+        }
     },
 
     columns: [
@@ -236,7 +245,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                 queryMode: 'local',
                 forceSelection: true,
                 store: Financial.util.User.getStore()
-            },
+            }
             /*filter: {
                 type: 'list',
                 idField: 'id',
@@ -267,7 +276,7 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                 multiSelect: true,
                 queryMode: 'local',
                 store: Financial.util.Category.getStore()
-            },
+            }
             /*filter: {
                 type: 'list',
                 idField: 'id',
@@ -297,9 +306,10 @@ Ext.define('Financial.view.main.internal.data.expenses.Grid', {
                     handler: 'onMarkExpenseAsPendingClick'
                 },
                 {
-                    iconCls: ' icon-delete ',
-                    tooltip: 'Delete',
-                    handler: 'onDeleteExpenseClick'
+                    getClass: function (v, metadata, record) {
+                        return this.up('grid').selectedRecords[record.get('id')] ? ' icon-checkbox_checked ' : ' icon-checkbox ';
+                    },
+                    handler: 'onSelectDeselectRecord'
                 }
             ],
             width: 16 * 2 + 4 * 2

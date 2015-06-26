@@ -3,10 +3,19 @@ Ext.define('Financial.store.Income', {
 
     model: 'Financial.model.Income',
 
-    groupField: 'user_id',
-
     autoLoad: false,
     autoDestroy: true,
+
+    sorters: [
+        {
+            property: 'created_at',
+            direction: 'DESC'
+        },
+        {
+            property: 'id',
+            direction: 'DESC'
+        }
+    ],
 
     proxy: {
         type: 'ajax',
