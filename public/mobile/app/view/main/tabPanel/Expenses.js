@@ -3,12 +3,15 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
     alias: 'widget.main-tabPanel-expenses',
 
     requires: [
-        'Ext.SegmentedButton'
+        'Ext.SegmentedButton',
+        'Financial.data.Expense',
+        'Ext.dataview.List'
     ],
 
     config: {
-        layout: {
-            type: 'vbox'
+        layout: 'vbox',
+        defaults: {
+            flex: 1
         },
         items: [
             {
@@ -21,19 +24,19 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
                 items: [
                     {
                         iconCls: 'add'
-                    },
-                    {
-                        iconCls: 'compose'
-                    },
-                    {
-                        iconCls: 'delete'
-                    },
-                    {
-                        iconCls: 'refresh'
-                    },
-                    {
-                        iconCls: 'search'
                     }
+                    /*{
+                     iconCls: 'compose'
+                     },
+                     {
+                     iconCls: 'delete'
+                     },
+                     {
+                     iconCls: 'refresh'
+                     },
+                     {
+                     iconCls: 'search'
+                     }*/
                 ]
             },
             {
@@ -41,13 +44,13 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
                 getStore: function () { return Financial.data.Expense.getStore(); },
                 itemTpl: [
                     '<div class="clearfix">' +
-                        '<b class="left">{item}</b> <span class="right money red">{sum:this.formatSum} {currency_id:this.formatCurrency}</span>' +
+                    '<b class="left">{item}</b> <span class="right money red">{sum:this.formatSum} {currency_id:this.formatCurrency}</span>' +
                     '</div>' +
                     '<div class="clearfix" style="margin-top: 10px">' +
-                        '<i class="left">{created_at:this.formatDate}</i> <span class="right">{users:this.formatUsers}</span>' +
+                    '<i class="left">{created_at:this.formatDate}</i> <span class="right">{users:this.formatUsers}</span>' +
                     '</div>' +
                     '<tpl if="categories.length">' +
-                        '<div style="margin-top: 10px; color: #999">{categories:this.formatCategories}</div>' +
+                    '<div style="margin-top: 10px; color: #999">{categories:this.formatCategories}</div>' +
                     '</tpl>',
                     {
                         formatSum: function (sum) {
@@ -96,30 +99,30 @@ Ext.define('Financial.view.main.tabPanel.Expenses', {
                 }
             }
             /*{
-                layout: {
-                    type: 'hbox',
-                    pack: 'center'
-                },
-                xtype: 'toolbar',
-                docked: 'top',
-                items: [
-                    {
-                        xtype: 'segmentedbutton',
-                        items: [
-                            {
-                                text: 'Finished',
-                                pressed: true
-                            },
-                            {
-                                text: 'Pending'
-                            },
-                            {
-                                text: 'All'
-                            }
-                        ]
-                    }
-                ]
-            }*/
+             layout: {
+             type: 'hbox',
+             pack: 'center'
+             },
+             xtype: 'toolbar',
+             docked: 'top',
+             items: [
+             {
+             xtype: 'segmentedbutton',
+             items: [
+             {
+             text: 'Finished',
+             pressed: true
+             },
+             {
+             text: 'Pending'
+             },
+             {
+             text: 'All'
+             }
+             ]
+             }
+             ]
+             }*/
         ]
     }
 });

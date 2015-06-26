@@ -32,11 +32,11 @@ Ext.define('Financial.view.main.tabPanel.Incomes', {
                 getStore: function () { return Financial.data.Income.getStore(); },
                 itemTpl: [
                     '<div class="clearfix">' +
-                        '<b class="left">{description}</b>' +
-                        '<span class="right money green">{sum:this.formatSum} {id:this.getCurrency}</span>' +
+                    '<b class="left">{description}</b>' +
+                    '<span class="right money green">{sum:this.formatSum} {id:this.getCurrency}</span>' +
                     '</div>' +
                     '<div class="clearfix" style="margin-top: 10px">' +
-                        '<i class="left">{created_at:this.formatDate}</i> <span class="right">{user_id:this.formatUser}</span>' +
+                    '<i class="left">{created_at:this.formatDate}</i> <span class="right">{user_id:this.formatUser}</span>' +
                     '</div>',
                     {
                         formatSum: function (sum) {
