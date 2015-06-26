@@ -37,7 +37,6 @@ Ext.define('Financial.view.main.TabPanel', {
                 title: 'Incomes',
                 cls: 'card',
                 iconCls: 'organize',
-                layout: 'fit',
                 items: [
                     {
                         xtype: 'main-tabPanel-incomes'
