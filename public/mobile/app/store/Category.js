@@ -7,16 +7,30 @@ Ext.define('Financial.store.Category', {
         model: 'Financial.model.Category',
 
         proxy: {
-            type: 'memory'
+            type: 'ajax',
+            reader: {
+                type: 'json'
+            },
+            api: {
+                read: Financial.routes.category.list,
+                create: Financial.routes.category.create,
+                update: Financial.routes.category.update
+            },
+            writer: {
+                type: 'json',
+                writeAllFields: false,
+                rootProperty: 'data'
+            }
         },
 
         storeId: 'category',
+        autoDestroy: false,
 
-        sorters: [{
-            property: 'expenses',
-            direction: 'DESC'
-        }],
-
-        autoDestroy: false
+        sorters: [
+            {
+                property: 'expenses',
+                direction: 'DESC'
+            }
+        ]
     }
 });

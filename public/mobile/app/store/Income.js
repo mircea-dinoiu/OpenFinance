@@ -4,19 +4,45 @@ Ext.define('Financial.store.Income', {
     requires: 'Financial.model.Income',
 
     config: {
-        groupField: 'user_id',
+        storeId: 'income',
+
+        model: 'Financial.model.Income',
 
         autoLoad: false,
         autoDestroy: true,
 
-        model: 'Financial.model.Income',
-
-        storeId: 'income',
+        sorters: [
+            {
+                property: 'created_at',
+                direction: 'DESC'
+            },
+            {
+                property: 'id',
+                direction: 'DESC'
+            }
+        ],
 
         proxy: {
             type: 'ajax',
             reader: {
                 type: 'json'
+            },
+            extraParams: {
+                start_date: (function () {
+                    var date = new Date;
+
+                    date.setDate(1);
+
+                    return Ext.util.Format.date(date, 'Y-m-d')
+                }()),
+                end_date: (function () {
+                    var date = new Date;
+
+                    date.setMonth(date.getMonth() + 1);
+                    date.setDate(0);
+
+                    return Ext.util.Format.date(date, 'Y-m-d');
+                }())
             },
             api: {
                 read: Financial.routes.income.list,

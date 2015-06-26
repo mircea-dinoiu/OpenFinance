@@ -9,7 +9,6 @@ Ext.define('Financial.store.Expense', {
         model: 'Financial.model.Expense',
 
         autoLoad: false,
-
         autoDestroy: false,
 
         sorters: [
@@ -22,14 +21,6 @@ Ext.define('Financial.store.Expense', {
                 direction: 'DESC'
             }
         ],
-
-        grouper: {
-            groupFn: function (record) {
-                return Ext.util.Format.date(record.get('created_at'), 'd-m-Y D');
-            }
-        },
-
-        groupDir: 'DESC',
 
         proxy: {
             type: 'ajax',

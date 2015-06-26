@@ -27,7 +27,7 @@ Ext.define('Financial.controller.Main', {
         });
 
         if (Financial.data.user) {
-            var requestsPending = 0;
+            var requestsPending = 2;
 
             function checkRequestsState() {
                 requestsPending--;
@@ -37,25 +37,17 @@ Ext.define('Financial.controller.Main', {
                 }
             }
 
+            Financial.data.Category.getStore().load(checkRequestsState);
+
             Ext.each([
                     {
                         success: function (response) {
                             Financial.data.Currency.setCurrency(response);
                         },
                         url: Financial.routes.getCurrencies
-                    },
-                    {
-                        success: function (response) {
-                            Financial.data.Category.getStore().setData(
-                                Ext.JSON.decode(response.responseText)
-                            );
-                        },
-                        url: Financial.routes.category.list
                     }
                 ],
                 function (request) {
-                    requestsPending++;
-
                     Ext.Ajax.request({
                         url: request.url,
                         success: function () {

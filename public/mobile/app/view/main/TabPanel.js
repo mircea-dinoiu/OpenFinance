@@ -16,17 +16,21 @@ Ext.define('Financial.view.main.TabPanel', {
             },
             docked: 'bottom'
         },
+        defaults: {
+            cls: 'card',
+            layout: 'vbox',
+            defaults: {
+                flex: 1
+            }
+        },
         items: [
             {
                 title: 'Reports',
-                iconCls: 'info',
-                cls: 'card'
+                iconCls: 'info'
             },
             {
                 title: 'Expenses',
                 iconCls: 'organize',
-                cls: 'card',
-                layout: 'fit',
                 items: [
                     {
                         xtype: 'main-tabPanel-expenses'
@@ -35,7 +39,6 @@ Ext.define('Financial.view.main.TabPanel', {
             },
             {
                 title: 'Incomes',
-                cls: 'card',
                 iconCls: 'organize',
                 items: [
                     {
@@ -45,12 +48,10 @@ Ext.define('Financial.view.main.TabPanel', {
             },
             {
                 title: 'Settings',
-                cls: 'card',
                 iconCls: 'settings'
             },
             {
                 title: 'User',
-                cls: 'card',
                 iconCls: 'user',
                 items: [
                     {

@@ -760,14 +760,36 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.viewport.WindowsPhone": [
     "Ext.viewport.WP"
   ],
-  "Financial.controller.Expense": [],
-  "Financial.controller.Login": [],
+  "Financial.controller.Abstract": [],
   "Financial.controller.Main": [],
+  "Financial.controller.main.Login": [],
+  "Financial.controller.main.TabPanel": [],
+  "Financial.controller.main.tabPanel.User": [],
+  "Financial.data.AbstractData": [],
+  "Financial.data.Category": [],
+  "Financial.data.Currency": [],
+  "Financial.data.Expense": [],
+  "Financial.data.Income": [],
+  "Financial.data.User": [],
+  "Financial.model.Category": [],
+  "Financial.model.Currency": [],
   "Financial.model.Expense": [],
-  "Financial.view.Login": [],
+  "Financial.model.Income": [],
+  "Financial.model.User": [],
+  "Financial.store.Category": [],
+  "Financial.store.Currency": [],
+  "Financial.store.Expense": [],
+  "Financial.store.Income": [],
+  "Financial.store.User": [],
+  "Financial.util.Format": [],
+  "Financial.util.Misc": [],
+  "Financial.util.PaintMonitor": [],
+  "Financial.util.SizeMonitor": [],
   "Financial.view.Main": [],
+  "Financial.view.main.Login": [],
   "Financial.view.main.TabPanel": [],
   "Financial.view.main.tabPanel.Expenses": [],
+  "Financial.view.main.tabPanel.Incomes": [],
   "Financial.view.main.tabPanel.User": []
 });
 
@@ -1713,21 +1735,45 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.viewport.Ios": [],
   "Ext.viewport.Viewport": [],
   "Ext.viewport.WindowsPhone": [],
-  "Financial.controller.Expense": [],
-  "Financial.controller.Login": [],
+  "Financial.controller.Abstract": [],
   "Financial.controller.Main": [],
+  "Financial.controller.main.Login": [],
+  "Financial.controller.main.TabPanel": [],
+  "Financial.controller.main.tabPanel.User": [],
+  "Financial.data.AbstractData": [],
+  "Financial.data.Category": [],
+  "Financial.data.Currency": [],
+  "Financial.data.Expense": [],
+  "Financial.data.Income": [],
+  "Financial.data.User": [],
+  "Financial.model.Category": [],
+  "Financial.model.Currency": [],
   "Financial.model.Expense": [],
-  "Financial.view.Login": [
-    "widget.loginview"
-  ],
+  "Financial.model.Income": [],
+  "Financial.model.User": [],
+  "Financial.store.Category": [],
+  "Financial.store.Currency": [],
+  "Financial.store.Expense": [],
+  "Financial.store.Income": [],
+  "Financial.store.User": [],
+  "Financial.util.Format": [],
+  "Financial.util.Misc": [],
+  "Financial.util.PaintMonitor": [],
+  "Financial.util.SizeMonitor": [],
   "Financial.view.Main": [
     "widget.main"
   ],
+  "Financial.view.main.Login": [
+    "widget.main-login"
+  ],
   "Financial.view.main.TabPanel": [
-    "widget.main-tabpanel"
+    "widget.main-tabPanel"
   ],
   "Financial.view.main.tabPanel.Expenses": [
     "widget.main-tabPanel-expenses"
+  ],
+  "Financial.view.main.tabPanel.Incomes": [
+    "widget.main-tabPanel-incomes"
   ],
   "Financial.view.main.tabPanel.User": [
     "widget.main-tabPanel-user"

@@ -7,7 +7,7 @@ Ext.define('Financial.data.AbstractData', {
         if (!this.cache[id]) {
             var store = this.getStore();
 
-            this.cache[id] = store.getAt(store.findExact('id', parseInt(id)));
+            this.cache[id] = store.getAt(store.findExact('id', id.toString()));
         }
 
         return this.cache[id];
