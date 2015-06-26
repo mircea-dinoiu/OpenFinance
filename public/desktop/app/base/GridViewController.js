@@ -45,16 +45,23 @@ Ext.define('Financial.base.GridViewController', {
 
     addRecord: function (button) {
         var grid = button.up('grid'),
+            store = grid.getStore(),
+            collapsiblePanel = grid.up('[collapsible=true]'),
             rowEditing = grid.getPlugin();
+
+        // Force expand collapsible panel if collapsed
+        if (collapsiblePanel) {
+            collapsiblePanel.expand(false);
+        }
 
         rowEditing.cancelEdit();
 
-        var record = Ext.create(grid.store.config.model, this.newRecordData || {});
+        var record = Ext.create(store.config.model, this.newRecordData || {});
 
         delete this.newRecordData;
         this.newRecord = record;
 
-        grid.getStore().insert(0, record);
+        store.insert(0, record);
         grid.getView().getRowByRecord(record).scrollIntoView(grid, false);
 
         rowEditing.startEdit(record, this.newRecordEditAt || 0);

@@ -4,6 +4,7 @@ Ext.define('Financial.store.Expense', {
     model: 'Financial.model.Expense',
 
     autoLoad: false,
+    autoDestroy: true,
 
     sorters: [
         {
