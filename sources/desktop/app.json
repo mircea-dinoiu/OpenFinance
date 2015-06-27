@@ -10,7 +10,7 @@
   /**
    * The relative path to the appliaction's markup file (html, jsp, asp, etc.)
    */
-  "indexHtmlPath": "../desktop.html",
+  "indexHtmlPath": "microloader.html",
   /**
    * Comma-separated string with the paths of directories or files to search. Any classes
    * declared in these locations will be available in your class "requires" or in calls
