@@ -9,7 +9,9 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
-public/mobile/build
-public/desktop/build
+public/mobile
+public/desktop
+sources/mobile/build
+sources/desktop/build
 .sass-cache
 public/desktop/boostrap.json
