@@ -6,9 +6,6 @@ class HomeController extends BaseController
     {
         $data = [];
 
-//        $data['currencies'] = DB::table('currencies')->select('id', 'iso_code', 'currency', 'symbol')->get();
-//        $data['users'] = DB::table('users')->select('id', 'first_name', 'last_name', 'email')->get();
-
         $data['currencies'] = Currency::all();
         $data['users'] = User::all();
 
@@ -19,26 +16,36 @@ class HomeController extends BaseController
     {
         if (PlatformController::isSupported()) {
             if (PlatformController::isMobile()) {
-                return $this->getMobileIndex();
+                return PlatformController::validatePlatform('mobile', 'url_mobile', function () {
+                    return $this->getMobileIndex();
+                });
             } else {
-                return $this->getDesktopIndex();
+                return PlatformController::validatePlatform('desktop', 'url', function () {
+                    return $this->getDesktopIndex();
+                });
             }
-        } else {
-            return View::make('not-supported');
         }
+
+        return View::make('not-supported');
     }
 
     public function getMobileIndex()
     {
-        $bootstrapScript = file_get_contents(app_path('../public/mobile.html'));
+        $bootstrapScript = file_get_contents(app_path('../public/mobile/microloader.html'));
 
-        return View::make('mobile.main')->with('bootstrapScript', $bootstrapScript);
+        return View::make('mobile.main')->with([
+            'bootstrapScript' => $bootstrapScript,
+            'baseUrl' => Config::get('app.url_mobile')
+        ]);
     }
 
     public function getDesktopIndex()
     {
-        $bootstrapScript = file_get_contents(app_path('../public/desktop/index.html'));
+        $bootstrapScript = file_get_contents(app_path('../public/desktop/microloader.html'));
 
-        return View::make('desktop.main')->with('bootstrapScript', $bootstrapScript);
+        return View::make('desktop.main')->with([
+            'bootstrapScript' => $bootstrapScript,
+            'baseUrl' => Config::get('app.url')
+        ]);
     }
 }

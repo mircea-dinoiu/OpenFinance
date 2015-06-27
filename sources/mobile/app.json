@@ -113,6 +113,9 @@
      * Extra resources to be copied along when build
      */
     "resources": [
+        "index.php",
+        "robots.txt",
+        "app/*",
         "resources/images",
         "resources/icons",
         "resources/startup"
@@ -141,5 +144,12 @@
      * Uniquely generated id for this application, used as prefix for localStorage keys.
      * Normally you should never change this value.
      */
-    "id": "3dccb930-785b-4930-ae5f-8bfe19ef0a57"
+    "id": "3dccb930-785b-4930-ae5f-8bfe19ef0a57",
+
+    "production": {
+      "output": {
+        "page": "microloader.html",
+        "base": "${app.dir}/../../public/mobile"
+      }
+    }
 }

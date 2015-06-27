@@ -11,12 +11,10 @@
 
     <link rel="icon"
           type="image/png"
-          href="{{ url(sprintf('desktop/resources/img/icon/%s.png', Config::get('app.debug') ? 'page_gear' : 'money')) }}"/>
+          href="{{ url(sprintf('resources/img/icon/%s.png', Config::get('app.debug') ? 'page_gear' : 'money')) }}"/>
 
-    {{--*/ $theme = 'neptune' /*--}}
-    {{ HTML::style("desktop/ext/packages/ext-theme-$theme/build/resources/ext-theme-$theme-all-debug.css")}}
-    {{ HTML::style('desktop/resources/css/icon.css?' . filemtime(app_path('../public/desktop/resources/css/icon.css'))) }}
-    {{ HTML::style('desktop/resources/css/extra.css?' . filemtime(app_path('../public/desktop/resources/css/extra.css'))) }}
+    {{ HTML::style('resources/css/icon.css?' . filemtime(app_path('../public/desktop/resources/css/icon.css'))) }}
+    {{ HTML::style('resources/css/extra.css?' . filemtime(app_path('../public/desktop/resources/css/extra.css'))) }}
 
     {{ $bootstrapScript }}
 </head>

@@ -17,7 +17,6 @@ Ext.application({
 
     requires: [
         'Ext.MessageBox',
-        'Financial.util.Format',
         'Financial.util.SizeMonitor', //TEMP fix, Chrome 43 bug
         'Financial.util.PaintMonitor' //TEMP fix, Chrome 43 bug
     ],

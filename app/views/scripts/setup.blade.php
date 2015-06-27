@@ -2,7 +2,7 @@
     var Financial = {};
 
     (function () {
-        var baseURL = '{{ Config::get('app.url') }}';
+        var baseURL = '{{ $baseUrl }}';
 
         Financial.data = {};
         Financial.debug = ('{{ var_export(Config::get('app.debug')) }}' === 'true');

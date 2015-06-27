@@ -3,6 +3,7 @@ Ext.define('Financial.view.main.TabPanel', {
     alias: 'widget.main-tabPanel',
 
     requires: [
+        'Financial.util.Format',
         'Financial.view.main.tabPanel.Expenses',
         'Financial.view.main.tabPanel.Incomes',
         'Financial.view.main.tabPanel.User'

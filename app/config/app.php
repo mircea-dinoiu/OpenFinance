@@ -26,6 +26,7 @@ return array(
 	|
 	*/
 	'url' => 'http://financial.dinoiu.com',
+	'url_mobile' => 'http://m.financial.dinoiu.com',
 
 	/*
 	|--------------------------------------------------------------------------
