@@ -345,9 +345,10 @@ Ext.define('Financial.controller.Data', {
 
     getCalculationsData: function () {
         var expenses = this.getExpensesData(),
-            expensesGrid = Financial.app.getMainView().down(this.selectors.expensesGrid);
+            expensesGrid = Financial.app.getMainView().down(this.selectors.expensesGrid),
+            expensesStore = expensesGrid.getStore();
 
-        if (expensesGrid.getStore().isFiltered()) {
+        if (expensesStore.getCount() !== expensesStore.getTotalCount()) {
             return expenses;
         } else {
             var incomes = this.getIncomesData();
