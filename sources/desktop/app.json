@@ -129,12 +129,7 @@
    *          "update": ""      // OPTIONAL
    *      }
    */
-  "css": [
-    {
-      "path": "bootstrap.css",
-      "bootstrap": true
-    }
-  ],
+  "css": [],
   /**
    * This option is used to configure the dynamic loader. At present these options
    * are supported.
@@ -201,8 +196,7 @@
   "bootstrap": {
     "base": "${app.dir}",
     "manifest": "bootstrap.json",
-    "microloader": "bootstrap.js",
-    "css": "bootstrap.css"
+    "microloader": "bootstrap.js"
   },
   /**
    *  Controls the output directory for build resources.  May be set with
