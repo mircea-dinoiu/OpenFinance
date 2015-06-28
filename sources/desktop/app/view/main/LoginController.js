@@ -14,7 +14,7 @@ Ext.define('Financial.view.main.LoginController', {
             params: form.getValues(),
             success: function (response) {
                 Financial.data.user = Ext.JSON.decode(response.responseText);
-                Financial.util.User.getStore().loadData(Financial.data.user.list);
+                Financial.data.User.getStore().loadData(Financial.data.user.list);
 
                 view.setLoading(false);
                 Financial.app.launch()

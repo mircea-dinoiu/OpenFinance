@@ -9,9 +9,9 @@ Ext.define('Financial.Application', {
     name: 'Financial',
 
     requires: [
-        'Financial.util.User',
-        'Financial.util.Currency',
-        'Financial.util.Category',
+        'Financial.data.User',
+        'Financial.data.Currency',
+        'Financial.data.Category',
         'Financial.util.Format',
         'Financial.util.Misc',
 
@@ -68,12 +68,12 @@ Ext.define('Financial.Application', {
                 }
             }
 
-            Financial.util.Category.getStore().load(checkRequestsState);
+            Financial.data.Category.getStore().load(checkRequestsState);
 
             Ext.each([
                     {
                         success: function (response) {
-                            Financial.util.Currency.setCurrency(response);
+                            Financial.data.Currency.setCurrency(response);
                         },
                         url: Financial.routes.getCurrencies
                     }
@@ -102,7 +102,7 @@ Ext.define('Financial.Application', {
                 url: Financial.routes.user.list,
                 success: function (response) {
                     Financial.data.user = Ext.JSON.decode(response.responseText);
-                    Financial.util.User.getStore().loadData(Financial.data.user.list);
+                    Financial.data.User.getStore().loadData(Financial.data.user.list);
 
                     Financial.app.launch();
                 },

@@ -23,7 +23,7 @@ Ext.define('Financial.view.main.internal.data.reports.Categories', {
             flex: 1,
             align: 'right',
             renderer: function(value, metaData, record) {
-                var currency = Financial.util.Currency.getDefaultCurrency();
+                var currency = Financial.data.Currency.getDefaultCurrency();
 
                 Financial.util.Misc.anotherCurrenciesTooltip(
                     metaData,
@@ -34,7 +34,7 @@ Ext.define('Financial.view.main.internal.data.reports.Categories', {
                 return Ext.String.format(
                     '{0} {1}',
                     Financial.util.Format.money(value),
-                    Financial.util.Currency.getDefaultCurrency().get('symbol')
+                    Financial.data.Currency.getDefaultCurrency().get('symbol')
                 );
             }
         }

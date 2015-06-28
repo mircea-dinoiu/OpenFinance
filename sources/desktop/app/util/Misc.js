@@ -46,7 +46,7 @@ Ext.define('Financial.util.Misc', {
             function (isoCode, multiplier) {
                 tooltip.push([
                     Financial.util.Format.money(record.get('sum') * multiplier),
-                    Financial.util.Currency.getCurrencyByISOCode(isoCode).get('symbol')
+                    Financial.data.Currency.getCurrencyByISOCode(isoCode).get('symbol')
                 ].join(' '));
             }
         );

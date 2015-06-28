@@ -1,5 +1,5 @@
-Ext.define('Financial.util.Currency', {
-    extend: 'Financial.util.AbstractStoreUtil',
+Ext.define('Financial.data.Currency', {
+    extend: 'Financial.base.StoreHandler',
 
     singleton: true,
     cache: {},
@@ -10,7 +10,7 @@ Ext.define('Financial.util.Currency', {
     setCurrency: function (response) {
         Financial.data.currency = Ext.JSON.decode(response.responseText);
 
-        Financial.util.Currency.getStore().loadData(Ext.Object.getValues(Financial.data.currency.map));
+        Financial.data.Currency.getStore().loadData(Ext.Object.getValues(Financial.data.currency.map));
     },
 
     getDefaultCurrency: function () {

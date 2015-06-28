@@ -8,7 +8,7 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
     controller: 'app-main-internal-manageCategories-grid',
 
     border: false,
-    store: Financial.util.Category.getStore(),
+    store: Financial.data.Category.getStore(),
     autoScroll: true,
     bufferedRenderer: false,
 
@@ -58,7 +58,7 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
                     value = cleanName(value);
 
                     if (value.length) {
-                        Financial.util.Category.getStore().each(function (record) {
+                        Financial.data.Category.getStore().each(function (record) {
                             if (id !== record.get('id') && cleanName(record.get('name')) === value) {
                                 valid = false;
                             }

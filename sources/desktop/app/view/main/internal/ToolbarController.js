@@ -226,10 +226,10 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         window.clearInterval(container.interval);
 
         function setCurrency() {
-            var defaultCurrency = Financial.util.Currency.getDefaultCurrency(),
+            var defaultCurrency = Financial.data.Currency.getDefaultCurrency(),
                 textArr = [];
 
-            Financial.util.Currency.getStore().each(function (currency) {
+            Financial.data.Currency.getStore().each(function (currency) {
                 if (currency.get('id') !== defaultCurrency.get('id')) {
                     textArr.push(Ext.String.format(
                         '<strong>{0}</strong>: {1} <i>{2}</i>',
@@ -250,7 +250,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
                 Ext.Ajax.request({
                     url: Financial.routes.getCurrencies,
                     success: function (response) {
-                        Financial.util.Currency.setCurrency(response);
+                        Financial.data.Currency.setCurrency(response);
 
                         setCurrency();
                     }

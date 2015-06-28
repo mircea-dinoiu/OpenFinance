@@ -1,4 +1,4 @@
-Ext.define('Financial.util.AbstractStoreUtil', {
+Ext.define('Financial.base.StoreHandler', {
     getStore: function () {
         return Ext.StoreManager.lookup(this.storeId) || Ext.create(this.storeClass);
     },

@@ -1,5 +1,5 @@
-Ext.define('Financial.util.Category', {
-    extend: 'Financial.util.AbstractStoreUtil',
+Ext.define('Financial.data.Category', {
+    extend: 'Financial.base.StoreHandler',
 
     singleton: true,
     cache: {},

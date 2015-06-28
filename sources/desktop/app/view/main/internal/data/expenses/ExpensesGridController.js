@@ -29,13 +29,13 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
                 var sum = 0;
 
                 Ext.Object.eachValue(grid.selectedRecords, function (record) {
-                    sum += Financial.util.Currency.convertToDefault(record.get('sum'), record.get('currency_id'));
+                    sum += Financial.data.Currency.convertToDefault(record.get('sum'), record.get('currency_id'));
                 });
 
                 return Ext.String.format(
                     '{0} {1}',
                     Financial.util.Format.money(sum),
-                    Financial.util.Currency.getDefaultCurrency().get('symbol')
+                    Financial.data.Currency.getDefaultCurrency().get('symbol')
                 );
             }())
         ));
@@ -57,7 +57,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         if (record.get('users').length === 0) {
             record.set(
                 'users',
-                Financial.util.User.getAllIds()
+                Financial.data.User.getAllIds()
             );
         }
 
@@ -116,7 +116,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
 
     addRecord: function (button) {
         this.newRecordData = {
-            currency_id: Financial.util.Currency.getDefaultCurrency().get('id'),
+            currency_id: Financial.data.Currency.getDefaultCurrency().get('id'),
             created_at: Financial.util.Misc.generateEICreationDate(button.up('grid')),
             users: [Financial.data.user.current.id],
             status: 'pending'

@@ -85,12 +85,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
          },
          getOtherCurrencies: function (sum) {
          var ret = [],
-         currency = Financial.util.Currency.getById(this.currencyId);
+         currency = Financial.data.Currency.getById(this.currencyId);
 
          Ext.Object.each(currency.get('rates'), function (isoCode, multiplier) {
          ret.push('<i>' + [
          Financial.util.Format.money(sum * multiplier),
-         Financial.util.Currency.getCurrencyByISOCode(isoCode).get('symbol')
+         Financial.data.Currency.getCurrencyByISOCode(isoCode).get('symbol')
          ].join(' ') + '</i>');
          });
 
@@ -153,16 +153,16 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                         typeAhead: true,
                         allowBlank: false,
                         forceSelection: true,
-                        store: Financial.util.Currency.getStore()
+                        store: Financial.data.Currency.getStore()
                     },
                     filter: {
                         type: 'list',
-                        store: Financial.util.Currency.getStore(),
+                        store: Financial.data.Currency.getStore(),
                         idField: 'id',
                         labelField: 'iso_code'
                     },
                     renderer: function (value) {
-                        return Financial.util.Currency.getById(value).get('symbol');
+                        return Financial.data.Currency.getById(value).get('symbol');
                     }
                 },
                 {
@@ -186,7 +186,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                     renderer: function (value, metaData, record) {
                         Financial.util.Misc.anotherCurrenciesTooltip(
                             metaData,
-                            Financial.util.Currency.getById(record.get('currency_id')),
+                            Financial.data.Currency.getById(record.get('currency_id')),
                             record
                         );
 
@@ -228,7 +228,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             renderer: function (ids) {
                 var ret = [];
 
-                Financial.util.User.getStore().each(function (user) {
+                Financial.data.User.getStore().each(function (user) {
                     if (ids.indexOf(user.id) !== -1) {
                         ret.push(user.get('first_name'));
                     }
@@ -244,13 +244,13 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 multiSelect: true,
                 queryMode: 'local',
                 forceSelection: true,
-                store: Financial.util.User.getStore()
+                store: Financial.data.User.getStore()
             }
             /*filter: {
                 type: 'list',
                 idField: 'id',
                 labelField: 'full_name',
-                store: Financial.util.User.getStore()
+                store: Financial.data.User.getStore()
             }*/
         },
         {
@@ -260,7 +260,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             renderer: function (ids) {
                 var ret = [];
 
-                Financial.util.Category.getStore().each(function (category) {
+                Financial.data.Category.getStore().each(function (category) {
                     if (ids.indexOf(category.get('id')) !== -1) {
                         ret.push(category.get('name'));
                     }
@@ -275,13 +275,13 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 displayField: 'name',
                 multiSelect: true,
                 queryMode: 'local',
-                store: Financial.util.Category.getStore()
+                store: Financial.data.Category.getStore()
             }
             /*filter: {
                 type: 'list',
                 idField: 'id',
                 labelField: 'name',
-                store: Financial.util.Category.getStore()
+                store: Financial.data.Category.getStore()
             }*/
         },
         {

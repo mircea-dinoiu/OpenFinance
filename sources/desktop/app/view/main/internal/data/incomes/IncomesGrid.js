@@ -48,7 +48,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 }
             },
             renderer: function(value, metaData, record) {
-                var currency = Financial.util.Currency.getDefaultCurrency();
+                var currency = Financial.data.Currency.getDefaultCurrency();
 
                 Financial.util.Misc.anotherCurrenciesTooltip(
                     metaData,
@@ -87,7 +87,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             text: 'From',
             flex: 1,
             renderer: function (userId) {
-                return Financial.util.User.getById(userId).get('full_name');
+                return Financial.data.User.getById(userId).get('full_name');
             },
             editor: {
                 xtype: 'combo',
@@ -98,7 +98,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 typeAhead: true,
                 allowBlank: false,
                 forceSelection: true,
-                store: Financial.util.User.getStore()
+                store: Financial.data.User.getStore()
             }
         },
         {

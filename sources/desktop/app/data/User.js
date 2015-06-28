@@ -1,5 +1,5 @@
-Ext.define('Financial.util.User', {
-    extend: 'Financial.util.AbstractStoreUtil',
+Ext.define('Financial.data.User', {
+    extend: 'Financial.base.StoreHandler',
 
     singleton: true,
     cache: {},

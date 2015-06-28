@@ -47,8 +47,8 @@ Ext.define('Financial.controller.Data', {
                 recordUsers = record.get('users'),
                 currencyId = record.get('currency_id');
 
-            if (currencyId !== parseInt(Financial.util.Currency.getDefaultCurrency().id)) {
-                sum = Financial.util.Currency.convertToDefault(sum, currencyId);
+            if (currencyId !== parseInt(Financial.data.Currency.getDefaultCurrency().id)) {
+                sum = Financial.data.Currency.convertToDefault(sum, currencyId);
             }
 
             sum /= recordUsers.length;
@@ -64,7 +64,7 @@ Ext.define('Financial.controller.Data', {
 
         var data = [];
 
-        Financial.util.User.getStore().each(function (record) {
+        Financial.data.User.getStore().each(function (record) {
             if (users[record.get('id')]) {
                 data.push({
                     sum: users[record.get('id')],
@@ -109,7 +109,7 @@ Ext.define('Financial.controller.Data', {
         Ext.Object.each(users, function (id, sum) {
             data.push({
                 sum: sum,
-                description: Financial.util.User.getById(id).get('full_name'),
+                description: Financial.data.User.getById(id).get('full_name'),
                 type: 'income',
                 localKey: id
             });
@@ -184,7 +184,7 @@ Ext.define('Financial.controller.Data', {
 
             data.push({
                 sum: totalRemainingByUser[id],
-                description: Financial.util.User.getById(id).get('full_name'),
+                description: Financial.data.User.getById(id).get('full_name'),
                 type: 'remaining',
                 localKey: id,
                 display: false,
@@ -212,7 +212,7 @@ Ext.define('Financial.controller.Data', {
 
             data.push({
                 sum: sum,
-                description: Financial.util.User.getById(id).get('full_name'),
+                description: Financial.data.User.getById(id).get('full_name'),
                 type: 'remaining',
                 localKey: id,
                 display: false,
@@ -238,7 +238,7 @@ Ext.define('Financial.controller.Data', {
         Ext.Object.each(totalRemainingByUser, function (id, sum) {
             data.push({
                 sum: sum,
-                description: Financial.util.User.getById(id).get('full_name'),
+                description: Financial.data.User.getById(id).get('full_name'),
                 type: 'remaining',
                 localKey: id,
                 display: false,
@@ -281,8 +281,8 @@ Ext.define('Financial.controller.Data', {
                     });
                 };
 
-            if (record.get('currency_id') !== parseInt(Financial.util.Currency.getDefaultCurrency().id)) {
-                sum = Financial.util.Currency.convertToDefault(sum, record.get('currency_id'));
+            if (record.get('currency_id') !== parseInt(Financial.data.Currency.getDefaultCurrency().id)) {
+                sum = Financial.data.Currency.convertToDefault(sum, record.get('currency_id'));
             }
 
             if (rCategories.length > 0) {
@@ -307,7 +307,7 @@ Ext.define('Financial.controller.Data', {
                 return 1;
             }
 
-            return Financial.util.Category.getById(a).get('expenses') > Financial.util.Category.getById(b).get('expenses') ? -1 : 1;
+            return Financial.data.Category.getById(a).get('expenses') > Financial.data.Category.getById(b).get('expenses') ? -1 : 1;
         });
 
         Ext.each(categoryIds, function (categoryId) {
@@ -317,7 +317,7 @@ Ext.define('Financial.controller.Data', {
             if (categoryId === 0) {
                 desc = '<i>Unclassified</i>';
             } else {
-                desc = Financial.util.Category.getById(categoryId).get('name');
+                desc = Financial.data.Category.getById(categoryId).get('name');
             }
 
             data.push({
@@ -331,7 +331,7 @@ Ext.define('Financial.controller.Data', {
             Ext.Object.each(category.users, function (id, sum) {
                 data.push({
                     sum: sum,
-                    description: Financial.util.User.getById(id).get('full_name'),
+                    description: Financial.data.User.getById(id).get('full_name'),
                     type: 'category',
                     localKey: id,
                     display: false,
