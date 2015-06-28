@@ -39,21 +39,6 @@ Ext.define('Financial.view.main.Login', {
                     }
                 ]
             },
-            /*{
-                xtype: 'togglefield',
-                name: 'remember_me',
-                label: 'Remember me',
-                labelWidth: '90%'
-            },
-            /*
-            {
-                /*xtype: 'checkboxfield',
-                name: 'remember_me',
-                value: true,
-                label: 'Remember me',
-                labelWrap: true,
-                margin: '0 0 0 0'
-            },*/
             {
                 xtype: 'button',
                 itemId: 'loginButton',

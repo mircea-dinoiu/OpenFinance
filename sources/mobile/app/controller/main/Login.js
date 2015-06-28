@@ -48,7 +48,7 @@ Ext.define('Financial.controller.main.Login', {
                 params: loginView.getValues(),
                 success: function (response) {
                     Financial.data.user = Ext.JSON.decode(response.responseText);
-                    Financial.data.User.getStore().loadData(Financial.data.user.list);
+                    Financial.data.User.getStore().setData(Financial.data.user.list);
                     loginView.setMasked(false);
                     Financial.app.getController('Main').launch();
                 },

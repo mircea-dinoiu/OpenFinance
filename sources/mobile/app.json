@@ -115,7 +115,7 @@
     "resources": [
         "index.php",
         "robots.txt",
-        "app/*",
+        "app/controller/*",
         "resources/images",
         "resources/icons",
         "resources/startup"

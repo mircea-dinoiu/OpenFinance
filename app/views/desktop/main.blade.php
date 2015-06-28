@@ -13,6 +13,10 @@
           type="image/png"
           href="{{ url(sprintf('resources/img/icon/%s.png', Config::get('app.debug') ? 'page_gear' : 'money')) }}"/>
 
+    @if (Config::get('app.debug'))
+        {{--*/ $theme = 'neptune' /*--}}
+        {{ HTML::style("ext/packages/ext-theme-$theme/build/resources/ext-theme-$theme-all-debug.css")}}
+    @endif
     {{ HTML::style('resources/css/icon.css?' . filemtime(app_path('../public/desktop/resources/css/icon.css'))) }}
     {{ HTML::style('resources/css/extra.css?' . filemtime(app_path('../public/desktop/resources/css/extra.css'))) }}
 

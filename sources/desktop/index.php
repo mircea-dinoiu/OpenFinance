@@ -1,2 +1,2 @@
 <?php
-include_once('../index.php');
+include_once('../../public/index.php');
