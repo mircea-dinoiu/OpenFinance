@@ -18,7 +18,7 @@
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'mobile/bootstrap.json', false);
+    xhr.open('GET', 'bootstrap.json', false);
     xhr.send(null);
 
     var options = eval("(" + xhr.responseText + ")"),
