@@ -1,7 +1,7 @@
 // FamFamFam: Silk Icons v13
 @import "compass/utilities/sprites";
 
-$map: sprite-map("icon/*.png");
+$map: sprite-map("icon/*.png", $layout: smart);
 
 @each $name in sprite-names($map) {
   .icon-#{$name} {
@@ -12,7 +12,7 @@ $map: sprite-map("icon/*.png");
 .icon-checkbox, .icon-checkbox_checked {
   background: {
     image: inline-image("../../ext/packages/ext-theme-neptune/build/resources/images/form/checkbox.png");
-    position: 0 0;
+    position: 0 0 !important;
   }
 
   &:hover {
