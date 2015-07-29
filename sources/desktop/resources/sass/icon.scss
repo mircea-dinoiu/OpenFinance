@@ -16,14 +16,14 @@ $map: sprite-map("icon/*.png", $layout: smart);
   }
 
   &:hover {
-    background-position: -15px 0;
+    background-position: -15px 0 !important;
   }
 
   &.icon-checkbox_checked {
-    background-position: 0 -15px;
+    background-position: 0 -15px !important;
 
     &:hover {
-      background-position: -15px -15px;
+      background-position: -15px -15px !important;
     }
   }
 }
