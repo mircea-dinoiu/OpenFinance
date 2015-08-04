@@ -11,12 +11,18 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
 
         //console.info('onStoreRefresh');
 
+        /**
+         * Toggle buttons depending on selected records
+         */
         Ext.each(['delete', 'deselect'], function (itemId) {
             grid.down(Ext.String.format('button[itemId="{0}"]', itemId)).setDisabled(
                 Ext.Object.getKeys(grid.selectedRecords).length === 0
             );
         });
 
+        /**
+         * Create bottom bar text
+         */
         items.push(Ext.String.format(
             'Count: {0}',
             store.getCount()
