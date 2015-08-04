@@ -11,9 +11,11 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
 
         //console.info('onStoreRefresh');
 
-        grid.down('button[itemId="delete"]').setDisabled(
-            Ext.Object.getKeys(grid.selectedRecords).length === 0
-        );
+        Ext.each(['delete', 'deselect'], function (itemId) {
+            grid.down(Ext.String.format('button[itemId="{0}"]', itemId)).setDisabled(
+                Ext.Object.getKeys(grid.selectedRecords).length === 0
+            );
+        });
 
         items.push(Ext.String.format(
             'Count: {0}',
@@ -69,7 +71,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
     },
 
     onDeleteSelectedExpensesClick: function () {
-        var grid = this.getView(),
+        var me = this,
+            grid = me.getView(),
             store = grid.getStore();
 
         Ext.Msg.show({
@@ -79,14 +82,24 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
             icon: Ext.Msg.QUESTION,
             fn: function (btn) {
                 if (btn === 'yes') {
+                    me.removeSelected();
+
                     store.remove(Ext.Object.getValues(grid.selectedRecords));
                     store.sync();
-
-                    grid.selectedRecords = {};
-                    grid.store.fireEvent('refresh');
                 }
             }
         });
+    },
+
+    onDeselectAllClick: function () {
+        this.removeSelected();
+    },
+
+    removeSelected: function () {
+        var grid = this.getView();
+
+        grid.selectedRecords = {};
+        grid.store.fireEvent('refresh');
     },
 
     onSelectDeselectRecord: function (a, b, c, e, event) {

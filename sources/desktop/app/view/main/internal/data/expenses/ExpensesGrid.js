@@ -111,6 +111,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             xtype: 'tbfill'
         },
         {
+            text: 'Deselect All',
+            handler: 'onDeselectAllClick',
+            itemId: 'deselect',
+            disabled: true
+        },
+        {
             text: 'Delete',
             iconCls: 'icon-delete',
             handler: 'onDeleteSelectedExpensesClick',
