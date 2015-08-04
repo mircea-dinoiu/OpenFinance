@@ -256,7 +256,7 @@ Ext.define('Financial.controller.Data', {
             data = [];
 
         expensesGrid.getStore().each(function (record) {
-            var rCategories = record.get('categories'),
+            var eCategories = record.get('categories'),
                 sum = record.get('sum'),
                 addData = function (categoryId, sum) {
                     if (!categories[categoryId]) {
@@ -285,9 +285,9 @@ Ext.define('Financial.controller.Data', {
                 sum = Financial.data.Currency.convertToDefault(sum, record.get('currency_id'));
             }
 
-            if (rCategories.length > 0) {
-                Ext.each(rCategories, function (categoryId) {
-                    addData(categoryId, sum);
+            if (eCategories.length > 0) {
+                Ext.each(eCategories, function (categoryId) {
+                    addData(categoryId, sum / eCategories.length);
                 });
             } else {
                 addData(0, sum);
