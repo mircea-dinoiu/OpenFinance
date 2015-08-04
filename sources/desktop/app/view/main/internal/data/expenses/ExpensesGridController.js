@@ -9,6 +9,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
             store = grid.getStore(),
             items = [];
 
+        //console.info('onStoreRefresh');
+
         grid.down('button[itemId="delete"]').setDisabled(
             Ext.Object.getKeys(grid.selectedRecords).length === 0
         );
@@ -62,6 +64,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         }
 
         this.callParent(arguments);
+
+        this.onStoreRefresh();
     },
 
     onDeleteSelectedExpensesClick: function () {
