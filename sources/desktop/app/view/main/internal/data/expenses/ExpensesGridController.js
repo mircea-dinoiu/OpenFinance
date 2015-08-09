@@ -88,20 +88,20 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
             icon: Ext.Msg.QUESTION,
             fn: function (btn) {
                 if (btn === 'yes') {
-                    me.removeSelected();
-
                     store.remove(Ext.Object.getValues(grid.selectedRecords));
                     store.sync();
+
+                    me.deselectAll();
                 }
             }
         });
     },
 
     onDeselectAllClick: function () {
-        this.removeSelected();
+        this.deselectAll();
     },
 
-    removeSelected: function () {
+    deselectAll: function () {
         var grid = this.getView();
 
         grid.selectedRecords = {};
