@@ -6,7 +6,13 @@ Ext.define('Financial.model.Expense', {
         {name: 'sum', type: 'float', defaultValue: ''},
         {name: 'currency_id', type: 'int'},
         {name: 'item', type: 'string'},
-        {name: 'created_at', type: 'date'},
+        {
+            name: 'created_at',
+            type: 'date',
+            convert: function (date) {
+                return Ext.Date.parse(date, 'Y-m-d H:i:s') || date;
+            }
+        },
         {name: 'status', type: 'string'},
         {
             name: 'users',
