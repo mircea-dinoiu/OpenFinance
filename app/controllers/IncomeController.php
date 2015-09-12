@@ -40,9 +40,21 @@ class IncomeController extends BaseController
         $data = Input::get('data');
 
         if (is_array($data) && !empty($data)) {
-            if (Validator::make($data, ['id' => 'required|income_id'])->passes()) {
-                return Income::destroy($data['id']);
+            $validationRules = ['id' => 'required|income_id'];
+
+            $output = [];
+
+            foreach ($data as $record) {
+                $validator = Validator::make($record, $validationRules);
+
+                if ($validator->passes()) {
+                    $output[] = Income::destroy($record['id']);
+                } else {
+                    $output[] = $validator->messages();
+                }
             }
+
+            return Response::json($output);
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
@@ -61,33 +73,39 @@ class IncomeController extends BaseController
                 'created_at' => 'sometimes|required|integer'
             ];
 
-            $validator = Validator::make($data, $validationRules);
+            $output = [];
 
-            if ($validator->passes()) {
-                $income = Income::find($data['id']);
+            foreach ($data as $record) {
+                $validator = Validator::make($record, $validationRules);
 
-                if (isset($data['sum'])) {
-                    $income->sum = $data['sum'];
+                if ($validator->passes()) {
+                    $income = Income::find($record['id']);
+
+                    if (isset($record['sum'])) {
+                        $income->sum = $record['sum'];
+                    }
+
+                    if (isset($record['description'])) {
+                        $income->description = $record['description'];
+                    }
+
+                    if (isset($record['user_id'])) {
+                        $income->user_id = $record['user_id'];
+                    }
+
+                    if (isset($record['created_at'])) {
+                        $income->created_at = date('Y-m-d H:i:s', $record['created_at']);
+                    }
+
+                    $income->save();
+
+                    $output[] = $income;
+                } else {
+                    $output[] = $validator->messages();
                 }
-
-                if (isset($data['description'])) {
-                    $income->description = $data['description'];
-                }
-
-                if (isset($data['user_id'])) {
-                    $income->user_id = $data['user_id'];
-                }
-
-                if (isset($data['created_at'])) {
-                    $income->created_at = date('Y-m-d H:i:s', $data['created_at']);
-                }
-
-                $income->save();
-
-                return Response::json($income);
-            } else {
-                return Response::json($validator->messages(), 400);
             }
+
+            return Response::json($output);
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
@@ -105,25 +123,31 @@ class IncomeController extends BaseController
                 'created_at' => 'sometimes|required|integer'
             ];
 
-            $validator = Validator::make($data, $validationRules);
+            $output = [];
 
-            if ($validator->passes()) {
-                $income = new Income;
+            foreach ($data as $record) {
+                $validator = Validator::make($record, $validationRules);
 
-                $income->sum = $data['sum'];
-                $income->description = $data['description'];
-                $income->user_id = $data['user_id'];
+                if ($validator->passes()) {
+                    $income = new Income;
 
-                if (isset($data['created_at'])) {
-                    $income->created_at = date('Y-m-d H:i:s', $data['created_at']);
+                    $income->sum = $record['sum'];
+                    $income->description = $record['description'];
+                    $income->user_id = $record['user_id'];
+
+                    if (isset($record['created_at'])) {
+                        $income->created_at = date('Y-m-d H:i:s', $record['created_at']);
+                    }
+
+                    $income->save();
+
+                    $output[] = $income;
+                } else {
+                    $output[] = $validator->messages();
                 }
-
-                $income->save();
-
-                return Response::json($income);
-            } else {
-                return Response::json($validator->messages(), 400);
             }
+
+            return Response::json($output);
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);

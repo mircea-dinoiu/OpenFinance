@@ -25,7 +25,8 @@ Ext.define('Financial.store.Category', {
         writer: {
             type: 'json',
             writeAllFields: false,
-            rootProperty: 'data'
+            rootProperty: 'data',
+            allowSingle: false
         }
     }
 });

@@ -31,7 +31,8 @@ Ext.define('Financial.store.Income', {
         writer: {
             type: 'json',
             writeAllFields: false,
-            rootProperty: 'data'
+            rootProperty: 'data',
+            allowSingle: false
         }
     },
 

@@ -17,10 +17,6 @@ class CategoryController extends \BaseController
                 'name' => 'sometimes|required|string'
             ];
 
-            if (isset($data['id'])) {
-                $data = [$data];
-            }
-
             $output = [];
 
             foreach ($data as $record) {
@@ -41,7 +37,7 @@ class CategoryController extends \BaseController
                 }
             }
 
-            return Response::json(count($output) === 1 ? $output[0] : $output);
+            return Response::json($output);
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
@@ -56,19 +52,25 @@ class CategoryController extends \BaseController
                 'name' => 'required|string'
             ];
 
-            $validator = Validator::make($data, $validationRules);
+            $output = [];
 
-            if ($validator->passes()) {
-                $category = new Category;
+            foreach ($data as $record) {
+                $validator = Validator::make($record, $validationRules);
 
-                $category->name = trim($data['name']);
+                if ($validator->passes()) {
+                    $category = new Category;
 
-                $category->save();
+                    $category->name = trim($record['name']);
 
-                return Response::json($category);
-            } else {
-                return Response::json($validator->messages(), 400);
+                    $category->save();
+
+                    $output[] = $category;
+                } else {
+                    $output[] = $validator->messages();
+                }
             }
+
+            return Response::json($output);
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);

@@ -143,6 +143,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
 
     columns: [
         {
+            text: 'ID',
+            dataIndex: 'id',
+            hidden: true,
+            align: 'right'
+        },
+        {
             text: 'Sum',
             columns: [
                 {
