@@ -63,11 +63,11 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         value: (function () {
                             var date = new Date();
 
-                            if (date.getDate() < 15) {
+                            if (date.getDate() < 2) {
                                 date.setMonth(date.getMonth() - 1);
                             }
                             
-                            date.setDate(15);
+                            date.setDate(2);
 
                             return date;
                         }()),
@@ -101,12 +101,12 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         value: (function () {
                             var date = new Date();
 
-                            if (date.getDate() < 15) {
+                            if (date.getDate() < 2) {
                                 date.setMonth(date.getMonth() - 1);
                             }
                             
                             date.setMonth(date.getMonth() + 1);
-                            date.setDate(14);
+                            date.setDate(1);
 
                             return date;
                         }()),
