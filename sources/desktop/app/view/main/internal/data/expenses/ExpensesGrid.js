@@ -12,7 +12,22 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
 
     viewConfig: {
         getRowClass: function (record) {
-            return record.get('status') + '-expense-row expense-row';
+            function day(date) {
+                return Ext.util.Format.date(date, 'Y-m-d');
+            }
+
+            var classes = [];
+
+            classes.push(record.get('status') + '-expense-row');
+            classes.push('expense-row');
+
+            if (day(record.get('created_at')) === day(new Date())) {
+                classes.push('today-row');
+            } else if (day(record.get('created_at')) > day(new Date())) {
+                classes.push('future-row');
+            }
+
+            return classes.join(' ');
         },
         loadMask: false
     },

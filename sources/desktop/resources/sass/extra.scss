@@ -24,6 +24,18 @@
   }
 }
 
+.today-row {
+  td {
+    font-weight: bold;
+  }
+}
+
+.future-row {
+  td > .x-grid-cell-inner {
+    opacity: 0.5;
+  }
+}
+
 .hidden {
   display: none;
   visibility: hidden;

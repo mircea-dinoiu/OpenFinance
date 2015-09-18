@@ -4,14 +4,30 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
     xtype: 'app-main-internal-data-incomes-grid',
     controller: 'app-main-internal-data-incomes-grid',
     autoScroll: true,
-    viewConfig: {
-        loadMask: false
-    },
     bufferedRenderer: false,
 
     requires: [
         'Financial.view.main.internal.data.incomes.IncomesGridController'
     ],
+
+    viewConfig: {
+        getRowClass: function (record) {
+            function day(date) {
+                return Ext.util.Format.date(date, 'Y-m-d');
+            }
+
+            var classes = [];
+
+            if (day(record.get('created_at')) === day(new Date())) {
+                classes.push('today-row');
+            } else if (day(record.get('created_at')) > day(new Date())) {
+                classes.push('future-row');
+            }
+
+            return classes.join(' ');
+        },
+        loadMask: false
+    },
 
     plugins: {
         ptype: 'rowediting',
