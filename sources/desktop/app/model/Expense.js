@@ -24,6 +24,17 @@ Ext.define('Financial.model.Expense', {
                 });
 
                 return ids;
+            },
+            sortType: function (ids) {
+                var ret = [];
+
+                Financial.data.User.getStore().each(function (user) {
+                    if (ids.indexOf(user.id) !== -1) {
+                        ret.push(user.get('first_name'));
+                    }
+                });
+
+                return ret.join(', ');
             }
         },
         {
@@ -36,6 +47,17 @@ Ext.define('Financial.model.Expense', {
                 });
 
                 return ids;
+            },
+            sortType: function (ids) {
+                var ret = [];
+
+                Financial.data.Category.getStore().each(function (category) {
+                    if (ids.indexOf(category.get('id')) !== -1) {
+                        ret.push(category.get('name'));
+                    }
+                });
+
+                return ret.join(', ');
             }
         }
     ]

@@ -12,6 +12,12 @@ Ext.define('Financial.model.Income', {
                 return Ext.Date.parse(date, 'Y-m-d H:i:s') || date;
             }
         },
-        {name: 'user_id', type: 'int'}
+        {
+            name: 'user_id',
+            type: 'int',
+            sortType: function (userId) {
+                return Financial.data.User.getById(userId).get('full_name');
+            }
+        }
     ]
 });

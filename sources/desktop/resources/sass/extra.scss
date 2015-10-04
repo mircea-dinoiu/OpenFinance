@@ -31,7 +31,7 @@
 }
 
 .future-row {
-  td > .x-grid-cell-inner {
+  td:not([data-columnid^="actioncolumn"]) > .x-grid-cell-inner {
     opacity: 0.5;
   }
 }
