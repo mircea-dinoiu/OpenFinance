@@ -1,0 +1,15 @@
+/vendor
+/node_modules
+Homestead.yaml
+Homestead.json
+.env
+.idea
+/storage
+public/mobile
+public/desktop
+sources/mobile/build
+sources/desktop/build
+sources/desktop/bootstrap.json
+sources/desktop/bootstrap.css
+sources/desktop/sass/example/bootstrap.json
+.sass-cache

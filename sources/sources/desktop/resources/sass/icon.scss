@@ -1,0 +1,29 @@
+// FamFamFam: Silk Icons v13
+@import "compass/utilities/sprites";
+
+$map: sprite-map("icon/*.png", $layout: smart);
+
+@each $name in sprite-names($map) {
+  .icon-#{$name} {
+    background: sprite($map, $name) !important;
+  }
+}
+
+.icon-checkbox, .icon-checkbox_checked {
+  background: {
+    image: inline-image("../../ext/packages/ext-theme-neptune/build/resources/images/form/checkbox.png");
+    position: 0 0 !important;
+  }
+
+  &:hover {
+    background-position: -15px 0 !important;
+  }
+
+  &.icon-checkbox_checked {
+    background-position: 0 -15px !important;
+
+    &:hover {
+      background-position: -15px -15px !important;
+    }
+  }
+}
