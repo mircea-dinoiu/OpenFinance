@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Income;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+
 class IncomeController extends Controller
 {
     public function getList()

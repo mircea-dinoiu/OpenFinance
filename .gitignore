@@ -14,3 +14,4 @@ sources/desktop/bootstrap.json
 sources/desktop/bootstrap.css
 sources/desktop/sass/example/bootstrap.json
 .sass-cache
+.sencha_backup

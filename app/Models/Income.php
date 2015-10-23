@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-class Income extends Illuminate\Database\Eloquent\Model {
+use Illuminate\Database\Eloquent\Model;
+
+class Income extends Model {
     protected $table = 'incomes';
 
     public function user() {
-        return $this->belongsTo('User')->select(['id']);
+        return $this->belongsTo('App\Models\User')->select(['id']);
     }
 }

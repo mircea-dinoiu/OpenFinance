@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Setting extends Illuminate\Database\Eloquent\Model
+use Illuminate\Database\Eloquent\Model;
+
+class Setting extends Model
 {
 
     /**

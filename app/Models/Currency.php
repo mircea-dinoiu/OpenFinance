@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
-class Currency extends Illuminate\Database\Eloquent\Model {
+use Illuminate\Database\Eloquent\Model;
+
+class Currency extends Model {
     protected $table = 'currencies';
 }

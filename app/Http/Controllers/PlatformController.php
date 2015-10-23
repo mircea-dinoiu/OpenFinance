@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Detection\MobileDetect;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Redirect;
+
 class PlatformController extends Controller {
     private static $detect;
 
     public static function detect() {
-        return isset(self::$detect) ? self::$detect : (self::$detect = new \Detection\MobileDetect());
+        return isset(self::$detect) ? self::$detect : (self::$detect = new MobileDetect());
     }
 
     public static function isMobile() {

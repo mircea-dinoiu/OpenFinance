@@ -2,6 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+
 class ExpenseController extends Controller
 {
     private static function newExpenseQuery()

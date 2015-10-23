@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
+use App\Models\Setting;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
+
 class CurrencyController extends Controller
 {
     private static $data = null;
