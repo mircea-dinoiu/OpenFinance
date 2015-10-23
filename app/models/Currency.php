@@ -1,4 +1,9 @@
 <?php
-class Currency extends Eloquent {
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Currency extends Model {
     protected $table = 'currencies';
 }

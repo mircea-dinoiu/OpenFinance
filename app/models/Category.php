@@ -1,6 +1,10 @@
 <?php
 
-class Category extends Eloquent
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Category extends Model
 {
     protected $table = 'categories';
 
@@ -14,6 +18,6 @@ class Category extends Eloquent
     }
 
     public function expenses() {
-        return $this->belongsToMany('Expense')->select(['id']);
+        return $this->belongsToMany('App\Models\Expense')->select(['id']);
     }
 }
