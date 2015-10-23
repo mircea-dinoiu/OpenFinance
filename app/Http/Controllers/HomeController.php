@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
+use App\Models\User;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\View;
+
 class HomeController extends Controller
 {
     public function getData()
