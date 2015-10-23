@@ -51,9 +51,22 @@ Ext.define('Financial.Application', {
         }
     },
 
+    initCSRFToken: function () {
+        var csrfToken = Ext.select('meta[name="csrf-token"]').elements[0].getAttribute('content');
+
+        Ext.Ajax.on('beforerequest', function(o,r) {
+            r.headers = Ext.apply({
+                'Accept': 'application/json',
+                'X-CSRF-Token': csrfToken
+            }, r.headers || {});
+        });
+    },
+
     launch: function () {
         var me = this,
             appMain = me.getAppMain();
+
+        me.initCSRFToken();
 
         appMain.setLoading(true);
 
