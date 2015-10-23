@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Income;
+
 Validator::extend('income_id', function ($attribute, $value) {
     if (!Validator::make([$attribute => $value], [$attribute => 'integer'])->passes()) {
         return false;
