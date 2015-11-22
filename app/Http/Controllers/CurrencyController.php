@@ -137,8 +137,13 @@ class CurrencyController extends Controller
                 $fromCache = true;
             }
         } else {
-            self::fetchFreshData();
-            self::cacheData();
+            try {
+                self::fetchFreshData();
+                self::cacheData();
+            } catch (\Exception $e) {
+                self::fetchCachedData();
+                $fromCache = true;
+            }
         }
 
         if (\Config::get('app.debug')) {
