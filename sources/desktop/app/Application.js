@@ -51,22 +51,40 @@ Ext.define('Financial.Application', {
         }
     },
 
-    initCSRFToken: function () {
-        var csrfToken = Ext.select('meta[name="csrf-token"]').elements[0].getAttribute('content');
+    initAjaxHandlers: function () {
+        var me = this,
+            csrfToken = Ext.select('meta[name="csrf-token"]').elements[0].getAttribute('content');
 
-        Ext.Ajax.on('beforerequest', function(o,r) {
+        Ext.Ajax.on('beforerequest', function (o, r) {
             r.headers = Ext.apply({
                 'Accept': 'application/json',
                 'X-CSRF-Token': csrfToken
             }, r.headers || {});
         });
+
+        Ext.Ajax.on('requestexception', function (conn, response, opts) {
+            if (!opts.failure) {
+                Ext.Msg.show({
+                    title: 'Error',
+                    closable: false,
+                    draggable: false,
+                    message: response.responseText,
+                    buttons: {text: 'Reload', itemId: 'ok', ui: 'action'},
+                    icon: Ext.Msg.ERROR,
+                    fn: function () {
+                        me.getAppMain().setLoading(true);
+                        window.location.reload();
+                    }
+                });
+            }
+        })
     },
 
     launch: function () {
         var me = this,
             appMain = me.getAppMain();
 
-        me.initCSRFToken();
+        me.initAjaxHandlers();
 
         appMain.setLoading(true);
 
@@ -99,7 +117,7 @@ Ext.define('Financial.Application', {
 
                             checkRequestsState();
                         },
-                        error: function () {
+                        failure: function () {
                             Ext.Msg.show({
                                 message: 'There was an error while trying to fetch data.<br>Please come back later.',
                                 title: 'Error',
