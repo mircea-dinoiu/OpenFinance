@@ -9,14 +9,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
             store = grid.getStore(),
             items = [];
 
-        //console.info('onStoreRefresh');
-
         /**
          * Toggle buttons depending on selected records
          */
         Ext.each(['delete', 'deselect'], function (itemId) {
             grid.down(Ext.String.format('button[itemId="{0}"]', itemId)).setDisabled(
-                Ext.Object.getKeys(grid.selectedRecords).length === 0
+                grid.getSelection().length === 0
             );
         });
 
@@ -30,7 +28,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
 
         items.push(Ext.String.format(
             'Selected count: {0}',
-            Ext.Object.getKeys(grid.selectedRecords).length
+            grid.getSelection().length
         ));
 
         items.push(Ext.String.format(
@@ -38,7 +36,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
             (function () {
                 var sum = 0;
 
-                Ext.Object.eachValue(grid.selectedRecords, function (record) {
+                Ext.each(grid.getSelection(), function (record) {
                     sum += Financial.data.Currency.convertToDefault(record.get('sum'), record.get('currency_id'));
                 });
 
@@ -88,10 +86,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
             icon: Ext.Msg.QUESTION,
             fn: function (btn) {
                 if (btn === 'yes') {
-                    store.remove(Ext.Object.getValues(grid.selectedRecords));
+                    store.remove(grid.getSelection());
                     store.sync();
-
-                    me.deselectAll();
                 }
             }
         });
@@ -104,28 +100,10 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
     deselectAll: function () {
         var grid = this.getView();
 
-        grid.selectedRecords = {};
-        grid.store.fireEvent('refresh');
+        grid.getSelectionModel().deselectAll();
     },
 
-    onSelectDeselectRecord: function (a, b, c, e, event) {
-        var grid = this.getView(),
-            record = event.record,
-            id = record.get('id'),
-            img = event.target,
-            alreadyChecked = !!grid.selectedRecords[id];
-
-        if (alreadyChecked) {
-            delete grid.selectedRecords[id];
-        } else {
-            grid.selectedRecords[id] = record;
-        }
-
-        img.className = img.className.replace(
-            /icon-checkbox_checked|icon-checkbox/g,
-            'icon-checkbox' + (alreadyChecked ? '' : '_checked')
-        );
-
+    onSelectionChange: function (grid, selected, eOpts) {
         this.onStoreRefresh();
     },
 

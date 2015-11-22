@@ -4,7 +4,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
     store: 'Financial.store.Expense',
     controller: 'app-main-internal-data-expenses-grid',
     autoScroll: true,
-    bufferedRenderer: false,
+    bufferedRenderer: true,
 
     requires: [
         'Financial.view.main.internal.data.expenses.ExpensesGridController'
@@ -30,6 +30,11 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             return classes.join(' ');
         },
         loadMask: false
+    },
+
+    selModel: {
+        selType: 'rowmodel', // rowmodel is the default selection model
+        mode: 'MULTI' // Allows selection of multiple rows
     },
 
     plugins: [
@@ -147,13 +152,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         }
     ],
 
-    selectedRecords: {},
-
     listeners: {
         refresh: {
             element: 'store',
             fn: 'onStoreRefresh'
-        }
+        },
+        selectionchange: 'onSelectionChange'
     },
 
     columns: [
@@ -331,15 +335,9 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                         return record.get('status') === 'pending' ? ' hidden ' : ' icon-flag_yellow ';
                     },
                     handler: 'onMarkExpenseAsPendingClick'
-                },
-                {
-                    getClass: function (v, metadata, record) {
-                        return this.up('grid').selectedRecords[record.get('id')] ? ' icon-checkbox_checked ' : ' icon-checkbox ';
-                    },
-                    handler: 'onSelectDeselectRecord'
                 }
             ],
-            width: 16 * 2 + 4 * 2
+            width: (16 + 4) * 1
         }
     ]
 });
