@@ -150,9 +150,60 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         }
     },
 
+    initCurrenciesContainer: function (currenciesContainer) {
+        window.clearTimeout(currenciesContainer.timeout);
+
+        function setCurrency() {
+            var defaultCurrency = Financial.data.Currency.getDefaultCurrency(),
+                textArr = [];
+
+            Financial.data.Currency.getStore().each(function (currency) {
+                if (currency.get('id') !== defaultCurrency.get('id')) {
+                    textArr.push(Ext.String.format(
+                        '<strong>{0}</strong>: {1} <i>{2}</i>',
+                        currency.get('iso_code'),
+                        currency.get('rates')[defaultCurrency.get('iso_code')],
+                        defaultCurrency.get('symbol')
+                    ));
+                }
+            });
+
+            currenciesContainer.setHtml(textArr.join('<br>'));
+        }
+
+        setCurrency();
+
+        function fetchCurrencies() {
+            currenciesContainer.timeout = setTimeout(function () {
+                if (Financial.data.user) {
+                    Ext.Ajax.request({
+                        url: Financial.routes.getCurrencies + '?update=true',
+                        success: function (response) {
+                            Financial.data.Currency.setCurrency(response);
+
+                            setCurrency();
+                            fetchCurrencies();
+                        }
+                    });
+                } else {
+                    window.clearTimeout(currenciesContainer.timeout);
+                }
+            }, 60 * 1000);
+        }
+
+        fetchCurrencies();
+    },
+
     /**
      * Handlers
      */
+    onAfterRender: function () {
+        var me = this,
+            toolbarView = me.getView();
+
+        me.initCurrenciesContainer(toolbarView.down('[itemId="currenciesContainer"]'));
+    },
+
     onLogoutClick: function () {
         var me = this,
             mainView = me.getView().up('app-main');
@@ -220,45 +271,6 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
 
     onToggleEndDateButton: function (button) {
         this.toggleDateButton(button, this.getEndDateButton());
-    },
-
-    onAfterCurrencyMenuContainerRender: function (container) {
-        window.clearInterval(container.interval);
-
-        function setCurrency() {
-            var defaultCurrency = Financial.data.Currency.getDefaultCurrency(),
-                textArr = [];
-
-            Financial.data.Currency.getStore().each(function (currency) {
-                if (currency.get('id') !== defaultCurrency.get('id')) {
-                    textArr.push(Ext.String.format(
-                        '<strong>{0}</strong>: {1} <i>{2}</i>',
-                        currency.get('iso_code'),
-                        currency.get('rates')[defaultCurrency.get('iso_code')],
-                        defaultCurrency.get('symbol')
-                    ));
-                }
-            });
-
-            container.setHtml(textArr.join('<br>'));
-        }
-
-        setCurrency();
-
-        container.interval = setInterval(function () {
-            if (Financial.data.user) {
-                Ext.Ajax.request({
-                    url: Financial.routes.getCurrencies,
-                    success: function (response) {
-                        Financial.data.Currency.setCurrency(response);
-
-                        setCurrency();
-                    }
-                });
-            } else {
-                window.clearInterval(container.interval);
-            }
-        }, 60 * 1000);
     },
 
     onManageCategoriesClick: function () {

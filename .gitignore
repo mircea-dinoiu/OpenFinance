@@ -5,7 +5,6 @@ Homestead.yaml
 Homestead.json
 .env
 .idea
-/storage
 public/mobile
 public/desktop
 sources/mobile/build

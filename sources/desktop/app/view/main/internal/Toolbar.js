@@ -11,6 +11,10 @@ Ext.define('Financial.view.main.internal.Toolbar', {
 
     layout: 'hbox',
 
+    listeners: {
+        afterrender: 'onAfterRender'
+    },
+
     items: [
         {
             text: 'Exchange rates',
@@ -21,9 +25,7 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                     {
                         xtype: 'container',
                         padding: '10px 20px',
-                        listeners: {
-                            afterrender: 'onAfterCurrencyMenuContainerRender'
-                        }
+                        itemId: 'currenciesContainer'
                     }
                 ]
             }

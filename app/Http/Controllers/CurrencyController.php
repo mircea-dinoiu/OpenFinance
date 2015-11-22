@@ -45,12 +45,8 @@ class CurrencyController extends Controller
         return static::convert($value, $from, static::getDefaultCurrency());
     }
 
-    private static function setupData()
+    private static function fetchFreshData()
     {
-        if (static::$data !== null) {
-            return;
-        }
-
         $map = [];
 
         $rawData = DB::table('currencies')->get();
@@ -95,6 +91,59 @@ class CurrencyController extends Controller
             'default' => self::getDefaultCurrency()->id,
             'map' => $map
         ];
+    }
+
+    private static function getCacheFilePath()
+    {
+        return base_path('storage/app/currencies.json');
+    }
+
+    private static function cacheData()
+    {
+        file_put_contents(self::getCacheFilePath(), json_encode(self::$data));
+    }
+
+    private static function fetchCachedData()
+    {
+        $filePath = self::getCacheFilePath();
+
+        if (file_exists($filePath)) {
+            try {
+                self::$data = json_decode(file_get_contents($filePath), true);
+                return true;
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private static function setupData()
+    {
+        if (static::$data !== null) {
+            return;
+        }
+
+        $update = \Input::get('update', null);
+
+        $fromCache = false;
+
+        if ($update !== 'true') {
+            if (self::fetchCachedData() === false) {
+                self::fetchFreshData();
+                self::cacheData();
+            } else {
+                $fromCache = true;
+            }
+        } else {
+            self::fetchFreshData();
+            self::cacheData();
+        }
+
+        if (\Config::get('app.debug')) {
+            self::$data['from_cache'] = $fromCache;
+        }
     }
 
     public static function getDefaultCurrency()
