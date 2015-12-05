@@ -68,7 +68,7 @@ Ext.define('Financial.Application', {
                     title: 'Error',
                     closable: false,
                     draggable: false,
-                    message: response.responseText,
+                    message: response.responseText || 'Cannot connect to server.',
                     buttons: {text: 'Reload', itemId: 'ok', ui: 'action'},
                     icon: Ext.Msg.ERROR,
                     fn: function () {
