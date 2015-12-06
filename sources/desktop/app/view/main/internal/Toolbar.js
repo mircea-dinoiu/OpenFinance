@@ -155,7 +155,6 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             }
         },
         {
-            iconCls: 'icon-user',
             listeners: {
                 render: 'onUserMenuRender'
             },

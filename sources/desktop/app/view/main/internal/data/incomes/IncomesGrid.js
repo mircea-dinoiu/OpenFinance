@@ -26,6 +26,11 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
 
             return classes.join(' ');
         },
+        listeners: {
+            refresh: function(dataView) {
+                Financial.util.Events.dataViewAutoFit(dataView);
+            }
+        },
         loadMask: false
     },
 
@@ -50,7 +55,8 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
         {
             dataIndex: 'sum',
             text: 'Sum',
-            flex: 1,
+            resizable: false,
+            fit: true,
             align: 'right',
             editor: {
                 xtype: 'numberfield',
@@ -88,7 +94,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             dataIndex: 'created_at',
             text: 'Date',
             formatter: "date('D d-m-Y')",
-            width: 115,
+            fit: true,
             resizable: false,
             align: 'center',
             editor: {
@@ -101,9 +107,11 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
         {
             dataIndex: 'user_id',
             text: 'From',
-            flex: 1,
+            align: 'center',
+            resizable: false,
+            fit: true,
             renderer: function (userId) {
-                return Financial.data.User.getById(userId).get('full_name');
+                return Financial.util.Format.userIcon(userId);
             },
             editor: {
                 xtype: 'combo',
@@ -130,7 +138,8 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                     handler: 'onDeleteIncomeClick'
                 }
             ],
-            width: 26
+            resizable: false,
+            fit: true
         }
     ]
 });

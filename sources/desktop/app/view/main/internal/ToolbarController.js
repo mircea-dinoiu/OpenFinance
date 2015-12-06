@@ -233,7 +233,13 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
     onUserMenuRender: function (button) {
         var userData = Financial.data.user.current;
 
-        button.setText(userData.full_name);
+        button.setText(
+            Ext.String.format(
+                '<span class="user-icon"><img src="{0}"></span>',
+                userData.avatar
+            ) +
+            userData.full_name
+        );
     },
 
     onPreviousMonthClick: function () {

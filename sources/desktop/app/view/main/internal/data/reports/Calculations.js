@@ -14,7 +14,7 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
                             case 'expense':
                                 return 'Expenses';
                             case 'remaining':
-                                return 'Remaining';
+                                return 'Balance';
                             case 'income':
                                 return 'Incomes';
                         }

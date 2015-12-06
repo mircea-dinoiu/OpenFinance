@@ -67,3 +67,47 @@
     font-weight: bold;
   }
 }
+
+@mixin user-icon($size) {
+  width: $size;
+
+  img {
+    width: $size;
+    height: $size;
+  }
+}
+
+.user-icon {
+  @include user-icon(20px);
+  position: relative;
+  display: inline-block;
+  height: 12px;
+
+  img {
+    position: absolute;
+    left: 0;
+    top: -3px;
+    border-radius: 50%;
+  }
+
+  &:not(:first-child) {
+    margin-left: 5px;
+  }
+}
+
+.x-toolbar .user-icon {
+  @include user-icon(16px);
+  margin-right: 5px;
+
+  img {
+    top: 0;
+  }
+}
+
+.display-block {
+  display: block !important;
+}
+
+.text-center {
+  text-align: center !important;
+}

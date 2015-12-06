@@ -17,6 +17,10 @@ Ext.define('Financial.model.User', {
         {
             name: 'full_name',
             type: 'string'
+        },
+        {
+            name: 'avatar',
+            type: 'string'
         }
     ]
 });

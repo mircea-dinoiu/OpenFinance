@@ -29,6 +29,11 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
 
             return classes.join(' ');
         },
+        listeners: {
+            refresh: function(dataView) {
+                Financial.util.Events.dataViewAutoFit(dataView);
+            }
+        },
         loadMask: false
     },
 
@@ -173,7 +178,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 {
                     text: 'Curr.',
                     dataIndex: 'currency_id',
-                    width: 70,
+                    resizable: false,
+                    fit: true,
                     align: 'center',
                     editor: {
                         xtype: 'combo',
@@ -199,7 +205,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 {
                     text: 'Value',
                     dataIndex: 'sum',
-                    flex: 1,
+                    resizable: false,
+                    fit: true,
                     align: 'right',
                     editor: {
                         xtype: 'numberfield',
@@ -242,7 +249,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             text: 'Date',
             dataIndex: 'created_at',
             formatter: "date('D d-m-Y')",
-            width: 115,
+            fit: true,
             resizable: false,
             align: 'center',
             editor: {
@@ -255,17 +262,10 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         {
             text: 'Blame',
             dataIndex: 'users',
-            flex: 2,
+            resizable: false,
+            fit: true,
             renderer: function (ids) {
-                var ret = [];
-
-                Financial.data.User.getStore().each(function (user) {
-                    if (ids.indexOf(user.id) !== -1) {
-                        ret.push(user.get('first_name'));
-                    }
-                });
-
-                return ret.join(', ');
+                return Financial.util.Format.userIcons(ids);
             },
             editor: {
                 xtype: 'combo',
@@ -337,7 +337,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                     handler: 'onMarkExpenseAsPendingClick'
                 }
             ],
-            width: (16 + 4) * 1
+            resizable: false,
+            fit: true
         }
     ]
 });
