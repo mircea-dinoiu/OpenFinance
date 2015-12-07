@@ -27,21 +27,26 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             return classes.join(' ');
         },
         listeners: {
-            refresh: function(dataView) {
+            refresh: function (dataView) {
                 Financial.util.Events.dataViewAutoFit(dataView);
             }
         },
         loadMask: false
     },
 
-    plugins: {
-        ptype: 'rowediting',
-        listeners: {
-            canceledit: 'onCancelRowEditing',
-            beforeedit: 'onBeforeRowEditing',
-            edit: 'onRowEditing'
+    plugins: [
+        {
+            ptype: 'rowediting',
+            listeners: {
+                canceledit: 'onCancelRowEditing',
+                beforeedit: 'onBeforeRowEditing',
+                edit: 'onRowEditing'
+            }
+        },
+        {
+            ptype: 'gridfilters'
         }
-    },
+    ],
 
     tbar: [
         {
@@ -69,7 +74,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                     return true;
                 }
             },
-            renderer: function(value, metaData, record) {
+            renderer: function (value, metaData, record) {
                 var currency = Financial.data.Currency.getDefaultCurrency();
 
                 Financial.util.Misc.anotherCurrenciesTooltip(
@@ -88,6 +93,9 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             editor: {
                 xtype: 'textfield',
                 allowOnlyWhitespace: false
+            },
+            filter: {
+                type: 'string'
             }
         },
         {
@@ -123,6 +131,11 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 allowBlank: false,
                 forceSelection: true,
                 store: Financial.data.User.getStore()
+            },
+            filter: {
+                type: 'list',
+                store: Financial.data.User.getStore(),
+                labelField: 'full_name'
             }
         },
         {

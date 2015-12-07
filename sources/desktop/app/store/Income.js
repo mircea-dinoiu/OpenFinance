@@ -37,7 +37,10 @@ Ext.define('Financial.store.Income', {
     },
 
     listeners: {
-        write: function(){
+        write: function () {
+            Financial.app.getController('Data').syncReports();
+        },
+        filterchange: function () {
             Financial.app.getController('Data').syncReports();
         }
     }

@@ -7,7 +7,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
     bufferedRenderer: false,
 
     requires: [
-        'Financial.view.main.internal.data.expenses.ExpensesGridController'
+        'Financial.view.main.internal.data.expenses.ExpensesGridController',
+        'Financial.filter.grid.MultiListFilter'
     ],
 
     viewConfig: {
@@ -276,13 +277,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 queryMode: 'local',
                 forceSelection: true,
                 store: Financial.data.User.getStore()
-            }
-            /*filter: {
-                type: 'list',
-                idField: 'id',
+            },
+            filter: {
+                type: 'multilist',
                 labelField: 'full_name',
                 store: Financial.data.User.getStore()
-            }*/
+            }
         },
         {
             text: 'Categories',
@@ -307,13 +307,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 multiSelect: true,
                 queryMode: 'local',
                 store: Financial.data.Category.getStore()
-            }
-            /*filter: {
-                type: 'list',
-                idField: 'id',
+            },
+            filter: {
+                type: 'multilist',
                 labelField: 'name',
                 store: Financial.data.Category.getStore()
-            }*/
+            }
         },
         {
             xtype: 'actioncolumn',
