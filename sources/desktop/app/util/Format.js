@@ -11,7 +11,7 @@ Ext.define('Financial.util.Format', {
             record.get('avatar'),
             record.get('full_name'),
             Ext.String.format(
-                "<div class='text-center'>{1}<img src='{0}' class='display-block' style='width: 80px; height: 80px;'></div>",
+                "<div class='text-center'>{1}<br><img src='{0}' class='inline-block' style='width: 80px; height: 80px;'></div>",
                 record.get('avatar'),
                 record.get('full_name')
             )
