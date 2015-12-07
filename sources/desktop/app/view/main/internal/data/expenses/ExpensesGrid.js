@@ -288,7 +288,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             text: 'Categories',
             dataIndex: 'categories',
             flex: 2,
-            renderer: function (ids) {
+            renderer: function (ids, metaData) {
                 var ret = [];
 
                 Financial.data.Category.getStore().each(function (category) {
@@ -296,6 +296,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                         ret.push(category.get('name'));
                     }
                 });
+
+                metaData.tdAttr = 'data-qtip="' + ret.join('<br>') + '"';
 
                 return ret.join(', ');
             },
