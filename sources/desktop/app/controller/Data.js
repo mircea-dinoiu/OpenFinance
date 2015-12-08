@@ -187,7 +187,7 @@ Ext.define('Financial.controller.Data', {
                 description: Financial.data.User.getById(id).get('full_name'),
                 type: 'remaining',
                 localKey: id,
-                display: false,
+                display: true,
                 parent: 'present'
             });
         });
@@ -215,7 +215,7 @@ Ext.define('Financial.controller.Data', {
                 description: Financial.data.User.getById(id).get('full_name'),
                 type: 'remaining',
                 localKey: id,
-                display: false,
+                display: true,
                 parent: 'past'
             });
         });
@@ -241,7 +241,7 @@ Ext.define('Financial.controller.Data', {
                 description: Financial.data.User.getById(id).get('full_name'),
                 type: 'remaining',
                 localKey: id,
-                display: false,
+                display: true,
                 parent: 'total'
             });
         });
