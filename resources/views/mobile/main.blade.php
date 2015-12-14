@@ -94,7 +94,7 @@
 		Financial.emailRegExp = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 	</script>
 
-    {{ $bootstrapScript }}
+    {!! $bootstrapScript !!}
 </head>
 <body>
 <div id="appLoadingIndicator">
