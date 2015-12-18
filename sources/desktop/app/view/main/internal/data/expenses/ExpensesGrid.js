@@ -11,6 +11,30 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         'Financial.filter.grid.MultiListFilter'
     ],
 
+    initComponent: function () {
+        this.callParent(arguments);
+
+        this.itemContextMenu = Ext.create('Ext.menu.Menu', {
+            items: [
+                {
+                    text: 'Round sum',
+                    iconCls: 'icon-arrow_refresh_small',
+                    handler: this.getController().onRoundExpenseSumClick.bind(this.getController())
+                },
+                {
+                    text: 'Ceil sum',
+                    iconCls: 'icon-arrow_up',
+                    handler: this.getController().onCeilExpenseSumClick.bind(this.getController())
+                },
+                {
+                    text: 'Floor sum',
+                    iconCls: 'icon-arrow_down',
+                    handler: this.getController().onFloorExpenseSumClick.bind(this.getController())
+                }
+            ]
+        });
+    },
+
     viewConfig: {
         getRowClass: function (record) {
             function day(date) {
@@ -31,8 +55,13 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             return classes.join(' ');
         },
         listeners: {
-            refresh: function(dataView) {
+            refresh: function (dataView) {
                 Financial.util.Events.dataViewAutoFit(dataView);
+            },
+            itemcontextmenu: function (view, record, item, index, e) {
+                e.stopEvent(); // stops the default event. i.e. Windows Context Menu
+                view.grid.itemContextMenu.showAt(e.getXY()); // show context menu where user right clicked
+                return false;
             }
         },
         loadMask: false
@@ -55,46 +84,46 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         {
             ptype: 'gridfilters'
             /*createColumnFilter: function (column) {
-                var me = this,
-                    columnFilter = column.filter,
-                    filter = {
-                        column: column,
-                        grid: me.grid,
-                        owner: me
-                    },
-                    field, model, type;
+             var me = this,
+             columnFilter = column.filter,
+             filter = {
+             column: column,
+             grid: me.grid,
+             owner: me
+             },
+             field, model, type;
 
-                if (Ext.isString(columnFilter)) {
-                    filter.type = columnFilter;
-                } else {
-                    Ext.apply(filter, columnFilter);
-                }
+             if (Ext.isString(columnFilter)) {
+             filter.type = columnFilter;
+             } else {
+             Ext.apply(filter, columnFilter);
+             }
 
-                if (!filter.type) {
-                    model = me.store.getModel();
-                    // If no filter type given, first try to get it from the data field.
-                    field = model && model.getField(column.dataIndex);
-                    type = field && field.type;
+             if (!filter.type) {
+             model = me.store.getModel();
+             // If no filter type given, first try to get it from the data field.
+             field = model && model.getField(column.dataIndex);
+             type = field && field.type;
 
-                    filter.type = (type && me.defaultFilterTypes[type]) ||
-                    column.defaultFilterType || 'string';
-                }
+             filter.type = (type && me.defaultFilterTypes[type]) ||
+             column.defaultFilterType || 'string';
+             }
 
-                filter.createFilter = function (config, key) {
-                    var filterCfg = {};//this.getFilterConfig(config, key);
+             filter.createFilter = function (config, key) {
+             var filterCfg = {};//this.getFilterConfig(config, key);
 
-                    console.log(filterCfg);
+             console.log(filterCfg);
 
-                    filterCfg.filterFn = function () {
-                        console.log(arguments);
-                        return true;
-                    };
+             filterCfg.filterFn = function () {
+             console.log(arguments);
+             return true;
+             };
 
-                    return new Ext.util.Filter(filterCfg);
-                };
+             return new Ext.util.Filter(filterCfg);
+             };
 
-                column.filter = Ext.Factory.gridFilter(filter);
-            }*/
+             column.filter = Ext.Factory.gridFilter(filter);
+             }*/
         }
         /*{
          ptype: 'rowexpander',

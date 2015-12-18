@@ -127,6 +127,17 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         this.callParent(arguments);
     },
 
+    applyMathMethodOnSelectedExpenses: function (method) {
+        var grid = this.getView();
+        var records = grid.getSelection();
+
+        Ext.each(records, function (record) {
+            record.set('sum', Math[method](record.get('sum')));
+        });
+
+        grid.getStore().sync();
+    },
+
     onBeforeRowEditing: function (rowEditing, context) {
         var editor = rowEditing.getEditor();
 
@@ -134,5 +145,17 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
 
         editor.down('datefield').setMinValue(Financial.app.getController('Data').getStartDate());
         editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
+    },
+
+    onRoundExpenseSumClick: function () {
+        this.applyMathMethodOnSelectedExpenses('round');
+    },
+
+    onFloorExpenseSumClick: function () {
+        this.applyMathMethodOnSelectedExpenses('floor');
+    },
+
+    onCeilExpenseSumClick: function () {
+        this.applyMathMethodOnSelectedExpenses('ceil');
     }
 });
