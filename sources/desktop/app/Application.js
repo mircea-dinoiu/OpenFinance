@@ -70,7 +70,7 @@ Ext.define('Financial.Application', {
                     closable: false,
                     draggable: false,
                     message: response.responseText || 'Cannot connect to server.',
-                    buttons: {text: 'Reload', itemId: 'ok', ui: 'action'},
+                    buttons: Ext.Msg.OK,
                     icon: Ext.Msg.ERROR,
                     fn: function () {
                         me.getAppMain().setLoading(true);
