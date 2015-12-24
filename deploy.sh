@@ -1,5 +1,3 @@
-composer update
-
 # Build mobile
 pushd sources/mobile
 #sencha app build
