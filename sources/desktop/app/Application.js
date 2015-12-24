@@ -16,7 +16,9 @@ Ext.define('Financial.Application', {
         'Financial.util.Misc',
         'Financial.util.Events',
 
-        'Financial.base.GridViewController'
+        'Financial.base.GridViewController',
+
+        'Financial.ux.window.Notification'
     ],
 
     stores: [
@@ -81,6 +83,53 @@ Ext.define('Financial.Application', {
         })
     },
 
+    getInitialRequests: function () {
+        return [
+            {
+                success: function (response) {
+                    Financial.data.Currency.setCurrency(response);
+                },
+                url: Financial.routes.getCurrencies
+            },
+            {
+                success: function (response) {
+                    var expenses = Ext.JSON.decode(response.responseText);
+
+                    if (expenses.length) {
+                        Ext.create('widget.uxNotification', {
+                            position: 'tr',
+                            useXAxis: true,
+                            iconCls: 'icon-error',
+                            title: 'Notice',
+                            html: 'There are <strong>{0}</strong> pending expenses before {1}'.format(
+                                expenses.length,
+                                Ext.Date.format(Financial.initialValues.getStartDate(), 'j, F Y')
+                            ),
+                            slideInDuration: 800,
+                            slideBackDuration: 1500,
+                            autoCloseDelay: 5000,
+                            slideInAnimation: 'elasticIn',
+                            slideBackAnimation: 'elasticIn'
+                        }).show();
+                    }
+                },
+                url: (function () {
+                    var url = Financial.routes.expense.list,
+                        params = {
+                            end_date: Ext.Date.format(Financial.initialValues.getStartDate(), 'Y-m-d'),
+                            'filters[status]': 'pending'
+                        };
+
+                    Ext.Object.each(params, function (key, value) {
+                        url = Ext.String.urlAppend(url, [key, value].join('='));
+                    });
+
+                    return url;
+                }())
+            }
+        ];
+    },
+
     launch: function () {
         var me = this,
             appMain = me.getAppMain();
@@ -90,7 +139,8 @@ Ext.define('Financial.Application', {
         appMain.setLoading(true);
 
         if (Financial.data.user) {
-            var requestsPending = 2;
+            var initialRequests = me.getInitialRequests(),
+                requestsPending = 0;
 
             function checkRequestsState() {
                 requestsPending--;
@@ -100,19 +150,13 @@ Ext.define('Financial.Application', {
                 }
             }
 
+            requestsPending++;
             Financial.data.Category.getStore().load(checkRequestsState);
 
-            Ext.each([
-                    {
-                        success: function (response) {
-                            Financial.data.Currency.setCurrency(response);
-                        },
-                        url: Financial.routes.getCurrencies
-                    }
-                ],
+            requestsPending += initialRequests.length;
+            Ext.each(initialRequests,
                 function (request) {
-                    Ext.Ajax.request({
-                        url: request.url,
+                    Ext.Ajax.request(Ext.apply({}, {
                         success: function () {
                             request.success.apply(request, arguments);
 
@@ -126,7 +170,7 @@ Ext.define('Financial.Application', {
                                 draggable: false
                             });
                         }
-                    });
+                    }, request));
                 }
             );
         } else {

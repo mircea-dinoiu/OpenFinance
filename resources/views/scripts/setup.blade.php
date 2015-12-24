@@ -4,6 +4,10 @@
     (function () {
         var baseURL = '{{ $baseUrl }}';
 
+        String.prototype.format = function () {
+            return Ext.String.format.apply(Ext.String, [this.toString()].concat(Array.from(arguments)))
+        };
+
         Financial.data = {};
         Financial.debug = ('{{ var_export(Config::get('app.debug')) }}' === 'true');
         Financial.routes = {
@@ -30,6 +34,31 @@
                 list: baseURL + '/category/list',
                 create: baseURL + '/category/create',
                 update: baseURL + '/category/update'
+            }
+        };
+        Financial.initialValues = {
+            getStartDate: function () {
+                var date = new Date();
+
+                if (date.getDate() < 2) {
+                    date.setMonth(date.getMonth() - 1);
+                }
+
+                date.setDate(2);
+
+                return date;
+            },
+            getEndDate: function () {
+                var date = new Date();
+
+                if (date.getDate() < 2) {
+                    date.setMonth(date.getMonth() - 1);
+                }
+
+                date.setMonth(date.getMonth() + 1);
+                date.setDate(1);
+
+                return date;
             }
         };
     }());

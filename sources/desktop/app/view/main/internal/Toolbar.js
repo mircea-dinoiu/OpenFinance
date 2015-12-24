@@ -62,17 +62,7 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         xtype: 'datepicker',
                         border: 0,
                         startDay: 1,
-                        value: (function () {
-                            var date = new Date();
-
-                            if (date.getDate() < 2) {
-                                date.setMonth(date.getMonth() - 1);
-                            }
-                            
-                            date.setDate(2);
-
-                            return date;
-                        }()),
+                        value: Financial.initialValues.getStartDate(),
                         listeners: {
                             select: 'onDateSelect'
                         }
@@ -100,18 +90,7 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         xtype: 'datepicker',
                         border: 0,
                         startDay: 1,
-                        value: (function () {
-                            var date = new Date();
-
-                            if (date.getDate() < 2) {
-                                date.setMonth(date.getMonth() - 1);
-                            }
-                            
-                            date.setMonth(date.getMonth() + 1);
-                            date.setDate(1);
-
-                            return date;
-                        }()),
+                        value: Financial.initialValues.getEndDate(),
                         listeners: {
                             select: 'onDateSelect'
                         }

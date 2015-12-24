@@ -27,12 +27,14 @@ class ExpenseController extends Controller
     {
         $data = [
             'start_date' => Input::get('start_date'),
-            'end_date' => Input::get('end_date')
+            'end_date' => Input::get('end_date'),
+            'filters' => Input::get('filters')
         ];
 
         $validationRules = [
             'start_date' => 'sometimes|date_format:Y-m-d',
-            'end_date' => 'sometimes|date_format:Y-m-d'
+            'end_date' => 'sometimes|date_format:Y-m-d',
+            'filters' => 'sometimes|array',
         ];
 
         $validator = Validator::make($data, $validationRules);
@@ -48,11 +50,19 @@ class ExpenseController extends Controller
                 $query->whereRaw('DATE(created_at) <= ?', [$data['end_date']]);
             }
 
+            if ($data['filters']) {
+                foreach ($data['filters'] as $key => $value) {
+                    if (in_array($key, ['status'])) {
+                        $query->whereRaw("$key = ?", [$value]);
+                    }
+                }
+            }
+
             return Response::json(
                 $query->get()
             );
         } else {
-            return Response::json(Lang::get('general.invalid_input_data'), 400);
+            return Response::json($validator->messages(), 400);
         }
     }
 
