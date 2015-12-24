@@ -1,4 +1,4 @@
-git clean -fdx
+composer update
 
 # Build mobile
 pushd sources/mobile
