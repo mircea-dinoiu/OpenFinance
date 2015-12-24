@@ -23,7 +23,7 @@ class HomeController extends Controller
     public function getIndex()
     {
         if (PlatformController::isSupported()) {
-            if (PlatformController::isMobile()) {
+            if (false && PlatformController::isMobile()) { // temporary disable mobile app
                 return PlatformController::validatePlatform('mobile', 'url_mobile', function () {
                     return $this->getMobileIndex();
                 });
