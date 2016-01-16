@@ -1,4 +1,4 @@
-Ext.define('Financial.model.User', {
+Ext.define('Financial.model.UserModel', {
     extend: 'Ext.data.Model',
 
     config: {

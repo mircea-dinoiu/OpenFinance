@@ -1,10 +1,10 @@
-Ext.define('Financial.store.Category', {
+Ext.define('Financial.store.CategoryStore', {
     extend: 'Ext.data.Store',
 
-    requires: 'Financial.model.Category',
+    requires: 'Financial.model.CategoryModel',
 
     config: {
-        model: 'Financial.model.Category',
+        model: 'Financial.model.CategoryModel',
 
         proxy: {
             type: 'ajax',

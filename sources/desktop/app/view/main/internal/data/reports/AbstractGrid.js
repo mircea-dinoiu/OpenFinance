@@ -3,7 +3,7 @@ Ext.define('Financial.view.main.internal.data.reports.AbstractGrid', {
     hideHeaders: true,
 
     initComponent: function () {
-        this.store = Ext.create('Financial.store.data.Report');
+        this.store = Ext.create('Financial.store.data.ReportStore');
 
         this.callParent(arguments);
 

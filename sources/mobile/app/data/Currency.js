@@ -1,13 +1,13 @@
 Ext.define('Financial.data.Currency', {
     extend: 'Financial.data.AbstractData',
 
-    requires: 'Financial.store.Currency',
+    requires: 'Financial.store.CurrencyStore',
 
     singleton: true,
     cache: {},
 
     storeId: 'currency',
-    storeClass: 'Financial.store.Currency',
+    storeClass: 'Financial.store.CurrencyStore',
 
     setCurrency: function (response) {
         Financial.data.currency = Ext.JSON.decode(response.responseText);

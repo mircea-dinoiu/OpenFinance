@@ -1,12 +1,12 @@
-Ext.define('Financial.store.Expense', {
+Ext.define('Financial.store.ExpenseStore', {
     extend: 'Ext.data.Store',
 
-    requires: 'Financial.model.Expense',
+    requires: 'Financial.model.ExpenseModel',
 
     config: {
         storeId: 'expense',
 
-        model: 'Financial.model.Expense',
+        model: 'Financial.model.ExpenseModel',
 
         autoLoad: false,
         autoDestroy: false,

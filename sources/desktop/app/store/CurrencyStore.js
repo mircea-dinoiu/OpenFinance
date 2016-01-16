@@ -1,7 +1,7 @@
-Ext.define('Financial.store.Currency', {
+Ext.define('Financial.store.CurrencyStore', {
     extend: 'Ext.data.Store',
 
-    model: 'Financial.model.Currency',
+    model: 'Financial.model.CurrencyModel',
 
     storeId: 'currency',
 

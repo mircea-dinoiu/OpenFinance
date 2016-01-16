@@ -1,12 +1,12 @@
-Ext.define('Financial.store.Income', {
+Ext.define('Financial.store.IncomeStore', {
     extend: 'Ext.data.Store',
 
-    requires: 'Financial.model.Income',
+    requires: 'Financial.model.IncomeModel',
 
     config: {
         storeId: 'income',
 
-        model: 'Financial.model.Income',
+        model: 'Financial.model.IncomeModel',
 
         autoLoad: false,
         autoDestroy: true,

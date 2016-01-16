@@ -1,7 +1,7 @@
-Ext.define('Financial.store.Expense', {
+Ext.define('Financial.store.IncomeStore', {
     extend: 'Ext.data.Store',
 
-    model: 'Financial.model.Expense',
+    model: 'Financial.model.IncomeModel',
 
     autoLoad: false,
     autoDestroy: true,
@@ -23,10 +23,10 @@ Ext.define('Financial.store.Expense', {
             type: 'json'
         },
         api: {
-            read: Financial.routes.expense.list,
-            create: Financial.routes.expense.create,
-            update: Financial.routes.expense.update,
-            destroy: Financial.routes.expense.destroy
+            read: Financial.routes.income.list,
+            create: Financial.routes.income.create,
+            update: Financial.routes.income.update,
+            destroy: Financial.routes.income.destroy
         },
         writer: {
             type: 'json',

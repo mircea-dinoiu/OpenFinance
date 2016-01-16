@@ -5,5 +5,5 @@ Ext.define('Financial.data.Category', {
     cache: {},
 
     storeId: 'category',
-    storeClass: 'Financial.store.Category'
+    storeClass: 'Financial.store.CategoryStore'
 });

@@ -22,21 +22,21 @@ Ext.define('Financial.Application', {
     ],
 
     stores: [
-        'Financial.store.Expense',
-        'Financial.store.Income',
-        'Financial.store.User',
-        'Financial.store.Currency',
-        'Financial.store.Category',
-        'Financial.store.data.Report'
+        'Financial.store.ExpenseStore',
+        'Financial.store.IncomeStore',
+        'Financial.store.UserStore',
+        'Financial.store.CurrencyStore',
+        'Financial.store.CategoryStore',
+        'Financial.store.data.ReportStore'
     ],
 
     models: [
-        'Financial.model.Expense',
-        'Financial.model.Income',
-        'Financial.model.User',
-        'Financial.model.Currency',
-        'Financial.model.Category',
-        'Financial.model.data.Report'
+        'Financial.model.ExpenseModel',
+        'Financial.model.IncomeModel',
+        'Financial.model.UserModel',
+        'Financial.model.CurrencyModel',
+        'Financial.model.CategoryModel',
+        'Financial.model.data.ReportModel'
     ],
 
     controllers: [

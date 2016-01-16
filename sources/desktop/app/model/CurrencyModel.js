@@ -1,4 +1,4 @@
-Ext.define('Financial.model.Currency', {
+Ext.define('Financial.model.CurrencyModel', {
     extend: 'Ext.data.Model',
 
     fields: [

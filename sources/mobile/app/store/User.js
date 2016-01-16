@@ -1,10 +1,10 @@
-Ext.define('Financial.store.User', {
+Ext.define('Financial.store.UserStore', {
     extend: 'Ext.data.Store',
 
-    requires: 'Financial.model.User',
+    requires: 'Financial.model.UserModel',
 
     config: {
-        model: 'Financial.model.User',
+        model: 'Financial.model.UserModel',
 
         storeId: 'user',
 

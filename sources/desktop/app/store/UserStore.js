@@ -1,7 +1,7 @@
-Ext.define('Financial.store.User', {
+Ext.define('Financial.store.UserStore', {
     extend: 'Ext.data.Store',
 
-    model: 'Financial.model.User',
+    model: 'Financial.model.UserModel',
 
     storeId: 'user',
 
