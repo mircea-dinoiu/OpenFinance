@@ -1,14 +1,14 @@
-Ext.define('Financial.store.Category', {
+Ext.define('Financial.store.CategoryStore', {
     extend: 'Ext.data.Store',
 
-    model: 'Financial.model.Category',
+    model: 'Financial.model.CategoryModel',
     autoDestroy: false,
     storeId: 'category',
 
     sorters: [
         {
-            property: 'expenses',
-            direction: 'DESC'
+            property: 'name',
+            direction: 'ASC'
         }
     ],
 

@@ -1,4 +1,4 @@
-Ext.define('Financial.store.data.Report', function () {
+Ext.define('Financial.store.data.ReportStore', function () {
     var displayFilter = function (record) {
         return record.get('display') === true;
     };
@@ -6,7 +6,7 @@ Ext.define('Financial.store.data.Report', function () {
     return {
         extend: 'Ext.data.Store',
 
-        model: 'Financial.model.data.Report',
+        model: 'Financial.model.data.ReportModel',
 
         groupField: 'type',
 

@@ -1,4 +1,4 @@
-Ext.define('Financial.model.Income', {
+Ext.define('Financial.model.IncomeModel', {
     extend: 'Ext.data.Model',
 
     fields: [

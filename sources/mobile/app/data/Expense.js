@@ -1,12 +1,12 @@
 Ext.define('Financial.data.Expense', {
     extend: 'Financial.data.AbstractData',
 
-    requires: 'Financial.store.Expense',
+    requires: 'Financial.store.ExpenseStore',
 
     singleton: true,
 
     cache: {},
 
     storeId: 'expense',
-    storeClass: 'Financial.store.Expense'
+    storeClass: 'Financial.store.ExpenseStore'
 });

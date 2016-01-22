@@ -1,10 +1,10 @@
-Ext.define('Financial.store.Currency', {
+Ext.define('Financial.store.CurrencyStore', {
     extend: 'Ext.data.Store',
 
-    requires: 'Financial.model.Currency',
+    requires: 'Financial.model.CurrencyModel',
 
     config: {
-        model: 'Financial.model.Currency',
+        model: 'Financial.model.CurrencyModel',
 
         storeId: 'currency',
 

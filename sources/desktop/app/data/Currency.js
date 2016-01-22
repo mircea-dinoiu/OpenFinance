@@ -5,7 +5,7 @@ Ext.define('Financial.data.Currency', {
     cache: {},
 
     storeId: 'currency',
-    storeClass: 'Financial.store.Currency',
+    storeClass: 'Financial.store.CurrencyStore',
 
     setCurrency: function (response) {
         Financial.data.currency = Ext.JSON.decode(response.responseText);

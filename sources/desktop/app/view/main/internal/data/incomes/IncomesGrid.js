@@ -1,6 +1,6 @@
 Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
     extend: 'Ext.grid.Panel',
-    store: 'Financial.store.Income',
+    store: 'Financial.store.IncomeStore',
     xtype: 'app-main-internal-data-incomes-grid',
     controller: 'app-main-internal-data-incomes-grid',
     autoScroll: true,

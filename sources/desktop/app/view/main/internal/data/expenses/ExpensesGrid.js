@@ -1,7 +1,7 @@
 Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
     extend: 'Ext.grid.Panel',
     xtype: 'app-main-internal-data-expenses-grid',
-    store: 'Financial.store.Expense',
+    store: 'Financial.store.ExpenseStore',
     controller: 'app-main-internal-data-expenses-grid',
     autoScroll: true,
     bufferedRenderer: false,
