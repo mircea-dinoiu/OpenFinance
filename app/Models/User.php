@@ -11,9 +11,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Model implements AuthenticatableContract,
-                                    AuthorizableContract,
-                                    CanResetPasswordContract
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use SoftDeletes, Authorizable, Authenticatable, CanResetPassword;
 
@@ -41,9 +39,18 @@ class User extends Model implements AuthenticatableContract,
 
     protected $dates = ['deleted_at'];
 
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name', 'avatar'];
 
-    public function getFullNameAttribute() {
+    public function getFullNameAttribute()
+    {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getAvatarAttribute()
+    {
+        return sprintf(
+            'http://www.gravatar.com/avatar/%s',
+            md5(strtolower(trim($this->email)))
+        );
     }
 }
