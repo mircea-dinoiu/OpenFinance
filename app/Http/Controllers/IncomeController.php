@@ -78,13 +78,17 @@ class IncomeController extends Controller
                 'sum' => 'sometimes|required|numeric|not_in:0',
                 'description' => 'sometimes|required|string',
                 'user_id' => 'sometimes|required|user_id',
-                'money_location_id' => 'sometimes|required|money_location_id',
+                'money_location_id' => 'sometimes|money_location_id',
                 'created_at' => 'sometimes|required|integer'
             ];
 
             $output = [];
 
             foreach ($data as $record) {
+                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                    $record['money_location_id'] = NULL;
+                }
+
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
@@ -133,13 +137,17 @@ class IncomeController extends Controller
                 'sum' => 'required|numeric|not_in:0',
                 'description' => 'required|string',
                 'user_id' => 'required|user_id',
-                'money_location_id' => 'required|money_location_id',
+                'money_location_id' => 'sometimes|money_location_id',
                 'created_at' => 'sometimes|required|integer'
             ];
 
             $output = [];
 
             foreach ($data as $record) {
+                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                    $record['money_location_id'] = NULL;
+                }
+
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
@@ -148,7 +156,10 @@ class IncomeController extends Controller
                     $income->sum = $record['sum'];
                     $income->description = $record['description'];
                     $income->user_id = $record['user_id'];
-                    $income->money_location_id = $record['money_location_id'];
+
+                    if (isset($record['money_location_id'])) {
+                        $income->money_location_id = $record['money_location_id'];
+                    }
 
                     if (isset($record['created_at'])) {
                         $income->created_at = date('Y-m-d H:i:s', $record['created_at']);

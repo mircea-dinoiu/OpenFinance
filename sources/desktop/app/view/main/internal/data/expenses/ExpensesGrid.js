@@ -357,7 +357,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 itemId: 'money_location',
                 queryMode: 'local',
                 typeAhead: true,
-                allowBlank: false,
                 forceSelection: true,
                 store: Financial.data.MoneyLocation.getStore()
             },

@@ -77,7 +77,7 @@ class ExpenseController extends Controller
                 'item' => 'sometimes|required|string',
                 'created_at' => 'sometimes|required|integer',
                 'currency_id' => 'sometimes|required|currency_id',
-                'money_location_id' => 'sometimes|required|money_location_id',
+                'money_location_id' => 'sometimes|money_location_id',
                 'status' => 'sometimes|required|string|in:finished,pending',
                 'users' => 'sometimes|required|user_ids',
                 'categories' => 'sometimes|category_ids'
@@ -86,6 +86,10 @@ class ExpenseController extends Controller
             $output = [];
 
             foreach ($data as $record) {
+                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                    $record['money_location_id'] = NULL;
+                }
+
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
@@ -201,13 +205,17 @@ class ExpenseController extends Controller
                 'users' => 'required|user_ids',
                 'created_at' => 'sometimes|required|integer',
                 'currency_id' => 'sometimes|required|currency_id',
-                'money_location_id' => 'sometimes|required|money_location_id',
+                'money_location_id' => 'sometimes|money_location_id',
                 'categories' => 'sometimes|category_ids'
             ];
 
             $output = [];
 
             foreach ($data as $record) {
+                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                    $record['money_location_id'] = NULL;
+                }
+
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
@@ -216,7 +224,10 @@ class ExpenseController extends Controller
                     $expense->sum = $record['sum'];
                     $expense->item = trim($record['item']);
                     $expense->status = 'pending';
-                    $expense->money_location_id = $record['money_location_id'];
+
+                    if (isset($record['money_location_id'])) {
+                        $expense->money_location_id = $record['money_location_id'];
+                    }
 
                     if (isset($record['currency_id'])) {
                         $expense->currency_id = $record['currency_id'];
