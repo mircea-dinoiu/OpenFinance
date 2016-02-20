@@ -63,8 +63,8 @@ Ext.define('Financial.model.ExpenseModel', {
         {
             name: 'money_location_id',
             type: 'int',
-            sortType: function (moneyLocationId) {
-                return Financial.data.MoneyLocation.getById(moneyLocationId).get('name');
+            sortType: function (id) {
+                return id == 0 ? '' : Financial.data.MoneyLocation.getById(id).get('name');
             }
         }
     ]
