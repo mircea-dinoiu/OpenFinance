@@ -53,16 +53,12 @@ Ext.define('Financial.controller.Data', {
                 sum = Financial.data.Currency.convertToDefault(sum, currencyId);
             }
 
-            mls[mlId] = mls[mlId] + sum || sum;
+            mls[mlId] = (mls[mlId] || 0) + sum;
 
             sum /= recordUsers.length;
 
             Ext.each(recordUsers, function (userId) {
-                if (!users[userId]) {
-                    users[userId] = 0;
-                }
-
-                users[userId] = users[userId] + sum || sum;
+                users[userId] = (users[userId] || 0) + sum;
             });
         });
 
@@ -80,7 +76,9 @@ Ext.define('Financial.controller.Data', {
         });
 
         this.addMLEntries(data, mls, 'expense');
-        this.addTotalToData(data, 'expense');
+
+        data.push(this.getGroupTotal(users, 'expense_user'));
+        data.push(this.getGroupTotal(mls, 'expense_ml'));
 
         return data;
     },
@@ -116,19 +114,15 @@ Ext.define('Financial.controller.Data', {
         });
     },
 
-    addTotalToData: function (data, prefix) {
-        var total = {
-            sum: Ext.Array.map(data, function (each) {
-                return each.sum;
-            }).reduce(function (a, b) {
+    getGroupTotal: function (data, type) {
+        return {
+            sum: Ext.Object.getValues(data).reduce(function (a, b) {
                 return a + b;
-            }, 0) / 2,
+            }, 0),
             description: 'TOTAL',
-            localKey: 'total'
+            localKey: 'total',
+            type: type
         };
-
-        data.push(Object.assign({type: prefix + '_user'}, total));
-        data.push(Object.assign({type: prefix + '_ml'}, total));
     },
 
     getIncomesData: function () {
@@ -144,8 +138,8 @@ Ext.define('Financial.controller.Data', {
             var mlId = record.get('money_location_id');
             var sum = record.get('sum');
 
-            users[uId] = users[uId] + sum || sum;
-            mls[mlId] = mls[mlId] + sum || sum;
+            users[uId] = (users[uId] || 0) + sum;
+            mls[mlId] = (mls[mlId] || 0) + sum;
         });
 
         Ext.Object.each(users, function (id, sum) {
@@ -158,7 +152,9 @@ Ext.define('Financial.controller.Data', {
         });
 
         this.addMLEntries(data, mls, 'income');
-        this.addTotalToData(data, 'income');
+
+        data.push(this.getGroupTotal(users, 'income_user'));
+        data.push(this.getGroupTotal(mls, 'income_ml'));
 
         return data;
     },
@@ -274,11 +270,11 @@ Ext.define('Financial.controller.Data', {
         data.push(Object.assign({type: 'remaining_user'}, pastTotal));
 
         Ext.Object.each(this.cache.past_remaining.money_locations, function (id, sum) {
-            totalRemainingByML[id] = totalRemainingByML[id] + sum || sum;
+            totalRemainingByML[id] = (totalRemainingByML[id] || 0) + sum;
         });
 
         Ext.Object.each(this.cache.past_remaining.users, function (id, sum) {
-            totalRemainingByUser[id] = totalRemainingByUser[id] + sum || sum;
+            totalRemainingByUser[id] = (totalRemainingByUser[id] || 0) + sum;
 
             data.push({
                 sum: sum,
@@ -294,11 +290,6 @@ Ext.define('Financial.controller.Data', {
          * Total remaining
          */
         var total = {
-            sum: Ext.Array.map(data, function (each) {
-                return !each.parent ? each.sum : 0;
-            }).reduce(function (a, b) {
-                return a + b;
-            }, 0),
             description: 'TOTAL',
             localKey: 'total'
         };
@@ -306,8 +297,6 @@ Ext.define('Financial.controller.Data', {
         var totalItem = {
             display: true
         };
-
-        data.push(Object.assign({type: 'remaining_user', hasChildren: true}, total));
 
         Ext.Object.each(totalRemainingByUser, function (id, sum) {
             data.push(Object.assign({
@@ -328,7 +317,20 @@ Ext.define('Financial.controller.Data', {
             }, totalItem));
         });
 
-        data.push(Object.assign({type: 'remaining_ml'}, total));
+        data.push(Object.assign({
+            type: 'remaining_ml',
+            sum: Ext.Object.getValues(totalRemainingByML).reduce(function (a, b) {
+                return a + b;
+            }, 0)
+        }, total));
+
+        data.push(Object.assign({
+            type: 'remaining_user',
+            hasChildren: true,
+            sum: Ext.Object.getValues(totalRemainingByUser).reduce(function (a, b) {
+                return a + b;
+            }, 0)
+        }, total));
 
         return data;
     },
