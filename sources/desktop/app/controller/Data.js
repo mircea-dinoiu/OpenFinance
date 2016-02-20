@@ -309,12 +309,14 @@ Ext.define('Financial.controller.Data', {
         });
 
         Ext.Object.each(totalRemainingByML, function (id, sum) {
-            data.push(Object.assign({
-                sum: sum,
-                description: me.formatMLName(id),
-                type: 'remaining_ml',
-                localKey: id
-            }, totalItem));
+            if (sum !== 0) {
+                data.push(Object.assign({
+                    sum: sum,
+                    description: me.formatMLName(id),
+                    type: 'remaining_ml',
+                    localKey: id
+                }, totalItem));
+            }
         });
 
         data.push(Object.assign({
