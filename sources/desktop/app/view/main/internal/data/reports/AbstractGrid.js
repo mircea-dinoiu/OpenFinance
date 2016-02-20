@@ -11,7 +11,25 @@ Ext.define('Financial.view.main.internal.data.reports.AbstractGrid', {
 
         this.getView().on('collapsebody', this.onCollapseBody, this);
 
+        this.store.on('refresh', this.syncExpandedByDefault, this);
+
         this.filters = [];
+    },
+
+    syncExpandedByDefault: function () {
+        var rePlugin = this.findPlugin('rowexpander');
+        var view = this.getView();
+        var rowCollapsedCls = rePlugin.rowCollapsedCls;
+
+        this.store.each(function (record) {
+            // console.log(node.parentNode.parentNode);
+            // var node = view.getRow(record).parentNode.parentNode;
+            // var normalRow = Ext.fly(node);
+            //
+            // if (record.get('display') === true && normalRow.hasCls(rowCollapsedCls)) {
+            //     normalRow.removeCls(rowCollapsedCls);
+            // }
+        });
     },
 
     onExpandBody: function (rowNode, record) {

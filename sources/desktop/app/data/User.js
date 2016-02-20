@@ -2,7 +2,6 @@ Ext.define('Financial.data.User', {
     extend: 'Financial.base.StoreHandler',
 
     singleton: true,
-    cache: {},
 
     storeId: 'user',
     storeClass: 'Financial.store.UserStore',

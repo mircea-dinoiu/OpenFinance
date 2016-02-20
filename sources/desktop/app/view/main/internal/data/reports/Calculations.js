@@ -10,14 +10,23 @@ Ext.define('Financial.view.main.internal.data.reports.Calculations', {
                 '{name:this.formatName}',
                 {
                     formatName: function (type) {
-                        switch (type) {
-                            case 'expense':
-                                return 'Expenses';
-                            case 'remaining':
-                                return 'Balance';
-                            case 'income':
-                                return 'Incomes';
+                        var ret = '';
+
+                        if (Ext.String.startsWith(type, 'expense')) {
+                            ret = 'Expenses';
+                        } else if (Ext.String.startsWith(type, 'remaining')) {
+                            ret = 'Balance';
+                        } else if (Ext.String.startsWith(type, 'income')) {
+                            ret = 'Incomes';
                         }
+
+                        if (Ext.String.endsWith(type, '_ml')) {
+                            ret += ' by money location';
+                        } else if (Ext.String.endsWith(type, '_user')) {
+                            ret += ' by user';
+                        }
+
+                        return ret;
                     }
                 }
             ]

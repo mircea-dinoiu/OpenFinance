@@ -34,3 +34,4 @@ Route::group([
 require_once('routes/expense.php');
 require_once('routes/income.php');
 require_once('routes/category.php');
+require_once('routes/money-location.php');

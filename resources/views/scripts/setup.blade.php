@@ -34,6 +34,11 @@
                 list: baseURL + '/category/list',
                 create: baseURL + '/category/create',
                 update: baseURL + '/category/update'
+            },
+            moneyLocation: {
+                list: baseURL + '/money-location/list',
+                create: baseURL + '/money-location/create',
+                update: baseURL + '/money-location/update'
             }
         };
         Financial.initialValues = {

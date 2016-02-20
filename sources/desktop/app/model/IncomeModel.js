@@ -18,6 +18,13 @@ Ext.define('Financial.model.IncomeModel', {
             sortType: function (userId) {
                 return Financial.data.User.getById(userId).get('full_name');
             }
+        },
+        {
+            name: 'money_location_id',
+            type: 'int',
+            sortType: function (moneyLocationId) {
+                return Financial.data.MoneyLocation.getById(moneyLocationId).get('name');
+            }
         }
     ]
 });

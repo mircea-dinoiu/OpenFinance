@@ -1,13 +1,13 @@
-Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
+Ext.define('Financial.view.main.internal.manageMoneyLocations.MoneyLocationsGrid', {
     extend: 'Financial.view.main.internal.managerWindow.ManagerWindowGrid',
 
-    xtype: 'app-main-internal-manageCategories-grid',
+    xtype: 'app-main-internal-manageMoneyLocations-grid',
 
-    requires: 'Financial.view.main.internal.manageCategories.CategoriesGridController',
+    requires: 'Financial.view.main.internal.manageMoneyLocations.MoneyLocationsGridController',
 
-    controller: 'app-main-internal-manageCategories-grid',
+    controller: 'app-main-internal-manageMoneyLocations-grid',
 
-    store: Financial.data.Category.getStore(),
+    store: Financial.data.MoneyLocation.getStore(),
 
     columns: [
         {

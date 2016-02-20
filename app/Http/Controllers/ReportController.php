@@ -12,7 +12,10 @@ class ReportController extends Controller
 {
     private function getPastIncomes($data)
     {
-        $ret = ['users' => []];
+        $ret = [
+            'users' => [],
+            'money_locations' => []
+        ];
 
         if ($data['start_date']) {
             $incomes = Income::whereRaw('DATE(created_at) < ?', [$data['start_date']])->get();
@@ -22,26 +25,46 @@ class ReportController extends Controller
                     $ret['users'][$income->user_id] = 0;
                 }
 
+                $mlId = $income->money_location_id || 0;
+
+                if (!isset($ret['money_locations'][$mlId])) {
+                    $ret['money_locations'][$mlId] = 0;
+                }
+
                 $ret['users'][$income->user_id] += $income->sum;
+                $ret['money_locations'][$mlId] += $income->sum;
             }
         }
 
         $ret['sum'] = array_sum($ret['users']);
+        $ret['users'] = (object) $ret['users'];
+        $ret['money_locations'] = (object) $ret['money_locations'];
 
-        return $ret;
+        return (object) $ret;
     }
 
     private function getPastExpenses($data)
     {
-        $ret = ['users' => []];
+        $ret = [
+            'users' => [],
+            'money_locations' => []
+        ];
 
         if ($data['start_date']) {
             $expenses = Expense::whereRaw('DATE(created_at) < ?', [$data['start_date']]);
 
             foreach (with(clone $expenses)->where('currency_id', '=', CurrencyController::getDefaultCurrency()->id)->get() as $expense) {
                 $users = $expense->users()->where('blame', '1')->get();
-                $sum = $expense->sum / count($users);
+                $mlId = $expense->money_location_id || 0;
+                $sum = $expense->sum;
 
+                if (!isset($ret['money_locations'][$mlId])) {
+                    $ret['money_locations'][$mlId] = 0;
+                }
+
+                $ret['money_locations'][$mlId] += $sum;
+
+                $sum /= count($users);
                 foreach ($users as $user) {
                     if (!isset($ret['users'][$user->id])) {
                         $ret['users'][$user->id] = 0;
@@ -53,8 +76,16 @@ class ReportController extends Controller
 
             foreach (with(clone $expenses)->where('currency_id', '<>', CurrencyController::getDefaultCurrency()->id)->get() as $expense) {
                 $users = $expense->users()->where('blame', '1')->get();
-                $sum = CurrencyController::convertToDefault($expense->sum, $expense->currency_id) / count($users);
+                $mlId = $expense->money_location_id || 0;
+                $sum = CurrencyController::convertToDefault($expense->sum, $expense->currency_id);
 
+                if (!isset($ret['money_locations'][$mlId])) {
+                    $ret['money_locations'][$mlId] = 0;
+                }
+
+                $ret['money_locations'][$mlId] += $sum;
+
+                $sum /= count($users);
                 foreach ($users as $user) {
                     if (!isset($ret['users'][$user->id])) {
                         $ret['users'][$user->id] = 0;
@@ -66,14 +97,20 @@ class ReportController extends Controller
         }
 
         $ret['sum'] = array_sum($ret['users']);
+        $ret['users'] = (object) $ret['users'];
+        $ret['money_locations'] = (object) $ret['money_locations'];
 
-        return $ret;
+        return (object) $ret;
     }
 
     private function getPastRemaining($pastExpenses, $pastIncomes)
     {
+        $pastExpenses = json_decode(json_encode($pastExpenses), true);
+        $pastIncomes = json_decode(json_encode($pastIncomes), true);
+
         $ret = [
             'users' => [],
+            'money_locations' => [],
             'sum' => $pastIncomes['sum'] - $pastExpenses['sum']
         ];
 
@@ -84,7 +121,17 @@ class ReportController extends Controller
             $ret['users'][$userId] = $incomes - $expenses;
         }
 
-        return $ret;
+        foreach (array_merge(array_keys($pastExpenses['money_locations']), array_keys($pastIncomes['money_locations'])) as $mlId) {
+            $incomes = isset($pastIncomes['money_locations'][$mlId]) ? $pastIncomes['money_locations'][$mlId] : 0;
+            $expenses = isset($pastExpenses['money_locations'][$mlId]) ? $pastExpenses['money_locations'][$mlId] : 0;
+
+            $ret['money_locations'][$mlId] = $incomes - $expenses;
+        }
+
+        $ret['users'] = (object) $ret['users'];
+        $ret['money_locations'] = (object) $ret['money_locations'];
+
+        return (object) $ret;
     }
 
     public function getReports()

@@ -59,6 +59,13 @@ Ext.define('Financial.model.ExpenseModel', {
 
                 return ret.join(', ');
             }
+        },
+        {
+            name: 'money_location_id',
+            type: 'int',
+            sortType: function (moneyLocationId) {
+                return Financial.data.MoneyLocation.getById(moneyLocationId).get('name');
+            }
         }
     ]
 });
