@@ -129,6 +129,11 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         text: 'Manage Categories',
                         iconCls: 'icon-folder_edit',
                         handler: 'onManageCategoriesClick'
+                    },
+                    {
+                        text: 'Manage Money Locations',
+                        iconCls: 'icon-folder_edit',
+                        handler: 'onManageMoneyLocationsClick'
                     }
                 ]
             }

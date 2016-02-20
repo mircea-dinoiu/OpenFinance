@@ -2,7 +2,10 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.app-main-internal-toolbar',
 
-    requires: 'Financial.view.main.internal.ManageCategories',
+    requires: [
+        'Financial.view.main.internal.ManageCategories',
+        'Financial.view.main.internal.ManageMoneyLocations'
+    ],
 
     dateFormat: 'Y-m-d',
 
@@ -281,6 +284,12 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
 
     onManageCategoriesClick: function () {
         var panel = Ext.create('Financial.view.main.internal.ManageCategories');
+
+        panel.show();
+    },
+
+    onManageMoneyLocationsClick: function () {
+        var panel = Ext.create('Financial.view.main.internal.ManageMoneyLocations');
 
         panel.show();
     }

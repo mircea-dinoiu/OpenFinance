@@ -4,6 +4,10 @@ Ext.define('Financial.base.StoreHandler', {
     },
 
     getById: function (id) {
+        if (!this.cache) {
+            this.cache = {};
+        }
+
         if (!this.cache[id]) {
             var store = this.getStore();
 

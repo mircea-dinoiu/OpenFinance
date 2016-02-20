@@ -118,9 +118,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             align: 'center',
             resizable: false,
             fit: true,
-            renderer: function (userId) {
-                return Financial.util.Format.userIcon(userId);
-            },
+            renderer: Financial.util.Format.userIcon.bind(Financial.util.Format),
             editor: {
                 xtype: 'combo',
                 valueField: 'id',
@@ -136,6 +134,30 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 type: 'list',
                 store: Financial.data.User.getStore(),
                 labelField: 'full_name'
+            }
+        },
+        {
+            dataIndex: 'money_location_id',
+            text: 'Destination',
+            align: 'center',
+            resizable: false,
+            fit: true,
+            renderer: Financial.util.Format.moneyLocationName.bind(Financial.util.Format),
+            editor: {
+                xtype: 'combo',
+                valueField: 'id',
+                displayField: 'name',
+                itemId: 'money_location',
+                queryMode: 'local',
+                typeAhead: true,
+                allowBlank: false,
+                forceSelection: true,
+                store: Financial.data.MoneyLocation.getStore()
+            },
+            filter: {
+                type: 'list',
+                store: Financial.data.MoneyLocation.getStore(),
+                labelField: 'name'
             }
         },
         {

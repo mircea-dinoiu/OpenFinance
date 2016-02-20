@@ -12,6 +12,8 @@ Ext.define('Financial.Application', {
         'Financial.data.User',
         'Financial.data.Currency',
         'Financial.data.Category',
+        'Financial.data.MoneyLocation',
+
         'Financial.util.Format',
         'Financial.util.Misc',
         'Financial.util.Events',
@@ -27,6 +29,7 @@ Ext.define('Financial.Application', {
         'Financial.store.UserStore',
         'Financial.store.CurrencyStore',
         'Financial.store.CategoryStore',
+        'Financial.store.MoneyLocationStore',
         'Financial.store.data.ReportStore'
     ],
 
@@ -36,6 +39,7 @@ Ext.define('Financial.Application', {
         'Financial.model.UserModel',
         'Financial.model.CurrencyModel',
         'Financial.model.CategoryModel',
+        'Financial.model.MoneyLocationModel',
         'Financial.model.data.ReportModel'
     ],
 
@@ -140,7 +144,7 @@ Ext.define('Financial.Application', {
 
         if (Financial.data.user) {
             var initialRequests = me.getInitialRequests(),
-                requestsPending = 0;
+                requestsPending = initialRequests.length;
 
             function checkRequestsState() {
                 requestsPending--;
@@ -150,10 +154,10 @@ Ext.define('Financial.Application', {
                 }
             }
 
-            requestsPending++;
+            requestsPending += 2;
             Financial.data.Category.getStore().load(checkRequestsState);
+            Financial.data.MoneyLocation.getStore().load(checkRequestsState);
 
-            requestsPending += initialRequests.length;
             Ext.each(initialRequests,
                 function (request) {
                     Ext.Ajax.request(Ext.apply({}, {

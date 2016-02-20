@@ -77,6 +77,7 @@ class ExpenseController extends Controller
                 'item' => 'sometimes|required|string',
                 'created_at' => 'sometimes|required|integer',
                 'currency_id' => 'sometimes|required|currency_id',
+                'money_location_id' => 'sometimes|required|money_location_id',
                 'status' => 'sometimes|required|string|in:finished,pending',
                 'users' => 'sometimes|required|user_ids',
                 'categories' => 'sometimes|category_ids'
@@ -104,6 +105,10 @@ class ExpenseController extends Controller
                         if ($record['currency_id'] !== CurrencyController::getDefaultCurrency()->id) {
                             $expense->status = 'pending';
                         }
+                    }
+
+                    if (isset($record['money_location_id'])) {
+                        $expense->money_location_id = $record['money_location_id'];
                     }
 
                     if (isset($record['status'])) {
@@ -196,6 +201,7 @@ class ExpenseController extends Controller
                 'users' => 'required|user_ids',
                 'created_at' => 'sometimes|required|integer',
                 'currency_id' => 'sometimes|required|currency_id',
+                'money_location_id' => 'sometimes|required|money_location_id',
                 'categories' => 'sometimes|category_ids'
             ];
 
@@ -210,6 +216,7 @@ class ExpenseController extends Controller
                     $expense->sum = $record['sum'];
                     $expense->item = trim($record['item']);
                     $expense->status = 'pending';
+                    $expense->money_location_id = $record['money_location_id'];
 
                     if (isset($record['currency_id'])) {
                         $expense->currency_id = $record['currency_id'];

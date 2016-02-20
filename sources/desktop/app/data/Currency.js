@@ -2,7 +2,6 @@ Ext.define('Financial.data.Currency', {
     extend: 'Financial.base.StoreHandler',
 
     singleton: true,
-    cache: {},
 
     storeId: 'currency',
     storeClass: 'Financial.store.CurrencyStore',

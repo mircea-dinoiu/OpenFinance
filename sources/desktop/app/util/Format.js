@@ -18,6 +18,14 @@ Ext.define('Financial.util.Format', {
         );
     },
 
+    moneyLocationName: function (id) {
+        if (id == 0) {
+            return '';
+        }
+
+        return Financial.data.MoneyLocation.getById(id).get('name');
+    },
+
     userIcon: function (id) {
         return this.recordToUserIcon(Financial.data.User.getById(id));
     },

@@ -294,9 +294,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             dataIndex: 'users',
             resizable: false,
             fit: true,
-            renderer: function (ids) {
-                return Financial.util.Format.userIcons(ids);
-            },
+            renderer: Financial.util.Format.userIcons.bind(Financial.util.Format),
             editor: {
                 xtype: 'combo',
                 itemId: 'users',
@@ -343,6 +341,30 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 type: 'multilist',
                 labelField: 'name',
                 store: Financial.data.Category.getStore()
+            }
+        },
+        {
+            dataIndex: 'money_location_id',
+            text: 'Source',
+            align: 'center',
+            resizable: false,
+            fit: true,
+            renderer: Financial.util.Format.moneyLocationName,
+            editor: {
+                xtype: 'combo',
+                valueField: 'id',
+                displayField: 'name',
+                itemId: 'money_location',
+                queryMode: 'local',
+                typeAhead: true,
+                allowBlank: false,
+                forceSelection: true,
+                store: Financial.data.MoneyLocation.getStore()
+            },
+            filter: {
+                type: 'list',
+                store: Financial.data.MoneyLocation.getStore(),
+                labelField: 'name'
             }
         },
         {
