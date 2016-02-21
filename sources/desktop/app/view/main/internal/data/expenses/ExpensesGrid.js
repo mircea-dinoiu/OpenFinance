@@ -172,6 +172,13 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             disabled: true
         },
         {
+            text: 'Duplicate',
+            iconCls: 'icon-page_copy',
+            handler: 'onDuplicateClick',
+            itemId: 'duplicate',
+            disabled: true
+        },
+        {
             text: 'Delete',
             iconCls: 'icon-delete',
             handler: 'onDeleteSelectedExpensesClick',
