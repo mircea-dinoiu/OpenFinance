@@ -298,6 +298,14 @@ Ext.define('Financial.controller.Data', {
             display: true
         };
 
+        data.push(Object.assign({
+            type: 'remaining_user',
+            hasChildren: true,
+            sum: Ext.Object.getValues(totalRemainingByUser).reduce(function (a, b) {
+                return a + b;
+            }, 0)
+        }, total));
+
         Ext.Object.each(totalRemainingByUser, function (id, sum) {
             data.push(Object.assign({
                 sum: sum,
@@ -322,14 +330,6 @@ Ext.define('Financial.controller.Data', {
         data.push(Object.assign({
             type: 'remaining_ml',
             sum: Ext.Object.getValues(totalRemainingByML).reduce(function (a, b) {
-                return a + b;
-            }, 0)
-        }, total));
-
-        data.push(Object.assign({
-            type: 'remaining_user',
-            hasChildren: true,
-            sum: Ext.Object.getValues(totalRemainingByUser).reduce(function (a, b) {
                 return a + b;
             }, 0)
         }, total));
