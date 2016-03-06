@@ -317,7 +317,7 @@ Ext.define('Financial.controller.Data', {
         });
 
         Ext.Object.each(totalRemainingByML, function (id, sum) {
-            if (sum !== 0) {
+            if (sum != 0) {
                 data.push(Object.assign({
                     sum: sum,
                     description: me.formatMLName(id),

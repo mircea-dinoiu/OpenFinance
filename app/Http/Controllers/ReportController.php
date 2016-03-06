@@ -25,7 +25,7 @@ class ReportController extends Controller
                     $ret['users'][$income->user_id] = 0;
                 }
 
-                $mlId = $income->money_location_id || 0;
+                $mlId = (int) $income->money_location_id;
 
                 if (!isset($ret['money_locations'][$mlId])) {
                     $ret['money_locations'][$mlId] = 0;
@@ -51,33 +51,13 @@ class ReportController extends Controller
         ];
 
         if ($data['start_date']) {
-            $expenses = Expense::whereRaw('DATE(created_at) < ?', [$data['start_date']]);
+            $expenses = Expense::whereRaw('DATE(created_at) < ?', [$data['start_date']])->get();
+            $defaultCurrencyId = CurrencyController::getDefaultCurrency()->id;
 
-            foreach (with(clone $expenses)->where('currency_id', '=', CurrencyController::getDefaultCurrency()->id)->get() as $expense) {
+            foreach ($expenses as $expense) {
                 $users = $expense->users()->where('blame', '1')->get();
-                $mlId = $expense->money_location_id || 0;
-                $sum = $expense->sum;
-
-                if (!isset($ret['money_locations'][$mlId])) {
-                    $ret['money_locations'][$mlId] = 0;
-                }
-
-                $ret['money_locations'][$mlId] += $sum;
-
-                $sum /= count($users);
-                foreach ($users as $user) {
-                    if (!isset($ret['users'][$user->id])) {
-                        $ret['users'][$user->id] = 0;
-                    }
-
-                    $ret['users'][$user->id] += $sum;
-                }
-            }
-
-            foreach (with(clone $expenses)->where('currency_id', '<>', CurrencyController::getDefaultCurrency()->id)->get() as $expense) {
-                $users = $expense->users()->where('blame', '1')->get();
-                $mlId = $expense->money_location_id || 0;
-                $sum = CurrencyController::convertToDefault($expense->sum, $expense->currency_id);
+                $mlId = (int) $expense->money_location_id;
+                $sum = $expense->currency_id === $defaultCurrencyId ? $expense->sum : CurrencyController::convertToDefault($expense->sum, $expense->currency_id);
 
                 if (!isset($ret['money_locations'][$mlId])) {
                     $ret['money_locations'][$mlId] = 0;
