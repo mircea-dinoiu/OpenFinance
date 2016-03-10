@@ -69,11 +69,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
     onDeleteSelectedExpensesClick: function () {
         var me = this,
             grid = me.getView(),
-            store = grid.getStore();
+            store = grid.getStore(),
+            selection = grid.getSelection();
 
         Ext.Msg.show({
-            title: 'Delete Expense?',
-            message: 'Are you sure you want to delete these expenses?',
+            title: Ext.String.format('Delete {0}?', selection.length > 1 ? 'Expenses' : 'Expense'),
+            message: Ext.String.format('Are you sure you want to delete {0}?', selection.length > 1 ? 'these expenses' : 'this expense'),
             buttons: Ext.Msg.YESNO,
             icon: Ext.Msg.QUESTION,
             fn: function (btn) {
