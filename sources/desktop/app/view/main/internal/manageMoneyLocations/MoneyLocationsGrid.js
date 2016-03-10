@@ -28,7 +28,7 @@ Ext.define('Financial.view.main.internal.manageMoneyLocations.MoneyLocationsGrid
                     value = cleanName(value);
 
                     if (value.length) {
-                        Financial.data.Category.getStore().each(function (record) {
+                        Financial.data.MoneyLocation.getStore().each(function (record) {
                             if (id !== record.get('id') && cleanName(record.get('name')) === value) {
                                 valid = false;
                             }
