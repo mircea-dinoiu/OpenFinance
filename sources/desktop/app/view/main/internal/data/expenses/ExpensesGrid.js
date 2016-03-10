@@ -17,14 +17,14 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         this.itemContextMenu = Ext.create('Ext.menu.Menu', {
             items: [
                 {
-                    text: 'Flag as pending',
-                    iconCls: 'icon-flag_yellow',
-                    handler: this.getController().onMarkExpensesSelectionAsPendingClick.bind(this.getController())
-                },
-                {
                     text: 'Flag as finished',
                     iconCls: 'icon-flag_green',
                     handler: this.getController().onMarkExpensesSelectionAsFinishedClick.bind(this.getController())
+                },
+                {
+                    text: 'Flag as pending',
+                    iconCls: 'icon-flag_yellow',
+                    handler: this.getController().onMarkExpensesSelectionAsPendingClick.bind(this.getController())
                 },
                 {
                     xtype: 'menuseparator'
