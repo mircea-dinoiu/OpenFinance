@@ -51,14 +51,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         grid.down('[itemId="statistics"]').setText(items.join(', '));
     },
 
-    markExpenseAs: function (as, event) {
-        var record = event.record,
-            store = record.store;
-
-        record.set('status', as);
-        store.sync();
-    },
-
     onRowEditing: function (rowEditing, context) {
         var record = context.record;
 
@@ -118,14 +110,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         this.onStoreRefresh();
     },
 
-    onMarkExpenseAsPendingClick: function (a, b, c, e, event) {
-        this.markExpenseAs('pending', event);
-    },
-
-    onMarkExpenseAsFinishedClick: function (a, b, c, e, event) {
-        this.markExpenseAs('finished', event);
-    },
-
     addRecord: function (button) {
         this.newRecordData = {
             currency_id: Financial.data.Currency.getDefaultCurrency().get('id'),
@@ -138,6 +122,19 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         this.callParent(arguments);
     },
 
+    onBeforeRowEditing: function (rowEditing, context) {
+        var editor = rowEditing.getEditor();
+
+        this.callParent(arguments);
+
+        editor.down('datefield').setMinValue(Financial.app.getController('Data').getStartDate());
+        editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
+    },
+
+    /**
+     * ROUND OPERATIONS
+     */
+
     applyMathMethodOnSelectedExpenses: function (method) {
         var grid = this.getView();
         var records = grid.getSelection();
@@ -147,15 +144,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         });
 
         grid.getStore().sync();
-    },
-
-    onBeforeRowEditing: function (rowEditing, context) {
-        var editor = rowEditing.getEditor();
-
-        this.callParent(arguments);
-
-        editor.down('datefield').setMinValue(Financial.app.getController('Data').getStartDate());
-        editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
     },
 
     onRoundExpenseSumClick: function () {
@@ -168,5 +156,28 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
 
     onCeilExpenseSumClick: function () {
         this.applyMathMethodOnSelectedExpenses('ceil');
+    },
+
+    /**
+     * STATUS CHANGING OPERATIONS
+     */
+
+    setStatusToSelectedExpenses: function (status) {
+        var grid = this.getView();
+        var records = grid.getSelection();
+
+        Ext.each(records, function (record) {
+            record.set('status', status);
+        });
+
+        grid.getStore().sync();
+    },
+
+    onMarkExpensesSelectionAsPendingClick: function () {
+        this.setStatusToSelectedExpenses('pending');
+    },
+
+    onMarkExpensesSelectionAsFinishedClick: function () {
+        this.setStatusToSelectedExpenses('finished');
     }
 });

@@ -17,6 +17,19 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         this.itemContextMenu = Ext.create('Ext.menu.Menu', {
             items: [
                 {
+                    text: 'Flag as pending',
+                    iconCls: 'icon-flag_yellow',
+                    handler: this.getController().onMarkExpensesSelectionAsPendingClick.bind(this.getController())
+                },
+                {
+                    text: 'Flag as finished',
+                    iconCls: 'icon-flag_green',
+                    handler: this.getController().onMarkExpensesSelectionAsFinishedClick.bind(this.getController())
+                },
+                {
+                    xtype: 'menuseparator'
+                },
+                {
                     text: 'Round sum',
                     iconCls: 'icon-arrow_refresh_small',
                     handler: this.getController().onRoundExpenseSumClick.bind(this.getController())
@@ -372,31 +385,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 store: Financial.data.MoneyLocation.getStore(),
                 labelField: 'name'
             }
-        },
-        {
-            xtype: 'actioncolumn',
-            editor: {
-                xtype: 'label',
-                text: ''
-            },
-            items: [
-                {
-                    tooltip: 'Flag as finished',
-                    getClass: function (v, metadata, record) {
-                        return record.get('status') === 'finished' ? ' hidden ' : ' icon-flag_green ';
-                    },
-                    handler: 'onMarkExpenseAsFinishedClick'
-                },
-                {
-                    tooltip: 'Flag as pending',
-                    getClass: function (v, metadata, record) {
-                        return record.get('status') === 'pending' ? ' hidden ' : ' icon-flag_yellow ';
-                    },
-                    handler: 'onMarkExpenseAsPendingClick'
-                }
-            ],
-            resizable: false,
-            fit: true
         }
     ]
 });
