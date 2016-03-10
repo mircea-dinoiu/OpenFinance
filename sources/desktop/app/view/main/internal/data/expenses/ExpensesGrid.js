@@ -310,28 +310,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             }
         },
         {
-            text: 'Blame',
-            dataIndex: 'users',
-            resizable: false,
-            fit: true,
-            renderer: Financial.util.Format.userIcons.bind(Financial.util.Format),
-            editor: {
-                xtype: 'combo',
-                itemId: 'users',
-                valueField: 'id',
-                displayField: 'full_name',
-                multiSelect: true,
-                queryMode: 'local',
-                forceSelection: true,
-                store: Financial.data.User.getStore()
-            },
-            filter: {
-                type: 'multilist',
-                labelField: 'full_name',
-                store: Financial.data.User.getStore()
-            }
-        },
-        {
             text: 'Categories',
             dataIndex: 'categories',
             flex: 2,
@@ -384,6 +362,28 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 type: 'list',
                 store: Financial.data.MoneyLocation.getStore(),
                 labelField: 'name'
+            }
+        },
+        {
+            text: 'Blame',
+            dataIndex: 'users',
+            resizable: false,
+            fit: true,
+            renderer: Financial.util.Format.userIcons.bind(Financial.util.Format),
+            editor: {
+                xtype: 'combo',
+                itemId: 'users',
+                valueField: 'id',
+                displayField: 'full_name',
+                multiSelect: true,
+                queryMode: 'local',
+                forceSelection: true,
+                store: Financial.data.User.getStore()
+            },
+            filter: {
+                type: 'multilist',
+                labelField: 'full_name',
+                store: Financial.data.User.getStore()
             }
         }
     ]
