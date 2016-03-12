@@ -4,7 +4,6 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
     xtype: 'app-main-internal-data-incomes-grid',
     controller: 'app-main-internal-data-incomes-grid',
     autoScroll: true,
-    bufferedRenderer: false,
 
     requires: [
         'Financial.view.main.internal.data.incomes.IncomesGridController'
