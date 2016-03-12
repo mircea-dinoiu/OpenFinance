@@ -270,14 +270,14 @@ Ext.define('Financial.controller.Data', {
         data.push(Object.assign({type: 'remaining_user'}, pastTotal));
 
         Ext.Object.each(this.cache.past_remaining.money_locations, function (id, sum) {
-            totalRemainingByML[id] = (totalRemainingByML[id] || 0) + sum;
+            totalRemainingByML[id] = (totalRemainingByML[id] || 0) + Number(sum.toFixed(2));
         });
 
         Ext.Object.each(this.cache.past_remaining.users, function (id, sum) {
-            totalRemainingByUser[id] = (totalRemainingByUser[id] || 0) + sum;
+            totalRemainingByUser[id] = (totalRemainingByUser[id] || 0) + Number(sum.toFixed(2));
 
             data.push({
-                sum: sum,
+                sum: Number(sum.toFixed(2)),
                 description: Financial.data.User.getById(id).get('full_name'),
                 type: 'remaining_user',
                 localKey: id,
