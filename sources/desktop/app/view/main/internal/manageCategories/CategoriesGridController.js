@@ -19,5 +19,5 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGridControll
                 }
             }
         });
-    },
+    }
 });

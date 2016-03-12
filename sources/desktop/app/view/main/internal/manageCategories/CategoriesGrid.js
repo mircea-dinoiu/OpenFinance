@@ -7,7 +7,7 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
 
     controller: 'app-main-internal-manageCategories-grid',
 
-    store: Financial.data.Category.getStore(),
+    store: 'category',
 
     columns: [
         {
@@ -49,7 +49,7 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
             },
             items: [
                 {
-                    iconCls: 'icon-delete',
+                    iconCls: 'x-fa fa-minus-circle',
                     tooltip: 'Delete',
                     handler: 'onDeleteClick'
                 }

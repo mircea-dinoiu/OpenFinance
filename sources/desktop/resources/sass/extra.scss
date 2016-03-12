@@ -7,10 +7,9 @@
 .expense-row {
   &.pending-expense-row {
     > td:nth-child(3) > .x-grid-cell-inner {
-      border-radius: 4px;
-      padding: 3px 8px 2px 8px;
-      margin: 2px;
-      @include background-image(linear_gradient(#FFE73A, #FAC637));
+      //padding: 3px 8px 2px 8px;
+      background: #5FA2DD;
+      color: #FFF;
     }
   }
 
@@ -31,8 +30,10 @@
 }
 
 .future-row {
-  td:not([data-columnid^="actioncolumn"]) > .x-grid-cell-inner {
-    opacity: 0.5;
+  td:not([data-columnid^="actioncolumn"]) {
+    > .x-grid-cell-inner {
+      opacity: 0.5;
+    }
   }
 }
 
@@ -116,6 +117,12 @@
   text-align: center !important;
 }
 
-.ux-notification-window .x-window-body {
-  padding: 10px 15px;
+.ux-notification-window {
+  .x-title-icon {
+    height: auto !important;
+  }
+
+  .x-window-body {
+    padding: 10px 15px;
+  }
 }

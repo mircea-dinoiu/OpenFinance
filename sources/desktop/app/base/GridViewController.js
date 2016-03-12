@@ -37,10 +37,10 @@ Ext.define('Financial.base.GridViewController', {
             this.newRecord === record ? 'Add' : 'Update'
         );
         updateBtn.setIconCls(
-            this.newRecord === record ? 'icon-add' : 'icon-disk'
+            this.newRecord === record ? 'x-fa fa-plus-circle' : 'x-fa fa-floppy-o'
         );
 
-        cancelBtn.setIconCls('icon-cancel');
+        cancelBtn.setIconCls('x-fa fa-ban');
     },
 
     addRecord: function (button) {

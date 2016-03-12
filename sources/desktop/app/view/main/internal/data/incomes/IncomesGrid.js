@@ -50,7 +50,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
     tbar: [
         {
             text: 'Add Income',
-            iconCls: 'icon-money_add',
+            iconCls: 'x-fa fa-plus-circle',
             handler: 'addRecord'
         }
     ],
@@ -127,11 +127,11 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 typeAhead: true,
                 allowBlank: false,
                 forceSelection: true,
-                store: Financial.data.User.getStore()
+                store: 'user'
             },
             filter: {
                 type: 'list',
-                store: Financial.data.User.getStore(),
+                store: 'user',
                 labelField: 'full_name'
             }
         },
@@ -150,11 +150,11 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 queryMode: 'local',
                 typeAhead: true,
                 forceSelection: true,
-                store: Financial.data.MoneyLocation.getStore()
+                store: 'moneyLocation'
             },
             filter: {
                 type: 'list',
-                store: Financial.data.MoneyLocation.getStore(),
+                store: 'moneyLocation',
                 labelField: 'name'
             }
         },
@@ -166,7 +166,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             },
             items: [
                 {
-                    iconCls: 'icon-delete',
+                    iconCls: 'x-fa fa-minus-circle',
                     tooltip: 'Delete',
                     handler: 'onDeleteIncomeClick'
                 }

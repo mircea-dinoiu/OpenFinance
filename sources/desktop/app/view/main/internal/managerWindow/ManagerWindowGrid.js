@@ -22,7 +22,7 @@ Ext.define('Financial.view.main.internal.managerWindow.ManagerWindowGrid', {
     tbar: [
         {
             text: 'Add',
-            iconCls: 'icon-folder_add',
+            iconCls: 'x-fa fa-plus-circle',
             handler: 'addRecord'
         }
     ],

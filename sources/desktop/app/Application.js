@@ -103,7 +103,7 @@ Ext.define('Financial.Application', {
                         Ext.create('widget.uxNotification', {
                             position: 'tr',
                             useXAxis: true,
-                            iconCls: 'icon-error',
+                            iconCls: 'x-fa fa-exclamation-triangle',
                             title: 'Notice',
                             html: 'There are <strong>{0}</strong> pending expenses before {1}'.format(
                                 expenses.length,
