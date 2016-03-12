@@ -374,7 +374,15 @@ Ext.define('Financial.controller.Data', {
             }
 
             if (recordCategories.length > 0) {
-                Ext.each(recordCategories, function (categoryId) {
+                Ext.each(recordCategories, function (rawCategoryId) {
+                    var categoryId;
+
+                    if (Financial.data.Category.getById(rawCategoryId)) {
+                        categoryId = rawCategoryId;
+                    } else {
+                        categoryId = 0;
+                    }
+                    
                     addData(categoryId, sum);
                 });
             } else {
