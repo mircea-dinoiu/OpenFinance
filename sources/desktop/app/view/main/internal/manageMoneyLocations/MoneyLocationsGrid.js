@@ -7,7 +7,7 @@ Ext.define('Financial.view.main.internal.manageMoneyLocations.MoneyLocationsGrid
 
     controller: 'app-main-internal-manageMoneyLocations-grid',
 
-    store: Financial.data.MoneyLocation.getStore(),
+    store: 'moneyLocation',
 
     columns: [
         {

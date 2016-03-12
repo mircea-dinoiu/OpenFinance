@@ -18,7 +18,7 @@ Ext.define('Financial.view.main.internal.Toolbar', {
     items: [
         {
             text: 'Exchange rates',
-            iconCls: 'icon-information',
+            iconCls: 'x-fa fa-info-circle',
             menu: {
                 xtype: 'menu',
                 items: [
@@ -34,14 +34,14 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             xtype: 'tbfill'
         },
         {
-            iconCls: 'icon-date_previous',
+            iconCls: 'x-fa fa-arrow-left',
             tooltip: 'Shift back one month',
             listeners: {
                 click: 'onPreviousMonthClick'
             }
         },
         {
-            iconCls: 'icon-checkbox_checked',
+            iconCls: 'x-fa fa-check-square-o',
             listeners: {
                 click: 'onToggleStartDateButton'
             }
@@ -51,7 +51,7 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             listeners: {
                 render: 'applyFilter'
             },
-            iconCls: 'icon-calendar',
+            iconCls: 'x-fa fa-calendar',
             menu: {
                 xtype: 'menu',
                 listeners: {
@@ -79,7 +79,7 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             listeners: {
                 render: 'applyFilter'
             },
-            iconCls: 'icon-calendar',
+            iconCls: 'x-fa fa-calendar',
             menu: {
                 xtype: 'menu',
                 listeners: {
@@ -99,13 +99,13 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             }
         },
         {
-            iconCls: 'icon-checkbox_checked',
+            iconCls: 'x-fa fa-check-square-o',
             listeners: {
                 click: 'onToggleEndDateButton'
             }
         },
         {
-            iconCls: 'icon-date_next',
+            iconCls: 'x-fa fa-arrow-right',
             tooltip: 'Shift forward one month',
             listeners: {
                 click: 'onNextMonthClick'
@@ -115,24 +115,24 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             xtype: 'tbfill'
         },
         {
-            iconCls: 'icon-database_refresh',
+            iconCls: 'x-fa fa-refresh',
             listeners: {
                 click: 'applyFilter'
             }
         },
         {
-            iconCls: 'icon-cog',
+            iconCls: 'x-fa fa-cog',
             menu: {
                 xtype: 'menu',
                 items: [
                     {
                         text: 'Manage Categories',
-                        iconCls: 'icon-folder_edit',
+                        iconCls: 'x-fa fa-pencil',
                         handler: 'onManageCategoriesClick'
                     },
                     {
                         text: 'Manage Money Locations',
-                        iconCls: 'icon-folder_edit',
+                        iconCls: 'x-fa fa-pencil',
                         handler: 'onManageMoneyLocationsClick'
                     }
                 ]
@@ -146,7 +146,7 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                 xtype: 'menu',
                 items: [
                     {
-                        iconCls: 'icon-door_out',
+                        iconCls: 'x-fa fa-sign-out',
                         text: 'Logout',
                         itemId: 'logout',
                         handler: 'onLogoutClick'

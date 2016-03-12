@@ -68,7 +68,7 @@ Ext.define('Financial.view.main.Login', {
                     formBind: true, //only enabled once the form is valid
                     disabled: true,
                     handler: 'submitLogin',
-                    iconCls: 'icon-door_in'
+                    iconCls: 'x-fa fa-sign-in'
                 }
             ]
         }

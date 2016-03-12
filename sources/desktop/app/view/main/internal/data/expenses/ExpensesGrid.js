@@ -17,12 +17,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             items: [
                 {
                     text: 'Flag as finished',
-                    iconCls: 'icon-flag_green',
+                    iconCls: 'x-fa fa-lock',
                     handler: this.getController().onMarkExpensesSelectionAsFinishedClick.bind(this.getController())
                 },
                 {
                     text: 'Flag as pending',
-                    iconCls: 'icon-flag_yellow',
+                    iconCls: 'x-fa fa-unlock',
                     handler: this.getController().onMarkExpensesSelectionAsPendingClick.bind(this.getController())
                 },
                 {
@@ -30,17 +30,17 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 },
                 {
                     text: 'Round sum',
-                    iconCls: 'icon-arrow_refresh_small',
+                    iconCls: 'x-fa fa-arrows-v',
                     handler: this.getController().onRoundExpenseSumClick.bind(this.getController())
                 },
                 {
                     text: 'Ceil sum',
-                    iconCls: 'icon-arrow_up',
+                    iconCls: 'x-fa fa-long-arrow-up',
                     handler: this.getController().onCeilExpenseSumClick.bind(this.getController())
                 },
                 {
                     text: 'Floor sum',
-                    iconCls: 'icon-arrow_down',
+                    iconCls: 'x-fa fa-long-arrow-down',
                     handler: this.getController().onFloorExpenseSumClick.bind(this.getController())
                 }
             ]
@@ -171,7 +171,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
     tbar: [
         {
             text: 'Add Expense',
-            iconCls: 'icon-cart_add',
+            iconCls: 'x-fa fa-cart-plus',
             handler: 'addRecord'
         },
         {
@@ -185,14 +185,14 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         },
         {
             text: 'Duplicate',
-            iconCls: 'icon-page_copy',
+            iconCls: 'x-fa fa-files-o',
             handler: 'onDuplicateClick',
             itemId: 'duplicate',
             disabled: true
         },
         {
             text: 'Delete',
-            iconCls: 'icon-delete',
+            iconCls: 'x-fa fa-minus-circle',
             handler: 'onDeleteSelectedExpensesClick',
             itemId: 'delete',
             disabled: true
@@ -239,11 +239,11 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                         typeAhead: true,
                         allowBlank: false,
                         forceSelection: true,
-                        store: Financial.data.Currency.getStore()
+                        store: 'currency'
                     },
                     filter: {
                         type: 'list',
-                        store: Financial.data.Currency.getStore(),
+                        store: 'currency',
                         idField: 'id',
                         labelField: 'iso_code'
                     },
@@ -332,12 +332,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 displayField: 'name',
                 multiSelect: true,
                 queryMode: 'local',
-                store: Financial.data.Category.getStore()
+                store: 'category'
             },
             filter: {
                 type: 'multilist',
                 labelField: 'name',
-                store: Financial.data.Category.getStore()
+                store: 'category'
             }
         },
         {
@@ -355,11 +355,11 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 queryMode: 'local',
                 typeAhead: true,
                 forceSelection: true,
-                store: Financial.data.MoneyLocation.getStore()
+                store: 'moneyLocation'
             },
             filter: {
                 type: 'list',
-                store: Financial.data.MoneyLocation.getStore(),
+                store: 'moneyLocation',
                 labelField: 'name'
             }
         },
@@ -377,12 +377,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 multiSelect: true,
                 queryMode: 'local',
                 forceSelection: true,
-                store: Financial.data.User.getStore()
+                store: 'user'
             },
             filter: {
                 type: 'multilist',
                 labelField: 'full_name',
-                store: Financial.data.User.getStore()
+                store: 'user'
             }
         }
     ]

@@ -137,7 +137,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
     },
 
     toggleDateButton: function (toggler, button) {
-        toggler.setIconCls(button.isDisabled() ? 'icon-checkbox_checked' : 'icon-checkbox');
+        toggler.setIconCls(button.isDisabled() ? 'x-fa fa-check-square-o' : 'x-fa fa-square-o');
         button.setDisabled(!button.isDisabled());
 
         if (!button.isDisabled()) {

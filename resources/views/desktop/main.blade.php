@@ -15,10 +15,9 @@
           href="{!! url(sprintf('resources/img/icon/%s.png', Config::get('app.debug') ? 'page_gear' : 'money')) !!}">
 
     @if (Config::get('app.debug'))
-        {{--*/ $theme = 'neptune' /*--}}
-        <link rel="stylesheet" href="{{ url( "ext/packages/ext-theme-$theme/build/resources/ext-theme-$theme-all-debug.css" ) }}">
+        {{--*/ $theme = 'triton' /*--}}
+        <link rel="stylesheet" href="{{ url( "ext/build/classic/theme-$theme/resources/theme-$theme-all-debug.css" ) }}">
     @endif
-    <link rel="stylesheet" href="{{ url( 'resources/css/icon.css?' . @filemtime(app_path('../public/desktop/resources/css/icon.css' ))) }}">
     <link rel="stylesheet" href="{{ url( 'resources/css/extra.css?' . @filemtime(app_path('../public/desktop/resources/css/extra.css' ))) }}">
 
     {!! $bootstrapScript !!}
