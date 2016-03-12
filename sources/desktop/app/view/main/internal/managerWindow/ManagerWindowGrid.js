@@ -2,7 +2,6 @@ Ext.define('Financial.view.main.internal.managerWindow.ManagerWindowGrid', {
     extend: 'Ext.grid.Panel',
     border: false,
     autoScroll: true,
-    bufferedRenderer: false,
 
     listeners: {
         beforedestroy: 'onBeforeDestroy',

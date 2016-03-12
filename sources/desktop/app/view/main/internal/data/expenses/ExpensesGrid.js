@@ -4,7 +4,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
     store: 'Financial.store.ExpenseStore',
     controller: 'app-main-internal-data-expenses-grid',
     autoScroll: true,
-    bufferedRenderer: false,
 
     requires: [
         'Financial.view.main.internal.data.expenses.ExpensesGridController',
