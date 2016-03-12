@@ -20,7 +20,8 @@ Ext.define('Financial.store.CategoryStore', {
         api: {
             read: Financial.routes.category.list,
             create: Financial.routes.category.create,
-            update: Financial.routes.category.update
+            update: Financial.routes.category.update,
+            destroy: Financial.routes.category.destroy
         },
         writer: {
             type: 'json',

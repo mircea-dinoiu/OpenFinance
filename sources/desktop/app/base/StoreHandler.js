@@ -4,16 +4,8 @@ Ext.define('Financial.base.StoreHandler', {
     },
 
     getById: function (id) {
-        if (!this.cache) {
-            this.cache = {};
-        }
+        var store = this.getStore();
 
-        if (!this.cache[id]) {
-            var store = this.getStore();
-
-            this.cache[id] = store.getAt(store.findExact('id', parseInt(id)));
-        }
-
-        return this.cache[id];
+        return store.getAt(store.findExact('id', parseInt(id)));
     }
 });

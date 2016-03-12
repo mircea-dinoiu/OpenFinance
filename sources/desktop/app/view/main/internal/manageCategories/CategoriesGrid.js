@@ -40,6 +40,22 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
                     return valid || 'The value must be unique';
                 }
             }
+        },
+        {
+            xtype: 'actioncolumn',
+            editor: {
+                xtype: 'label',
+                text: ''
+            },
+            items: [
+                {
+                    iconCls: 'icon-delete',
+                    tooltip: 'Delete',
+                    handler: 'onDeleteClick'
+                }
+            ],
+            resizable: false,
+            fit: true
         }
     ]
 });

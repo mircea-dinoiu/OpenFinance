@@ -83,4 +83,29 @@ class CategoryController extends Controller
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
     }
+
+    public function postDelete()
+    {
+        $data = Input::get('data');
+
+        if (is_array($data) && !empty($data)) {
+            $validationRules = ['id' => 'required|category_id'];
+
+            $output = [];
+
+            foreach ($data as $record) {
+                $validator = Validator::make($record, $validationRules);
+
+                if ($validator->passes()) {
+                    $output[] = Category::destroy($record['id']);
+                } else {
+                    $output[] = $validator->messages();
+                }
+            }
+
+            return Response::json($output);
+        }
+
+        return Response::json(Lang::get('general.invalid_input_data'), 400);
+    }
 }

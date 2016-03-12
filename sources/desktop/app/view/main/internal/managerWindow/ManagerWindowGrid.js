@@ -11,6 +11,14 @@ Ext.define('Financial.view.main.internal.managerWindow.ManagerWindowGrid', {
         }
     },
 
+    viewConfig: {
+        listeners: {
+            refresh: function (dataView) {
+                Financial.util.Events.dataViewAutoFit(dataView);
+            }
+        }
+    },
+
     tbar: [
         {
             text: 'Add',
@@ -28,20 +36,5 @@ Ext.define('Financial.view.main.internal.managerWindow.ManagerWindowGrid', {
                 edit: 'onRowEditing'
             }
         }
-    ],
-
-    onStoreWrite: function () {
-        Ext.ComponentQuery.query('app-main-internal-data-expenses-grid')[0].store.fireEvent('refresh');
-        Financial.app.getController('Data').syncReports();
-    },
-
-    onBeforeDestroy: function () {
-        var grid = this.getView(),
-            store = grid.getStore();
-
-        /**
-         * Restore the original sort
-         */
-        store.sort(store.config.sorters);
-    }
+    ]
 });
