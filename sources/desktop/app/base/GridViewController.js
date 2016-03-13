@@ -41,13 +41,16 @@ Ext.define('Financial.base.GridViewController', {
         );
 
         cancelBtn.setIconCls('x-fa fa-ban');
+
+        rowEditing.grid.getView().getScrollable().on('scrollstart', rowEditing.cancelEdit, rowEditing, {single: true});
     },
 
     addRecord: function (button) {
-        var grid = button.up('grid'),
-            store = grid.getStore(),
-            collapsiblePanel = grid.up('[collapsible=true]'),
-            rowEditing = grid.getPlugin();
+        var grid = button.up('grid');
+        var store = grid.getStore();
+        var collapsiblePanel = grid.up('[collapsible=true]');
+        var rowEditing = grid.getPlugin();
+        var tableView = grid.getView();
 
         // Force expand collapsible panel if collapsed
         if (collapsiblePanel) {
@@ -62,9 +65,14 @@ Ext.define('Financial.base.GridViewController', {
         this.newRecord = record;
 
         store.insert(0, record);
-        grid.getView().getRowByRecord(record).scrollIntoView(grid, false);
+        tableView.getScrollable().suspendEvents();
+        tableView.bufferedRenderer.scrollTo(store.indexOf(record));
 
         rowEditing.startEdit(record, this.newRecordEditAt || 0);
         delete this.newRecordEditAt;
+
+        setTimeout(function () {
+            tableView.getScrollable().resumeEvents();
+        }, 0);
     }
 });
