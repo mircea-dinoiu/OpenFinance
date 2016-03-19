@@ -185,7 +185,7 @@ Ext.define('Financial.controller.Data', {
         filteredExpenses = filteredExpenses ? filteredExpenses.sum : 0;
         filteredIncomes = filteredIncomes ? filteredIncomes.sum : 0;
 
-        return filteredIncomes - filteredExpenses;
+        return Number((filteredIncomes - filteredExpenses).toFixed(2));
     },
 
     getRemainingData: function (expenses, incomes) {
