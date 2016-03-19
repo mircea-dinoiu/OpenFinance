@@ -12,7 +12,8 @@ Ext.define('Financial.Application', {
         'Financial.data.User',
         'Financial.data.Currency',
         'Financial.data.Category',
-        'Financial.data.MoneyLocation',
+        'Financial.data.ML',
+        'Financial.data.MLType',
 
         'Financial.util.Format',
         'Financial.util.Misc',
@@ -29,7 +30,8 @@ Ext.define('Financial.Application', {
         'Financial.store.UserStore',
         'Financial.store.CurrencyStore',
         'Financial.store.CategoryStore',
-        'Financial.store.MoneyLocationStore',
+        'Financial.store.MLStore',
+        'Financial.store.MLTypeStore',
         'Financial.store.data.ReportStore'
     ],
 
@@ -39,7 +41,8 @@ Ext.define('Financial.Application', {
         'Financial.model.UserModel',
         'Financial.model.CurrencyModel',
         'Financial.model.CategoryModel',
-        'Financial.model.MoneyLocationModel',
+        'Financial.model.MLModel',
+        'Financial.model.MLTypeModel',
         'Financial.model.data.ReportModel'
     ],
 
@@ -154,9 +157,17 @@ Ext.define('Financial.Application', {
                 }
             }
 
-            requestsPending += 2;
-            Financial.data.Category.getStore().load(checkRequestsState);
-            Financial.data.MoneyLocation.getStore().load(checkRequestsState);
+            var storesToPreload = [
+                Financial.data.Category.getStore(),
+                Financial.data.ML.getStore(),
+                Financial.data.MLType.getStore()
+            ];
+
+            requestsPending += storesToPreload.length;
+
+            storesToPreload.forEach(function (store) {
+                store.load(checkRequestsState);
+            });
 
             Ext.each(initialRequests,
                 function (request) {

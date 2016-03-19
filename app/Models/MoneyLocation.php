@@ -9,4 +9,8 @@ class MoneyLocation extends Model
     protected $table = 'money_locations';
 
     public $timestamps = false;
+
+    public function type() {
+        return $this->belongsTo('App\Models\MLType')->select(['id']);
+    }
 }

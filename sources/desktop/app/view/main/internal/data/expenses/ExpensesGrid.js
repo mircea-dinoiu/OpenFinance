@@ -348,7 +348,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             align: 'center',
             resizable: false,
             fit: true,
-            renderer: Financial.util.Format.moneyLocationName,
+            renderer: Financial.util.Format.mlName,
             editor: {
                 xtype: 'combo',
                 valueField: 'id',
@@ -357,11 +357,11 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 queryMode: 'local',
                 typeAhead: true,
                 forceSelection: true,
-                store: 'moneyLocation'
+                store: 'ml'
             },
             filter: {
                 type: 'list',
-                store: 'moneyLocation',
+                store: 'ml',
                 labelField: 'name'
             }
         },

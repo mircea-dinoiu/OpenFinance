@@ -4,7 +4,8 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
 
     requires: [
         'Financial.view.main.internal.ManageCategories',
-        'Financial.view.main.internal.ManageMoneyLocations'
+        'Financial.view.main.internal.ManageMLs',
+        'Financial.view.main.internal.ManageMLTypes'
     ],
 
     dateFormat: 'Y-m-d',
@@ -288,8 +289,14 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         panel.show();
     },
 
-    onManageMoneyLocationsClick: function () {
-        var panel = Ext.create('Financial.view.main.internal.ManageMoneyLocations');
+    onManageMLsClick: function () {
+        var panel = Ext.create('Financial.view.main.internal.ManageMLs');
+
+        panel.show();
+    },
+
+    onManageMLTypesClick: function () {
+        var panel = Ext.create('Financial.view.main.internal.ManageMLTypes');
 
         panel.show();
     }

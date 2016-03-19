@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MoneyLocation;
+use App\Models\MLType;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 
-class MoneyLocationController extends Controller
+class MLTypeController extends Controller
 {
     public function getList()
     {
-        return Response::json(MoneyLocation::get());
+        return Response::json(MLType::get());
     }
 
     public function postUpdate()
@@ -21,9 +21,8 @@ class MoneyLocationController extends Controller
 
         if (is_array($data) && !empty($data)) {
             $validationRules = [
-                'id' => 'required|money_location_id',
-                'name' => 'sometimes|required|string',
-                'type_id' => 'sometimes|required|money_location_type_id'
+                'id' => 'required|money_location_type_id',
+                'name' => 'sometimes|required|string'
             ];
 
             $output = [];
@@ -32,19 +31,15 @@ class MoneyLocationController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $moneyLocation = MoneyLocation::find($record['id']);
+                    $mlType = MLType::find($record['id']);
 
                     if (isset($record['name'])) {
-                        $moneyLocation->name = trim($record['name']);
+                        $mlType->name = trim($record['name']);
                     }
 
-                    if (isset($record['type_id'])) {
-                        $moneyLocation->type_id = $record['type_id'];
-                    }
+                    $mlType->save();
 
-                    $moneyLocation->save();
-
-                    $output[] = $moneyLocation;
+                    $output[] = $mlType;
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -62,8 +57,7 @@ class MoneyLocationController extends Controller
 
         if (is_array($data) && !empty($data)) {
             $validationRules = [
-                'name' => 'required|string',
-                'type_id' => 'required|money_location_type_id'
+                'name' => 'required|string'
             ];
 
             $output = [];
@@ -72,14 +66,13 @@ class MoneyLocationController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $moneyLocation = new MoneyLocation;
+                    $mlType = new MLType;
 
-                    $moneyLocation->name = trim($record['name']);
-                    $moneyLocation->type_id = $record['type_id'];
+                    $mlType->name = trim($record['name']);
 
-                    $moneyLocation->save();
+                    $mlType->save();
 
-                    $output[] = $moneyLocation;
+                    $output[] = $mlType;
                 } else {
                     $output[] = $validator->messages();
                 }

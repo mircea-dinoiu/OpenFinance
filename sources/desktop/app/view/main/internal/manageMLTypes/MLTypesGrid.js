@@ -1,13 +1,13 @@
-Ext.define('Financial.view.main.internal.manageMoneyLocations.MoneyLocationsGrid', {
+Ext.define('Financial.view.main.internal.manageMLTypes.MLTypesGrid', {
     extend: 'Financial.view.main.internal.managerWindow.ManagerWindowGrid',
 
-    xtype: 'app-main-internal-manageMoneyLocations-grid',
+    xtype: 'app-main-internal-manageMLTypes-grid',
 
-    requires: 'Financial.view.main.internal.manageMoneyLocations.MoneyLocationsGridController',
+    requires: 'Financial.view.main.internal.manageMLTypes.MLTypesGridController',
 
-    controller: 'app-main-internal-manageMoneyLocations-grid',
+    controller: 'app-main-internal-manageMLTypes-grid',
 
-    store: 'moneyLocation',
+    store: 'mlType',
 
     columns: [
         {
@@ -28,7 +28,7 @@ Ext.define('Financial.view.main.internal.manageMoneyLocations.MoneyLocationsGrid
                     value = cleanName(value);
 
                     if (value.length) {
-                        Financial.data.MoneyLocation.getStore().each(function (record) {
+                        Financial.data.MLType.getStore().each(function (record) {
                             if (id !== record.get('id') && cleanName(record.get('name')) === value) {
                                 valid = false;
                             }

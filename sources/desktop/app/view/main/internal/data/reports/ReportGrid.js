@@ -1,20 +1,38 @@
-Ext.define('Financial.view.main.internal.data.reports.Categories', {
-    xtype: 'app-main-internal-data-reports-categories',
+Ext.define('Financial.view.main.internal.data.reports.ReportGrid', {
+    extend: 'Ext.grid.Panel',
+    hideHeaders: true,
+    collapsible: true,
+    xtype: 'app-main-internal-data-reports-report-grid',
+    groupField: 'group',
 
-    extend: 'Financial.view.main.internal.data.reports.AbstractGrid',
+    initComponent: function () {
+        this.store = Ext.create('Financial.store.data.ReportStore', {
+            groupField: this.groupField
+        });
 
-    features: [
-        {
-            ftype: 'groupingsummary',
-            showSummaryRow: false,
-            groupHeaderTpl: 'Categories'
+        this.callParent(arguments);
+
+        this.filters = [];
+    },
+
+    cls: 'report-grid',
+
+    viewConfig: {
+        getRowClass: function (record) {
+            var classes = [];
+
+            if (record.get('description') === 'TOTAL') {
+                classes.push('total-row');
+            }
+
+            return classes.join(' ');
         }
-    ],
+    },
 
     columns: [
         {
             dataIndex: 'description',
-            text: 'Name',
+            text: 'Description',
             flex: 1
         },
         {

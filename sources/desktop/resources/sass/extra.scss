@@ -45,30 +45,32 @@ body > .x-mask {
   visibility: hidden;
 }
 
-.fake-expander-grid {
-  .non-expandable-row .x-grid-row-expander {
-    display: none;
-  }
-
-  .x-grid-rowbody {
-    display: none;
-  }
-
-  .child-row {
-    td:first-child {
-      background: #FFF;
-    }
-
-    td:not(:first-child) {
-      background: #EEE;
-      color: #AAA;
-    }
-  }
-}
-
 .report-grid {
   .total-row {
     font-weight: bold;
+  }
+
+  > .x-panel-header {
+    &, .x-tool-img, .x-panel-header-title-default {
+      background-color: #E3E3E3 !important;
+      color: #646464 !important;
+    }
+  }
+
+  .group-name, .group-sum {
+    display: block;
+    width: 50%;
+    @extend .text-ellipsis;
+  }
+
+  .group-name {
+    @extend .left;
+  }
+
+  .group-sum {
+    font-weight: bold;
+    text-align: right;
+    @extend .right;
   }
 }
 
@@ -128,4 +130,23 @@ body > .x-mask {
   .x-window-body {
     padding: 10px 15px;
   }
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.left {
+  float: left !important;
+}
+
+.right {
+  float: right !important;
+}
+
+.clearfix:after {
+  clear: both;
+  content: "";
+  display: block;
 }

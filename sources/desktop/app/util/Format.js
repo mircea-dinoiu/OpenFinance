@@ -18,12 +18,20 @@ Ext.define('Financial.util.Format', {
         );
     },
 
-    moneyLocationName: function (id) {
+    mlName: function (id) {
         if (id == 0) {
             return '';
         }
 
-        return Financial.data.MoneyLocation.getById(id).get('name');
+        return Financial.data.ML.getById(id).get('name');
+    },
+
+    mlTypeName: function (id) {
+        if (id == 0) {
+            return '';
+        }
+
+        return Financial.data.MLType.getById(id).get('name');
     },
 
     userIcon: function (id) {

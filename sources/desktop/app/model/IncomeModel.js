@@ -23,7 +23,7 @@ Ext.define('Financial.model.IncomeModel', {
             name: 'money_location_id',
             type: 'int',
             sortType: function (id) {
-                return id == 0 ? '' : Financial.data.MoneyLocation.getById(id).get('name');
+                return id == 0 ? '' : Financial.data.ML.getById(id).get('name');
             }
         }
     ]

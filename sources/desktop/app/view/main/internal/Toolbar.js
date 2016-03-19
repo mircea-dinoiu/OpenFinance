@@ -133,7 +133,12 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                     {
                         text: 'Manage Money Locations',
                         iconCls: 'x-fa fa-pencil',
-                        handler: 'onManageMoneyLocationsClick'
+                        handler: 'onManageMLsClick'
+                    },
+                    {
+                        text: 'Manage Money Location Types',
+                        iconCls: 'x-fa fa-pencil',
+                        handler: 'onManageMLTypesClick'
                     }
                 ]
             }

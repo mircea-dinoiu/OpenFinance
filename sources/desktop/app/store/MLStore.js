@@ -1,9 +1,9 @@
-Ext.define('Financial.store.MoneyLocationStore', {
+Ext.define('Financial.store.MLStore', {
     extend: 'Ext.data.Store',
 
-    model: 'Financial.model.MoneyLocationModel',
+    model: 'Financial.model.MLModel',
     autoDestroy: false,
-    storeId: 'moneyLocation',
+    storeId: 'ml',
 
     sorters: [
         {
@@ -18,9 +18,9 @@ Ext.define('Financial.store.MoneyLocationStore', {
             type: 'json'
         },
         api: {
-            read: Financial.routes.moneyLocation.list,
-            create: Financial.routes.moneyLocation.create,
-            update: Financial.routes.moneyLocation.update
+            read: Financial.routes.ml.list,
+            create: Financial.routes.ml.create,
+            update: Financial.routes.ml.update
         },
         writer: {
             type: 'json',

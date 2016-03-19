@@ -1,4 +1,4 @@
-Ext.define('Financial.model.MoneyLocationModel', {
+Ext.define('Financial.model.MLTypeModel', {
     extend: 'Ext.data.Model',
 
     fields: [

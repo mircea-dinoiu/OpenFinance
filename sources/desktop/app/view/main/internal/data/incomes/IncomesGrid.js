@@ -143,7 +143,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             align: 'center',
             resizable: false,
             fit: true,
-            renderer: Financial.util.Format.moneyLocationName.bind(Financial.util.Format),
+            renderer: Financial.util.Format.mlName.bind(Financial.util.Format),
             editor: {
                 xtype: 'combo',
                 valueField: 'id',
@@ -152,11 +152,11 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 queryMode: 'local',
                 typeAhead: true,
                 forceSelection: true,
-                store: 'moneyLocation'
+                store: 'ml'
             },
             filter: {
                 type: 'list',
-                store: 'moneyLocation',
+                store: 'ml',
                 labelField: 'name'
             }
         },

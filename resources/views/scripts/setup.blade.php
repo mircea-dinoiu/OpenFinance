@@ -1,3 +1,4 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 <script>
     var Financial = {};
 
@@ -36,10 +37,15 @@
                 update: baseURL + '/category/update',
                 destroy: baseURL + '/category/delete'
             },
-            moneyLocation: {
+            ml: {
                 list: baseURL + '/money-location/list',
                 create: baseURL + '/money-location/create',
                 update: baseURL + '/money-location/update'
+            },
+            mlType: {
+                list: baseURL + '/money-location-type/list',
+                create: baseURL + '/money-location-type/create',
+                update: baseURL + '/money-location-type/update'
             }
         };
         Financial.initialValues = {
