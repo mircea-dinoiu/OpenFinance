@@ -89,6 +89,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             dataIndex: 'description',
             text: 'Desc.',
             flex: 1,
+            minWidth: 100,
             editor: {
                 xtype: 'textfield',
                 allowOnlyWhitespace: false
@@ -117,6 +118,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             align: 'center',
             resizable: false,
             fit: true,
+            minWidth: 100,
             renderer: Financial.util.Format.userIcon.bind(Financial.util.Format),
             editor: {
                 xtype: 'combo',

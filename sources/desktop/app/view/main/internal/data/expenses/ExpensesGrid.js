@@ -229,6 +229,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                     dataIndex: 'currency_id',
                     resizable: false,
                     fit: true,
+                    minWidth: 70,
                     align: 'center',
                     editor: {
                         xtype: 'combo',
@@ -286,6 +287,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             text: 'Item',
             dataIndex: 'item',
             flex: 4,
+            minWidth: 100,
             editor: {
                 xtype: 'textfield',
                 allowOnlyWhitespace: false
@@ -366,8 +368,10 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         {
             text: 'Blame',
             dataIndex: 'users',
+            minWidth: 100,
             resizable: false,
             fit: true,
+            align: 'center',
             renderer: Financial.util.Format.userIcons.bind(Financial.util.Format),
             editor: {
                 xtype: 'combo',
