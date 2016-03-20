@@ -106,7 +106,7 @@
     {
       "path": "app.js",
       "bundle": true,
-      "update": "delta"
+      "update": "full"
     }
   ],
   /**
