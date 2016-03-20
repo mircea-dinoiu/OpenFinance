@@ -3,16 +3,15 @@ Ext.define('Financial.view.main.internal.data.reports.ReportGrid', {
     hideHeaders: true,
     collapsible: true,
     xtype: 'app-main-internal-data-reports-report-grid',
-    groupField: 'group',
 
     initComponent: function () {
-        this.store = Ext.create('Financial.store.data.ReportStore', {
-            groupField: this.groupField
-        });
+        this.store = Ext.create('Financial.store.data.ReportStore');
 
         this.callParent(arguments);
 
-        this.filters = [];
+        if (this.color) {
+            this.addCls(this.color);
+        }
     },
 
     cls: 'report-grid',

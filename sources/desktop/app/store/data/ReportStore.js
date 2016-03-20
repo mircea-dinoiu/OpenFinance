@@ -3,6 +3,8 @@ Ext.define('Financial.store.data.ReportStore', {
 
     model: 'Financial.model.data.ReportModel',
 
+    groupField: 'group',
+
     proxy: {
         type: 'memory'
     }

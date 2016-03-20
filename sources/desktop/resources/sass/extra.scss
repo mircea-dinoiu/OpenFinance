@@ -11,8 +11,8 @@ body > .x-mask {
 .expense-row {
   &.pending-expense-row {
     > td:nth-child(3) > .x-grid-cell-inner {
-      background: #5FA2DD;
-      color: #FFF;
+      background: #F1C232;
+      color: rgba(0, 0, 0, 0.9);
     }
   }
 
@@ -45,15 +45,30 @@ body > .x-mask {
   visibility: hidden;
 }
 
+@mixin report-grid-header-color($color, $selector, $dark: false) {
+  &.#{$selector} {
+    > .x-panel-header {
+      &, .x-tool-img, .x-panel-header-title-default {
+        background-color: $color !important;
+        @if ($dark) {
+          color: rgba(0, 0, 0, 0.9);
+        } @else {
+          color: rgba(255, 255, 255, 0.9);
+        }
+      }
+    }
+  }
+}
+
 .report-grid {
+  @include report-grid-header-color(#6AA84F, 'green');
+  @include report-grid-header-color(#A64D79, 'orchid');
+  @include report-grid-header-color(#A83232, 'red');
+  @include report-grid-header-color(#F1C232, 'yellow', true);
+
   > .x-panel-header {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
-
-    &, .x-tool-img, .x-panel-header-title-default {
-      background-color: #E3E3E3 !important;
-      color: #646464 !important;
-    }
 
     .x-panel-header-title {
       height: 44px !important;

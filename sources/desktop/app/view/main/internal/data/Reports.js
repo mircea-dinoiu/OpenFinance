@@ -29,6 +29,7 @@
         items: [
             {
                 xtype: 'app-main-internal-data-reports-report-grid',
+                color: 'green',
                 itemId: 'balanceByML',
                 title: 'Balance by location',
                 features: {
@@ -51,6 +52,7 @@
             },
             {
                 xtype: 'app-main-internal-data-reports-report-grid',
+                color: 'green',
                 itemId: 'balanceByUser',
                 title: 'Balance by user',
                 features: {
@@ -66,6 +68,7 @@
             },
             {
                 xtype: 'app-main-internal-data-reports-report-grid',
+                color: 'orchid',
                 itemId: 'expensesByCategory',
                 title: 'Expenses by category',
                 features: {
@@ -89,16 +92,19 @@
             },
             {
                 xtype: 'app-main-internal-data-reports-report-grid',
+                color: 'red',
                 itemId: 'expensesByML',
                 title: 'Expenses by location'
             },
             {
                 xtype: 'app-main-internal-data-reports-report-grid',
+                color: 'red',
                 itemId: 'expensesByUser',
                 title: 'Expenses by user'
             },
             {
                 xtype: 'app-main-internal-data-reports-report-grid',
+                color: 'yellow',
                 itemId: 'incomesByML',
                 title: 'Incomes by location',
                 features: {
@@ -121,6 +127,7 @@
             },
             {
                 xtype: 'app-main-internal-data-reports-report-grid',
+                color: 'yellow',
                 itemId: 'incomesByUser',
                 title: 'Incomes by user'
             }
