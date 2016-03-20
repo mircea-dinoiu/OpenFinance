@@ -46,14 +46,34 @@ body > .x-mask {
 }
 
 .report-grid {
-  .total-row {
-    font-weight: bold;
-  }
-
   > .x-panel-header {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
     &, .x-tool-img, .x-panel-header-title-default {
       background-color: #E3E3E3 !important;
       color: #646464 !important;
+    }
+
+    .x-panel-header-title {
+      height: 44px !important;
+    }
+
+    .grid-custom-title {
+      position: relative;
+
+      .grid-title-name {
+        position: relative;
+        top: -7px;
+      }
+
+      .grid-title-sum {
+        position: absolute;
+        top: 9px;
+        left: 0;
+        font-size: 12px;
+        font-weight: bold;
+      }
     }
   }
 

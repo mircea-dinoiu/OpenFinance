@@ -16,19 +16,7 @@ Ext.define('Financial.view.main.internal.data.reports.ReportGrid', {
     },
 
     cls: 'report-grid',
-
-    viewConfig: {
-        getRowClass: function (record) {
-            var classes = [];
-
-            if (record.get('description') === 'TOTAL') {
-                classes.push('total-row');
-            }
-
-            return classes.join(' ');
-        }
-    },
-
+    
     columns: [
         {
             dataIndex: 'description',
