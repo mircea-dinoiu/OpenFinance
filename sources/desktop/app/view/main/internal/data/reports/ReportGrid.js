@@ -2,6 +2,7 @@ Ext.define('Financial.view.main.internal.data.reports.ReportGrid', {
     extend: 'Ext.grid.Panel',
     hideHeaders: true,
     collapsible: true,
+    animCollapse: false,
     xtype: 'app-main-internal-data-reports-report-grid',
 
     initComponent: function () {
