@@ -11,7 +11,7 @@
 
     var includeStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
-        data : [
+        data: [
             {
                 id: 'all',
                 name: 'Everything'

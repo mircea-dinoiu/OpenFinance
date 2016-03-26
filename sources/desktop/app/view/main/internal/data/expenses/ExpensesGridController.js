@@ -123,7 +123,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         this.callParent(arguments);
     },
 
-    onBeforeRowEditing: function (rowEditing, context) {
+    onBeforeRowEditing: function (rowEditing) {
         var editor = rowEditing.getEditor();
 
         this.callParent(arguments);

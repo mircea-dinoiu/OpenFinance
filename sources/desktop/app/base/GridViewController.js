@@ -8,7 +8,9 @@ Ext.define('Financial.base.GridViewController', {
 
             delete this.newRecord;
 
-            store && store.remove(record);
+            if (store != null) {
+                store.remove(record);
+            }
         }
     },
 

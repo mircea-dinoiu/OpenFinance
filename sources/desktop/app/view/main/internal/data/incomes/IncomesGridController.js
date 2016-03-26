@@ -29,7 +29,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGridController', {
         });
     },
 
-    onBeforeRowEditing: function (rowEditing, context) {
+    onBeforeRowEditing: function (rowEditing) {
         var editor = rowEditing.getEditor();
 
         this.callParent(arguments);

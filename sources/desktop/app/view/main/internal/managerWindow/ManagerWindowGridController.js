@@ -2,7 +2,7 @@ Ext.define('Financial.view.main.internal.managerWindow.ManagerWindowGridControll
     extend: 'Financial.base.GridViewController',
 
     onStoreWrite: function () {
-        Ext.ComponentQuery.query('app-main-internal-data-expenses-grid')[0].store.fireEvent('refresh');
+        Financial.data.Expense.getStore().fireEvent('refresh');
         Financial.app.getController('Data').syncReports();
     },
 

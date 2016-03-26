@@ -14,6 +14,8 @@ Ext.define('Financial.Application', {
         'Financial.data.Category',
         'Financial.data.ML',
         'Financial.data.MLType',
+        'Financial.data.Income',
+        'Financial.data.Expense',
 
         'Financial.util.Format',
         'Financial.util.Misc',
@@ -85,7 +87,7 @@ Ext.define('Financial.Application', {
                     }
                 });
             }
-        })
+        });
     },
 
     getInitialRequests: function () {

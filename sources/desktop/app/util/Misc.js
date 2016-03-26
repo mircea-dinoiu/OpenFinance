@@ -2,7 +2,7 @@ Ext.define('Financial.util.Misc', {
     singleton: true,
 
     generateEICreationDate: function (grid) {
-        var createdAt = new Date,
+        var createdAt = new Date(),
             sd = Financial.app.getController('Data').getStartDate(),
             ed = Financial.app.getController('Data').getEndDate(),
             date = function (value) {
@@ -27,11 +27,9 @@ Ext.define('Financial.util.Misc', {
                 if (date(createdAt) > date(ed)) {
                     setCreatedAt(sd);
                 }
-            } else {
-                if (date(createdAt) < date(sd) ||
-                    date(createdAt) > date(ed)) {
-                    setCreatedAt(sd);
-                }
+            } else if (date(createdAt) < date(sd) ||
+                date(createdAt) > date(ed)) {
+                setCreatedAt(sd);
             }
         }
 

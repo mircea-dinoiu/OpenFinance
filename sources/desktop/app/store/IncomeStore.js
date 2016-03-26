@@ -4,7 +4,8 @@ Ext.define('Financial.store.IncomeStore', {
     model: 'Financial.model.IncomeModel',
 
     autoLoad: false,
-    autoDestroy: true,
+    autoDestroy: false,
+    storeId: 'income',
 
     sorters: [
         {

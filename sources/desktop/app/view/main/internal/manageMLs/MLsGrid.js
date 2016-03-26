@@ -17,7 +17,7 @@ Ext.define('Financial.view.main.internal.manageMLs.MLsGrid', {
             editor: {
                 xtype: 'textfield',
                 allowOnlyWhitespace: false,
-                validator: function (value) {
+                validator: function (rawValue) {
                     var valid = true,
                         id = this.up().getRecord().get('id');
 
@@ -25,7 +25,7 @@ Ext.define('Financial.view.main.internal.manageMLs.MLsGrid', {
                         return name.trim().toLowerCase();
                     }
 
-                    value = cleanName(value);
+                    var value = cleanName(rawValue);
 
                     if (value.length) {
                         Financial.data.ML.getStore().each(function (record) {

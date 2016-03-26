@@ -1,6 +1,6 @@
 Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
     extend: 'Ext.grid.Panel',
-    store: 'Financial.store.IncomeStore',
+    store: 'income',
     xtype: 'app-main-internal-data-incomes-grid',
     controller: 'app-main-internal-data-incomes-grid',
     autoScroll: true,
@@ -101,7 +101,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
         {
             dataIndex: 'created_at',
             text: 'Date',
-            formatter: "date('D d-m-Y')",
+            formatter: 'date("D d-m-Y")',
             fit: true,
             resizable: false,
             align: 'center',

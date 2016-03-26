@@ -1,6 +1,6 @@
 (function () {
-    var description = function (description) {
-        return Ext.String.format('<span data-qtip="{0}">{0}</span>', description);
+    var description = function (text) {
+        return Ext.String.format('<span data-qtip="{0}">{0}</span>', text);
     };
 
     var safeNum = function (num) {
@@ -46,8 +46,6 @@
         ],
 
         selectors: {
-            expensesGrid: 'app-main-internal-data-expenses-grid',
-            incomesGrid: 'app-main-internal-data-incomes-grid',
             toolbar: 'app-main-internal-toolbar',
             includeCombo: 'app-main-internal-data-reports combo'
         },
@@ -175,8 +173,6 @@
         getIncomesData: function () {
             var data = {byUser: [], byML: []},
                 startDate = this.getStartDate(),
-                mainView = Financial.app.getMainView(),
-                toolbar = mainView.down('app-main-internal-toolbar'),
                 users = {},
                 mls = {};
 
@@ -237,8 +233,6 @@
         getRemainingData: function (expenses, incomes) {
             var me = this,
                 data = {byUser: [], byML: []},
-                mainView = Financial.app.getMainView(),
-                toolbar = mainView.down('app-main-internal-toolbar'),
                 users,
                 mls,
                 totalRemainingByUser = {},
@@ -295,7 +289,7 @@
 
                 var recordCategories = record.get('categories'),
                     sum = record.get('sum'),
-                    addData = function (categoryId, sum) {
+                    addData = function (categoryId, rawCatSum) {
                         if (!categories[categoryId]) {
                             categories[categoryId] = {
                                 users: {}
@@ -303,15 +297,14 @@
                         }
 
                         var users = record.get('users');
-
-                        sum /= users.length;
+                        var catSum = rawCatSum / users.length;
 
                         Ext.each(users, function (id) {
-                            if (!categories[categoryId]['users'][id]) {
-                                categories[categoryId]['users'][id] = 0;
+                            if (!categories[categoryId].users[id]) {
+                                categories[categoryId].users[id] = 0;
                             }
 
-                            categories[categoryId]['users'][id] += sum;
+                            categories[categoryId].users[id] += catSum;
                         });
                     };
 
@@ -358,7 +351,7 @@
                         sum: sum,
                         description: description(Financial.data.User.getById(id).get('full_name')),
                         group: categoryId
-                    })
+                    });
                 });
             });
 
@@ -387,6 +380,7 @@
             }
 
             var expensesByCategory = this.getReportGrid('expensesByCategory');
+            
             expensesByCategory.getStore().loadData(this.getExpensesByCategory());
         },
 
@@ -395,10 +389,12 @@
             var byUser = expenses.byUser;
 
             var expensesByMLGrid = this.getReportGrid('expensesByML');
+            
             expensesByMLGrid.getStore().loadData(byML);
             addSumToTitle(expensesByMLGrid, byML);
 
             var expensesByUserGrid = this.getReportGrid('expensesByUser');
+            
             expensesByUserGrid.getStore().loadData(byUser);
             addSumToTitle(expensesByUserGrid, byUser);
         },
@@ -408,10 +404,12 @@
             var byUser = incomes.byUser;
 
             var incomesByMLGrid = this.getReportGrid('incomesByML');
+            
             incomesByMLGrid.getStore().loadData(byML);
             addSumToTitle(incomesByMLGrid, byML);
 
             var incomesByUserGrid = this.getReportGrid('incomesByUser');
+            
             incomesByUserGrid.getStore().loadData(byUser);
             addSumToTitle(incomesByUserGrid, byUser);
         },
@@ -421,20 +419,22 @@
             var byUser = balance.byUser;
 
             var balanceByMLGrid = this.getReportGrid('balanceByML');
+            
             balanceByMLGrid.getStore().loadData(byML);
             addSumToTitle(balanceByMLGrid, byML);
 
             var balanceByUserGrid = this.getReportGrid('balanceByUser');
+            
             balanceByUserGrid.getStore().loadData(byUser);
             addSumToTitle(balanceByUserGrid, byUser);
         },
 
-        getExpensesStore() {
-            return Financial.app.getMainView().down(this.selectors.expensesGrid).getStore();
+        getExpensesStore: function () {
+            return Financial.data.Expense.getStore();
         },
 
-        getIncomesStore() {
-            return Financial.app.getMainView().down(this.selectors.incomesGrid).getStore();
+        getIncomesStore: function () {
+            return Financial.data.Income.getStore();
         },
 
         loadData: function (params) {
@@ -454,6 +454,7 @@
             me.setLoading(true);
 
             var expensesStore = this.getExpensesStore();
+            
             expensesStore.proxy.extraParams = params;
             expensesStore.load(function () {
                 check();
@@ -504,6 +505,7 @@
             });
 
             var incomesStore = this.getIncomesStore();
+            
             incomesStore.proxy.extraParams = params;
             incomesStore.load(check);
         }

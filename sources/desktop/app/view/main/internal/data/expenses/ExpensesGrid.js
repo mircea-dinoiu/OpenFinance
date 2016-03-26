@@ -1,7 +1,7 @@
 Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
     extend: 'Ext.grid.Panel',
     xtype: 'app-main-internal-data-expenses-grid',
-    store: 'Financial.store.ExpenseStore',
+    store: 'expense',
     controller: 'app-main-internal-data-expenses-grid',
     autoScroll: true,
 
@@ -299,7 +299,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         {
             text: 'Date',
             dataIndex: 'created_at',
-            formatter: "date('D d-m-Y')",
+            formatter: 'date("D d-m-Y")',
             fit: true,
             resizable: false,
             align: 'center',
