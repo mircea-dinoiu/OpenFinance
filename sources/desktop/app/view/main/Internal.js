@@ -3,6 +3,7 @@ Ext.define('Financial.view.main.Internal', {
 
     requires: [
         'Financial.view.main.internal.Data',
+        'Financial.view.main.internal.Charts',
         'Financial.view.main.internal.Toolbar'
     ],
 
@@ -23,9 +24,18 @@ Ext.define('Financial.view.main.Internal', {
         },
         {
             layout: 'fit',
+            xtype: 'tabpanel',
+            defaults: {
+                margin: '1px 0 0 0'
+            },
             items: [
                 {
+                    title: 'Data',
                     xtype: 'app-main-internal-data'
+                },
+                {
+                    title: 'Charts',
+                    xtype: 'app-main-internal-charts'
                 }
             ],
             flex: 1,
