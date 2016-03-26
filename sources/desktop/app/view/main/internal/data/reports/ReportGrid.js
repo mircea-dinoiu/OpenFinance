@@ -9,14 +9,42 @@ Ext.define('Financial.view.main.internal.data.reports.ReportGrid', {
         this.store = Ext.create('Financial.store.data.ReportStore');
 
         this.callParent(arguments);
+        this.store.on('refresh', this.gsAutoCollapse, this);
 
         if (this.color) {
             this.addCls(this.color);
         }
     },
 
+    gsAutoCollapse: function () {
+        var gsFeature = null;
+        var gsConfig = null;
+
+        Ext.each(this.getView().features, function (feature) {
+            if (feature.ftype === 'groupingsummary') {
+                gsFeature = feature;
+                return false;
+            }
+        });
+
+        Ext.each(this.features, function (feature) {
+            if (feature.ftype === 'groupingsummary') {
+                gsConfig = feature;
+                return false;
+            }
+        });
+
+        if (gsFeature != null) {
+            if (gsConfig.startCollapsed) {
+                gsFeature.collapseAll();
+            } else {
+                gsFeature.expandAll();
+            }
+        }
+    },
+
     cls: 'report-grid',
-    
+
     columns: [
         {
             dataIndex: 'description',
@@ -28,7 +56,7 @@ Ext.define('Financial.view.main.internal.data.reports.ReportGrid', {
             text: 'Sum',
             flex: 1,
             align: 'right',
-            renderer: function(value, metaData, record) {
+            renderer: function (value, metaData, record) {
                 var currency = Financial.data.Currency.getDefaultCurrency();
 
                 Financial.util.Misc.anotherCurrenciesTooltip(

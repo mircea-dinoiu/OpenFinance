@@ -34,7 +34,6 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGridController', {
 
         this.callParent(arguments);
 
-        editor.down('datefield').setMinValue(Financial.app.getController('Data').getStartDate());
         editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
     }
 });

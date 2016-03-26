@@ -28,7 +28,6 @@ Route::group([
     'before' => 'auth'
 ], function () {
     Route::get('get-currencies', 'CurrencyController@getCurrencies');
-    Route::get('get-reports', 'ReportController@getReports');
 });
 
 require_once('routes/expense.php');

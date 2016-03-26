@@ -9,39 +9,18 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
     ],
 
     dateFormat: 'Y-m-d',
-
-    getDateRangeDisplayValue: function () {
-        return Ext.String.format(
-            '{0} - {1}',
-            this.getStartDateDisplayValue(),
-            this.getEndDateDisplayValue()
-        );
-    },
-
-    getDateDisplayValue: function (button, picker, disabledText) {
-        if (button.isDisabled()) {
-            return disabledText;
-        }
-
+    
+    getDateDisplayValue: function (picker) {
         return Ext.util.Format.date(picker.getValue(), 'M j, Y');
     },
 
-    getStartDateDisplayValue: function () {
-        return this.getDateDisplayValue(this.getStartDateButton(), this.getStartDatePicker(), 'Beginning');
-    },
-
     getEndDateDisplayValue: function () {
-        return this.getDateDisplayValue(this.getEndDateButton(), this.getEndDatePicker(), 'End');
+        return this.getDateDisplayValue(this.getEndDatePicker());
     },
 
     shiftMonths: function (months) {
-        var sdPicker = this.getStartDatePicker(),
-            edPicker = this.getEndDatePicker(),
-            sd = sdPicker.getValue(),
+        var edPicker = this.getEndDatePicker(),
             ed = edPicker.getValue();
-
-        sd.setMonth(sd.getMonth() + months);
-        sdPicker.setValue(sd);
 
         ed.setMonth(ed.getMonth() + months);
         edPicker.setValue(ed);
@@ -49,84 +28,19 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         this.applyFilter();
     },
 
-    setLimits: function (sdPicker, edPicker, refPicker) {
-        var sd = new Date(sdPicker.getValue()),
-            ed = new Date(edPicker.getValue());
-
-        if (refPicker) {
-            if (refPicker === sdPicker) {
-                //sd.setMonth(sd.getMonth() + 1);
-                //sd.setDate(sd.getDate() - 1);
-                edPicker.setMinDate(sd);
-            } else {
-                //ed.setMonth(ed.getMonth() - 1);
-                //ed.setDate(ed.getDate() + 1);
-                sdPicker.setMaxDate(ed);
-            }
-        } else {
-            var date = function (value) {
-                return Ext.util.Format.date(value, 'Y-m');
-            };
-
-            if (date(sdPicker.getValue()) > date(edPicker.getValue()) && this.lastEnabledPicker) {
-                if (this.lastEnabledPicker === sdPicker) {
-                    ed.setMonth(ed.getMonth() - 1);
-                    ed.setDate(ed.getDate() + 1);
-
-                    sdPicker.setValue(ed);
-                } else {
-                    sd.setMonth(sd.getMonth() + 1);
-                    sd.setDate(sd.getDate() - 1);
-
-                    edPicker.setValue(sd);
-                }
-
-                delete this.lastEnabledPicker;
-
-                this.applyFilter(false);
-            }
-
-            edPicker.setMinDate(sd);
-            sdPicker.setMaxDate(ed);
-        }
-    },
-
-    applyFilter: function (setLimits) {
+    applyFilter: function () {
         var params = {},
-            sdButton = this.getStartDateButton(),
-            sdPicker = this.getStartDatePicker(),
             edButton = this.getEndDateButton(),
             edPicker = this.getEndDatePicker();
 
-        if (sdButton.rendered && edButton.rendered) {
-            sdButton.setText(this.getStartDateDisplayValue());
+        if (edButton.rendered) {
             edButton.setText(this.getEndDateDisplayValue());
 
-            if (false !== setLimits) {
-                this.setLimits(sdPicker, edPicker);
-            }
-
-            sdPicker.previousValue = sdPicker.getValue();
             edPicker.previousValue = edPicker.getValue();
-
-            if (!sdButton.isDisabled()) {
-                params.start_date = Ext.util.Format.date(sdPicker.getValue(), this.dateFormat);
-            }
-
-            if (!edButton.isDisabled()) {
-                params.end_date = Ext.util.Format.date(edPicker.getValue(), this.dateFormat);
-            }
+            params.end_date = Ext.util.Format.date(edPicker.getValue(), this.dateFormat);
 
             Financial.app.getController('Data').loadData(params);
         }
-    },
-
-    getStartDateButton: function () {
-        return this.getView().down('[itemId="start-date-button"]');
-    },
-
-    getStartDatePicker: function () {
-        return this.getStartDateButton().down('datepicker');
     },
 
     getEndDateButton: function () {
@@ -135,23 +49,6 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
 
     getEndDatePicker: function () {
         return this.getEndDateButton().down('datepicker');
-    },
-
-    toggleDateButton: function (toggler, button) {
-        toggler.setIconCls(button.isDisabled() ? 'x-fa fa-check-square-o' : 'x-fa fa-square-o');
-        button.setDisabled(!button.isDisabled());
-
-        if (!button.isDisabled()) {
-            this.lastEnabledPicker = button.down('datepicker');
-        }
-
-        if (this.getStartDateButton().isDisabled() || this.getEndDateButton().isDisabled()) {
-            this.applyFilter(false);
-            this.getStartDatePicker().setMaxDate(null);
-            this.getEndDatePicker().setMinDate(null);
-        } else {
-            this.applyFilter();
-        }
     },
 
     initCurrenciesContainer: function (currenciesContainer) {
@@ -267,20 +164,11 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
 
         if (dp.candidateValue && date(dp.previousValue) !== date(dp.candidateValue)) {
             this.applyFilter(false);
-            this.setLimits(this.getStartDatePicker(), this.getEndDatePicker(), dp);
         } else {
             dp.setValue(dp.previousValue);
         }
 
         delete dp.candidateValue;
-    },
-
-    onToggleStartDateButton: function (button) {
-        this.toggleDateButton(button, this.getStartDateButton());
-    },
-
-    onToggleEndDateButton: function (button) {
-        this.toggleDateButton(button, this.getEndDateButton());
     },
 
     onManageCategoriesClick: function () {
