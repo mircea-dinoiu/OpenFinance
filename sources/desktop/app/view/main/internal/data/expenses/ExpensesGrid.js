@@ -294,6 +294,11 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             },
             filter: {
                 type: 'string'
+            },
+            renderer: function (value, metaData) {
+                metaData.tdAttr = 'data-qtip="' + value + '"';
+
+                return value;
             }
         },
         {
