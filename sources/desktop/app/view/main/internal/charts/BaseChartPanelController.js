@@ -22,19 +22,29 @@ Ext.define('Financial.view.main.internal.charts.BaseChartPanelController', {
     onCheckAll: function () {
         var chart = this.getView().down('chart');
         var store = chart.getLegendStore();
+        var start = new Date();
 
+        Ext.suspendLayouts();
         store.each(function (record) {
             record.set('disabled', false);
         });
+        Ext.resumeLayouts();
+
+        Ext.Logger.info(Ext.String.format('Check all action finished in {0}ms', new Date() - start));
     },
 
     onUncheckAll: function () {
         var chart = this.getView().down('chart');
         var store = chart.getLegendStore();
+        var start = new Date();
 
+        Ext.suspendLayouts();
         store.each(function (record) {
             record.set('disabled', true);
         });
         store.first().set('disabled', false);
+        Ext.resumeLayouts();
+
+        Ext.Logger.info(Ext.String.format('Uncheck all action finished in {0}ms', new Date() - start));
     }
 });
