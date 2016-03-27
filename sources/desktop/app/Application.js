@@ -171,9 +171,10 @@ Ext.define('Financial.Application', {
     show: function (view) {
         var appMain = this.getAppMain();
 
-        appMain.removeAll(); // also removes loading mask
+        appMain.removeAll();
         appMain.add({
             xtype: Ext.String.format('app-main-{0}', view)
         });
+        appMain.setLoading(false);
     }
 });

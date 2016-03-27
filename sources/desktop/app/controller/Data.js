@@ -37,6 +37,8 @@
 
                 if (this.loadingCount === 0) {
                     mainView.setLoading(false);
+                } else {
+                    mainView.setLoading(true);
                 }
             }
         },
@@ -360,7 +362,7 @@
 
         syncReports: function () {
             //<debug>
-            console.info('Sync reports');
+            Ext.Logger.info('Sync reports');
             //</debug>
             var mainView = Financial.app.getMainView();
 
