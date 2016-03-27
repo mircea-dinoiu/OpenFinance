@@ -34,7 +34,7 @@ Ext.define('Financial.view.main.internal.data.reports.ReportGrid', {
             }
         });
 
-        if (gsFeature != null) {
+        if (gsFeature != null && gsConfig != null) {
             if (gsConfig.startCollapsed) {
                 gsFeature.collapseAll();
             } else {

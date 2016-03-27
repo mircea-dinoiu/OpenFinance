@@ -140,11 +140,7 @@
         },
 
         formatMLName: function (id) {
-            if (id == 0) {
-                return '<i>Unclassified</i>';
-            }
-
-            return Financial.data.ML.getById(id).get('name');
+            return Financial.data.ML.getNameById(id);
         },
 
         addMLEntries: function (data, mls) {
@@ -366,22 +362,38 @@
             //<debug>
             console.info('Sync reports');
             //</debug>
+            var mainView = Financial.app.getMainView();
 
-            var expenses = this.getExpensesData(),
-                expensesStore = this.getExpensesStore();
+            var data = mainView.down('app-main-internal-data');
+            var charts = mainView.down('app-main-internal-charts');
 
-            this.renderExpenses(expenses);
+            if (data.isVisible()) {
+                var expenses = this.getExpensesData(),
+                    expensesStore = this.getExpensesStore();
 
-            if (!(expensesStore.isFiltered() && expensesStore.getCount() !== expensesStore.getTotalCount())) {
-                var incomes = this.getIncomesData();
+                this.renderExpenses(expenses);
 
-                this.renderIncomes(incomes);
-                this.renderBalance(this.getRemainingData(expenses, incomes));
+                if (!(expensesStore.isFiltered() && expensesStore.getCount() !== expensesStore.getTotalCount())) {
+                    var incomes = this.getIncomesData();
+
+                    this.renderIncomes(incomes);
+                    this.renderBalance(this.getRemainingData(expenses, incomes));
+                }
+
+                var expensesByCategory = this.getReportGrid('expensesByCategory');
+
+                expensesByCategory.getStore().loadData(this.getExpensesByCategory());
+            } else if (charts.isVisible()) {
+                var panels = mainView.query('app-main-internal-charts-baseChartPanel');
+
+                panels.forEach(function (panel) {
+                    var chart = panel.down('chart');
+
+                    if (chart != null) {
+                        panel.drawChart();
+                    }
+                });
             }
-
-            var expensesByCategory = this.getReportGrid('expensesByCategory');
-            
-            expensesByCategory.getStore().loadData(this.getExpensesByCategory());
         },
 
         renderExpenses: function (expenses) {
@@ -389,12 +401,12 @@
             var byUser = expenses.byUser;
 
             var expensesByMLGrid = this.getReportGrid('expensesByML');
-            
+
             expensesByMLGrid.getStore().loadData(byML);
             addSumToTitle(expensesByMLGrid, byML);
 
             var expensesByUserGrid = this.getReportGrid('expensesByUser');
-            
+
             expensesByUserGrid.getStore().loadData(byUser);
             addSumToTitle(expensesByUserGrid, byUser);
         },
@@ -404,12 +416,12 @@
             var byUser = incomes.byUser;
 
             var incomesByMLGrid = this.getReportGrid('incomesByML');
-            
+
             incomesByMLGrid.getStore().loadData(byML);
             addSumToTitle(incomesByMLGrid, byML);
 
             var incomesByUserGrid = this.getReportGrid('incomesByUser');
-            
+
             incomesByUserGrid.getStore().loadData(byUser);
             addSumToTitle(incomesByUserGrid, byUser);
         },
@@ -419,12 +431,12 @@
             var byUser = balance.byUser;
 
             var balanceByMLGrid = this.getReportGrid('balanceByML');
-            
+
             balanceByMLGrid.getStore().loadData(byML);
             addSumToTitle(balanceByMLGrid, byML);
 
             var balanceByUserGrid = this.getReportGrid('balanceByUser');
-            
+
             balanceByUserGrid.getStore().loadData(byUser);
             addSumToTitle(balanceByUserGrid, byUser);
         },
@@ -454,7 +466,7 @@
             me.setLoading(true);
 
             var expensesStore = this.getExpensesStore();
-            
+
             expensesStore.proxy.extraParams = params;
             expensesStore.load(function () {
                 check();
@@ -505,7 +517,7 @@
             });
 
             var incomesStore = this.getIncomesStore();
-            
+
             incomesStore.proxy.extraParams = params;
             incomesStore.load(check);
         }

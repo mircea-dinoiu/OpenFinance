@@ -13,7 +13,9 @@ Ext.define('Financial.data.Currency', {
     },
 
     getDefaultCurrency: function () {
-        return this.getById(Financial.data.currency.default);
+        var def = 'default';
+        
+        return this.getById(Financial.data.currency[def]);
     },
 
     convert: function (value, rawFrom, rawTo) {

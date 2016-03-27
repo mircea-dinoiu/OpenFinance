@@ -85,11 +85,7 @@
                                 '<div class="clearfix"><span class="group-name" data-qtip="{name:this.formatName}">{name:this.formatName}</span> <span class="group-sum">{children:this.formatChildren}</span></div>',
                                 {
                                     formatName: function (id) {
-                                        if (id == 0) {
-                                            return '<i>Unclassified</i>';
-                                        } else {
-                                            return Financial.data.MLType.getById(id).get('name');
-                                        }
+                                        return Financial.data.MLType.getNameById(id);
                                     },
                                     formatChildren: formatChildren
                                 }
@@ -115,11 +111,7 @@
                                 '<div class="clearfix"><span class="group-name" data-qtip="{name:this.formatName}">{name:this.formatName}</span> <span class="group-sum">{children:this.formatChildren}</span></div>',
                                 {
                                     formatName: function (id) {
-                                        if (id == 0) {
-                                            return '<i>Unclassified</i>';
-                                        } else {
-                                            return Financial.data.Category.getById(id).get('name');
-                                        }
+                                        return Financial.data.Category.getNameById(id);
                                     },
                                     formatChildren: formatChildren
                                 }
@@ -150,11 +142,7 @@
                                 '<div class="clearfix"><span class="group-name" data-qtip="{name:this.formatName}">{name:this.formatName}</span> <span class="group-sum">{children:this.formatChildren}</span></div>',
                                 {
                                     formatName: function (id) {
-                                        if (id == 0) {
-                                            return '<i>Unclassified</i>';
-                                        } else {
-                                            return Financial.data.MLType.getById(id).get('name');
-                                        }
+                                        return Financial.data.MLType.getNameById(id);
                                     },
                                     formatChildren: formatChildren
                                 }
