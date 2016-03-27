@@ -107,7 +107,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         store.sync();
     },
 
-    onSelectionChange: function (grid, selected, eOpts) {
+    onSelectionChange: function () {
         this.onStoreRefresh();
     },
 
@@ -123,12 +123,11 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         this.callParent(arguments);
     },
 
-    onBeforeRowEditing: function (rowEditing, context) {
+    onBeforeRowEditing: function (rowEditing) {
         var editor = rowEditing.getEditor();
 
         this.callParent(arguments);
 
-        editor.down('datefield').setMinValue(Financial.app.getController('Data').getStartDate());
         editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
     },
 

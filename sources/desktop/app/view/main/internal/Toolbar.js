@@ -41,40 +41,6 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             }
         },
         {
-            iconCls: 'x-fa fa-check-square-o',
-            listeners: {
-                click: 'onToggleStartDateButton'
-            }
-        },
-        {
-            itemId: 'start-date-button',
-            listeners: {
-                render: 'applyFilter'
-            },
-            iconCls: 'x-fa fa-calendar',
-            menu: {
-                xtype: 'menu',
-                listeners: {
-                    hide: 'onDatePickerHide'
-                },
-                items: [
-                    {
-                        xtype: 'datepicker',
-                        border: 0,
-                        startDay: 1,
-                        value: Financial.initialValues.getStartDate(),
-                        listeners: {
-                            select: 'onDateSelect'
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            xtype: 'tbtext',
-            html: '&mdash;'
-        },
-        {
             itemId: 'end-date-button',
             listeners: {
                 render: 'applyFilter'
@@ -96,12 +62,6 @@ Ext.define('Financial.view.main.internal.Toolbar', {
                         }
                     }
                 ]
-            }
-        },
-        {
-            iconCls: 'x-fa fa-check-square-o',
-            listeners: {
-                click: 'onToggleEndDateButton'
             }
         },
         {

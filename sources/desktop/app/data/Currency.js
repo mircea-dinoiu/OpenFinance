@@ -13,10 +13,15 @@ Ext.define('Financial.data.Currency', {
     },
 
     getDefaultCurrency: function () {
-        return this.getById(Financial.data.currency['default']);
+        var def = 'default';
+        
+        return this.getById(Financial.data.currency[def]);
     },
 
-    convert: function (value, from, to) {
+    convert: function (value, rawFrom, rawTo) {
+        var from = rawFrom;
+        var to = rawTo;
+        
         if (Ext.isNumeric(from)) {
             from = this.getById(from);
         } else if (Ext.isString(from)) {

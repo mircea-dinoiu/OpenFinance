@@ -14,14 +14,14 @@ Ext.define('Financial.Application', {
         'Financial.data.Category',
         'Financial.data.ML',
         'Financial.data.MLType',
+        'Financial.data.Income',
+        'Financial.data.Expense',
 
         'Financial.util.Format',
         'Financial.util.Misc',
         'Financial.util.Events',
 
-        'Financial.base.GridViewController',
-
-        'Financial.ux.window.Notification'
+        'Financial.base.GridViewController'
     ],
 
     stores: [
@@ -87,7 +87,7 @@ Ext.define('Financial.Application', {
                     }
                 });
             }
-        })
+        });
     },
 
     getInitialRequests: function () {
@@ -97,42 +97,6 @@ Ext.define('Financial.Application', {
                     Financial.data.Currency.setCurrency(response);
                 },
                 url: Financial.routes.getCurrencies
-            },
-            {
-                success: function (response) {
-                    var expenses = Ext.JSON.decode(response.responseText);
-
-                    if (expenses.length) {
-                        Ext.create('widget.uxNotification', {
-                            position: 'tr',
-                            useXAxis: true,
-                            iconCls: 'x-fa fa-exclamation-triangle',
-                            title: 'Notice',
-                            html: 'There are <strong>{0}</strong> pending expenses before {1}'.format(
-                                expenses.length,
-                                Ext.Date.format(Financial.initialValues.getStartDate(), 'j, F Y')
-                            ),
-                            slideInDuration: 800,
-                            slideBackDuration: 1500,
-                            autoCloseDelay: 5000,
-                            slideInAnimation: 'elasticIn',
-                            slideBackAnimation: 'elasticIn'
-                        }).show();
-                    }
-                },
-                url: (function () {
-                    var url = Financial.routes.expense.list,
-                        params = {
-                            end_date: Ext.Date.format(Financial.initialValues.getStartDate(), 'Y-m-d'),
-                            'filters[status]': 'pending'
-                        };
-
-                    Ext.Object.each(params, function (key, value) {
-                        url = Ext.String.urlAppend(url, [key, value].join('='));
-                    });
-
-                    return url;
-                }())
             }
         ];
     },
@@ -207,11 +171,9 @@ Ext.define('Financial.Application', {
     show: function (view) {
         var appMain = this.getAppMain();
 
-        appMain.removeAll();
+        appMain.removeAll(); // also removes loading mask
         appMain.add({
             xtype: Ext.String.format('app-main-{0}', view)
         });
-
-        appMain.setLoading(false);
     }
 });

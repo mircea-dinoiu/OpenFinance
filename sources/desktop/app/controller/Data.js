@@ -1,6 +1,6 @@
 (function () {
-    var description = function (description) {
-        return Ext.String.format('<span data-qtip="{0}">{0}</span>', description);
+    var description = function (text) {
+        return Ext.String.format('<span data-qtip="{0}">{0}</span>', text);
     };
 
     var safeNum = function (num) {
@@ -41,32 +41,64 @@
             }
         },
 
+        requires: [
+            'Financial.ux.window.Notification'
+        ],
+
         selectors: {
-            expensesGrid: 'app-main-internal-data-expenses-grid',
-            incomesGrid: 'app-main-internal-data-incomes-grid',
-            toolbar: 'app-main-internal-toolbar'
+            toolbar: 'app-main-internal-toolbar',
+            includeCombo: 'app-main-internal-data-reports combo'
         },
 
-        cache: {},
+        getIncludeCombo: function () {
+            return Financial.app.getMainView().down(this.selectors.includeCombo);
+        },
 
         getStartDate: function () {
-            var controller = Financial.app.getMainView().down(this.selectors.toolbar).getController();
+            var date = new Date(this.getEndDate());
+            var include = this.getIncludeCombo().getValue();
 
-            return controller.getStartDateButton().isDisabled() ? null : controller.getStartDatePicker().getValue();
+            date.setHours(0);
+            date.setMinutes(0);
+            date.setMilliseconds(0);
+
+            switch (include) {
+                case 'ly':
+                    date.setYear(date.getFullYear() - 1);
+                    break;
+                case 'lm':
+                    date.setMonth(date.getMonth() - 1);
+                    break;
+                case 'lw':
+                    date.setDate(date.getDate() - 7);
+                    break;
+                case 'ld':
+                    date.setDate(date.getDate() - 1);
+                    break;
+                default:
+                    date = null;
+                    break;
+            }
+
+            return date;
         },
 
         getEndDate: function () {
             var controller = Financial.app.getMainView().down(this.selectors.toolbar).getController();
 
-            return controller.getEndDateButton().isDisabled() ? null : controller.getEndDatePicker().getValue();
+            return new Date(controller.getEndDatePicker().getValue());
         },
 
         getExpensesData: function () {
             var users = {},
                 mls = {},
-                expensesGrid = Financial.app.getMainView().down(this.selectors.expensesGrid);
+                startDate = this.getStartDate();
 
-            expensesGrid.getStore().each(function (record) {
+            this.getExpensesStore().each(function (record) {
+                if (startDate != null && record.get('created_at').toISOString() < startDate.toISOString()) {
+                    return;
+                }
+
                 var sum = record.get('sum'),
                     recordUsers = record.get('users'),
                     currencyId = record.get('currency_id'),
@@ -108,11 +140,7 @@
         },
 
         formatMLName: function (id) {
-            if (id == 0) {
-                return '<i>Unclassified</i>';
-            }
-
-            return Financial.data.ML.getById(id).get('name');
+            return Financial.data.ML.getNameById(id);
         },
 
         addMLEntries: function (data, mls) {
@@ -140,13 +168,15 @@
 
         getIncomesData: function () {
             var data = {byUser: [], byML: []},
-                mainView = Financial.app.getMainView(),
-                incomesGrid = mainView.down(this.selectors.incomesGrid),
-                toolbar = mainView.down('app-main-internal-toolbar'),
+                startDate = this.getStartDate(),
                 users = {},
                 mls = {};
 
-            incomesGrid.getStore().each(function (record) {
+            this.getIncomesStore().each(function (record) {
+                if (startDate != null && record.get('created_at').toISOString() < startDate.toISOString()) {
+                    return;
+                }
+
                 var uId = record.get('user_id');
                 var mlId = record.get('money_location_id');
                 var sum = record.get('sum');
@@ -199,18 +229,10 @@
         getRemainingData: function (expenses, incomes) {
             var me = this,
                 data = {byUser: [], byML: []},
-                mainView = Financial.app.getMainView(),
-                toolbar = mainView.down('app-main-internal-toolbar'),
                 users,
                 mls,
                 totalRemainingByUser = {},
                 totalRemainingByML = {};
-
-            var groups = {
-                TOTAL: 'Total',
-                PRESENT: toolbar.getController().getDateRangeDisplayValue(),
-                PAST: 'Past'
-            };
 
             users = this.getUniques(expenses.byUser, incomes.byUser);
             mls = this.getUniques(expenses.byML, incomes.byML);
@@ -224,29 +246,6 @@
 
             Ext.each(users, function (id) {
                 totalRemainingByUser[id] = me.getRemainingSum(expenses.byUser, incomes.byUser, id);
-
-                data.byUser.push({
-                    sum: totalRemainingByUser[id],
-                    description: description(Financial.data.User.getById(id).get('full_name')),
-                    group: groups.PRESENT
-                });
-            });
-
-            /**
-             * Remaining past
-             */
-            Ext.Object.each(this.cache.past_remaining.money_locations, function (id, sum) {
-                totalRemainingByML[id] = (totalRemainingByML[id] || 0) + safeNum(sum);
-            });
-
-            Ext.Object.each(this.cache.past_remaining.users, function (id, sum) {
-                totalRemainingByUser[id] = (totalRemainingByUser[id] || 0) + safeNum(sum);
-
-                data.byUser.push({
-                    sum: safeNum(sum),
-                    description: description(Financial.data.User.getById(id).get('full_name')),
-                    group: groups.PAST
-                });
             });
 
             /**
@@ -255,8 +254,7 @@
             Ext.Object.each(totalRemainingByUser, function (id, sum) {
                 data.byUser.push({
                     sum: sum,
-                    description: description(Financial.data.User.getById(id).get('full_name')),
-                    group: groups.TOTAL
+                    description: description(Financial.data.User.getById(id).get('full_name'))
                 });
             });
 
@@ -276,15 +274,18 @@
         },
 
         getExpensesByCategory: function () {
-            var mainView = Financial.app.getMainView(),
-                expensesGrid = mainView.down(this.selectors.expensesGrid),
-                categories = {},
-                data = [];
+            var categories = {},
+                data = [],
+                startDate = this.getStartDate();
 
-            expensesGrid.getStore().each(function (record) {
+            this.getExpensesStore().each(function (record) {
+                if (startDate != null && record.get('created_at').toISOString() < startDate.toISOString()) {
+                    return;
+                }
+
                 var recordCategories = record.get('categories'),
                     sum = record.get('sum'),
-                    addData = function (categoryId, sum) {
+                    addData = function (categoryId, rawCatSum) {
                         if (!categories[categoryId]) {
                             categories[categoryId] = {
                                 users: {}
@@ -292,15 +293,14 @@
                         }
 
                         var users = record.get('users');
-
-                        sum /= users.length;
+                        var catSum = rawCatSum / users.length;
 
                         Ext.each(users, function (id) {
-                            if (!categories[categoryId]['users'][id]) {
-                                categories[categoryId]['users'][id] = 0;
+                            if (!categories[categoryId].users[id]) {
+                                categories[categoryId].users[id] = 0;
                             }
 
-                            categories[categoryId]['users'][id] += sum;
+                            categories[categoryId].users[id] += catSum;
                         });
                     };
 
@@ -347,7 +347,7 @@
                         sum: sum,
                         description: description(Financial.data.User.getById(id).get('full_name')),
                         group: categoryId
-                    })
+                    });
                 });
             });
 
@@ -359,10 +359,17 @@
         },
 
         syncReports: function () {
-            if (this.loadingCount === 0) {
+            //<debug>
+            console.info('Sync reports');
+            //</debug>
+            var mainView = Financial.app.getMainView();
+
+            var data = mainView.down('app-main-internal-data');
+            var charts = mainView.down('app-main-internal-charts');
+
+            if (data.isVisible()) {
                 var expenses = this.getExpensesData(),
-                    expensesGrid = Financial.app.getMainView().down(this.selectors.expensesGrid),
-                    expensesStore = expensesGrid.getStore();
+                    expensesStore = this.getExpensesStore();
 
                 this.renderExpenses(expenses);
 
@@ -373,7 +380,19 @@
                     this.renderBalance(this.getRemainingData(expenses, incomes));
                 }
 
-                this.getReportGrid('expensesByCategory').getStore().loadData(this.getExpensesByCategory());
+                var expensesByCategory = this.getReportGrid('expensesByCategory');
+
+                expensesByCategory.getStore().loadData(this.getExpensesByCategory());
+            } else if (charts.isVisible()) {
+                var panels = mainView.query('app-main-internal-charts-baseChartPanel');
+
+                panels.forEach(function (panel) {
+                    var chart = panel.down('chart');
+
+                    if (chart != null) {
+                        panel.drawChart();
+                    }
+                });
             }
         },
 
@@ -382,10 +401,12 @@
             var byUser = expenses.byUser;
 
             var expensesByMLGrid = this.getReportGrid('expensesByML');
+
             expensesByMLGrid.getStore().loadData(byML);
             addSumToTitle(expensesByMLGrid, byML);
 
             var expensesByUserGrid = this.getReportGrid('expensesByUser');
+
             expensesByUserGrid.getStore().loadData(byUser);
             addSumToTitle(expensesByUserGrid, byUser);
         },
@@ -395,10 +416,12 @@
             var byUser = incomes.byUser;
 
             var incomesByMLGrid = this.getReportGrid('incomesByML');
+
             incomesByMLGrid.getStore().loadData(byML);
             addSumToTitle(incomesByMLGrid, byML);
 
             var incomesByUserGrid = this.getReportGrid('incomesByUser');
+
             incomesByUserGrid.getStore().loadData(byUser);
             addSumToTitle(incomesByUserGrid, byUser);
         },
@@ -408,51 +431,95 @@
             var byUser = balance.byUser;
 
             var balanceByMLGrid = this.getReportGrid('balanceByML');
+
             balanceByMLGrid.getStore().loadData(byML);
             addSumToTitle(balanceByMLGrid, byML);
 
-            this.getReportGrid('balanceByUser').getStore().loadData(byUser);
+            var balanceByUserGrid = this.getReportGrid('balanceByUser');
+
+            balanceByUserGrid.getStore().loadData(byUser);
+            addSumToTitle(balanceByUserGrid, byUser);
+        },
+
+        getExpensesStore: function () {
+            return Financial.data.Expense.getStore();
+        },
+
+        getIncomesStore: function () {
+            return Financial.data.Income.getStore();
         },
 
         loadData: function (params) {
-            var me = this,
-                mainView = Financial.app.getMainView();
+            var me = this;
+            var includeCombo = me.getIncludeCombo();
+            var check = function () {
+                me.setLoading(false);
 
-            Ext.each([
-                me.selectors.expensesGrid,
-                me.selectors.incomesGrid
-            ], function (gridSelector) {
-                var store = mainView.down(gridSelector).getStore();
-
-                me.setLoading(true);
-
-                store.proxy.extraParams = params;
-                store.load(function () {
-                    me.setLoading(false);
+                if (me.loadingCount === 0) {
                     me.syncReports();
-                });
-            });
+                    includeCombo.setDisabled(false);
+                }
+            };
 
+            includeCombo.setDisabled(true);
+            me.setLoading(true);
             me.setLoading(true);
 
-            Ext.Ajax.request({
-                url: Financial.routes.getReports,
-                params: params,
-                method: 'GET',
-                success: function (response) {
-                    me.cache = Ext.JSON.decode(response.responseText);
-                    me.setLoading(false);
-                    me.syncReports();
-                },
-                error: function () {
-                    Ext.Msg.show({
-                        message: 'There was an error while trying to fetch data.<br>Please come back later.',
-                        title: 'Error',
-                        closable: false,
-                        draggable: false
+            var expensesStore = this.getExpensesStore();
+
+            expensesStore.proxy.extraParams = params;
+            expensesStore.load(function () {
+                check();
+
+                var count = 0;
+                var startDate = me.getStartDate();
+
+                expensesStore.each(function (record) {
+                    if (startDate == null || record.get('created_at').toISOString() >= startDate.toISOString()) {
+                        return;
+                    }
+
+                    if (record.get('status') === 'pending') {
+                        count++;
+                    }
+                });
+
+                if (count) {
+                    var html;
+
+                    if (startDate == null) {
+                        html = 'There are <strong>{0}</strong> pending expenses'.format(
+                            count
+                        );
+                    } else {
+                        html = 'There are <strong>{0}</strong> pending expenses before {1}'.format(
+                            count,
+                            Ext.Date.format(startDate, 'j, F Y')
+                        );
+                    }
+
+                    var notification = Ext.create('Financial.ux.window.Notification', {
+                        position: 'tr',
+                        useXAxis: true,
+                        iconCls: 'x-fa fa-exclamation-triangle',
+                        title: 'Notice',
+                        html: html,
+                        slideInDuration: 800,
+                        slideBackDuration: 1500,
+                        autoCloseDelay: 5000,
+                        slideInAnimation: 'elasticIn',
+                        slideBackAnimation: 'elasticIn'
                     });
+
+                    // notification shows in a bad place when show is called directly (seems like the DOM is not ready for it)
+                    setTimeout(notification.show.bind(notification), 0);
                 }
             });
+
+            var incomesStore = this.getIncomesStore();
+
+            incomesStore.proxy.extraParams = params;
+            incomesStore.load(check);
         }
     });
 }());

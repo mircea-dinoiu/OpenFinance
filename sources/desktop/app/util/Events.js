@@ -3,8 +3,9 @@ Ext.define('Financial.util.Events', {
 
     dataViewAutoFit: function (dataView) {
         Ext.each(dataView.panel.columns, function (column) {
-            if (column.fit === true)
+            if (column.fit === true) {
                 column.autoSize();
+            }
         });
     }
 });

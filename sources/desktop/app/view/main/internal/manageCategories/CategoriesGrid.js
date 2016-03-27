@@ -17,7 +17,7 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
             editor: {
                 xtype: 'textfield',
                 allowOnlyWhitespace: false,
-                validator: function (value) {
+                validator: function (rawValue) {
                     var valid = true,
                         id = this.up().getRecord().get('id');
 
@@ -25,7 +25,7 @@ Ext.define('Financial.view.main.internal.manageCategories.CategoriesGrid', {
                         return name.trim().toLowerCase();
                     }
 
-                    value = cleanName(value);
+                    var value = cleanName(rawValue);
 
                     if (value.length) {
                         Financial.data.Category.getStore().each(function (record) {

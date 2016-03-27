@@ -1,3 +1,4 @@
+/*eslint-disable*/
 /* 
  *	Notification extension for Ext JS 4.0.2+
  *	Version: 2.1.3

@@ -43,6 +43,7 @@
    *      ]
    */
   "requires": [
+    "sencha-charts"
   ],
   /**
    * Sass configuration properties.

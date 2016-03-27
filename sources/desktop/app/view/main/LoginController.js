@@ -17,7 +17,7 @@ Ext.define('Financial.view.main.LoginController', {
                 Financial.data.User.getStore().loadData(Financial.data.user.list);
 
                 view.setLoading(false);
-                Financial.app.launch()
+                Financial.app.launch();
             },
             failure: function (response) {
                 view.setLoading(false);

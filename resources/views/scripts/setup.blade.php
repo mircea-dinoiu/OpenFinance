@@ -25,7 +25,6 @@
                 destroy: baseURL + '/income/delete'
             },
             getCurrencies: baseURL + '/get-currencies',
-            getReports: baseURL + '/get-reports',
             user: {
                 list: baseURL + '/user/list',
                 logout: baseURL + '/user/logout',
@@ -49,17 +48,6 @@
             }
         };
         Financial.initialValues = {
-            getStartDate: function () {
-                var date = new Date();
-
-                if (date.getDate() < 2) {
-                    date.setMonth(date.getMonth() - 1);
-                }
-
-                date.setDate(2);
-
-                return date;
-            },
             getEndDate: function () {
                 var date = new Date();
 
