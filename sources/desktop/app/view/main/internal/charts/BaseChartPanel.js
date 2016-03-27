@@ -51,7 +51,7 @@
                         type: 'hbox',
                         align: 'stretch'
                     },
-                    padding: '30px 10px 10px',
+                    padding: '10px',
                     items: [
                         {
                             xtype: 'combo',
