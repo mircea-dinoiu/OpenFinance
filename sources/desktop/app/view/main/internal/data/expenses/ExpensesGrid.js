@@ -289,8 +289,15 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             flex: 4,
             minWidth: 100,
             editor: {
-                xtype: 'textfield',
-                allowOnlyWhitespace: false
+                xtype: 'combo',
+                itemId: 'item',
+                valueField: 'item',
+                displayField: 'item',
+                queryMode: 'local',
+                allowBlank: false,
+                listeners: {
+                    blur: 'onItemInputBlur'
+                }
             },
             filter: {
                 type: 'string'
