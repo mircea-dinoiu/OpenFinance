@@ -58,6 +58,12 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             classes.push(record.get('status') + '-expense-row');
             classes.push('expense-row');
 
+            if (record.get('created_at').getDate() % 2 === 0) {
+                classes.push('even-row');
+            } else {
+                classes.push('odd-row');
+            }
+
             if (day(record.get('created_at')) === day(new Date())) {
                 classes.push('today-row');
             } else if (day(record.get('created_at')) > day(new Date())) {
@@ -76,7 +82,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 return false;
             }
         },
-        loadMask: false
+        loadMask: false,
+        stripeRows: false
     },
 
     selModel: {

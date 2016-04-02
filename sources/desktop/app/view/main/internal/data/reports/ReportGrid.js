@@ -5,6 +5,10 @@ Ext.define('Financial.view.main.internal.data.reports.ReportGrid', {
     animCollapse: false,
     xtype: 'app-main-internal-data-reports-report-grid',
 
+    viewConfig: {
+        stripeRows: false
+    },
+
     initComponent: function () {
         this.store = Ext.create('Financial.store.data.ReportStore');
 
