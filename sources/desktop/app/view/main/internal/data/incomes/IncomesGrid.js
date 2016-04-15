@@ -17,6 +17,12 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
 
             var classes = [];
 
+            if (record.get('created_at').getMonth() % 2 === 0) {
+                classes.push('even-row');
+            } else {
+                classes.push('odd-row');
+            }
+
             if (day(record.get('created_at')) === day(new Date())) {
                 classes.push('today-row');
             } else if (day(record.get('created_at')) > day(new Date())) {
@@ -30,7 +36,8 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 Financial.util.Events.dataViewAutoFit(dataView);
             }
         },
-        loadMask: false
+        loadMask: false,
+        stripeRows: false
     },
 
     plugins: [

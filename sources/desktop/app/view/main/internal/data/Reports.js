@@ -17,6 +17,10 @@
                 name: 'Everything'
             },
             {
+                id: 'ut',
+                name: 'Until today'
+            },
+            {
                 id: 'ld',
                 name: '1 day before'
             },

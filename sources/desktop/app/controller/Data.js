@@ -56,9 +56,17 @@
             return Financial.app.getMainView().down(this.selectors.includeCombo);
         },
 
+        resetCache: function () {
+            this.cache = {};
+            this.cache.include = this.getIncludeCombo().getValue();
+            this.cache.endDate = this.getEndDate();
+            this.cache.startDate = this.getStartDate();
+            this.cache.today = new Date();
+        },
+
         getStartDate: function () {
-            var date = new Date(this.getEndDate());
-            var include = this.getIncludeCombo().getValue();
+            var date = new Date(this.cache.endDate);
+            var include = this.cache.include;
 
             date.setHours(0);
             date.setMinutes(0);
@@ -91,13 +99,31 @@
             return new Date(controller.getEndDatePicker().getValue());
         },
 
+        recordIsInRange: function (record) {
+            switch (this.cache.include) {
+                case 'ut':
+                    if (Ext.util.Format.date(record.get('created_at'), 'Y-m-d') > Ext.util.Format.date(this.cache.today, 'Y-m-d')) {
+                        return false;
+                    }
+                    break;
+                default:
+                    var startDate = this.cache.startDate;
+
+                    if (startDate != null && record.get('created_at').toISOString() < startDate.toISOString()) {
+                        return false;
+                    }
+            }
+
+            return true;
+        },
+
         getExpensesData: function () {
-            var users = {},
-                mls = {},
-                startDate = this.getStartDate();
+            var me = this,
+                users = {},
+                mls = {};
 
             this.getExpensesStore().each(function (record) {
-                if (startDate != null && record.get('created_at').toISOString() < startDate.toISOString()) {
+                if (!me.recordIsInRange(record)) {
                     return;
                 }
 
@@ -169,13 +195,13 @@
         },
 
         getIncomesData: function () {
-            var data = {byUser: [], byML: []},
-                startDate = this.getStartDate(),
+            var me = this,
+                data = {byUser: [], byML: []},
                 users = {},
                 mls = {};
 
             this.getIncomesStore().each(function (record) {
-                if (startDate != null && record.get('created_at').toISOString() < startDate.toISOString()) {
+                if (!me.recordIsInRange(record)) {
                     return;
                 }
 
@@ -276,12 +302,12 @@
         },
 
         getExpensesByCategory: function () {
-            var categories = {},
-                data = [],
-                startDate = this.getStartDate();
+            var me = this,
+                categories = {},
+                data = [];
 
             this.getExpensesStore().each(function (record) {
-                if (startDate != null && record.get('created_at').toISOString() < startDate.toISOString()) {
+                if (!me.recordIsInRange(record)) {
                     return;
                 }
 
@@ -361,9 +387,10 @@
         },
 
         syncReports: function () {
-            //<debug>
+            this.resetCache();
+
             Ext.Logger.info('Sync reports');
-            //</debug>
+            
             var mainView = Financial.app.getMainView();
 
             var data = mainView.down('app-main-internal-data');

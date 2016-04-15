@@ -129,6 +129,43 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         this.callParent(arguments);
 
         editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
+
+        var items = {};
+
+        Financial.data.Expense.getStore().each(function (record) {
+            var rawName = record.get('item').toLowerCase().trim();
+
+            if (items[rawName] == null) {
+                items[rawName] = {item: record.get('item')};
+            }
+        });
+        editor.down('combo[itemId="item"]').setStore(new Ext.data.JsonStore({
+            fields: ['item'],
+            data: Ext.Object.getValues(items)
+        }));
+    },
+
+    onItemInputBlur: function (input) {
+        var rowEditor = input.up('roweditor');
+        var categoriesCombo = rowEditor.down('combo[itemId="categories"]');
+        var categories = categoriesCombo.getValue();
+
+        if (categories.length === 0) {
+            var value = input.getValue().toLowerCase().trim();
+
+            Financial.data.Expense.getStore().each(function (record) {
+                var rawName = record.get('item').toLowerCase().trim();
+
+                if (rawName == value) {
+                    var recordCategories = record.get('categories');
+
+                    if (recordCategories.length) {
+                        categoriesCombo.setValue(recordCategories);
+                        return false;
+                    }
+                }
+            });
+        }
     },
 
     /**

@@ -40,6 +40,18 @@ body > .x-mask {
   }
 }
 
+.even-row {
+  td:first-child > .x-grid-cell-inner {
+    border-left: 3px solid lightblue;
+  }
+}
+
+.odd-row {
+  td:first-child > .x-grid-cell-inner {
+    border-left: 3px solid lightcoral;
+  }
+}
+
 .hidden {
   display: none;
   visibility: hidden;
