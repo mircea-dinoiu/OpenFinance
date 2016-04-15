@@ -12,7 +12,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         /**
          * Toggle buttons depending on selected records
          */
-        Ext.each(['delete', 'deselect', 'duplicate'], function (itemId) {
+        Ext.each(['deselect'], function (itemId) {
             grid.down(Ext.String.format('button[itemId="{0}"]', itemId)).setDisabled(
                 grid.getSelection().length === 0
             );
@@ -96,7 +96,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         grid.getSelectionModel().deselectAll();
     },
 
-    onDuplicateClick: function () {
+    onDuplicateSelectedExpensesClick: function () {
         var grid = this.getView();
         var store = grid.getStore();
 
