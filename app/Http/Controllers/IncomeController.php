@@ -92,31 +92,31 @@ class IncomeController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $income = Income::find($record['id']);
+                    $model = Income::find($record['id']);
 
                     if (isset($record['sum'])) {
-                        $income->sum = $record['sum'];
+                        $model->sum = $record['sum'];
                     }
 
                     if (isset($record['description'])) {
-                        $income->description = $record['description'];
+                        $model->description = $record['description'];
                     }
 
                     if (isset($record['user_id'])) {
-                        $income->user_id = $record['user_id'];
+                        $model->user_id = $record['user_id'];
                     }
 
                     if (isset($record['money_location_id'])) {
-                        $income->money_location_id = $record['money_location_id'];
+                        $model->money_location_id = $record['money_location_id'];
                     }
 
                     if (isset($record['created_at'])) {
-                        $income->created_at = date('Y-m-d H:i:s', $record['created_at']);
+                        $model->created_at = date('Y-m-d H:i:s', $record['created_at']);
                     }
 
-                    $income->save();
+                    $model->save();
 
-                    $output[] = $income;
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -151,23 +151,23 @@ class IncomeController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $income = new Income;
+                    $model = new Income;
 
-                    $income->sum = $record['sum'];
-                    $income->description = $record['description'];
-                    $income->user_id = $record['user_id'];
+                    $model->sum = $record['sum'];
+                    $model->description = $record['description'];
+                    $model->user_id = $record['user_id'];
 
                     if (isset($record['money_location_id'])) {
-                        $income->money_location_id = $record['money_location_id'];
+                        $model->money_location_id = $record['money_location_id'];
                     }
 
                     if (isset($record['created_at'])) {
-                        $income->created_at = date('Y-m-d H:i:s', $record['created_at']);
+                        $model->created_at = date('Y-m-d H:i:s', $record['created_at']);
                     }
 
-                    $income->save();
+                    $model->save();
 
-                    $output[] = $income;
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }

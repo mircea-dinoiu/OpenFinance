@@ -31,15 +31,15 @@ class CategoryController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $category = Category::find($record['id']);
+                    $model = Category::find($record['id']);
 
                     if (isset($record['name'])) {
-                        $category->name = trim($record['name']);
+                        $model->name = trim($record['name']);
                     }
 
-                    $category->save();
+                    $model->save();
 
-                    $output[] = $category;
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -66,13 +66,13 @@ class CategoryController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $category = new Category;
+                    $model = new Category;
 
-                    $category->name = trim($record['name']);
+                    $model->name = trim($record['name']);
 
-                    $category->save();
+                    $model->save();
 
-                    $output[] = $category;
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }

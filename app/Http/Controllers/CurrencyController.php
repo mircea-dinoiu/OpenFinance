@@ -49,14 +49,14 @@ class CurrencyController extends Controller
     {
         $map = [];
 
-        $rawData = DB::table('currencies')->get();
+        $rawData = DB::table('currencies')->get(); // todo shouldn't be Currency::get()?
 
         $allowedISOCodes = [];
 
-        foreach ($rawData as $currency) {
-            $map[$currency->id] = (array)$currency;
+        foreach ($rawData as $model) {
+            $map[$model->id] = (array)$model;
 
-            $allowedISOCodes[] = $currency->iso_code;
+            $allowedISOCodes[] = $model->iso_code;
         }
 
         $xml = simplexml_load_file('http://www.bnr.ro/nbrfxrates.xml');

@@ -31,15 +31,15 @@ class MLTypeController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $mlType = MLType::find($record['id']);
+                    $model = MLType::find($record['id']);
 
                     if (isset($record['name'])) {
-                        $mlType->name = trim($record['name']);
+                        $model->name = trim($record['name']);
                     }
 
-                    $mlType->save();
+                    $model->save();
 
-                    $output[] = $mlType;
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -66,13 +66,13 @@ class MLTypeController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $mlType = new MLType;
+                    $model = new MLType;
 
-                    $mlType->name = trim($record['name']);
+                    $model->name = trim($record['name']);
 
-                    $mlType->save();
+                    $model->save();
 
-                    $output[] = $mlType;
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }
