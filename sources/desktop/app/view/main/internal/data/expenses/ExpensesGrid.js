@@ -26,6 +26,19 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                     handler: this.getController().onMarkExpensesSelectionAsPendingClick.bind(this.getController())
                 },
                 {
+                    xtype: 'menuseparator'  
+                },
+                {
+                    text: 'Delete',
+                    iconCls: 'x-fa fa-minus-circle',
+                    handler: this.getController().onDeleteSelectedExpensesClick.bind(this.getController())
+                },
+                {
+                    text: 'Duplicate',
+                    iconCls: 'x-fa fa-files-o',
+                    handler: this.getController().onDuplicateSelectedExpensesClick.bind(this.getController())
+                },
+                {
                     xtype: 'menuseparator'
                 },
                 {
@@ -188,20 +201,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             text: 'Deselect All',
             handler: 'onDeselectAllClick',
             itemId: 'deselect',
-            disabled: true
-        },
-        {
-            text: 'Duplicate',
-            iconCls: 'x-fa fa-files-o',
-            handler: 'onDuplicateClick',
-            itemId: 'duplicate',
-            disabled: true
-        },
-        {
-            text: 'Delete',
-            iconCls: 'x-fa fa-minus-circle',
-            handler: 'onDeleteSelectedExpensesClick',
-            itemId: 'delete',
             disabled: true
         }
     ],

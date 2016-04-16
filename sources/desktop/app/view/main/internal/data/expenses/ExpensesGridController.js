@@ -12,7 +12,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         /**
          * Toggle buttons depending on selected records
          */
-        Ext.each(['delete', 'deselect', 'duplicate'], function (itemId) {
+        Ext.each(['deselect'], function (itemId) {
             grid.down(Ext.String.format('button[itemId="{0}"]', itemId)).setDisabled(
                 grid.getSelection().length === 0
             );
@@ -96,7 +96,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         grid.getSelectionModel().deselectAll();
     },
 
-    onDuplicateClick: function () {
+    onDuplicateSelectedExpensesClick: function () {
         var grid = this.getView();
         var store = grid.getStore();
 
@@ -149,23 +149,20 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         var rowEditor = input.up('roweditor');
         var categoriesCombo = rowEditor.down('combo[itemId="categories"]');
         var categories = categoriesCombo.getValue();
+        var value = input.getValue().toLowerCase().trim();
 
-        if (categories.length === 0) {
-            var value = input.getValue().toLowerCase().trim();
+        Financial.data.Expense.getStore().each(function (record) {
+            var rawName = record.get('item').toLowerCase().trim();
 
-            Financial.data.Expense.getStore().each(function (record) {
-                var rawName = record.get('item').toLowerCase().trim();
+            if (rawName == value) {
+                var recordCategories = record.get('categories');
 
-                if (rawName == value) {
-                    var recordCategories = record.get('categories');
-
-                    if (recordCategories.length) {
-                        categoriesCombo.setValue(recordCategories);
-                        return false;
-                    }
+                if (recordCategories.length) {
+                    categoriesCombo.setValue(recordCategories);
+                    return false;
                 }
-            });
-        }
+            }
+        });
     },
 
     /**
