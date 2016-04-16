@@ -33,7 +33,7 @@ class CategoryController extends Controller
                 if ($validator->passes()) {
                     $model = Category::find($record['id']);
 
-                    if (isset($record['name'])) {
+                    if (array_key_exists('name', $record)) {
                         $model->name = trim($record['name']);
                     }
 

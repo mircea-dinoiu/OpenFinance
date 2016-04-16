@@ -85,7 +85,7 @@ class IncomeController extends Controller
             $output = [];
 
             foreach ($data as $record) {
-                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                if (array_key_exists('money_location_id', $record) && $record['money_location_id'] == 0) {
                     $record['money_location_id'] = NULL;
                 }
 
@@ -94,23 +94,23 @@ class IncomeController extends Controller
                 if ($validator->passes()) {
                     $model = Income::find($record['id']);
 
-                    if (isset($record['sum'])) {
+                    if (array_key_exists('sum', $record)) {
                         $model->sum = $record['sum'];
                     }
 
-                    if (isset($record['description'])) {
+                    if (array_key_exists('description', $record)) {
                         $model->description = $record['description'];
                     }
 
-                    if (isset($record['user_id'])) {
+                    if (array_key_exists('user_id', $record)) {
                         $model->user_id = $record['user_id'];
                     }
 
-                    if (isset($record['money_location_id'])) {
+                    if (array_key_exists('money_location_id', $record)) {
                         $model->money_location_id = $record['money_location_id'];
                     }
 
-                    if (isset($record['created_at'])) {
+                    if (array_key_exists('created_at', $record)) {
                         $model->created_at = date('Y-m-d H:i:s', $record['created_at']);
                     }
 
@@ -144,7 +144,7 @@ class IncomeController extends Controller
             $output = [];
 
             foreach ($data as $record) {
-                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                if (array_key_exists('money_location_id', $record) && $record['money_location_id'] == 0) {
                     $record['money_location_id'] = NULL;
                 }
 
@@ -157,11 +157,11 @@ class IncomeController extends Controller
                     $model->description = $record['description'];
                     $model->user_id = $record['user_id'];
 
-                    if (isset($record['money_location_id'])) {
+                    if (array_key_exists('money_location_id', $record)) {
                         $model->money_location_id = $record['money_location_id'];
                     }
 
-                    if (isset($record['created_at'])) {
+                    if (array_key_exists('created_at', $record)) {
                         $model->created_at = date('Y-m-d H:i:s', $record['created_at']);
                     }
 

@@ -86,7 +86,7 @@ class ExpenseController extends Controller
             $output = [];
 
             foreach ($data as $record) {
-                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                if (array_key_exists('money_location_id', $record) && $record['money_location_id'] == 0) {
                     $record['money_location_id'] = NULL;
                 }
 
@@ -95,15 +95,15 @@ class ExpenseController extends Controller
                 if ($validator->passes()) {
                     $model = Expense::find($record['id']);
 
-                    if (isset($record['sum'])) {
+                    if (array_key_exists('sum', $record)) {
                         $model->sum = $record['sum'];
                     }
 
-                    if (isset($record['item'])) {
+                    if (array_key_exists('item', $record)) {
                         $model->item = trim($record['item']);
                     }
 
-                    if (isset($record['currency_id'])) {
+                    if (array_key_exists('currency_id', $record)) {
                         $model->currency_id = $record['currency_id'];
 
                         if ($record['currency_id'] !== CurrencyController::getDefaultCurrency()->id) {
@@ -111,11 +111,11 @@ class ExpenseController extends Controller
                         }
                     }
 
-                    if (isset($record['money_location_id'])) {
+                    if (array_key_exists('money_location_id', $record)) {
                         $model->money_location_id = $record['money_location_id'];
                     }
 
-                    if (isset($record['status'])) {
+                    if (array_key_exists('status', $record)) {
                         $model->status = $record['status'];
 
                         if ($model->status === 'finished') {
@@ -124,7 +124,7 @@ class ExpenseController extends Controller
                         }
                     }
 
-                    if (isset($record['created_at'])) {
+                    if (array_key_exists('created_at', $record)) {
                         $model->created_at = date('Y-m-d H:i:s', $record['created_at']);
                     }
 
@@ -133,7 +133,7 @@ class ExpenseController extends Controller
                     /**
                      * Categories
                      */
-                    if (isset($record['categories'])) {
+                    if (array_key_exists('categories', $record)) {
                         DB::table('category_expense')->where('expense_id', '=', $model->id)->delete();
                         foreach ($record['categories'] as $id) {
                             DB::table('category_expense')->insert([
@@ -146,7 +146,7 @@ class ExpenseController extends Controller
                     /**
                      * Users
                      */
-                    if (isset($record['users'])) {
+                    if (array_key_exists('users', $record)) {
                         foreach (User::all() as $user) {
                             DB::table('expense_user')
                                 ->where('expense_id', '=', $model->id)
@@ -212,7 +212,7 @@ class ExpenseController extends Controller
             $output = [];
 
             foreach ($data as $record) {
-                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                if (array_key_exists('money_location_id', $record) && $record['money_location_id'] == 0) {
                     $record['money_location_id'] = NULL;
                 }
 
@@ -225,23 +225,23 @@ class ExpenseController extends Controller
                     $model->item = trim($record['item']);
                     $model->status = 'pending';
 
-                    if (isset($record['money_location_id'])) {
+                    if (array_key_exists('money_location_id', $record)) {
                         $model->money_location_id = $record['money_location_id'];
                     }
 
-                    if (isset($record['currency_id'])) {
+                    if (array_key_exists('currency_id', $record)) {
                         $model->currency_id = $record['currency_id'];
                     } else {
                         $model->currency_id = CurrencyController::getDefaultCurrency()->id;
                     }
 
-                    if (isset($record['created_at'])) {
+                    if (array_key_exists('created_at', $record)) {
                         $model->created_at = date('Y-m-d H:i:s', $record['created_at']);
                     }
 
                     $model->save();
 
-                    if (isset($record['categories']) && count($record['categories']) > 0) {
+                    if (array_key_exists('categories', $record) && count($record['categories']) > 0) {
                         foreach ($record['categories'] as $id) {
                             DB::table('category_expense')->insert([
                                 'category_id' => $id,

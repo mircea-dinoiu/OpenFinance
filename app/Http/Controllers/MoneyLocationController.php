@@ -34,11 +34,11 @@ class MoneyLocationController extends Controller
                 if ($validator->passes()) {
                     $model = MoneyLocation::find($record['id']);
 
-                    if (isset($record['name'])) {
+                    if (array_key_exists('name', $record)) {
                         $model->name = trim($record['name']);
                     }
 
-                    if (isset($record['type_id'])) {
+                    if (array_key_exists('type_id', $record)) {
                         $model->type_id = $record['type_id'];
                     }
 
