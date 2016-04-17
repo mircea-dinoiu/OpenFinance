@@ -44,7 +44,8 @@ Ext.define('Financial.base.GridViewController', {
 
         cancelBtn.setIconCls('x-fa fa-ban');
 
-        rowEditing.grid.getView().getScrollable().on('scrollstart', rowEditing.cancelEdit, rowEditing, {single: true});
+        // todo we can't edit rows when horizontal scroll it's present, let's find another solution
+        // rowEditing.grid.getView().getScrollable().on('scrollstart', rowEditing.cancelEdit, rowEditing, {single: true});
     },
 
     addRecord: function (button) {

@@ -163,7 +163,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
             };
 
         if (dp.candidateValue && date(dp.previousValue) !== date(dp.candidateValue)) {
-            this.applyFilter(false);
+            this.applyFilter();
         } else {
             dp.setValue(dp.previousValue);
         }

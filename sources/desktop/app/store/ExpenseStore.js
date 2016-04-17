@@ -1,5 +1,5 @@
 Ext.define('Financial.store.ExpenseStore', {
-    extend: 'Ext.data.Store',
+    extend: 'Financial.store.BaseRepeatStore',
 
     model: 'Financial.model.ExpenseModel',
 
@@ -21,7 +21,8 @@ Ext.define('Financial.store.ExpenseStore', {
     proxy: {
         type: 'ajax',
         reader: {
-            type: 'json'
+            type: 'json',
+            transform: Financial.util.RepeatedModels.createTransformer('Financial.model.ExpenseModel')
         },
         api: {
             read: Financial.routes.expense.list,
@@ -34,15 +35,6 @@ Ext.define('Financial.store.ExpenseStore', {
             writeAllFields: false,
             rootProperty: 'data',
             allowSingle: false
-        }
-    },
-
-    listeners: {
-        write: function () {
-            Financial.app.getController('Data').syncReports();
-        },
-        filterchange: function () {
-            Financial.app.getController('Data').syncReports();
         }
     }
 });

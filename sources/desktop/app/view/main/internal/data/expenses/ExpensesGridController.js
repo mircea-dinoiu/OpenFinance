@@ -1,5 +1,5 @@
 Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', {
-    extend: 'Financial.base.GridViewController',
+    extend: 'Financial.base.FinancialGridViewController',
 
     alias: 'controller.app-main-internal-data-expenses-grid',
 
@@ -66,26 +66,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         this.onStoreRefresh();
     },
 
-    onDeleteSelectedExpensesClick: function () {
-        var me = this,
-            grid = me.getView(),
-            store = grid.getStore(),
-            selection = grid.getSelection();
-
-        Ext.Msg.show({
-            title: Ext.String.format('Delete {0}?', selection.length > 1 ? 'Expenses' : 'Expense'),
-            message: Ext.String.format('Are you sure you want to delete {0}?', selection.length > 1 ? 'these expenses' : 'this expense'),
-            buttons: Ext.Msg.YESNO,
-            icon: Ext.Msg.QUESTION,
-            fn: function (btn) {
-                if (btn === 'yes') {
-                    store.remove(grid.getSelection());
-                    store.sync();
-                }
-            }
-        });
-    },
-
     onDeselectAllClick: function () {
         this.deselectAll();
     },
@@ -96,17 +76,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         grid.getSelectionModel().deselectAll();
     },
 
-    onDuplicateSelectedExpensesClick: function () {
-        var grid = this.getView();
-        var store = grid.getStore();
-
-        Ext.each(grid.getSelection(), function (record) {
-            store.add(record.copy(null));
-        });
-
-        store.sync();
-    },
-
     onSelectionChange: function () {
         this.onStoreRefresh();
     },
@@ -115,8 +84,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         this.newRecordData = {
             currency_id: Financial.data.Currency.getDefaultCurrency().get('id'),
             created_at: Financial.util.Misc.generateEICreationDate(button.up('grid')),
-            users: [Financial.data.user.current.id],
-            status: 'pending'
+            users: [Financial.data.user.current.id]
         };
         this.newRecordEditAt = 1;
 
@@ -126,7 +94,9 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
     onBeforeRowEditing: function (rowEditing) {
         var editor = rowEditing.getEditor();
 
-        this.callParent(arguments);
+        if (this.callParent(arguments) === false) {
+            return;
+        }
 
         editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
 
@@ -148,7 +118,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
     onItemInputBlur: function (input) {
         var rowEditor = input.up('roweditor');
         var categoriesCombo = rowEditor.down('combo[itemId="categories"]');
-        var categories = categoriesCombo.getValue();
         var value = input.getValue().toLowerCase().trim();
 
         Financial.data.Expense.getStore().each(function (record) {
@@ -163,55 +132,5 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
                 }
             }
         });
-    },
-
-    /**
-     * ROUND OPERATIONS
-     */
-
-    applyMathMethodOnSelectedExpenses: function (method) {
-        var grid = this.getView();
-        var records = grid.getSelection();
-
-        Ext.each(records, function (record) {
-            record.set('sum', Math[method](record.get('sum')));
-        });
-
-        grid.getStore().sync();
-    },
-
-    onRoundExpenseSumClick: function () {
-        this.applyMathMethodOnSelectedExpenses('round');
-    },
-
-    onFloorExpenseSumClick: function () {
-        this.applyMathMethodOnSelectedExpenses('floor');
-    },
-
-    onCeilExpenseSumClick: function () {
-        this.applyMathMethodOnSelectedExpenses('ceil');
-    },
-
-    /**
-     * STATUS CHANGING OPERATIONS
-     */
-
-    setStatusToSelectedExpenses: function (status) {
-        var grid = this.getView();
-        var records = grid.getSelection();
-
-        Ext.each(records, function (record) {
-            record.set('status', status);
-        });
-
-        grid.getStore().sync();
-    },
-
-    onMarkExpensesSelectionAsPendingClick: function () {
-        this.setStatusToSelectedExpenses('pending');
-    },
-
-    onMarkExpensesSelectionAsFinishedClick: function () {
-        this.setStatusToSelectedExpenses('finished');
     }
 });

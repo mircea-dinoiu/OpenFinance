@@ -50,5 +50,9 @@ Ext.define('Financial.util.Misc', {
         );
 
         metaData.tdAttr = 'data-qtip="' + tooltip.join('<br>') + '"';
+    },
+
+    day: function (date) {
+        return Ext.util.Format.date(date, 'Y-m-d');
     }
 });

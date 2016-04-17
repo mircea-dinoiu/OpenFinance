@@ -1,57 +1,11 @@
 Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Financial.base.FinancialGrid',
     store: 'income',
     xtype: 'app-main-internal-data-incomes-grid',
     controller: 'app-main-internal-data-incomes-grid',
-    autoScroll: true,
 
     requires: [
         'Financial.view.main.internal.data.incomes.IncomesGridController'
-    ],
-
-    viewConfig: {
-        getRowClass: function (record) {
-            function day(date) {
-                return Ext.util.Format.date(date, 'Y-m-d');
-            }
-
-            var classes = [];
-
-            if (record.get('created_at').getMonth() % 2 === 0) {
-                classes.push('even-row');
-            } else {
-                classes.push('odd-row');
-            }
-
-            if (day(record.get('created_at')) === day(new Date())) {
-                classes.push('today-row');
-            } else if (day(record.get('created_at')) > day(new Date())) {
-                classes.push('future-row');
-            }
-
-            return classes.join(' ');
-        },
-        listeners: {
-            refresh: function (dataView) {
-                Financial.util.Events.dataViewAutoFit(dataView);
-            }
-        },
-        loadMask: false,
-        stripeRows: false
-    },
-
-    plugins: [
-        {
-            ptype: 'rowediting',
-            listeners: {
-                canceledit: 'onCancelRowEditing',
-                beforeedit: 'onBeforeRowEditing',
-                edit: 'onRowEditing'
-            }
-        },
-        {
-            ptype: 'gridfilters'
-        }
     ],
 
     tbar: [
@@ -63,6 +17,13 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
     ],
 
     columns: [
+        {
+            text: 'ID',
+            dataIndex: 'id',
+            hidden: true,
+            align: 'right',
+            renderer: Financial.util.RepeatedModels.idColumnRenderer
+        },
         {
             dataIndex: 'sum',
             text: 'Sum',
@@ -96,6 +57,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             dataIndex: 'description',
             text: 'Desc.',
             flex: 1,
+            tdCls: 'display-status',
             minWidth: 100,
             editor: {
                 xtype: 'textfield',
@@ -167,21 +129,6 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 labelField: 'name'
             }
         },
-        {
-            xtype: 'actioncolumn',
-            editor: {
-                xtype: 'label',
-                text: ''
-            },
-            items: [
-                {
-                    iconCls: 'x-fa fa-minus-circle',
-                    tooltip: 'Delete',
-                    handler: 'onDeleteIncomeClick'
-                }
-            ],
-            resizable: false,
-            fit: true
-        }
+        Financial.util.RepeatedModels.getRepeatColumnConfig()
     ]
 });

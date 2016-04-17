@@ -1,10 +1,12 @@
 Ext.define('Financial.model.IncomeModel', {
-    extend: 'Ext.data.Model',
+    extend: 'Financial.model.BaseRepeatModel',
 
     fields: [
-        {name: 'id', type: 'int'},
+        {name: 'id'},
         {name: 'sum', type: 'float', defaultValue: ''},
         {name: 'description', type: 'string'},
+        {name: 'repeat'},
+        {name: 'status', type: 'string', defaultValue: 'pending'},
         {
             name: 'created_at',
             type: 'date',

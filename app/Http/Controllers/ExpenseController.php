@@ -13,16 +13,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ExpenseController extends Controller
 {
-    private static function newExpenseQuery()
-    {
-        return Expense::with([
-            'users' => function ($query) {
-                $query->where('blame', '=', '1');
-            },
-            'categories'
-        ]);
-    }
-
     public function getList()
     {
         $data = [
@@ -40,7 +30,7 @@ class ExpenseController extends Controller
         $validator = Validator::make($data, $validationRules);
 
         if ($validator->passes()) {
-            $query = static::newExpenseQuery();
+            $query = Expense::query();
 
             if ($data['start_date']) {
                 $query->whereRaw('DATE(created_at) >= ?', [$data['start_date']]);
@@ -75,10 +65,11 @@ class ExpenseController extends Controller
                 'id' => 'required|expense_id',
                 'sum' => 'sometimes|required|numeric|not_in:0',
                 'item' => 'sometimes|required|string',
+                'repeat' => 'sometimes|repeat',
                 'created_at' => 'sometimes|required|integer',
                 'currency_id' => 'sometimes|required|currency_id',
                 'money_location_id' => 'sometimes|money_location_id',
-                'status' => 'sometimes|required|string|in:finished,pending',
+                'status' => 'sometimes|required|status',
                 'users' => 'sometimes|required|user_ids',
                 'categories' => 'sometimes|category_ids'
             ];
@@ -94,6 +85,7 @@ class ExpenseController extends Controller
 
                 if ($validator->passes()) {
                     $model = Expense::find($record['id']);
+                    $clone = $model->toArray();
 
                     if (array_key_exists('sum', $record)) {
                         $model->sum = $record['sum'];
@@ -103,11 +95,20 @@ class ExpenseController extends Controller
                         $model->item = trim($record['item']);
                     }
 
+                    if (array_key_exists('repeat', $record)) {
+                        $model->repeat = $record['repeat'];
+
+                        if ($model->repeat != null) {
+                            $model->status = Expense::STATUS_PENDING;
+                        }
+                    }
+
                     if (array_key_exists('currency_id', $record)) {
                         $model->currency_id = $record['currency_id'];
 
                         if ($record['currency_id'] !== CurrencyController::getDefaultCurrency()->id) {
-                            $model->status = 'pending';
+                            $model->status = Expense::STATUS_PENDING;
+                            unset($record['status']);
                         }
                     }
 
@@ -118,14 +119,20 @@ class ExpenseController extends Controller
                     if (array_key_exists('status', $record)) {
                         $model->status = $record['status'];
 
-                        if ($model->status === 'finished') {
+                        if ($model->status === Expense::STATUS_FINISHED) {
                             $model->sum = CurrencyController::convertToDefault($model->sum, $model->currency_id);
                             $model->currency_id = CurrencyController::getDefaultCurrency()->id;
+
+                            if ($model->repeat !== null) {
+                                $this->create(advanceRepeatDate($clone));
+                            }
+
+                            $model->repeat = null;
                         }
                     }
 
                     if (array_key_exists('created_at', $record)) {
-                        $model->created_at = date('Y-m-d H:i:s', $record['created_at']);
+                        $model->created_at = standardDate($record['created_at']);
                     }
 
                     $model->save();
@@ -157,7 +164,7 @@ class ExpenseController extends Controller
                         }
                     }
 
-                    $output[] = static::newExpenseQuery()->find($model->id);
+                    $output[] = Expense::query()->find($model->id);
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -202,6 +209,7 @@ class ExpenseController extends Controller
             $validationRules = [
                 'sum' => 'required|numeric|not_in:0',
                 'item' => 'required|string',
+                'repeat' => 'sometimes|repeat',
                 'users' => 'required|user_ids',
                 'created_at' => 'sometimes|required|integer',
                 'currency_id' => 'sometimes|required|currency_id',
@@ -219,47 +227,9 @@ class ExpenseController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $model = new Expense;
+                    $model = $this->create($record);
 
-                    $model->sum = $record['sum'];
-                    $model->item = trim($record['item']);
-                    $model->status = 'pending';
-
-                    if (array_key_exists('money_location_id', $record)) {
-                        $model->money_location_id = $record['money_location_id'];
-                    }
-
-                    if (array_key_exists('currency_id', $record)) {
-                        $model->currency_id = $record['currency_id'];
-                    } else {
-                        $model->currency_id = CurrencyController::getDefaultCurrency()->id;
-                    }
-
-                    if (array_key_exists('created_at', $record)) {
-                        $model->created_at = date('Y-m-d H:i:s', $record['created_at']);
-                    }
-
-                    $model->save();
-
-                    if (array_key_exists('categories', $record) && count($record['categories']) > 0) {
-                        foreach ($record['categories'] as $id) {
-                            DB::table('category_expense')->insert([
-                                'category_id' => $id,
-                                'expense_id' => $model->id
-                            ]);
-                        }
-                    }
-
-                    foreach (User::all() as $user) {
-                        DB::table('expense_user')->insert([
-                            'user_id' => $user->id,
-                            'expense_id' => $model->id,
-                            'blame' => in_array($user->id, $record['users']),
-                            'seen' => ($user->id === Auth::user()->id)
-                        ]);
-                    }
-
-                    $output[] = static::newExpenseQuery()->find($model->id);
+                    $output[] = Expense::query()->find($model->id);
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -269,5 +239,53 @@ class ExpenseController extends Controller
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
+    }
+
+    protected function create($record) {
+        $model = new Expense;
+
+        $model->sum = $record['sum'];
+        $model->item = trim($record['item']);
+        $model->status = Expense::STATUS_PENDING;
+
+        if (array_key_exists('repeat', $record)) {
+            $model->repeat = $record['repeat'];
+        }
+
+        if (array_key_exists('money_location_id', $record)) {
+            $model->money_location_id = $record['money_location_id'];
+        }
+
+        if (array_key_exists('currency_id', $record)) {
+            $model->currency_id = $record['currency_id'];
+        } else {
+            $model->currency_id = CurrencyController::getDefaultCurrency()->id;
+        }
+
+        if (array_key_exists('created_at', $record)) {
+            $model->created_at = standardDate($record['created_at']);
+        }
+
+        $model->save();
+
+        if (array_key_exists('categories', $record) && count($record['categories']) > 0) {
+            foreach ($record['categories'] as $id) {
+                DB::table('category_expense')->insert([
+                    'category_id' => $id,
+                    'expense_id' => $model->id
+                ]);
+            }
+        }
+
+        foreach (User::all() as $user) {
+            DB::table('expense_user')->insert([
+                'user_id' => $user->id,
+                'expense_id' => $model->id,
+                'blame' => in_array($user->id, $record['users']),
+                'seen' => ($user->id === Auth::user()->id)
+            ]);
+        }
+
+        return $model;
     }
 }

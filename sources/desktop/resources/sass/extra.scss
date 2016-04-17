@@ -8,21 +8,10 @@ body > .x-mask {
   border: none !important;
 }
 
-.expense-row {
-  &.pending-expense-row {
-    > td:nth-child(3) > .x-grid-cell-inner {
-      background: #F1C232;
-      color: rgba(0, 0, 0, 0.9);
-    }
-  }
-
-  + .x-grid-rowbody-tr .x-grid-rowbody {
-    .expense-details-separator {
-      width: calc(100% + 20px);
-      margin: -4px 0 5px -10px;
-      border: none;
-      border-top: 1px solid #EDEDED;
-    }
+.financial-grid-pending-row {
+  > td.display-status > .x-grid-cell-inner {
+    background: #F1C232;
+    color: rgba(0, 0, 0, 0.9);
   }
 }
 
@@ -32,7 +21,14 @@ body > .x-mask {
   }
 }
 
-.future-row {
+.fake-row {
+  td {
+    font-style: italic;
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.future-row:not(.fake-row) {
   td:not([data-columnid^="actioncolumn"]) {
     > .x-grid-cell-inner {
       opacity: 0.5;

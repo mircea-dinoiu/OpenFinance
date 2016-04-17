@@ -20,6 +20,7 @@ Ext.define('Financial.Application', {
         'Financial.util.Format',
         'Financial.util.Misc',
         'Financial.util.Events',
+        'Financial.util.RepeatedModels',
 
         'Financial.base.GridViewController'
     ],

@@ -496,7 +496,9 @@
 
             var expensesStore = this.getExpensesStore();
 
-            expensesStore.proxy.extraParams = params;
+            if (params != null) {
+                expensesStore.proxy.extraParams = params;
+            }
             expensesStore.load(function () {
                 check();
 
@@ -547,7 +549,9 @@
 
             var incomesStore = this.getIncomesStore();
 
-            incomesStore.proxy.extraParams = params;
+            if (params != null) {
+                incomesStore.proxy.extraParams = params;
+            }
             incomesStore.load(check);
         }
     });
