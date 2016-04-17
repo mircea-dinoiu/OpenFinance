@@ -29,7 +29,6 @@ Ext.define('Financial.base.FinancialGridViewController', {
     },
 
     showDeleteConfirmationMessage: function (name) {
-        var plural = Ext.util.Format.plural;
         var capitalize = Ext.util.Format.capitalize;
         var format = Ext.String.format;
 
@@ -39,8 +38,8 @@ Ext.define('Financial.base.FinancialGridViewController', {
             selection = grid.getSelection();
 
         Ext.Msg.show({
-            title: format('Delete {0}?', capitalize(selection.length > 1 ? plural(name) : name)),
-            message: format('Are you sure you want to delete {0}?', selection.length > 1 ? format('these {0}', plural(name)) : format('this {0}', name)),
+            title: format('Delete {0}?', capitalize(selection.length > 1 ? format('{0}s', name) : name)),
+            message: format('Are you sure you want to delete {0}?', selection.length > 1 ? format('these {0}s', name) : format('this {0}', name)),
             buttons: Ext.Msg.YESNO,
             icon: Ext.Msg.QUESTION,
             fn: function (btn) {
