@@ -54,5 +54,14 @@ Ext.define('Financial.util.Misc', {
 
     day: function (date) {
         return Ext.util.Format.date(date, 'Y-m-d');
+    },
+    
+    icon: function (opts) {
+        return Ext.String.format(
+            '<i data-qtip="{0}" style="font-style: normal; color: {1}" class="x-fa fa-{2}" aria-hidden="true"></i>',
+            opts.tooltip,
+            opts.color,
+            opts.type
+        );
     }
 });

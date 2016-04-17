@@ -25,17 +25,14 @@ Ext.define('Financial.base.FinancialGridViewController', {
     },
 
     onDeleteSelectedRecordsClick: function () {
-        this.showDeleteConfirmationMessage('item');
-    },
-
-    showDeleteConfirmationMessage: function (name) {
         var capitalize = Ext.util.Format.capitalize;
         var format = Ext.String.format;
 
         var me = this,
             grid = me.getView(),
             store = grid.getStore(),
-            selection = grid.getSelection();
+            selection = grid.getSelection(),
+            name = grid.itemName;
 
         Ext.Msg.show({
             title: format('Delete {0}?', capitalize(selection.length > 1 ? format('{0}s', name) : name)),

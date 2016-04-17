@@ -8,31 +8,16 @@ body > .x-mask {
   border: none !important;
 }
 
-.financial-grid-pending-row {
-  > td.display-status > .x-grid-cell-inner {
-    background: #F1C232;
-    color: rgba(0, 0, 0, 0.9);
-  }
-}
-
 .today-row {
   td {
     font-weight: bold;
-  }
-}
-
-.fake-row {
-  td {
-    font-style: italic;
     background: rgba(0, 0, 0, 0.1);
   }
 }
 
-.future-row:not(.fake-row) {
-  td:not([data-columnid^="actioncolumn"]) {
-    > .x-grid-cell-inner {
-      opacity: 0.5;
-    }
+.future-row {
+  td {
+    background: rgba(0, 0, 0, 0.05);
   }
 }
 

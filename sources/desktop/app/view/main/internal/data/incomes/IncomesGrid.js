@@ -16,6 +16,8 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
         }
     ],
 
+    itemName: 'income',
+
     columns: [
         {
             text: 'ID',
@@ -57,7 +59,6 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             dataIndex: 'description',
             text: 'Desc.',
             flex: 1,
-            tdCls: 'display-status',
             minWidth: 100,
             editor: {
                 xtype: 'textfield',
@@ -65,6 +66,9 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             },
             filter: {
                 type: 'string'
+            },
+            renderer: function () {
+                return this.renderFlagColumn.apply(this, arguments);
             }
         },
         {

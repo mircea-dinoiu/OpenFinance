@@ -8,6 +8,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         'Financial.view.main.internal.data.expenses.ExpensesGridController',
         'Financial.filter.grid.MultiListFilter'
     ],
+    
+    itemName: 'expense',
 
     tbar: [
         {
@@ -116,7 +118,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             dataIndex: 'item',
             flex: 4,
             minWidth: 100,
-            tdCls: 'display-status',
             editor: {
                 xtype: 'combo',
                 itemId: 'item',
@@ -131,10 +132,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             filter: {
                 type: 'string'
             },
-            renderer: function (value, metaData) {
-                metaData.tdAttr = 'data-qtip="' + value + '"';
-
-                return value;
+            renderer: function () {
+                return this.renderFlagColumn.apply(this, arguments);
             }
         },
         {

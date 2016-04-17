@@ -69,13 +69,52 @@ Ext.define('Financial.base.FinancialGrid', {
             items: this.getContextMenuItems()
         });
     },
+
+    renderFlagColumn: function (value, metaData, record) {
+        var format = Ext.String.format;
+        var parts = [];
+
+        metaData.tdAttr = 'data-qtip="' + value + '"';
+
+        if (record.get('status') === 'pending') {
+            parts.push(
+                Financial.util.Misc.icon({
+                    tooltip: format('{0} is pending confirmation', Ext.String.capitalize(this.itemName)),
+                    color: '#F1C232',
+                    type: 'exclamation-triangle'
+                })
+            );
+        }
+
+        if (record.get('repeat')) {
+            parts.push(
+                Financial.util.Misc.icon({
+                    tooltip: format('Recurrent {0}', this.itemName),
+                    color: '#3977F1',
+                    type: 'repeat'
+                })
+            );
+
+            if (record.isFake()) {
+                parts.push(
+                    Financial.util.Misc.icon({
+                        tooltip: format('Generated {0}', this.itemName),
+                        color: '#CC0000',
+                        type: 'magic'
+                    })
+                );
+            }
+        }
+
+        parts.push(value);
+
+        return parts.join(' ');
+    },
     
     getRowClasses: function (record) {
         var classes = [];
         var day = Financial.util.Misc.day;
 
-        classes.push('financial-grid-' + record.get('status') + '-row');
-        
         if (record.isFake()) {
             classes.push('fake-row');
         }
