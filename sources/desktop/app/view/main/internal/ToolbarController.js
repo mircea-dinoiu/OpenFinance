@@ -39,9 +39,13 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
             edPicker.previousValue = edPicker.getValue();
             params.end_date = Ext.util.Format.date(edPicker.getValue(), this.dateFormat);
 
-            Financial.app.getController('Data').loadData(params);
+            this.bufferedLoadData();
         }
     },
+
+    bufferedLoadData: Ext.Function.createBuffered(function (params) {
+        Financial.app.getController('Data').loadData(params);
+    }, 500),
 
     getEndDateButton: function () {
         return this.getView().down('[itemId="end-date-button"]');
