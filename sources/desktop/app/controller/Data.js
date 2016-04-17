@@ -500,6 +500,7 @@
                 expensesStore.proxy.extraParams = params;
             }
             expensesStore.load(function () {
+                Financial.util.RepeatedModels.generateClones(expensesStore);
                 check();
 
                 var count = 0;
@@ -552,7 +553,10 @@
             if (params != null) {
                 incomesStore.proxy.extraParams = params;
             }
-            incomesStore.load(check);
+            incomesStore.load(function () {
+                Financial.util.RepeatedModels.generateClones(incomesStore);
+                check();
+            });
         }
     });
 }());

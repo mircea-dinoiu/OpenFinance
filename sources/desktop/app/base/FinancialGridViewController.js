@@ -55,12 +55,22 @@ Ext.define('Financial.base.FinancialGridViewController', {
     setStatusToSelectedRecords: function (status) {
         var grid = this.getView();
         var records = grid.getSelection();
+        var store = grid.getStore();
 
         Ext.each(records, function (record) {
+            if (status === 'finished' && record.get('repeat') != null) {
+                var copy = record.copy(null);
+                var attrs = Financial.util.RepeatedModels.advanceRepeatDate(copy.data);
+
+                copy.set(attrs);
+
+                store.add(copy.data);
+            }
+            
             record.set('status', status);
         });
 
-        grid.getStore().sync();
+        store.sync();
     },
 
     onMarkSelectionAsPendingClick: function () {

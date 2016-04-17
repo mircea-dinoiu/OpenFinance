@@ -85,7 +85,6 @@ class ExpenseController extends Controller
 
                 if ($validator->passes()) {
                     $model = Expense::find($record['id']);
-                    $clone = $model->toArray();
 
                     if (array_key_exists('sum', $record)) {
                         $model->sum = $record['sum'];
@@ -122,11 +121,6 @@ class ExpenseController extends Controller
                         if ($model->status === Expense::STATUS_FINISHED) {
                             $model->sum = CurrencyController::convertToDefault($model->sum, $model->currency_id);
                             $model->currency_id = CurrencyController::getDefaultCurrency()->id;
-
-                            if ($model->repeat !== null) {
-                                $this->create(advanceRepeatDate($clone));
-                            }
-
                             $model->repeat = null;
                         }
                     }

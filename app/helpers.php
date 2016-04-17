@@ -55,29 +55,6 @@ class Calculator
     }
 }
 
-function advanceRepeatDate($record) {
-    $date = new DateTime($record['created_at']);
-
-    switch ($record['repeat']) {
-        case 'd':
-            $date->modify('+1 day');
-            break;
-        case 'w':
-            $date->modify('+1 week');
-            break;
-        case 'm':
-            $date->modify('+1 month');
-            break;
-        case 'y':
-            $date->modify('+1 year');
-            break;
-    }
-
-    $record['created_at'] = standardDate($date);
-    
-    return $record;
-}
-
 function standardDate($date) {
     $format = 'Y-m-d H:i:s';
 

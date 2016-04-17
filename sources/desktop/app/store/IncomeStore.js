@@ -21,8 +21,7 @@ Ext.define('Financial.store.IncomeStore', {
     proxy: {
         type: 'ajax',
         reader: {
-            type: 'json',
-            transform: Financial.util.RepeatedModels.createTransformer('Financial.model.IncomeModel')
+            type: 'json'
         },
         api: {
             read: Financial.routes.income.list,

@@ -33,9 +33,10 @@ Ext.define('Financial.util.RepeatedModels', {
         };
     },
 
-    advanceRepeatDate: function (obj, repeats) {
+    advanceRepeatDate: function (obj, rawRepeats) {
         var newObject = Ext.clone(obj);
         var date = new Date(newObject.created_at);
+        var repeats = rawRepeats || 1;
 
         switch (newObject.repeat) {
             case 'd':
@@ -56,56 +57,64 @@ Ext.define('Financial.util.RepeatedModels', {
 
         return newObject;
     },
-    
-    transformRepeated: function (data, Model) {
+
+    getClonesFor: function (item, Model, endDate) {
         var out = [];
-        var endDate = Financial.app.getController('Data').getEndDate();
 
-        data.forEach(function (item) {
-            if (item.repeat != null) {
-                var repeats = 1;
+        if (item.repeat != null) {
+            var repeats = 1;
 
-                while (true) {
-                    var newObject = Financial.util.RepeatedModels.advanceRepeatDate(item, repeats);
+            while (true) {
+                var newObject = Financial.util.RepeatedModels.advanceRepeatDate(
+                    _.omit(item, 'id'),
+                    repeats
+                );
 
-                    if (Ext.util.Format.date(newObject.created_at, 'Y-m-d') > Ext.util.Format.date(endDate, 'Y-m-d')) {
-                        break;
-                    } else {
-                        newObject.id = Model.identifier.generate();
+                newObject.persist = false;
 
-                        out.push(newObject);
-                        repeats++;
-                    }
+                if (Ext.util.Format.date(newObject.created_at, 'Y-m-d') > Ext.util.Format.date(endDate, 'Y-m-d')) {
+                    break;
+                } else {
+                    out.push(new Model(newObject));
+                    repeats++;
                 }
             }
-
-            out.push(item);
-        });
+        }
 
         return out;
     },
-    
-    createTransformer: function (modelClassName) {
-        var me = this;
 
-        return function (data) {
-            return me.transformRepeated(data, Ext.ClassManager.get(modelClassName));
-        };
-    },
-    
-    shouldRefreshAllData: function (operation) {
-        return operation.getRecords().filter(
-            function (record) {
-                return record.hasRepeatClones();
-            }
-        ).length > 0;
-    },
-    
     idColumnRenderer: function (value) {
         if (isNaN(parseInt(value))) {
             return '';
         }
 
         return value;
+    },
+
+    generateClones: function (store) {
+        var me = this;
+        var oldClones = [];
+        var newClones = [];
+        var endDate = Financial.app.getController('Data').getEndDate();
+
+        store.getRange().forEach(function (record) {
+            if (record.isFake()) {
+                oldClones.push(record);
+            } else if (record.get('repeat')) {
+                var recordClones = me.getClonesFor(record.data, store.model, endDate);
+
+                if (recordClones.length) {
+                    newClones = newClones.concat(recordClones);
+                }
+            }
+        });
+
+        oldClones.forEach(function (record) {
+            store.remove(record);
+        });
+        newClones.forEach(function (record) {
+            store.add(record);
+        });
     }
 });

@@ -95,7 +95,6 @@ class IncomeController extends Controller
 
                 if ($validator->passes()) {
                     $model = Income::find($record['id']);
-                    $clone = $model->toArray();
 
                     if (array_key_exists('sum', $record)) {
                         $model->sum = $record['sum'];
@@ -129,10 +128,6 @@ class IncomeController extends Controller
                         $model->status = $record['status'];
 
                         if ($model->status === Income::STATUS_FINISHED) {
-                            if ($model->repeat !== null) {
-                                $this->create(advanceRepeatDate($clone));
-                            }
-
                             $model->repeat = null;
                         }
                     }

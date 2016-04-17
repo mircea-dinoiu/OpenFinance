@@ -40,7 +40,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
             params.end_date = Ext.util.Format.date(edPicker.getValue(), this.dateFormat);
 
             if (buffered === true) {
-                this.bufferedLoadData();
+                this.bufferedLoadData(params);
             } else {
                 Financial.app.getController('Data').loadData(params);
             }

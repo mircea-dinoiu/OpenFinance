@@ -2,7 +2,8 @@ Ext.define('Financial.model.ExpenseModel', {
     extend: 'Financial.model.BaseRepeatModel',
 
     fields: [
-        {name: 'id'},
+        {name: 'id', type: 'int'},
+        {name: 'persist', type: 'boolean', defaultValue: true, persist: false},
         {name: 'sum', type: 'float', defaultValue: ''},
         {name: 'currency_id', type: 'int'},
         {name: 'item', type: 'string'},
