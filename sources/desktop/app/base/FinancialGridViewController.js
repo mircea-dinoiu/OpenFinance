@@ -2,7 +2,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
     extend: 'Financial.base.GridViewController',
 
     onBeforeRowEditing: function (rowEditing, context) {
-        if (context.record.isFake()) {
+        if (context.record.isGenerated()) {
             return false;
         }
 

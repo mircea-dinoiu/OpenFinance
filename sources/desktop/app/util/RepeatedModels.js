@@ -99,7 +99,7 @@ Ext.define('Financial.util.RepeatedModels', {
         var endDate = Financial.app.getController('Data').getEndDate();
 
         store.getRange().forEach(function (record) {
-            if (record.isFake()) {
+            if (record.isGenerated()) {
                 oldClones.push(record);
             } else if (record.get('repeat')) {
                 var recordClones = me.getClonesFor(record.data, store.model, endDate);

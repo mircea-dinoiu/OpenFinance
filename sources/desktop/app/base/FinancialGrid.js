@@ -93,7 +93,7 @@ Ext.define('Financial.base.FinancialGrid', {
                 })
             );
 
-            if (record.isFake()) {
+            if (record.isGenerated()) {
                 parts.push(
                     Financial.util.Misc.icon({
                         tooltip: format('Generated {0}', this.itemName),
@@ -112,10 +112,6 @@ Ext.define('Financial.base.FinancialGrid', {
     getRowClasses: function (record) {
         var classes = [];
         var day = Financial.util.Misc.day;
-
-        if (record.isFake()) {
-            classes.push('fake-row');
-        }
 
         if (record.get('created_at').getDate() % 2 === 0) {
             classes.push('even-row');
@@ -141,7 +137,7 @@ Ext.define('Financial.base.FinancialGrid', {
                 Financial.util.Events.dataViewAutoFit(dataView);
             },
             beforeselect: function (view, record) {
-                if (record.isFake()) {
+                if (record.isGenerated()) {
                     return false;
                 }
             },
