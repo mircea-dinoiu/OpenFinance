@@ -74,8 +74,6 @@ Ext.define('Financial.base.FinancialGrid', {
         var format = Ext.String.format;
         var parts = [];
 
-        metaData.tdAttr = 'data-qtip="' + value + '"';
-
         if (record.get('status') === 'pending') {
             parts.push(
                 Financial.util.Misc.icon({
@@ -106,7 +104,7 @@ Ext.define('Financial.base.FinancialGrid', {
             }
         }
 
-        parts.push(value);
+        parts.push(format('<span data-qtip="{0}">{0}</span>', value));
 
         return parts.join(' ');
     },

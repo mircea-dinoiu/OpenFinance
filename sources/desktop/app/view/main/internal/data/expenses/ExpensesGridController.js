@@ -95,7 +95,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         var editor = rowEditing.getEditor();
 
         if (this.callParent(arguments) === false) {
-            return;
+            return false;
         }
 
         editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
