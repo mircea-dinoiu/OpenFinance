@@ -9,32 +9,49 @@ Ext.define('Financial.view.main.internal.Data', {
 
     xtype: 'app-main-internal-data',
 
-    layout: 'border',
-    defaults: {
-        split: true
+    layout: {
+        type: 'hbox',
+        align: 'stretch'
     },
+
     items: [
         {
             title: 'Reports',
-            region: 'west',
             minWidth: 250,
             width: 250,
-            collapsible: true,
             xtype: 'app-main-internal-data-reports'
         },
         {
-            title: 'Expenses',
-            region: 'center',
-            xtype: 'app-main-internal-data-expenses'
+            width: 10,
+            bodyStyle: 'background: #EEEEEE;'
         },
         {
-            title: 'Incomes',
-            region: 'east',
-            minWidth: 500,
-            width: 500,
-            collapsed: true,
-            collapsible: true,
-            xtype: 'app-main-internal-data-incomes'
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            flex: 1,
+            defaults: {
+                collapsible: true,
+                flex: 1
+            },
+            items: [
+                {
+                    title: 'Expenses',
+                    xtype: 'app-main-internal-data-expenses'
+                },
+                {
+                    height: 10,
+                    flex: 0,
+                    collapsible: false,
+                    bodyStyle: 'background: #EEEEEE;'
+                },
+                {
+                    title: 'Incomes',
+                    xtype: 'app-main-internal-data-incomes',
+                    collapseDirection: 'bottom'
+                }
+            ]
         }
     ]
 });

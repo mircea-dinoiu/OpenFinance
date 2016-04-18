@@ -8,7 +8,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         'Financial.view.main.internal.data.expenses.ExpensesGridController',
         'Financial.filter.grid.MultiListFilter'
     ],
-    
+
     itemName: 'expense',
 
     tbar: [

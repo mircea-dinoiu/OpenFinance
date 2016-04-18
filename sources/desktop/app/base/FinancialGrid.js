@@ -108,7 +108,7 @@ Ext.define('Financial.base.FinancialGrid', {
 
         return parts.join(' ');
     },
-    
+
     getRowClasses: function (record) {
         var classes = [];
         var day = Financial.util.Misc.day;
@@ -134,6 +134,9 @@ Ext.define('Financial.base.FinancialGrid', {
         },
         listeners: {
             refresh: function (dataView) {
+                Financial.util.Events.dataViewAutoFit(dataView);
+            },
+            scroll: function (dataView) {
                 Financial.util.Events.dataViewAutoFit(dataView);
             },
             beforeselect: function (view, record) {
