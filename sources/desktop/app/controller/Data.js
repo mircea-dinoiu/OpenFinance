@@ -390,7 +390,7 @@
             this.resetCache();
 
             Ext.Logger.info('Sync reports');
-            
+
             var mainView = Financial.app.getMainView();
 
             var data = mainView.down('app-main-internal-data');
@@ -507,11 +507,11 @@
                 var startDate = me.getStartDate();
 
                 expensesStore.each(function (record) {
-                    if (startDate == null || record.get('created_at').toISOString() >= startDate.toISOString()) {
-                        return;
-                    }
+                    if (record.get('status') === 'pending' && record.get('persist')) {
+                        if (startDate == null || record.get('created_at').toISOString() >= startDate.toISOString()) {
+                            return;
+                        }
 
-                    if (record.get('status') === 'pending') {
                         count++;
                     }
                 });
