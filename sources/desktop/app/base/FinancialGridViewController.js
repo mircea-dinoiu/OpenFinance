@@ -71,6 +71,8 @@ Ext.define('Financial.base.FinancialGridViewController', {
         });
 
         store.sync();
+
+        grid.getView().refresh();
     },
 
     onMarkSelectionAsPendingClick: function () {
