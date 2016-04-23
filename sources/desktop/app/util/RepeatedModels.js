@@ -60,6 +60,7 @@ Ext.define('Financial.util.RepeatedModels', {
 
     getClonesFor: function (item, Model, endDate) {
         var out = [];
+        var day = Financial.util.Misc.day;
 
         if (item.repeat != null) {
             var repeats = 1;
@@ -72,7 +73,7 @@ Ext.define('Financial.util.RepeatedModels', {
 
                 newObject.persist = false;
 
-                if (Ext.util.Format.date(newObject.created_at, 'Y-m-d') > Ext.util.Format.date(endDate, 'Y-m-d')) {
+                if (day(newObject.created_at) > day(endDate)) {
                     break;
                 } else {
                     out.push(new Model(newObject));

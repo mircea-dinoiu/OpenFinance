@@ -17,7 +17,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
             var copy = record.copy(null);
 
             copy.set('status', 'pending');
-            
+
             store.add(copy);
         });
 
@@ -56,6 +56,8 @@ Ext.define('Financial.base.FinancialGridViewController', {
         var grid = this.getView();
         var records = grid.getSelection();
         var store = grid.getStore();
+        var endDate = Financial.app.getController('Data').getEndDate();
+        var day = Financial.util.Misc.day;
 
         Ext.each(records, function (record) {
             if (status === 'finished' && record.get('repeat') != null) {
@@ -64,15 +66,17 @@ Ext.define('Financial.base.FinancialGridViewController', {
 
                 copy.set(attrs);
 
-                store.add(copy.data);
+                if (day(endDate) >= day(attrs.created_at)) {
+                    store.add(copy.data);
+                }
+
+                record.set('repeat', null);
             }
-            
+
             record.set('status', status);
         });
 
         store.sync();
-
-        grid.getView().refresh();
     },
 
     onMarkSelectionAsPendingClick: function () {

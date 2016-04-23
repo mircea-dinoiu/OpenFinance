@@ -16,7 +16,7 @@ Ext.define('Financial.view.main.internal.managerWindow.ManagerWindowGrid', {
             refresh: function (dataView) {
                 Financial.util.Events.dataViewAutoFit(dataView);
             },
-            scroll: function (dataView) {
+            scrollend: function (dataView) {
                 Financial.util.Events.dataViewAutoFit(dataView);
             }
         }

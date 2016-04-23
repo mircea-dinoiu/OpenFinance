@@ -68,6 +68,10 @@ Ext.define('Financial.base.FinancialGrid', {
         this.contextMenu = Ext.create('Ext.menu.Menu', {
             items: this.getContextMenuItems()
         });
+
+        this.store.on('update', function () {
+            this.getView().refresh();
+        }, this);
     },
 
     renderFlagColumn: function (value, metaData, record) {
@@ -136,7 +140,7 @@ Ext.define('Financial.base.FinancialGrid', {
             refresh: function (dataView) {
                 Financial.util.Events.dataViewAutoFit(dataView);
             },
-            scroll: function (dataView) {
+            scrollend: function (dataView) {
                 Financial.util.Events.dataViewAutoFit(dataView);
             },
             beforeselect: function (view, record) {
