@@ -125,8 +125,14 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 displayField: 'item',
                 queryMode: 'local',
                 allowBlank: false,
+                anyMatch: true,
                 listeners: {
                     blur: 'onItemInputBlur'
+                },
+                listConfig: {
+                    getInnerTpl: function () {
+                        return '{item}<span class="item-usages">{usages:plural("item")}</span>';
+                    }
                 }
             },
             filter: {

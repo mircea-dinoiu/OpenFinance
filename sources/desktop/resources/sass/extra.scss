@@ -8,6 +8,12 @@ body > .x-mask {
   border: none !important;
 }
 
+.item-usages {
+  opacity: 0.5;
+  float: right;
+  font-style: italic;
+}
+
 .today-row {
   td {
     font-weight: bold;
