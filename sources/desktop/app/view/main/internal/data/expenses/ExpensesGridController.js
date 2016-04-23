@@ -106,12 +106,14 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
             var rawName = record.get('item').toLowerCase().trim();
 
             if (items[rawName] == null) {
-                items[rawName] = {item: record.get('item')};
+                items[rawName] = {item: record.get('item'), usages: 1};
+            } else {
+                items[rawName].usages++;
             }
         });
         editor.down('combo[itemId="item"]').setStore(new Ext.data.JsonStore({
             fields: ['item'],
-            data: Ext.Object.getValues(items)
+            data: _.sortBy(Ext.Object.getValues(items), 'usages').reverse()
         }));
     },
 
