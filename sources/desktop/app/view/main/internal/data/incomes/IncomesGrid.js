@@ -13,6 +13,15 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             text: 'Add Income',
             iconCls: 'x-fa fa-plus-circle',
             handler: 'addRecord'
+        },
+        {
+            xtype: 'tbfill'
+        },
+        {
+            text: 'Deselect All',
+            handler: 'onDeselectAllClick',
+            itemId: 'deselect',
+            disabled: true
         }
     ],
 

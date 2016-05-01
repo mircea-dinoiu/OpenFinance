@@ -28,21 +28,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         }
     ],
 
-    bbar: [
-        {
-            xtype: 'tbtext',
-            itemId: 'statistics'
-        }
-    ],
-
-    listeners: {
-        refresh: {
-            element: 'store',
-            fn: 'onStoreRefresh'
-        },
-        selectionchange: 'onSelectionChange'
-    },
-
     columns: [
         {
             text: 'ID',

@@ -16,6 +16,21 @@ Ext.define('Financial.base.FinancialGrid', {
         }
     ],
 
+    listeners: {
+        refresh: {
+            element: 'store',
+            fn: 'onStoreRefresh'
+        },
+        selectionchange: 'onSelectionChange'
+    },
+
+    bbar: [
+        {
+            xtype: 'tbtext',
+            itemId: 'statistics'
+        }
+    ],
+
     getContextMenuItems: function () {
         return [
             {
