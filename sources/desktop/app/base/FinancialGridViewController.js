@@ -18,11 +18,26 @@ Ext.define('Financial.base.FinancialGridViewController', {
 
         grid.getSelectionModel().deselectAll();
     },
-    
+
     onRowEditing: function () {
         this.callParent(arguments);
 
         this.onStoreRefresh();
+    },
+
+    togglePending: function (checkbox, value) {
+        var store = this.getView().getStore();
+        var filter = this.pendingFilter ? this.pendingFilter : new Ext.util.Filter({
+            property: 'status',
+            value: 'pending'
+        });
+
+        if (value === true) {
+            store.addFilter(filter);
+        } else {
+            store.removeFilter(filter);
+            this.pendingFilter = null;
+        }
     },
 
     onSelectionChange: function () {

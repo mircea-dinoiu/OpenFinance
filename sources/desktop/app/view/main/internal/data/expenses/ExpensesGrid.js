@@ -11,22 +11,15 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
 
     itemName: 'expense',
 
-    tbar: [
-        {
-            text: 'Add Expense',
-            iconCls: 'x-fa fa-cart-plus',
-            handler: 'addRecord'
-        },
-        {
-            xtype: 'tbfill'
-        },
-        {
-            text: 'Deselect All',
-            handler: 'onDeselectAllClick',
-            itemId: 'deselect',
-            disabled: true
-        }
-    ],
+    getDocked: function () {
+        var items = this.callParent(arguments);
+
+        items.forEach(function (docked) {
+            _.findWhere(docked.items, {itemId: 'addRecordButton'}).iconCls = 'x-fa fa-cart-plus';
+        });
+
+        return items;
+    },
 
     columns: [
         {

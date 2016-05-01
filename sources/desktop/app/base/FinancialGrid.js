@@ -77,8 +77,43 @@ Ext.define('Financial.base.FinancialGrid', {
         ];
     },
 
+    getDocked: function () {
+        return [
+            {
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [
+                    {
+                        text: Ext.String.format('Add {0}', this.itemName),
+                        handler: 'addRecord',
+                        itemId: 'addRecordButton'
+                    },
+                    {
+                        xtype: 'tbfill'
+                    },
+                    {
+                        xtype: 'checkbox',
+                        boxLabel: Ext.String.format('Display only pending {0}s', this.itemName),
+                        handler: 'togglePending'
+                    },
+                    {
+                        xtype: 'tbfill'
+                    },
+                    {
+                        text: 'Deselect All',
+                        handler: 'onDeselectAllClick',
+                        itemId: 'deselect',
+                        disabled: true
+                    }
+                ]
+            }
+        ];
+    },
+
     initComponent: function () {
         this.callParent(arguments);
+
+        this.addDocked(this.getDocked());
 
         this.contextMenu = Ext.create('Ext.menu.Menu', {
             items: this.getContextMenuItems()
