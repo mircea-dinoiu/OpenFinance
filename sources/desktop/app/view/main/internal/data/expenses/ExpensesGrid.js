@@ -130,6 +130,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         {
             text: 'Date',
             dataIndex: 'created_at',
+            tdCls: 'date',
             formatter: 'date("D d-m-Y")',
             fit: true,
             resizable: false,

@@ -85,6 +85,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             text: 'Date',
             formatter: 'date("D d-m-Y")',
             fit: true,
+            tdCls: 'date',
             resizable: false,
             align: 'center',
             editor: {
