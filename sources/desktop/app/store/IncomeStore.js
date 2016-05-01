@@ -1,5 +1,5 @@
 Ext.define('Financial.store.IncomeStore', {
-    extend: 'Ext.data.Store',
+    extend: 'Financial.store.BaseRepeatStore',
 
     model: 'Financial.model.IncomeModel',
 
@@ -34,15 +34,6 @@ Ext.define('Financial.store.IncomeStore', {
             writeAllFields: false,
             rootProperty: 'data',
             allowSingle: false
-        }
-    },
-
-    listeners: {
-        write: function () {
-            Financial.app.getController('Data').syncReports();
-        },
-        filterchange: function () {
-            Financial.app.getController('Data').syncReports();
         }
     }
 });

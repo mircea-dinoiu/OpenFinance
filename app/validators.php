@@ -56,3 +56,11 @@ foreach (
     as $each) {
     Validator::extend($each[0], idsValidator($each[1]));
 }
+
+Validator::extend('repeat', function ($attr, $value) {
+    return in_array($value, ['d', 'w', 'm', 'y']);
+});
+
+Validator::extend('status', function ($attr, $value) {
+    return in_array($value, ['finished', 'pending']);
+});

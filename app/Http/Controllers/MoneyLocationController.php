@@ -32,19 +32,19 @@ class MoneyLocationController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $moneyLocation = MoneyLocation::find($record['id']);
+                    $model = MoneyLocation::find($record['id']);
 
-                    if (isset($record['name'])) {
-                        $moneyLocation->name = trim($record['name']);
+                    if (array_key_exists('name', $record)) {
+                        $model->name = trim($record['name']);
                     }
 
-                    if (isset($record['type_id'])) {
-                        $moneyLocation->type_id = $record['type_id'];
+                    if (array_key_exists('type_id', $record)) {
+                        $model->type_id = $record['type_id'];
                     }
 
-                    $moneyLocation->save();
+                    $model->save();
 
-                    $output[] = $moneyLocation;
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -72,14 +72,14 @@ class MoneyLocationController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $moneyLocation = new MoneyLocation;
+                    $model = new MoneyLocation;
 
-                    $moneyLocation->name = trim($record['name']);
-                    $moneyLocation->type_id = $record['type_id'];
+                    $model->name = trim($record['name']);
+                    $model->type_id = $record['type_id'];
 
-                    $moneyLocation->save();
+                    $model->save();
 
-                    $output[] = $moneyLocation;
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }

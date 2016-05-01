@@ -390,7 +390,7 @@
             this.resetCache();
 
             Ext.Logger.info('Sync reports');
-            
+
             var mainView = Financial.app.getMainView();
 
             var data = mainView.down('app-main-internal-data');
@@ -496,19 +496,22 @@
 
             var expensesStore = this.getExpensesStore();
 
-            expensesStore.proxy.extraParams = params;
+            if (params != null) {
+                expensesStore.proxy.extraParams = params;
+            }
             expensesStore.load(function () {
+                Financial.util.RepeatedModels.generateClones(expensesStore);
                 check();
 
                 var count = 0;
                 var startDate = me.getStartDate();
 
                 expensesStore.each(function (record) {
-                    if (startDate == null || record.get('created_at').toISOString() >= startDate.toISOString()) {
-                        return;
-                    }
+                    if (record.get('status') === 'pending' && record.get('persist')) {
+                        if (startDate == null || record.get('created_at').toISOString() >= startDate.toISOString()) {
+                            return;
+                        }
 
-                    if (record.get('status') === 'pending') {
                         count++;
                     }
                 });
@@ -547,8 +550,13 @@
 
             var incomesStore = this.getIncomesStore();
 
-            incomesStore.proxy.extraParams = params;
-            incomesStore.load(check);
+            if (params != null) {
+                incomesStore.proxy.extraParams = params;
+            }
+            incomesStore.load(function () {
+                Financial.util.RepeatedModels.generateClones(incomesStore);
+                check();
+            });
         }
     });
 }());

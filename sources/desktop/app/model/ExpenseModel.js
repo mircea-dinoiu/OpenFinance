@@ -1,11 +1,13 @@
 Ext.define('Financial.model.ExpenseModel', {
-    extend: 'Ext.data.Model',
+    extend: 'Financial.model.BaseRepeatModel',
 
     fields: [
         {name: 'id', type: 'int'},
+        {name: 'persist', type: 'boolean', defaultValue: true, persist: false},
         {name: 'sum', type: 'float', defaultValue: ''},
         {name: 'currency_id', type: 'int'},
         {name: 'item', type: 'string'},
+        {name: 'repeat'},
         {
             name: 'created_at',
             type: 'date',
@@ -13,17 +15,13 @@ Ext.define('Financial.model.ExpenseModel', {
                 return Ext.Date.parse(date, 'Y-m-d H:i:s') || date;
             }
         },
-        {name: 'status', type: 'string'},
+        {name: 'status', type: 'string', defaultValue: 'pending'},
         {
             name: 'users',
-            convert: function (users) {
-                var ids = [];
-
-                Ext.each(users, function (user) {
-                    ids.push(parseInt(user.hasOwnProperty('id') ? user.id : user));
+            convert: function (ids) {
+                return (ids || []).map(function (id) {
+                    return parseInt(id);
                 });
-
-                return ids;
             },
             sortType: function (ids) {
                 var ret = [];
@@ -39,14 +37,10 @@ Ext.define('Financial.model.ExpenseModel', {
         },
         {
             name: 'categories',
-            convert: function (categories) {
-                var ids = [];
-
-                Ext.each(categories, function (category) {
-                    ids.push(parseInt(category.hasOwnProperty('id') ? category.id : category));
+            convert: function (ids) {
+                return (ids || []).map(function (id) {
+                    return parseInt(id);
                 });
-
-                return ids;
             },
             sortType: function (ids) {
                 var ret = [];

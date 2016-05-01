@@ -101,6 +101,8 @@ return [
     'user_ids' => 'The :attribute field is invalid.',
     'category_ids' => 'The :attribute field is invalid.',
     'money_location_id' => 'The :attribute field is invalid.',
+    'repeat' => 'The :attribute field is invalid.',
+    'status' => 'The :attribute field is invalid.',
 
     /*
     |--------------------------------------------------------------------------

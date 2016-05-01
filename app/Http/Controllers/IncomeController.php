@@ -25,7 +25,7 @@ class IncomeController extends Controller
         $validator = Validator::make($data, $validationRules);
 
         if ($validator->passes()) {
-            $query = Income::with('user');
+            $query = Income::query();
 
             if ($data['start_date']) {
                 $query->whereRaw('DATE(created_at) >= ?', [$data['start_date']]);
@@ -77,46 +77,64 @@ class IncomeController extends Controller
                 'id' => 'required|income_id',
                 'sum' => 'sometimes|required|numeric|not_in:0',
                 'description' => 'sometimes|required|string',
+                'repeat' => 'sometimes|repeat',
                 'user_id' => 'sometimes|required|user_id',
                 'money_location_id' => 'sometimes|money_location_id',
+                'status' => 'sometimes|required|status',
                 'created_at' => 'sometimes|required|integer'
             ];
 
             $output = [];
 
             foreach ($data as $record) {
-                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                if (array_key_exists('money_location_id', $record) && $record['money_location_id'] == 0) {
                     $record['money_location_id'] = NULL;
                 }
 
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $income = Income::find($record['id']);
+                    $model = Income::find($record['id']);
 
-                    if (isset($record['sum'])) {
-                        $income->sum = $record['sum'];
+                    if (array_key_exists('sum', $record)) {
+                        $model->sum = $record['sum'];
                     }
 
-                    if (isset($record['description'])) {
-                        $income->description = $record['description'];
+                    if (array_key_exists('description', $record)) {
+                        $model->description = $record['description'];
                     }
 
-                    if (isset($record['user_id'])) {
-                        $income->user_id = $record['user_id'];
+                    if (array_key_exists('repeat', $record)) {
+                        $model->repeat = $record['repeat'];
+
+                        if ($model->repeat != null) {
+                            $model->status = Income::STATUS_PENDING;
+                        }
                     }
 
-                    if (isset($record['money_location_id'])) {
-                        $income->money_location_id = $record['money_location_id'];
+                    if (array_key_exists('user_id', $record)) {
+                        $model->user_id = $record['user_id'];
                     }
 
-                    if (isset($record['created_at'])) {
-                        $income->created_at = date('Y-m-d H:i:s', $record['created_at']);
+                    if (array_key_exists('money_location_id', $record)) {
+                        $model->money_location_id = $record['money_location_id'];
                     }
 
-                    $income->save();
+                    if (array_key_exists('created_at', $record)) {
+                        $model->created_at = standardDate($record['created_at']);
+                    }
 
-                    $output[] = $income;
+                    if (array_key_exists('status', $record)) {
+                        $model->status = $record['status'];
+
+                        if ($model->status === Income::STATUS_FINISHED) {
+                            $model->repeat = null;
+                        }
+                    }
+                    
+                    $model->save();
+
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -137,6 +155,7 @@ class IncomeController extends Controller
                 'sum' => 'required|numeric|not_in:0',
                 'description' => 'required|string',
                 'user_id' => 'required|user_id',
+                'repeat' => 'sometimes|repeat',
                 'money_location_id' => 'sometimes|money_location_id',
                 'created_at' => 'sometimes|required|integer'
             ];
@@ -144,30 +163,16 @@ class IncomeController extends Controller
             $output = [];
 
             foreach ($data as $record) {
-                if (isset($record['money_location_id']) && $record['money_location_id'] == 0) {
+                if (array_key_exists('money_location_id', $record) && $record['money_location_id'] == 0) {
                     $record['money_location_id'] = NULL;
                 }
 
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $income = new Income;
+                    $model = $this->create($record);
 
-                    $income->sum = $record['sum'];
-                    $income->description = $record['description'];
-                    $income->user_id = $record['user_id'];
-
-                    if (isset($record['money_location_id'])) {
-                        $income->money_location_id = $record['money_location_id'];
-                    }
-
-                    if (isset($record['created_at'])) {
-                        $income->created_at = date('Y-m-d H:i:s', $record['created_at']);
-                    }
-
-                    $income->save();
-
-                    $output[] = $income;
+                    $output[] = $model;
                 } else {
                     $output[] = $validator->messages();
                 }
@@ -177,5 +182,30 @@ class IncomeController extends Controller
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
+    }
+    
+    protected function create($record) {
+        $model = new Income;
+
+        $model->sum = $record['sum'];
+        $model->description = $record['description'];
+        $model->user_id = $record['user_id'];
+        $model->status = Income::STATUS_PENDING;
+
+        if (array_key_exists('repeat', $record)) {
+            $model->repeat = $record['repeat'];
+        }
+
+        if (array_key_exists('money_location_id', $record)) {
+            $model->money_location_id = $record['money_location_id'];
+        }
+
+        if (array_key_exists('created_at', $record)) {
+            $model->created_at = standardDate($record['created_at']);
+        }
+
+        $model->save();
+        
+        return $model;
     }
 }

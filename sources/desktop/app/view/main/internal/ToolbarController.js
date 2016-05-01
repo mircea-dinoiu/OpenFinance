@@ -25,10 +25,10 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         ed.setMonth(ed.getMonth() + months);
         edPicker.setValue(ed);
 
-        this.applyFilter();
+        this.applyFilter(true);
     },
 
-    applyFilter: function () {
+    applyFilter: function (buffered) {
         var params = {},
             edButton = this.getEndDateButton(),
             edPicker = this.getEndDatePicker();
@@ -39,9 +39,17 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
             edPicker.previousValue = edPicker.getValue();
             params.end_date = Ext.util.Format.date(edPicker.getValue(), this.dateFormat);
 
-            Financial.app.getController('Data').loadData(params);
+            if (buffered === true) {
+                this.bufferedLoadData(params);
+            } else {
+                Financial.app.getController('Data').loadData(params);
+            }
         }
     },
+
+    bufferedLoadData: Ext.Function.createBuffered(function (params) {
+        Financial.app.getController('Data').loadData(params);
+    }, 500),
 
     getEndDateButton: function () {
         return this.getView().down('[itemId="end-date-button"]');
@@ -163,7 +171,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
             };
 
         if (dp.candidateValue && date(dp.previousValue) !== date(dp.candidateValue)) {
-            this.applyFilter(false);
+            this.applyFilter();
         } else {
             dp.setValue(dp.previousValue);
         }

@@ -5,7 +5,8 @@
   },
   "globals": {
     "Ext": true,
-    "Financial": true
+    "Financial": true,
+    "_": true
   },
   "rules": {
     "quotes": [2, "single"],

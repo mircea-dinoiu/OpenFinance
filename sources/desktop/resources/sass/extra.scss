@@ -8,35 +8,22 @@ body > .x-mask {
   border: none !important;
 }
 
-.expense-row {
-  &.pending-expense-row {
-    > td:nth-child(3) > .x-grid-cell-inner {
-      background: #F1C232;
-      color: rgba(0, 0, 0, 0.9);
-    }
-  }
-
-  + .x-grid-rowbody-tr .x-grid-rowbody {
-    .expense-details-separator {
-      width: calc(100% + 20px);
-      margin: -4px 0 5px -10px;
-      border: none;
-      border-top: 1px solid #EDEDED;
-    }
-  }
+.item-usages {
+  opacity: 0.5;
+  float: right;
+  font-style: italic;
 }
 
 .today-row {
   td {
     font-weight: bold;
+    background: rgba(0, 0, 0, 0.1);
   }
 }
 
 .future-row {
-  td:not([data-columnid^="actioncolumn"]) {
-    > .x-grid-cell-inner {
-      opacity: 0.5;
-    }
+  td {
+    background: rgba(0, 0, 0, 0.05);
   }
 }
 

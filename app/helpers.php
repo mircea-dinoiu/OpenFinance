@@ -54,3 +54,17 @@ class Calculator
         return 0;
     }
 }
+
+function standardDate($date) {
+    $format = 'Y-m-d H:i:s';
+
+    if ($date instanceof DateTime) {
+        return $date->format($format);
+    }
+
+    try {
+        return date($format, $date);
+    } catch (Exception $e) {
+        return standardDate(new DateTime($date));
+    }
+}

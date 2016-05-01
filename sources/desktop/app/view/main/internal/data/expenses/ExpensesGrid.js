@@ -1,192 +1,15 @@
 Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Financial.base.FinancialGrid',
     xtype: 'app-main-internal-data-expenses-grid',
     store: 'expense',
     controller: 'app-main-internal-data-expenses-grid',
-    autoScroll: true,
 
     requires: [
         'Financial.view.main.internal.data.expenses.ExpensesGridController',
         'Financial.filter.grid.MultiListFilter'
     ],
 
-    initComponent: function () {
-        this.callParent(arguments);
-
-        this.itemContextMenu = Ext.create('Ext.menu.Menu', {
-            items: [
-                {
-                    text: 'Flag as finished',
-                    iconCls: 'x-fa fa-lock',
-                    handler: this.getController().onMarkExpensesSelectionAsFinishedClick.bind(this.getController())
-                },
-                {
-                    text: 'Flag as pending',
-                    iconCls: 'x-fa fa-unlock',
-                    handler: this.getController().onMarkExpensesSelectionAsPendingClick.bind(this.getController())
-                },
-                {
-                    xtype: 'menuseparator'  
-                },
-                {
-                    text: 'Delete',
-                    iconCls: 'x-fa fa-minus-circle',
-                    handler: this.getController().onDeleteSelectedExpensesClick.bind(this.getController())
-                },
-                {
-                    text: 'Duplicate',
-                    iconCls: 'x-fa fa-files-o',
-                    handler: this.getController().onDuplicateSelectedExpensesClick.bind(this.getController())
-                },
-                {
-                    xtype: 'menuseparator'
-                },
-                {
-                    text: 'Round sum',
-                    iconCls: 'x-fa fa-arrows-v',
-                    handler: this.getController().onRoundExpenseSumClick.bind(this.getController())
-                },
-                {
-                    text: 'Ceil sum',
-                    iconCls: 'x-fa fa-long-arrow-up',
-                    handler: this.getController().onCeilExpenseSumClick.bind(this.getController())
-                },
-                {
-                    text: 'Floor sum',
-                    iconCls: 'x-fa fa-long-arrow-down',
-                    handler: this.getController().onFloorExpenseSumClick.bind(this.getController())
-                }
-            ]
-        });
-    },
-
-    viewConfig: {
-        getRowClass: function (record) {
-            function day(date) {
-                return Ext.util.Format.date(date, 'Y-m-d');
-            }
-
-            var classes = [];
-
-            classes.push(record.get('status') + '-expense-row');
-            classes.push('expense-row');
-
-            if (record.get('created_at').getDate() % 2 === 0) {
-                classes.push('even-row');
-            } else {
-                classes.push('odd-row');
-            }
-
-            if (day(record.get('created_at')) === day(new Date())) {
-                classes.push('today-row');
-            } else if (day(record.get('created_at')) > day(new Date())) {
-                classes.push('future-row');
-            }
-
-            return classes.join(' ');
-        },
-        listeners: {
-            refresh: function (dataView) {
-                Financial.util.Events.dataViewAutoFit(dataView);
-            },
-            itemcontextmenu: function (view, record, item, index, e) {
-                e.stopEvent(); // stops the default event. i.e. Windows Context Menu
-                view.grid.itemContextMenu.showAt(e.getXY()); // show context menu where user right clicked
-                return false;
-            }
-        },
-        loadMask: false,
-        stripeRows: false
-    },
-
-    selModel: {
-        selType: 'rowmodel', // rowmodel is the default selection model
-        mode: 'MULTI' // Allows selection of multiple rows
-    },
-
-    plugins: [
-        {
-            ptype: 'rowediting',
-            listeners: {
-                canceledit: 'onCancelRowEditing',
-                beforeedit: 'onBeforeRowEditing',
-                edit: 'onRowEditing'
-            }
-        },
-        {
-            ptype: 'gridfilters'
-            /*createColumnFilter: function (column) {
-             var me = this,
-             columnFilter = column.filter,
-             filter = {
-             column: column,
-             grid: me.grid,
-             owner: me
-             },
-             field, model, type;
-
-             if (Ext.isString(columnFilter)) {
-             filter.type = columnFilter;
-             } else {
-             Ext.apply(filter, columnFilter);
-             }
-
-             if (!filter.type) {
-             model = me.store.getModel();
-             // If no filter type given, first try to get it from the data field.
-             field = model && model.getField(column.dataIndex);
-             type = field && field.type;
-
-             filter.type = (type && me.defaultFilterTypes[type]) ||
-             column.defaultFilterType || 'string';
-             }
-
-             filter.createFilter = function (config, key) {
-             var filterCfg = {};//this.getFilterConfig(config, key);
-
-             console.log(filterCfg);
-
-             filterCfg.filterFn = function () {
-             console.log(arguments);
-             return true;
-             };
-
-             return new Ext.util.Filter(filterCfg);
-             };
-
-             column.filter = Ext.Factory.gridFilter(filter);
-             }*/
-        }
-        /*{
-         ptype: 'rowexpander',
-         expandOnDblClick: false,
-         expandOnEnter: false,
-         rowBodyTpl: [
-         '<hr class="expense-details-separator">',
-         // TODO THIS IS A HACK!? IMPROVE CODE PLEASE
-         '<div><strong>Sum for other currencies: </strong>{currency_id:this.prepareCurrency}{sum:this.getOtherCurrencies}</div>',
-         {
-         prepareCurrency: function (currencyId) {
-         this.currencyId = currencyId;
-         return '';
-         },
-         getOtherCurrencies: function (sum) {
-         var ret = [],
-         currency = Financial.data.Currency.getById(this.currencyId);
-
-         Ext.Object.each(currency.get('rates'), function (isoCode, multiplier) {
-         ret.push('<i>' + [
-         Financial.util.Format.money(sum * multiplier),
-         Financial.data.Currency.getCurrencyByISOCode(isoCode).get('symbol')
-         ].join(' ') + '</i>');
-         });
-
-         return ret.join(', ');
-         }
-         }
-         ]
-         }*/
-    ],
+    itemName: 'expense',
 
     tbar: [
         {
@@ -225,7 +48,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             text: 'ID',
             dataIndex: 'id',
             hidden: true,
-            align: 'right'
+            align: 'right',
+            renderer: Financial.util.RepeatedModels.idColumnRenderer
         },
         {
             text: 'Sum',
@@ -301,17 +125,21 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 displayField: 'item',
                 queryMode: 'local',
                 allowBlank: false,
+                anyMatch: true,
                 listeners: {
                     blur: 'onItemInputBlur'
+                },
+                listConfig: {
+                    getInnerTpl: function () {
+                        return '{item}<span class="item-usages">{usages:plural("item")}</span>';
+                    }
                 }
             },
             filter: {
                 type: 'string'
             },
-            renderer: function (value, metaData) {
-                metaData.tdAttr = 'data-qtip="' + value + '"';
-
-                return value;
+            renderer: function () {
+                return this.renderFlagColumn.apply(this, arguments);
             }
         },
         {
@@ -406,6 +234,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 labelField: 'full_name',
                 store: 'user'
             }
-        }
+        },
+        Financial.util.RepeatedModels.getRepeatColumnConfig()
     ]
 });
