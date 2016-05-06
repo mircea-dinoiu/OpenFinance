@@ -26,6 +26,9 @@ Ext.define('Financial.view.main.Internal', {
         },
         {
             layout: 'fit',
+            style: {
+                opacity: Financial.util.Discreteness.toOpacity()
+            },
             xtype: 'tabpanel',
             defaults: {
                 margin: '1px 0 0 0'

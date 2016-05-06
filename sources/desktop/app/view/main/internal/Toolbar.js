@@ -75,6 +75,22 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             xtype: 'tbfill'
         },
         {
+            xtype: 'slider',
+            width: 200,
+            value: Financial.util.Discreteness.getValue(),
+            increment: 10,
+            labelWidth: 80,
+            minValue: 0,
+            maxValue: 100,
+            fieldLabel: 'Discreteness',
+            tipText: function (thumb) {
+                return Ext.String.format('{0}%', thumb.value);
+            },
+            listeners: {
+                change: 'onDiscretenessChange'
+            }
+        },
+        {
             iconCls: 'x-fa fa-refresh',
             listeners: {
                 click: 'applyFilter'
