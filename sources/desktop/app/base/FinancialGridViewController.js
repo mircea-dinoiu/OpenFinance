@@ -142,8 +142,8 @@ Ext.define('Financial.base.FinancialGridViewController', {
         var grid = this.getView();
         var records = grid.getSelection();
         var store = grid.getStore();
-        // var endDate = Financial.app.getController('Data').getEndDate();
-        // var day = Financial.util.Misc.day;
+        var endDate = Financial.app.getController('Data').getEndDate();
+        var day = Financial.util.Misc.day;
 
         Ext.each(records, function (record) {
             if (status === 'finished' && record.get('repeat') != null) {
@@ -152,9 +152,11 @@ Ext.define('Financial.base.FinancialGridViewController', {
 
                 copy.set(attrs);
 
-                // if (day(endDate) >= day(attrs.created_at)) {
+                if (day(endDate) >= day(attrs.created_at)) {
                     store.add(copy.data);
-                // }
+                } else {
+                    copy.save();
+                }
 
                 record.set('repeat', null);
             }
