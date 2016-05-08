@@ -46,6 +46,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                         itemId: 'currency',
                         queryMode: 'local',
                         typeAhead: true,
+                        anyMatch: true,
                         allowBlank: false,
                         forceSelection: true,
                         store: 'currency'
@@ -102,8 +103,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 valueField: 'item',
                 displayField: 'item',
                 queryMode: 'local',
-                allowBlank: false,
                 anyMatch: true,
+                allowBlank: false,
                 listeners: {
                     blur: 'onItemInputBlur'
                 },
@@ -159,6 +160,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 displayField: 'name',
                 multiSelect: true,
                 queryMode: 'local',
+                anyMatch: true,
                 store: 'category'
             },
             filter: {
@@ -180,6 +182,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 displayField: 'name',
                 itemId: 'money_location',
                 queryMode: 'local',
+                anyMatch: true,
                 typeAhead: true,
                 forceSelection: true,
                 store: 'ml'
@@ -205,6 +208,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 displayField: 'full_name',
                 multiSelect: true,
                 queryMode: 'local',
+                anyMatch: true,
                 forceSelection: true,
                 store: 'user'
             },

@@ -102,6 +102,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 displayField: 'full_name',
                 itemId: 'user',
                 queryMode: 'local',
+                anyMatch: true,
                 typeAhead: true,
                 allowBlank: false,
                 forceSelection: true,
@@ -126,6 +127,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 displayField: 'name',
                 itemId: 'money_location',
                 queryMode: 'local',
+                anyMatch: true,
                 typeAhead: true,
                 forceSelection: true,
                 store: 'ml'
