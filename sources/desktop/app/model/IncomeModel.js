@@ -29,5 +29,24 @@ Ext.define('Financial.model.IncomeModel', {
                 return id == 0 ? '' : Financial.data.ML.getById(id).get('name');
             }
         }
-    ]
+    ],
+
+    proxy: {
+        type: 'ajax',
+        reader: {
+            type: 'json'
+        },
+        api: {
+            read: Financial.routes.income.list,
+            create: Financial.routes.income.create,
+            update: Financial.routes.income.update,
+            destroy: Financial.routes.income.destroy
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data',
+            allowSingle: false
+        }
+    }
 });
