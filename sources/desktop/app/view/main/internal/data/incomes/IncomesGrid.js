@@ -98,6 +98,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             renderer: Financial.util.Format.userIcon.bind(Financial.util.Format),
             editor: {
                 xtype: 'combo',
+                selectOnTab: false,
                 valueField: 'id',
                 displayField: 'full_name',
                 itemId: 'user',
@@ -123,6 +124,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             renderer: Financial.util.Format.mlName.bind(Financial.util.Format),
             editor: {
                 xtype: 'combo',
+                selectOnTab: false,
                 valueField: 'id',
                 displayField: 'name',
                 itemId: 'money_location',
