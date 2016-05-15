@@ -71,6 +71,7 @@ Ext.define('Financial.util.RepeatedModels', {
                     repeats
                 );
 
+                newObject.original = item.id;
                 newObject.persist = false;
 
                 if (day(newObject.created_at) > day(endDate)) {

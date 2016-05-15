@@ -206,6 +206,17 @@ Ext.define('Financial.base.FinancialGrid', {
                 }
 
                 return false;
+            },
+            itemdblclick: function (view, record) {
+                if (record.isGenerated()) {
+                    var grid = view.grid;
+                    var store = grid.store;
+                    var bufferedRenderer = _.findWhere(grid.getPlugins(), {ptype: 'bufferedrenderer'});
+                    var originalRecordIndex = store.handler.getIndexById(record.get('original'));
+
+                    bufferedRenderer.scrollTo(originalRecordIndex);
+                    grid.setSelection(store.getAt(originalRecordIndex));
+                }
             }
         },
         loadMask: false,
