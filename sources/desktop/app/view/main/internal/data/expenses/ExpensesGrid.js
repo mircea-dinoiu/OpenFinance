@@ -41,7 +41,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                     align: 'center',
                     editor: {
                         xtype: 'combo',
-                        selectOnTab: false,
                         valueField: 'id',
                         displayField: 'symbol',
                         itemId: 'currency',
@@ -157,7 +156,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             },
             editor: {
                 xtype: 'combo',
-                selectOnTab: false,
                 itemId: 'categories',
                 valueField: 'id',
                 displayField: 'name',
@@ -181,7 +179,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             renderer: Financial.util.Format.mlName,
             editor: {
                 xtype: 'combo',
-                selectOnTab: false,
                 valueField: 'id',
                 displayField: 'name',
                 itemId: 'money_location',
@@ -207,7 +204,6 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             renderer: Financial.util.Format.userIcons.bind(Financial.util.Format),
             editor: {
                 xtype: 'combo',
-                selectOnTab: false,
                 itemId: 'users',
                 valueField: 'id',
                 displayField: 'full_name',
