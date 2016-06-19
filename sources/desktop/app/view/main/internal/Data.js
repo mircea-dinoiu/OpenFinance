@@ -19,7 +19,9 @@ Ext.define('Financial.view.main.internal.Data', {
             title: 'Reports',
             minWidth: 250,
             width: 250,
-            xtype: 'app-main-internal-data-reports'
+            xtype: 'app-main-internal-data-reports',
+            collapsible: true,
+            collapseDirection: 'left'
         },
         {
             width: 10,

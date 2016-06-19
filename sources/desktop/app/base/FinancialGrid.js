@@ -207,6 +207,15 @@ Ext.define('Financial.base.FinancialGrid', {
 
                 return false;
             },
+            itemlongpress: function (view, record, item, index, e) {
+                e.stopEvent(); // stops the default event. i.e. Windows Context Menu
+
+                if (view.grid.getSelection().length > 0) {
+                    view.grid.contextMenu.showAt(e.getXY()); // show context menu where user right clicked
+                }
+
+                return false;
+            },
             itemdblclick: function (view, record) {
                 if (record.isGenerated()) {
                     var grid = view.grid;
