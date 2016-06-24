@@ -12,7 +12,6 @@ Ext.define('Financial.util.RepeatedModels', {
         return {
             text: 'Repeat',
             dataIndex: 'repeat',
-            fit: true,
             align: 'center',
             minWidth: 100,
             resizable: false,
