@@ -59,7 +59,8 @@ class HomeController extends Controller
 
         return View::make('desktop.main')->with([
             'bootstrapScript' => $bootstrapScript,
-            'baseUrl' => Config::get('app.url')
+            'baseUrl' => Config::get('app.url'),
+            'isMobile' => PlatformController::isMobile()
         ]);
     }
 }

@@ -9,6 +9,7 @@
             return Ext.String.format.apply(Ext.String, [this.toString()].concat(Array.from(arguments)))
         };
 
+        Financial.isMobile = Boolean({{ $isMobile }});
         Financial.data = {};
         Financial.debug = ('{{ var_export(Config::get('app.debug')) }}' === 'true');
         Financial.routes = {

@@ -21,6 +21,7 @@ Ext.define('Financial.view.main.internal.Data', {
             width: 250,
             xtype: 'app-main-internal-data-reports',
             collapsible: true,
+            collapsed: Financial.isMobile,
             collapseDirection: 'left'
         },
         {
