@@ -5,7 +5,8 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
     controller: 'app-main-internal-data-incomes-grid',
 
     requires: [
-        'Financial.view.main.internal.data.incomes.IncomesGridController'
+        'Financial.view.main.internal.data.incomes.IncomesGridController',
+        'Financial.filter.grid.MultiListFilter'
     ],
 
     itemName: 'income',
@@ -109,7 +110,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                     store: 'user'
                 },
                 filter: {
-                    type: 'list',
+                    type: 'multilist',
                     store: 'user',
                     labelField: 'full_name'
                 }
@@ -132,7 +133,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                     store: 'ml'
                 },
                 filter: {
-                    type: 'list',
+                    type: 'multilist',
                     store: 'ml',
                     labelField: 'name'
                 }

@@ -55,7 +55,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                             store: 'currency'
                         },
                         filter: {
-                            type: 'list',
+                            type: 'multilist',
                             store: 'currency',
                             idField: 'id',
                             labelField: 'iso_code'
@@ -187,7 +187,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                     store: 'ml'
                 },
                 filter: {
-                    type: 'list',
+                    type: 'multilist',
                     store: 'ml',
                     labelField: 'name'
                 }
