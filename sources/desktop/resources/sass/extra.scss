@@ -28,14 +28,15 @@ body > .x-mask {
 }
 
 .even-row {
-  td:first-child > .x-grid-cell-inner {
-    border-left: 3px solid lightblue;
+  td.x-grid-cell.date {
+    background: rgba(173, 216, 230, 0.75);
   }
 }
 
 .odd-row {
-  td:first-child > .x-grid-cell-inner {
-    border-left: 3px solid lightcoral;
+  td.x-grid-cell.date {
+    background: rgba(240, 128, 128, 0.75);
+    color: white;
   }
 }
 

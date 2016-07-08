@@ -195,5 +195,9 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         var panel = Ext.create('Financial.view.main.internal.ManageMLTypes');
 
         panel.show();
+    },
+
+    onDiscretenessChange: function (slider, value) {
+        Financial.util.Discreteness.setValue(value);
     }
 });

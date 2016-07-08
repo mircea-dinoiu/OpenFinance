@@ -12,7 +12,6 @@ Ext.define('Financial.util.RepeatedModels', {
         return {
             text: 'Repeat',
             dataIndex: 'repeat',
-            fit: true,
             align: 'center',
             minWidth: 100,
             resizable: false,
@@ -71,6 +70,7 @@ Ext.define('Financial.util.RepeatedModels', {
                     repeats
                 );
 
+                newObject.original = item.id;
                 newObject.persist = false;
 
                 if (day(newObject.created_at) > day(endDate)) {

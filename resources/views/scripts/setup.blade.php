@@ -9,6 +9,7 @@
             return Ext.String.format.apply(Ext.String, [this.toString()].concat(Array.from(arguments)))
         };
 
+        Financial.isMobile = Boolean({{ $isMobile }});
         Financial.data = {};
         Financial.debug = ('{{ var_export(Config::get('app.debug')) }}' === 'true');
         Financial.routes = {
@@ -51,12 +52,8 @@
             getEndDate: function () {
                 var date = new Date();
 
-                if (date.getDate() < 2) {
-                    date.setMonth(date.getMonth() - 1);
-                }
-
-                date.setMonth(date.getMonth() + 1);
                 date.setDate(1);
+                date.setMonth(date.getMonth() + 1);
 
                 return date;
             }

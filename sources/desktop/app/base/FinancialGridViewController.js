@@ -9,6 +9,92 @@ Ext.define('Financial.base.FinancialGridViewController', {
         return this.callParent(arguments);
     },
 
+    onDeselectAllClick: function () {
+        this.deselectAll();
+    },
+
+    deselectAll: function () {
+        var grid = this.getView();
+
+        grid.getSelectionModel().deselectAll();
+    },
+
+    onRowEditing: function () {
+        this.callParent(arguments);
+
+        this.onStoreRefresh();
+    },
+
+    togglePending: function (checkbox, value) {
+        var store = this.getView().getStore();
+        var filter = this.pendingFilter ? this.pendingFilter : new Ext.util.Filter({
+            property: 'status',
+            value: 'pending'
+        });
+
+        if (value === true) {
+            store.addFilter(filter);
+        } else {
+            store.removeFilter(filter);
+            this.pendingFilter = null;
+        }
+    },
+
+    onSelectionChange: function () {
+        this.onStoreRefresh();
+    },
+
+    onStoreRefresh: function () {
+        var me = this,
+            grid = me.getView(),
+            store = grid.getStore(),
+            items = [];
+
+        /**
+         * Toggle buttons depending on selected records
+         */
+        Ext.each(['deselect'], function (itemId) {
+            grid.down(Ext.String.format('button[itemId="{0}"]', itemId)).setDisabled(
+                grid.getSelection().length === 0
+            );
+        });
+
+        /**
+         * Create bottom bar text
+         */
+        items.push(Ext.String.format(
+            'Count: {0}',
+            store.getCount()
+        ));
+
+        items.push(Ext.String.format(
+            'Selected count: {0}',
+            grid.getSelection().length
+        ));
+
+        items.push(Ext.String.format(
+            'Selected sum: {0}',
+            (function () {
+                var sum = 0;
+
+                Ext.each(grid.getSelection(), function (record) {
+                    var recordSum = record.get('sum');
+                    var recordCurrency = record.get('currency_id');
+
+                    sum += recordCurrency != null ? Financial.data.Currency.convertToDefault(recordSum, recordCurrency) : recordSum;
+                });
+
+                return Ext.String.format(
+                    '{0} {1}',
+                    Financial.util.Format.money(sum),
+                    Financial.data.Currency.getDefaultCurrency().get('symbol')
+                );
+            }())
+        ));
+
+        grid.down('[itemId="statistics"]').setText(items.join(', '));
+    },
+
     onDuplicateSelectedRecordsClick: function () {
         var grid = this.getView();
         var store = grid.getStore();
@@ -68,6 +154,8 @@ Ext.define('Financial.base.FinancialGridViewController', {
 
                 if (day(endDate) >= day(attrs.created_at)) {
                     store.add(copy.data);
+                } else {
+                    copy.save();
                 }
 
                 record.set('repeat', null);

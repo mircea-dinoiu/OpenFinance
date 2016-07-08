@@ -16,6 +16,21 @@ Ext.define('Financial.base.FinancialGrid', {
         }
     ],
 
+    listeners: {
+        refresh: {
+            element: 'store',
+            fn: 'onStoreRefresh'
+        },
+        selectionchange: 'onSelectionChange'
+    },
+
+    bbar: [
+        {
+            xtype: 'tbtext',
+            itemId: 'statistics'
+        }
+    ],
+
     getContextMenuItems: function () {
         return [
             {
@@ -62,8 +77,43 @@ Ext.define('Financial.base.FinancialGrid', {
         ];
     },
 
+    getDocked: function () {
+        return [
+            {
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [
+                    {
+                        text: Ext.String.format('Add {0}', this.itemName),
+                        handler: 'addRecord',
+                        itemId: 'addRecordButton'
+                    },
+                    {
+                        xtype: 'tbfill'
+                    },
+                    {
+                        xtype: 'checkbox',
+                        boxLabel: Ext.String.format('Display only pending {0}s', this.itemName),
+                        handler: 'togglePending'
+                    },
+                    {
+                        xtype: 'tbfill'
+                    },
+                    {
+                        text: 'Deselect All',
+                        handler: 'onDeselectAllClick',
+                        itemId: 'deselect',
+                        disabled: true
+                    }
+                ]
+            }
+        ];
+    },
+
     initComponent: function () {
         this.callParent(arguments);
+
+        this.addDocked(this.getDocked());
 
         this.contextMenu = Ext.create('Ext.menu.Menu', {
             items: this.getContextMenuItems()
@@ -156,6 +206,26 @@ Ext.define('Financial.base.FinancialGrid', {
                 }
 
                 return false;
+            },
+            itemlongpress: function (view, record, item, index, e) {
+                e.stopEvent(); // stops the default event. i.e. Windows Context Menu
+
+                if (view.grid.getSelection().length > 0) {
+                    view.grid.contextMenu.showAt(e.getXY()); // show context menu where user right clicked
+                }
+
+                return false;
+            },
+            itemdblclick: function (view, record) {
+                if (record.isGenerated()) {
+                    var grid = view.grid;
+                    var store = grid.store;
+                    var bufferedRenderer = _.findWhere(grid.getPlugins(), {ptype: 'bufferedrenderer'});
+                    var originalRecordIndex = store.handler.getIndexById(record.get('original'));
+
+                    bufferedRenderer.scrollTo(originalRecordIndex);
+                    grid.setSelection(store.getAt(originalRecordIndex));
+                }
             }
         },
         loadMask: false,

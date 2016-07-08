@@ -7,11 +7,15 @@ Ext.define('Financial.filter.grid.MultiListFilter', {
 
         filter.operatorFns[this.operator] = function (candidate) {
             var matchesFilter = true,
-                selectedUserIds = this._filterValue,
-                presentUserIds = this.getCandidateValue(candidate, selectedUserIds);
+                selection = this._filterValue,
+                recordValue = this.getCandidateValue(candidate, selection);
 
-            Ext.Array.each(selectedUserIds, function (selectedUserId) {
-                if (!Ext.Array.contains(presentUserIds, selectedUserId)) {
+            Ext.Array.each(selection, function (id) {
+                if (recordValue.constructor !== Array) {
+                    if (!Ext.Array.contains(selection, recordValue)) {
+                        matchesFilter = false;
+                    }
+                } else if (!Ext.Array.contains(recordValue, id)) {
                     matchesFilter = false;
                 }
 
