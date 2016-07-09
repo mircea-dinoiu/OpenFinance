@@ -85,8 +85,36 @@ Ext.define('Financial.base.FinancialGrid', {
                 items: [
                     {
                         text: Ext.String.format('Add {0}', this.itemName),
-                        handler: 'addRecord',
-                        itemId: 'addRecordButton'
+                        itemId: 'addRecordButton',
+                        menu: {
+                            xtype: 'menu',
+                            plain: true,
+                            listeners: {
+                                show: 'onAddRecordMenuShow'
+                            },
+                            items: [
+                                {
+                                    text: '<b>Smart</b> <i>(default)</i>',
+                                    itemId: 'smart',
+                                    handler: 'addRecord'
+                                },
+                                {
+                                    text: 'Use maximum date from the records',
+                                    itemId: 'max',
+                                    handler: 'addRecord'
+                                },
+                                {
+                                    text: 'Use today\'s date',
+                                    itemId: 'today',
+                                    handler: 'addRecord'
+                                },
+                                {
+                                    text: 'Use the first selected row date',
+                                    itemId: 'relative',
+                                    handler: 'addRecord'
+                                }
+                            ]
+                        }
                     },
                     {
                         xtype: 'tbfill'

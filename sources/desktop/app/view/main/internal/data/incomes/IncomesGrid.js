@@ -78,15 +78,14 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             },
             {
                 dataIndex: 'created_at',
-                text: 'Date',
-                formatter: 'date("D d-m-Y")',
+                text: 'Date & Time',
+                formatter: 'date(" D d-m-Y, H:i ")',
                 tdCls: 'date',
                 resizable: false,
                 align: 'center',
                 editor: {
                     xtype: 'datefield',
-                    format: 'd-m-Y',
-                    altFormats: 'd/m/Y|j/n/Y|j/n/y|j/m/y|d/n/y|j/m/Y|d/n/Y|d-m-y|d/m|d-m|dm|dmy|dmY|d|Y-m-d|j-n|j/n',
+                    format: 'd-m-Y, H:i',
                     startDay: 1
                 }
             },

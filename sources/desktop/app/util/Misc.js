@@ -1,48 +1,63 @@
 Ext.define('Financial.util.Misc', {
     singleton: true,
 
-    generateEICreationDate: function (grid) {
+    generateEICreationDate: function (button) {
+        var grid = button.up('grid');
+        var now = new Date();
         var firstSelected = grid.getSelection()[0];
-        var createdAt = new Date();
-        var increaseSeconds = function (date) {
-            date.setSeconds(date.getSeconds() + 1);
+        var createdAt = null;
+        var setTime = function (date) {
+            date.setHours(now.getHours(), now.getMinutes());
         };
+        var sd = Financial.app.getController('Data').getStartDate(),
+            ed = Financial.app.getController('Data').getEndDate(),
+            day = Financial.util.Misc.day;
 
-        if (firstSelected) {
-            createdAt = new Date(firstSelected.get('created_at'));
+        var behaviors = {
+            'smart': function () {
+                [
+                    behaviors.relative,
+                    behaviors.today,
+                    behaviors.max
+                ].every(function (behavior) {
+                    behavior();
 
-            increaseSeconds(createdAt);
-        } else {
-            var sd = Financial.app.getController('Data').getStartDate(),
-                ed = Financial.app.getController('Data').getEndDate(),
-                date = function (value) {
-                    return Ext.util.Format.date(value, 'Y-m-d');
-                },
-                setCreatedAt = function (defaultDate) {
+                    return createdAt == null;
+                });
+            },
+            'today': function () {
+                if (day(now) <= day(ed)) {
+                    createdAt = new Date();
+                }
+            },
+            'max': function () {
+                var setCreatedAt = function (defaultDate) {
                     if (grid.getStore().count()) {
                         createdAt = new Date(grid.getStore().max('created_at'));
                     } else {
                         createdAt = new Date(defaultDate);
                     }
 
-                    increaseSeconds(createdAt);
+                    setTime(createdAt);
                 };
 
-            if (ed !== null || sd !== null) {
-                if (ed === null) {
-                    if (date(createdAt) < date(sd)) {
-                        setCreatedAt(sd);
-                    }
-                } else if (sd === null) {
-                    if (date(createdAt) > date(ed)) {
-                        setCreatedAt(sd);
-                    }
-                } else if (date(createdAt) < date(sd) ||
-                    date(createdAt) > date(ed)) {
+                if (sd === null) {
+                    setCreatedAt(ed);
+                } else if (day(now) < day(sd) ||
+                    day(now) > day(ed)) {
                     setCreatedAt(sd);
                 }
+            },
+            'relative': function () {
+                if (firstSelected) {
+                    createdAt = new Date(firstSelected.get('created_at'));
+
+                    setTime(createdAt);
+                }
             }
-        }
+        };
+
+        behaviors[button.itemId]();
 
         return createdAt;
     },
@@ -66,7 +81,7 @@ Ext.define('Financial.util.Misc', {
     day: function (date) {
         return Ext.util.Format.date(date, 'Y-m-d');
     },
-    
+
     icon: function (opts) {
         return Ext.String.format(
             '<i data-qtip="{0}" style="font-style: normal; color: {1}" class="x-fa fa-{2}" aria-hidden="true"></i>',

@@ -124,16 +124,15 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 }
             },
             {
-                text: 'Date',
+                text: 'Date & Time',
                 dataIndex: 'created_at',
                 tdCls: 'date',
-                formatter: 'date("D d-m-Y")',
+                formatter: 'date(" D d-m-Y, H:i ")',
                 resizable: false,
                 align: 'center',
                 editor: {
                     xtype: 'datefield',
-                    format: 'd-m-Y',
-                    altFormats: 'd/m/Y|j/n/Y|j/n/y|j/m/y|d/n/y|j/m/Y|d/n/Y|d-m-y|d/m|d-m|dm|dmy|dmY|d|Y-m-d|j-n|j/n',
+                    format: 'd-m-Y, H:i',
                     startDay: 1
                 }
             },
