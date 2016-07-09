@@ -1,6 +1,18 @@
 Ext.define('Financial.base.FinancialGridViewController', {
     extend: 'Financial.base.GridViewController',
 
+    onAddRecordMenuShow: function (menu) {
+        menu.items.each(function (item) {
+            item.setDisabled(false);
+            item.setTooltip('');
+
+            if (null == Financial.util.Misc.generateEICreationDate(item)) {
+                item.setDisabled(true);
+                item.setTooltip('This option is not available for the current date range filter value');
+            }
+        });
+    },
+
     onBeforeRowEditing: function (rowEditing, context) {
         if (context.record.isGenerated()) {
             return false;

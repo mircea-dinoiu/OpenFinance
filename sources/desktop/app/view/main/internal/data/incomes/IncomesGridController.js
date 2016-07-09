@@ -3,9 +3,9 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGridController', {
 
     alias: 'controller.app-main-internal-data-incomes-grid',
 
-    addRecord: function () {
+    addRecord: function (button) {
         this.newRecordData = {
-            created_at: Financial.util.Misc.generateEICreationDate(this.getView()),
+            created_at: Financial.util.Misc.generateEICreationDate(button),
             user_id: Financial.data.user.current.id
         };
         this.callParent(arguments);

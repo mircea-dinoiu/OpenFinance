@@ -19,7 +19,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
     addRecord: function (button) {
         this.newRecordData = {
             currency_id: Financial.data.Currency.getDefaultCurrency().get('id'),
-            created_at: Financial.util.Misc.generateEICreationDate(button.up('grid')),
+            created_at: Financial.util.Misc.generateEICreationDate(button),
             users: [Financial.data.user.current.id]
         };
         this.newRecordEditAt = 1;
