@@ -63,7 +63,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
             },
             {
                 dataIndex: 'description',
-                text: 'Desc.',
+                text: 'Description',
                 minWidth: 100,
                 editor: {
                     xtype: 'textfield',
