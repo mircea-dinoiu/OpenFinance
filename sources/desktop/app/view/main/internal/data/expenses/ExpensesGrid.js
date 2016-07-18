@@ -95,7 +95,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 ]
             },
             {
-                text: 'Item',
+                text: 'Description',
                 dataIndex: 'item',
                 minWidth: 100,
                 editor: {
