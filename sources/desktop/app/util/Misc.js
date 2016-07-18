@@ -25,6 +25,24 @@ Ext.define('Financial.util.Misc', {
                     return createdAt == null;
                 });
             },
+            'yesterday': function () {
+                const yesterday = new Date(now);
+
+                yesterday.setDate(yesterday.getDate() - 1);
+
+                if (day(yesterday) <= day(ed)) {
+                    createdAt = yesterday;
+                }
+            },
+            'tomorrow': function () {
+                const tomorrow = new Date(now);
+
+                tomorrow.setDate(tomorrow.getDate() + 1);
+
+                if (day(tomorrow) <= day(ed)) {
+                    createdAt = tomorrow;
+                }
+            },
             'today': function () {
                 if (day(now) <= day(ed)) {
                     createdAt = new Date();

@@ -104,8 +104,18 @@ Ext.define('Financial.base.FinancialGrid', {
                                     handler: 'addRecord'
                                 },
                                 {
+                                    text: 'Use yesterday\'s date',
+                                    itemId: 'yesterday',
+                                    handler: 'addRecord'
+                                },
+                                {
                                     text: 'Use today\'s date',
                                     itemId: 'today',
+                                    handler: 'addRecord'
+                                },
+                                {
+                                    text: 'Use tomorrow\'s date',
+                                    itemId: 'tomorrow',
                                     handler: 'addRecord'
                                 },
                                 {
