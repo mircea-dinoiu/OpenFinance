@@ -170,7 +170,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
             },
             {
                 dataIndex: 'money_location_id',
-                text: 'Source',
+                text: 'Payment method',
                 align: 'center',
                 resizable: false,
                 renderer: Financial.util.Format.mlName,
@@ -192,7 +192,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                 }
             },
             {
-                text: 'Blame',
+                text: 'Charged person(s)',
                 dataIndex: 'users',
                 minWidth: 100,
                 resizable: false,
