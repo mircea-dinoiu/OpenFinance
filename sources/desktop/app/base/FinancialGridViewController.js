@@ -13,6 +13,10 @@ Ext.define('Financial.base.FinancialGridViewController', {
         });
     },
 
+    onRowContextMenuShow: function (menu) {
+        menu.down('[itemId="paste-column-value"]').setDisabled(this.clipboard == null);
+    },
+
     onBeforeRowEditing: function (rowEditing, context) {
         if (context.record.isGenerated()) {
             return false;
@@ -212,5 +216,56 @@ Ext.define('Financial.base.FinancialGridViewController', {
 
     onCeilRecordSumClick: function () {
         this.applyMathMethodOnSelectedRecords('ceil');
+    },
+
+    /**
+     * COPY OPERATIONS
+     */
+    onCopyColumnValueClick: function (item) {
+        var selection = this.getView().getSelection();
+        var record = selection[0];
+
+        this.clipboard = {
+            dataIndex: item.dataIndex,
+            value: record.get(item.dataIndex)
+        };
+
+        if (selection.length > 1) {
+            Ext.Msg.alert(
+                'Warning',
+                Ext.String.format(
+                    'Only one value can be copied into clipboard.<br>The value of the column "{0}" was copied only for "{1}".',
+                    item.text,
+                    record.get('item')
+                )
+            );
+        }
+    },
+
+    onPasteColumnValueClick: function () {
+        var grid = this.getView();
+
+        grid.getSelection().forEach(function (record) {
+            record.set(this.clipboard.dataIndex, this.clipboard.value);
+        }.bind(this));
+
+        grid.getStore().sync();
+
+        this.clipboard = null;
+    },
+
+    onCopyColumnValueMenuShow: function (menu) {
+        if (menu.items.length === 0) {
+            var grid = this.getView();
+
+            grid.getColumns().forEach(function (column) {
+                var data = {
+                    dataIndex: column.dataIndex,
+                    text: column.text
+                };
+
+                menu.add(Ext.create('Ext.menu.Item', data));
+            });
+        }
     }
 });
