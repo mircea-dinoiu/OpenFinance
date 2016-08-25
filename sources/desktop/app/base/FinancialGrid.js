@@ -73,6 +73,30 @@ Ext.define('Financial.base.FinancialGrid', {
                 text: 'Floor sum',
                 iconCls: 'x-fa fa-long-arrow-down',
                 handler: this.getController().onFloorRecordSumClick.bind(this.getController())
+            },
+            {
+                xtype: 'menuseparator'
+            },
+            {
+                text: 'Copy column value',
+                iconCls: 'x-fa fa-clipboard',
+                menu: {
+                    plain: true,
+                    defaults: {
+                        handler: this.getController().onCopyColumnValueClick.bind(this.getController())
+                    },
+                    listeners: {
+                        show: this.getController().onCopyColumnValueMenuShow.bind(this.getController())
+                    },
+                    items: []
+                }
+            },
+            {
+                text: 'Paste column value',
+                itemId: 'paste-column-value',
+                iconCls: 'x-fa fa-clipboard',
+                disabled: true,
+                handler: this.getController().onPasteColumnValueClick.bind(this.getController())
             }
         ];
     },
@@ -154,7 +178,10 @@ Ext.define('Financial.base.FinancialGrid', {
         this.addDocked(this.getDocked());
 
         this.contextMenu = Ext.create('Ext.menu.Menu', {
-            items: this.getContextMenuItems()
+            items: this.getContextMenuItems(),
+            listeners: {
+                show: this.getController().onRowContextMenuShow.bind(this.getController())
+            }
         });
 
         this.store.on('update', function () {
