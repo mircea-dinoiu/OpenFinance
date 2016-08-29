@@ -357,24 +357,28 @@
                 return parseInt(id);
             });
 
-            categoryIds.sort(function (a, b) {
-                if (a == 0) {
+            categoryIds.sort(function (id1, id2) {
+                if (id1 == 0) {
                     return -1;
                 }
 
-                if (b == 0) {
+                if (id2 == 0) {
                     return 1;
                 }
 
-                return Financial.data.Category.getById(a).get('expenses') > Financial.data.Category.getById(b).get('expenses') ? -1 : 1;
+                var sum1 = Ext.Array.sum(Ext.Object.getValues(categories[id1].users));
+                var sum2 = Ext.Array.sum(Ext.Object.getValues(categories[id2].users));
+
+                return sum1 > sum2 ? -1 : 1;
             });
 
-            Ext.each(categoryIds, function (categoryId) {
+            Ext.each(categoryIds, function (categoryId, index) {
                 Ext.Object.each(categories[categoryId].users, function (id, sum) {
                     data.push({
                         sum: sum,
                         description: description(Financial.data.User.getById(id).get('full_name')),
-                        group: categoryId
+                        group: categoryId,
+                        index: index
                     });
                 });
             });
