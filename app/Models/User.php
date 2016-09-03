@@ -49,7 +49,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getAvatarAttribute()
     {
         return sprintf(
-            'http://www.gravatar.com/avatar/%s',
+            'https://www.gravatar.com/avatar/%s',
             md5(strtolower(trim($this->email)))
         );
     }
