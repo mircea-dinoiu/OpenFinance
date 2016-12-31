@@ -13,6 +13,6 @@
 </head>
 <body>
 <div id="root"></div>
-<script src="{!! $baseUrl !!}/dist/bundles/mobile.js"></script>
+<script src="{!! $baseUrl !!}/dist/bundles/Mobile.js"></script>
 </body>
 </html>
