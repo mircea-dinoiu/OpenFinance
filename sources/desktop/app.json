@@ -167,7 +167,7 @@
   "production": {
       "output": {
         "page": "microloader.html",
-        "base": "${app.dir}/../../public/desktop"
+        "base": "${app.dir}/../../public"
       }
   },
   "testing": {
@@ -267,8 +267,6 @@
    * Extra resources to be copied along when build
    */
   "resources": [
-    "index.php",
-    "robots.txt"
   ],
   /**
    * File / directory name matchers to ignore when copying to the builds, must be valid regular expressions

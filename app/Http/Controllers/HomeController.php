@@ -43,8 +43,8 @@ class HomeController extends Controller
     public function getDesktopIndex()
     {
         $bootstrapScript = file_get_contents(app_path(sprintf(
-            '../%s/desktop/microloader.html',
-            Config::get('app.debug') ? 'sources' : 'public'
+            '../%s/microloader.html',
+            Config::get('app.debug') ? 'sources/desktop' : 'public'
         )));
 
         return View::make('desktop.main')->with([

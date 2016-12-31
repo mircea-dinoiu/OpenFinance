@@ -80,7 +80,7 @@
         <link rel="stylesheet" href="{{ url( "ext/build/classic/theme-$theme/resources/theme-$theme-all-debug.css" ) }}">
         <link rel="stylesheet" href="{{ url( 'ext/build/packages/charts/classic/classic/resources/charts-all-debug.css' ) }}">
     @endif
-    <link rel="stylesheet" href="{{ url( 'resources/css/extra.css?' . @filemtime(app_path('../public/desktop/resources/css/extra.css' ))) }}">
+    <link rel="stylesheet" href="{{ url( 'resources/css/extra.css?' . @filemtime(app_path('../public/resources/css/extra.css' ))) }}">
 
     {!! $bootstrapScript !!}
 </head>
