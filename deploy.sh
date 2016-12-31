@@ -1,4 +1,5 @@
 # Build with npm
+npm install
 npm run build
 
 # Build desktop version

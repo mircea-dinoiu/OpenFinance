@@ -198,6 +198,8 @@ class ExpenseController extends Controller
     public function postCreate()
     {
         $data = Input::get('data');
+        $validRecords = [];
+        $errors = [];
 
         if (is_array($data) && !empty($data)) {
             $validationRules = [
@@ -211,8 +213,6 @@ class ExpenseController extends Controller
                 'categories' => 'sometimes|category_ids'
             ];
 
-            $output = [];
-
             foreach ($data as $record) {
                 if (array_key_exists('money_location_id', $record) && $record['money_location_id'] == 0) {
                     $record['money_location_id'] = NULL;
@@ -221,15 +221,25 @@ class ExpenseController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $model = $this->create($record);
-
-                    $output[] = Expense::query()->find($model->id);
+                    $validRecords[] = $record;
                 } else {
-                    $output[] = $validator->messages();
+                    $errors[] = $validator->messages();
                 }
             }
 
-            return Response::json($output);
+            if (count($errors) > 0) {
+                return Response::json($errors, 400);
+            } else {
+                $output = [];
+
+                foreach ($validRecords as $record) {
+                    $model = $this->create($record);
+
+                    $output[] = Expense::query()->find($model->id);
+                }
+
+                return Response::json($output);
+            }
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
