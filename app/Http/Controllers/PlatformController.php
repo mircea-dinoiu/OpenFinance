@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Detection\MobileDetect;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Redirect;
 
 class PlatformController extends Controller {
     private static $detect;
@@ -23,13 +21,5 @@ class PlatformController extends Controller {
 
     public static function isSupported() {
         return self::isMobile() || self::isDesktop();
-    }
-
-    public static function validatePlatform($platform, $fallbackUrlKey, $return) {
-        if (ends_with($_SERVER['DOCUMENT_ROOT'], $platform)) {
-            return $return();
-        }
-
-        return Redirect::to(Config::get('app.' . $fallbackUrlKey));
     }
 }

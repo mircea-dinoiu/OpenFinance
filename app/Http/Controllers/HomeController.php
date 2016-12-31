@@ -23,14 +23,10 @@ class HomeController extends Controller
     public function getIndex()
     {
         if (PlatformController::isSupported()) {
-            if (false && PlatformController::isMobile()) { // temporary disable mobile app
-                return PlatformController::validatePlatform('mobile', 'url_mobile', function () {
-                    return $this->getMobileIndex();
-                });
+            if (PlatformController::isMobile()) {
+                return $this->getMobileIndex();
             } else {
-                return PlatformController::validatePlatform('desktop', 'url', function () {
-                    return $this->getDesktopIndex();
-                });
+                return $this->getDesktopIndex();
             }
         }
 
@@ -39,14 +35,8 @@ class HomeController extends Controller
 
     public function getMobileIndex()
     {
-        $bootstrapScript = file_get_contents(app_path(sprintf(
-            '../%s/mobile/microloader.html',
-            Config::get('app.debug') ? 'sources' : 'public'
-        )));
-
         return View::make('mobile.main')->with([
-            'bootstrapScript' => $bootstrapScript,
-            'baseUrl' => Config::get('app.url_mobile')
+            'baseUrl' => Config::get('app.url')
         ]);
     }
 

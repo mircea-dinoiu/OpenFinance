@@ -27,7 +27,6 @@ return [
     */
 
     'url' => env('APP_URL', 'http://financial.dinoiu.com'),
-    'url_mobile' => env('APP_URL_MOBILE', 'http://m.financial.dinoiu.com'),
 
     /*
     |--------------------------------------------------------------------------

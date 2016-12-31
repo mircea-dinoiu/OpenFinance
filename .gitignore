@@ -16,3 +16,4 @@ sources/desktop/resources/css
 .sass-cache
 .sencha_backup
 _ide_helper.php
+public/dist
