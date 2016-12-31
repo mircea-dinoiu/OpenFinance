@@ -1,10 +1,18 @@
 {
-  "private": true,
-  "devDependencies": {
-    "gulp": "^3.8.8"
+  "name": "financial",
+  "version": "1.0.0",
+  "description": "This application is made to track down your monthly expenses and incomes in the family and help you understand better where your money are going and how can you be more careful what you're spending money on.",
+  "scripts": {
+    "build": "echo \"Building project...\""
   },
-  "dependencies": {
-    "laravel-elixir": "^3.0.0",
-    "bootstrap-sass": "^3.0.0"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mircea-dinoiu/financial.git"
+  },
+  "author": "Mircea Dinoiu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mircea-dinoiu/financial/issues"
+  },
+  "homepage": "https://github.com/mircea-dinoiu/financial#readme"
 }
