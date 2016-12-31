@@ -1,7 +1,5 @@
-# Build mobile
-pushd sources/mobile
-#sencha app build
-popd
+# Build with npm
+npm run build
 
 # Build desktop version
 pushd sources/desktop

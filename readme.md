@@ -12,3 +12,13 @@ Working with:
 - Backend with Laravel 5 PHP Framework
 - Desktop UI with Sencha ExtJS 6
 - Mobile UI with Sencha Touch
+
+# How to deploy:
+```
+curl -sS https://getcomposer.org/installer | php
+git clone -b master git@bitbucket.org:mirceadinoiu/financial.git
+
+pushd financial
+php '../composer.phar' install
+bash deploy.sh
+```
