@@ -16,7 +16,7 @@ Working with:
 # How to deploy:
 ```
 curl -sS https://getcomposer.org/installer | php
-git clone -b master git@bitbucket.org:mirceadinoiu/financial.git
+git clone -b master git@github.com:mircea-dinoiu/financial.git
 
 pushd financial
 php '../composer.phar' install
