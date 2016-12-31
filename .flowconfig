@@ -1,0 +1,11 @@
+[ignore]
+.*/node_modules/.*/test
+<PROJECT_ROOT>/vendor
+
+[include]
+
+[libs]
+
+[options]
+module.system.node.resolve_dirname=sources
+
