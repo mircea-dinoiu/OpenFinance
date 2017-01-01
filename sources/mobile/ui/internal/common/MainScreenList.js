@@ -105,7 +105,7 @@ export default class MainScreenList extends PureComponent {
         }, 500);
     };
 
-    handleRefresh = async () => {
+    handleRefresh = async() => {
         this.setState({
             refreshing: true
         });
@@ -126,50 +126,52 @@ export default class MainScreenList extends PureComponent {
         return (
             <div>
                 {this.state.firstLoad ? <BigLoader/> : (
-                    <ReactPullToRefresh
-                        onRefresh={this.handleRefresh}
-                    >
-                        {this.state.refreshing && (
-                            <RefreshIndicator
-                                size={40}
-                                left={10}
-                                top={0}
-                                status="loading"
-                                style={{display: 'block', position: 'relative', margin: '10px auto'}}
-                            />
-                        )}
-                        <Subheader style={{textAlign: 'center'}}>Pull down to refresh</Subheader>
-                        {this.getGroupedResults().map(([date, items]) => {
-                            return (
-                                <div key={date}>
-                                    <List>
-                                        <Subheader style={{textAlign: 'center'}}>{moment(date).calendar(null, CalendarWithoutTime)}</Subheader>
-                                        {items.map(item => (
-                                            <ListItem
-                                                key={item.get('id')}
-                                                item={item.toJS()}
-                                                data={this.props}
-                                                onDelete={this.handleDelete}
-                                                onUpdate={this.handleUpdate}
-                                                api={this.props.api}
-                                            />
-                                        )).toArray()}
-                                    </List>
-                                    <Divider/>
-                                </div>
-                            )
-                        })}
-                        <Col>
-                            <RaisedButton
-                                label={this.state.loadingMore ? <ButtonProgress/> : 'Load More'}
-                                fullWidth={true}
-                                onTouchTap={this.loadMore}
-                                style={{margin: '20px 0 40px'}}
-                                disabled={this.state.loadingMore}
-                            />
-                        </Col>
-                    </ReactPullToRefresh>
-                )}
+                        <div>
+                            <ReactPullToRefresh
+                                onRefresh={this.handleRefresh}
+                            >
+                                {this.state.refreshing && (
+                                    <RefreshIndicator
+                                        size={40}
+                                        left={10}
+                                        top={0}
+                                        status="loading"
+                                        style={{display: 'block', position: 'relative', margin: '10px auto'}}
+                                    />
+                                )}
+                                <Subheader style={{textAlign: 'center'}}>Pull down to refresh</Subheader>
+                            </ReactPullToRefresh>
+                            {this.getGroupedResults().map(([date, items]) => {
+                                return (
+                                    <div key={date}>
+                                        <List>
+                                            <Subheader style={{textAlign: 'center'}}>{moment(date).calendar(null, CalendarWithoutTime)}</Subheader>
+                                            {items.map(item => (
+                                                <ListItem
+                                                    key={item.get('id')}
+                                                    item={item.toJS()}
+                                                    data={this.props}
+                                                    onDelete={this.handleDelete}
+                                                    onUpdate={this.handleUpdate}
+                                                    api={this.props.api}
+                                                />
+                                            )).toArray()}
+                                        </List>
+                                        <Divider/>
+                                    </div>
+                                )
+                            })}
+                            <Col>
+                                <RaisedButton
+                                    label={this.state.loadingMore ? <ButtonProgress/> : 'Load More'}
+                                    fullWidth={true}
+                                    onTouchTap={this.loadMore}
+                                    style={{margin: '20px 0 40px'}}
+                                    disabled={this.state.loadingMore}
+                                />
+                            </Col>
+                        </div>
+                    )}
             </div>
         );
     }
