@@ -46,6 +46,7 @@ export default class ExpenseListItem extends PureComponent {
     toggleEditDialog = () => {
         this.setState({
             createEditDialog: true,
+            editDialogKey: Date.now(),
             editDialogOpen: !this.state.editDialogOpen
         });
     };
@@ -61,11 +62,6 @@ export default class ExpenseListItem extends PureComponent {
 
     submitUpdate = (data) => {
         this.toggleEditDialog();
-
-        this.setState({
-            editDialogKey: Date.now()
-        });
-
         this.props.onUpdate(data);
     };
 
