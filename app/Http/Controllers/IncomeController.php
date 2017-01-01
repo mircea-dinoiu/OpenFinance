@@ -14,12 +14,16 @@ class IncomeController extends Controller
     {
         $data = [
             'start_date' => Input::get('start_date'),
-            'end_date' => Input::get('end_date')
+            'end_date' => Input::get('end_date'),
+            'page' => Input::get('page'),
+            'per_page' => Input::get('per_page')
         ];
 
         $validationRules = [
             'start_date' => 'sometimes|date_format:Y-m-d',
-            'end_date' => 'sometimes|date_format:Y-m-d'
+            'end_date' => 'sometimes|date_format:Y-m-d',
+            'page' => 'sometimes|numeric',
+            'per_page' => 'sometimes|numeric'
         ];
 
         $validator = Validator::make($data, $validationRules);
@@ -35,9 +39,17 @@ class IncomeController extends Controller
                 $query->whereRaw('DATE(created_at) <= ?', [$data['end_date']]);
             }
 
-            return Response::json(
-                $query->orderBy('created_at', 'desc')->get()
-            );
+            if (isset($data['page']) && isset($data['per_page'])) {
+                $perPage = $data['per_page'];
+
+                return Response::json(
+                    $query->skip(($data['page'] - 1) * $perPage)->take($perPage)->orderBy('created_at', 'desc')->get()
+                );
+            } else {
+                return Response::json(
+                    $query->orderBy('created_at', 'desc')->get()
+                );
+            }
         }
 
         return Response::json($validator->messages(), 400);
@@ -71,6 +83,8 @@ class IncomeController extends Controller
     public function postUpdate()
     {
         $data = Input::get('data');
+        $validRecords = [];
+        $errors = [];
 
         if (is_array($data) && !empty($data)) {
             $validationRules = [
@@ -84,8 +98,6 @@ class IncomeController extends Controller
                 'created_at' => 'sometimes|required|integer'
             ];
 
-            $output = [];
-
             foreach ($data as $record) {
                 if (array_key_exists('money_location_id', $record) && $record['money_location_id'] == 0) {
                     $record['money_location_id'] = NULL;
@@ -94,6 +106,18 @@ class IncomeController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
+                    $validRecords[] = $record;
+                } else {
+                    $errors[] = $validator->messages();
+                }
+            }
+
+            if (count($errors) > 0) {
+                return Response::json($errors, 400);
+            } else {
+                $output = [];
+
+                foreach ($validRecords as $record) {
                     $model = Income::find($record['id']);
 
                     if (array_key_exists('sum', $record)) {
@@ -131,16 +155,14 @@ class IncomeController extends Controller
                             $model->repeat = null;
                         }
                     }
-                    
+
                     $model->save();
 
                     $output[] = $model;
-                } else {
-                    $output[] = $validator->messages();
                 }
-            }
 
-            return Response::json($output);
+                return Response::json($output);
+            }
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
@@ -149,6 +171,8 @@ class IncomeController extends Controller
     public function postCreate()
     {
         $data = Input::get('data');
+        $validRecords = [];
+        $errors = [];
 
         if (is_array($data) && !empty($data)) {
             $validationRules = [
@@ -160,8 +184,6 @@ class IncomeController extends Controller
                 'created_at' => 'sometimes|required|integer'
             ];
 
-            $output = [];
-
             foreach ($data as $record) {
                 if (array_key_exists('money_location_id', $record) && $record['money_location_id'] == 0) {
                     $record['money_location_id'] = NULL;
@@ -170,21 +192,32 @@ class IncomeController extends Controller
                 $validator = Validator::make($record, $validationRules);
 
                 if ($validator->passes()) {
-                    $model = $this->create($record);
-
-                    $output[] = $model;
+                    $validRecords[] = $record;
                 } else {
-                    $output[] = $validator->messages();
+                    $errors[] = $validator->messages();
                 }
             }
 
-            return Response::json($output);
+            if (count($errors) > 0) {
+                return Response::json($errors, 400);
+            } else {
+                $output = [];
+
+                foreach ($validRecords as $record) {
+                    $model = $this->create($record);
+
+                    $output[] = $model;
+                }
+
+                return Response::json($output);
+            }
         }
 
         return Response::json(Lang::get('general.invalid_input_data'), 400);
     }
-    
-    protected function create($record) {
+
+    protected function create($record)
+    {
         $model = new Income;
 
         $model->sum = $record['sum'];
@@ -205,7 +238,7 @@ class IncomeController extends Controller
         }
 
         $model->save();
-        
+
         return $model;
     }
 }
