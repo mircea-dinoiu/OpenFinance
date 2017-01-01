@@ -236,7 +236,7 @@ export default class ExpenseEditor extends PureComponent {
                 {this.renderChargedPersons()}
                 {this.renderRepeat()}
 
-                <RaisedButton disabled={this.props.saving} label={this.props.saving ? <ButtonProgress/> : 'Save'} primary={true} fullWidth={true} style={{margin: '20px 0 40px'}} onClick={this.save}/>
+                <RaisedButton disabled={this.props.saving} label={this.props.saving ? <ButtonProgress/> : 'Save'} primary={true} fullWidth={true} style={{margin: '20px 0 40px'}} onTouchTap={this.save}/>
             </Col>
         );
     }

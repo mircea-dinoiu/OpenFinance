@@ -75,7 +75,7 @@ export default class Login extends PureComponent {
                     label={this.state.loading ? <ButtonProgress/> : 'Login'}
                     primary={true}
                     style={{margin: '20px 0 0'}}
-                    onClick={this.submit}
+                    onTouchTap={this.submit}
                     disabled={this.state.loading}
                 />
                 {this.state.error != null && (

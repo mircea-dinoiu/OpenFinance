@@ -98,7 +98,7 @@ export default class ExpenseList extends PureComponent {
                             <RaisedButton
                                 label={this.state.loadingMore ? <ButtonProgress/> : 'Load More'}
                                 fullWidth={true}
-                                onClick={this.loadMore}
+                                onTouchTap={this.loadMore}
                                 style={{margin: '20px 0 40px'}}
                                 disabled={this.state.loadingMore}
                             />
