@@ -1,6 +1,7 @@
+#!/usr/bin/env bash
 # Build with npm
 npm install
-npm run build
+npm run build:prod
 
 # Build desktop version
 pushd sources/desktop

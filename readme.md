@@ -20,5 +20,5 @@ git clone -b master git@github.com:mircea-dinoiu/financial.git
 
 pushd financial
 php '../composer.phar' install
-bash deploy.sh
+bash build.sh
 ```

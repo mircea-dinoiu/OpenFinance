@@ -4,7 +4,9 @@
   "description": "This application is made to track down your monthly expenses and incomes in the family and help you understand better where your money are going and how can you be more careful what you're spending money on.",
   "scripts": {
     "build": "webpack",
-    "watch": "webpack --watch"
+    "build:prod": "NODE_ENV=production webpack",
+    "build:hot": "NODE_ENV=hot webpack-dev-server --hot --inline",
+    "build:watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,7 @@
     "babel-preset-es2016": "^6.16.0",
     "babel-preset-es2017": "^6.16.0",
     "babel-preset-react": "^6.16.0",
+    "compression-webpack-plugin": "^0.3.2",
     "css-loader": "^0.26.1",
     "deep-extend": "^0.4.1",
     "eslint": "^3.12.2",

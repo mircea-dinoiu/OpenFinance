@@ -4,20 +4,20 @@ import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigati
 
 import Expenses from './internal/Expenses';
 
-import AccountBalance from 'material-ui/svg-icons/action/account-balance';
+// import AccountBalance from 'material-ui/svg-icons/action/account-balance';
 import TrendingUp from 'material-ui/svg-icons/action/trending-up';
 import TrendingDown from 'material-ui/svg-icons/action/trending-down';
 
 export default class Internal extends PureComponent {
     state = {
-        selectedIndex: 1,
+        selectedIndex: 0,
         tab: null
     };
 
     select = (index) => this.setState({selectedIndex: index, tab: this.createTab(index)});
 
     createTab(index) {
-        if (index == 1) {
+        if (index == 0) {
             return (
                 <Expenses {...this.props}/>
             );
@@ -43,20 +43,20 @@ export default class Internal extends PureComponent {
                 </div>
                 <Paper zDepth={1}>
                     <BottomNavigation selectedIndex={this.state.selectedIndex}>
-                        <BottomNavigationItem
+                        {/*<BottomNavigationItem
                             label="Balance"
                             icon={<AccountBalance/>}
                             onTouchTap={() => this.select(0)}
-                        />
+                        />*/}
                         <BottomNavigationItem
                             label="Expenses"
                             icon={<TrendingDown/>}
-                            onTouchTap={() => this.select(1)}
+                            onTouchTap={() => this.select(0)}
                         />
                         <BottomNavigationItem
                             label="Incomes"
                             icon={<TrendingUp/>}
-                            onTouchTap={() => this.select(2)}
+                            onTouchTap={() => this.select(1)}
                         />
                     </BottomNavigation>
                 </Paper>
