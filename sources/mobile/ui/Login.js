@@ -53,6 +53,7 @@ export default class Login extends PureComponent {
                     value={this.state.email}
                     onChange={event => this.setState({email: event.target.value})}
                     disabled={this.state.loading}
+                    fullWidth={true}
                 />
                 <TextField
                     hintText="Type in your password"
@@ -61,6 +62,7 @@ export default class Login extends PureComponent {
                     value={this.state.password}
                     onChange={event => this.setState({password: event.target.value})}
                     disabled={this.state.loading}
+                    fullWidth={true}
                 />
                 <Toggle
                     style={{margin: '20px 0 0'}}
