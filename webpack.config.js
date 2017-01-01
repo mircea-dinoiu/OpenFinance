@@ -30,7 +30,7 @@ module.exports = {
                 exclude: [
                     /node_modules/
                 ],
-                loaders: ['babel?cacheDirectory=true']
+                loaders: [isHot ? 'react-hot' : null, 'babel?cacheDirectory=true'].filter(Boolean)
             },
             {
                 test: /\.scss$/,
@@ -43,6 +43,7 @@ module.exports = {
         ]
     },
     plugins: [
+        isProduction && new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
         isProduction && new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, sourceMap: false}),
         isProduction && new CompressionPlugin({
             algorithm: 'gzip'
