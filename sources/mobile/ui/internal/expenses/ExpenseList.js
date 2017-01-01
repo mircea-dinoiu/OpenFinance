@@ -71,9 +71,12 @@ export default class ExpenseList extends PureComponent {
             }
         });
 
-        this.setState({
-            results: this.state.results.filter(each => each.get('id') !== id)
-        });
+        // Keep the deleted UI a bit more
+        setTimeout(() => {
+            this.setState({
+                results: this.state.results.filter(each => each.get('id') !== id)
+            });
+        }, 500);
     };
 
     handleUpdate = (data) => {

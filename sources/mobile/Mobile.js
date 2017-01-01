@@ -114,7 +114,7 @@ class Mobile extends PureComponent {
     };
 
     isCurrenciesDrawerReady() {
-        return this.state.currencies != null;
+        return this.state.user != null && this.state.currencies != null;
     }
 
     render() {
