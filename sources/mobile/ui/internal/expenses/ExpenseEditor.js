@@ -72,6 +72,7 @@ export default class ExpenseEditor extends PureComponent {
                 label={this.state.saving ? <ButtonProgress/> : 'Update'}
                 primary={true}
                 onTouchTap={this.save}
+                style={{float: 'right'}}
             />
         ];
 
