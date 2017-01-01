@@ -8,7 +8,7 @@ injectTapEventPlugin();
 
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
-import {CircularProgress, AppBar} from 'material-ui';
+import {AppBar} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {fetch} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
@@ -16,6 +16,7 @@ import routes from 'common/defs/routes';
 import Login from './ui/Login';
 import Logged from './ui/appBar/Logged';
 import Internal from './ui/Internal';
+import {BigLoader} from './ui/components/loaders';
 
 import {fromJS} from 'immutable';
 
@@ -118,9 +119,7 @@ class Mobile extends PureComponent {
                     />
                     {
                         this.state.loading ? (
-                            <div style={{textAlign: 'center', padding: '50px 0 0'}}>
-                                <CircularProgress size={100}/>
-                            </div>
+                            <BigLoader/>
                         ) : this.state.ui
                     }
                 </div>

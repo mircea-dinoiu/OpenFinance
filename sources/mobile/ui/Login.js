@@ -1,7 +1,7 @@
 // @flow
 import React, {PureComponent} from 'react';
-import {TextField, Toggle, RaisedButton, Snackbar} from 'material-ui';
-import ButtonProgress from './components/ButtonProgress';
+import {TextField, Toggle, RaisedButton} from 'material-ui';
+import {ButtonProgress} from './components/loaders';
 import routes from 'common/defs/routes';
 import fetch from 'common/utils/fetch';
 import {stringify} from 'query-string';

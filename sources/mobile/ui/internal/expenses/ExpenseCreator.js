@@ -7,10 +7,17 @@ import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
 
 export default class ExpenseCreator extends PureComponent {
     state = {
-        createCount: 1
+        createCount: 1,
+        saving: false
     };
 
     save = async (data) => {
+        this.setState({
+            error: null,
+            success: null,
+            saving: true
+        });
+        
         const response = await fetch(routes.expense.create, {
             method: 'POST',
             headers: {
@@ -23,8 +30,11 @@ export default class ExpenseCreator extends PureComponent {
         if (response.ok) {
             this.setState({
                 success: 'The expense was successfully created',
-                createCount: this.state.createCount + 1
-            })
+                createCount: this.state.createCount + 1,
+                saving: false
+            });
+            
+            this.props.onReceiveNewExpense(json[0]); 
         } else {
             let error = json;
 
@@ -37,7 +47,8 @@ export default class ExpenseCreator extends PureComponent {
             }
 
             this.setState({
-                error
+                error,
+                saving: false
             });
         }
     };
@@ -45,7 +56,7 @@ export default class ExpenseCreator extends PureComponent {
     render() {
         return (
             <div>
-                <ExpenseForm key={this.state.createCount} {...this.props} onSave={this.save}/>
+                <ExpenseForm key={this.state.createCount} {...this.props} onSave={this.save} saving={this.state.saving}/>
                 {this.state.error && <ErrorSnackbar key={Math.random()} message={this.state.error}/>}
                 {this.state.success && <SuccessSnackbar key={Math.random()} message={this.state.success}/>}
             </div>

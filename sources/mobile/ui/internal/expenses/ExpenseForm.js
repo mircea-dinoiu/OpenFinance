@@ -2,14 +2,10 @@ import React, {PureComponent} from 'react';
 import {TextField, DatePicker, TimePicker, SelectField, MenuItem, Chip, Avatar, RaisedButton} from 'material-ui';
 import {Row, Col} from 'react-grid-system';
 import {grey100} from 'material-ui/styles/colors';
+import RepeatOptions from 'common/defs/repeatOptions';
+import {ButtonProgress} from '../../components/loaders';
 
 const greyBoxStyle = {backgroundColor: grey100, paddingBottom: 10, marginTop: 10, marginBottom: 10};
-const RepeatOptions = [
-    ['d', 'Daily'],
-    ['w', 'Weekly'],
-    ['m', 'Monthly'],
-    ['y', 'Yearly']
-];
 
 export default class ExpenseEditor extends PureComponent {
     getEmptyState() {
@@ -149,7 +145,7 @@ export default class ExpenseEditor extends PureComponent {
 
                         return (
                             <Chip
-                                style={{margin: 5}}
+                                style={{margin: '5px 5px 0 0'}}
                                 key={id}
                                 onRequestDelete={() => this.setState({
                                         chargedPersons: this.state.chargedPersons.filter(each => each !== id)
@@ -240,7 +236,7 @@ export default class ExpenseEditor extends PureComponent {
                 {this.renderChargedPersons()}
                 {this.renderRepeat()}
 
-                <RaisedButton label="Save" primary={true} fullWidth={true} style={{margin: '20px 0 40px'}} onClick={this.save}/>
+                <RaisedButton disabled={this.props.saving} label={this.props.saving ? <ButtonProgress/> : 'Save'} primary={true} fullWidth={true} style={{margin: '20px 0 40px'}} onClick={this.save}/>
             </Col>
         );
     }

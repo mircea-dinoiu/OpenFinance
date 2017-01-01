@@ -18,13 +18,17 @@ class ExpenseController extends Controller
         $data = [
             'start_date' => Input::get('start_date'),
             'end_date' => Input::get('end_date'),
-            'filters' => Input::get('filters')
+            'filters' => Input::get('filters'),
+            'page' => Input::get('page'),
+            'per_page' => Input::get('per_page')
         ];
 
         $validationRules = [
             'start_date' => 'sometimes|date_format:Y-m-d',
             'end_date' => 'sometimes|date_format:Y-m-d',
             'filters' => 'sometimes|array',
+            'page' => 'sometimes|numeric',
+            'per_page' => 'sometimes|numeric'
         ];
 
         $validator = Validator::make($data, $validationRules);
@@ -48,9 +52,17 @@ class ExpenseController extends Controller
                 }
             }
 
-            return Response::json(
-                $query->get()
-            );
+            if (isset($data['page']) && isset($data['per_page'])) {
+                $perPage = $data['per_page'];
+
+                return Response::json(
+                    $query->skip(($data['page'] - 1) * $perPage)->take($perPage)->orderBy('created_at', 'desc')->get()
+                );
+            } else {
+                return Response::json(
+                    $query->get()
+                );
+            }
         } else {
             return Response::json($validator->messages(), 400);
         }

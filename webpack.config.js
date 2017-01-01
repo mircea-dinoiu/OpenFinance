@@ -1,7 +1,10 @@
 const path = require('path');
-const enableSourceMaps = true;
+
+const isProduction = false;
+const enableSourceMaps = isProduction === false;
 
 module.exports = {
+    devtool: isProduction ? null : 'cheap-module-eval-source-map',
     entry: {
         'bundles/Mobile': path.resolve('sources/mobile/Mobile.js')
     },
