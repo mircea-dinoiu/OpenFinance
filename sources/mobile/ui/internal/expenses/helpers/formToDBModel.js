@@ -9,6 +9,7 @@ export default (data, props) => {
     date.setSeconds(time.getSeconds());
 
     return {
+        id: data.id,
         currency_id: data.currency,
         sum: data.sum,
         item: data.description,

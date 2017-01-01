@@ -4,6 +4,9 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import ExpenseCreator from './expenses/ExpenseCreator';
 import ExpenseList from './expenses/ExpenseList';
 
+import AddIcon from 'material-ui/svg-icons/content/add';
+import ViewListIcon from 'material-ui/svg-icons/action/view-list';
+
 export default class Expenses extends PureComponent {
     state = {
         newExpense: null
@@ -12,10 +15,10 @@ export default class Expenses extends PureComponent {
     render() {
         return (
             <Tabs>
-                <Tab label="Create Expense">
+                <Tab icon={<AddIcon/>}>
                     <ExpenseCreator {...this.props} onReceiveNewExpense={expense => this.setState({newExpense: expense})}/>
                 </Tab>
-                <Tab label="Expense List">
+                <Tab icon={<ViewListIcon/>}>
                     <ExpenseList {...this.props} newExpense={this.state.newExpense}/>
                 </Tab>
             </Tabs>

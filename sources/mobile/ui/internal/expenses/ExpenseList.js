@@ -76,6 +76,18 @@ export default class ExpenseList extends PureComponent {
         });
     };
 
+    handleUpdate = (data) => {
+        this.setState({
+            results: this.state.results.map(each => {
+                if (each.get('id') === data.id) {
+                    return Immutable.fromJS(data);
+                }
+
+                return each;
+            })
+        })
+    };
+
     render() {
         return (
             <div>
@@ -87,7 +99,13 @@ export default class ExpenseList extends PureComponent {
                                     <List>
                                         <Subheader style={{textAlign: 'center'}}>{moment(date).calendar(null, CalendarWithoutTime)}</Subheader>
                                         {items.map(item => (
-                                            <ExpenseListItem key={item.get('id')} item={item.toJS()} data={this.props} onDelete={this.handleDelete}/>
+                                            <ExpenseListItem
+                                                key={item.get('id')}
+                                                item={item.toJS()}
+                                                data={this.props}
+                                                onDelete={this.handleDelete}
+                                                onUpdate={this.handleUpdate}
+                                            />
                                         )).toArray()}
                                     </List>
                                     <Divider/>

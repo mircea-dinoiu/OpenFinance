@@ -3,30 +3,22 @@ import {TextField, DatePicker, TimePicker, SelectField, MenuItem, Chip, Avatar, 
 import {Row, Col} from 'react-grid-system';
 import {grey100} from 'material-ui/styles/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
-import {ButtonProgress} from '../../components/loaders';
 
 const greyBoxStyle = {backgroundColor: grey100, paddingBottom: 10, marginTop: 10, marginBottom: 10};
 
 export default class ExpenseEditor extends PureComponent {
-    getEmptyState() {
-        return {
-            currency: this.props.currencies.get('default'),
-            description: '',
-            sum: '',
-            paymentMethod: null,
-            chargedPersons: [this.props.user.getIn(['current', 'id'])],
-            categories: [],
-            repeat: null,
-            date: new Date(),
-            time: new Date()
-        };
-    }
-
-    state = this.getEmptyState();
-
-    save = () => {
-        this.props.onSave(this.state);
+    props: {
+        initialValues: {},
+        onFormChange: Function
     };
+
+    state = this.props.initialValues;
+
+    setState(state) {
+        this.props.onFormChange({...this.state, ...state});
+
+        return super.setState(state);
+    }
 
     renderSum() {
         return (
@@ -235,8 +227,6 @@ export default class ExpenseEditor extends PureComponent {
                 {this.renderPaymentMethod()}
                 {this.renderChargedPersons()}
                 {this.renderRepeat()}
-
-                <RaisedButton disabled={this.props.saving} label={this.props.saving ? <ButtonProgress/> : 'Save'} primary={true} fullWidth={true} style={{margin: '20px 0 40px'}} onTouchTap={this.save}/>
             </Col>
         );
     }
