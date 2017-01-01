@@ -8,14 +8,18 @@ injectTapEventPlugin();
 
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
-import {AppBar} from 'material-ui';
+
+import {AppBar, Drawer, IconButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import EuroSymbol from 'material-ui/svg-icons/action/euro-symbol';
+
 import {fetch} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 
 import Login from './ui/Login';
 import Logged from './ui/appBar/Logged';
 import Internal from './ui/Internal';
+import Currencies from './ui/Currencies';
 import {BigLoader} from './ui/components/loaders';
 
 import {fromJS} from 'immutable';
@@ -25,6 +29,7 @@ class Mobile extends PureComponent {
         title: 'Loading..',
         loading: true,
         ui: null,
+        currenciesDrawerOpen: false,
 
         user: null,
         currencies: null,
@@ -108,15 +113,30 @@ class Mobile extends PureComponent {
         }
     };
 
+    isCurrenciesDrawerReady() {
+        return this.state.currencies != null;
+    }
+
     render() {
         return (
             <MuiThemeProvider>
                 <div>
                     <AppBar
                         title={this.state.title}
-                        showMenuIconButton={false}
+                        showMenuIconButton={this.isCurrenciesDrawerReady()}
+                        onLeftIconButtonTouchTap={() => this.setState({currenciesDrawerOpen: true})}
+                        iconElementLeft={<IconButton><EuroSymbol/></IconButton>}
                         iconElementRight={this.state.user ? <Logged onLogout={this.onLogout}/> : null}
                     />
+                    {this.isCurrenciesDrawerReady() && (
+                        <Drawer
+                            docked={false}
+                            open={this.state.currenciesDrawerOpen}
+                            onRequestChange={(currenciesDrawerOpen) => this.setState({currenciesDrawerOpen})}
+                        >
+                            <Currencies data={this.state.currencies}/>
+                        </Drawer>
+                    )}
                     {
                         this.state.loading ? (
                             <BigLoader/>
