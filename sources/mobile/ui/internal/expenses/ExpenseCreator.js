@@ -8,7 +8,7 @@ import {parseCRUDError} from 'common/parsers';
 import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
 import {ButtonProgress} from '../../components/loaders';
 
-import formToDBModel from './helpers/formToDBModel';
+import formToModel from './helpers/formToModel';
 import getFormDefaults from './helpers/getFormDefaults';
 
 import {Col} from 'react-grid-system';
@@ -31,21 +31,21 @@ export default class ExpenseCreator extends PureComponent {
             success: null,
             saving: true
         });
-        
+
         const response = await fetchJSON(routes.expense.create, {
             method: 'POST',
-            body: {data: [formToDBModel(data, this.props)]}
+            body: {data: [formToModel(data, this.props)]}
         });
         const json = await response.json();
-        
+
         if (response.ok) {
             this.setState({
                 success: 'The expense was successfully created',
                 createCount: this.state.createCount + 1,
                 saving: false
             });
-            
-            this.props.onReceiveNewExpense(json[0]); 
+
+            this.props.onReceiveNewRecord(json[0]); 
         } else {
             this.setState({
                 error: parseCRUDError(json),

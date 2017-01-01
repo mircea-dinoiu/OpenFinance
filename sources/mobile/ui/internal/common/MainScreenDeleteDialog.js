@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Dialog, RaisedButton} from 'material-ui';
 
-const ExpenseDelete = ({open, onYes, onNo, ...props}) => {
+const MainScreenDeleteDialog = ({open, entityName, onYes, onNo, ...props}) => {
     const actions = [
         <RaisedButton
             label="Yes"
@@ -19,14 +19,14 @@ const ExpenseDelete = ({open, onYes, onNo, ...props}) => {
 
     return (
         <Dialog
-            title="Delete Expense?"
+            title={`Delete ${entityName}?`}
             open={open}
             actions={actions}
             {...props}
         >
-            Are you sure you want to delete this expense?
+            Are you sure you want to delete this {entityName}?
         </Dialog>
     )
 };
 
-export default ExpenseDelete;
+export default MainScreenDeleteDialog;

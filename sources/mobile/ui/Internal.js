@@ -3,6 +3,7 @@ import {Paper} from 'material-ui';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
 import Expenses from './internal/Expenses';
+import Incomes from './internal/Incomes';
 
 // import AccountBalance from 'material-ui/svg-icons/action/account-balance';
 import TrendingUp from 'material-ui/svg-icons/action/trending-up';
@@ -17,17 +18,15 @@ export default class Internal extends PureComponent {
     select = (index) => this.setState({selectedIndex: index, tab: this.createTab(index)});
 
     createTab(index) {
-        if (index == 0) {
-            return (
-                <Expenses {...this.props}/>
-            );
-        } else {
-            return (
-                <div style={{
-                    textAlign: 'center',
-                    padding: '50px'
-                }}>This section is not available yet.</div>
-            )
+        switch (index) {
+            case 0:
+                return (
+                    <Expenses {...this.props}/>
+                );
+            case 1:
+                return (
+                    <Incomes {...this.props}/>
+                );
         }
     }
 

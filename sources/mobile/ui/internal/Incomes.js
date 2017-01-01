@@ -2,13 +2,13 @@ import React from 'react';
 
 import MainScreen from './common/MainScreen';
 
-import Creator from './expenses/ExpenseCreator';
-import List from './expenses/ExpenseList';
+import Creator from './incomes/IncomeCreator';
+import List from './incomes/IncomeList';
 
-const Expenses = (props) => {
+const Incomes = (props) => {
     return (
       <MainScreen {...props} listComponent={List} creatorComponent={Creator}/>
     );
 };
 
-export default Expenses;
+export default Incomes;

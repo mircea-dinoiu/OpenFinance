@@ -1,25 +1,25 @@
 import React, {PureComponent} from 'react';
 import MainScreenListItem from '../common/MainScreenListItem';
-import ExpenseListItemContent from './ExpenseListItemContent';
-import ExpenseForm from './ExpenseForm';
+import IncomeListItemContent from './IncomeListItemContent';
+import IncomeForm from './IncomeForm';
 
 import modelToForm from './helpers/modelToForm';
 import formToModel from './helpers/formToModel';
 
-const ExpenseListItem = (props) => {
+const IncomeListItem = (props) => {
     return (
         <MainScreenListItem
-            entityName="expense"
-            nameProperty="item"
+            entityName="income"
+            nameProperty="description"
             editDialogProps={{
                 modelToForm,
                 formToModel,
-                formComponent: ExpenseForm
+                formComponent: IncomeForm
             }}
-            contentComponent={ExpenseListItemContent}
+            contentComponent={IncomeListItemContent}
             {...props}
         />
     )
 };
 
-export default ExpenseListItem;
+export default IncomeListItem;

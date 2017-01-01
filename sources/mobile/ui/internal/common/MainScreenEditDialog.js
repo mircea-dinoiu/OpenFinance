@@ -1,26 +1,21 @@
+// @flow
 import React, {PureComponent} from 'react';
 
 import {Dialog, RaisedButton} from 'material-ui';
 
 import {Row, Col} from 'react-grid-system';
 
-import ExpenseForm from './ExpenseForm';
-
 import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
 import {ButtonProgress} from '../../components/loaders';
 
-import dbModelToForm from './helpers/dbModelToForm';
-import formToDBModel from './helpers/formToDBModel';
-
-import routes from 'common/defs/routes';
 import {fetchJSON} from 'common/utils/fetch';
 import {parseCRUDError} from 'common/parsers';
 
-export default class ExpenseEditor extends PureComponent {
+export default class MainScreenEditDialog extends PureComponent {
     state = {
         saving: false
     };
-    formData = dbModelToForm(this.props.entity);
+    formData = this.props.modelToForm(this.props.entity);
 
     save = async() => {
         const data = this.formData;
@@ -31,15 +26,15 @@ export default class ExpenseEditor extends PureComponent {
             saving: true
         });
 
-        const response = await fetchJSON(routes.expense.update, {
+        const response = await fetchJSON(this.props.api.update, {
             method: 'POST',
-            body: {data: [formToDBModel(data, this.props)]}
+            body: {data: [this.props.formToModel(data, this.props)]}
         });
         const json = await response.json();
 
         if (response.ok) {
             this.setState({
-                success: 'The expense was successfully updated',
+                success: `The ${this.props.entityName} was successfully updated`,
                 saving: false
             });
 
@@ -75,17 +70,18 @@ export default class ExpenseEditor extends PureComponent {
                 style={{float: 'right'}}
             />
         ];
+        const Form = this.props.formComponent;
 
         return (
             <Dialog
-                title="Edit Expense"
+                title={`Edit ${this.props.entityName}`}
                 open={this.props.open}
                 autoScrollBodyContent={true}
                 actions={actions}
                 contentStyle={{width: '95%'}}
             >
                 <Row>
-                    <ExpenseForm
+                    <Form
                         {...this.props.data}
                         onFormChange={formData => this.formData = formData}
                         initialValues={this.formData}
@@ -98,4 +94,4 @@ export default class ExpenseEditor extends PureComponent {
             </Dialog>
         );
     }
-}
+};

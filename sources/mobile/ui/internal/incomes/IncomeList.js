@@ -2,15 +2,15 @@ import React, {PureComponent} from 'react';
 
 import routes from 'common/defs/routes';
 
-import ExpenseListItem from './ExpenseListItem';
+import IncomeListItem from './IncomeListItem';
 import MainScreenList from '../common/MainScreenList';
 
 const ExpenseList = (props) => {
     return (
         <MainScreenList
             {...props}
-            api={routes.expense}
-            listItemComponent={ExpenseListItem}
+            api={routes.income}
+            listItemComponent={IncomeListItem}
         />
     )
 };
