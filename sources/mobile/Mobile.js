@@ -13,7 +13,7 @@ import {AppBar, Drawer, IconButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import EuroSymbol from 'material-ui/svg-icons/action/euro-symbol';
 
-import {fetch} from 'common/utils/fetch';
+import fetch from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 
 import Login from './ui/Login';

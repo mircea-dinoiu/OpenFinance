@@ -10,7 +10,7 @@ const isHot = env === 'hot';
 const enableSourceMaps = isProduction === false;
 
 module.exports = {
-    devtool: isProduction ? null : 'cheap-module-eval-source-map',
+    devtool: isProduction ? null : 'cheap-eval-source-map',
     entry: {
         'bundles/Mobile': path.resolve('sources/mobile/Mobile.js')
     },
