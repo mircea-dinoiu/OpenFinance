@@ -4,6 +4,7 @@ import {Col} from 'react-grid-system';
 import {stringify} from 'query-string';
 import moment from 'moment';
 import Immutable from 'immutable';
+import ReactPullToRefresh from 'react-pull-to-refresh';
 
 import {BigLoader, ButtonProgress} from '../../components/loaders';
 
@@ -11,130 +12,165 @@ import fetch, {fetchJSON} from 'common/utils/fetch';
 import {CalendarWithoutTime} from 'common/defs/formats';
 
 import {List} from 'material-ui/List';
-import {RaisedButton, Subheader, Divider} from 'material-ui';
+import {RaisedButton, Subheader, Divider, RefreshIndicator} from 'material-ui';
 
 export default class MainScreenList extends PureComponent {
-  props: {
-    api: {
-      destroy: string,
-      list: string
-    },
-    listItemComponent: any
-  };
+    props: {
+        api: {
+            destroy: string,
+            list: string
+        },
+        listItemComponent: any
+    };
 
-  state = {
-      firstLoad: true,
-      page: 1,
-      results: Immutable.List(),
-      loadingMore: false
-  };
+    state = {
+        firstLoad: true,
+        page: 1,
+        results: Immutable.List(),
+        loadingMore: false,
+        refreshing: false
+    };
 
-  componentDidMount() {
-      this.loadMore();
-  }
+    componentDidMount() {
+        this.loadMore();
+    }
 
-  componentWillReceiveProps({newRecord}) {
-      if (newRecord && this.state.results.filter(each => each.get('id') == newRecord.id).size === 0) {
-          this.setState({
-              results: this.state.results.concat(Immutable.fromJS([newRecord]))
-          });
-      }
-  }
+    componentWillReceiveProps({newRecord}) {
+        if (newRecord && this.state.results.filter(each => each.get('id') == newRecord.id).size === 0) {
+            this.setState({
+                results: this.state.results.concat(Immutable.fromJS([newRecord]))
+            });
+        }
+    }
 
-  loadMore = async() => {
-      this.setState({
-          loadingMore: true
-      });
+    loadMore = async({
+        page = this.state.page,
+        results = this.state.results
+    } = {}) => {
+        if (this.state.loadingMore === true) {
+            return;
+        }
 
-      const response = await fetch(`${this.props.api.list}?${stringify({
-          end_date: moment().format('YYYY-MM-DD'),
-          page: this.state.page,
-          per_page: 50
-      })}`);
+        this.setState({
+            loadingMore: true
+        });
 
-      const json = await response.json();
+        const response = await fetch(`${this.props.api.list}?${stringify({
+            end_date: moment().format('YYYY-MM-DD'),
+            page: page,
+            per_page: 50
+        })}`);
 
-      this.setState({
-          page: this.state.page + 1,
-          results: this.state.results.concat(Immutable.fromJS(json)),
-          firstLoad: false,
-          loadingMore: false
-      });
-  };
+        const json = await response.json();
 
-  getGroupedResults() {
-      const results = this.state.results.sortBy(each => each.get('created_at')).reverse();
+        this.setState({
+            page: page + 1,
+            results: results.concat(Immutable.fromJS(json)),
+            firstLoad: false,
+            loadingMore: false
+        });
+    };
 
-      return results.groupBy(each => moment(each.get('created_at')).format('YYYY-MM-DD')).entrySeq();
-  }
+    getGroupedResults() {
+        const results = this.state.results.sortBy(each => each.get('created_at')).reverse();
 
-  handleUpdate = (data) => {
-      this.setState({
-          results: this.state.results.map(each => {
-              if (each.get('id') === data.id) {
-                  return Immutable.fromJS(data);
-              }
+        return results.groupBy(each => moment(each.get('created_at')).format('YYYY-MM-DD')).entrySeq();
+    }
 
-              return each;
-          })
-      })
-  };
+    handleUpdate = (data) => {
+        this.setState({
+            results: this.state.results.map(each => {
+                if (each.get('id') === data.id) {
+                    return Immutable.fromJS(data);
+                }
 
-  handleDelete = async (id) => {
-      await fetchJSON(this.props.api.destroy, {
-          method: 'POST',
-          body: {
-              data: [{id: id}]
-          }
-      });
+                return each;
+            })
+        })
+    };
 
-      // Keep the nice deleted message a bit more
-      setTimeout(() => {
-          this.setState({
-              results: this.state.results.filter(each => each.get('id') !== id)
-          });
-      }, 500);
-  };
+    handleDelete = async(id) => {
+        await fetchJSON(this.props.api.destroy, {
+            method: 'POST',
+            body: {
+                data: [{id: id}]
+            }
+        });
 
-  render() {
-      const ListItem = this.props.listItemComponent;
+        // Keep the nice deleted message a bit more
+        setTimeout(() => {
+            this.setState({
+                results: this.state.results.filter(each => each.get('id') !== id)
+            });
+        }, 500);
+    };
 
-      return (
-          <div>
-              {this.state.firstLoad ? <BigLoader/> : (
-                  <div>
-                      {this.getGroupedResults().map(([date, items]) => {
-                          return (
-                              <div key={date}>
-                                  <List>
-                                      <Subheader style={{textAlign: 'center'}}>{moment(date).calendar(null, CalendarWithoutTime)}</Subheader>
-                                      {items.map(item => (
-                                          <ListItem
-                                              key={item.get('id')}
-                                              item={item.toJS()}
-                                              data={this.props}
-                                              onDelete={this.handleDelete}
-                                              onUpdate={this.handleUpdate}
-                                              api={this.props.api}
-                                          />
-                                      )).toArray()}
-                                  </List>
-                                  <Divider/>
-                              </div>
-                          )
-                      })}
-                      <Col>
-                          <RaisedButton
-                              label={this.state.loadingMore ? <ButtonProgress/> : 'Load More'}
-                              fullWidth={true}
-                              onTouchTap={this.loadMore}
-                              style={{margin: '20px 0 40px'}}
-                              disabled={this.state.loadingMore}
-                          />
-                      </Col>
-                  </div>
-              )}
-          </div>
-      );
-  }
+    handleRefresh = async () => {
+        this.setState({
+            refreshing: true
+        });
+
+        await this.loadMore({
+            page: 1,
+            results: Immutable.List()
+        });
+
+        this.setState({
+            refreshing: false
+        });
+    };
+
+    render() {
+        const ListItem = this.props.listItemComponent;
+
+        return (
+            <div>
+                {this.state.firstLoad ? <BigLoader/> : (
+                    <ReactPullToRefresh
+                        onRefresh={this.handleRefresh}
+                    >
+                        {this.state.refreshing && (
+                            <RefreshIndicator
+                                size={40}
+                                left={10}
+                                top={0}
+                                status="loading"
+                                style={{display: 'block', position: 'relative', margin: '10px auto'}}
+                            />
+                        )}
+                        <Subheader style={{textAlign: 'center'}}>Pull down to refresh</Subheader>
+                        {this.getGroupedResults().map(([date, items]) => {
+                            return (
+                                <div key={date}>
+                                    <List>
+                                        <Subheader style={{textAlign: 'center'}}>{moment(date).calendar(null, CalendarWithoutTime)}</Subheader>
+                                        {items.map(item => (
+                                            <ListItem
+                                                key={item.get('id')}
+                                                item={item.toJS()}
+                                                data={this.props}
+                                                onDelete={this.handleDelete}
+                                                onUpdate={this.handleUpdate}
+                                                api={this.props.api}
+                                            />
+                                        )).toArray()}
+                                    </List>
+                                    <Divider/>
+                                </div>
+                            )
+                        })}
+                        <Col>
+                            <RaisedButton
+                                label={this.state.loadingMore ? <ButtonProgress/> : 'Load More'}
+                                fullWidth={true}
+                                onTouchTap={this.loadMore}
+                                style={{margin: '20px 0 40px'}}
+                                disabled={this.state.loadingMore}
+                            />
+                        </Col>
+                    </ReactPullToRefresh>
+                )}
+            </div>
+        );
+    }
 }
