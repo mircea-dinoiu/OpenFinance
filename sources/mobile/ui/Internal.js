@@ -38,7 +38,11 @@ export default class Internal extends PureComponent {
     render() {
         return (
             <div>
-                <div style={{height: 'calc(100vh - 56px - 64px)', overflow: 'auto'}}>
+                <div style={{
+                    height: 'calc(100vh - 56px - 64px)',
+                    overflowY: 'scroll',
+                    WebkitOverflowScrolling: 'touch'
+                }}>
                     {this.state.tab}
                 </div>
                 <Paper zDepth={1}>
