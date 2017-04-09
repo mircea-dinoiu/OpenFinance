@@ -26,5 +26,7 @@ sources/desktop/bootstrap.json
 sources/desktop/bootstrap.css
 sources/desktop/sass/example/bootstrap.json
 sources/desktop/resources/css
+
+# NODE STUFF
 config/local.json
 npm-debug.log*
