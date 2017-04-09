@@ -6,7 +6,8 @@
     "build": "webpack",
     "build:prod": "NODE_ENV=production webpack",
     "build:hot": "NODE_ENV=hot webpack-dev-server --hot --inline",
-    "build:watch": "webpack --watch"
+    "build:watch": "webpack --watch",
+    "start": "node ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -49,9 +50,18 @@
     "style-loader": "^0.13.1",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2",
-    "whatwg-fetch": "^2.0.1"
+    "whatwg-fetch": "^2.0.1",
+    "babel-polyfill": "^6.20.0"
   },
   "dependencies": {
-    "babel-polyfill": "^6.20.0"
+    "body-parser": "~1.17.1",
+    "config": "^1.25.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "jade": "~1.11.0",
+    "morgan": "~1.8.1",
+    "sequelize": "^3.30.4",
+    "serve-favicon": "~2.4.2"
   }
 }
