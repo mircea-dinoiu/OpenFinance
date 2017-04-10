@@ -161,7 +161,7 @@ module.exports = {
         }
     },
 
-    async getCurrencies({update}) {
+    async getList({update}) {
         await this.setupData({update});
 
         return this.data;

@@ -1,9 +1,8 @@
-var express = require('express');
-var router = express.Router();
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+module.exports = {
+    '/': require('./home'),
+    '/get-currencies': require('./currency'),
+    '/category': require('./category'),
+    '/user': require('./user'),
+    '/money-location': require('./money-location'),
+    '/money-location-type': require('./money-location-type'),
+};
