@@ -4,10 +4,13 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const config = require('config');
-const debug = config.get('debug');
-
+const csrf = require('csurf');
 const app = express();
+
+// config
+const config = require('config');
+const localDevMode = config.get('localDevMode');
+const debug = config.get('debug');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'server', 'views'));
@@ -21,7 +24,24 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-if (debug) {
+/**
+ * CSRF
+ */
+app.use(csrf({cookie: true}));
+app.use(function (err, req, res, next) {
+    if (err.code !== 'EBADCSRFTOKEN') {
+        return next(err);
+    }
+
+    // handle CSRF token errors here
+    res.status(403);
+    res.send(debug ? 'Missing CSRF Token' : null);
+});
+
+/**
+ * Serve from sources/desktop when localDevMode is true
+ */
+if (localDevMode) {
     app.use(express.static(path.join(__dirname, 'sources/desktop')));
 }
 

@@ -5,5 +5,6 @@
     "pass": "",
     "name": ""
   },
-  "debug": true
+  "debug": true,
+  "localDevMode": true
 }
