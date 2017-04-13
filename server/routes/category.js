@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/CategoryController');
+const filters = require('../filters');
 
-router.get('/list', async (req, res) => {
+router.get('/list', filters.auth, async (req, res) => {
     res.json(await Controller.getList());
 });
 

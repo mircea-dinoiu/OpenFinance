@@ -6,5 +6,8 @@
     "name": ""
   },
   "debug": true,
-  "localDevMode": true
+  "localDevMode": true,
+  "session": {
+    "secret": "keyboard cat"
+  }
 }
