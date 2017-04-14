@@ -9,5 +9,6 @@
   "localDevMode": true,
   "session": {
     "secret": "keyboard cat"
-  }
+  },
+  "timezone": "Europe/Bucharest"
 }

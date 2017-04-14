@@ -7,4 +7,8 @@ router.get('/list', filters.auth, async (req, res) => {
     res.json(await Controller.getList());
 });
 
+router.post('/delete', filters.auth, async (req, res) => {
+    res.json(await Controller.postDelete(req, res));
+});
+
 module.exports = router;

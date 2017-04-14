@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = (sequelize, types) => {
     const Expense =  sequelize.define('expenses', {
         currency_id: types.INTEGER,
@@ -9,7 +11,7 @@ module.exports = (sequelize, types) => {
         money_location_id: types.INTEGER,
         repeat: types.STRING,
         status: types.STRING,
-        sum: types.FLOAT,
+        sum: types.FLOAT
     }, {
         underscored: true,
         classMethods: {
@@ -52,6 +54,10 @@ module.exports = (sequelize, types) => {
                     values.categories = values.categoryIds.split(',').map(Number);
                     delete values.categoryIds;
                 }
+
+                // FIXME TEMP WORKAROUND sources/desktop/app/model/ExpenseModel.js:15
+                values.created_at = moment(values.created_at).format('YYYY-MM-DD HH:mm:ss');
+                values.updated_at = moment(values.updated_at).format('YYYY-MM-DD HH:mm:ss');
 
                 return values;
             }

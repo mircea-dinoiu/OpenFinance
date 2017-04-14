@@ -1,9 +1,9 @@
 const {User} = require('../models');
 
 module.exports = {
-    async getList(id) {
+    async getList(user) {
         return {
-            current: await User.findOne({id}),
+            current: user,
             list: await User.findAll()
         };
     }

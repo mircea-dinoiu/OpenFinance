@@ -2,9 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
-const dbConfig = require('config').get('db');
+const config = require('config');
+const dbConfig = config.get('db');
 const db = {};
-const sql = new Sequelize(`mysql://${dbConfig.get('user')}:${dbConfig.get('pass')}@${dbConfig.get('host')}/${dbConfig.get('name')}`);
+const sql = new Sequelize(`mysql://${dbConfig.get('user')}:${dbConfig.get('pass')}@${dbConfig.get('host')}/${dbConfig.get('name')}`, {
+    timezone: config.get('timezone')
+});
 
 fs
     .readdirSync(__dirname)

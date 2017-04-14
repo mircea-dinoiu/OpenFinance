@@ -1,9 +1,12 @@
-const {Category, Expense} = require('../models');
+const {Category: Model, Expense} = require('../models');
+const BaseController = require('./BaseController');
 
-module.exports = {
+module.exports = Object.assign({}, BaseController, {
+    Model,
+
     async getList() {
-        const categories = await Category.findAll({
-            attributes: Object.keys(Category.rawAttributes).concat([
+        const categories = await Model.findAll({
+            attributes: Object.keys(Model.rawAttributes).concat([
                 ['COUNT(expenses.id)', 'expenseCount']
             ]),
             include: [{model: Expense, attributes: []}],
@@ -28,8 +31,4 @@ module.exports = {
     async postCreate() {
         // todo
     },
-
-    async postDelete() {
-        // todo
-    },
-};
+});
