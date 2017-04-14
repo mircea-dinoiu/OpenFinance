@@ -1,7 +1,5 @@
 module.exports = (sequelize, types) => {
     const Expense =  sequelize.define('expenses', {
-        // categories: types.STRING, // todo
-        // users: types.STRING, // todo
         currency_id: types.INTEGER,
         id: {
             type: types.INTEGER,
@@ -14,6 +12,50 @@ module.exports = (sequelize, types) => {
         sum: types.FLOAT,
     }, {
         underscored: true,
+        classMethods: {
+            associate: function (models) {
+                Expense.belongsToMany(models.User, {
+                    through: models.ExpenseUser,
+                    timestamps: false,
+                });
+                Expense.belongsToMany(models.Category, {
+                    through: 'category_expense',
+                    timestamps: false,
+                });
+
+                Expense.addScope('default', {
+                    attributes: Object.keys(Expense.rawAttributes).concat([
+                        ['GROUP_CONCAT(DISTINCT users.id)', 'userIds'],
+                        ['GROUP_CONCAT(DISTINCT categories.id)', 'categoryIds']
+                    ]),
+                    include: [
+                        {
+                            model: models.User,
+                            where: ['`users.expense_user`.`blame` = 1']
+                        },
+                        {model: models.Category, attributes: []}
+                    ],
+                    group: ['id']
+                });
+            }
+        },
+        instanceMethods: {
+            toJSON: function () {
+                const values = Object.assign({}, this.dataValues);
+
+                if (values.userIds) {
+                    values.users = values.userIds.split(',').map(Number);
+                    delete values.userIds;
+                }
+
+                if (values.categoryIds) {
+                    values.categories = values.categoryIds.split(',').map(Number);
+                    delete values.categoryIds;
+                }
+
+                return values;
+            }
+        }
     });
 
     return Expense;
