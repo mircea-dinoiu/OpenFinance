@@ -1,56 +1,53 @@
 const {Income: Model} = require('../models');
 const BaseController = require('./BaseController');
+const {pick} = require('lodash');
+const {Validator} = require('../validators');
 
 module.exports = Object.assign({}, BaseController, {
     Model,
 
     async getList(req, res) {
-        const {
-            start_date,
-            end_date,
-            page,
-            per_page
-        } = req.query;
+        const input = pick(req.query, 'start_date', 'end_date', 'page', 'per_page');
+        const rules = {
+            start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
+            endt_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
+            page: ['sometimes', 'isInt'],
+            per_page: ['sometimes', 'isInt']
+        };
+        const validator = new Validator(input, rules);
 
-        start_date !== undefined && req.checkQuery('start_date').isDateFormat('YYYY-MM-DD');
-        end_date !== undefined && req.checkQuery('end_date').isDateFormat('YYYY-MM-DD');
-        page !== undefined && req.checkQuery('page').isInt();
-        per_page !== undefined && req.checkQuery('per_page').isInt();
+        if (validator.passes()) {
+            const whereClause = [];
+            const whereReplacements = [];
 
-        const result = await req.getValidationResult();
+            if (input.start_date) {
+                whereClause.push(`DATE(${Model.tableName}.created_at) >= ?`);
+                whereReplacements.push(input.start_date);
+            }
 
-        if (!result.isEmpty()) {
+            if (input.end_date) {
+                whereClause.push(`DATE(${Model.tableName}.created_at) <= ?`);
+                whereReplacements.push(input.end_date);
+            }
+
+            const queryOpts = {
+                where: [whereClause.join(' AND '), ...whereReplacements]
+            };
+
+            if (input.page != null && input.per_page != null) {
+                const offset = (input.page - 1) * input.per_page;
+
+                Object.assign(queryOpts, {
+                    // https://github.com/sequelize/sequelize/issues/3007
+                    order: `created_at DESC LIMIT ${offset}, ${input.per_page}`
+                });
+            }
+
+            return Model.findAll(queryOpts);
+        } else {
             res.status(400);
 
-            return result.array();
+            return validator.errors();
         }
-
-        const whereClause = [];
-        const whereReplacements = [];
-
-        if (start_date) {
-            whereClause.push(`DATE(${Model.tableName}.created_at) >= ?`);
-            whereReplacements.push(start_date);
-        }
-
-        if (end_date) {
-            whereClause.push(`DATE(${Model.tableName}.created_at) <= ?`);
-            whereReplacements.push(end_date);
-        }
-
-        const queryOpts = {
-            where: [whereClause.join(' AND '), ...whereReplacements]
-        };
-
-        if (page != null && per_page != null) {
-            const offset = (page - 1) * per_page;
-
-            Object.assign(queryOpts, {
-                // https://github.com/sequelize/sequelize/issues/3007
-                order: `created_at DESC LIMIT ${offset}, ${per_page}`
-            });
-        }
-
-        return Model.findAll(queryOpts);
     }
 });

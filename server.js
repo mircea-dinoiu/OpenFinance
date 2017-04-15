@@ -37,26 +37,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 /**
- * Validator
- */
-app.use(require('express-validator')({
-    customValidators: require('./server/validators'),
-    errorFormatter: function(param, msg/*, value*/) {
-        const namespace = param.split('.');
-        const root = namespace.shift();
-        let formParam = root;
-
-        while (namespace.length) {
-            formParam += '[' + namespace.shift() + ']';
-        }
-
-        return {
-            [param]: msg
-        };
-    }
-}));
-
-/**
  * Session
  */
 const session = require('express-session');
