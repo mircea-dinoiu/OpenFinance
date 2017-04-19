@@ -1,10 +1,29 @@
-const {Expense: Model} = require('../models');
+const {Expense: Model, User, Currency, MoneyLocation, Category} = require('../models');
 const BaseController = require('./BaseController');
 const {pick} = require('lodash');
 const {Validator} = require('../validators');
 
 module.exports = Object.assign({}, BaseController, {
     Model,
+
+    async postCreate(req, res) {
+        const {data} = req.body;
+        const validRecords = [];
+        const errors = [];
+
+        if (Array.isArray(data)) {
+            const rules = {
+                'sum': ['isRequired', 'isFloat', 'isNotZero'],
+                'item': ['isRequired', 'isString'],
+                'repeat': ['sometimes', 'isRepeatValue'],
+                'users': ['isRequired', ['isIdArray', User]],
+                'created_at': ['sometimes', 'isRequired', 'isInt'],
+                'currency_id': ['sometimes', 'isRequired', ['isId', Currency]],
+                'money_location_id': ['sometimes', ['isId', MoneyLocation]],
+                'categories': ['sometimes', ['isIdArray', Category]]
+            };
+        }
+    },
 
     async getList(req, res) {
         const input = pick(
@@ -24,7 +43,7 @@ module.exports = Object.assign({}, BaseController, {
         };
         const validator = new Validator(input, rules);
 
-        if (validator.passes()) {
+        if (await validator.passes()) {
             const whereClause = [];
             const whereReplacements = [];
 

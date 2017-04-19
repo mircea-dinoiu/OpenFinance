@@ -1,13 +1,12 @@
 const {isPlainObject} = require('lodash');
+const Messages = require('../Messages');
 
 module.exports = {
-    INVALID_INPUT_MESSAGE: 'Invalid input',
-
     async postDelete(req, res) {
         const err = () => {
             res.status(400);
 
-            return this.INVALID_INPUT_MESSAGE;
+            return Messages.ERROR_INVALID_INPUT;
         };
         const {data} = req.body;
 
@@ -22,14 +21,14 @@ module.exports = {
                         output.push(model.toJSON());
 
                         await model.destroy();
-
-                        continue;
+                    } else {
+                        output.push({
+                            id: Messages.ERROR_INVALID_ID
+                        });
                     }
+                } else {
+                    output.push(Messages.ERROR_INVALID_RECORD);
                 }
-
-                output.push({
-                    id: this.INVALID_INPUT_MESSAGE
-                });
             }
 
             return output;

@@ -16,7 +16,7 @@ module.exports = Object.assign({}, BaseController, {
         };
         const validator = new Validator(input, rules);
 
-        if (validator.passes()) {
+        if (await validator.passes()) {
             const whereClause = [];
             const whereReplacements = [];
 
