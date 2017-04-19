@@ -32,14 +32,14 @@ module.exports = Object.assign({}, BaseController, {
             'end_date',
             'filters',
             'page',
-            'per_page'
+            'limit'
         );
         const rules = {
             start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
             end_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
             filters: ['sometimes', 'isPlainObject'],
             page: ['sometimes', 'isInt'],
-            per_page: ['sometimes', 'isInt'],
+            limit: ['sometimes', 'isInt'],
         };
         const validator = new Validator(input, rules);
 
@@ -72,12 +72,12 @@ module.exports = Object.assign({}, BaseController, {
                 where: [whereClause.join(' AND '), ...whereReplacements]
             };
 
-            if (input.page != null && input.per_page != null) {
-                const offset = (input.page - 1) * input.per_page;
+            if (input.page != null && input.limit != null) {
+                const offset = (input.page - 1) * input.limit;
 
                 Object.assign(queryOpts, {
                     // https://github.com/sequelize/sequelize/issues/3007
-                    order: `created_at DESC LIMIT ${offset}, ${input.per_page}`
+                    order: `created_at DESC LIMIT ${offset}, ${input.limit}`
                 });
             }
 

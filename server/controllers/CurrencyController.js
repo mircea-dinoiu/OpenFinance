@@ -8,6 +8,15 @@ module.exports = {
     data: null,
     defaultCurrency: null,
     cacheFilePath: basePath('storage/app/currencies.json'),
+    currencies: null,
+
+    async getCurrencies(fetch = false) {
+        if (this.currencies == null || fetch === true) {
+            this.currencies = await Currency.findAll();
+        }
+
+        return this.currencies;
+    },
 
     async fetchCachedData() {
         return new Promise((resolve) => {
@@ -24,12 +33,39 @@ module.exports = {
         });
     },
 
-    async convert() {
-        // todo
+    async getCurrencyByProp(key, value) {
+        const currencies = await this.getCurrencies();
+
+        return currencies.find(each => each[key] == value);
+    },
+
+    async convert(value, rawFrom, rawTo) {
+        this.setupData();
+
+        let from = rawFrom;
+        let to = rawTo;
+
+        if (typeof from === 'number') {
+            from = await this.getCurrencyByProp('id', from);
+        } else if (typeof from === 'string') {
+            from = await this.getCurrencyByProp('iso_code', from);
+        }
+
+        if (typeof to === 'number') {
+            to = await this.getCurrencyByProp('id', to);
+        } else if (typeof to === 'string') {
+            to = await this.getCurrencyByProp('iso_code', from);
+        }
+
+        if (from.iso_code === to.iso_code) {
+            return value;
+        }
+
+        return value * this.data.map[from.id].rates[to.iso_code];
     },
 
     async convertToDefault(value, from) {
-        return this.convert(value, from, await this.getDefaultCurrency());
+        return this.convert(value, from, (await this.getDefaultCurrency()).id);
     },
 
     async fetchRates(allowedISOCodes) {
@@ -94,7 +130,7 @@ module.exports = {
 
     async fetchFreshData() {
         const map = {};
-        const rawData = await Currency.findAll();
+        const rawData = await this.getCurrencies(true);
         const allowedISOCodes = [];
 
         rawData.forEach(model => {

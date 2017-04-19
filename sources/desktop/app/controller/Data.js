@@ -401,21 +401,36 @@
             var charts = mainView.down('app-main-internal-charts');
 
             if (data.isVisible()) {
-                var expenses = this.getExpensesData(),
-                    expensesStore = this.getExpensesStore();
+                Ext.Ajax.request({
+                    url: Financial.routes.report.default,
+                    method: 'GET',
+                    params: _.pick({
+                        end_date: this.cache.include === 'ut' ? Ext.util.Format.date(this.cache.today, 'Y-m-d') : this.getEndDate(),
+                        start_date: this.getStartDate()
+                    },  _.identity),
+                    success: function (response) {
+                        var json = JSON.parse(response.responseText);
+                        console.log(response.responseText);
+                        console.log(JSON.stringify({
+                            expensesData: this.getExpensesData()
+                        }));
+                        var expenses = json.expensesData,
+                            expensesStore = this.getExpensesStore();
 
-                this.renderExpenses(expenses);
+                        this.renderExpenses(expenses);
 
-                if (!(expensesStore.isFiltered() && expensesStore.getCount() !== expensesStore.getTotalCount())) {
-                    var incomes = this.getIncomesData();
+                        if (!(expensesStore.isFiltered() && expensesStore.getCount() !== expensesStore.getTotalCount())) {
+                            var incomes = this.getIncomesData();
 
-                    this.renderIncomes(incomes);
-                    this.renderBalance(this.getRemainingData(expenses, incomes));
-                }
+                            this.renderIncomes(incomes);
+                            this.renderBalance(this.getRemainingData(expenses, incomes));
+                        }
 
-                var expensesByCategory = this.getReportGrid('expensesByCategory');
+                        var expensesByCategory = this.getReportGrid('expensesByCategory');
 
-                expensesByCategory.getStore().loadData(this.getExpensesByCategory());
+                        expensesByCategory.getStore().loadData(this.getExpensesByCategory());
+                    }.bind(this)
+                });
             } else if (charts.isVisible()) {
                 var panels = mainView.query('app-main-internal-charts-baseChartPanel');
 

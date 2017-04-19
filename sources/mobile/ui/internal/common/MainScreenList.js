@@ -58,7 +58,7 @@ export default class MainScreenList extends PureComponent {
         const response = await fetch(`${this.props.api.list}?${stringify({
             end_date: moment().format('YYYY-MM-DD'),
             page: page,
-            per_page: 50
+            limit: 50
         })}`);
 
         const json = await response.json();
