@@ -144,38 +144,6 @@
             });
         },
 
-        getIncomesData: function () {
-            var me = this,
-                data = {byUser: [], byML: []},
-                users = {},
-                mls = {};
-
-            this.getIncomesStore().each(function (record) {
-                if (!me.recordIsInRange(record)) {
-                    return;
-                }
-
-                var uId = record.get('user_id');
-                var mlId = record.get('money_location_id');
-                var sum = record.get('sum');
-
-                users[uId] = (users[uId] || 0) + sum;
-                mls[mlId] = (mls[mlId] || 0) + sum;
-            });
-
-            Ext.Object.each(users, function (id, sum) {
-                data.byUser.push({
-                    sum: sum,
-                    description: description(Financial.data.User.getById(id).get('full_name')),
-                    reference: id
-                });
-            });
-
-            this.addMLEntries(data.byML, mls);
-
-            return data;
-        },
-
         getUniques: function (expenses, incomes) {
             return Ext.Array.unique(Ext.Array.map(Ext.Array.merge(
                 expenses,
@@ -360,17 +328,12 @@
                     },  _.identity),
                     success: function (response) {
                         var json = JSON.parse(response.responseText);
-                        var expenses = json.expensesData,
-                            expensesStore = this.getExpensesStore();
+                        var expenses = json.expensesData;
+                        var incomes = json.incomesData;
 
                         this.renderExpenses(expenses);
-
-                        if (!(expensesStore.isFiltered() && expensesStore.getCount() !== expensesStore.getTotalCount())) {
-                            var incomes = this.getIncomesData();
-
-                            this.renderIncomes(incomes);
-                            this.renderBalance(this.getRemainingData(expenses, incomes));
-                        }
+                        this.renderIncomes(incomes);
+                        this.renderBalance(this.getRemainingData(expenses, incomes));
 
                         var expensesByCategory = this.getReportGrid('expensesByCategory');
 

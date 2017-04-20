@@ -28,11 +28,50 @@ module.exports = {
                 expenseRecords,
                 userRecords,
                 mlRecords,
-                defaultCurrency
+                defaultCurrency,
+                incomeRecords,
+            }),
+            incomesData: await this.getIncomesData({
+                userRecords,
+                mlRecords,
+                incomeRecords,
             })
         };
 
         return ret;
+    },
+
+    async getIncomesData({incomeRecords, userRecords, mlRecords}) {
+        const data = {byUser: [], byML: []},
+            users = {},
+            mls = {};
+
+        for (const record of incomeRecords) {
+            const uId = record.user_id;
+            const mlId = record.money_location_id || 0;
+            const sum = record.sum;
+
+            users[uId] = (users[uId] || 0) + sum;
+            mls[mlId] = (mls[mlId] || 0) + sum;
+        }
+
+        Object.keys(users).forEach(id => {
+            const sum = users[id];
+
+            data.byUser.push({
+                sum: sum,
+                description: description(userRecords.find(record => record.id == id).full_name),
+                reference: id
+            });
+        });
+
+        this.addMLEntries({
+            data: data.byML,
+            mls,
+            mlRecords
+        });
+
+        return data;
     },
 
     async getExpensesData({expenseRecords, userRecords, mlRecords, defaultCurrency}) {
