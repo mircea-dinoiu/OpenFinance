@@ -40,10 +40,11 @@ module.exports = {
         const mls = {};
 
         for (const record of expenseRecords) {
-            let sum = record.sum;
-            const recordUsers = record.users;
-            const currencyId = record.currency_id;
-            const mlId = record.money_location_id || 0;
+            const json = record.toJSON();
+            let sum = json.sum;
+            const recordUsers = json.users;
+            const currencyId = json.currency_id;
+            const mlId = json.money_location_id || 0;
 
             if (currencyId !== parseInt(defaultCurrency.id)) {
                 console.log(`[DEBUG] Converting ${sum} (${currencyId} => ${defaultCurrency.id})`);
@@ -55,9 +56,7 @@ module.exports = {
 
             sum /= recordUsers.length;
 
-            recordUsers.forEach(user => {
-                const userId = user.id;
-
+            recordUsers.forEach(userId => {
                 users[userId] = (users[userId] || 0) + sum;
             });
         }

@@ -117,56 +117,6 @@
             return true;
         },
 
-        getExpensesData: function () {
-            var me = this,
-                users = {},
-                mls = {};
-
-            this.getExpensesStore().each(function (record) {
-                if (!me.recordIsInRange(record)) {
-                    return;
-                }
-
-                var sum = record.get('sum'),
-                    recordUsers = record.get('users'),
-                    currencyId = record.get('currency_id'),
-                    mlId = record.get('money_location_id');
-
-                if (currencyId !== parseInt(Financial.data.Currency.getDefaultCurrency().id)) {
-                    sum = Financial.data.Currency.convertToDefault(sum, currencyId);
-                }
-
-                mls[mlId] = (mls[mlId] || 0) + sum;
-
-                sum /= recordUsers.length;
-
-                Ext.each(recordUsers, function (userId) {
-                    users[userId] = (users[userId] || 0) + sum;
-                });
-            });
-
-            var data = {
-                byUser: [],
-                byML: []
-            };
-
-            Financial.data.User.getStore().each(function (record) {
-                var id = record.get('id');
-
-                if (users[id]) {
-                    data.byUser.push({
-                        sum: users[id],
-                        description: description(record.get('full_name')),
-                        reference: id
-                    });
-                }
-            });
-
-            this.addMLEntries(data.byML, mls);
-
-            return data;
-        },
-
         formatMLName: function (id) {
             return Financial.data.ML.getNameById(id);
         },
@@ -410,10 +360,6 @@
                     },  _.identity),
                     success: function (response) {
                         var json = JSON.parse(response.responseText);
-                        console.log(response.responseText);
-                        console.log(JSON.stringify({
-                            expensesData: this.getExpensesData()
-                        }));
                         var expenses = json.expensesData,
                             expensesStore = this.getExpensesStore();
 
