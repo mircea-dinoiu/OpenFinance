@@ -3,10 +3,6 @@
         return Ext.String.format('<span data-qtip="{0}">{0}</span>', text);
     };
 
-    var safeNum = function (num) {
-        return Number(num.toFixed(2));
-    };
-
     var addSumToTitle = function (grid, items) {
         grid.setTitle(Ext.String.format(
             '<div class="grid-custom-title"><span class="grid-title-name">{0}</span><span class="grid-title-sum">{1}</span></div>',
@@ -144,81 +140,6 @@
             });
         },
 
-        getUniques: function (expenses, incomes) {
-            return Ext.Array.unique(Ext.Array.map(Ext.Array.merge(
-                expenses,
-                incomes
-            ).filter(function (item) {
-                return item.isTotal !== true;
-            }), function (item) {
-                return parseInt(item.reference);
-            }));
-        },
-
-        getRemainingSum: function (expenses, incomes, id) {
-            var filteredExpenses, filteredIncomes;
-
-            filteredExpenses = expenses.filter(function (expense) {
-                return expense.reference == id;
-            })[0];
-
-            filteredIncomes = incomes.filter(function (income) {
-                return income.reference == id;
-            })[0];
-
-            filteredExpenses = filteredExpenses ? filteredExpenses.sum : 0;
-            filteredIncomes = filteredIncomes ? filteredIncomes.sum : 0;
-
-            return safeNum(filteredIncomes - filteredExpenses);
-        },
-
-        getRemainingData: function (expenses, incomes) {
-            var me = this,
-                data = {byUser: [], byML: []},
-                users,
-                mls,
-                totalRemainingByUser = {},
-                totalRemainingByML = {};
-
-            users = this.getUniques(expenses.byUser, incomes.byUser);
-            mls = this.getUniques(expenses.byML, incomes.byML);
-
-            /**
-             * Remaining present
-             */
-            Ext.each(mls, function (id) {
-                totalRemainingByML[id] = me.getRemainingSum(expenses.byML, incomes.byML, id);
-            });
-
-            Ext.each(users, function (id) {
-                totalRemainingByUser[id] = me.getRemainingSum(expenses.byUser, incomes.byUser, id);
-            });
-
-            /**
-             * Total remaining
-             */
-            Ext.Object.each(totalRemainingByUser, function (id, sum) {
-                data.byUser.push({
-                    sum: sum,
-                    description: description(Financial.data.User.getById(id).get('full_name'))
-                });
-            });
-
-            Ext.Object.each(totalRemainingByML, function (id, sum) {
-                if (sum != 0) {
-                    var ml = Financial.data.ML.getById(id);
-
-                    data.byML.push({
-                        sum: sum,
-                        description: description(me.formatMLName(id)),
-                        group: (ml ? ml.get('type_id') : 0) || 0
-                    });
-                }
-            });
-
-            return data;
-        },
-
         getExpensesByCategory: function () {
             var me = this,
                 categories = {},
@@ -330,10 +251,11 @@
                         var json = JSON.parse(response.responseText);
                         var expenses = json.expensesData;
                         var incomes = json.incomesData;
+                        var remaining = json.remainingData;
 
                         this.renderExpenses(expenses);
                         this.renderIncomes(incomes);
-                        this.renderBalance(this.getRemainingData(expenses, incomes));
+                        this.renderBalance(remaining);
 
                         var expensesByCategory = this.getReportGrid('expensesByCategory');
 
@@ -428,7 +350,6 @@
                 expensesStore.proxy.extraParams = params;
             }
             expensesStore.load(function () {
-                Financial.util.RepeatedModels.generateClones(expensesStore);
                 check();
 
                 var count = 0;
@@ -482,7 +403,6 @@
                 incomesStore.proxy.extraParams = params;
             }
             incomesStore.load(function () {
-                Financial.util.RepeatedModels.generateClones(incomesStore);
                 check();
             });
         }

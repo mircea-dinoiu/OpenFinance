@@ -57,65 +57,11 @@ Ext.define('Financial.util.RepeatedModels', {
         return newObject;
     },
 
-    getClonesFor: function (item, Model, endDate) {
-        var out = [];
-        var day = Financial.util.Misc.day;
-
-        if (item.repeat != null) {
-            var repeats = 1;
-
-            while (true) {
-                var newObject = Financial.util.RepeatedModels.advanceRepeatDate(
-                    _.omit(item, 'id'),
-                    repeats
-                );
-
-                newObject.original = item.id;
-                newObject.persist = false;
-
-                if (day(newObject.created_at) > day(endDate)) {
-                    break;
-                } else {
-                    out.push(new Model(newObject));
-                    repeats++;
-                }
-            }
-        }
-
-        return out;
-    },
-
     idColumnRenderer: function (value) {
         if (isNaN(parseInt(value))) {
             return '';
         }
 
         return value;
-    },
-
-    generateClones: function (store) {
-        var me = this;
-        var oldClones = [];
-        var newClones = [];
-        var endDate = Financial.app.getController('Data').getEndDate();
-
-        store.getRange().forEach(function (record) {
-            if (record.isGenerated()) {
-                oldClones.push(record);
-            } else if (record.get('repeat')) {
-                var recordClones = me.getClonesFor(record.data, store.model, endDate);
-
-                if (recordClones.length) {
-                    newClones = newClones.concat(recordClones);
-                }
-            }
-        });
-
-        oldClones.forEach(function (record) {
-            store.remove(record);
-        });
-        newClones.forEach(function (record) {
-            store.add(record);
-        });
     }
 });

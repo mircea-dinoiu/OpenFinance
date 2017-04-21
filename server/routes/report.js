@@ -3,8 +3,8 @@ const router = express.Router();
 const Controller = require('../controllers/ReportController');
 const filters = require('../filters');
 
-router.get('/', filters.auth, async (req, res) => {
-    res.json(await Controller.getList(req, res));
+router.get('/', filters.auth, (req, res) => {
+    res.wrapPromise(Controller.getList(req, res));
 });
 
 module.exports = router;

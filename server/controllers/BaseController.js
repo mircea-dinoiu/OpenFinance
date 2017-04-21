@@ -3,11 +3,6 @@ const Messages = require('../Messages');
 
 module.exports = {
     async postDelete(req, res) {
-        const err = () => {
-            res.status(400);
-
-            return Messages.ERROR_INVALID_INPUT;
-        };
         const {data} = req.body;
 
         if (data && Array.isArray(data)) {
@@ -31,9 +26,10 @@ module.exports = {
                 }
             }
 
-            return output;
+            res.json(output);
         } else {
-            return err();
+            res.status(400);
+            res.json(Messages.ERROR_INVALID_INPUT);
         }
     }
 };

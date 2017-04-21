@@ -3,6 +3,7 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const app = express();
+const Messages = require('./server/Messages');
 
 /**
  * Config
@@ -20,6 +21,24 @@ app.set('view engine', 'hbs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+
+/**
+ * Add promise rejection wrapper
+ */
+const wrapPromise = function (promise: Promise) {
+    promise.catch(e => {
+        console.error(e);
+        this.status(500);
+        this.json(Messages.ERROR_UNEXPECTED);
+    });
+
+    return promise;
+};
+
+app.use((req, res, next) => {
+    res.wrapPromise = wrapPromise;
+    next();
+});
 
 /**
  * Cookie parser

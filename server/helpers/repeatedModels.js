@@ -1,0 +1,80 @@
+module.exports = {
+    generateClones: function (store) {
+        var me = this;
+        var oldClones = [];
+        var newClones = [];
+        var endDate = Financial.app.getController('Data').getEndDate();
+
+        store.getRange().forEach(function (record) {
+            if (record.isGenerated()) {
+                oldClones.push(record);
+            } else if (record.get('repeat')) {
+                var recordClones = me.getClonesFor(record.data, store.model, endDate);
+
+                if (recordClones.length) {
+                    newClones = newClones.concat(recordClones);
+                }
+            }
+        });
+
+        oldClones.forEach(function (record) {
+            store.remove(record);
+        });
+        newClones.forEach(function (record) {
+            store.add(record);
+        });
+    },
+
+    getClonesFor: function (item, Model, endDate) {
+        var out = [];
+        var day = Financial.util.Misc.day;
+
+        if (item.repeat != null) {
+            var repeats = 1;
+
+            while (true) {
+                var newObject = Financial.util.RepeatedModels.advanceRepeatDate(
+                    _.omit(item, 'id'),
+                    repeats
+                );
+
+                newObject.original = item.id;
+                newObject.persist = false;
+
+                if (day(newObject.created_at) > day(endDate)) {
+                    break;
+                } else {
+                    out.push(new Model(newObject));
+                    repeats++;
+                }
+            }
+        }
+
+        return out;
+    },
+
+    advanceRepeatDate: function (obj, rawRepeats) {
+        var newObject = Ext.clone(obj);
+        var date = new Date(newObject.created_at);
+        var repeats = rawRepeats || 1;
+
+        switch (newObject.repeat) {
+            case 'd':
+                date.setDate(date.getDate() + 1 * repeats);
+                break;
+            case 'w':
+                date.setDate(date.getDate() + 7 * repeats);
+                break;
+            case 'm':
+                date.setMonth(date.getMonth() + 1 * repeats);
+                break;
+            case 'y':
+                date.setFullYear(date.getFullYear() + 1 * repeats);
+                break;
+        }
+
+        newObject.created_at = date;
+
+        return newObject;
+    },
+};

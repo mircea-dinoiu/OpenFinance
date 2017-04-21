@@ -36,7 +36,7 @@ module.exports = Object.assign({}, BaseController, {
         );
         const rules = {
             start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
-            end_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
+            end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
             filters: ['sometimes', 'isPlainObject'],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
@@ -81,11 +81,10 @@ module.exports = Object.assign({}, BaseController, {
                 });
             }
 
-            return Model.scope('default').findAll(queryOpts);
+            res.json(Model.scope('default').findAll(queryOpts));
         } else {
             res.status(400);
-
-            return validator.errors();
+            res.json(validator.errors());
         }
     }
 });

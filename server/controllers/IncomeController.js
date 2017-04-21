@@ -10,7 +10,7 @@ module.exports = Object.assign({}, BaseController, {
         const input = pick(req.query, 'start_date', 'end_date', 'page', 'limit');
         const rules = {
             start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
-            end_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
+            end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt']
         };
@@ -43,11 +43,10 @@ module.exports = Object.assign({}, BaseController, {
                 });
             }
 
-            return Model.findAll(queryOpts);
+            res.json(Model.findAll(queryOpts));
         } else {
             res.status(400);
-
-            return validator.errors();
+            res.json(validator.errors());
         }
     }
 });
