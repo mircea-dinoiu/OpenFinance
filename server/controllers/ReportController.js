@@ -2,6 +2,7 @@ const ExpenseController = require('./ExpenseController');
 const IncomeController = require('./IncomeController');
 const CurrencyController = require('./CurrencyController');
 const {User, MoneyLocation} = require('../models');
+const {sortBy} = require('lodash');
 
 const description = (text) => {
     return `<span data-qtip="${text}">${text}</span>`;
@@ -148,7 +149,7 @@ module.exports = {
             push('0', this.formatMLName(0, {mlRecords}));
         }
 
-        mlRecords.forEach(record => {
+        sortBy(mlRecords, 'name').forEach(record => {
             const id = record.id;
 
             if (mls[id]) {
