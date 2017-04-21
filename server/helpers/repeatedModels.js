@@ -1,50 +1,53 @@
+const moment = require('moment');
+
 module.exports = {
-    generateClones: function (store) {
-        var me = this;
-        var oldClones = [];
-        var newClones = [];
-        var endDate = Financial.app.getController('Data').getEndDate();
+    generateClones({records, endDate}) {
+        const ret = [];
 
-        store.getRange().forEach(function (record) {
-            if (record.isGenerated()) {
-                oldClones.push(record);
-            } else if (record.get('repeat')) {
-                var recordClones = me.getClonesFor(record.data, store.model, endDate);
+        records.forEach((record) => {
+            ret.push(record);
 
-                if (recordClones.length) {
-                    newClones = newClones.concat(recordClones);
-                }
+            if (record.repeat) {
+                this.getClonesFor({
+                    record: record,
+                    endDate
+                }).forEach(clone => {
+                    ret.push(clone);
+                });
             }
         });
-
-        oldClones.forEach(function (record) {
-            store.remove(record);
-        });
-        newClones.forEach(function (record) {
-            store.add(record);
-        });
+        
+        return ret;
     },
 
-    getClonesFor: function (item, Model, endDate) {
-        var out = [];
-        var day = Financial.util.Misc.day;
+    day(date) {
+        return moment(date).format('YYYY-MM-DD');
+    },
 
-        if (item.repeat != null) {
-            var repeats = 1;
+    getClonesFor({record, endDate}) {
+        const out = [];
+        const day = this.day;
+
+        if (record.repeat != null) {
+            let repeats = 1;
 
             while (true) {
-                var newObject = Financial.util.RepeatedModels.advanceRepeatDate(
-                    _.omit(item, 'id'),
+                const newObject = this.advanceRepeatDate(
+                    record.toJSON(),
                     repeats
                 );
 
-                newObject.original = item.id;
+                newObject.original = record.id;
                 newObject.persist = false;
+
+                delete newObject.id;
 
                 if (day(newObject.created_at) > day(endDate)) {
                     break;
                 } else {
-                    out.push(new Model(newObject));
+                    out.push({
+                        toJSON: () => newObject
+                    });
                     repeats++;
                 }
             }
@@ -53,10 +56,10 @@ module.exports = {
         return out;
     },
 
-    advanceRepeatDate: function (obj, rawRepeats) {
-        var newObject = Ext.clone(obj);
-        var date = new Date(newObject.created_at);
-        var repeats = rawRepeats || 1;
+    advanceRepeatDate(obj, rawRepeats) {
+        const newObject = Object.assign({}, obj);
+        const date = new Date(newObject.created_at);
+        const repeats = rawRepeats || 1;
 
         switch (newObject.repeat) {
             case 'd':
@@ -73,7 +76,7 @@ module.exports = {
                 break;
         }
 
-        newObject.created_at = date;
+        newObject.created_at = moment(date).format('YYYY-MM-DD HH:mm:ss');
 
         return newObject;
     },

@@ -1,6 +1,7 @@
 const {pick} = require('lodash');
 const {Validator} = require('../validators');
 const {Income: Model} = require('../models');
+const repeatedModels = require('../helpers/repeatedModels');
 
 module.exports = {
     async list(query) {
@@ -22,10 +23,8 @@ module.exports = {
                 whereReplacements.push(input.start_date);
             }
 
-            if (input.end_date) {
-                whereClause.push(`DATE(${Model.tableName}.created_at) <= ?`);
-                whereReplacements.push(input.end_date);
-            }
+            whereClause.push(`DATE(${Model.tableName}.created_at) <= ?`);
+            whereReplacements.push(input.end_date);
 
             const queryOpts = {
                 where: [whereClause.join(' AND '), ...whereReplacements]
@@ -42,7 +41,10 @@ module.exports = {
 
             return {
                 error: false,
-                json: await Model.findAll(queryOpts)
+                json: repeatedModels.generateClones({
+                    records: await Model.findAll(queryOpts),
+                    endDate: input.end_date
+                })
             };
         } else {
             return {
