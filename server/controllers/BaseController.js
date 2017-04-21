@@ -31,5 +31,15 @@ module.exports = {
             res.status(400);
             res.json(Messages.ERROR_INVALID_INPUT);
         }
+    },
+
+    async getList(req, res) {
+        const {error, json} = await this.Service.list(req.query);
+
+        if (error) {
+            res.status(400);
+        }
+
+        res.json(json);
     }
 };

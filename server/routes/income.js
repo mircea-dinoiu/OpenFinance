@@ -7,7 +7,7 @@ router.get('/list', filters.auth, async (req, res) => {
     res.wrapPromise(Controller.getList(req, res));
 });
 
-router.post('/delete', filters.auth, async (req, res) => {
+router.post('/delete', filters.auth, (req, res) => {
     res.wrapPromise(Controller.postDelete(req, res));
 });
 

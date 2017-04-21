@@ -1,5 +1,5 @@
-const ExpenseController = require('./ExpenseController');
-const IncomeController = require('./IncomeController');
+const ExpenseService = require('../services/ExpenseService');
+const IncomeService = require('../services/IncomeService');
 const CurrencyController = require('./CurrencyController');
 const {User, MoneyLocation} = require('../models');
 const {sortBy, uniq, concat} = require('lodash');
@@ -21,16 +21,27 @@ module.exports = {
             mlRecords,
             defaultCurrency
         ] = await Promise.all([
-            ExpenseController.getList(req, res),
-            IncomeController.getList(req, res),
+            ExpenseService.list(req.query),
+            IncomeService.list(req.query),
             User.findAll(),
             MoneyLocation.findAll(),
             CurrencyController.getDefaultCurrency()
         ]);
 
-        // One of the validators failed
-        if (res.statusCode !== 200) {
+        if (expenseRecords.error) {
+            res.status(400);
+            res.json(expenseRecords.json);
             return;
+        } else {
+            expenseRecords = expenseRecords.json;
+        }
+
+        if (incomeRecords.error) {
+            res.status(400);
+            res.json(incomeRecords.json);
+            return;
+        } else {
+            incomeRecords = incomeRecords.json;
         }
 
         const ret = {

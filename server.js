@@ -25,7 +25,7 @@ app.use(logger('dev'));
 /**
  * Add promise rejection wrapper
  */
-const wrapPromise = function (promise: Promise) {
+const wrapPromise = function (promise) {
     promise.catch(e => {
         console.error(e);
         this.status(500);
