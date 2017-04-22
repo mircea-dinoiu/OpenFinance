@@ -12,7 +12,7 @@ router.get('/chart/expenses-by-category', filters.auth, (req, res) => {
 });
 
 router.get('/chart/expenses-incomes-by-user', filters.auth, (req, res) => {
-    res.wrapPromise(Controller.getSummary(req, res));
+    res.wrapPromise(Controller.getExpensesIncomesByUser(req, res));
 });
 
 module.exports = router;

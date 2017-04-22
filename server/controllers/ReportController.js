@@ -71,6 +71,115 @@ module.exports = {
         res.json(ret);
     },
 
+    async getExpensesIncomesByUser(req, res) {
+        const input = {
+            display: req.query.display
+        };
+        const rules = {
+            display: ['isRequired', ['isIn', ['am', 'cm', 'ay']]]
+        };
+        const validator = new Validator(input, rules);
+
+        if (false === await validator.passes()) {
+            res.status(400);
+            res.json(validator.errors());
+
+            return;
+        }
+
+        let [
+            expenseRecords,
+            incomeRecords,
+            userRecords,
+            defaultCurrency
+        ] = await Promise.all([
+            ExpenseService.list(req.query),
+            IncomeService.list(req.query),
+            User.findAll(),
+            CurrencyController.getDefaultCurrency()
+        ]);
+
+        if (expenseRecords.error) {
+            res.status(400);
+            res.json(expenseRecords.json);
+            return;
+        } else {
+            expenseRecords = expenseRecords.json;
+        }
+
+        if (incomeRecords.error) {
+            res.status(400);
+            res.json(incomeRecords.json);
+            return;
+        } else {
+            incomeRecords = incomeRecords.json;
+        }
+
+        const series = [];
+        const fields = [];
+        const timeMap = {};
+        const timeFormat = ChartReportHelper.getTimeFormat(input.display);
+
+        const addToTimeMap = function (dataKey, record, sum) {
+            if (fields.indexOf(dataKey) === -1) {
+                fields.push(dataKey);
+            }
+
+            ChartReportHelper.addToTimeMap(timeMap, dataKey, record, sum, timeFormat);
+        };
+
+        incomeRecords.forEach(function (record) {
+            if (!ChartReportHelper.recordIsInRange(record, input.display)) {
+                return;
+            }
+
+            const dataKey = 'data' + record.user_id + 'i';
+
+            addToTimeMap(dataKey, record, record.sum);
+        });
+
+        for (const record of expenseRecords) {
+            if (!ChartReportHelper.recordIsInRange(record, input.display)) {
+                continue;
+            }
+
+            const json = record.toJSON();
+
+            const users = json.users;
+            const currencyId = json.currency_id;
+            let sum = json.sum;
+
+            if (currencyId !== parseInt(defaultCurrency.id)) {
+                sum = await CurrencyController.convertToDefault(sum, currencyId);
+            }
+
+            sum /= users.length;
+
+            users.forEach(function (id) {
+                const dataKey = 'data' + id + 'e';
+
+                addToTimeMap(dataKey, json, sum);
+            });
+        }
+
+        fields.forEach(function (field) {
+            const cleanField = field.replace(/data/, '');
+            const id = cleanField.replace(/[ei]/g, '');
+            const type = field.endsWith('e') ? 'Expenses' : 'Incomes';
+
+            series.push({
+                title: `${userRecords.find(each => each.id == id).first_name}\'s ${type}`,
+                yField: field
+            });
+        });
+
+        res.json({
+            fields: fields,
+            map: timeMap,
+            series: series
+        });
+    },
+
     async getExpensesByCategoryChart(req, res) {
         const input = {
             display: req.query.display
