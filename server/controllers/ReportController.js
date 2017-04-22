@@ -1,7 +1,7 @@
 const ExpenseService = require('../services/ExpenseService');
 const IncomeService = require('../services/IncomeService');
 const CurrencyController = require('./CurrencyController');
-const {User, MoneyLocation} = require('../models');
+const {User, Category, MoneyLocation} = require('../models');
 const {sortBy, uniq, concat} = require('lodash');
 
 const description = (text) => {
@@ -19,12 +19,14 @@ module.exports = {
             incomeRecords,
             userRecords,
             mlRecords,
+            categoryRecords,
             defaultCurrency
         ] = await Promise.all([
             ExpenseService.list(req.query),
             IncomeService.list(req.query),
             User.findAll(),
             MoneyLocation.findAll(),
+            Category.findAll(),
             CurrencyController.getDefaultCurrency()
         ]);
 
@@ -56,6 +58,12 @@ module.exports = {
                 userRecords,
                 mlRecords,
                 incomeRecords,
+            }),
+            expensesByCategory: await this.getExpensesByCategory({
+                expenseRecords,
+                defaultCurrency,
+                categoryRecords,
+                userRecords,
             })
         };
 
@@ -192,9 +200,7 @@ module.exports = {
             const mlId = json.money_location_id || 0;
 
             if (currencyId !== parseInt(defaultCurrency.id)) {
-                console.log(`>>>>\nConverting ${sum} (${currencyId} => ${defaultCurrency.id})`);
                 sum = await CurrencyController.convertToDefault(sum, currencyId);
-                console.log(`Resulted ${sum}\n<<<<`);
             }
 
             mls[mlId] = (mls[mlId] || 0) + sum;
@@ -261,5 +267,91 @@ module.exports = {
                 push(id, record.name, record.type_id);
             }
         });
+    },
+
+    async getExpensesByCategory({
+        expenseRecords,
+        defaultCurrency,
+        categoryRecords,
+        userRecords,
+    }) {
+        const categories = {};
+        const data = [];
+
+        for (const record of expenseRecords) {
+            const json = record.toJSON();
+            const recordCategories = json.categories;
+            let sum = json.sum;
+            const addData = function (categoryId, rawCatSum) {
+                if (!categories[categoryId]) {
+                    categories[categoryId] = {
+                        users: {}
+                    };
+                }
+
+                const users = json.users;
+                const catSum = rawCatSum / users.length;
+
+                users.forEach(function (id) {
+                    if (!categories[categoryId].users[id]) {
+                        categories[categoryId].users[id] = 0;
+                    }
+
+                    categories[categoryId].users[id] += catSum;
+                });
+            };
+
+            if (json.currency_id !== parseInt(defaultCurrency.id)) {
+                sum = await CurrencyController.convertToDefault(sum, json.currency_id);
+            }
+
+            if (recordCategories.length > 0) {
+                recordCategories.forEach(function (rawCategoryId) {
+                    let categoryId;
+
+                    if (categoryRecords.find(each => each.id == rawCategoryId)) {
+                        categoryId = rawCategoryId;
+                    } else {
+                        categoryId = 0;
+                    }
+
+                    addData(categoryId, sum);
+                });
+            } else {
+                addData(0, sum);
+            }
+        }
+
+        const categoryIds = Object.keys(categories).map(function (id) {
+            return parseInt(id);
+        });
+
+        categoryIds.sort(function (id1, id2) {
+            if (id1 == 0) {
+                return -1;
+            }
+
+            if (id2 == 0) {
+                return 1;
+            }
+
+            const sum1 = Object.values(categories[id1].users).reduce((acc, el) => acc + el, 0);
+            const sum2 = Object.values(categories[id2].users).reduce((acc, el) => acc + el, 0);
+
+            return sum1 > sum2 ? -1 : 1;
+        });
+
+        categoryIds.forEach(function (categoryId, index) {
+            Object.entries(categories[categoryId].users).forEach(([id, sum]) => {
+                data.push({
+                    sum: sum,
+                    description: description(userRecords.find(each => each.id == id).full_name),
+                    group: categoryId,
+                    index: index
+                });
+            });
+        });
+
+        return data;
     }
 };

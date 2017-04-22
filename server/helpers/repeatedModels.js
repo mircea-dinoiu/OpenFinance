@@ -45,9 +45,9 @@ module.exports = {
                 if (day(newObject.created_at) > day(endDate)) {
                     break;
                 } else {
-                    out.push({
+                    out.push(Object.assign({
                         toJSON: () => newObject
-                    });
+                    }, newObject));
                     repeats++;
                 }
             }

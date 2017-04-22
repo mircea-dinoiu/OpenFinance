@@ -47,13 +47,19 @@ module.exports = (sequelize, types) => {
 
                 if (values.userIds) {
                     values.users = values.userIds.split(',').map(Number);
-                    delete values.userIds;
+                } else {
+                    values.users = [];
                 }
+
+                delete values.userIds;
 
                 if (values.categoryIds) {
                     values.categories = values.categoryIds.split(',').map(Number);
-                    delete values.categoryIds;
+                } else {
+                    values.categories = [];
                 }
+
+                delete values.categoryIds;
 
                 // FIXME TEMP WORKAROUND sources/desktop/app/model/ExpenseModel.js:15
                 values.created_at = moment(values.created_at).format('YYYY-MM-DD HH:mm:ss');

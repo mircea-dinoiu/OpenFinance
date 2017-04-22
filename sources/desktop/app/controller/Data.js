@@ -95,136 +95,6 @@
             return new Date(controller.getEndDatePicker().getValue());
         },
 
-        recordIsInRange: function (record) {
-            switch (this.cache.include) {
-                case 'ut':
-                    if (Ext.util.Format.date(record.get('created_at'), 'Y-m-d') > Ext.util.Format.date(this.cache.today, 'Y-m-d')) {
-                        return false;
-                    }
-                    break;
-                default:
-                    var startDate = this.cache.startDate;
-
-                    if (startDate != null && record.get('created_at').toISOString() < startDate.toISOString()) {
-                        return false;
-                    }
-            }
-
-            return true;
-        },
-
-        formatMLName: function (id) {
-            return Financial.data.ML.getNameById(id);
-        },
-
-        addMLEntries: function (data, mls) {
-            var push = function (id, name, group) {
-                data.push({
-                    sum: mls[id],
-                    description: description(name),
-                    reference: id,
-                    group: group
-                });
-            };
-
-            if (mls['0']) {
-                push('0', this.formatMLName(0));
-            }
-
-            Financial.data.ML.getStore().each(function (record) {
-                var id = record.get('id');
-
-                if (mls[id]) {
-                    push(id, record.get('name'), record.get('type_id'));
-                }
-            });
-        },
-
-        getExpensesByCategory: function () {
-            var me = this,
-                categories = {},
-                data = [];
-
-            this.getExpensesStore().each(function (record) {
-                if (!me.recordIsInRange(record)) {
-                    return;
-                }
-
-                var recordCategories = record.get('categories'),
-                    sum = record.get('sum'),
-                    addData = function (categoryId, rawCatSum) {
-                        if (!categories[categoryId]) {
-                            categories[categoryId] = {
-                                users: {}
-                            };
-                        }
-
-                        var users = record.get('users');
-                        var catSum = rawCatSum / users.length;
-
-                        Ext.each(users, function (id) {
-                            if (!categories[categoryId].users[id]) {
-                                categories[categoryId].users[id] = 0;
-                            }
-
-                            categories[categoryId].users[id] += catSum;
-                        });
-                    };
-
-                if (record.get('currency_id') !== parseInt(Financial.data.Currency.getDefaultCurrency().id)) {
-                    sum = Financial.data.Currency.convertToDefault(sum, record.get('currency_id'));
-                }
-
-                if (recordCategories.length > 0) {
-                    Ext.each(recordCategories, function (rawCategoryId) {
-                        var categoryId;
-
-                        if (Financial.data.Category.getById(rawCategoryId)) {
-                            categoryId = rawCategoryId;
-                        } else {
-                            categoryId = 0;
-                        }
-
-                        addData(categoryId, sum);
-                    });
-                } else {
-                    addData(0, sum);
-                }
-            });
-
-            var categoryIds = Ext.Array.map(Ext.Object.getKeys(categories), function (id) {
-                return parseInt(id);
-            });
-
-            categoryIds.sort(function (id1, id2) {
-                if (id1 == 0) {
-                    return -1;
-                }
-
-                if (id2 == 0) {
-                    return 1;
-                }
-
-                var sum1 = Ext.Array.sum(Ext.Object.getValues(categories[id1].users));
-                var sum2 = Ext.Array.sum(Ext.Object.getValues(categories[id2].users));
-
-                return sum1 > sum2 ? -1 : 1;
-            });
-
-            Ext.each(categoryIds, function (categoryId, index) {
-                Ext.Object.each(categories[categoryId].users, function (id, sum) {
-                    data.push({
-                        sum: sum,
-                        description: description(Financial.data.User.getById(id).get('full_name')),
-                        group: categoryId,
-                        index: index
-                    });
-                });
-            });
-
-            return data;
-        },
-
         getReportGrid: function (name) {
             return Financial.app.getMainView().down('[itemId="' + name + '"]');
         },
@@ -259,7 +129,7 @@
 
                         var expensesByCategory = this.getReportGrid('expensesByCategory');
 
-                        expensesByCategory.getStore().loadData(this.getExpensesByCategory());
+                        expensesByCategory.getStore().loadData(json.expensesByCategory);
                     }.bind(this)
                 });
             } else if (charts.isVisible()) {
