@@ -101,31 +101,6 @@
         getDisplayComboValue: function () {
             return this.down('combo[itemId="display"]').getValue();
         },
-        
-        getTimeFormat: function () {
-            var timeDisplayFormat;
-            var timeValueFormat;
-            
-            switch (this.getDisplayComboValue()) {
-                case 'am':
-                    timeDisplayFormat = 'M Y';
-                    timeValueFormat = 'Y-m';
-                    break;
-                case 'ay':
-                    timeDisplayFormat = 'Y';
-                    timeValueFormat = 'Y';
-                    break;
-                case 'cm':
-                    timeDisplayFormat = 'D, j M';
-                    timeValueFormat = 'Y-m-d';
-                    break;
-            }
-            
-            return {
-                display: timeDisplayFormat,
-                value: timeValueFormat
-            };
-        },
 
         recordIsInRange: function (record) {
             switch (this.getDisplayComboValue()) {

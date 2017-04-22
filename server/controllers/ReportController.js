@@ -1,19 +1,13 @@
 const ExpenseService = require('../services/ExpenseService');
 const IncomeService = require('../services/IncomeService');
+const SummaryReportService = require('../services/SummaryReportService');
 const CurrencyController = require('./CurrencyController');
 const {User, Category, MoneyLocation} = require('../models');
-const {sortBy, uniq, concat} = require('lodash');
-
-const description = (text) => {
-    return `<span data-qtip="${text}">${text}</span>`;
-};
-
-const safeNum = function (num) {
-    return Number(num.toFixed(2));
-};
+const ChartReportHelper = require('../helpers/ChartReportHelper');
+const {Validator} = require('../validators');
 
 module.exports = {
-    async getList(req, res) {
+    async getSummary(req, res) {
         let [
             expenseRecords,
             incomeRecords,
@@ -47,19 +41,19 @@ module.exports = {
         }
 
         const ret = {
-            expensesData: await this.getExpensesData({
+            expensesData: await SummaryReportService.getExpensesData({
                 expenseRecords,
                 userRecords,
                 mlRecords,
                 defaultCurrency,
                 incomeRecords,
             }),
-            incomesData: this.getIncomesData({
+            incomesData: SummaryReportService.getIncomesData({
                 userRecords,
                 mlRecords,
                 incomeRecords,
             }),
-            expensesByCategory: await this.getExpensesByCategory({
+            expensesByCategory: await SummaryReportService.getExpensesByCategory({
                 expenseRecords,
                 defaultCurrency,
                 categoryRecords,
@@ -67,7 +61,7 @@ module.exports = {
             })
         };
 
-        ret.remainingData = this.getRemainingData({
+        ret.remainingData = SummaryReportService.getRemainingData({
             expenses: ret.expensesData,
             incomes: ret.incomesData,
             userRecords,
@@ -77,228 +71,61 @@ module.exports = {
         res.json(ret);
     },
 
-    getUniques: function (expenses, incomes) {
-        return uniq(concat(
-            expenses,
-            incomes
-        ).filter(function (item) {
-            return item.isTotal !== true;
-        }).map(function (item) {
-            return parseInt(item.reference);
-        }));
-    },
+    async getExpensesByCategoryChart(req, res) {
+        const input = {
+            display: req.query.display
+        };
+        const rules = {
+            display: ['isRequired', ['isIn', ['am', 'cm', 'ay']]]
+        };
+        const validator = new Validator(input, rules);
 
-    getRemainingSum: function (expenses, incomes, id) {
-        let filteredExpenses, filteredIncomes;
+        if (false === await validator.passes()) {
+            res.status(400);
+            res.json(validator.errors());
 
-        filteredExpenses = expenses.filter(function (expense) {
-            return expense.reference === id;
-        })[0];
-
-        filteredIncomes = incomes.filter(function (income) {
-            return income.reference === id;
-        })[0];
-
-        filteredExpenses = filteredExpenses ? filteredExpenses.sum : 0;
-        filteredIncomes = filteredIncomes ? filteredIncomes.sum : 0;
-
-        return safeNum(filteredIncomes - filteredExpenses);
-    },
-
-    getRemainingData({expenses, incomes, userRecords, mlRecords}) {
-        let data = {byUser: [], byML: []},
-            users,
-            mls,
-            totalRemainingByUser = {},
-            totalRemainingByML = {};
-
-        users = this.getUniques(expenses.byUser, incomes.byUser);
-        mls = this.getUniques(expenses.byML, incomes.byML);
-
-        /**
-         * Remaining present
-         */
-        mls.forEach((id) => {
-            totalRemainingByML[id] = this.getRemainingSum(expenses.byML, incomes.byML, id);
-        });
-
-        users.forEach((id) => {
-            totalRemainingByUser[id] = this.getRemainingSum(expenses.byUser, incomes.byUser, id);
-        });
-
-        /**
-         * Total remaining
-         */
-        Object.keys(totalRemainingByUser).forEach(function (id) {
-            const sum = totalRemainingByUser[id];
-
-            data.byUser.push({
-                sum: sum,
-                description: description(userRecords.find(each => each.id == id).full_name)
-            });
-        });
-
-        Object.keys(totalRemainingByML).forEach(id => {
-            const sum = totalRemainingByML[id];
-
-            if (sum !== 0) {
-                const ml = mlRecords.find(each => each.id == id);
-
-                data.byML.push({
-                    sum: sum,
-                    description: description(this.formatMLName(id, {mlRecords})),
-                    group: (ml ? ml.type_id : 0) || 0
-                });
-            }
-        });
-
-        return data;
-    },
-
-    getIncomesData({incomeRecords, userRecords, mlRecords}) {
-        const data = {byUser: [], byML: []},
-            users = {},
-            mls = {};
-
-        for (const record of incomeRecords) {
-            const uId = record.user_id;
-            const mlId = record.money_location_id || 0;
-            const sum = record.sum;
-
-            users[uId] = (users[uId] || 0) + sum;
-            mls[mlId] = (mls[mlId] || 0) + sum;
+            return;
         }
 
-        Object.keys(users).forEach(id => {
-            const sum = users[id];
+        const series = [];
+        const categoryIds = [];
+        const timeMap = {};
+        const timeFormat = ChartReportHelper.getTimeFormat(input.display);
+        let [
+            expenseRecords,
+            categoryRecords,
+            defaultCurrency
+        ] = await Promise.all([
+            ExpenseService.list(req.query),
+            Category.findAll(),
+            CurrencyController.getDefaultCurrency()
+        ]);
 
-            data.byUser.push({
-                sum: sum,
-                description: description(userRecords.find(each => each.id == id).full_name),
-                reference: Number(id)
-            });
-        });
-
-        this.addMLEntries({
-            data: data.byML,
-            mls,
-            mlRecords
-        });
-
-        return data;
-    },
-
-    async getExpensesData({expenseRecords, userRecords, mlRecords, defaultCurrency}) {
-        const users = {};
-        const mls = {};
+        if (expenseRecords.error) {
+            res.status(400);
+            res.json(expenseRecords.json);
+            return;
+        } else {
+            expenseRecords = expenseRecords.json;
+        }
 
         for (const record of expenseRecords) {
+            if (!ChartReportHelper.recordIsInRange(record, input.display)) {
+                continue;
+            }
+
             const json = record.toJSON();
-            let sum = json.sum;
-            const recordUsers = json.users;
-            const currencyId = json.currency_id;
-            const mlId = json.money_location_id || 0;
 
-            if (currencyId !== parseInt(defaultCurrency.id)) {
-                sum = await CurrencyController.convertToDefault(sum, currencyId);
-            }
-
-            mls[mlId] = (mls[mlId] || 0) + sum;
-
-            sum /= recordUsers.length;
-
-            recordUsers.forEach(userId => {
-                users[userId] = (users[userId] || 0) + sum;
-            });
-        }
-
-        const data = {
-            byUser: [],
-            byML: []
-        };
-
-        userRecords.forEach(record => {
-            const id = record.id;
-
-            if (users[id]) {
-                data.byUser.push({
-                    sum: users[id],
-                    description: description(record.full_name),
-                    reference: id
-                });
-            }
-        });
-
-        this.addMLEntries({
-            data: data.byML,
-            mls,
-            mlRecords
-        });
-
-        return data;
-    },
-
-    formatMLName(id, {mlRecords}) {
-        if (id == 0) {
-            return '<i>Unclassified</i>';
-        }
-
-        return mlRecords.find(each => each.id == id).name;
-    },
-
-    addMLEntries({data, mls, mlRecords}) {
-        const push = function (id, name, group) {
-            data.push({
-                sum: mls[id],
-                description: description(name),
-                reference: id,
-                group: group
-            });
-        };
-
-        if (mls['0']) {
-            push('0', this.formatMLName(0, {mlRecords}));
-        }
-
-        sortBy(mlRecords, 'name').forEach(record => {
-            const id = record.id;
-
-            if (mls[id]) {
-                push(id, record.name, record.type_id);
-            }
-        });
-    },
-
-    async getExpensesByCategory({
-        expenseRecords,
-        defaultCurrency,
-        categoryRecords,
-        userRecords,
-    }) {
-        const categories = {};
-        const data = [];
-
-        for (const record of expenseRecords) {
-            const json = record.toJSON();
             const recordCategories = json.categories;
             let sum = json.sum;
             const addData = function (categoryId, rawCatSum) {
-                if (!categories[categoryId]) {
-                    categories[categoryId] = {
-                        users: {}
-                    };
+                if (categoryIds.indexOf(categoryId) === -1) {
+                    categoryIds.push(categoryId);
                 }
 
-                const users = json.users;
-                const catSum = rawCatSum / users.length;
+                const dataKey = 'data' + categoryId;
 
-                users.forEach(function (id) {
-                    if (!categories[categoryId].users[id]) {
-                        categories[categoryId].users[id] = 0;
-                    }
-
-                    categories[categoryId].users[id] += catSum;
-                });
+                ChartReportHelper.addToTimeMap(timeMap, dataKey, json, rawCatSum / (recordCategories.length || 1), timeFormat);
             };
 
             if (json.currency_id !== parseInt(defaultCurrency.id)) {
@@ -322,36 +149,23 @@ module.exports = {
             }
         }
 
-        const categoryIds = Object.keys(categories).map(function (id) {
-            return parseInt(id);
-        });
+        categoryIds.forEach(function (id) {
+            const title = id == 0 ? '<i>Unclassified</i>' : categoryRecords.find(each => each.id == id).name;
 
-        categoryIds.sort(function (id1, id2) {
-            if (id1 == 0) {
-                return -1;
-            }
-
-            if (id2 == 0) {
-                return 1;
-            }
-
-            const sum1 = Object.values(categories[id1].users).reduce((acc, el) => acc + el, 0);
-            const sum2 = Object.values(categories[id2].users).reduce((acc, el) => acc + el, 0);
-
-            return sum1 > sum2 ? -1 : 1;
-        });
-
-        categoryIds.forEach(function (categoryId, index) {
-            Object.entries(categories[categoryId].users).forEach(([id, sum]) => {
-                data.push({
-                    sum: sum,
-                    description: description(userRecords.find(each => each.id == id).full_name),
-                    group: categoryId,
-                    index: index
-                });
+            series.push({
+                title,
+                yField: 'data' + id
             });
         });
 
-        return data;
+        const categoryIdsAsFields = categoryIds.map(function (id) {
+            return 'data' + id;
+        });
+
+        res.json({
+            fields: categoryIdsAsFields,
+            map: timeMap,
+            series: series
+        });
     }
 };

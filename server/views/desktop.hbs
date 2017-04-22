@@ -36,7 +36,11 @@
                     destroy: baseURL + '/income/delete'
                 },
                 report: {
-                    default: baseURL + '/report'
+                    summary: baseURL + '/report/summary',
+                    chart: {
+                        expensesByCategory: baseURL + '/report/chart/expenses-by-category',
+                        expensesIncomesByUser: baseURL + '/report/chart/expenses-incomes-by-user'
+                    }
                 },
                 getCurrencies: baseURL + '/get-currencies',
                 user: {
