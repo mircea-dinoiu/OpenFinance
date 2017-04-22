@@ -68,7 +68,6 @@ Ext.define('Financial.model.ExpenseModel', {
         reader: {
             type: 'json'
         },
-        limitParam: undefined, // TODO REMOVE SOON
         api: {
             read: Financial.routes.expense.list,
             create: Financial.routes.expense.create,

@@ -39,10 +39,6 @@
             }
         },
 
-        requires: [
-            'Financial.ux.window.Notification'
-        ],
-
         selectors: {
             toolbar: 'app-main-internal-toolbar',
             includeCombo: 'app-main-internal-data-reports combo'
@@ -221,50 +217,6 @@
             }
             expensesStore.load(function () {
                 check();
-
-                var count = 0;
-                var startDate = me.getStartDate();
-
-                expensesStore.each(function (record) {
-                    if (record.get('status') === 'pending' && record.get('persist')) {
-                        if (startDate == null || record.get('created_at').toISOString() >= startDate.toISOString()) {
-                            return;
-                        }
-
-                        count++;
-                    }
-                });
-
-                if (count) {
-                    var html;
-
-                    if (startDate == null) {
-                        html = 'There are <strong>{0}</strong> pending expenses'.format(
-                            count
-                        );
-                    } else {
-                        html = 'There are <strong>{0}</strong> pending expenses before {1}'.format(
-                            count,
-                            Ext.Date.format(startDate, 'j, F Y')
-                        );
-                    }
-
-                    var notification = Ext.create('Financial.ux.window.Notification', {
-                        position: 'tr',
-                        useXAxis: true,
-                        iconCls: 'x-fa fa-exclamation-triangle',
-                        title: 'Notice',
-                        html: html,
-                        slideInDuration: 800,
-                        slideBackDuration: 1500,
-                        autoCloseDelay: 5000,
-                        slideInAnimation: 'elasticIn',
-                        slideBackAnimation: 'elasticIn'
-                    });
-
-                    // notification shows in a bad place when show is called directly (seems like the DOM is not ready for it)
-                    setTimeout(notification.show.bind(notification), 0);
-                }
             });
 
             var incomesStore = this.getIncomesStore();

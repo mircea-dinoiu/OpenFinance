@@ -7,11 +7,13 @@
         drawChart: function () {
             var me = this;
 
+            me.setLoading(true);
+
             Ext.Ajax.request({
                 url: Financial.routes.report.chart.expensesByCategory,
                 method: 'GET',
                 params: {
-                    display: this.getDisplayComboValue(),
+                    display: me.getDisplayComboValue(),
                     end_date: Financial.app.getController('Data').getEndDate()
                 },
                 success: function (response) {
@@ -21,8 +23,9 @@
                         return Object.assign(me.getLineConfig(), each);
                     });
 
-                    this.createChart(data);
-                }.bind(this)
+                    me.createChart(data);
+                    me.setLoading(false);
+                }
             });
         }
     });

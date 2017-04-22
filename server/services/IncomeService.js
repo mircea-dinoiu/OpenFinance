@@ -1,7 +1,7 @@
 const {pick} = require('lodash');
 const {Validator} = require('../validators');
 const {Income: Model} = require('../models');
-const repeatedModels = require('../helpers/repeatedModels');
+const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
 
 module.exports = {
     async list(query) {
@@ -41,7 +41,7 @@ module.exports = {
 
             return {
                 error: false,
-                json: repeatedModels.generateClones({
+                json: RepeatedModelsHelper.generateClones({
                     records: await Model.findAll(queryOpts),
                     endDate: input.end_date
                 })

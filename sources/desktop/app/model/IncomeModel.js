@@ -36,7 +36,6 @@ Ext.define('Financial.model.IncomeModel', {
         reader: {
             type: 'json'
         },
-        limitParam: undefined, // TODO REMOVE SOON
         api: {
             read: Financial.routes.income.list,
             create: Financial.routes.income.create,
