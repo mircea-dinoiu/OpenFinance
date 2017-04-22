@@ -20,25 +20,6 @@
     Ext.define('Financial.controller.Data', {
         extend: 'Ext.app.Controller',
 
-        loadingCount: 0,
-
-        setLoading: function (toggle) {
-            var mainView = Financial.app.getMainView();
-
-            if (toggle) {
-                this.loadingCount += 1;
-                mainView.setLoading(true);
-            } else {
-                this.loadingCount -= 1;
-
-                if (this.loadingCount === 0) {
-                    mainView.setLoading(false);
-                } else {
-                    mainView.setLoading(true);
-                }
-            }
-        },
-
         selectors: {
             toolbar: 'app-main-internal-toolbar',
             includeCombo: 'app-main-internal-data-reports combo'
@@ -196,37 +177,22 @@
 
         loadData: function (params) {
             var me = this;
-            var includeCombo = me.getIncludeCombo();
-            var check = function () {
-                me.setLoading(false);
 
-                if (me.loadingCount === 0) {
-                    me.syncReports();
-                    includeCombo.setDisabled(false);
-                }
-            };
-
-            includeCombo.setDisabled(true);
-            me.setLoading(true);
-            me.setLoading(true);
+            me.syncReports();
 
             var expensesStore = this.getExpensesStore();
 
             if (params != null) {
                 expensesStore.proxy.extraParams = params;
             }
-            expensesStore.load(function () {
-                check();
-            });
+            expensesStore.load();
 
             var incomesStore = this.getIncomesStore();
 
             if (params != null) {
                 incomesStore.proxy.extraParams = params;
             }
-            incomesStore.load(function () {
-                check();
-            });
+            incomesStore.load();
         }
     });
 }());

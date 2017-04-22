@@ -3,7 +3,6 @@ Ext.define('Financial.store.IncomeStore', {
 
     model: 'Financial.model.IncomeModel',
 
-    autoLoad: false,
     autoDestroy: false,
     storeId: 'income',
 
