@@ -2,7 +2,7 @@ const {Expense: Model, User, Currency, MoneyLocation, Category} = require('../mo
 const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
 
-module.exports = Object.assign({}, BaseController, {
+module.exports = BaseController.extend({
     Model,
     Service,
 

@@ -84,8 +84,10 @@ class Validator {
                 let params = [];
 
                 if (Array.isArray(rule)) {
-                    ruleName = rule.shift();
-                    params = rule;
+                    const copy = Array.from(rule);
+
+                    ruleName = copy.shift();
+                    params = copy;
                 }
 
                 if (ruleName === 'sometimes') {
