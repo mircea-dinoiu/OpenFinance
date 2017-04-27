@@ -8,27 +8,38 @@ module.exports = {
         const rules = this.updateValidationRules;
 
         if (Array.isArray(data)) {
-            const output = [];
+            const errors = [];
+            const validRecords = [];
 
             for (const record of data) {
                 if (isPlainObject(record)) {
                     const validator = new Validator(record, rules);
 
                     if (await validator.passes()) {
-                        const model = await this.Model.findOne({where: {id: record.id}});
-
-                        await model.update(this.sanitizeUpdateValues(record));
-
-                        output.push(model.toJSON());
+                        validRecords.push(record);
                     } else {
-                        output.push(validator.errors());
+                        errors.push(validator.errors());
                     }
                 } else {
-                    output.push(Messages.ERROR_INVALID_INPUT);
+                    errors.push(Messages.ERROR_INVALID_INPUT);
                 }
             }
 
-            res.json(output);
+            if (errors.length) {
+                res.status(400).json(errors);
+            } else {
+                const output = [];
+
+                for (const record of validRecords) {
+                    const model = await this.Model.findOne({where: {id: record.id}});
+
+                    await model.update(this.sanitizeUpdateValues(record));
+
+                    output.push(model.toJSON());
+                }
+
+                res.json(output);
+            }
         } else {
             res.status(400).json(Messages.ERROR_INVALID_INPUT);
         }
@@ -39,25 +50,36 @@ module.exports = {
         const rules = this.createValidationRules;
 
         if (Array.isArray(data)) {
-            const output = [];
+            const errors = [];
+            const validRecords = [];
 
             for (const record of data) {
                 if (isPlainObject(record)) {
                     const validator = new Validator(record, rules);
 
                     if (await validator.passes()) {
-                        const model = await this.Model.create(this.sanitizeCreateValues(record));
-
-                        output.push(model.toJSON());
+                        validRecords.push(record);
                     } else {
-                        output.push(validator.errors());
+                        errors.push(validator.errors());
                     }
                 } else {
-                    output.push(Messages.ERROR_INVALID_INPUT);
+                    errors.push(Messages.ERROR_INVALID_INPUT);
                 }
             }
 
-            res.json(output);
+            if (errors.length) {
+                res.status(400).json(errors);
+            } else {
+                const output = [];
+
+                for (const record of validRecords) {
+                    const model = await this.Model.create(this.sanitizeCreateValues(record));
+
+                    output.push(model.toJSON());
+                }
+
+                res.json(output);
+            }
         } else {
             res.status(400).json(Messages.ERROR_INVALID_INPUT);
         }

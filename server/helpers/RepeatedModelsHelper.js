@@ -1,4 +1,5 @@
 const moment = require('moment');
+const {standardDate} = require('../helpers');
 
 module.exports = {
     generateClones({records, endDate}) {
@@ -76,7 +77,7 @@ module.exports = {
                 break;
         }
 
-        newObject.created_at = moment(date).format('YYYY-MM-DD HH:mm:ss');
+        newObject.created_at = standardDate(date);
 
         return newObject;
     },

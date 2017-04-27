@@ -1,4 +1,4 @@
-const moment = require('moment');
+const {standardDate} = require('../helpers');
 
 module.exports = (sequelize, types) => {
     return sequelize.define('incomes', {
@@ -19,8 +19,8 @@ module.exports = (sequelize, types) => {
                 const values = Object.assign({}, this.dataValues);
 
                 // FIXME TEMP WORKAROUND sources/desktop/app/model/IncomeModel.js:15
-                values.created_at = moment(values.created_at).format('YYYY-MM-DD HH:mm:ss');
-                values.updated_at = moment(values.updated_at).format('YYYY-MM-DD HH:mm:ss');
+                values.created_at = standardDate(values.created_at);
+                values.updated_at = standardDate(values.updated_at);
 
                 return values;
             }

@@ -1,4 +1,4 @@
-const moment = require('moment');
+const {standardDate} = require('../helpers');
 
 module.exports = (sequelize, types) => {
     const Expense =  sequelize.define('expenses', {
@@ -62,8 +62,8 @@ module.exports = (sequelize, types) => {
                 delete values.categoryIds;
 
                 // FIXME TEMP WORKAROUND sources/desktop/app/model/ExpenseModel.js:15
-                values.created_at = moment(values.created_at).format('YYYY-MM-DD HH:mm:ss');
-                values.updated_at = moment(values.updated_at).format('YYYY-MM-DD HH:mm:ss');
+                values.created_at = standardDate(values.created_at);
+                values.updated_at = standardDate(values.updated_at);
 
                 return values;
             }

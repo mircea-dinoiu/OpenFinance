@@ -3,7 +3,24 @@ const {isPlainObject} = require('lodash');
 const validator = require('validator');
 const debug = require('config').get('debug');
 
+const stringIsInt = validator.isInt;
+const stringIsFloat = validator.isFloat;
+
 Object.assign(validator, {
+    isInt: (value) => {
+        if (typeof value === 'number') {
+            return true;
+        }
+
+        return stringIsInt(value);
+    },
+    isFloat: (value) => {
+        if (typeof value === 'number') {
+            return true;
+        }
+
+        return stringIsFloat(value);
+    },
     isArray: (value) => {
         return Array.isArray(value);
     },
@@ -14,7 +31,7 @@ Object.assign(validator, {
         return moment(value, format).isValid();
     },
     isId: async (id, Model) => {
-        if (!validator.isInt(String(id))) {
+        if (!validator.isInt(id)) {
             return false;
         }
 

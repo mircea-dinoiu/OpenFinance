@@ -11,4 +11,12 @@ router.post('/delete', filters.auth, (req, res) => {
     res.wrapPromise(Controller.postDelete(req, res));
 });
 
+router.post('/update', filters.auth, (req, res) => {
+    res.wrapPromise(Controller.postUpdate(req, res));
+});
+
+router.post('/create', filters.auth, (req, res) => {
+    res.wrapPromise(Controller.postCreate(req, res));
+});
+
 module.exports = router;
