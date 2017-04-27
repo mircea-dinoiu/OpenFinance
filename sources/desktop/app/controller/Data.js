@@ -76,10 +76,50 @@
             return Financial.app.getMainView().down('[itemId="' + name + '"]');
         },
 
+        syncSummary: function () {
+            Ext.Logger.info('Sync summary');
+
+            Ext.Ajax.request({
+                url: Financial.routes.report.summary,
+                method: 'GET',
+                params: _.pick({
+                    end_date: this.cache.include === 'ut' ? Ext.util.Format.date(this.cache.today, 'Y-m-d') : this.getEndDate(),
+                    start_date: this.getStartDate()
+                },  _.identity),
+                success: function (response) {
+                    var json = JSON.parse(response.responseText);
+                    var expenses = json.expensesData;
+                    var incomes = json.incomesData;
+                    var remaining = json.remainingData;
+
+                    this.renderExpenses(expenses);
+                    this.renderIncomes(incomes);
+                    this.renderBalance(remaining);
+
+                    var expensesByCategory = this.getReportGrid('expensesByCategory');
+
+                    expensesByCategory.getStore().loadData(json.expensesByCategory);
+                }.bind(this)
+            });
+        },
+
+        syncCharts: function () {
+            Ext.Logger.info('Sync charts');
+
+            var mainView = Financial.app.getMainView();
+            var panels = mainView.query('app-main-internal-charts-baseChartPanel');
+
+            panels.forEach(function (panel) {
+                var chart = panel.down('chart');
+
+                if (chart != null) {
+                    panel.drawChart();
+                }
+            });
+        },
+
         syncReports: function () {
             this.resetCache();
-
-            Ext.Logger.info('Sync reports');
 
             var mainView = Financial.app.getMainView();
 
@@ -87,38 +127,11 @@
             var charts = mainView.down('app-main-internal-charts');
 
             if (data.isVisible()) {
-                Ext.Ajax.request({
-                    url: Financial.routes.report.summary,
-                    method: 'GET',
-                    params: _.pick({
-                        end_date: this.cache.include === 'ut' ? Ext.util.Format.date(this.cache.today, 'Y-m-d') : this.getEndDate(),
-                        start_date: this.getStartDate()
-                    },  _.identity),
-                    success: function (response) {
-                        var json = JSON.parse(response.responseText);
-                        var expenses = json.expensesData;
-                        var incomes = json.incomesData;
-                        var remaining = json.remainingData;
-
-                        this.renderExpenses(expenses);
-                        this.renderIncomes(incomes);
-                        this.renderBalance(remaining);
-
-                        var expensesByCategory = this.getReportGrid('expensesByCategory');
-
-                        expensesByCategory.getStore().loadData(json.expensesByCategory);
-                    }.bind(this)
-                });
+                this.syncSummary();
             } else if (charts.isVisible()) {
-                var panels = mainView.query('app-main-internal-charts-baseChartPanel');
-
-                panels.forEach(function (panel) {
-                    var chart = panel.down('chart');
-
-                    if (chart != null) {
-                        panel.drawChart();
-                    }
-                });
+                this.syncCharts();
+            } else {
+                this.syncSummary();
             }
         },
 
