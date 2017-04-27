@@ -10,5 +10,6 @@
   "session": {
     "secret": "keyboard cat"
   },
-  "timezone": "Europe/Bucharest"
+  "timezone": "Europe/Bucharest",
+  "enableCSRF": true
 }

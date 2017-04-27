@@ -15,7 +15,7 @@ router.get('/', function (req, res) {
     if (PlatformService.isSupported()) {
         const data = {
             isMobile: PlatformService.isMobile(),
-            csrfToken: req.csrfToken(),
+            csrfToken: req.csrfToken ? req.csrfToken() : '',
             debug: debug,
             baseUrl: '',
             localDevMode: localDevMode,

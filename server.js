@@ -121,18 +121,20 @@ app.use(passport.session());
 /**
  * CSRF
  */
-const csrf = require('csurf');
+if (config.get('enableCSRF')) {
+    const csrf = require('csurf');
 
-app.use(csrf({cookie: true}));
-app.use(function (err, req, res, next) {
-    if (err.code !== 'EBADCSRFTOKEN') {
-        return next(err);
-    }
+    app.use(csrf({cookie: true}));
+    app.use(function (err, req, res, next) {
+        if (err.code !== 'EBADCSRFTOKEN') {
+            return next(err);
+        }
 
-    // handle CSRF token errors here
-    res.status(403);
-    res.send(debug ? 'Missing CSRF Token' : null);
-});
+        // handle CSRF token errors here
+        res.status(403);
+        res.send(debug ? 'Missing CSRF Token' : null);
+    });
+}
 
 /**
  * Server static assets

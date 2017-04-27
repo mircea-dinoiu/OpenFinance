@@ -5,7 +5,7 @@ module.exports = {
     async postDelete(req, res) {
         const {data} = req.body;
 
-        if (data && Array.isArray(data)) {
+        if (Array.isArray(data)) {
             const output = [];
 
             for (const record of data) {
@@ -28,8 +28,7 @@ module.exports = {
 
             res.json(output);
         } else {
-            res.status(400);
-            res.json(Messages.ERROR_INVALID_INPUT);
+            res.status(400).json(Messages.ERROR_INVALID_INPUT);
         }
     },
 

@@ -14,7 +14,7 @@ Object.assign(validator, {
         return moment(value, format).isValid();
     },
     isId: async (id, Model) => {
-        if (!validator.isInt(id)) {
+        if (!validator.isInt(String(id))) {
             return false;
         }
 
