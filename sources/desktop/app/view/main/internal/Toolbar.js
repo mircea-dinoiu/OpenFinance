@@ -31,6 +31,21 @@ Ext.define('Financial.view.main.internal.Toolbar', {
             }
         },
         {
+            xtype: 'tbfill',
+        },
+        {
+            html: 'Got issues with the new site? <a href="' + Financial.oldSite + '">Switch to legacy version</a>',
+            xtype: 'container',
+            style: {
+                background: '#ffde71',
+                height: '32px',
+                top: '0',
+                border: '1px solid #BD9927',
+                lineHeight: '30px',
+                padding: '0 8px'
+            }
+        },
+        {
             xtype: 'tbfill'
         },
         {

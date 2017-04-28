@@ -11,5 +11,6 @@
     "secret": "keyboard cat"
   },
   "timezone": "Europe/Bucharest",
-  "enableCSRF": true
+  "enableCSRF": true,
+  "oldSite": "#"
 }

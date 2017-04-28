@@ -19,6 +19,7 @@
                 return Ext.String.format.apply(Ext.String, [this.toString()].concat(Array.from(arguments)))
             };
 
+            Financial.oldSite = '{{ oldSite }}';
             Financial.isMobile = Boolean({{ isMobile }});
             Financial.data = {};
             Financial.debug = ('{{ debug }}' === 'true');

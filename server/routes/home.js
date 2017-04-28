@@ -20,6 +20,7 @@ router.get('/', function (req, res) {
             baseUrl: '',
             localDevMode: localDevMode,
             assetHost: req.cookies.devserver ? req.cookies.devserver : '',
+            oldSite: config.get('oldSite')
         };
 
         if (PlatformService.isMobile()) {
