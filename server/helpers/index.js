@@ -18,7 +18,7 @@ module.exports = {
         return dest;
     },
 
-    standardDate(value) {
-        return moment(value).format('YYYY-MM-DD HH:mm:ss');
+    standardDate(value, format) {
+        return moment(value, format).format('YYYY-MM-DD HH:mm:ss');
     }
 };

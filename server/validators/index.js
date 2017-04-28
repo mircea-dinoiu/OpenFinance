@@ -2,6 +2,7 @@ const moment = require('moment');
 const {isPlainObject} = require('lodash');
 const validator = require('validator');
 const debug = require('config').get('debug');
+const chalk = require('chalk');
 
 const stringIsInt = validator.isInt;
 const stringIsFloat = validator.isFloat;
@@ -120,7 +121,8 @@ class Validator {
 
                     if (debug) {
                         console.log(
-                            `[DEBUG] ${dataKey}: validator.${ruleName}(${[value].concat(params).join(', ')})`
+                            chalk.inverse('Validation rule called:'),
+                            chalk.green(`${dataKey}: validator.${ruleName}(${[value].concat(params).join(', ')})`)
                         );
                     }
 

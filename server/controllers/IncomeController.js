@@ -47,7 +47,7 @@ module.exports = BaseController.extend({
         }
 
         if (record.hasOwnProperty('created_at')) {
-            values.created_at = standardDate(record.created_at);
+            values.created_at = standardDate(record.created_at, 'X');
         }
 
         if (record.hasOwnProperty('status')) {
@@ -59,5 +59,33 @@ module.exports = BaseController.extend({
         }
 
         return values;
-    }
+    },
+
+    sanitizeCreateValues(record) {
+        const values = pickOwnProperties(record, [
+            'sum',
+            'description',
+            'user_id',
+            'repeat',
+            'money_location_id',
+        ]);
+
+        values.status = 'pending';
+
+        if (record.hasOwnProperty('created_at')) {
+            values.created_at = standardDate(record.created_at, 'X');
+        }
+
+        return values;
+    },
+
+    parseRecord(record) {
+        const workingRecord = Object.assign({}, record);
+
+        if (workingRecord.hasOwnProperty('money_location_id') && workingRecord.money_location_id == 0) {
+            workingRecord.money_location_id = null;
+        }
+
+        return workingRecord;
+    },
 });

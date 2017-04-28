@@ -1,8 +1,13 @@
 const {isPlainObject} = require('lodash');
 const Messages = require('../Messages');
 const {Validator} = require('../validators');
+const chalk = require('chalk');
 
 module.exports = {
+    parseRecord(record) {
+        return record;
+    },
+
     async postUpdate(req, res) {
         const {data} = req.body;
         const rules = this.updateValidationRules;
@@ -13,10 +18,11 @@ module.exports = {
 
             for (const record of data) {
                 if (isPlainObject(record)) {
-                    const validator = new Validator(record, rules);
+                    const workingRecord = this.parseRecord(record);
+                    const validator = new Validator(workingRecord, rules);
 
                     if (await validator.passes()) {
-                        validRecords.push(record);
+                        validRecords.push(workingRecord);
                     } else {
                         errors.push(validator.errors());
                     }
@@ -32,8 +38,18 @@ module.exports = {
 
                 for (const record of validRecords) {
                     const model = await this.Model.findOne({where: {id: record.id}});
+                    const values = this.sanitizeUpdateValues(record);
 
-                    await model.update(this.sanitizeUpdateValues(record));
+                    console.log(
+                        chalk.inverse(`Updating ${this.Model.name} #${record.id} with`),
+                        chalk.green(JSON.stringify(values, null, 2))
+                    );
+
+                    if (values.hasOwnProperty('created_at')) {
+                        model.setDataValue('created_at', values.created_at);
+                    }
+
+                    await model.update(values);
 
                     output.push(model.toJSON());
                 }
@@ -55,10 +71,11 @@ module.exports = {
 
             for (const record of data) {
                 if (isPlainObject(record)) {
-                    const validator = new Validator(record, rules);
+                    const workingRecord = this.parseRecord(record);
+                    const validator = new Validator(workingRecord, rules);
 
                     if (await validator.passes()) {
-                        validRecords.push(record);
+                        validRecords.push(workingRecord);
                     } else {
                         errors.push(validator.errors());
                     }

@@ -5,6 +5,7 @@ module.exports = (sequelize, types) => {
         id: {
             type: types.INTEGER,
             primaryKey: true,
+            autoIncrement: true
         },
         description: types.STRING,
         money_location_id: types.INTEGER,
