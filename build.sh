@@ -10,3 +10,7 @@ compass compile
 popd
 sencha app build
 popd
+
+# Install npm prod
+rm -rf node_modules
+npm install --production
