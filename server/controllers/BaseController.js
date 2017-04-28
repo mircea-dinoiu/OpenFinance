@@ -37,8 +37,12 @@ module.exports = {
                 const output = [];
 
                 for (const record of validRecords) {
-                    const model = await this.Model.findOne({where: {id: record.id}});
-                    const values = this.sanitizeUpdateValues(record);
+                    let model = await this.Model.findOne({where: {id: record.id}});
+                    let values = this.sanitizeUpdateValues(record, model);
+
+                    if (values instanceof Promise) {
+                        values = await values;
+                    }
 
                     console.log(
                         chalk.inverse(`Updating ${this.Model.name} #${record.id} with`),
@@ -50,6 +54,10 @@ module.exports = {
                     }
 
                     await model.update(values);
+
+                    if (this.updateRelations) {
+                        model = await this.updateRelations({record,  model});
+                    }
 
                     output.push(model.toJSON());
                 }
@@ -90,7 +98,26 @@ module.exports = {
                 const output = [];
 
                 for (const record of validRecords) {
-                    const model = await this.Model.create(this.sanitizeCreateValues(record));
+                    let values = this.sanitizeCreateValues(record);
+
+                    if (values instanceof Promise) {
+                        values = await values;
+                    }
+
+                    console.log(
+                        chalk.inverse(`Updating ${this.Model.name} #${record.id} with`),
+                        chalk.green(JSON.stringify(values, null, 2))
+                    );
+
+                    let model = await this.Model.create(values);
+
+                    if (this.createRelations) {
+                        model = await this.createRelations({
+                            record,
+                            model,
+                            req
+                        });
+                    }
 
                     output.push(model.toJSON());
                 }
