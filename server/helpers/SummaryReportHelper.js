@@ -1,7 +1,11 @@
 const {uniq, concat, sortBy} = require('lodash');
 
 module.exports = {
-    description(text) {
+    description(text, {html} = {}) {
+        if (html === 'false') {
+            return text;
+        }
+
         return `<span data-qtip="${text}">${text}</span>`;
     },
 
@@ -37,9 +41,11 @@ module.exports = {
         return this.safeNum(filteredIncomes - filteredExpenses);
     },
 
-    formatMLName(id, {mlRecords}) {
+    formatMLName(id, {mlRecords, html}) {
         if (id == 0) {
-            return '<i>Unclassified</i>';
+            const name = 'Unclassified';
+
+            return html === 'false' ? name : `<i>${name}</i>`;
         }
 
         return mlRecords.find(each => each.id == id).name;

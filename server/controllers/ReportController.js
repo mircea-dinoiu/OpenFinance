@@ -66,6 +66,7 @@ module.exports = {
             incomes: ret.incomesData,
             userRecords,
             mlRecords,
+            html: req.query.html
         });
 
         res.json(ret);

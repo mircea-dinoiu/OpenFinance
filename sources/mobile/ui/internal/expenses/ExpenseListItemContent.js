@@ -9,6 +9,7 @@ import {grey500, grey700, yellowA700, cyan500} from 'material-ui/styles/colors';
 import {Avatar, Chip} from 'material-ui';
 
 import RepeatOptions from 'common/defs/repeatOptions';
+import {numericValue} from '../../formatters';
 
 const ExpenseListItemContent = (props) => {
     const item = props.item;
@@ -31,7 +32,7 @@ const ExpenseListItemContent = (props) => {
             <Row>
                 <Col xs={6}>
                         <span style={{fontSize: 14, float: 'left', lineHeight: '20px'}}>
-                            <span style={{color: grey700}}>{currencyISOCode}</span> {new Intl.NumberFormat().format(item.sum)}
+                            {numericValue(item.sum, currencyISOCode)}
                         </span>
                     &nbsp;
                     {item.status === 'pending' && <Warning style={{height: 20, width: 20}} color={yellowA700}/>}

@@ -7,6 +7,7 @@ import Warning from 'material-ui/svg-icons/alert/warning';
 import Cached from 'material-ui/svg-icons/action/cached';
 import {grey500, grey700, yellowA700, cyan500} from 'material-ui/styles/colors';
 import {Avatar} from 'material-ui';
+import {numericValue} from '../../formatters';
 
 import RepeatOptions from 'common/defs/repeatOptions';
 
@@ -31,7 +32,7 @@ const IncomeListItemContent = (props) => {
             <Row>
                 <Col xs={6}>
                         <span style={{fontSize: 14, float: 'left', lineHeight: '20px'}}>
-                            <span style={{color: grey700}}>{currencyISOCode}</span> {new Intl.NumberFormat().format(item.sum)}
+                            {numericValue(item.sum, currencyISOCode)}
                         </span>
                     &nbsp;
                     {item.status === 'pending' && <Warning style={{height: 20, width: 20}} color={yellowA700}/>}
