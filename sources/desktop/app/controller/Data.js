@@ -1,8 +1,4 @@
 (function () {
-    var description = function (text) {
-        return Ext.String.format('<span data-qtip="{0}">{0}</span>', text);
-    };
-
     var addSumToTitle = function (grid, items) {
         grid.setTitle(Ext.String.format(
             '<div class="grid-custom-title"><span class="grid-title-name">{0}</span><span class="grid-title-sum">{1}</span></div>',
