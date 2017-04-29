@@ -57,9 +57,6 @@ Ext.define('Financial.view.main.internal.Toolbar', {
         },
         {
             itemId: 'end-date-button',
-            listeners: {
-                render: 'applyFilter'
-            },
             iconCls: 'x-fa fa-calendar',
             menu: {
                 xtype: 'menu',

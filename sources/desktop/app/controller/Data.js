@@ -22,11 +22,25 @@
 
         selectors: {
             toolbar: 'app-main-internal-toolbar',
-            includeCombo: 'app-main-internal-data-reports combo'
+            includeCombo: 'app-main-internal-data-reports combo',
+            expensesGrid: 'app-main-internal-data-expenses',
+            incomesGrid: 'app-main-internal-data-incomes'
+        },
+
+        getComponent: function (selector) {
+            return Financial.app.getMainView().down(selector);
         },
 
         getIncludeCombo: function () {
-            return Financial.app.getMainView().down(this.selectors.includeCombo);
+            return this.getComponent(this.selectors.includeCombo);
+        },
+
+        getExpensesGrid: function () {
+            return this.getComponent(this.selectors.expensesGrid);
+        },
+
+        getIncomesGrid: function () {
+            return this.getComponent(this.selectors.incomesGrid);
         },
 
         resetCache: function () {
@@ -79,6 +93,11 @@
         syncSummary: function () {
             Ext.Logger.info('Sync summary');
 
+            var mainView = Financial.app.getMainView();
+            var summary = mainView.down('app-main-internal-data-reports');
+
+            summary.setLoading(true);
+
             Ext.Ajax.request({
                 url: Financial.routes.report.summary,
                 method: 'GET',
@@ -99,6 +118,8 @@
                     var expensesByCategory = this.getReportGrid('expensesByCategory');
 
                     expensesByCategory.getStore().loadData(json.expensesByCategory);
+
+                    summary.setLoading(false);
                 }.bind(this)
             });
         },
@@ -188,24 +209,40 @@
             return Financial.data.Income.getStore();
         },
 
-        loadData: function (params) {
-            var me = this;
-
-            me.syncReports();
-
+        syncExpenses: function (params) {
             var expensesStore = this.getExpensesStore();
+            var expensesGrid = this.getExpensesGrid();
+
+            expensesGrid.setLoading(true);
 
             if (params != null) {
                 expensesStore.proxy.extraParams = params;
             }
-            expensesStore.load();
+            expensesStore.load(function () {
+                expensesGrid.setLoading(false);
+            });
+        },
 
+        syncIncomes: function (params) {
             var incomesStore = this.getIncomesStore();
+            var incomesGrid = this.getIncomesGrid();
+
+            incomesGrid.setLoading(true);
 
             if (params != null) {
                 incomesStore.proxy.extraParams = params;
             }
-            incomesStore.load();
+            incomesStore.load(function () {
+                incomesGrid.setLoading(false);
+            });
+        },
+
+        loadData: function (params) {
+            var me = this;
+
+            me.syncReports();
+            me.syncExpenses(params);
+            me.syncIncomes(params);
         }
     });
 }());

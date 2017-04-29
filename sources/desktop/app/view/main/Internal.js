@@ -20,6 +20,10 @@ Ext.define('Financial.view.main.Internal', {
         width: '100%'
     },
 
+    listeners: {
+        afterrender: 'onAfterRender'
+    },
+
     items: [
         {
             xtype: 'app-main-internal-toolbar'

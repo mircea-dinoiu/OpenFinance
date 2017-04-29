@@ -7,5 +7,9 @@ Ext.define('Financial.view.main.InternalController', {
         setTimeout(function () {
             Financial.app.getController('Data').syncReports();
         }, 0);
-    }
+    },
+
+    onAfterRender: function () {
+        this.getView().down('app-main-internal-toolbar').getController().applyFilter()
+    },
 });
