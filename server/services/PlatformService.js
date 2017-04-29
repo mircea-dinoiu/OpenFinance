@@ -14,7 +14,7 @@ module.exports = {
     isMobile() {
         const {name, version} = this.detector.getOS();
 
-        return (name === 'iOS' && Number(version) >= 7) || name === 'Android';
+        return (name === 'iOS' && Number(version.split('.')[0]) >= 7) || name === 'Android';
     },
 
     isDesktop() {
