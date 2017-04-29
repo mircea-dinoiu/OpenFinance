@@ -5,7 +5,9 @@ const basename = path.basename(module.filename);
 const config = require('config');
 const dbConfig = config.get('db');
 const db = {};
-const sql = new Sequelize(`mysql://${dbConfig.get('user')}:${dbConfig.get('pass')}@${dbConfig.get('host')}/${dbConfig.get('name')}`, {
+const sql = new Sequelize(dbConfig.get('name'), dbConfig.get('user'), dbConfig.get('pass'), {
+    host: dbConfig.get('host'),
+    dialect: 'mysql',
     timezone: config.get('timezone')
 });
 
