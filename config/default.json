@@ -5,8 +5,8 @@
     "pass": "",
     "name": ""
   },
-  "debug": true,
-  "localDevMode": true,
+  "debug": false,
+  "localDevMode": false,
   "session": {
     "secret": "keyboard cat"
   },
