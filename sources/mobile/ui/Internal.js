@@ -4,14 +4,15 @@ import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigati
 
 import Expenses from './internal/Expenses';
 import Incomes from './internal/Incomes';
+import Summary from './internal/Summary';
 
-// import AccountBalance from 'material-ui/svg-icons/action/account-balance';
+import AccountBalance from 'material-ui/svg-icons/action/account-balance';
 import TrendingUp from 'material-ui/svg-icons/action/trending-up';
 import TrendingDown from 'material-ui/svg-icons/action/trending-down';
 
 export default class Internal extends PureComponent {
     state = {
-        selectedIndex: 0,
+        selectedIndex: 1,
         tab: null
     };
 
@@ -21,9 +22,13 @@ export default class Internal extends PureComponent {
         switch (index) {
             case 0:
                 return (
-                    <Expenses {...this.props}/>
+                    <Summary {...this.props}/>
                 );
             case 1:
+                return (
+                    <Expenses {...this.props}/>
+                );
+            case 2:
                 return (
                     <Incomes {...this.props}/>
                 );
@@ -46,20 +51,20 @@ export default class Internal extends PureComponent {
                 </div>
                 <Paper zDepth={1}>
                     <BottomNavigation selectedIndex={this.state.selectedIndex}>
-                        {/*<BottomNavigationItem
-                            label="Balance"
+                        <BottomNavigationItem
+                            label="Summary"
                             icon={<AccountBalance/>}
                             onTouchTap={() => this.select(0)}
-                        />*/}
+                        />
                         <BottomNavigationItem
                             label="Expenses"
                             icon={<TrendingDown/>}
-                            onTouchTap={() => this.select(0)}
+                            onTouchTap={() => this.select(1)}
                         />
                         <BottomNavigationItem
                             label="Incomes"
                             icon={<TrendingUp/>}
-                            onTouchTap={() => this.select(1)}
+                            onTouchTap={() => this.select(2)}
                         />
                     </BottomNavigation>
                 </Paper>

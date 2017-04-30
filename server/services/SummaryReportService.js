@@ -2,7 +2,7 @@ const SummaryReportHelper = require('../helpers/SummaryReportHelper');
 const CurrencyController = require('../controllers/CurrencyController');
 
 module.exports = {
-    getRemainingData({expenses, incomes, userRecords, mlRecords}) {
+    getRemainingData({expenses, incomes, userRecords, mlRecords, html}) {
         let data = {byUser: [], byML: []},
             users,
             mls,
@@ -43,7 +43,9 @@ module.exports = {
 
                 data.byML.push({
                     sum: sum,
-                    description: SummaryReportHelper.description(SummaryReportHelper.formatMLName(id, {mlRecords})),
+                    description: SummaryReportHelper.description(SummaryReportHelper.formatMLName(id, {mlRecords, html}), {
+                        html
+                    }),
                     group: (ml ? ml.type_id : 0) || 0
                 });
             }

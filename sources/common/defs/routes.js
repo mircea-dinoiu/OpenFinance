@@ -15,6 +15,13 @@ export default {
         update: baseURL + '/income/update',
         destroy: baseURL + '/income/delete'
     },
+    report: {
+        summary: baseURL + '/report/summary',
+        chart: {
+            expensesByCategory: baseURL + '/report/chart/expenses-by-category',
+            expensesIncomesByUser: baseURL + '/report/chart/expenses-incomes-by-user'
+        }
+    },
     getCurrencies: baseURL + '/get-currencies',
     user: {
         list: baseURL + '/user/list',
