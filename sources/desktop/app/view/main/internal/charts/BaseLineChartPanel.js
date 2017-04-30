@@ -10,21 +10,6 @@ Ext.define('Financial.view.main.internal.charts.BaseLineChartPanel', {
         'Ext.chart.interactions.ItemHighlight',
         'Ext.chart.series.Line'
     ],
-    
-    addToTimeMap: function (timeMap, dataKey, record, sum, timeFormat) {
-        var timeDisplay = Ext.util.Format.date(record.get('created_at'), timeFormat.display);
-        var timeValue = Ext.util.Format.date(record.get('created_at'), timeFormat.value);
-        
-        if (timeMap[timeValue] == null) {
-            timeMap[timeValue] = {time: timeDisplay, sortField: timeValue};
-        }
-
-        if (timeMap[timeValue][dataKey] == null) {
-            timeMap[timeValue][dataKey] = 0;
-        }
-
-        timeMap[timeValue][dataKey] += sum;
-    },
 
     createChart: function (data) {
         var store = data.store || new Ext.data.JsonStore({

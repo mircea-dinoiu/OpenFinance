@@ -1,0 +1,16 @@
+{
+  "db": {
+    "host": "",
+    "user": "",
+    "pass": "",
+    "name": ""
+  },
+  "debug": false,
+  "localDevMode": false,
+  "session": {
+    "secret": "keyboard cat"
+  },
+  "timezone": "Europe/Bucharest",
+  "enableCSRF": true,
+  "oldSite": "#"
+}
