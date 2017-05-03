@@ -7,7 +7,7 @@ const http = require('http');
 module.exports = {
     data: null,
     defaultCurrency: null,
-    cacheFilePath: basePath('storage/app/currencies.json'),
+    cacheFilePath: basePath('storage/currencies.json'),
     currencies: null,
 
     async getCurrencies(fetch = false) {
