@@ -8,7 +8,8 @@ const db = {};
 const sql = new Sequelize(dbConfig.get('name'), dbConfig.get('user'), dbConfig.get('pass'), {
     host: dbConfig.get('host'),
     dialect: 'mysql',
-    timezone: config.get('timezone')
+    timezone: config.get('timezone'),
+    logging: config.get('debug') ? console.log : false
 });
 
 fs

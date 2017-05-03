@@ -76,37 +76,45 @@ module.exports = {
                 path: '/nbrfxrates.xml',
             };
 
-            http.get(options, (res) => {
+            const req = http.get(options, (res) => {
                 let chunks = [];
 
-                res.on('data', function(chunk) {
-                    chunks.push(chunk);
-                }).on('end', function() {
-                    chunks = Buffer.concat(chunks).toString();
+                res
+                    .on('data', function (chunk) {
+                        chunks.push(chunk);
+                    })
+                    .on('end', function () {
+                        chunks = Buffer.concat(chunks).toString();
 
-                    const xml2js = require('xml2js');
+                        const xml2js = require('xml2js');
 
-                    xml2js.parseString(chunks, (err, xml) => {
-                        const body = xml.DataSet.Body[0];
-                        const origCurrencyISOCode = String(body.OrigCurrency[0]);
-                        const rates = {};
+                        xml2js.parseString(chunks, (err, xml) => {
+                            const body = xml.DataSet.Body[0];
+                            const origCurrencyISOCode = String(body.OrigCurrency[0]);
+                            const rates = {};
 
-                        rates[origCurrencyISOCode] = 1;
+                            rates[origCurrencyISOCode] = 1;
 
-                        const Rate = body.Cube[0].Rate;
+                            const Rate = body.Cube[0].Rate;
 
-                        Rate.forEach(({_, $}) => {
-                            const key = $.currency;
+                            Rate.forEach(({_, $}) => {
+                                const key = $.currency;
 
-                            if (allowedISOCodes.includes(key)) {
-                                rates[key] = Number(_);
-                            }
+                                if (allowedISOCodes.includes(key)) {
+                                    rates[key] = Number(_);
+                                }
+                            });
+
+                            resolve(rates);
                         });
-
-                        resolve(rates);
                     });
-                });
             });
+
+            req
+                .on('error', function (e) {
+                    console.error(e);
+                    resolve(null);
+                });
         });
     },
 
@@ -143,6 +151,11 @@ module.exports = {
             this.fetchRates(allowedISOCodes),
             this.getDefaultCurrency(),
         ]);
+
+        if (rates == null) {
+            await this.fetchCachedData();
+            return;
+        }
 
         Object.entries(map).forEach(([id, currencyInfo]) => {
             map[id].rates = {};
