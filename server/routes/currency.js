@@ -5,9 +5,7 @@ const filters = require('../filters');
 
 // todo change to currency/list
 router.get('/', filters.auth, async(req, res) => {
-    const update = req.query.update === 'true';
-
-    res.json(await Controller.getList({update}));
+    res.wrapPromise(Controller.getList(req, res));
 });
 
 module.exports = router;

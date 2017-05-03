@@ -210,9 +210,11 @@ module.exports = {
         }
     },
 
-    async getList({update}) {
+    async getList(req, res) {
+        const update = req.query.update === 'true';
+
         await this.setupData({update});
 
-        return this.data;
+        res.json(this.data);
     }
 };

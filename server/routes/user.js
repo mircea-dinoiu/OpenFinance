@@ -5,7 +5,7 @@ const passport = require('passport');
 const filters = require('../filters');
 
 router.get('/list', filters.auth, async (req, res) => {
-    res.json(await Controller.getList(req.user));
+    res.wrapPromise(Controller.getList(req, res));
 });
 
 router.post(
@@ -28,7 +28,7 @@ router.post(
                     return next(err);
                 }
 
-                res.json(await Controller.getList(req.user));
+                await Controller.getList(req, res);
             });
         })(req, res, next);
     }
