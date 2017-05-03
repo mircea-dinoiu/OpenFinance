@@ -35,7 +35,7 @@ router.post(
 );
 
 router.post('/logout', filters.auth, (req, res) => {
-    res.session.destroy();
+    req.session.destroy();
 
     if (req.xhr) {
         res.send({});
