@@ -1,13 +1,5 @@
-# PHP stuff
-/vendor
-composer.lock
-Homestead.yaml
-Homestead.json
-.env
-
-# EDITOR stuff
+# IDE stuff
 .idea
-_ide_helper.php
 
 # NPM stuff
 /node_modules
