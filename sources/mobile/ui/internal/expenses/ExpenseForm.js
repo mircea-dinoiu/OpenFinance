@@ -23,16 +23,34 @@ export default class ExpenseEditor extends PureComponent {
         return super.setState(state);
     }
 
-    bindAutoComplete(key) {
+    bindAutoComplete({searchKey, valueKey, multiple = true, defaultSearchText = '', forceSelection = true}) {
         return {
-            searchText: this.state[key] || '',
+            searchText: this.state[searchKey] || defaultSearchText,
             onUpdateInput: (value) => {
-                this.setState({[key]: value});
+                if (multiple || forceSelection === false) {
+                    this.setState({
+                        [searchKey]: value
+                    });
+                } else {
+                    this.setState({
+                        [searchKey]: value,
+                        [valueKey]: null,
+                    });
+                }
             },
             openOnFocus: true,
             filter: AutoComplete.fuzzyFilter,
-            onNewRequest: () => {
-                this.setState({[key]: ''});
+            onNewRequest: ({value}) => {
+                if (multiple) {
+                    this.setState({
+                        [searchKey]: '',
+                        [valueKey]: this.state[valueKey].concat(Number(value.key)),
+                    });
+                } else {
+                    this.setState({
+                        [valueKey]: value.key,
+                    });
+                }
             }
         }
     }
@@ -123,20 +141,34 @@ export default class ExpenseEditor extends PureComponent {
     }
 
     renderPaymentMethod() {
+        const searchKey = 'paymentSearch';
+        const valueKey = 'paymentMethod';
+
         return (
-            <SelectField
+            <AutoComplete
                 floatingLabelText="Payment Method"
                 floatingLabelFixed={true}
-                value={this.state.paymentMethod}
-                onChange={(e, i, value) => this.setState({paymentMethod: value})}
+                {...this.bindAutoComplete({
+                    searchKey,
+                    valueKey,
+                    multiple: false,
+                    defaultSearchText: this.state[valueKey] != null ? (
+                        this.props.moneyLocations.find(each => each.get('id') == this.state[valueKey]).get('name')
+                    ) : ''
+                })}
                 fullWidth={true}
-            >
-                {
-                    this.props.moneyLocations.sortBy(each => each.get('name')).map(
+                dataSource={
+                    this.props.moneyLocations
+                        .sortBy(each => each.get('name')).map(
                         map => ({value: map.get('id'), primaryText: map.get('name')})
-                    ).toJS().map(props => <MenuItem key={props.value} {...props}/>)
+                    )
+                        .toJS()
+                        .map(props => ({
+                            value: <MenuItem key={props.value} {...props}/>,
+                            text: props.primaryText,
+                        }))
                 }
-            </SelectField>
+            />
         );
     }
 
@@ -144,27 +176,34 @@ export default class ExpenseEditor extends PureComponent {
         return (
             <Row style={greyBoxStyle}>
                 <Col>
-                    <SelectField
+                    <AutoComplete
                         floatingLabelText="Charged Persons"
                         floatingLabelFixed={true}
-                        onChange={(e, i, value) => this.setState({chargedPersons: this.state.chargedPersons.concat(value)})}
+                        {...this.bindAutoComplete({searchKey: 'usersSearch', valueKey: 'chargedPersons'})}
                         fullWidth={true}
-                    >
-                        {
+                        dataSource={
                             this.props.user.get('list')
                                 .sortBy(each => each.get('full_name'))
                                 .filter(each => !this.state.chargedPersons.includes(each.get('id')))
-                                .map(
-                                    map => ({value: map.get('id'), primaryText: map.get('full_name')})
-                                ).toJS().map(props => <MenuItem key={props.value} {...props}/>)
+                                .toJS()
+                                .map(record => ({
+                                    value: (
+                                        <MenuItem
+                                            key={record.id}
+                                            primaryText={record.full_name}
+                                            secondaryText={<Avatar src={record.avatar}/>}
+                                        />
+                                    ),
+                                    text: record.full_name,
+                                }))
                         }
-                    </SelectField>
+                    />
                 </Col>
 
                 <Col style={{
-                        display: 'flex',
-                        flexWrap: 'wrap'
-                      }}>
+                    display: 'flex',
+                    flexWrap: 'wrap'
+                }}>
                     {this.state.chargedPersons.map(id => {
                         const [, user] = this.props.user.get('list').findEntry(each => each.get('id') == id);
 
@@ -173,8 +212,8 @@ export default class ExpenseEditor extends PureComponent {
                                 style={{margin: '5px 5px 0 0'}}
                                 key={id}
                                 onRequestDelete={() => this.setState({
-                                        chargedPersons: this.state.chargedPersons.filter(each => each !== id)
-                                    })}
+                                    chargedPersons: this.state.chargedPersons.filter(each => each !== id)
+                                })}
                             >
                                 <Avatar src={user.get('avatar')}/>
                                 {user.get('full_name')}
@@ -193,13 +232,7 @@ export default class ExpenseEditor extends PureComponent {
                     <AutoComplete
                         floatingLabelText="Categories"
                         floatingLabelFixed={true}
-                        {...this.bindAutoComplete('categoriesSearch')}
-                        onNewRequest={({value}) => {
-                            this.setState({
-                                categories: this.state.categories.concat(Number(value.key)),
-                                categoriesSearch: '',
-                            });
-                        }}
+                        {...this.bindAutoComplete({searchKey: 'categoriesSearch', valueKey: 'categories'})}
                         fullWidth={true}
                         dataSource={
                             this.props.categories
@@ -217,9 +250,9 @@ export default class ExpenseEditor extends PureComponent {
                 </Col>
 
                 <Col style={{
-                        display: 'flex',
-                        flexWrap: 'wrap'
-                      }}>
+                    display: 'flex',
+                    flexWrap: 'wrap'
+                }}>
                     {this.state.categories.map(id => {
                         const [, entity] = this.props.categories.findEntry(each => each.get('id') == id);
 
@@ -228,8 +261,8 @@ export default class ExpenseEditor extends PureComponent {
                                 style={{margin: 5}}
                                 key={id}
                                 onRequestDelete={() => this.setState({
-                                        categories: this.state.categories.filter(each => each !== id)
-                                    })}
+                                    categories: this.state.categories.filter(each => each !== id)
+                                })}
                             >
                                 {entity.get('name')}
                             </Chip>
@@ -242,20 +275,26 @@ export default class ExpenseEditor extends PureComponent {
 
     renderRepeat() {
         return (
-            <SelectField
+            <AutoComplete
                 floatingLabelText="Repeat"
                 floatingLabelFixed={true}
-                value={this.state.repeat}
-                onChange={(e, i, value) => this.setState({repeat: value})}
+                {...this.bindAutoComplete({
+                    searchKey: 'repeatSearch',
+                    valueKey: 'repeat',
+                    multiple: false,
+                    defaultSearchText: this.state.repeat != null ? RepeatOptions.find(each => each[0] === this.state.repeat)[1] : ''
+                })}
                 fullWidth={true}
-            >
-                {
+                dataSource={
                     RepeatOptions.map(arr => ({
                         value: arr[0],
                         primaryText: arr[1]
-                    })).map(props => <MenuItem key={props.value} {...props}/>)
+                    })).map(props => ({
+                        value: <MenuItem key={props.value} {...props}/>,
+                        text: props.primaryText,
+                    }))
                 }
-            </SelectField>
+            />
         );
     }
 

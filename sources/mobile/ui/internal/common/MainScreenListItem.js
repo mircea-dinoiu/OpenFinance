@@ -87,6 +87,7 @@ export default class ExpenseListItem extends PureComponent {
 
     render() {
         const item = this.props.item;
+        const persist = item.persist !== false;
 
         const ListItemContent = this.props.contentComponent;
 
@@ -99,18 +100,18 @@ export default class ExpenseListItem extends PureComponent {
                     <ListItem onTouchTap={this.toggleDetails}
                               style={this.getStyle()}
                               innerDivStyle={{paddingLeft: 40}}
-                              leftIcon={(
-                        <IconMenu
-                          iconButtonElement={<IconButton style={{padding: 0, width: 40}}><MoreVertIcon /></IconButton>}
-                          anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                          style={{marginLeft: 0, left: 0}}
-                          onTouchTap={event => event.stopPropagation()}
-                        >
-                          <MenuItem primaryText="Edit" leftIcon={<CreateIcon/>} onTouchTap={this.toggleEditDialog}/>
-                          <MenuItem primaryText="Delete" leftIcon={<DeleteIcon/>} onTouchTap={this.toggleDeleteDialog}/>
-                        </IconMenu>
-                      )}
+                              leftIcon={persist ? (
+                                  <IconMenu
+                                      iconButtonElement={<IconButton style={{padding: 0, width: 40}}><MoreVertIcon /></IconButton>}
+                                      anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                                      targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                                      style={{marginLeft: 0, left: 0}}
+                                      onTouchTap={event => event.stopPropagation()}
+                                  >
+                                      <MenuItem primaryText="Edit" leftIcon={<CreateIcon/>} onTouchTap={this.toggleEditDialog}/>
+                                      <MenuItem primaryText="Delete" leftIcon={<DeleteIcon/>} onTouchTap={this.toggleDeleteDialog}/>
+                                  </IconMenu>
+                              ) : null}
                     >
                         {this.state.createDeleteDialog && (
                             <MainScreenDeleteDialog

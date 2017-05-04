@@ -41,15 +41,11 @@ export default class Internal extends PureComponent {
 
     render() {
         return (
-            <div>
-                <div style={{
-                    height: 'calc(100vh - 56px - 64px)',
-                    overflowY: 'scroll',
-                    WebkitOverflowScrolling: 'touch'
-                }}>
-                    {this.state.tab}
-                </div>
-                <Paper zDepth={1}>
+            <div style={{
+                paddingBottom: '56px'
+            }}>
+                {this.state.tab}
+                <Paper zDepth={1} style={{position: 'fixed', bottom: 0}}>
                     <BottomNavigation selectedIndex={this.state.selectedIndex}>
                         <BottomNavigationItem
                             label="Summary"

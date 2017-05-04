@@ -120,13 +120,19 @@ class Mobile extends PureComponent {
     render() {
         return (
             <MuiThemeProvider>
-                <div>
+                <div style={{
+                    paddingTop: '64px',
+                }}>
                     <AppBar
                         title={this.state.title}
                         showMenuIconButton={this.isCurrenciesDrawerReady()}
                         onLeftIconButtonTouchTap={() => this.setState({currenciesDrawerOpen: true})}
                         iconElementLeft={<IconButton><EuroSymbol/></IconButton>}
                         iconElementRight={this.state.user ? <Logged onLogout={this.onLogout}/> : null}
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                        }}
                     />
                     {this.isCurrenciesDrawerReady() && (
                         <Drawer

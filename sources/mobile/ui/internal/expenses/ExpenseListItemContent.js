@@ -5,7 +5,8 @@ import {Row, Col} from 'react-grid-system';
 
 import Warning from 'material-ui/svg-icons/alert/warning';
 import Cached from 'material-ui/svg-icons/action/cached';
-import {grey500, grey700, yellowA700, cyan500} from 'material-ui/styles/colors';
+import TrendingUp from 'material-ui/svg-icons/action/trending-up';
+import {grey500, grey700, yellowA700, cyan500, red500} from 'material-ui/styles/colors';
 import {Avatar, Chip} from 'material-ui';
 
 import RepeatOptions from 'common/defs/repeatOptions';
@@ -37,6 +38,7 @@ const ExpenseListItemContent = (props) => {
                     &nbsp;
                     {item.status === 'pending' && <Warning style={{height: 20, width: 20}} color={yellowA700}/>}
                     {item.repeat != null && <Cached style={{height: 20, width: 20}} color={cyan500}/>}
+                    {item.persist === false && <TrendingUp style={{height: 20, width: 20}} color={red500}/>}
                 </Col>
                 <Col xs={6} style={{textAlign: 'right'}}>
                     {item.money_location_id && (
