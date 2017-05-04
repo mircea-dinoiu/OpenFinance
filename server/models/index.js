@@ -1,4 +1,5 @@
 const fs = require('fs');
+const chalk = require('chalk');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
@@ -9,7 +10,9 @@ const sql = new Sequelize(dbConfig.get('name'), dbConfig.get('user'), dbConfig.g
     host: dbConfig.get('host'),
     dialect: 'mysql',
     timezone: config.get('timezone'),
-    logging: config.get('debug') ? console.log : false
+    logging: config.get('debug') ? (...args) => {
+        console.log(chalk.inverse('SQL:'), ...args.map(arg => chalk.cyan(arg)))
+    } : false
 });
 
 fs
