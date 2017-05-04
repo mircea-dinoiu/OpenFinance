@@ -50,7 +50,7 @@ module.exports = BaseController.extend({
             values.created_at = standardDate(record.created_at, 'X');
         }
 
-        if (record.hasOwnProperty('status')) {
+        if (record.hasOwnProperty('status') && !values.hasOwnProperty('repeat')) {
             values.status = record.status;
 
             if (values.status === 'finished') {
