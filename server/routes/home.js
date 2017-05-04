@@ -18,7 +18,7 @@ router.get('/', function (req, res) {
             csrfToken: req.csrfToken ? req.csrfToken() : '',
             debug: debug,
             localDevMode: localDevMode,
-            assetHost: req.cookies.devserver ? req.cookies.devserver : '',
+            assetHost: config.get('devServer.enable') ? config.get('devServer.hostname') : '',
             oldSite: config.get('oldSite')
         };
 

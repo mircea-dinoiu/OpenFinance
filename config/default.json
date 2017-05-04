@@ -12,5 +12,9 @@
   },
   "timezone": "Europe/Bucharest",
   "enableCSRF": true,
-  "oldSite": "#"
+  "oldSite": "#",
+  "devServer": {
+    "hostname": "http://localhost:8080",
+    "enable": false
+  }
 }
