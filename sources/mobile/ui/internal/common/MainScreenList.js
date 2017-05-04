@@ -37,9 +37,13 @@ export default class MainScreenList extends PureComponent {
 
     componentWillReceiveProps({newRecord}) {
         if (newRecord && this.state.results.filter(each => each.get('id') == newRecord.id).size === 0) {
-            this.setState({
-                results: this.state.results.concat(Immutable.fromJS([newRecord]))
-            });
+            if (newRecord.repeat) {
+                this.refresh();
+            } else {
+                this.setState({
+                    results: this.state.results.concat(Immutable.fromJS([newRecord]))
+                });
+            }
         }
     }
 
@@ -78,15 +82,7 @@ export default class MainScreenList extends PureComponent {
     }
 
     handleUpdate = (data) => {
-        this.setState({
-            results: this.state.results.map(each => {
-                if (each.get('id') === data.id) {
-                    return Immutable.fromJS(data);
-                }
-
-                return each;
-            })
-        })
+        this.refresh();
     };
 
     handleDelete = async(id) => {
@@ -99,13 +95,11 @@ export default class MainScreenList extends PureComponent {
 
         // Keep the nice deleted message a bit more
         setTimeout(() => {
-            this.setState({
-                results: this.state.results.filter(each => each.get('id') !== id)
-            });
+            this.refresh();
         }, 500);
     };
 
-    handleRefresh = async() => {
+    refresh = async() => {
         this.setState({
             refreshing: true
         });
@@ -128,7 +122,7 @@ export default class MainScreenList extends PureComponent {
                 {this.state.firstLoad ? <BigLoader/> : (
                         <div>
                             <ReactPullToRefresh
-                                onRefresh={this.handleRefresh}
+                                onRefresh={this.refresh}
                             >
                                 {this.state.refreshing && (
                                     <RefreshIndicator
