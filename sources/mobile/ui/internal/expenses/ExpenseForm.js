@@ -3,6 +3,9 @@ import {TextField, DatePicker, TimePicker, SelectField, MenuItem, Chip, Avatar, 
 import {Row, Col} from 'react-grid-system';
 import {grey100} from 'material-ui/styles/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
+import {fetch} from 'common/utils/fetch';
+import routes from 'common/defs/routes';
+import {stringify} from 'query-string';
 
 const greyBoxStyle = {backgroundColor: grey100, paddingBottom: 10, marginTop: 10, marginBottom: 10};
 
@@ -60,9 +63,25 @@ export default class ExpenseEditor extends PureComponent {
                 value={this.state.description}
                 fullWidth={true}
                 onChange={event => this.setState({description: event.target.value})}
+                onBlur={this.onDescriptionBlur}
             />
         );
     }
+
+    onDescriptionBlur = async (event) => {
+        const search = event.target.value.toLowerCase().trim();
+
+        if (search) {
+            const response = await fetch(`${routes.suggestion.categories}?${stringify({
+                search
+            })}`);
+            const categories = await response.json();
+
+            this.setState({
+                categories,
+            });
+        }
+    };
 
     renderDateTime() {
         return (

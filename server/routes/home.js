@@ -17,7 +17,6 @@ router.get('/', function (req, res) {
             isMobile: PlatformService.isMobile(),
             csrfToken: req.csrfToken ? req.csrfToken() : '',
             debug: debug,
-            baseUrl: '',
             localDevMode: localDevMode,
             assetHost: req.cookies.devserver ? req.cookies.devserver : '',
             oldSite: config.get('oldSite')

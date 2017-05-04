@@ -26,9 +26,5 @@ const getMeta = (name) => {
 export default {
     get csrfToken() {
         return getMeta('csrf-token');
-    },
-
-    get baseUrl() {
-        return getMeta('base-url');
     }
 }

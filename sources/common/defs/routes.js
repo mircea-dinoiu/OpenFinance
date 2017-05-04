@@ -1,47 +1,46 @@
-import config from '../utils/config';
-
-const baseURL = config.baseUrl;
-
 export default {
     expense: {
-        list: baseURL + '/expense/list',
-        create: baseURL + '/expense/create',
-        update: baseURL + '/expense/update',
-        destroy: baseURL + '/expense/delete'
+        list: '/expense/list',
+        create: '/expense/create',
+        update: '/expense/update',
+        destroy: '/expense/delete'
     },
     income: {
-        list: baseURL + '/income/list',
-        create: baseURL + '/income/create',
-        update: baseURL + '/income/update',
-        destroy: baseURL + '/income/delete'
+        list: '/income/list',
+        create: '/income/create',
+        update: '/income/update',
+        destroy: '/income/delete'
     },
     report: {
-        summary: baseURL + '/report/summary',
+        summary: '/report/summary',
         chart: {
-            expensesByCategory: baseURL + '/report/chart/expenses-by-category',
-            expensesIncomesByUser: baseURL + '/report/chart/expenses-incomes-by-user'
+            expensesByCategory: '/report/chart/expenses-by-category',
+            expensesIncomesByUser: '/report/chart/expenses-incomes-by-user'
         }
     },
-    getCurrencies: baseURL + '/get-currencies',
+    getCurrencies: '/get-currencies',
     user: {
-        list: baseURL + '/user/list',
-        logout: baseURL + '/user/logout',
-        login: baseURL + '/user/login'
+        list: '/user/list',
+        logout: '/user/logout',
+        login: '/user/login'
     },
     category: {
-        list: baseURL + '/category/list',
-        create: baseURL + '/category/create',
-        update: baseURL + '/category/update',
-        destroy: baseURL + '/category/delete'
+        list: '/category/list',
+        create: '/category/create',
+        update: '/category/update',
+        destroy: '/category/delete'
     },
     ml: {
-        list: baseURL + '/money-location/list',
-        create: baseURL + '/money-location/create',
-        update: baseURL + '/money-location/update'
+        list: '/money-location/list',
+        create: '/money-location/create',
+        update: '/money-location/update'
     },
     mlType: {
-        list: baseURL + '/money-location-type/list',
-        create: baseURL + '/money-location-type/create',
-        update: baseURL + '/money-location-type/update'
+        list: '/money-location-type/list',
+        create: '/money-location-type/create',
+        update: '/money-location-type/update'
+    },
+    suggestion: {
+        categories: '/suggestion/categories',
     }
 }

@@ -28,8 +28,8 @@ module.exports = (sequelize, types) => {
 
                 Expense.addScope('default', {
                     attributes: Object.keys(Expense.rawAttributes).concat([
-                        ['GROUP_CONCAT(DISTINCT users.id)', 'userIds'],
-                        ['GROUP_CONCAT(DISTINCT categories.id)', 'categoryIds']
+                        ['GROUP_CONCAT(DISTINCT `users`.`id`)', 'userIds'],
+                        ['GROUP_CONCAT(DISTINCT `categories`.`id`)', 'categoryIds']
                     ]),
                     include: [
                         {
