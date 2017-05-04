@@ -58,16 +58,20 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
         var categoriesCombo = rowEditor.down('combo[itemId="categories"]');
         var value = input.getValue().toLowerCase().trim();
 
-        Financial.data.Expense.getStore().each(function (record) {
-            var rawName = record.get('item').toLowerCase().trim();
+        if (value.length === 0) {
+            return;
+        }
 
-            if (rawName == value) {
-                var recordCategories = record.get('categories');
+        Ext.Ajax.request({
+            url: Financial.routes.suggestion.categories,
+            method: 'GET',
+            params: {
+                search: value,
+            },
+            success: function (response) {
+                var json = JSON.parse(response.responseText);
 
-                if (recordCategories.length) {
-                    categoriesCombo.setValue(recordCategories);
-                    return false;
-                }
+                categoriesCombo.setValue(json);
             }
         });
     }
