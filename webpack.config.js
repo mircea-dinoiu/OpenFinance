@@ -15,7 +15,10 @@ module.exports = {
         'bundles/Mobile': path.resolve('sources/mobile/Mobile.js')
     },
     devServer: isHot ? {
-        contentBase: path.resolve('./public')
+        contentBase: path.resolve('./public'),
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        }
     } : null,
     output: {
         path: path.resolve('./public/dist'),

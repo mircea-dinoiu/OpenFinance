@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {TextField, DatePicker, TimePicker, SelectField, MenuItem, Chip, Avatar, RaisedButton} from 'material-ui';
+import {AutoComplete, TextField, DatePicker, TimePicker, SelectField, MenuItem, Chip, Avatar, RaisedButton} from 'material-ui';
 import {Row, Col} from 'react-grid-system';
 import {grey100} from 'material-ui/styles/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
@@ -15,12 +15,29 @@ export default class ExpenseEditor extends PureComponent {
         onFormChange: Function
     };
 
-    state = this.props.initialValues;
+    state = {
+        ...this.props.initialValues,
+        categoriesSearch: '',
+    };
 
     setState(state) {
         this.props.onFormChange({...this.state, ...state});
 
         return super.setState(state);
+    }
+
+    bindAutoComplete(key) {
+        return {
+            searchText: this.state[key],
+            onUpdateInput: (value) => {
+                this.setState({[key]: value});
+            },
+            openOnFocus: true,
+            filter: AutoComplete.fuzzyFilter,
+            onNewRequest: () => {
+                this.setState({[key]: ''});
+            }
+        }
     }
 
     renderSum() {
@@ -176,21 +193,30 @@ export default class ExpenseEditor extends PureComponent {
         return (
             <Row style={greyBoxStyle}>
                 <Col>
-                    <SelectField
+                    <AutoComplete
                         floatingLabelText="Categories"
                         floatingLabelFixed={true}
-                        onChange={(e, i, value) => this.setState({categories: this.state.categories.concat(value)})}
+                        {...this.bindAutoComplete('categoriesSearch')}
+                        onNewRequest={({value}) => {
+                            this.setState({
+                                categories: this.state.categories.concat(Number(value.key)),
+                                categoriesSearch: '',
+                            });
+                        }}
                         fullWidth={true}
-                    >
-                        {
+                        dataSource={
                             this.props.categories
                                 .sortBy(each => each.get('name'))
                                 .filter(each => !this.state.categories.includes(each.get('id')))
-                                .map(
-                                    map => ({value: map.get('id'), primaryText: map.get('name')})
-                                ).toJS().map(props => <MenuItem key={props.value} {...props}/>)
+                                .toJS()
+                                .map(record => ({
+                                    value: (
+                                        <MenuItem key={record.id} primaryText={record.name} secondaryText={record.expenses}/>
+                                    ),
+                                    text: record.name,
+                                }))
                         }
-                    </SelectField>
+                    />
                 </Col>
 
                 <Col style={{
