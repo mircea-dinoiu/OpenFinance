@@ -15,10 +15,7 @@ export default class ExpenseEditor extends PureComponent {
         onFormChange: Function
     };
 
-    state = {
-        ...this.props.initialValues,
-        categoriesSearch: '',
-    };
+    state = this.props.initialValues;
 
     setState(state) {
         this.props.onFormChange({...this.state, ...state});
@@ -28,7 +25,7 @@ export default class ExpenseEditor extends PureComponent {
 
     bindAutoComplete(key) {
         return {
-            searchText: this.state[key],
+            searchText: this.state[key] || '',
             onUpdateInput: (value) => {
                 this.setState({[key]: value});
             },
