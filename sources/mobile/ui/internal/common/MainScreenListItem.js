@@ -1,8 +1,8 @@
 import React, {PureComponent} from 'react';
 
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import CreateIcon from 'material-ui/svg-icons/content/create';
+import MoreVertIcon from 'material-ui-icons/MoreVert';
+import DeleteIcon from 'material-ui-icons/Delete';
+import CreateIcon from 'material-ui-icons/Create';
 
 import {cyan50, red50} from 'material-ui/styles/colors';
 import {IconButton, MenuItem, IconMenu} from 'material-ui';

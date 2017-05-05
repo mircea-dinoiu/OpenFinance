@@ -2,8 +2,8 @@
 import React, {PureComponent} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 
-import AddIcon from 'material-ui/svg-icons/content/add';
-import ViewListIcon from 'material-ui/svg-icons/action/view-list';
+import AddIcon from 'material-ui-icons/Add';
+import ViewListIcon from 'material-ui-icons/ViewList';
 
 export default class Expenses extends PureComponent {
     state = {

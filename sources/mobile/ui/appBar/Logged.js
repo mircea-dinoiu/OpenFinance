@@ -1,5 +1,5 @@
 import React from 'react';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import MoreVertIcon from 'material-ui-icons/MoreVert';
 import {IconMenu, IconButton, MenuItem} from 'material-ui';
 
 const Logged = (rawProps) => {

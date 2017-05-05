@@ -3,9 +3,9 @@ import moment from 'moment';
 
 import {Row, Col} from 'react-grid-system';
 
-import Warning from 'material-ui/svg-icons/alert/warning';
-import Cached from 'material-ui/svg-icons/action/cached';
-import TrendingUp from 'material-ui/svg-icons/action/trending-up';
+import Warning from 'material-ui-icons/Warning';
+import Cached from 'material-ui-icons/Cached';
+import TrendingUp from 'material-ui-icons/TrendingUp';
 import {grey500, grey700, yellowA700, cyan500, red500} from 'material-ui/styles/colors';
 import {Avatar, Chip} from 'material-ui';
 

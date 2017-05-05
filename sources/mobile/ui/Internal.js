@@ -6,9 +6,9 @@ import Expenses from './internal/Expenses';
 import Incomes from './internal/Incomes';
 import Summary from './internal/Summary';
 
-import AccountBalance from 'material-ui/svg-icons/action/account-balance';
-import TrendingUp from 'material-ui/svg-icons/action/trending-up';
-import TrendingDown from 'material-ui/svg-icons/action/trending-down';
+import AccountBalance from 'material-ui-icons/AccountBalance';
+import TrendingUp from 'material-ui-icons/TrendingUp';
+import TrendingDown from 'material-ui-icons/TrendingDown';
 
 export default class Internal extends PureComponent {
     state = {
@@ -45,7 +45,7 @@ export default class Internal extends PureComponent {
                 paddingBottom: '56px'
             }}>
                 {this.state.tab}
-                <Paper zDepth={1} style={{position: 'fixed', bottom: 0}}>
+                <Paper zDepth={1} style={{position: 'fixed', bottom: 0, zIndex: 1}}>
                     <BottomNavigation selectedIndex={this.state.selectedIndex}>
                         <BottomNavigationItem
                             label="Summary"

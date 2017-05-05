@@ -1,4 +1,5 @@
 import 'normalize.css';
+import './Mobile.scss';
 import 'babel-polyfill';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -11,7 +12,7 @@ import {render} from 'react-dom';
 
 import {AppBar, Drawer, IconButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import EuroSymbol from 'material-ui/svg-icons/action/euro-symbol';
+import EuroSymbol from 'material-ui-icons/EuroSymbol';
 
 import fetch from 'common/utils/fetch';
 import routes from 'common/defs/routes';
