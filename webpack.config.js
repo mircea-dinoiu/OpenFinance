@@ -27,25 +27,38 @@ module.exports = {
         publicPath: `${isHot ? 'http://localhost:8080' : ''}/dist/`
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
                 exclude: [
                     /node_modules/
                 ],
-                loaders: [isHot ? 'react-hot' : null, 'babel?cacheDirectory=true'].filter(Boolean)
+                use: [
+                    isHot ? {loader: 'react-hot-loader'} : null,
+                    {loader: 'babel-loader', options: {cacheDirectory: true}}
+                ].filter(Boolean)
             },
             {
                 test: /\.scss$/,
-                loaders: ['style', `css?sourceMap=${enableSourceMaps}&url=false`, `sass?sourceMap=${enableSourceMaps}`]
+                use: [
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader', options: {sourceMap: enableSourceMaps, url: false}},
+                    {loader: 'sass-loader', options: {sourceMap: enableSourceMaps}}
+                ]
             },
             {
                 test: /\.css$/,
-                loaders: ['style', `css?sourceMap=${enableSourceMaps}&url=false`]
+                use: [
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader', options: {sourceMap: enableSourceMaps, url: false}}
+                ]
             }
         ]
     },
     plugins: [
+        isProduction && new webpack.LoaderOptionsPlugin({
+            minimize: true
+        }),
         isProduction && new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
         isProduction && new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, sourceMap: false}),
         isProduction && new CompressionPlugin({
@@ -53,8 +66,9 @@ module.exports = {
         })
     ].filter(Boolean),
     resolve: {
-        root: [
-            path.resolve('sources')
+        modules: [
+            path.resolve('sources'),
+            path.resolve('node_modules')
         ]
     }
 };
