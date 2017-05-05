@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
+
+if which yarn >/dev/null; then
+    echo Yarn ready
+else
+    npm install -g yarn
+fi
+
 # Build with npm
-npm install
-npm run build:prod
+yarn install
+yarn run build:prod
 
 # Build desktop version
 pushd sources/desktop
@@ -13,4 +20,4 @@ popd
 
 # Install npm prod
 rm -rf node_modules
-npm install --production
+yarn install --production
