@@ -56,6 +56,11 @@ export default class ExpenseEditor extends PureComponent {
                         [valueKey]: value.key,
                     });
                 }
+            },
+            popoverProps: {
+                style: {
+                    position: 'absolute'
+                }
             }
         }
     }
