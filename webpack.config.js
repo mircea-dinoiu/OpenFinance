@@ -10,7 +10,7 @@ const isHot = env === 'hot';
 const enableSourceMaps = isProduction === false;
 
 module.exports = {
-    devtool: isProduction ? null : 'cheap-source-map',
+    devtool: isProduction ? false : 'cheap-source-map',
     entry: {
         'bundles/Mobile': path.resolve('sources/mobile/Mobile.js')
     },
@@ -19,7 +19,7 @@ module.exports = {
         headers: {
             'Access-Control-Allow-Origin': '*',
         }
-    } : null,
+    } : undefined,
     output: {
         path: path.resolve('./public/dist'),
         // filename: isProduction ? '[name].[chunkhash].js' : '[name].js',
