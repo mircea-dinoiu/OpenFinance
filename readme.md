@@ -17,8 +17,8 @@ Working with:
 ```
 # Install the following:
 # - Git
-# NodeJS
-# Sencha Cmd (https://www.sencha.com/products/extjs/cmd-download/)
+# - NodeJS
+# - Sencha Cmd (https://www.sencha.com/products/extjs/cmd-download/)
 
 git clone -b master git@github.com:mircea-dinoiu/financial.git
 
