@@ -40,6 +40,11 @@ export default class ExpenseEditor extends PureComponent {
             },
             openOnFocus: true,
             filter: AutoComplete.fuzzyFilter,
+            listStyle: {
+                maxHeight: 200,
+                overflow: 'auto'
+            },
+            animated: false,
             onNewRequest: ({value}) => {
                 if (multiple) {
                     this.setState({
