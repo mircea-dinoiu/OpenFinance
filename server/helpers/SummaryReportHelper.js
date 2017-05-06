@@ -62,7 +62,7 @@ module.exports = {
         };
 
         if (mls['0']) {
-            push('0', this.formatMLName(0, {mlRecords}));
+            push(0, this.formatMLName(0, {mlRecords}));
         }
 
         sortBy(mlRecords, 'name').forEach(record => {
