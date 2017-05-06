@@ -4,7 +4,8 @@
   "description": "This application is made to track down your monthly expenses and incomes in the family and help you understand better where your money are going and how can you be more careful what you're spending money on.",
   "scripts": {
     "build": "webpack",
-    "build:prod": "NODE_ENV=production webpack",
+    "build:css": "node-sass sources/desktop/resources/sass/extra.scss sources/desktop/resources/css/extra.css",
+    "build:prod": "npm run build:css && NODE_ENV=production webpack",
     "build:hot": "NODE_ENV=hot webpack-dev-server --hot --inline",
     "build:watch": "webpack --watch",
     "start": "node ./bin/www"
