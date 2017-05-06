@@ -28,6 +28,14 @@ router.post(
                     return next(err);
                 }
 
+                if (req.body.remember_me === 'true') {
+                    // This user won't have to log in for a year
+                    req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000;
+                } else {
+                    // This user should log in again after restarting the browser
+                    req.session.cookie.expires = false;
+                }
+
                 await Controller.getList(req, res);
             });
         })(req, res, next);
