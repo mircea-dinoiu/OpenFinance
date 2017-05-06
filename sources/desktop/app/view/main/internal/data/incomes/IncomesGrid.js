@@ -15,7 +15,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
         var items = this.callParent(arguments);
 
         items.forEach(function (docked) {
-            _.findWhere(docked.items, {itemId: 'addRecordButton'}).iconCls = 'x-fa fa-plus-circle';
+            _.find(docked.items, {itemId: 'addRecordButton'}).iconCls = 'x-fa fa-plus-circle';
         });
 
         return items;

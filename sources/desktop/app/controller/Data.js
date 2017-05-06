@@ -97,7 +97,7 @@
             Ext.Ajax.request({
                 url: Financial.routes.report.summary,
                 method: 'GET',
-                params: _.pick({
+                params: _.pickBy({
                     end_date: this.cache.include === 'ut' ? Ext.util.Format.date(this.cache.today, 'Y-m-d') : this.getEndDate(),
                     start_date: this.getStartDate()
                 },  _.identity),

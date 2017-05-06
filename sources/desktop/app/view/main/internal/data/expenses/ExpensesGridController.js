@@ -34,36 +34,35 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGridController', 
             return false;
         }
 
-        editor.down('datefield').setMaxValue(Financial.app.getController('Data').getEndDate());
+        var endDate = Financial.app.getController('Data').getEndDate();
 
-        var items = {};
-
-        Financial.data.Expense.getStore().each(function (record) {
-            var rawName = record.get('item').toLowerCase().trim();
-
-            if (items[rawName] == null) {
-                items[rawName] = {item: record.get('item'), usages: 1};
-            } else {
-                items[rawName].usages++;
-            }
-        });
+        editor.down('datefield').setMaxValue(endDate);
         editor.down('combo[itemId="item"]').setStore(new Ext.data.JsonStore({
-            fields: ['item'],
-            data: _.sortBy(Ext.Object.getValues(items), 'usages').reverse()
+            fields: ['item', 'usages'],
+            proxy: {
+                type: 'ajax',
+                url: Financial.routes.suggestion.expense.descriptions,
+                reader: {
+                    type: 'json'
+                },
+                extraParams: {
+                    end_date: endDate
+                }
+            }
         }));
     },
 
     onItemInputBlur: function (input) {
         var rowEditor = input.up('roweditor');
         var categoriesCombo = rowEditor.down('combo[itemId="categories"]');
-        var value = input.getValue().toLowerCase().trim();
+        var value = (input.getValue() || '').toLowerCase().trim();
 
         if (value.length === 0) {
             return;
         }
 
         Ext.Ajax.request({
-            url: Financial.routes.suggestion.categories,
+            url: Financial.routes.suggestion.expense.categories,
             method: 'GET',
             params: {
                 search: value,

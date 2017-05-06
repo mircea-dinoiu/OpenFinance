@@ -114,7 +114,7 @@ export default class ExpenseEditor extends PureComponent {
         const search = event.target.value.toLowerCase().trim();
 
         if (search) {
-            const response = await fetch(`${routes.suggestion.categories}?${stringify({
+            const response = await fetch(`${routes.suggestion.expense.categories}?${stringify({
                 search
             })}`);
             const categories = await response.json();

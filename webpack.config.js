@@ -12,7 +12,8 @@ const enableSourceMaps = isProduction === false;
 module.exports = {
     devtool: isProduction ? false : 'cheap-source-map',
     entry: {
-        'bundles/Mobile': path.resolve('sources/mobile/Mobile.js')
+        'bundles/Mobile': path.resolve('sources/mobile/Mobile.js'),
+        'bundles/Desktop': path.resolve('sources/desktop/Desktop.js'),
     },
     devServer: isHot ? {
         contentBase: path.resolve('./public'),

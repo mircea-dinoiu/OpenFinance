@@ -1,5 +1,6 @@
 const BaseController = require('./BaseController');
 const {Expense, sql} = require('../models');
+const {Validator} = require('../validators');
 
 module.exports = BaseController.extend({
     async getCategories(req, res) {
@@ -28,5 +29,31 @@ module.exports = BaseController.extend({
         }
 
         res.json(ret);
+    },
+
+    async getExpenseDescriptions(req, res) {
+        const {query} = req;
+        const validator = new Validator(query, {
+            search: ['isString'],
+            end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']]
+        });
+
+        if (await validator.passes()) {
+            res.json(await Expense.findAll({
+                attributes: [
+                    'item',
+                    [sql.fn('COUNT', 'item'), 'usages']
+                ],
+                where: [
+                    'DATE(created_at) <= ? AND LOWER(item) LIKE ?',
+                    query.end_date,
+                    `%${query.search}%`
+                ],
+                group: 'item',
+                order: 'usages DESC LIMIT 10'
+            }))
+        } else {
+            res.status(400).json(validator.errors());
+        }
     }
 });

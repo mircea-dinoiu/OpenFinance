@@ -41,6 +41,9 @@ export default {
         update: '/money-location-type/update'
     },
     suggestion: {
-        categories: '/suggestion/categories',
+        expense: {
+            categories: '/suggestion/expense/categories',
+            descriptions: '/suggestion/expense/descriptions'
+        }
     }
 }

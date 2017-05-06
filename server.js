@@ -139,11 +139,12 @@ if (config.get('enableCSRF')) {
 /**
  * Server static assets
  */
-app.use(express.static(path.join(__dirname, 'public')));
 // Serve from sources/desktop when localDevMode is true
 if (localDevMode) {
     app.use(express.static(path.join(__dirname, 'sources/desktop')));
 }
+// public should come after -- we need to prioritize the sources/desktop assets
+app.use(express.static(path.join(__dirname, 'public')));
 
 /**
  * ROUTES

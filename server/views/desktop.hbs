@@ -8,83 +8,17 @@
 
     <title>Financial</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script>
-        var Financial = {};
-
-        (function () {
-            String.prototype.format = function () {
-                return Ext.String.format.apply(Ext.String, [this.toString()].concat(Array.from(arguments)))
-            };
-
-            Financial.oldSite = '{{ oldSite }}';
-            Financial.isMobile = Boolean({{ isMobile }});
-            Financial.data = {};
-            Financial.debug = ('{{ debug }}' === 'true');
-            Financial.routes = {
-                expense: {
-                    list: '/expense/list',
-                    create: '/expense/create',
-                    update: '/expense/update',
-                    destroy: '/expense/delete'
-                },
-                income: {
-                    list: '/income/list',
-                    create: '/income/create',
-                    update: '/income/update',
-                    destroy: '/income/delete'
-                },
-                report: {
-                    summary: '/report/summary',
-                    chart: {
-                        expensesByCategory: '/report/chart/expenses-by-category',
-                        expensesIncomesByUser: '/report/chart/expenses-incomes-by-user'
-                    }
-                },
-                getCurrencies: '/get-currencies',
-                user: {
-                    list: '/user/list',
-                    logout: '/user/logout',
-                    login: '/user/login'
-                },
-                category: {
-                    list: '/category/list',
-                    create: '/category/create',
-                    update: '/category/update',
-                    destroy: '/category/delete'
-                },
-                ml: {
-                    list: '/money-location/list',
-                    create: '/money-location/create',
-                    update: '/money-location/update'
-                },
-                mlType: {
-                    list: '/money-location-type/list',
-                    create: '/money-location-type/create',
-                    update: '/money-location-type/update'
-                },
-                suggestion: {
-                    categories: '/suggestion/categories'
-                }
-            };
-            Financial.initialValues = {
-                getEndDate: function () {
-                    var date = new Date();
-
-                    date.setDate(1);
-                    date.setMonth(date.getMonth() + 1);
-
-                    return date;
-                }
-            };
-        }());
-    </script>
-
     {{#if localDevMode}}
-    <link rel="stylesheet" href="/ext/build/classic/theme-{{ theme }}/resources/theme-{{ theme }}-all-debug.css">
-    <link rel="stylesheet" href="/ext/build/packages/charts/classic/classic/resources/charts-all-debug.css">
+        <link rel="stylesheet" href="/ext/build/classic/theme-{{ theme }}/resources/theme-{{ theme }}-all-debug.css">
+        <link rel="stylesheet" href="/ext/build/packages/charts/classic/classic/resources/charts-all-debug.css">
     {{/if}}
-    <link rel="stylesheet" href="/resources/css/extra.css">
+
+    <script src="{{ assetHost }}/dist/bundles/Desktop.js"></script>
+    <script>
+        Financial.oldSite = '{{ oldSite }}';
+        Financial.isMobile = Boolean({{ isMobile }});
+        Financial.debug = ('{{ debug }}' === 'true');
+    </script>
 
     {{{ bootstrapScript }}}
 </head>

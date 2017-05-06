@@ -15,7 +15,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
         var items = this.callParent(arguments);
 
         items.forEach(function (docked) {
-            _.findWhere(docked.items, {itemId: 'addRecordButton'}).iconCls = 'x-fa fa-cart-plus';
+            _.find(docked.items, {itemId: 'addRecordButton'}).iconCls = 'x-fa fa-cart-plus';
         });
 
         return items;
@@ -104,7 +104,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                     itemId: 'item',
                     valueField: 'item',
                     displayField: 'item',
-                    queryMode: 'local',
+                    queryMode: 'remote',
+                    queryParam: 'search',
                     anyMatch: true,
                     allowBlank: false,
                     listeners: {
