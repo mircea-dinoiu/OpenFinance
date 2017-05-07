@@ -1,9 +1,9 @@
 import React from 'react';
 import {BigLoader} from '../components/loaders';
 import {Subheader, List, ListItem, RefreshIndicator, Card, CardHeader, CardText} from 'material-ui';
+import * as colors from 'material-ui/styles/colors';
 import ReactPullToRefresh from 'react-pull-to-refresh';
 import routes from '../../../common/defs/routes';
-import moment from 'moment';
 import {stringify} from 'query-string';
 import {fetch} from '../../../common/utils/fetch';
 import {numericValue} from '../formatters';
@@ -34,7 +34,7 @@ export default class Summary extends React.PureComponent {
 
     load = async () => {
         const response = await fetch(`${routes.report.summary}?${stringify({
-            end_date: moment().format('YYYY-MM-DD'),
+            end_date: this.props.endDate,
             html: false
         })}`);
         const json = await response.json();
@@ -50,7 +50,6 @@ export default class Summary extends React.PureComponent {
 
         return numericValue(value, currencyISOCode);
     }
-
     renderResults() {
         const {remainingData} = this.state.results;
         const headerColor = 'rgba(255, 255, 255, 0.9)';
@@ -59,11 +58,11 @@ export default class Summary extends React.PureComponent {
         return (
             <div style={{margin: '0 10px 20px'}}>
                 <Card style={{backgroundColor: balanceBg}}>
-                    <CardHeader title={<span style={{color: headerColor}}>BALANCE BY LOCATION</span>}/>
+                    <CardHeader style={{paddingBottom: 0}} title={<span style={{color: headerColor}}>BALANCE BY LOCATION</span>}/>
                     <CardText>
                         {Object.entries(groupBy(remainingData.byML, 'group')).map(([id, items]) => (
-                            <Card>
-                                <CardHeader title={this.props.moneyLocationTypes.find(mlType => mlType.get('id') == id).get('name').toUpperCase()}/>
+                            <Card style={{backgroundColor: id == 0 ? colors.grey200 : colors.white, marginBottom: 5}}>
+                                {id != 0 && <CardHeader style={{paddingBottom: 0}} title={this.props.moneyLocationTypes.find(mlType => mlType.get('id') == id).get('name').toUpperCase()}/>}
                                 <List>
                                     {items.map(each => (
                                         <ListItem

@@ -60,7 +60,7 @@ export default class MainScreenList extends PureComponent {
         });
 
         const response = await fetch(`${this.props.api.list}?${stringify({
-            end_date: moment().format('YYYY-MM-DD'),
+            end_date: this.props.endDate,
             page: page,
             limit: 50
         })}`);

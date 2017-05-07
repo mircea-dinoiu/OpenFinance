@@ -1,5 +1,14 @@
 import React, {PureComponent} from 'react';
-import {AutoComplete, TextField, DatePicker, TimePicker, SelectField, MenuItem, Chip, Avatar, RaisedButton} from 'material-ui';
+import {
+    AutoComplete,
+    TextField,
+    DatePicker,
+    TimePicker,
+    SelectField,
+    MenuItem,
+    Chip,
+    Avatar
+} from 'material-ui';
 import {Row, Col} from 'react-grid-system';
 import {grey100} from 'material-ui/styles/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
@@ -15,7 +24,10 @@ export default class ExpenseEditor extends PureComponent {
         onFormChange: Function
     };
 
-    state = this.props.initialValues;
+    state = {
+        descriptionSuggestions: [],
+        ...this.props.initialValues
+    };
 
     setState(state) {
         this.props.onFormChange({...this.state, ...state});
@@ -23,20 +35,29 @@ export default class ExpenseEditor extends PureComponent {
         return super.setState(state);
     }
 
-    bindAutoComplete({searchKey, valueKey, multiple = true, defaultSearchText = '', forceSelection = true}) {
+    bindAutoComplete({
+                         searchKey,
+                         valueKey,
+                         multiple = true,
+                         defaultSearchText = '',
+                         forceSelection = true,
+                         onUpdateInput = () => {}
+                     }) {
         return {
             searchText: this.state[searchKey] || defaultSearchText,
             onUpdateInput: (value) => {
-                if (multiple || forceSelection === false) {
+                 if (multiple) {
                     this.setState({
                         [searchKey]: value
                     });
                 } else {
                     this.setState({
                         [searchKey]: value,
-                        [valueKey]: null,
+                        [valueKey]: forceSelection ? null : value,
                     });
                 }
+
+                onUpdateInput(value);
             },
             openOnFocus: true,
             filter: AutoComplete.fuzzyFilter,
@@ -98,16 +119,40 @@ export default class ExpenseEditor extends PureComponent {
     }
 
     renderDescription() {
+        const searchKey = 'descriptionSearch';
+        const valueKey = 'description';
+
         return (
-            <TextField
+            <AutoComplete
                 floatingLabelText="Description"
                 floatingLabelFixed={true}
-                value={this.state.description}
+                {...this.bindAutoComplete({
+                    searchKey,
+                    valueKey,
+                    multiple: false,
+                    forceSelection: false,
+                    onUpdateInput: (value) => this.fetchDescriptionSuggestions(value)
+                })}
                 fullWidth={true}
-                onChange={event => this.setState({description: event.target.value})}
                 onBlur={this.onDescriptionBlur}
+                dataSource={this.state.descriptionSuggestions.map(each => ({
+                    text: each.item,
+                    value: <MenuItem key={each.item} primaryText={each.item} secondaryText={<em>{each.usages} usages</em>}/>
+                }))}
             />
         );
+    }
+
+    async fetchDescriptionSuggestions(search) {
+        const response = await fetch(`${routes.suggestion.expense.descriptions}?${stringify({
+            search,
+            end_date: this.props.endDate
+        })}`);
+        const descriptionSuggestions = await response.json();
+
+        this.setState({
+            descriptionSuggestions
+        });
     }
 
     onDescriptionBlur = async (event) => {
@@ -251,7 +296,8 @@ export default class ExpenseEditor extends PureComponent {
                                 .toJS()
                                 .map(record => ({
                                     value: (
-                                        <MenuItem key={record.id} primaryText={record.name} secondaryText={record.expenses}/>
+                                        <MenuItem key={record.id} primaryText={record.name}
+                                                  secondaryText={record.expenses}/>
                                     ),
                                     text: record.name,
                                 }))

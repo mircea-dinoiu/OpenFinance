@@ -9,6 +9,7 @@ injectTapEventPlugin();
 
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
+import moment from 'moment';
 
 import {AppBar, Drawer, IconButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -83,6 +84,7 @@ class Mobile extends PureComponent {
                                   moneyLocations={this.state.moneyLocations}
                                   moneyLocationTypes={this.state.moneyLocationTypes}
                                   user={this.state.user}
+                                  endDate={moment().format('YYYY-MM-DD')}
                         />,
                     loading: false,
                     title: 'Financial'
