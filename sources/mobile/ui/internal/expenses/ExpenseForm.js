@@ -131,7 +131,8 @@ export default class ExpenseEditor extends PureComponent {
                     valueKey,
                     multiple: false,
                     forceSelection: false,
-                    onUpdateInput: (value) => this.fetchDescriptionSuggestions(value)
+                    onUpdateInput: (value) => this.fetchDescriptionSuggestions(value),
+                    defaultSearchText: this.state[valueKey]
                 })}
                 fullWidth={true}
                 onBlur={this.onDescriptionBlur}
