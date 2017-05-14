@@ -1,5 +1,6 @@
 const SummaryReportHelper = require('../helpers/SummaryReportHelper');
 const CurrencyController = require('../controllers/CurrencyController');
+const {sortBy} = require('lodash');
 
 module.exports = {
     getRemainingData({expenses, incomes, userRecords, mlRecords, html}) {
@@ -51,7 +52,10 @@ module.exports = {
             }
         });
 
-        return data;
+        return {
+            byML: sortBy(data.byML, 'description'),
+            byUser: sortBy(data.byUser, 'description')
+        };
     },
 
     getIncomesData({incomeRecords, userRecords, mlRecords}) {
