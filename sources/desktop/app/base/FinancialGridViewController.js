@@ -150,11 +150,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
         });
     },
 
-    /**
-     * STATUS CHANGING OPERATIONS
-     */
-
-    setStatusToSelectedRecords: function (status) {
+    onDetachClick: function () {
         var grid = this.getView();
         var records = grid.getSelection();
         var store = grid.getStore();
@@ -162,7 +158,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
         var day = Financial.util.Misc.day;
 
         Ext.each(records, function (record) {
-            if (status === 'finished' && record.get('repeat') != null) {
+            if (record.get('repeat') != null) {
                 var copy = record.copy(null);
                 var attrs = Financial.util.RepeatedModels.advanceRepeatDate(copy.data);
 
@@ -176,7 +172,21 @@ Ext.define('Financial.base.FinancialGridViewController', {
 
                 record.set('repeat', null);
             }
+        });
 
+        store.sync();
+    },
+
+    /**
+     * STATUS CHANGING OPERATIONS
+     */
+
+    setStatusToSelectedRecords: function (status) {
+        var grid = this.getView();
+        var records = grid.getSelection();
+        var store = grid.getStore();
+
+        Ext.each(records, function (record) {
             record.set('status', status);
         });
 

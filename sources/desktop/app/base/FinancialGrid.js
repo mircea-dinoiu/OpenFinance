@@ -34,6 +34,15 @@ Ext.define('Financial.base.FinancialGrid', {
     getContextMenuItems: function () {
         return [
             {
+                text: 'Detach',
+                iconCls: 'x-fa fa-unlink',
+                tooltip: 'Detach record from repeating sequence',
+                handler: this.getController().onDetachClick.bind(this.getController())
+            },
+            {
+                xtype: 'menuseparator'
+            },
+            {
                 text: 'Flag as finished',
                 iconCls: 'x-fa fa-lock',
                 handler: this.getController().onMarkSelectionAsFinishedClick.bind(this.getController())
