@@ -50,15 +50,18 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                     }
                 },
                 renderer: function (value, metaData, record) {
-                    var currency = Financial.data.Currency.getDefaultCurrency();
+                    var Currency = Financial.data.Currency;
+                    var displayCurrency = Currency.getDisplayCurrency();
 
                     Financial.util.Misc.anotherCurrenciesTooltip(
                         metaData,
-                        currency,
+                        displayCurrency,
                         record
                     );
 
-                    return Financial.util.Format.money(value) + ' ' + currency.get('symbol');
+                    return Financial.util.Format.currencyColumn(Currency.getDefaultCurrency().get('id')) + ' ' + Financial.util.Format.money(
+                        Currency.convertDefaultToDisplay(value)
+                    );
                 }
             },
             {

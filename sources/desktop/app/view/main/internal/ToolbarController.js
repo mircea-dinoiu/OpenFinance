@@ -5,7 +5,8 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
     requires: [
         'Financial.view.main.internal.ManageCategories',
         'Financial.view.main.internal.ManageMLs',
-        'Financial.view.main.internal.ManageMLTypes'
+        'Financial.view.main.internal.ManageMLTypes',
+        'Financial.view.main.internal.ManagePreferences'
     ],
 
     dateFormat: 'Y-m-d',
@@ -63,7 +64,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         window.clearTimeout(currenciesContainer.timeout);
 
         function setCurrency() {
-            var defaultCurrency = Financial.data.Currency.getDefaultCurrency(),
+            var defaultCurrency = Financial.data.Currency.getDisplayCurrency(),
                 textArr = [];
 
             Financial.data.Currency.getStore().each(function (currency) {
@@ -179,6 +180,12 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         delete dp.candidateValue;
     },
 
+    onPreferencesClick: function () {
+        var panel = Ext.create('Financial.view.main.internal.ManagePreferences');
+
+        panel.show();
+    },
+
     onManageCategoriesClick: function () {
         var panel = Ext.create('Financial.view.main.internal.ManageCategories');
 
@@ -195,9 +202,5 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         var panel = Ext.create('Financial.view.main.internal.ManageMLTypes');
 
         panel.show();
-    },
-
-    onDiscretenessChange: function (slider, value) {
-        Financial.util.Discreteness.setValue(value);
     }
 });

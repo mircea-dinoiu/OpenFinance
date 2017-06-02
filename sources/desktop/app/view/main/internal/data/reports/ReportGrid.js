@@ -66,18 +66,23 @@ Ext.define('Financial.view.main.internal.data.reports.ReportGrid', {
             flex: 1,
             align: 'right',
             renderer: function (value, metaData, record) {
-                var currency = Financial.data.Currency.getDefaultCurrency();
+                var Currency = Financial.data.Currency;
+                var displayCurrency = Currency.getDisplayCurrency();
 
                 Financial.util.Misc.anotherCurrenciesTooltip(
                     metaData,
-                    currency,
+                    displayCurrency,
                     record
                 );
 
                 return Ext.String.format(
                     '{0} {1}',
-                    Financial.util.Format.money(value),
-                    Financial.data.Currency.getDefaultCurrency().get('symbol')
+                    Financial.util.Format.money(
+                        Currency.convertDefaultToDisplay(
+                            value
+                        )
+                    ),
+                    displayCurrency.get('symbol')
                 );
             }
         }

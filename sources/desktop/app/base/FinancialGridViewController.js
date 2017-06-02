@@ -97,13 +97,13 @@ Ext.define('Financial.base.FinancialGridViewController', {
                     var recordSum = record.get('sum');
                     var recordCurrency = record.get('currency_id');
 
-                    sum += recordCurrency != null ? Financial.data.Currency.convertToDefault(recordSum, recordCurrency) : recordSum;
+                    sum += recordCurrency != null ? Financial.data.Currency.convertToDisplay(recordSum, recordCurrency) : recordSum;
                 });
 
                 return Ext.String.format(
                     '{0} {1}',
                     Financial.util.Format.money(sum),
-                    Financial.data.Currency.getDefaultCurrency().get('symbol')
+                    Financial.data.Currency.getDisplayCurrency().get('symbol')
                 );
             }())
         ));

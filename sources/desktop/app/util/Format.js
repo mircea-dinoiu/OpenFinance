@@ -5,6 +5,20 @@ Ext.define('Financial.util.Format', {
         return Ext.util.Format.number(value, '0,0.00');
     },
 
+    currencyColumn: function (rawId) {
+        var id = rawId;
+        var Currency = Financial.data.Currency;
+        var defaultCId = Currency.getDefaultCurrency().get('id');
+        var displayCId = Currency.getDisplayCurrency().get('id');
+        var ret = Financial.data.Currency.getById(id).get('symbol');
+
+        if (id == defaultCId && defaultCId !== displayCId) {
+            ret = ret + ' → ' + Financial.data.Currency.getById(displayCId).get('symbol');
+        }
+
+        return ret;
+    },
+
     recordToUserIcon: function (record) {
         return Ext.String.format(
             '<span class="user-icon"><img src="{0}" alt="{1}" data-qtip="{2}"></span>',
