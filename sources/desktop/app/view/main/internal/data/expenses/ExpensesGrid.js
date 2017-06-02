@@ -92,7 +92,7 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                             );
 
                             return Financial.util.Format.money(
-                                record.get('currency_id') == Currency.getDefaultCurrency().get('id') ? Currency.convertDefaultToDisplay(value) : value,
+                                record.get('currency_id') == Currency.getDefaultCurrency().get('id') ? Currency.convertDefaultToDisplay(value) : value
                             );
                         }
                     }
