@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import MainScreenListItem from '../common/MainScreenListItem';
 import ExpenseListItemContent from './ExpenseListItemContent';
 import ExpenseForm from './ExpenseForm';

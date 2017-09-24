@@ -15,10 +15,11 @@ import RepeatOptions from 'common/defs/repeatOptions';
 import {fetch} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 import {stringify} from 'query-string';
+import {connect} from "react-redux";
 
 const greyBoxStyle = {backgroundColor: grey100, paddingBottom: 10, marginTop: 10, marginBottom: 10};
 
-export default class ExpenseEditor extends PureComponent {
+class ExpenseForm extends PureComponent {
     props: {
         initialValues: {},
         onFormChange: Function
@@ -369,3 +370,17 @@ export default class ExpenseEditor extends PureComponent {
         );
     }
 }
+
+export default connect(
+    ({
+        currencies,
+        categories,
+        moneyLocations,
+        user,
+    }) => ({
+        currencies,
+        categories,
+        moneyLocations,
+        user,
+    })
+)(ExpenseForm);

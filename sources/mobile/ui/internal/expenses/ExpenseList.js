@@ -1,14 +1,13 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 
 import routes from 'common/defs/routes';
 
 import ExpenseListItem from './ExpenseListItem';
 import MainScreenList from '../common/MainScreenList';
 
-const ExpenseList = (props) => {
+const ExpenseList = () => {
     return (
         <MainScreenList
-            {...props}
             api={routes.expense}
             listItemComponent={ExpenseListItem}
         />

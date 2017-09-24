@@ -21,10 +21,10 @@ export default class Expenses extends PureComponent {
         return (
             <Tabs>
                 <Tab icon={<AddIcon/>}>
-                    <Creator {...this.props} onReceiveNewRecord={newRecord => this.setState({newRecord})}/>
+                    <Creator onReceiveNewRecord={newRecord => this.setState({newRecord})}/>
                 </Tab>
                 <Tab icon={<ViewListIcon/>}>
-                    <List {...this.props} newRecord={this.state.newRecord}/>
+                    <List newRecord={this.state.newRecord}/>
                 </Tab>
             </Tabs>
         );

@@ -8,8 +8,9 @@ import {stringify} from 'query-string';
 import {fetch} from '../../../common/utils/fetch';
 import {numericValue} from '../formatters';
 import {groupBy} from 'lodash';
+import {connect} from 'react-redux';
 
-export default class Summary extends React.PureComponent {
+class Summary extends React.PureComponent {
     state = {
         firstLoad: true,
         results: null,
@@ -105,3 +106,5 @@ export default class Summary extends React.PureComponent {
         );
     }
 }
+
+export default connect(state => state)(Summary);

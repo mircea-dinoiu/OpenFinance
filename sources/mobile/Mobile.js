@@ -2,14 +2,13 @@ import 'normalize.css';
 import './Mobile.scss';
 import 'babel-polyfill';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
-
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
+import {connect, Provider} from 'react-redux';
+import {createStore, bindActionCreators} from 'redux';
 import moment from 'moment';
+import {reducer} from './state/reducers';
+import * as actions from './state/actions';
 
 import {AppBar, Drawer, IconButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -26,36 +25,29 @@ import {BigLoader} from './ui/components/loaders';
 
 import {fromJS} from 'immutable';
 
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
+
 class Mobile extends PureComponent {
-    state = {
-        title: 'Loading..',
-        loading: true,
-        ui: null,
-        currenciesDrawerOpen: false,
-
-        user: null,
-        currencies: null,
-        categories: null,
-        moneyLocations: null,
-        moneyLocationTypes: null
-    };
-
     componentDidMount() {
         this.loadData();
     }
 
-    async loadData() {
-        this.setState({
-            loading: true
-        });
+    componentWillReceiveProps(nextProps) {
+        if (this.props.user != nextProps.user && nextProps.user != null) {
+            this.loadData(nextProps);
+        }
+    }
 
-        if (this.state.user == null) {
+    async loadData(props = this.props) {
+        props.actions.toggleLoading(true);
+
+        if (props.user == null) {
             const response = await fetch(routes.user.list);
             
             if (response.ok) {
-                this.setState({
-                    user: fromJS(await response.json())
-                }, this.loadData)
+                props.actions.updateUser(fromJS(await response.json()))
             } else {
                 this.showLogin();
             }
@@ -72,40 +64,30 @@ class Mobile extends PureComponent {
                 fetch(routes.mlType.list)
             ]);
             
-            this.setState({
+            props.actions.updateState({
                 currencies: fromJS(await currenciesResponse.json()),
                 categories: fromJS(await categoriesResponse.json()),
                 moneyLocations: fromJS(await mlResponse.json()),
-                moneyLocationTypes: fromJS(await mlTypesResponse.json())
-            }, () => {
-                this.setState({
-                    ui: <Internal currencies={this.state.currencies}
-                                  categories={this.state.categories}
-                                  moneyLocations={this.state.moneyLocations}
-                                  moneyLocationTypes={this.state.moneyLocationTypes}
-                                  user={this.state.user}
-                                  endDate={moment().format('YYYY-MM-DD')}
-                        />,
-                    loading: false,
-                    title: 'Financial'
-                })
+                moneyLocationTypes: fromJS(await mlTypesResponse.json()),
+                loading: false,
+                title: 'Financial',
+                endDate: moment().format('YYYY-MM-DD'),
+                ui: <Internal/>
             });
         }
     }
 
     showLogin() {
-        this.setState({
+        this.props.actions.updateState({
             user: null,
-            ui: <Login onReceiveUser={user => this.setState({user: fromJS(user)}, this.loadData)}/>,
+            ui: <Login/>,
             loading: false,
             title: 'Please Login'
         });
     }
 
     onLogout = async() => {
-        this.setState({
-            loading: true
-        });
+        this.props.actions.toggleLoading(true);
 
         const response = await fetch(routes.user.logout, {method: 'POST'});
 
@@ -117,7 +99,7 @@ class Mobile extends PureComponent {
     };
 
     isCurrenciesDrawerReady() {
-        return this.state.user != null && this.state.currencies != null;
+        return this.props.user != null && this.props.currencies != null;
     }
 
     render() {
@@ -127,11 +109,11 @@ class Mobile extends PureComponent {
                     paddingTop: '64px',
                 }}>
                     <AppBar
-                        title={this.state.title}
+                        title={this.props.title}
                         showMenuIconButton={this.isCurrenciesDrawerReady()}
-                        onLeftIconButtonTouchTap={() => this.setState({currenciesDrawerOpen: true})}
+                        onLeftIconButtonTouchTap={() => this.props.actions.updateState({currenciesDrawerOpen: true})}
                         iconElementLeft={<IconButton><EuroSymbol/></IconButton>}
-                        iconElementRight={this.state.user ? <Logged onLogout={this.onLogout}/> : null}
+                        iconElementRight={this.props.user ? <Logged onLogout={this.onLogout}/> : null}
                         style={{
                             position: 'fixed',
                             top: 0,
@@ -140,16 +122,16 @@ class Mobile extends PureComponent {
                     {this.isCurrenciesDrawerReady() && (
                         <Drawer
                             docked={false}
-                            open={this.state.currenciesDrawerOpen}
-                            onRequestChange={(currenciesDrawerOpen) => this.setState({currenciesDrawerOpen})}
+                            open={this.props.currenciesDrawerOpen}
+                            onRequestChange={(currenciesDrawerOpen) => this.props.actions.updateState({currenciesDrawerOpen})}
                         >
-                            <Currencies data={this.state.currencies}/>
+                            <Currencies data={this.props.currencies}/>
                         </Drawer>
                     )}
                     {
-                        this.state.loading ? (
+                        this.props.loading ? (
                             <BigLoader/>
-                        ) : this.state.ui
+                        ) : this.props.ui
                     }
                 </div>
             </MuiThemeProvider>
@@ -157,7 +139,26 @@ class Mobile extends PureComponent {
     }
 }
 
+const MobileContainer = connect(state => state, dispatch => ({
+    actions: bindActionCreators(actions, dispatch)
+}))(Mobile);
+
+const store = createStore(reducer, {
+    title: 'Loading..',
+    loading: true,
+    ui: null,
+    currenciesDrawerOpen: false,
+
+    user: null,
+    currencies: null,
+    categories: null,
+    moneyLocations: null,
+    moneyLocationTypes: null
+}, window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : noop => noop);
+
 render(
-    <Mobile/>,
+    <Provider store={store}>
+        <MobileContainer/>
+    </Provider>,
     document.getElementById('root')
 );

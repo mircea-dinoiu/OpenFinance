@@ -6,12 +6,12 @@ import routes from 'common/defs/routes';
 import fetch from 'common/utils/fetch';
 import {stringify} from 'query-string';
 import {ErrorSnackbar} from './components/snackbars';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Actions} from 'mobile/state/reducers';
+import {updateUser} from 'mobile/state/actions';
 
-export default class Login extends PureComponent {
-    props: {
-        onReceiveUser: Function
-    };
-
+class Login extends PureComponent {
     state = {
         email: '',
         password: '',
@@ -35,7 +35,7 @@ export default class Login extends PureComponent {
         const json = await response.json();
 
         if (response.ok) {
-            this.props.onReceiveUser(json);
+            this.props.actions.updateUser(json);
         } else {
             this.setState({
                 error: json,
@@ -87,3 +87,7 @@ export default class Login extends PureComponent {
         );
     }
 }
+
+export default connect(null, dispatch => ({
+    actions: bindActionCreators({updateUser}, dispatch)
+}))(Login);

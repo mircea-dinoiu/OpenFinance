@@ -5,9 +5,9 @@ import MainScreen from './common/MainScreen';
 import Creator from './expenses/ExpenseCreator';
 import List from './expenses/ExpenseList';
 
-const Expenses = (props) => {
+const Expenses = () => {
     return (
-      <MainScreen {...props} listComponent={List} creatorComponent={Creator}/>
+      <MainScreen listComponent={List} creatorComponent={Creator}/>
     );
 };
 

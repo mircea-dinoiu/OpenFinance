@@ -1,7 +1,5 @@
 // @flow
 import React, {PureComponent} from 'react';
-
-import routes from 'common/defs/routes';
 import {fetchJSON} from 'common/utils/fetch';
 import {parseCRUDError} from 'common/parsers';
 
@@ -11,8 +9,9 @@ import {ButtonProgress} from '../../components/loaders';
 import {Col} from 'react-grid-system';
 
 import {RaisedButton} from 'material-ui';
+import {connect} from "react-redux";
 
-export default class MainScreenCreator extends PureComponent {
+class MainScreenCreator extends PureComponent {
     state = {
         createCount: 1,
         saving: false
@@ -68,7 +67,6 @@ export default class MainScreenCreator extends PureComponent {
             <div>
                 <Form
                     key={this.state.createCount}
-                    {...this.props}
                     onFormChange={formData => this.formData = formData}
                     initialValues={this.formDefaults}
                 />
@@ -79,3 +77,5 @@ export default class MainScreenCreator extends PureComponent {
         )
     }
 }
+
+export default connect(({currencies, user}) => ({currencies, user}))(MainScreenCreator);

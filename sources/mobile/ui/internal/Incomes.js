@@ -5,9 +5,9 @@ import MainScreen from './common/MainScreen';
 import Creator from './incomes/IncomeCreator';
 import List from './incomes/IncomeList';
 
-const Incomes = (props) => {
+const Incomes = () => {
     return (
-      <MainScreen {...props} listComponent={List} creatorComponent={Creator}/>
+      <MainScreen listComponent={List} creatorComponent={Creator}/>
     );
 };
 
