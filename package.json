@@ -7,7 +7,10 @@
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:hot": "cross-env NODE_ENV=hot webpack-dev-server --hot --inline",
     "build:watch": "webpack --watch",
-    "start": "node ./bin/www"
+    "sencha": "pushd sources/desktop && sencha app build",
+    "start": "node ./bin/www",
+    "heroku-prebuild": "npm install --only=dev",
+    "heroku-postbuild": "npm run build:prod && npm run sencha"
   },
   "repository": {
     "type": "git",
