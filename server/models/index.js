@@ -4,11 +4,8 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const config = require('config');
-const dbConfig = config.get('db');
 const db = {};
-const sql = new Sequelize(dbConfig.get('name'), dbConfig.get('user'), dbConfig.get('pass'), {
-    host: dbConfig.get('host'),
-    dialect: 'mysql',
+const sql = new Sequelize(process.env.DATABASE_URL, {
     timezone: config.get('timezone'),
     logging: config.get('debug') ? (...args) => {
         console.log(chalk.inverse('SQL:'), ...args.map(arg => chalk.cyan(arg)))

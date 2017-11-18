@@ -1,10 +1,4 @@
 {
-  "db": {
-    "host": "",
-    "user": "",
-    "pass": "",
-    "name": ""
-  },
   "debug": false,
   "localDevMode": false,
   "session": {
