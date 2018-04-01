@@ -15,7 +15,7 @@ Ext.define('Financial.view.main.internal.charts.BaseChartPanelController', {
             title,
             record.get('time'),
             Financial.util.Format.money(record.get(item.series.getYField())),
-            Financial.data.Currency.getDisplayCurrency().get('symbol')
+            Financial.data.Currency.getDefaultCurrency().get('symbol')
         ));
     },
 

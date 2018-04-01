@@ -60,8 +60,8 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                             idField: 'id',
                             labelField: 'iso_code'
                         },
-                        renderer: function (id) {
-                            return Financial.util.Format.currencyColumn(id);
+                        renderer: function (value) {
+                            return Financial.data.Currency.getById(value).get('symbol');
                         }
                     },
                     {
@@ -83,17 +83,13 @@ Ext.define('Financial.view.main.internal.data.expenses.ExpensesGrid', {
                         },
                         minWidth: 85,
                         renderer: function (value, metaData, record) {
-                            var Currency = Financial.data.Currency;
-
                             Financial.util.Misc.anotherCurrenciesTooltip(
                                 metaData,
-                                record.get('currency_id') == Currency.getDefaultCurrency().get('id') ? Currency.getDisplayCurrency() : Currency.getById(record.get('currency_id')),
+                                Financial.data.Currency.getById(record.get('currency_id')),
                                 record
                             );
 
-                            return Financial.util.Format.money(
-                                record.get('currency_id') == Currency.getDefaultCurrency().get('id') ? Currency.convertDefaultToDisplay(value) : value
-                            );
+                            return Financial.util.Format.money(value);
                         }
                     }
                 ]

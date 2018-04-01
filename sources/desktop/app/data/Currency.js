@@ -6,10 +6,6 @@ Ext.define('Financial.data.Currency', {
     storeId: 'currency',
     storeClass: 'Financial.store.CurrencyStore',
 
-    localStorage: new Ext.util.LocalStorage({
-        id: 'currency'
-    }),
-
     setCurrency: function (response) {
         Financial.data.currency = Ext.JSON.decode(response.responseText);
 
@@ -20,24 +16,6 @@ Ext.define('Financial.data.Currency', {
         var def = 'default';
         
         return this.getById(Financial.data.currency[def]);
-    },
-
-    getDisplayCurrency: function () {
-        var id = this.localStorage.getItem('displayCurrency');
-
-        if (id != null) {
-            var r = this.getById(id);
-
-            if (r) {
-                return r;
-            }
-        }
-
-        return this.getDefaultCurrency();
-    },
-
-    setDisplayCurrency: function (id) {
-        this.localStorage.setItem('displayCurrency', id);
     },
 
     convert: function (value, rawFrom, rawTo) {
@@ -65,14 +43,6 @@ Ext.define('Financial.data.Currency', {
 
     convertToDefault: function (value, from) {
         return this.convert(value, from, this.getDefaultCurrency());
-    },
-
-    convertToDisplay: function (value, from) {
-        return this.convert(value, from, this.getDisplayCurrency());
-    },
-
-    convertDefaultToDisplay: function (value) {
-        return this.convert(value, this.getDefaultCurrency(), this.getDisplayCurrency());
     },
 
     getCurrencyByISOCode: function (ISOCode) {
