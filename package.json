@@ -10,7 +10,8 @@
     "start": "node ./bin/www",
     "heroku-prebuild": "npm install --only=dev",
     "heroku-postbuild": "npm run build:prod",
-    "flow": "flow"
+    "flow": "flow",
+    "test": "jest --bail --config package.json"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "eslint-plugin-react": "^6.8.0",
     "flow-bin": "^0.55.0",
     "immutable": "^3.8.1",
+    "jest": "^22.4.3",
     "material-ui": "^0.18.0",
     "material-ui-icons": "^1.0.0-alpha.3",
     "node-sass": "^4.5.2",
@@ -85,5 +87,11 @@
     "ua-parser-js": "^0.7.12",
     "validator": "^7.0.0",
     "xml2js": "^0.4.17"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "package.json",
+      "sources/desktop/ext"
+    ]
   }
 }
