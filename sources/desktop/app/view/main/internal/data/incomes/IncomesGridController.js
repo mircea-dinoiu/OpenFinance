@@ -5,6 +5,7 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGridController', {
 
     addRecord: function (button) {
         this.newRecordData = {
+            currency_id: Financial.data.Currency.getDefaultCurrency().get('id'),
             created_at: Financial.util.Misc.generateEICreationDate(button),
             user_id: Financial.data.user.current.id
         };

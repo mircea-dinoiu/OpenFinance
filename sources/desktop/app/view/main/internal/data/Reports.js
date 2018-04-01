@@ -1,17 +1,11 @@
 (function () {
     var formatChildren = function (models) {
-        var Currency = Financial.data.Currency;
-
         return Ext.String.format(
             '{0} {1}',
-            Financial.util.Format.money(
-                Currency.convertDefaultToDisplay(
-                    models.reduce(function (prev, curr) {
-                        return prev + curr.get('sum');
-                    }, 0)
-                )
-            ),
-            Currency.getDisplayCurrency().get('symbol')
+            Financial.util.Format.money(models.reduce(function (prev, curr) {
+                return prev + curr.get('sum');
+            }, 0)),
+            Financial.data.Currency.getDefaultCurrency().get('symbol')
         );
     };
 

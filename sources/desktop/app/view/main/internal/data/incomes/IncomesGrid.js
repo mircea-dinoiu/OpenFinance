@@ -34,35 +34,65 @@ Ext.define('Financial.view.main.internal.data.incomes.IncomesGrid', {
                 renderer: Financial.util.RepeatedModels.idColumnRenderer
             },
             {
-                dataIndex: 'sum',
                 text: 'Sum',
-                resizable: false,
-                align: 'right',
-                editor: {
-                    xtype: 'numberfield',
-                    allowBlank: false,
-                    validator: function (value) {
-                        if (parseFloat(value) === 0) {
-                            return 'The value must be different than 0';
+                columns: [
+                    {
+                        text: 'Curr.',
+                        dataIndex: 'currency_id',
+                        resizable: false,
+                        minWidth: 70,
+                        align: 'center',
+                        editor: {
+                            xtype: 'combo',
+                            valueField: 'id',
+                            displayField: 'symbol',
+                            itemId: 'currency',
+                            queryMode: 'local',
+                            typeAhead: true,
+                            anyMatch: true,
+                            allowBlank: false,
+                            forceSelection: true,
+                            store: 'currency'
+                        },
+                        filter: {
+                            type: 'multilist',
+                            store: 'currency',
+                            idField: 'id',
+                            labelField: 'iso_code'
+                        },
+                        renderer: function (value) {
+                            return Financial.data.Currency.getById(value).get('symbol');
                         }
+                    },
+                    {
+                        text: 'Value',
+                        dataIndex: 'sum',
+                        resizable: false,
+                        align: 'right',
+                        editor: {
+                            xtype: 'numberfield',
+                            itemId: 'sum',
+                            allowBlank: false,
+                            validator: function (value) {
+                                if (parseFloat(value) === 0) {
+                                    return 'The value must be different than 0';
+                                }
 
-                        return true;
+                                return true;
+                            }
+                        },
+                        minWidth: 85,
+                        renderer: function (value, metaData, record) {
+                            Financial.util.Misc.anotherCurrenciesTooltip(
+                                metaData,
+                                Financial.data.Currency.getById(record.get('currency_id')),
+                                record
+                            );
+
+                            return Financial.util.Format.money(value);
+                        }
                     }
-                },
-                renderer: function (value, metaData, record) {
-                    var Currency = Financial.data.Currency;
-                    var displayCurrency = Currency.getDisplayCurrency();
-
-                    Financial.util.Misc.anotherCurrenciesTooltip(
-                        metaData,
-                        displayCurrency,
-                        record
-                    );
-
-                    return Financial.util.Format.currencyColumn(Currency.getDefaultCurrency().get('id')) + ' ' + Financial.util.Format.money(
-                        Currency.convertDefaultToDisplay(value)
-                    );
-                }
+                ]
             },
             {
                 dataIndex: 'description',

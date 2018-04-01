@@ -64,7 +64,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         window.clearTimeout(currenciesContainer.timeout);
 
         function setCurrency() {
-            var defaultCurrency = Financial.data.Currency.getDisplayCurrency(),
+            var defaultCurrency = Financial.data.Currency.getDefaultCurrency(),
                 textArr = [];
 
             Financial.data.Currency.getStore().each(function (currency) {

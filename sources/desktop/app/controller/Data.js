@@ -1,20 +1,14 @@
 (function () {
     var addSumToTitle = function (grid, items) {
-        var Currency = Financial.data.Currency;
-
         grid.setTitle(Ext.String.format(
             '<div class="grid-custom-title"><span class="grid-title-name">{0}</span><span class="grid-title-sum">{1}</span></div>',
             grid.config.title,
             Ext.String.format(
                 '{0} {1}',
-                Financial.util.Format.money(
-                    Currency.convertDefaultToDisplay(
-                        items.reduce(function (prev, curr) {
-                            return prev + curr.sum;
-                        }, 0)
-                    )
-                ),
-                Currency.getDisplayCurrency().get('symbol')
+                Financial.util.Format.money(items.reduce(function (prev, curr) {
+                    return prev + curr.sum;
+                }, 0)),
+                Financial.data.Currency.getDefaultCurrency().get('symbol')
             )
         ));
     };

@@ -9,18 +9,6 @@ Ext.define('Financial.view.main.internal.ManagePreferences', {
     initComponent: function () {
         this.callParent(arguments);
 
-        var displayCurrency = Financial.data.Currency.getDisplayCurrency();
-        var currencyItems = [];
-
-        Financial.data.Currency.getStore().each(function (each) {
-            currencyItems.push({
-                boxLabel: each.get('iso_code'),
-                name: 'id',
-                inputValue: each.get('id'),
-                checked: each === displayCurrency,
-            });
-        });
-
         var items = [
             {
                 xtype: 'form',
@@ -41,17 +29,6 @@ Ext.define('Financial.view.main.internal.ManagePreferences', {
                         listeners: {
                             change: this.onDiscretenessChange
                         }
-                    },
-                    {
-                        xtype: 'radiogroup',
-                        fieldLabel: 'Display Currency',
-                        // Arrange radio buttons into two columns, distributed vertically
-                        columns: 2,
-                        vertical: true,
-                        items: currencyItems,
-                        listeners: {
-                            change: this.onDisplayCurrencyChange,
-                        }
                     }
                 ]
             }
@@ -62,11 +39,5 @@ Ext.define('Financial.view.main.internal.ManagePreferences', {
 
     onDiscretenessChange: function (slider, value) {
         Financial.util.Discreteness.setValue(value);
-    },
-
-    onDisplayCurrencyChange: function (group, value) {
-        Financial.data.Currency.setDisplayCurrency(value.id);
-        Financial.getApplication().getAppMain().setLoading(true);
-        location.reload();
     }
 });

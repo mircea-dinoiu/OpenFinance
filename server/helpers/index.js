@@ -1,5 +1,6 @@
 const path = require('path');
 const moment = require('moment');
+const fs = require('fs');
 
 module.exports = {
     basePath(string = '') {
@@ -20,5 +21,10 @@ module.exports = {
 
     standardDate(value, format) {
         return moment(value, format).format('YYYY-MM-DD HH:mm:ss');
+    },
+
+    logError(...args) {
+        console.error(...args);
+        fs.appendFile(basePath('storage/error.log'), args.concat('').join('\n'));
     }
 };

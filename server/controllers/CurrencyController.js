@@ -1,5 +1,6 @@
+const CurrencyHelper = require('..//helpers/CurrencyHelper');
 const config = require('config');
-const {basePath} = require('../helpers');
+const {basePath, logError} = require('../helpers');
 const fs = require('fs');
 const {Currency, Setting} = require('../models');
 const http = require('http');
@@ -69,6 +70,8 @@ module.exports = {
     },
 
     async fetchRates(allowedISOCodes) {
+        const defaultCurrencyISOCode = (await this.getDefaultCurrency()).iso_code;
+
         return new Promise((resolve) => {
             const options = {
                 host: 'www.bnr.ro',
@@ -89,20 +92,9 @@ module.exports = {
                         const xml2js = require('xml2js');
 
                         xml2js.parseString(chunks, (err, xml) => {
-                            const body = xml.DataSet.Body[0];
-                            const origCurrencyISOCode = String(body.OrigCurrency[0]);
-                            const rates = {};
-
-                            rates[origCurrencyISOCode] = 1;
-
-                            const Rate = body.Cube[0].Rate;
-
-                            Rate.forEach(({_, $}) => {
-                                const key = $.currency;
-
-                                if (allowedISOCodes.includes(key)) {
-                                    rates[key] = Number(_);
-                                }
+                            const rates = CurrencyHelper.xmlToRates(xml, {
+                                allowedISOCodes,
+                                defaultCurrencyISOCode,
                             });
 
                             resolve(rates);
@@ -112,7 +104,7 @@ module.exports = {
 
             req
                 .on('error', function (e) {
-                    console.error(e);
+                    logError(e);
                     resolve(null);
                 });
         });
@@ -157,19 +149,7 @@ module.exports = {
             return;
         }
 
-        Object.entries(map).forEach(([id, currencyInfo]) => {
-            map[id].rates = {};
-
-            Object.entries(rates).forEach(([eachISOCode]) => {
-                if (currencyInfo.iso_code === eachISOCode) {
-                    return;
-                }
-
-                const value = Math.round(1 / rates[eachISOCode] * rates[currencyInfo.iso_code] * (10 ** 4)) / (10 ** 4);
-
-                map[id].rates[eachISOCode] = value;
-            });
-        });
+        CurrencyHelper.appendRatesToCurrencies(map, {rates});
 
         this.data = {
             map,
@@ -187,7 +167,6 @@ module.exports = {
         update = false
     } = {}) {
         let fromCache = false;
-
         if (update !== true) {
             if (await this.fetchCachedData() === false) {
                 await this.fetchFreshData();
@@ -200,6 +179,7 @@ module.exports = {
                 await this.fetchFreshData();
                 await this.cacheData();
             } catch (e) {
+                logError(e);
                 await this.fetchCachedData();
                 fromCache = true;
             }

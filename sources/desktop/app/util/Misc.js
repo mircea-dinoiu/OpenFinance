@@ -26,7 +26,7 @@ Ext.define('Financial.util.Misc', {
                 });
             },
             'yesterday': function () {
-                var yesterday = new Date(now);
+                const yesterday = new Date(now);
 
                 yesterday.setDate(yesterday.getDate() - 1);
 
@@ -82,16 +82,12 @@ Ext.define('Financial.util.Misc', {
 
     anotherCurrenciesTooltip: function (metaData, currency, record) {
         var tooltip = [];
-        var sum = Financial.data.Currency.convertToDisplay(
-            record.get('sum'),
-            record.get('currency_id') == null ? Financial.data.Currency.getDefaultCurrency() : record.get('currency_id')
-        );
 
         Ext.Object.each(
             currency.get('rates'),
             function (isoCode, multiplier) {
                 tooltip.push([
-                    Financial.util.Format.money(sum * multiplier),
+                    Financial.util.Format.money(record.get('sum') * multiplier),
                     Financial.data.Currency.getCurrencyByISOCode(isoCode).get('symbol')
                 ].join(' '));
             }
