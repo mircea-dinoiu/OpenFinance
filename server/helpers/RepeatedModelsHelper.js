@@ -69,8 +69,14 @@ module.exports = {
             case 'w':
                 date.setDate(date.getDate() + 7 * repeats);
                 break;
+            case '2w':
+                date.setDate(date.getDate() + 7 * 2 * repeats);
+                break;
             case 'm':
                 date.setMonth(date.getMonth() + 1 * repeats);
+                break;
+            case '3m':
+                date.setMonth(date.getMonth() + 3 * repeats);
                 break;
             case 'y':
                 date.setFullYear(date.getFullYear() + 1 * repeats);
