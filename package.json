@@ -76,6 +76,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "sequelize": "^3.30.4",
+    "sequelize-cli": "^4.0.0",
     "serve-favicon": "~2.4.2",
     "ua-parser-js": "^0.7.12",
     "validator": "^7.0.0",

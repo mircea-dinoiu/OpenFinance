@@ -158,11 +158,6 @@ module.exports = BaseController.extend({
             values.status = record.status;
 
             if (values.status === 'finished') {
-                values.sum = await CurrencyController.convertToDefault(
-                    values.hasOwnProperty('sum') ? values.sum : model.sum,
-                    values.hasOwnProperty('currency_id') ? values.currency_id : model.currency_id
-                );
-                values.currency_id = defaultCurrency.id;
                 values.repeat = null;
             }
         }
