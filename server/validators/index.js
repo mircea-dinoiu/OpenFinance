@@ -56,7 +56,7 @@ Object.assign(validator, {
         return true;
     },
     isRepeatValue: (value) => {
-        return ['d', 'w', 'm', 'y'].includes(value);
+        return ['d', 'w', '2w', 'm', '3m', 'y'].includes(value);
     },
     isStatusValue: (value) => {
         return ['finished', 'pending'].includes(value);
