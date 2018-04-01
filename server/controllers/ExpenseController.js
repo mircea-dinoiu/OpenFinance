@@ -127,7 +127,6 @@ module.exports = BaseController.extend({
             'sum',
             'money_location_id',
         ]);
-        const defaultCurrency = await CurrencyController.getDefaultCurrency();
 
         if (workingRecord.hasOwnProperty('item')) {
             values.item = workingRecord.item.trim();
@@ -147,11 +146,6 @@ module.exports = BaseController.extend({
 
         if (workingRecord.hasOwnProperty('currency_id')) {
             values.currency_id = workingRecord.currency_id;
-
-            if (workingRecord.currency_id !== defaultCurrency.id) {
-                values.status = 'pending';
-                delete workingRecord.status;
-            }
         }
 
         if (workingRecord.hasOwnProperty('status')) {

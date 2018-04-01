@@ -48,9 +48,10 @@ module.exports = {
                 defaultCurrency,
                 incomeRecords,
             }),
-            incomesData: SummaryReportService.getIncomesData({
+            incomesData: await SummaryReportService.getIncomesData({
                 userRecords,
                 mlRecords,
+                defaultCurrency,
                 incomeRecords,
             }),
             expensesByCategory: await SummaryReportService.getExpensesByCategory({

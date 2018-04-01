@@ -58,7 +58,7 @@ module.exports = {
         };
     },
 
-    getIncomesData({incomeRecords, userRecords, mlRecords}) {
+    async getIncomesData({incomeRecords, userRecords, mlRecords, defaultCurrency}) {
         const data = {byUser: [], byML: []},
             users = {},
             mls = {};
@@ -66,7 +66,12 @@ module.exports = {
         for (const record of incomeRecords) {
             const uId = record.user_id;
             const mlId = record.money_location_id || 0;
-            const sum = record.sum;
+            let sum = record.sum;
+            const currencyId = record.currency_id;
+
+            if (currencyId !== parseInt(defaultCurrency.id)) {
+                sum = await CurrencyController.convertToDefault(sum, currencyId);
+            }
 
             users[uId] = (users[uId] || 0) + sum;
             mls[mlId] = (mls[mlId] || 0) + sum;
@@ -95,12 +100,12 @@ module.exports = {
         const users = {};
         const mls = {};
 
-        for (const record of expenseRecords) {
-            const json = record.toJSON();
-            let sum = json.sum;
-            const recordUsers = json.users;
-            const currencyId = json.currency_id;
-            const mlId = json.money_location_id || 0;
+        for (const rawRecord of expenseRecords) {
+            const record = rawRecord.toJSON();
+            let sum = record.sum;
+            const recordUsers = record.users;
+            const currencyId = record.currency_id;
+            const mlId = record.money_location_id || 0;
 
             if (currencyId !== parseInt(defaultCurrency.id)) {
                 sum = await CurrencyController.convertToDefault(sum, currencyId);

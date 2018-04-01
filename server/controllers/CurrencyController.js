@@ -62,7 +62,7 @@ module.exports = {
             return value;
         }
 
-        return value / this.data.map[from.id].rates[to.iso_code];
+        return value * this.data.map[from.id].rates[to.iso_code];
     },
 
     async convertToDefault(value, from) {
@@ -104,7 +104,7 @@ module.exports = {
 
             req
                 .on('error', function (e) {
-                    console.error(e);
+                    logError(e);
                     resolve(null);
                 });
         });

@@ -5,6 +5,7 @@ Ext.define('Financial.model.IncomeModel', {
         {name: 'id', type: 'int'},
         {name: 'persist', type: 'boolean', defaultValue: true, persist: false},
         {name: 'sum', type: 'float', defaultValue: ''},
+        {name: 'currency_id', type: 'int'},
         {name: 'description', type: 'string'},
         {name: 'repeat'},
         {name: 'status', type: 'string', defaultValue: 'pending'},
