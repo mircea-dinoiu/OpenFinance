@@ -2,8 +2,9 @@ import React, {PureComponent} from 'react';
 import {TextField, DatePicker, TimePicker, SelectField, MenuItem} from 'material-ui';
 import {Row, Col} from 'react-grid-system';
 import RepeatOptions from 'common/defs/repeatOptions';
+import {connect} from "react-redux";
 
-export default class IncomeForm extends PureComponent {
+class IncomeForm extends PureComponent {
     props: {
         initialValues: {},
         onFormChange: Function
@@ -147,3 +148,13 @@ export default class IncomeForm extends PureComponent {
         );
     }
 }
+
+export default connect(
+    ({
+         moneyLocations,
+         user,
+     }) => ({
+        moneyLocations,
+        user,
+    })
+)(IncomeForm);

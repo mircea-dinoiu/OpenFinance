@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import ExpenseForm from './ExpenseForm';
 
 import routes from 'common/defs/routes';
@@ -7,7 +7,7 @@ import MainScreenCreator from '../common/MainScreenCreator';
 import formToModel from './helpers/formToModel';
 import getFormDefaults from './helpers/getFormDefaults';
 
-const ExpenseCreator = (props) => {
+const ExpenseCreator = () => {
     return (
         <MainScreenCreator
             getFormDefaults={getFormDefaults}
@@ -15,7 +15,6 @@ const ExpenseCreator = (props) => {
             formComponent={ExpenseForm}
             api={routes.expense}
             entityName="expense"
-            {...props}
         />
     );
 };

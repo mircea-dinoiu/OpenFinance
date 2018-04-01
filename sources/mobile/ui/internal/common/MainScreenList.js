@@ -13,8 +13,9 @@ import {CalendarWithoutTime} from 'common/defs/formats';
 
 import {List} from 'material-ui/List';
 import {RaisedButton, Subheader, Divider, RefreshIndicator} from 'material-ui';
+import {connect} from 'react-redux';
 
-export default class MainScreenList extends PureComponent {
+class MainScreenList extends PureComponent {
     props: {
         api: {
             destroy: string,
@@ -144,7 +145,6 @@ export default class MainScreenList extends PureComponent {
                                                 <ListItem
                                                     key={item.get('id')}
                                                     item={item.toJS()}
-                                                    data={this.props}
                                                     onDelete={this.handleDelete}
                                                     onUpdate={this.handleUpdate}
                                                     api={this.props.api}
@@ -170,3 +170,9 @@ export default class MainScreenList extends PureComponent {
         );
     }
 }
+
+export default connect(({
+    endDate
+}) => ({
+    endDate
+}))(MainScreenList);

@@ -11,6 +11,7 @@ import {Avatar} from 'material-ui';
 import {numericValue} from '../../formatters';
 
 import RepeatOptions from 'common/defs/repeatOptions';
+import {connect} from "react-redux";
 
 const IncomeListItemContent = (props) => {
     const item = props.item;
@@ -58,4 +59,4 @@ const IncomeListItemContent = (props) => {
     );
 };
 
-export default IncomeListItemContent;
+export default connect(({user, currencies, moneyLocations}) => ({data: {user, currencies, moneyLocations}}))(IncomeListItemContent);

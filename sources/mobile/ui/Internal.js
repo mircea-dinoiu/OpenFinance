@@ -22,15 +22,15 @@ export default class Internal extends PureComponent {
         switch (index) {
             case 0:
                 return (
-                    <Summary {...this.props}/>
+                    <Summary/>
                 );
             case 1:
                 return (
-                    <Expenses {...this.props}/>
+                    <Expenses/>
                 );
             case 2:
                 return (
-                    <Incomes {...this.props}/>
+                    <Incomes/>
                 );
         }
     }
