@@ -19,7 +19,6 @@ router.get('/', function (req, res) {
             debug: debug,
             localDevMode: localDevMode,
             assetHost: config.get('devServer.enable') ? config.get('devServer.hostname') : '',
-            oldSite: config.get('oldSite')
         };
 
         if (PlatformService.isMobile()) {
