@@ -17,3 +17,4 @@ sources/desktop/resources/css
 # NODE STUFF
 config/local.json
 npm-debug.log*
+yarn-error.log

@@ -43,12 +43,12 @@ Ext.define('Financial.base.FinancialGrid', {
                 xtype: 'menuseparator'
             },
             {
-                text: 'Flag as finished',
+                text: 'Mark as reviewed',
                 iconCls: 'x-fa fa-lock',
                 handler: this.getController().onMarkSelectionAsFinishedClick.bind(this.getController())
             },
             {
-                text: 'Flag as pending',
+                text: 'Mark as needs review',
                 iconCls: 'x-fa fa-unlock',
                 handler: this.getController().onMarkSelectionAsPendingClick.bind(this.getController())
             },
@@ -205,7 +205,7 @@ Ext.define('Financial.base.FinancialGrid', {
         if (record.get('status') === 'pending') {
             parts.push(
                 Financial.util.Misc.icon({
-                    tooltip: format('{0} is pending confirmation', Ext.String.capitalize(this.itemName)),
+                    tooltip: format('{0} is pending review', Ext.String.capitalize(this.itemName)),
                     color: '#F1C232',
                     type: 'exclamation-triangle'
                 })
