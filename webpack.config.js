@@ -2,7 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
 
-const env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV || 'development';
+
+console.log('Webpack building for', env);
 
 const isProduction = env === 'production';
 const isHot = env === 'hot';
@@ -12,7 +14,7 @@ const enableSourceMaps = isProduction === false;
 module.exports = {
     devtool: isProduction ? false : 'cheap-source-map',
     entry: {
-        'bundles/Mobile': path.resolve('sources/mobile/Mobile.js'),
+        'bundles/Responsive': path.resolve('sources/mobile/Responsive.js'),
         'bundles/Desktop': path.resolve('sources/desktop/Desktop.js'),
     },
     devServer: isHot ? {
@@ -60,7 +62,7 @@ module.exports = {
         isProduction && new webpack.LoaderOptionsPlugin({
             minimize: true
         }),
-        isProduction && new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
+        new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify(env)}}),
         isProduction && new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, sourceMap: false}),
         isProduction && new CompressionPlugin({
             algorithm: 'gzip'

@@ -8,6 +8,7 @@ export default (data) => {
 
     return {
         id: data.id,
+        currency_id: data.currency,
         sum: data.sum,
         description: data.description,
         repeat: data.repeat,

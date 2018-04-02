@@ -1,35 +1,51 @@
 import 'normalize.css';
-import './Mobile.scss';
+import './Responsive.scss';
 import 'babel-polyfill';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 import {connect, Provider} from 'react-redux';
 import {createStore, bindActionCreators} from 'redux';
-import moment from 'moment';
-import {reducer} from './state/reducers';
-import * as actions from './state/actions';
+import {reducer} from 'common/state/reducers';
+import {
+    updateUser,
+    toggleLoading,
+    setScreen,
+    updateState,
+} from 'common/state/actions';
 
-import {AppBar, Drawer, IconButton} from 'material-ui';
+import {Drawer} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import EuroSymbol from 'material-ui-icons/EuroSymbol';
 
 import fetch from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 
 import Login from './ui/Login';
-import Logged from './ui/appBar/Logged';
 import Internal from './ui/Internal';
 import Currencies from './ui/Currencies';
 import {BigLoader} from './ui/components/loaders';
+import TopBar from 'common/components/TopBar';
 
 import {fromJS} from 'immutable';
+import getScreenQueries from 'common/utils/getScreenQueries';
+import EventListener from 'react-event-listener';
+import {flexColumn} from 'common/defs/styles';
+import {getInitialEndDate} from 'common/utils/dates';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-class Mobile extends PureComponent {
+const actions = {
+    updateUser,
+    toggleLoading,
+    setScreen,
+    updateState,
+};
+
+class App extends PureComponent<{
+    actions: typeof actions
+}> {
     componentDidMount() {
         this.loadData();
     }
@@ -71,7 +87,7 @@ class Mobile extends PureComponent {
                 moneyLocationTypes: fromJS(await mlTypesResponse.json()),
                 loading: false,
                 title: 'Financial',
-                endDate: moment().format('YYYY-MM-DD'),
+                endDate: getInitialEndDate(),
                 ui: <Internal/>
             });
         }
@@ -102,22 +118,21 @@ class Mobile extends PureComponent {
         return this.props.user != null && this.props.currencies != null;
     }
 
+    onWindowResize = () => {
+        this.props.actions.setScreen(getScreenQueries());
+    };
+
     render() {
         return (
             <MuiThemeProvider>
                 <div style={{
                     paddingTop: '64px',
+                    ...flexColumn,
                 }}>
-                    <AppBar
-                        title={this.props.title}
-                        showMenuIconButton={this.isCurrenciesDrawerReady()}
-                        onLeftIconButtonTouchTap={() => this.props.actions.updateState({currenciesDrawerOpen: true})}
-                        iconElementLeft={<IconButton><EuroSymbol/></IconButton>}
-                        iconElementRight={this.props.user ? <Logged onLogout={this.onLogout}/> : null}
-                        style={{
-                            position: 'fixed',
-                            top: 0,
-                        }}
+                    <EventListener target="window" onResize={this.onWindowResize}/>
+                    <TopBar
+                        showCurrenciesDrawer={this.isCurrenciesDrawerReady()}
+                        onLogout={this.onLogout}
                     />
                     {this.isCurrenciesDrawerReady() && (
                         <Drawer
@@ -139,11 +154,12 @@ class Mobile extends PureComponent {
     }
 }
 
-const MobileContainer = connect(state => state, dispatch => ({
+const AppContainer = connect(state => state, dispatch => ({
     actions: bindActionCreators(actions, dispatch)
-}))(Mobile);
+}))(App);
 
 const store = createStore(reducer, {
+    screen: getScreenQueries(),
     title: 'Loading..',
     loading: true,
     ui: null,
@@ -158,7 +174,7 @@ const store = createStore(reducer, {
 
 render(
     <Provider store={store}>
-        <MobileContainer/>
+        <AppContainer/>
     </Provider>,
     document.getElementById('root')
 );

@@ -3,6 +3,7 @@ import moment from 'moment';
 export default (data) => {
     return {
         id: data.id,
+        currency: data.currency_id,
         sum: data.sum,
         description: data.description,
         date: moment(data.created_at).toDate(),

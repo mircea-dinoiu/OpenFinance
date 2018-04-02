@@ -16,8 +16,8 @@ import {connect} from "react-redux";
 const IncomeListItemContent = (props) => {
     const item = props.item;
     const userList = props.data.user.get('list');
-    const currencies = props.data.currencies;
-    const currencyISOCode = currencies.get('map').getIn([String(currencies.get('default')), 'iso_code']);
+    const currenciesMap = props.data.currencies.get('map');
+    const currencyISOCode = currenciesMap.getIn([String(item.currency_id), 'iso_code']);
 
     return (
         <div>

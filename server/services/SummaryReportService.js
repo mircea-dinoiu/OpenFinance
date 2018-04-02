@@ -30,10 +30,15 @@ module.exports = {
         Object.keys(totalRemainingByUser).forEach(function (id) {
             const sum = totalRemainingByUser[id];
 
-            data.byUser.push({
-                sum: sum,
-                description: SummaryReportHelper.description(userRecords.find(each => each.id == id).full_name)
-            });
+            if (sum !== 0) {
+                const user = userRecords.find(each => each.id == id);
+
+                data.byUser.push({
+                    sum: sum,
+                    description: SummaryReportHelper.description(user.full_name, {html}),
+                    group: (user ? user.id : 0) || 0
+                });
+            }
         });
 
         Object.keys(totalRemainingByML).forEach(id => {

@@ -8,8 +8,8 @@ import {stringify} from 'query-string';
 import {ErrorSnackbar} from './components/snackbars';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Actions} from 'mobile/state/reducers';
-import {updateUser} from 'mobile/state/actions';
+import {Actions} from 'common/state/reducers';
+import {updateUser} from 'common/state/actions';
 
 class Login extends PureComponent {
     state = {

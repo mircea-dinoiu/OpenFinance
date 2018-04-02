@@ -47,6 +47,7 @@
             this.cache.today = new Date();
         },
 
+        // @ported to common/utils/dates:getStartDate
         getStartDate: function () {
             var date = new Date(this.cache.endDate);
             var include = this.cache.include;
@@ -76,6 +77,7 @@
             return date;
         },
 
+        // @ported to redux:endDate
         getEndDate: function () {
             var controller = Financial.app.getMainView().down(this.selectors.toolbar).getController();
 

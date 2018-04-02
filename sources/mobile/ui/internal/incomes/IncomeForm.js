@@ -20,14 +20,33 @@ class IncomeForm extends PureComponent {
 
     renderSum() {
         return (
-            <TextField
-                floatingLabelText="Sum"
-                floatingLabelFixed={true}
-                value={this.state.sum}
-                fullWidth={true}
-                type="number"
-                onChange={event => this.setState({sum: event.target.value})}
-            />
+            <Row>
+                <Col xs={4}>
+                    <SelectField
+                        floatingLabelText="Currency"
+                        floatingLabelFixed={true}
+                        value={this.state.currency}
+                        onChange={(e, i, value) => this.setState({currency: value})}
+                        fullWidth={true}
+                    >
+                        {
+                            this.props.currencies.get('map').map(
+                                map => ({value: map.get('id'), primaryText: map.get('iso_code')})
+                            ).toArray().map(props => <MenuItem key={props.value} {...props}/>)
+                        }
+                    </SelectField>
+                </Col>
+                <Col xs={8}>
+                    <TextField
+                        floatingLabelText="Sum"
+                        floatingLabelFixed={true}
+                        value={this.state.sum}
+                        fullWidth={true}
+                        type="number"
+                        onChange={event => this.setState({sum: event.target.value})}
+                    />
+                </Col>
+            </Row>
         );
     }
 
@@ -126,24 +145,12 @@ class IncomeForm extends PureComponent {
     render() {
         return (
             <Col>
-                <Row>
-                    <Col xs={6}>
-                        {this.renderSum()}
-                    </Col>
-                    <Col xs={6}>
-                        {this.renderRepeat()}
-                    </Col>
-                </Row>
+                {this.renderSum()}
                 {this.renderDescription()}
                 {this.renderDateTime()}
-                <Row>
-                    <Col xs={6}>
-                        {this.renderDestination()}
-                    </Col>
-                    <Col xs={6}>
-                        {this.renderFrom()}
-                    </Col>
-                </Row>
+                {this.renderDestination()}
+                {this.renderFrom()}
+                {this.renderRepeat()}
             </Col>
         );
     }
@@ -151,9 +158,11 @@ class IncomeForm extends PureComponent {
 
 export default connect(
     ({
-         moneyLocations,
-         user,
-     }) => ({
+        currencies,
+        moneyLocations,
+        user,
+    }) => ({
+        currencies,
         moneyLocations,
         user,
     })

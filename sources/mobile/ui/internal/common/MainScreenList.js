@@ -4,7 +4,6 @@ import {Col} from 'react-grid-system';
 import {stringify} from 'query-string';
 import moment from 'moment';
 import Immutable from 'immutable';
-import ReactPullToRefresh from 'react-pull-to-refresh';
 
 import {BigLoader, ButtonProgress} from '../../components/loaders';
 
@@ -12,8 +11,10 @@ import fetch, {fetchJSON} from 'common/utils/fetch';
 import {CalendarWithoutTime} from 'common/defs/formats';
 
 import {List} from 'material-ui/List';
-import {RaisedButton, Subheader, Divider, RefreshIndicator} from 'material-ui';
+import {RaisedButton, Subheader, Divider} from 'material-ui';
 import {connect} from 'react-redux';
+import RefreshTrigger from 'common/components/RefreshTrigger';
+import {greyedOut} from 'common/defs/styles';
 
 class MainScreenList extends PureComponent {
     props: {
@@ -36,7 +37,8 @@ class MainScreenList extends PureComponent {
         this.loadMore();
     }
 
-    componentWillReceiveProps({newRecord}) {
+
+    componentWillReceiveProps({newRecord, endDate}) {
         if (newRecord && this.state.results.filter(each => each.get('id') == newRecord.id).size === 0) {
             if (newRecord.repeat) {
                 this.refresh();
@@ -46,12 +48,17 @@ class MainScreenList extends PureComponent {
                 });
             }
         }
+
+        if (endDate !== this.props.endDate) {
+            this.refresh({endDate});
+        }
     }
 
-    loadMore = async({
-        page = this.state.page,
-        results = this.state.results
-    } = {}) => {
+    loadMore = async ({
+                          page = this.state.page,
+                          results = this.state.results,
+                          endDate = this.props.endDate,
+                      } = {}) => {
         if (this.state.loadingMore === true) {
             return;
         }
@@ -61,7 +68,7 @@ class MainScreenList extends PureComponent {
         });
 
         const response = await fetch(`${this.props.api.list}?${stringify({
-            end_date: this.props.endDate,
+            end_date: endDate,
             page: page,
             limit: 50
         })}`);
@@ -82,11 +89,11 @@ class MainScreenList extends PureComponent {
         return results.groupBy(each => moment(each.get('created_at')).format('YYYY-MM-DD')).entrySeq();
     }
 
-    handleUpdate = (data) => {
+    handleUpdate = () => {
         this.refresh();
     };
 
-    handleDelete = async(id) => {
+    handleDelete = async (id) => {
         await fetchJSON(this.props.api.destroy, {
             method: 'POST',
             body: {
@@ -100,14 +107,15 @@ class MainScreenList extends PureComponent {
         }, 500);
     };
 
-    refresh = async() => {
+    refresh = async ({endDate = this.props.endDate} = {}) => {
         this.setState({
             refreshing: true
         });
 
         await this.loadMore({
             page: 1,
-            results: Immutable.List()
+            results: Immutable.List(),
+            endDate,
         });
 
         this.setState({
@@ -118,61 +126,51 @@ class MainScreenList extends PureComponent {
     render() {
         const ListItem = this.props.listItemComponent;
 
+        if (this.state.firstLoad) {
+            return <BigLoader/>;
+        }
+
         return (
             <div>
-                {this.state.firstLoad ? <BigLoader/> : (
-                        <div>
-                            <ReactPullToRefresh
-                                onRefresh={this.refresh}
-                            >
-                                {this.state.refreshing && (
-                                    <RefreshIndicator
-                                        size={40}
-                                        left={10}
-                                        top={0}
-                                        status="loading"
-                                        style={{display: 'block', position: 'relative', margin: '10px auto'}}
-                                    />
-                                )}
-                                <Subheader style={{textAlign: 'center'}}>Pull down to refresh</Subheader>
-                            </ReactPullToRefresh>
-                            {this.getGroupedResults().map(([date, items]) => {
-                                return (
-                                    <div key={date}>
-                                        <List>
-                                            <Subheader style={{textAlign: 'center'}}>{moment(date).calendar(null, CalendarWithoutTime)}</Subheader>
-                                            {items.map(item => (
-                                                <ListItem
-                                                    key={item.get('id')}
-                                                    item={item.toJS()}
-                                                    onDelete={this.handleDelete}
-                                                    onUpdate={this.handleUpdate}
-                                                    api={this.props.api}
-                                                />
-                                            )).toArray()}
-                                        </List>
-                                        <Divider/>
-                                    </div>
-                                )
-                            })}
-                            <Col>
-                                <RaisedButton
-                                    label={this.state.loadingMore ? <ButtonProgress/> : 'Load More'}
-                                    fullWidth={true}
-                                    onTouchTap={this.loadMore}
-                                    style={{margin: '20px 0 40px'}}
-                                    disabled={this.state.loadingMore}
-                                />
-                            </Col>
-                        </div>
-                    )}
+                <RefreshTrigger onRefresh={this.refresh} refreshing={this.state.refreshing}/>
+                <div style={this.state.refreshing ? greyedOut : {}}>
+                    {this.getGroupedResults().map(([date, items]) => {
+                        return (
+                            <div key={date}>
+                                <List>
+                                    <Subheader
+                                        style={{textAlign: 'center'}}>{moment(date).calendar(null, CalendarWithoutTime)}</Subheader>
+                                    {items.map(item => (
+                                        <ListItem
+                                            key={item.get('id')}
+                                            item={item.toJS()}
+                                            onDelete={this.handleDelete}
+                                            onUpdate={this.handleUpdate}
+                                            api={this.props.api}
+                                        />
+                                    )).toArray()}
+                                </List>
+                                <Divider/>
+                            </div>
+                        )
+                    })}
+                    <Col>
+                        <RaisedButton
+                            label={this.state.loadingMore ? <ButtonProgress/> : 'Load More'}
+                            fullWidth={true}
+                            onTouchTap={this.loadMore}
+                            style={{margin: '20px 0 40px'}}
+                            disabled={this.state.loadingMore}
+                        />
+                    </Col>
+                </div>
             </div>
         );
     }
 }
 
 export default connect(({
-    endDate
-}) => ({
+                            endDate
+                        }) => ({
     endDate
 }))(MainScreenList);

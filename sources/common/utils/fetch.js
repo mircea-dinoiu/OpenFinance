@@ -1,3 +1,4 @@
+// @flow
 import 'whatwg-fetch';
 import deepExtend from 'deep-extend';
 import config from './config';

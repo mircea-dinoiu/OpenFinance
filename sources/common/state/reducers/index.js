@@ -1,5 +1,5 @@
 import {fromJS} from 'immutable';
-import {Actions} from 'mobile/state';
+import {Actions} from 'common/state';
 
 export const reducer = (state, action) => {
     switch (action.type) {
@@ -10,8 +10,12 @@ export const reducer = (state, action) => {
             };
         case Actions.UPDATE_USER:
             return {...state, user: fromJS(action.user)};
+        case Actions.SET_SCREEN:
+            return {...state, screen: action.value};
         case Actions.LOADING_ENABLE:
-            return {...state, loading: true}
+            return {...state, loading: true};
+        case Actions.SET_END_DATE:
+            return {...state, endDate: action.value};
         case Actions.LOADING_DISABLE:
             return {...state, loading: false}
     }

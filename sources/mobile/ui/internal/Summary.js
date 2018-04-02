@@ -1,41 +1,53 @@
 import React from 'react';
 import {BigLoader} from '../components/loaders';
-import {Subheader, List, ListItem, RefreshIndicator, Card, CardHeader, CardText} from 'material-ui';
+import {List, ListItem, Card, CardHeader, CardText} from 'material-ui';
 import * as colors from 'material-ui/styles/colors';
-import ReactPullToRefresh from 'react-pull-to-refresh';
 import routes from '../../../common/defs/routes';
 import {stringify} from 'query-string';
 import {fetch} from '../../../common/utils/fetch';
 import {numericValue} from '../formatters';
-import {groupBy} from 'lodash';
+import {groupBy, pickBy, identity} from 'lodash';
 import {connect} from 'react-redux';
+import IncludeDropdown from 'common/components/IncludeDropdown';
+import {getStartDate, formatYMD} from 'common/utils/dates';
+import RefreshTrigger from 'common/components/RefreshTrigger';
+import {greyedOut} from 'common/defs/styles';
 
-class Summary extends React.PureComponent {
+type TypeProps = {
+    screen: TypeScreenQueries,
+};
+
+class Summary extends React.PureComponent<TypeProps> {
     state = {
         firstLoad: true,
         results: null,
-        refreshing: false
-    };
-
-    handleRefresh = async() => {
-        this.setState({
-            refreshing: true
-        });
-
-        await this.load();
-
-        this.setState({
-            refreshing: false
-        });
+        refreshing: false,
+        include: 'ut'
     };
 
     componentDidMount() {
         this.load();
     }
 
-    load = async () => {
+    componentWillReceiveProps({endDate}) {
+        if (endDate !== this.props.endDate) {
+            this.load({endDate});
+        }
+    }
+
+    load = async ({endDate = this.props.endDate} = {}) => {
+        this.setState({
+            refreshing: true,
+        });
+
         const response = await fetch(`${routes.report.summary}?${stringify({
-            end_date: this.props.endDate,
+            ...pickBy({
+                end_date: this.state.include === 'ut' ? formatYMD() : endDate,
+                start_date: getStartDate({
+                    include: this.state.include,
+                    endDate,
+                }),
+            }, identity),
             html: false
         })}`);
         const json = await response.json();
@@ -43,6 +55,7 @@ class Summary extends React.PureComponent {
         this.setState({
             results: json,
             firstLoad: false,
+            refreshing: false,
         });
     };
 
@@ -51,57 +64,88 @@ class Summary extends React.PureComponent {
 
         return numericValue(value, currencyISOCode);
     }
+
+    renderCard({
+                   backgroundColor,
+                   title,
+                   summaryObject,
+                   entities,
+                   entityIdField = 'id',
+                   entityNameField = 'name'
+               }) {
+        const headerColor = 'rgba(255, 255, 255, 0.9)';
+
+        return (
+            <Card style={{backgroundColor, marginBottom: 10}}>
+                <CardHeader style={{paddingBottom: 0}} title={<span style={{color: headerColor}}>{title}</span>}/>
+                <CardText>
+                    {Object.entries(groupBy(summaryObject, 'group')).map(([id, items]) => (
+                        <Card style={{backgroundColor: id == 0 ? colors.grey200 : colors.white, marginBottom: 5}}>
+                            {id != 0 && <CardHeader style={{paddingBottom: 0}}
+                                                    title={entities.find(each => each.get(entityIdField) == id).get(entityNameField).toUpperCase()}/>}
+                            <List>
+                                {items.map(each => (
+                                    <ListItem
+                                        primaryText={each.description}
+                                        secondaryText={this.numericValue(each.sum)}
+                                    />
+                                ))}
+                            </List>
+                        </Card>
+                    ))}
+                </CardText>
+            </Card>
+        );
+    }
+
     renderResults() {
         const {remainingData} = this.state.results;
-        const headerColor = 'rgba(255, 255, 255, 0.9)';
         const balanceBg = '#6AA84F';
 
         return (
-            <div style={{margin: '0 10px 20px'}}>
-                <Card style={{backgroundColor: balanceBg}}>
-                    <CardHeader style={{paddingBottom: 0}} title={<span style={{color: headerColor}}>BALANCE BY LOCATION</span>}/>
-                    <CardText>
-                        {Object.entries(groupBy(remainingData.byML, 'group')).map(([id, items]) => (
-                            <Card style={{backgroundColor: id == 0 ? colors.grey200 : colors.white, marginBottom: 5}}>
-                                {id != 0 && <CardHeader style={{paddingBottom: 0}} title={this.props.moneyLocationTypes.find(mlType => mlType.get('id') == id).get('name').toUpperCase()}/>}
-                                <List>
-                                    {items.map(each => (
-                                        <ListItem
-                                            primaryText={each.description}
-                                            secondaryText={this.numericValue(each.sum)}
-                                        />
-                                    ))}
-                                </List>
-                            </Card>
-                        ))}
-                    </CardText>
-                </Card>
+            <div style={{margin: '0 0 20px'}}>
+                {this.renderCard({
+                    backgroundColor: balanceBg,
+                    title: 'Balance by location',
+                    summaryObject: remainingData.byML,
+                    entities: this.props.moneyLocationTypes
+                })}
+
+                {this.renderCard({
+                    backgroundColor: balanceBg,
+                    title: 'Balance by user',
+                    summaryObject: remainingData.byUser,
+                    entities: this.props.user.get('list'),
+                    entityNameField: 'full_name'
+                })}
             </div>
         );
     }
 
+    onIncludeChange = (include) => {
+        this.setState({include}, this.load);
+    };
+
     render() {
+        if (this.state.firstLoad) {
+            return <BigLoader/>;
+        }
+
         return (
-            <div>
-                {this.state.firstLoad ? <BigLoader/> : (
-                    <div>
-                        <ReactPullToRefresh
-                            onRefresh={this.handleRefresh}
-                        >
-                            {this.state.refreshing && (
-                                <RefreshIndicator
-                                    size={40}
-                                    left={10}
-                                    top={0}
-                                    status="loading"
-                                    style={{display: 'block', position: 'relative', margin: '10px auto'}}
-                                />
-                            )}
-                            <Subheader style={{textAlign: 'center'}}>Pull down to refresh</Subheader>
-                        </ReactPullToRefresh>
-                    </div>
-                )}
-                {this.state.results && this.renderResults()}
+            <div style={{
+                padding: '0 5px',
+            }}>
+                <RefreshTrigger
+                    onRefresh={this.load}
+                    refreshing={this.state.refreshing}
+                />
+                <div style={this.state.refreshing ? greyedOut : {}}>
+                    <IncludeDropdown
+                        value={this.state.include}
+                        onChange={this.onIncludeChange}
+                    />
+                    {this.state.results && this.renderResults()}
+                </div>
             </div>
         );
     }
