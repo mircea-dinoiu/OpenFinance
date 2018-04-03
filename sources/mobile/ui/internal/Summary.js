@@ -1,6 +1,6 @@
 import React from 'react';
 import {BigLoader} from '../components/loaders';
-import {List, ListItem, Card, CardHeader, CardText} from 'material-ui';
+import {List, Card, CardHeader, CardText} from 'material-ui';
 import * as colors from 'material-ui/styles/colors';
 import routes from '../../../common/defs/routes';
 import {stringify} from 'query-string';
@@ -12,6 +12,7 @@ import IncludeDropdown from 'common/components/IncludeDropdown';
 import {getStartDate, formatYMD} from 'common/utils/dates';
 import RefreshTrigger from 'common/components/RefreshTrigger';
 import {greyedOut} from 'common/defs/styles';
+import ResponsiveListItem from 'common/components/ResponsiveListItem';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -85,7 +86,7 @@ class Summary extends React.PureComponent<TypeProps> {
                                                     title={entities.find(each => each.get(entityIdField) == id).get(entityNameField).toUpperCase()}/>}
                             <List>
                                 {items.map(each => (
-                                    <ListItem
+                                    <ResponsiveListItem
                                         primaryText={each.description}
                                         secondaryText={this.numericValue(each.sum)}
                                     />

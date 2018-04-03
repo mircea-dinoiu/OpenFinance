@@ -5,14 +5,15 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import CreateIcon from 'material-ui-icons/Create';
 
 import {cyan50, red50} from 'material-ui/styles/colors';
-import {IconButton, MenuItem, IconMenu} from 'material-ui';
-import {ListItem} from 'material-ui/List';
+import {IconButton, MenuItem, IconMenu, TableRow} from 'material-ui';
 
 
 import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
+import ResponsiveListItem from 'common/components/ResponsiveListItem';
+import {connect} from 'react-redux';
 
-export default class ExpenseListItem extends PureComponent {
+class ExpenseListItem extends PureComponent {
     props: {
         entityName: string,
         editDialogProps: {
@@ -85,21 +86,47 @@ export default class ExpenseListItem extends PureComponent {
         return {};
     }
 
+    getInnerDivStyle() {
+        if (this.state.deleted) {
+            return {};
+        }
+
+        if (this.props.screen.isLarge) {
+            return {};
+        }
+
+        return {paddingLeft: 40};
+    }
+
     render() {
         const item = this.props.item;
         const persist = item.persist !== false;
 
         const ListItemContent = this.props.contentComponent;
+        const itemContent = (
+            <ListItemContent
+                item={item}
+                expanded={this.state.expanded}
+                data={this.props.data}
+            />
+        );
+
+        if (this.props.screen.isLarge) {
+            return itemContent;
+        }
 
         return (
             this.state.deleted ? (
-                    <ListItem style={this.getStyle()}>
+                    <ResponsiveListItem
+                        style={this.getStyle()}
+                        innerDivStyle={this.getInnerDivStyle()}
+                    >
                         Deleted: <strong>{item[this.props.nameProperty]}</strong>
-                    </ListItem>
+                    </ResponsiveListItem>
                 ) : (
-                    <ListItem onTouchTap={this.toggleDetails}
+                    <ResponsiveListItem onTouchTap={this.toggleDetails}
                               style={this.getStyle()}
-                              innerDivStyle={{paddingLeft: 40}}
+                              innerDivStyle={this.getInnerDivStyle()}
                               leftIcon={persist ? (
                                   <IconMenu
                                       iconButtonElement={<IconButton style={{padding: 0, width: 40}}><MoreVertIcon /></IconButton>}
@@ -134,13 +161,11 @@ export default class ExpenseListItem extends PureComponent {
                                 {...this.props.editDialogProps}
                             />
                         )}
-                        <ListItemContent
-                            item={item}
-                            expanded={this.state.expanded}
-                            data={this.props.data}
-                        />
-                    </ListItem>
+                        {itemContent}
+                    </ResponsiveListItem>
                 )
         );
     }
 }
+
+export default connect(({screen}) => ({screen}))(ExpenseListItem);

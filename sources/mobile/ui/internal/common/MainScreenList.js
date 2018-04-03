@@ -11,7 +11,7 @@ import fetch, {fetchJSON} from 'common/utils/fetch';
 import {CalendarWithoutTime} from 'common/defs/formats';
 
 import {List} from 'material-ui/List';
-import {RaisedButton, Subheader, Divider} from 'material-ui';
+import {RaisedButton, Subheader, Divider, Table, TableBody, TableHeader} from 'material-ui';
 import {connect} from 'react-redux';
 import RefreshTrigger from 'common/components/RefreshTrigger';
 import {greyedOut} from 'common/defs/styles';
@@ -37,6 +37,13 @@ class MainScreenList extends PureComponent {
         this.loadMore();
     }
 
+    getLimit() {
+        if (this.props.screen.isLarge) {
+            return 250;
+        }
+
+        return 50;
+    }
 
     componentWillReceiveProps({newRecord, endDate}) {
         if (newRecord && this.state.results.filter(each => each.get('id') == newRecord.id).size === 0) {
@@ -70,7 +77,7 @@ class MainScreenList extends PureComponent {
         const response = await fetch(`${this.props.api.list}?${stringify({
             end_date: endDate,
             page: page,
-            limit: 50
+            limit: this.getLimit(),
         })}`);
 
         const json = await response.json();
@@ -83,8 +90,12 @@ class MainScreenList extends PureComponent {
         });
     };
 
+    getSortedResults() {
+        return this.state.results.sortBy(each => each.get('created_at')).reverse();
+    }
+
     getGroupedResults() {
-        const results = this.state.results.sortBy(each => each.get('created_at')).reverse();
+        const results = this.getSortedResults();
 
         return results.groupBy(each => moment(each.get('created_at')).format('YYYY-MM-DD')).entrySeq();
     }
@@ -123,9 +134,58 @@ class MainScreenList extends PureComponent {
         });
     };
 
-    render() {
+    renderItem(item) {
         const ListItem = this.props.listItemComponent;
 
+        return (
+            <ListItem
+                key={item.get('id')}
+                item={item.toJS()}
+                onDelete={this.handleDelete}
+                onUpdate={this.handleUpdate}
+                api={this.props.api}
+            />
+        )
+    }
+
+    renderResults() {
+        if (this.props.screen.isLarge) {
+            const Header = this.props.headerComponent;
+
+            return (
+                <Table
+                    height="calc(100vh - 240px)"
+                >
+                    <TableHeader>
+                        <Header/>
+                    </TableHeader>
+                    <TableBody>
+                        {this.getSortedResults().map((item) => (
+                            this.renderItem(item)
+                        ))}
+                    </TableBody>
+                </Table>
+            );
+        }
+
+        return this.getGroupedResults().map(([date, items]) => {
+            return (
+                <div key={date}>
+                    <List>
+                        <Subheader
+                            style={{textAlign: 'center'}}>{moment(date).calendar(null, CalendarWithoutTime)}</Subheader>
+                        {items.map(item => (
+                            this.renderItem(item)
+                        )).toArray()}
+                    </List>
+                    <Divider/>
+                </div>
+            )
+        });
+    }
+
+
+    render() {
         if (this.state.firstLoad) {
             return <BigLoader/>;
         }
@@ -134,35 +194,19 @@ class MainScreenList extends PureComponent {
             <div>
                 <RefreshTrigger onRefresh={this.refresh} refreshing={this.state.refreshing}/>
                 <div style={this.state.refreshing ? greyedOut : {}}>
-                    {this.getGroupedResults().map(([date, items]) => {
-                        return (
-                            <div key={date}>
-                                <List>
-                                    <Subheader
-                                        style={{textAlign: 'center'}}>{moment(date).calendar(null, CalendarWithoutTime)}</Subheader>
-                                    {items.map(item => (
-                                        <ListItem
-                                            key={item.get('id')}
-                                            item={item.toJS()}
-                                            onDelete={this.handleDelete}
-                                            onUpdate={this.handleUpdate}
-                                            api={this.props.api}
-                                        />
-                                    )).toArray()}
-                                </List>
-                                <Divider/>
-                            </div>
-                        )
-                    })}
-                    <Col>
-                        <RaisedButton
-                            label={this.state.loadingMore ? <ButtonProgress/> : 'Load More'}
-                            fullWidth={true}
-                            onTouchTap={this.loadMore}
-                            style={{margin: '20px 0 40px'}}
-                            disabled={this.state.loadingMore}
-                        />
-                    </Col>
+                    {this.renderResults()}
+                    {this.props.screen.isLarge ? null : (
+                        <Col>
+                            <RaisedButton
+                                label={this.state.loadingMore ? <ButtonProgress/> : 'Load More'}
+                                fullWidth={true}
+                                onTouchTap={this.loadMore}
+                                style={{margin: '20px 0 40px'}}
+                                disabled={this.state.loadingMore}
+                            />
+                        </Col>
+                    )}
+
                 </div>
             </div>
         );
@@ -170,7 +214,7 @@ class MainScreenList extends PureComponent {
 }
 
 export default connect(({
-                            endDate
+                            endDate, screen
                         }) => ({
-    endDate
+    endDate, screen
 }))(MainScreenList);
