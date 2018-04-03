@@ -28,7 +28,6 @@ import {fromJS} from 'immutable';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import EventListener from 'react-event-listener';
 import {flexColumn} from 'common/defs/styles';
-import {getInitialEndDate} from 'common/utils/dates';
 import {hot} from 'react-hot-loader';
 
 // Needed for onTouchTap
@@ -84,11 +83,10 @@ class App extends PureComponent<{
                 categories: fromJS(await categoriesResponse.json()),
                 moneyLocations: fromJS(await mlResponse.json()),
                 moneyLocationTypes: fromJS(await mlTypesResponse.json()),
-                loading: false,
                 title: 'Financial',
-                endDate: getInitialEndDate(),
                 ui: <Internal/>
             });
+            props.actions.toggleLoading(false);
         }
     }
 
@@ -96,9 +94,9 @@ class App extends PureComponent<{
         this.props.actions.updateState({
             user: null,
             ui: <Login/>,
-            loading: false,
             title: 'Please Login'
         });
+        this.props.actions.toggleLoading(false);
     }
 
     onLogout = async() => {

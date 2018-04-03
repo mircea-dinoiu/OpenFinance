@@ -1,28 +1,81 @@
 import {fromJS} from 'immutable';
 import {Actions} from 'common/state';
 import {uniqueId} from 'lodash';
+import getScreenQueries from 'common/utils/getScreenQueries';
+import {combineReducers} from 'redux';
+import {getInitialEndDate} from 'common/utils/dates';
 
-export const reducer = (state, action) => {
-    switch (action.type) {
-        case Actions.UPDATE_STATE:
-            return {
-                ...state,
-                ...action.state,
-            };
-        case Actions.UPDATE_USER:
-            return {...state, user: fromJS(action.user)};
-        case Actions.SET_SCREEN:
-            return {...state, screen: action.value};
-        case Actions.LOADING_ENABLE:
-            return {...state, loading: true};
-        case Actions.SET_END_DATE:
-            return {...state, endDate: action.value};
-        case Actions.REFRESH_WIDGETS:
-            return {...state, refreshWidgets: uniqueId()};
-        case Actions.LOADING_DISABLE:
-            return {...state, loading: false}
+const stateKeysWithoutReducers = [];
+
+const screen = (state = getScreenQueries(), action) => {
+    return action.type === Actions.SET_SCREEN ? action.value : state;
+};
+
+const refreshWidgets = (state = uniqueId(), action) => {
+    return action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
+};
+
+const bindToUpdateState = (prop, defaultValue) => {
+    stateKeysWithoutReducers.push(prop);
+
+    return (state = defaultValue, action) => {
+        if (action.type === Actions.UPDATE_STATE) {
+            Object.keys(action.state).forEach(key => {
+                if (!stateKeysWithoutReducers.includes(key)) {
+                    throw new Error(
+                        `${key} has its own reducer. Please use action ${Actions.UPDATE_STATE} only for ${stateKeysWithoutReducers.join(', ')}`
+                    );
+                }
+            });
+
+            if (action.state.hasOwnProperty(prop)) {
+                return action.state[prop];
+            }
+        }
+
+        return state;
+    };
+};
+
+const user = (state = null, action) => (
+    action.type === Actions.UPDATE_USER ? fromJS(action.user) : state
+);
+
+const loading = (state = true, action) => {
+    if (action.type === Actions.LOADING_ENABLE) {
+        return true;
+    }
+
+    if (action.type === Actions.LOADING_DISABLE) {
+        return false;
     }
 
     return state;
 };
 
+const endDate = (state = getInitialEndDate(), action) => (
+    action.type === Actions.SET_END_DATE ? action.value : state
+);
+
+const title = bindToUpdateState('title', 'Loading...');
+const ui = bindToUpdateState('ui', null);
+const currenciesDrawerOpen = bindToUpdateState('currenciesDrawerOpen', false);
+const currencies = bindToUpdateState('currencies', null);
+const categories = bindToUpdateState('categories', null);
+const moneyLocations = bindToUpdateState('moneyLocations', null);
+const moneyLocationTypes = bindToUpdateState('moneyLocationTypes', null);
+
+export const reducer = combineReducers({
+    screen,
+    title,
+    loading,
+    endDate,
+    ui,
+    currenciesDrawerOpen,
+    refreshWidgets,
+    user,
+    currencies,
+    categories,
+    moneyLocations,
+    moneyLocationTypes,
+});
