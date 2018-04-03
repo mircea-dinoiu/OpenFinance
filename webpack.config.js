@@ -14,7 +14,7 @@ const enableSourceMaps = isProduction === false;
 module.exports = {
     devtool: isProduction ? false : 'cheap-source-map',
     entry: {
-        'bundles/Responsive': path.resolve('sources/mobile/Responsive.js'),
+        'bundles/Responsive': path.resolve('sources/mobile/index.js'),
         'bundles/Desktop': path.resolve('sources/desktop/Desktop.js'),
     },
     devServer: isHot ? {
@@ -37,7 +37,6 @@ module.exports = {
                     /node_modules/
                 ],
                 use: [
-                    isHot ? {loader: 'react-hot-loader'} : null,
                     {loader: 'babel-loader', options: {cacheDirectory: true}}
                 ].filter(Boolean)
             },

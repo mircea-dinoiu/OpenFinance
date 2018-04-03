@@ -3,10 +3,8 @@ import './Responsive.scss';
 import 'babel-polyfill';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React, {PureComponent} from 'react';
-import {render} from 'react-dom';
-import {connect, Provider} from 'react-redux';
-import {createStore, bindActionCreators} from 'redux';
-import {reducer} from 'common/state/reducers';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {
     updateUser,
     toggleLoading,
@@ -31,6 +29,7 @@ import getScreenQueries from 'common/utils/getScreenQueries';
 import EventListener from 'react-event-listener';
 import {flexColumn} from 'common/defs/styles';
 import {getInitialEndDate} from 'common/utils/dates';
+import {hot} from 'react-hot-loader';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -158,23 +157,4 @@ const AppContainer = connect(state => state, dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 }))(App);
 
-const store = createStore(reducer, {
-    screen: getScreenQueries(),
-    title: 'Loading..',
-    loading: true,
-    ui: null,
-    currenciesDrawerOpen: false,
-
-    user: null,
-    currencies: null,
-    categories: null,
-    moneyLocations: null,
-    moneyLocationTypes: null
-}, window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : noop => noop);
-
-render(
-    <Provider store={store}>
-        <AppContainer/>
-    </Provider>,
-    document.getElementById('root')
-);
+export default hot(module)(AppContainer);
