@@ -55,7 +55,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
 
     renderLarge() {
         return (
-            <Row>
+            <Row nogutter>
                 <Col xs={2} style={{paddingRight: 0}}>
                     <Summary/>
                 </Col>

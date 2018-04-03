@@ -34,7 +34,7 @@ const IncomeListItemContent = (props) => {
             <Row>
                 <Col xs={6}>
                         <span style={{fontSize: 14, float: 'left', lineHeight: '20px'}}>
-                            {numericValue(item.sum, currencyISOCode)}
+                            {numericValue(item.sum, {currency: currencyISOCode})}
                         </span>
                     &nbsp;
                     {item.status === 'pending' && <Warning style={{height: 20, width: 20}} color={yellowA700}/>}

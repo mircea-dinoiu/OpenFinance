@@ -1,6 +1,9 @@
 import React from 'react';
 import {BigLoader} from '../components/loaders';
-import {List, Card, CardHeader, CardText} from 'material-ui';
+import {
+    List, Card, CardHeader, CardText, Paper, Table, TableBody, TableRow, TableRowColumn,
+    TableHeaderColumn, TableHeader
+} from 'material-ui';
 import * as colors from 'material-ui/styles/colors';
 import routes from '../../../common/defs/routes';
 import {stringify} from 'query-string';
@@ -13,6 +16,7 @@ import {getStartDate, formatYMD} from 'common/utils/dates';
 import RefreshTrigger from 'common/components/RefreshTrigger';
 import {greyedOut} from 'common/defs/styles';
 import ResponsiveListItem from 'common/components/ResponsiveListItem';
+import {Col, Row} from 'react-grid-system';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -60,13 +64,13 @@ class Summary extends React.PureComponent<TypeProps> {
         });
     };
 
-    numericValue(value) {
-        const currencyISOCode = this.props.currencies.getIn(['map', String(this.props.currencies.get('default')), 'iso_code']);
+    numericValue(value, opts = {}) {
+        const currency = this.props.currencies.getIn(['map', String(this.props.currencies.get('default')), 'iso_code']);
 
-        return numericValue(value, currencyISOCode);
+        return numericValue(value, {...opts, currency});
     }
 
-    renderCard({
+    renderCategory({
                    backgroundColor,
                    title,
                    summaryObject,
@@ -75,27 +79,47 @@ class Summary extends React.PureComponent<TypeProps> {
                    entityNameField = 'name'
                }) {
         const headerColor = 'rgba(255, 255, 255, 0.9)';
+        const shouldGroup = summaryObject.every(each => each.hasOwnProperty('group'));
 
         return (
-            <Card style={{backgroundColor, marginBottom: 10}}>
-                <CardHeader style={{paddingBottom: 0}} title={<span style={{color: headerColor}}>{title}</span>}/>
-                <CardText>
-                    {Object.entries(groupBy(summaryObject, 'group')).map(([id, items]) => (
-                        <Card style={{backgroundColor: id == 0 ? colors.grey200 : colors.white, marginBottom: 5}}>
-                            {id != 0 && <CardHeader style={{paddingBottom: 0}}
-                                                    title={entities.find(each => each.get(entityIdField) == id).get(entityNameField).toUpperCase()}/>}
-                            <List>
-                                {items.map(each => (
-                                    <ResponsiveListItem
-                                        primaryText={each.description}
-                                        secondaryText={this.numericValue(each.sum)}
-                                    />
-                                ))}
-                            </List>
-                        </Card>
-                    ))}
-                </CardText>
-            </Card>
+            <div>
+                <Card style={{marginBottom: 10}}>
+                    <CardHeader style={{backgroundColor, paddingTop: 0}}>
+                        <div style={{color: headerColor}}>
+                            {title} ({this.numericValue(
+                                summaryObject.reduce((acc, each) => acc + each.sum, 0),
+                                {currencyStyle: {color: headerColor}}
+                            )})
+                        </div>
+                    </CardHeader>
+
+                    <CardText style={{padding: '0 5px'}}>
+                        {Object.entries(groupBy(summaryObject, 'group')).map(([id, items]) => [
+                            shouldGroup && id != 0 && (
+                                <CardHeader
+                                    style={{paddingTop: 0, paddingBottom: 0}}
+                                >
+                                    <div>
+                                        {entities.find(each => each.get(entityIdField) == id).get(entityNameField).toUpperCase()} ({this.numericValue(
+                                            items.reduce((acc, each) => acc + each.sum, 0)
+                                        )})
+                                    </div>
+                                </CardHeader>
+                            ),
+                            <Table>
+                                <TableBody displayRowCheckbox={false}>
+                                    {items.map(each => (
+                                        <TableRow style={{backgroundColor: id == 0 ? colors.grey200 : colors.white, marginBottom: 5}}>
+                                            <TableRowColumn>{each.description}</TableRowColumn>
+                                            <TableRowColumn style={{textAlign: 'right'}}>{this.numericValue(each.sum)}</TableRowColumn>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        ].filter(Boolean))}
+                    </CardText>
+                </Card>
+            </div>
         );
     }
 
@@ -105,14 +129,14 @@ class Summary extends React.PureComponent<TypeProps> {
 
         return (
             <div style={{margin: '0 0 20px'}}>
-                {this.renderCard({
+                {this.renderCategory({
                     backgroundColor: balanceBg,
                     title: 'Balance by location',
                     summaryObject: remainingData.byML,
                     entities: this.props.moneyLocationTypes
                 })}
 
-                {this.renderCard({
+                {this.renderCategory({
                     backgroundColor: balanceBg,
                     title: 'Balance by user',
                     summaryObject: remainingData.byUser,
@@ -141,10 +165,14 @@ class Summary extends React.PureComponent<TypeProps> {
                     refreshing={this.state.refreshing}
                 />
                 <div style={this.state.refreshing ? greyedOut : {}}>
-                    <IncludeDropdown
-                        value={this.state.include}
-                        onChange={this.onIncludeChange}
-                    />
+                    <Row>
+                        <Col push={{xs: 1}} xs={10}>
+                            <IncludeDropdown
+                                value={this.state.include}
+                                onChange={this.onIncludeChange}
+                            />
+                        </Col>
+                    </Row>
                     {this.state.results && this.renderResults()}
                 </div>
             </div>

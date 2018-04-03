@@ -36,7 +36,6 @@ module.exports = {
                 data.byUser.push({
                     sum: sum,
                     description: SummaryReportHelper.description(user.full_name, {html}),
-                    group: (user ? user.id : 0) || 0
                 });
             }
         });

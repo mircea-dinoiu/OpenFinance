@@ -12,6 +12,7 @@ import {Avatar, Chip, TableRow, TableRowColumn} from 'material-ui';
 import RepeatOptions from 'common/defs/repeatOptions';
 import {numericValue} from '../../formatters';
 import {connect} from "react-redux";
+import {ColumnStyles} from 'mobile/ui/internal/expenses/defs';
 
 const ExpenseListItemContent = (props) => {
     const item = props.item;
@@ -60,28 +61,32 @@ const ExpenseListItemContent = (props) => {
     if (props.screen.isLarge) {
         return (
             <TableRow>
-                <TableRowColumn style={{textAlign: 'center'}}>
+                <TableRowColumn style={ColumnStyles.CURRENCY}>
                     {currencyISOCode}
                 </TableRowColumn>
-                <TableRowColumn style={{textAlign: 'right'}}>
+                <TableRowColumn style={ColumnStyles.AMOUNT}>
                     {numericValue(item.sum)}
                 </TableRowColumn>
                 <TableRowColumn>
-                    {flags}&nbsp;{descriptionDisplay}
+                    <span style={{float: 'left'}}>{flags}</span>
+                    &nbsp;
+                    <span style={{fontSize: 14, float: 'left', lineHeight: '20px'}}>
+                        {descriptionDisplay}
+                    </span>
                 </TableRowColumn>
-                <TableRowColumn style={{textAlign: 'center'}}>
+                <TableRowColumn style={ColumnStyles.DATE_TIME}>
                     {dateDisplay}
                 </TableRowColumn>
                 <TableRowColumn>
                     {categoriesDisplay}
                 </TableRowColumn>
-                <TableRowColumn style={{textAlign: 'center'}}>
+                <TableRowColumn style={ColumnStyles.ACCOUNT}>
                     {accountDisplay}
                 </TableRowColumn>
-                <TableRowColumn style={{textAlign: 'center'}}>
+                <TableRowColumn style={ColumnStyles.PERSONS}>
                     {personsDisplay}
                 </TableRowColumn>
-                <TableRowColumn style={{textAlign: 'center'}}>
+                <TableRowColumn style={ColumnStyles.REPEAT}>
                     {repeatsDisplay}
                 </TableRowColumn>
             </TableRow>
@@ -99,7 +104,7 @@ const ExpenseListItemContent = (props) => {
             <Row>
                 <Col xs={6}>
                     <span style={{fontSize: 14, float: 'left', lineHeight: '20px'}}>
-                        {numericValue(item.sum, currencyISOCode)}
+                        {numericValue(item.sum, {currency: currencyISOCode})}
                     </span>
                     &nbsp;
                     {flags}

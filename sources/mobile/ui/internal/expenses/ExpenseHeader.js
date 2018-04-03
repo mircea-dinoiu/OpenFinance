@@ -1,32 +1,33 @@
 // @flow
 import React from 'react';
 import {TableHeaderColumn, TableRow} from 'material-ui';
+import {ColumnStyles} from './defs';
 
 const ExpenseHeaderRow = () => {
     return (
         <TableRow>
-            <TableHeaderColumn style={{textAlign: 'center'}}>
+            <TableHeaderColumn style={ColumnStyles.CURRENCY}>
                 Currency
             </TableHeaderColumn>
-            <TableHeaderColumn style={{textAlign: 'right'}}>
+            <TableHeaderColumn style={ColumnStyles.AMOUNT}>
                 Amount
             </TableHeaderColumn>
             <TableHeaderColumn>
                 Description
             </TableHeaderColumn>
-            <TableHeaderColumn style={{textAlign: 'center'}}>
+            <TableHeaderColumn style={ColumnStyles.DATE_TIME}>
                 Date & Time
             </TableHeaderColumn>
             <TableHeaderColumn>
                 Categories
             </TableHeaderColumn>
-            <TableHeaderColumn style={{textAlign: 'center'}}>
+            <TableHeaderColumn style={ColumnStyles.ACCOUNT}>
                 Account
             </TableHeaderColumn>
-            <TableHeaderColumn style={{textAlign: 'center'}}>
+            <TableHeaderColumn style={ColumnStyles.PERSONS}>
                 Person(s)
             </TableHeaderColumn>
-            <TableHeaderColumn style={{textAlign: 'center'}}>
+            <TableHeaderColumn style={ColumnStyles.REPEAT}>
                 Repeat
             </TableHeaderColumn>
         </TableRow>
