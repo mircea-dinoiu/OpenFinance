@@ -13,7 +13,6 @@ import {CalendarWithoutTime} from 'common/defs/formats';
 import {List} from 'material-ui/List';
 import {RaisedButton, Subheader, Divider, Table, TableBody, TableHeader} from 'material-ui';
 import {connect} from 'react-redux';
-import RefreshTrigger from 'common/components/RefreshTrigger';
 import {greyedOut} from 'common/defs/styles';
 
 class MainScreenList extends PureComponent {
@@ -196,7 +195,6 @@ class MainScreenList extends PureComponent {
 
         return (
             <div>
-                <RefreshTrigger onRefresh={this.refresh} refreshing={this.state.refreshing}/>
                 <div style={this.state.refreshing ? greyedOut : {}}>
                     {this.renderResults()}
                     {this.props.screen.isLarge ? null : (

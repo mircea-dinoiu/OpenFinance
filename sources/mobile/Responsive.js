@@ -92,10 +92,10 @@ class App extends PureComponent<{
 
     showLogin() {
         this.props.actions.updateState({
-            user: null,
             ui: <Login/>,
             title: 'Please Login'
         });
+        this.props.actions.updateUser(null);
         this.props.actions.toggleLoading(false);
     }
 

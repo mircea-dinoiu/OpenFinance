@@ -13,7 +13,6 @@ import {groupBy, pickBy, identity} from 'lodash';
 import {connect} from 'react-redux';
 import IncludeDropdown from 'common/components/IncludeDropdown';
 import {getStartDate, formatYMD} from 'common/utils/dates';
-import RefreshTrigger from 'common/components/RefreshTrigger';
 import {greyedOut} from 'common/defs/styles';
 import {Col, Row} from 'react-grid-system';
 
@@ -163,10 +162,6 @@ class Summary extends React.PureComponent<TypeProps> {
             <div style={{
                 padding: '0 5px',
             }}>
-                <RefreshTrigger
-                    onRefresh={this.load}
-                    refreshing={this.state.refreshing}
-                />
                 <div style={this.state.refreshing ? greyedOut : {}}>
                     <Row>
                         <Col push={{xs: 1}} xs={10}>

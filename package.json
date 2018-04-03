@@ -50,7 +50,6 @@
     "react-event-listener": "^0.5.3",
     "react-grid-system": "3.1.2",
     "react-hot-loader": "4.0.1",
-    "react-pull-to-refresh": "^1.0.6",
     "react-redux": "^5.0.6",
     "react-tap-event-plugin": "3.0.2",
     "redux": "^3.7.2",
