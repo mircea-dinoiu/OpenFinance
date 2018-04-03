@@ -19,6 +19,7 @@ const ExpenseListItemContent = (props) => {
     const userList = props.data.user.get('list');
     const currenciesMap = props.data.currencies.get('map');
     const currencyISOCode = currenciesMap.getIn([String(item.currency_id), 'iso_code']);
+    const screen = props.screen;
 
     const personsDisplay = userList.map(
         each => item.users.includes(each.get('id')) ? (
@@ -26,11 +27,13 @@ const ExpenseListItemContent = (props) => {
         ) : null
     );
     const descriptionDisplay = item.item;
-    const flags = [
-        item.status === 'pending' && <Warning style={{height: 20, width: 20}} color={yellowA700}/>,
-        item.repeat != null && <Cached style={{height: 20, width: 20}} color={cyan500}/>,
-        item.persist === false && <TrendingUp style={{height: 20, width: 20}} color={red500}/>,
-    ];
+    const flags = (
+        <React.Fragment>
+            {item.status === 'pending' && <Warning style={{height: 20, width: 20}} color={yellowA700}/>}
+            {item.repeat != null && <Cached style={{height: 20, width: 20}} color={cyan500}/>}
+            {item.persist === false && <TrendingUp style={{height: 20, width: 20}} color={red500}/>}
+        </React.Fragment>
+    );
     const accountDisplay = (
         item.money_location_id && (
             <span style={{fontSize: 14, color: grey700}}>{props.data.moneyLocations.find(each => each.get('id') === item.money_location_id).get('name')}</span>
@@ -44,23 +47,31 @@ const ExpenseListItemContent = (props) => {
             {props.data.categories.map(each => item.categories.includes(each.get('id')) ? (
                 <Chip
                     key={each.get('id')}
-                    style={{margin: '5px 5px 0 0'}}
+                    style={{margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`}}
                 >
                     {each.get('name')}
                 </Chip>
             ) : null)}
         </div>
     );
-    const dateDisplay = <span style={{fontSize: 14, color: grey500}}>{moment(item.created_at).format('lll')}</span>;
+    const dateDisplay = <span style={{
+        fontSize: 14,
+        color: screen.isLarge ? 'inherit' : grey500,
+    }}>{moment(item.created_at).format('lll')}</span>;
+    const repeatsText = item.repeat ? RepeatOptions.filter(each => each[0] === item.repeat)[0][1] : '';
     const repeatsDisplay = (
         <span style={{fontSize: 14, color: grey500}}>
-            {item.repeat ? `Repeats ${RepeatOptions.filter(each => each[0] === item.repeat)[0][1]}` : 'Does not repeat'}
+            {screen.isLarge ? (
+                repeatsText
+            ) : (
+                repeatsText ? `Repeats ${repeatsText}` : 'Does not repeat'
+            )}
         </span>
     );
 
     if (props.screen.isLarge) {
         return (
-            <TableRow>
+            <React.Fragment>
                 <TableRowColumn style={ColumnStyles.CURRENCY}>
                     {currencyISOCode}
                 </TableRowColumn>
@@ -74,7 +85,7 @@ const ExpenseListItemContent = (props) => {
                         {descriptionDisplay}
                     </span>
                 </TableRowColumn>
-                <TableRowColumn style={ColumnStyles.DATE_TIME}>
+                <TableRowColumn className="msl__date-column" style={ColumnStyles.DATE_TIME}>
                     {dateDisplay}
                 </TableRowColumn>
                 <TableRowColumn>
@@ -89,7 +100,7 @@ const ExpenseListItemContent = (props) => {
                 <TableRowColumn style={ColumnStyles.REPEAT}>
                     {repeatsDisplay}
                 </TableRowColumn>
-            </TableRow>
+            </React.Fragment>
         );
     }
     

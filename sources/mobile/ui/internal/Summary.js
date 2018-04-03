@@ -82,20 +82,20 @@ class Summary extends React.PureComponent<TypeProps> {
         const shouldGroup = summaryObject.every(each => each.hasOwnProperty('group'));
 
         return (
-            <div>
-                <Card style={{marginBottom: 10}}>
-                    <CardHeader style={{backgroundColor, paddingTop: 0}}>
-                        <div style={{color: headerColor}}>
-                            {title} ({this.numericValue(
-                                summaryObject.reduce((acc, each) => acc + each.sum, 0),
-                                {currencyStyle: {color: headerColor}}
-                            )})
-                        </div>
-                    </CardHeader>
+            <Card style={{marginBottom: 10}}>
+                <CardHeader style={{backgroundColor, paddingTop: 0}}>
+                    <div style={{color: headerColor}}>
+                        {title} ({this.numericValue(
+                            summaryObject.reduce((acc, each) => acc + each.sum, 0),
+                            {currencyStyle: {color: headerColor}}
+                        )})
+                    </div>
+                </CardHeader>
 
-                    <CardText style={{padding: '0 5px'}}>
-                        {Object.entries(groupBy(summaryObject, 'group')).map(([id, items]) => [
-                            shouldGroup && id != 0 && (
+                <CardText style={{padding: '0 5px'}}>
+                    {Object.entries(groupBy(summaryObject, 'group')).map(([id, items]) => (
+                        <React.Fragment key={id}>
+                            {shouldGroup && id != 0 && (
                                 <CardHeader
                                     style={{paddingTop: 0, paddingBottom: 0}}
                                 >
@@ -105,21 +105,21 @@ class Summary extends React.PureComponent<TypeProps> {
                                         )})
                                     </div>
                                 </CardHeader>
-                            ),
+                            )}
                             <Table>
                                 <TableBody displayRowCheckbox={false}>
-                                    {items.map(each => (
-                                        <TableRow style={{backgroundColor: id == 0 ? colors.grey200 : colors.white, marginBottom: 5}}>
+                                    {items.map((each, index) => (
+                                        <TableRow selectable={false} key={index} style={{backgroundColor: id == 0 ? colors.grey200 : colors.white, marginBottom: 5}}>
                                             <TableRowColumn>{each.description}</TableRowColumn>
                                             <TableRowColumn style={{textAlign: 'right'}}>{this.numericValue(each.sum)}</TableRowColumn>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
-                        ].filter(Boolean))}
-                    </CardText>
-                </Card>
-            </div>
+                        </React.Fragment>
+                    ))}
+                </CardText>
+            </Card>
         );
     }
 

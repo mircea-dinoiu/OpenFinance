@@ -206,7 +206,6 @@ class MainScreenList extends PureComponent {
                             />
                         </Col>
                     )}
-
                 </div>
             </div>
         );

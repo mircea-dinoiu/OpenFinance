@@ -41,14 +41,6 @@ module.exports = {
                 ].filter(Boolean)
             },
             {
-                test: /\.scss$/,
-                use: [
-                    {loader: 'style-loader'},
-                    {loader: 'css-loader', options: {sourceMap: enableSourceMaps, url: false}},
-                    {loader: 'sass-loader', options: {sourceMap: enableSourceMaps}}
-                ]
-            },
-            {
                 test: /\.css$/,
                 use: [
                     {loader: 'style-loader'},
@@ -65,7 +57,8 @@ module.exports = {
         isProduction && new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, sourceMap: false}),
         isProduction && new CompressionPlugin({
             algorithm: 'gzip'
-        })
+        }),
+        !isProduction && new webpack.NamedModulesPlugin(),
     ].filter(Boolean),
     resolve: {
         modules: [

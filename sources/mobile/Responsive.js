@@ -1,5 +1,5 @@
 import 'normalize.css';
-import './Responsive.scss';
+import './Responsive.css';
 import 'babel-polyfill';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React, {PureComponent} from 'react';

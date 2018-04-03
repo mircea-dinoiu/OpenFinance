@@ -5,14 +5,16 @@ import routes from 'common/defs/routes';
 
 import IncomeListItem from './IncomeListItem';
 import MainScreenList from '../common/MainScreenList';
+import ExpenseHeader from 'mobile/ui/internal/expenses/ExpenseHeader';
 
-const ExpenseList = () => {
+const IncomeList = () => {
     return (
         <MainScreenList
             api={routes.income}
             listItemComponent={IncomeListItem}
+            headerComponent={ExpenseHeader}
         />
     )
 };
 
-export default ExpenseList;
+export default IncomeList;

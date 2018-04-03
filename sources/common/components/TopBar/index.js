@@ -41,7 +41,7 @@ class TopBar extends PureComponent<TypeProps> {
             <AppBar
                 title={this.props.title}
                 showMenuIconButton={this.props.showCurrenciesDrawer}
-                onLeftIconButtonTouchTap={() => this.props.actions.updateState({currenciesDrawerOpen: true})}
+                onLeftIconButtonClick={() => this.props.actions.updateState({currenciesDrawerOpen: true})}
                 iconElementLeft={<IconButton><EuroSymbol/></IconButton>}
                 iconElementRight={this.props.user ? <Logged onLogout={this.props.onLogout}/> : null}
                 style={{

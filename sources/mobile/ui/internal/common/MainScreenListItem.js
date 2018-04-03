@@ -12,6 +12,8 @@ import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
 import ResponsiveListItem from 'common/components/ResponsiveListItem';
 import {connect} from 'react-redux';
+import {formatYMD} from 'common/utils/dates';
+import moment from 'moment';
 
 class ExpenseListItem extends PureComponent {
     props: {
@@ -91,11 +93,27 @@ class ExpenseListItem extends PureComponent {
             return {};
         }
 
-        if (this.props.screen.isLarge) {
-            return {};
+        return {paddingLeft: 40};
+    }
+
+    getClassName(): string {
+        const classes = [];
+        const day = formatYMD;
+        const item = this.props.item;
+
+        if (moment(item.created_at).date() % 2 === 0) {
+            classes.push('msl__even-row');
+        } else {
+            classes.push('msl__odd-row');
         }
 
-        return {paddingLeft: 40};
+        if (day(item.created_at) === day(new Date())) {
+            classes.push('msl__today-row');
+        } else if (day(item.created_at) > day(new Date())) {
+            classes.push('msl__future-row');
+        }
+
+        return classes.join(' ');
     }
 
     render() {
@@ -110,9 +128,50 @@ class ExpenseListItem extends PureComponent {
                 data={this.props.data}
             />
         );
+        const dialogs = (
+            <React.Fragment>
+                {this.state.createDeleteDialog && (
+                    <MainScreenDeleteDialog
+                        open={this.state.deleteDialogOpen}
+                        onYes={this.submitDelete}
+                        onNo={this.toggleDeleteDialog}
+                        entityName={this.props.entityName}
+                    />
+                )}
+                {this.state.createEditDialog && (
+                    <MainScreenEditDialog
+                        key={this.editDialogKey}
+                        open={this.state.editDialogOpen}
+                        data={this.props.data}
+                        entity={item}
+                        onCancel={this.toggleEditDialog}
+                        onSave={this.submitUpdate}
+                        entityName={this.props.entityName}
+                        api={this.props.api}
+                        {...this.props.editDialogProps}
+                    />
+                )}
+            </React.Fragment>
+        );
+        const menuItems = (
+            <React.Fragment>
+                <MenuItem primaryText="Edit" leftIcon={<CreateIcon/>} onTouchTap={this.toggleEditDialog}/>
+                <MenuItem primaryText="Delete" leftIcon={<DeleteIcon/>} onTouchTap={this.toggleDeleteDialog}/>
+            </React.Fragment>
+        );
 
         if (this.props.screen.isLarge) {
-            return itemContent;
+            return (
+                <TableRow
+                    style={this.getStyle()}
+                    className={this.getClassName()}
+                    hoverable={true}
+                    onDoubleClick={this.toggleEditDialog}
+                >
+                    {dialogs}
+                    {itemContent}
+                </TableRow>
+            );
         }
 
         return (
@@ -135,32 +194,11 @@ class ExpenseListItem extends PureComponent {
                                       style={{marginLeft: 0, left: 0}}
                                       onTouchTap={event => event.stopPropagation()}
                                   >
-                                      <MenuItem primaryText="Edit" leftIcon={<CreateIcon/>} onTouchTap={this.toggleEditDialog}/>
-                                      <MenuItem primaryText="Delete" leftIcon={<DeleteIcon/>} onTouchTap={this.toggleDeleteDialog}/>
+                                      {menuItems}
                                   </IconMenu>
                               ) : null}
                     >
-                        {this.state.createDeleteDialog && (
-                            <MainScreenDeleteDialog
-                                open={this.state.deleteDialogOpen}
-                                onYes={this.submitDelete}
-                                onNo={this.toggleDeleteDialog}
-                                entityName={this.props.entityName}
-                            />
-                        )}
-                        {this.state.createEditDialog && (
-                            <MainScreenEditDialog
-                                key={this.editDialogKey}
-                                open={this.state.editDialogOpen}
-                                data={this.props.data}
-                                entity={item}
-                                onCancel={this.toggleEditDialog}
-                                onSave={this.submitUpdate}
-                                entityName={this.props.entityName}
-                                api={this.props.api}
-                                {...this.props.editDialogProps}
-                            />
-                        )}
+                        {dialogs}
                         {itemContent}
                     </ResponsiveListItem>
                 )

@@ -4,6 +4,6 @@ export const ColumnStyles = {
     AMOUNT: {textAlign: 'right', width: 50},
     DATE_TIME: {textAlign: 'center'},
     ACCOUNT: {textAlign: 'center'},
-    PERSONS: {textAlign: 'center'},
+    PERSONS: {textAlign: 'center', width: 50},
     REPEAT: {textAlign: 'center'},
 };
