@@ -1,5 +1,6 @@
 import {fromJS} from 'immutable';
 import {Actions} from 'common/state';
+import {uniqueId} from 'lodash';
 
 export const reducer = (state, action) => {
     switch (action.type) {
@@ -16,6 +17,8 @@ export const reducer = (state, action) => {
             return {...state, loading: true};
         case Actions.SET_END_DATE:
             return {...state, endDate: action.value};
+        case Actions.REFRESH_WIDGETS:
+            return {...state, refreshWidgets: uniqueId()};
         case Actions.LOADING_DISABLE:
             return {...state, loading: false}
     }

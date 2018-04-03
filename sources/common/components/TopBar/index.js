@@ -1,12 +1,13 @@
 // @flow
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import {AppBar, DatePicker, IconButton, Paper} from 'material-ui';
+import {AppBar, DatePicker, IconButton, Paper, ToolbarGroup} from 'material-ui';
 import EuroSymbol from 'material-ui-icons/EuroSymbol';
+import Refresh from 'material-ui-icons/Refresh';
 import ArrowBack from 'material-ui-icons/ArrowBack';
 import ArrowForward from 'material-ui-icons/ArrowForward';
 import Logged from 'mobile/ui/appBar/Logged';
-import {updateState, setEndDate} from 'common/state/actions';
+import {updateState, setEndDate, refreshWidgets} from 'common/state/actions';
 import {bindActionCreators} from 'redux';
 import {formatYMD} from 'common/utils/dates';
 import moment from 'moment';
@@ -18,6 +19,7 @@ type TypeProps = {
     actions: {
         setEndDate: typeof setEndDate,
         updateState: typeof updateState,
+        refreshWidgets: typeof refreshWidgets,
     }
 };
 
@@ -35,6 +37,9 @@ class TopBar extends PureComponent<TypeProps> {
     onChangeEndDate = (nothing, date) => {
         this.props.actions.setEndDate(formatYMD(date));
     };
+    onClickRefresh = () => {
+        this.props.actions.refreshWidgets();
+    };
 
     render() {
         return (
@@ -43,7 +48,12 @@ class TopBar extends PureComponent<TypeProps> {
                 showMenuIconButton={this.props.showCurrenciesDrawer}
                 onLeftIconButtonClick={() => this.props.actions.updateState({currenciesDrawerOpen: true})}
                 iconElementLeft={<IconButton><EuroSymbol/></IconButton>}
-                iconElementRight={this.props.user ? <Logged onLogout={this.props.onLogout}/> : null}
+                iconElementRight={(
+                    <ToolbarGroup>
+                        <IconButton onClick={this.onClickRefresh}><Refresh color="white"/></IconButton>
+                        {this.props.user ? <Logged onLogout={this.props.onLogout}/> : null}
+                    </ToolbarGroup>
+                )}
                 style={{
                     position: 'fixed',
                     top: 0,
@@ -83,6 +93,7 @@ export default connect(
         actions: bindActionCreators({
             updateState,
             setEndDate,
+            refreshWidgets,
         }, dispatch)
     })
 )(TopBar);

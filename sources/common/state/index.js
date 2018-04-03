@@ -5,4 +5,5 @@ export const Actions = {
     UPDATE_USER: 'UPDATE_USER',
     SET_SCREEN: 'SET_SCREEN',
     SET_END_DATE: 'SET_END_DATE',
+    REFRESH_WIDGETS: 'REFRESH_WIDGETS'
 };

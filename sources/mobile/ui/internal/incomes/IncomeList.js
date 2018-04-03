@@ -8,6 +8,7 @@ import MainScreenList from '../common/MainScreenList';
 import ExpenseHeader from 'mobile/ui/internal/expenses/ExpenseHeader';
 
 const IncomeList = () => {
+    return null;
     return (
         <MainScreenList
             api={routes.income}

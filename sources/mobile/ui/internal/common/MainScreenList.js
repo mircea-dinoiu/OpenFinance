@@ -45,7 +45,7 @@ class MainScreenList extends PureComponent {
         return 50;
     }
 
-    componentWillReceiveProps({newRecord, endDate}) {
+    componentWillReceiveProps({newRecord, endDate, refreshWidgets}) {
         if (newRecord && this.state.results.filter(each => each.get('id') == newRecord.id).size === 0) {
             if (newRecord.repeat) {
                 this.refresh();
@@ -54,6 +54,10 @@ class MainScreenList extends PureComponent {
                     results: this.state.results.concat(Immutable.fromJS([newRecord]))
                 });
             }
+        }
+        
+        if (refreshWidgets !== this.props.refreshWidgets) {
+            this.refresh();
         }
 
         if (endDate !== this.props.endDate) {
@@ -154,7 +158,7 @@ class MainScreenList extends PureComponent {
 
             return (
                 <Table
-                    height="calc(100vh - 240px)"
+                    height="calc(100vh - 180px)"
                 >
                     <TableHeader>
                         <Header/>
@@ -213,7 +217,11 @@ class MainScreenList extends PureComponent {
 }
 
 export default connect(({
-                            endDate, screen
+                            endDate,
+                            screen,
+                            refreshWidgets,
                         }) => ({
-    endDate, screen
+    endDate,
+    screen,
+    refreshWidgets,
 }))(MainScreenList);

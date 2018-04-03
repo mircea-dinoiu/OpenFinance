@@ -6,6 +6,7 @@ import {render} from 'react-dom';
 import {createStore} from 'redux';
 import {reducer} from 'common/state/reducers';
 import Responsive from './Responsive';
+import {uniqueId} from 'lodash';
 
 const store = createStore(reducer, {
     screen: getScreenQueries(),
@@ -13,6 +14,7 @@ const store = createStore(reducer, {
     loading: true,
     ui: null,
     currenciesDrawerOpen: false,
+    refreshWidgets: uniqueId(),
 
     user: null,
     currencies: null,

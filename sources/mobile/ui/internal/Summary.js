@@ -15,7 +15,6 @@ import IncludeDropdown from 'common/components/IncludeDropdown';
 import {getStartDate, formatYMD} from 'common/utils/dates';
 import RefreshTrigger from 'common/components/RefreshTrigger';
 import {greyedOut} from 'common/defs/styles';
-import ResponsiveListItem from 'common/components/ResponsiveListItem';
 import {Col, Row} from 'react-grid-system';
 
 type TypeProps = {
@@ -34,9 +33,13 @@ class Summary extends React.PureComponent<TypeProps> {
         this.load();
     }
 
-    componentWillReceiveProps({endDate}) {
+    componentWillReceiveProps({endDate, refreshWidgets}) {
         if (endDate !== this.props.endDate) {
             this.load({endDate});
+        }
+
+        if (refreshWidgets !== this.props.refreshWidgets) {
+            this.load();
         }
     }
 

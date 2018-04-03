@@ -2,10 +2,15 @@
 import React from 'react';
 import {RefreshIndicator, Subheader} from 'material-ui';
 import ReactPullToRefresh from 'react-pull-to-refresh';
+import {connect} from 'react-redux';
 
 const buttonStyle = {display: 'block', position: 'relative', margin: '10px auto 0'};
 
-const RefreshTrigger = ({onRefresh, refreshing}) => {
+const RefreshTrigger = ({onRefresh, refreshing, screen}) => {
+    if (screen.isLarge) {
+        return null;
+    }
+
     const refreshIndicator = (
         <RefreshIndicator
             size={40}
@@ -29,4 +34,4 @@ const RefreshTrigger = ({onRefresh, refreshing}) => {
     );
 };
 
-export default RefreshTrigger;
+export default connect(({screen}) => ({screen}))(RefreshTrigger);
