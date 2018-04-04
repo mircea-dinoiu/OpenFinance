@@ -1,7 +1,27 @@
+// @flow
 import React, {PureComponent} from 'react';
 import {MenuItem, Subheader} from 'material-ui';
+import {bindActionCreators} from 'redux';
+import {fetchCurrencies} from 'common/state/actions';
+import {connect} from 'react-redux';
 
-export default class Currencies extends PureComponent {
+class Currencies extends PureComponent {
+    interval = null;
+
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            if (this.props.user) {
+                this.props.actions.fetchCurrencies({update: true});
+            }
+        }, 60 * 1000);
+    }
+
+    componentWillUnmount() {
+        if (this.interval != null) {
+            clearInterval(this.interval);
+        }
+    }
+
     render() {
         const map = this.props.data.get('map');
         const defaultCurrencyId = this.props.data.get('default');
@@ -25,3 +45,12 @@ export default class Currencies extends PureComponent {
         );
     }
 }
+
+export default connect(
+    ({user}) => ({user}),
+    dispatch => ({
+        actions: bindActionCreators({
+            fetchCurrencies
+        }, dispatch)
+    })
+)(Currencies)

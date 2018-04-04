@@ -29,6 +29,7 @@ import getScreenQueries from 'common/utils/getScreenQueries';
 import EventListener from 'react-event-listener';
 import {flexColumn} from 'common/defs/styles';
 import {hot} from 'react-hot-loader';
+import {fetchCurrencies} from 'common/state/actions';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -39,9 +40,10 @@ const actions = {
     toggleLoading,
     setScreen,
     updateState,
+    fetchCurrencies,
 };
 
-class App extends PureComponent<{
+class Responsive extends PureComponent<{
     actions: typeof actions
 }> {
     componentDidMount() {
@@ -66,20 +68,19 @@ class App extends PureComponent<{
                 this.showLogin();
             }
         } else {
+            props.actions.fetchCurrencies();
+
             const [
-                currenciesResponse,
                 categoriesResponse,
                 mlResponse,
                 mlTypesResponse
             ] = await Promise.all([
-                fetch(routes.getCurrencies),
                 fetch(routes.category.list),
                 fetch(routes.ml.list),
                 fetch(routes.mlType.list)
             ]);
             
             props.actions.updateState({
-                currencies: fromJS(await currenciesResponse.json()),
                 categories: fromJS(await categoriesResponse.json()),
                 moneyLocations: fromJS(await mlResponse.json()),
                 moneyLocationTypes: fromJS(await mlTypesResponse.json()),
@@ -135,6 +136,7 @@ class App extends PureComponent<{
                         <Drawer
                             docked={false}
                             open={this.props.currenciesDrawerOpen}
+                            openSecondary={true}
                             onRequestChange={(currenciesDrawerOpen) => this.props.actions.updateState({currenciesDrawerOpen})}
                         >
                             <Currencies data={this.props.currencies}/>
@@ -153,6 +155,6 @@ class App extends PureComponent<{
 
 const AppContainer = connect(state => state, dispatch => ({
     actions: bindActionCreators(actions, dispatch)
-}))(App);
+}))(Responsive);
 
 export default hot(module)(AppContainer);

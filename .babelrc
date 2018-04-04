@@ -6,6 +6,7 @@
           "last 1 versions"
         ]
       },
+      "modules": false,
       "debug": true
     }],
     "react"

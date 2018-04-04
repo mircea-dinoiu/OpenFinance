@@ -67,6 +67,12 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                         <Tab label="Incomes">
                             <Incomes/>
                         </Tab>
+                        <Tab label="Categories">
+                        </Tab>
+                        <Tab label="Accounts">
+                        </Tab>
+                        <Tab label="Account Types">
+                        </Tab>
                     </Tabs>
                 </Col>
             </Row>

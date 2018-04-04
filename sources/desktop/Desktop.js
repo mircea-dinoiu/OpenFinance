@@ -1,4 +1,4 @@
-import './Desktop.scss';
+import './Desktop.css';
 import routes from 'common/defs/routes';
 import lodash from 'lodash';
 

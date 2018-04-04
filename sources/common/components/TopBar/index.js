@@ -2,7 +2,7 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import {AppBar, DatePicker, IconButton, Paper, ToolbarGroup} from 'material-ui';
-import EuroSymbol from 'material-ui-icons/EuroSymbol';
+import MonetizationOn from 'material-ui-icons/MonetizationOn';
 import Refresh from 'material-ui-icons/Refresh';
 import ArrowBack from 'material-ui-icons/ArrowBack';
 import ArrowForward from 'material-ui-icons/ArrowForward';
@@ -40,18 +40,26 @@ class TopBar extends PureComponent<TypeProps> {
     onClickRefresh = () => {
         this.props.actions.refreshWidgets();
     };
+    onClickCurrenciesDrawerTrigger = () => {
+        this.props.actions.updateState({currenciesDrawerOpen: true});
+    };
 
     render() {
         return (
             <AppBar
                 title={this.props.title}
-                showMenuIconButton={this.props.showCurrenciesDrawer}
-                onLeftIconButtonClick={() => this.props.actions.updateState({currenciesDrawerOpen: true})}
-                iconElementLeft={<IconButton><EuroSymbol/></IconButton>}
+                showMenuIconButton={false}
                 iconElementRight={(
                     <ToolbarGroup>
-                        <IconButton onClick={this.onClickRefresh}><Refresh color="white"/></IconButton>
-                        {this.props.user ? <Logged onLogout={this.props.onLogout}/> : null}
+                        {this.props.showCurrenciesDrawer && (
+                            <IconButton onClick={this.onClickCurrenciesDrawerTrigger}><MonetizationOn color="white"/></IconButton>
+                        )}
+                        {this.props.user && (
+                            <IconButton onClick={this.onClickRefresh}><Refresh color="white"/></IconButton>
+                        )}
+                        {this.props.user && (
+                            <Logged onLogout={this.props.onLogout}/>
+                        )}
                     </ToolbarGroup>
                 )}
                 style={{
