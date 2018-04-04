@@ -10,6 +10,7 @@ const IncludeDropdown = ({onChange, value}) => (
         value={value}
         onChange={(e, i, value) => onChange(value)}
         fullWidth={true}
+        style={{margin: '-10px 0 0'}}
     >
         {IncludeOptions.map(option => (
             <MenuItem key={option.id} value={option.id} primaryText={option.name}/>

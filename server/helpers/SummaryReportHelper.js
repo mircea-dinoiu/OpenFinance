@@ -51,18 +51,18 @@ module.exports = {
         return mlRecords.find(each => each.id == id).name;
     },
 
-    addMLEntries({data, mls, mlRecords}) {
+    addMLEntries({data, mls, mlRecords, html}) {
         const push = (id, name, group) => {
             data.push({
                 sum: mls[id],
-                description: this.description(name),
+                description: this.description(name, {html}),
                 reference: id,
                 group: group
             });
         };
 
         if (mls['0']) {
-            push(0, this.formatMLName(0, {mlRecords}));
+            push(0, this.formatMLName(0, {mlRecords, html}));
         }
 
         sortBy(mlRecords, 'name').forEach(record => {

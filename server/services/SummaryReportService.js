@@ -62,7 +62,7 @@ module.exports = {
         };
     },
 
-    async getIncomesData({incomeRecords, userRecords, mlRecords, defaultCurrency}) {
+    async getIncomesData({incomeRecords, userRecords, mlRecords, defaultCurrency, html}) {
         const data = {byUser: [], byML: []},
             users = {},
             mls = {};
@@ -86,12 +86,13 @@ module.exports = {
 
             data.byUser.push({
                 sum: sum,
-                description: SummaryReportHelper.description(userRecords.find(each => each.id == id).full_name),
+                description: SummaryReportHelper.description(userRecords.find(each => each.id == id).full_name, {html}),
                 reference: Number(id)
             });
         });
 
         SummaryReportHelper.addMLEntries({
+            html,
             data: data.byML,
             mls,
             mlRecords
@@ -100,7 +101,7 @@ module.exports = {
         return data;
     },
 
-    async getExpensesData({expenseRecords, userRecords, mlRecords, defaultCurrency}) {
+    async getExpensesData({expenseRecords, userRecords, mlRecords, defaultCurrency, html}) {
         const users = {};
         const mls = {};
 
@@ -135,13 +136,14 @@ module.exports = {
             if (users[id]) {
                 data.byUser.push({
                     sum: users[id],
-                    description: SummaryReportHelper.description(record.full_name),
+                    description: SummaryReportHelper.description(record.full_name, {html}),
                     reference: id
                 });
             }
         });
 
         SummaryReportHelper.addMLEntries({
+            html,
             data: data.byML,
             mls,
             mlRecords
@@ -151,10 +153,11 @@ module.exports = {
     },
 
     async getExpensesByCategory({
-                                    expenseRecords,
-                                    defaultCurrency,
-                                    categoryRecords,
-                                    userRecords,
+        expenseRecords,
+        defaultCurrency,
+        categoryRecords,
+        userRecords,
+        html,
                                 }) {
         const categories = {};
         const data = [];
@@ -226,7 +229,7 @@ module.exports = {
             Object.entries(categories[categoryId].users).forEach(([id, sum]) => {
                 data.push({
                     sum: sum,
-                    description: SummaryReportHelper.description(userRecords.find(each => each.id == id).full_name),
+                    description: SummaryReportHelper.description(userRecords.find(each => each.id == id).full_name, {html}),
                     group: categoryId,
                     index: index
                 });

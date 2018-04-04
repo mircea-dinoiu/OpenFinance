@@ -30,6 +30,7 @@ import EventListener from 'react-event-listener';
 import {flexColumn} from 'common/defs/styles';
 import {hot} from 'react-hot-loader';
 import {fetchCurrencies} from 'common/state/actions';
+import {Sizes} from 'common/defs';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -124,7 +125,7 @@ class Responsive extends PureComponent<{
         return (
             <MuiThemeProvider>
                 <div style={{
-                    paddingTop: '64px',
+                    paddingTop: Sizes.HEADER_SIZE,
                     ...flexColumn,
                 }}>
                     <EventListener target="window" onResize={this.onWindowResize}/>

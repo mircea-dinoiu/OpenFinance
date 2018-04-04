@@ -47,18 +47,21 @@ module.exports = {
                 mlRecords,
                 defaultCurrency,
                 incomeRecords,
+                html: req.query.html
             }),
             incomesData: await SummaryReportService.getIncomesData({
                 userRecords,
                 mlRecords,
                 defaultCurrency,
                 incomeRecords,
+                html: req.query.html
             }),
             expensesByCategory: await SummaryReportService.getExpensesByCategory({
                 expenseRecords,
                 defaultCurrency,
                 categoryRecords,
                 userRecords,
+                html: req.query.html
             })
         };
 

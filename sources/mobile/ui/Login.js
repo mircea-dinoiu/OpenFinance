@@ -58,7 +58,7 @@ class Login extends PureComponent {
 
     render() {
         return (
-            <Row>
+            <Row nogutter>
                 <Col
                     xs={10}
                     md={6}

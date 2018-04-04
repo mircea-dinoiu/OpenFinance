@@ -64,7 +64,11 @@ class MainScreenCreator extends PureComponent {
         const Form = this.props.formComponent;
 
         return (
-            <div>
+            <div
+                style={{
+                    backgroundColor: 'white'
+                }}
+            >
                 <Form
                     key={this.state.createCount}
                     onFormChange={formData => this.formData = formData}

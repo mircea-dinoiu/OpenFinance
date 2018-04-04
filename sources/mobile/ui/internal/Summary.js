@@ -1,20 +1,19 @@
 import React from 'react';
 import {BigLoader} from '../components/loaders';
 import {
-    List, Card, CardHeader, CardText, Paper, Table, TableBody, TableRow, TableRowColumn,
-    TableHeaderColumn, TableHeader
+    Paper
 } from 'material-ui';
 import * as colors from 'material-ui/styles/colors';
 import routes from '../../../common/defs/routes';
 import {stringify} from 'query-string';
 import {fetch} from '../../../common/utils/fetch';
-import {numericValue} from '../formatters';
 import {groupBy, pickBy, identity} from 'lodash';
 import {connect} from 'react-redux';
 import IncludeDropdown from 'common/components/IncludeDropdown';
 import {getStartDate, formatYMD} from 'common/utils/dates';
 import {greyedOut} from 'common/defs/styles';
-import {Col, Row} from 'react-grid-system';
+import {Sizes} from 'common/defs';
+import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -66,82 +65,67 @@ class Summary extends React.PureComponent<TypeProps> {
         });
     };
 
-    numericValue(value, opts = {}) {
-        const currency = this.props.currencies.getIn(['map', String(this.props.currencies.get('default')), 'iso_code']);
-
-        return numericValue(value, {...opts, currency});
-    }
-
-    renderCategory({
-                   backgroundColor,
-                   title,
-                   summaryObject,
-                   entities,
-                   entityIdField = 'id',
-                   entityNameField = 'name'
-               }) {
-        const headerColor = 'rgba(255, 255, 255, 0.9)';
-        const shouldGroup = summaryObject.every(each => each.hasOwnProperty('group'));
-
-        return (
-            <Card style={{marginBottom: 10}}>
-                <CardHeader style={{backgroundColor, paddingTop: 0}}>
-                    <div style={{color: headerColor}}>
-                        {title} ({this.numericValue(
-                            summaryObject.reduce((acc, each) => acc + each.sum, 0),
-                            {currencyStyle: {color: headerColor}}
-                        )})
-                    </div>
-                </CardHeader>
-
-                <CardText style={{padding: '0 5px'}}>
-                    {Object.entries(groupBy(summaryObject, 'group')).map(([id, items]) => (
-                        <React.Fragment key={id}>
-                            {shouldGroup && id != 0 && (
-                                <CardHeader
-                                    style={{paddingTop: 0, paddingBottom: 0}}
-                                >
-                                    <div>
-                                        {entities.find(each => each.get(entityIdField) == id).get(entityNameField).toUpperCase()} ({this.numericValue(
-                                            items.reduce((acc, each) => acc + each.sum, 0)
-                                        )})
-                                    </div>
-                                </CardHeader>
-                            )}
-                            <Table>
-                                <TableBody displayRowCheckbox={false}>
-                                    {items.map((each, index) => (
-                                        <TableRow selectable={false} key={index} style={{backgroundColor: id == 0 ? colors.grey200 : colors.white, marginBottom: 5}}>
-                                            <TableRowColumn>{each.description}</TableRowColumn>
-                                            <TableRowColumn style={{textAlign: 'right'}}>{this.numericValue(each.sum)}</TableRowColumn>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </React.Fragment>
-                    ))}
-                </CardText>
-            </Card>
-        );
+    renderCategory(props) {
+        return React.createElement(SummaryCategory, props);
     }
 
     renderResults() {
-        const {remainingData} = this.state.results;
-        const balanceBg = '#6AA84F';
+        const {results} = this.state;
 
         return (
             <div style={{margin: '0 0 20px'}}>
                 {this.renderCategory({
-                    backgroundColor: balanceBg,
+                    backgroundColor: colors.green500,
                     title: 'Balance by location',
-                    summaryObject: remainingData.byML,
-                    entities: this.props.moneyLocationTypes
+                    summaryObject: results.remainingData.byML,
+                    entities: this.props.moneyLocationTypes,
+                    expandedByDefault: true
                 })}
 
                 {this.renderCategory({
-                    backgroundColor: balanceBg,
+                    backgroundColor: colors.green500,
                     title: 'Balance by user',
-                    summaryObject: remainingData.byUser,
+                    summaryObject: results.remainingData.byUser,
+                    entities: this.props.user.get('list'),
+                    entityNameField: 'full_name'
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.purple500,
+                    title: 'Expenses by category',
+                    summaryObject: results.expensesByCategory,
+                    entities: this.props.categories,
+                    entityNameField: 'name'
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.red500,
+                    title: 'Expenses by location',
+                    summaryObject: results.expensesData.byML,
+                    entities: this.props.moneyLocations,
+                    entityNameField: 'name'
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.red500,
+                    title: 'Expenses by user',
+                    summaryObject: results.expensesData.byUser,
+                    entities: this.props.user.get('list'),
+                    entityNameField: 'full_name'
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.lime900,
+                    title: 'Incomes by location',
+                    summaryObject: results.incomesData.byML,
+                    entities: this.props.moneyLocations,
+                    entityNameField: 'full_name'
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.lime900,
+                    title: 'Incomes by user',
+                    summaryObject: results.incomesData.byUser,
                     entities: this.props.user.get('list'),
                     entityNameField: 'full_name'
                 })}
@@ -161,16 +145,20 @@ class Summary extends React.PureComponent<TypeProps> {
         return (
             <div style={{
                 padding: '0 5px',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                height: `calc(100vh - ${Sizes.HEADER_SIZE})`
             }}>
                 <div style={this.state.refreshing ? greyedOut : {}}>
-                    <Row>
-                        <Col push={{xs: 1}} xs={10}>
-                            <IncludeDropdown
-                                value={this.state.include}
-                                onChange={this.onIncludeChange}
-                            />
-                        </Col>
-                    </Row>
+                    <Paper style={{
+                        margin: '5px 0',
+                        padding: '0 10px'
+                    }}>
+                        <IncludeDropdown
+                            value={this.state.include}
+                            onChange={this.onIncludeChange}
+                        />
+                    </Paper>
                     {this.state.results && this.renderResults()}
                 </div>
             </div>
