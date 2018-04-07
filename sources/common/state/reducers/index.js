@@ -4,6 +4,7 @@ import {uniqueId} from 'lodash';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import {combineReducers} from 'redux';
 import {getInitialEndDate} from 'common/utils/dates';
+import {PREFERENCE_END_DATE, setPreference} from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
 
@@ -53,9 +54,15 @@ const loading = (state = true, action) => {
     return state;
 };
 
-const endDate = (state = getInitialEndDate(), action) => (
-    action.type === Actions.SET_END_DATE ? action.value : state
-);
+const endDate = (state = getInitialEndDate(), action) => {
+    if (action.type === Actions.SET_END_DATE) {
+        setPreference(PREFERENCE_END_DATE, action.value);
+        
+        return action.value;
+    }
+    
+    return state;
+};
 
 const title = bindToUpdateState('title', 'Loading...');
 const ui = bindToUpdateState('ui', null);

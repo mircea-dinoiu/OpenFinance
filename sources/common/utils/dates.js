@@ -1,5 +1,6 @@
 // @flow
 import moment from 'moment';
+import {getPreference, PREFERENCE_END_DATE} from 'common/utils/preferences';
 
 export function getStartDate({endDate, include}: {endDate: string, include: string}): string {
     let date = moment(endDate).toDate();
@@ -39,5 +40,7 @@ export function getInitialEndDate(): string {
     date.setDate(1);
     date.setMonth(date.getMonth() + 1);
 
-    return formatYMD(date);
+    const defaultDate = formatYMD(date);
+
+    return getPreference(PREFERENCE_END_DATE, defaultDate);
 }
