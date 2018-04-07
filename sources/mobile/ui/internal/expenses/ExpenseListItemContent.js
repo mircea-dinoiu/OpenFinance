@@ -76,7 +76,7 @@ const ExpenseListItemContent = (props) => {
                     {currencyISOCode}
                 </TableRowColumn>
                 <TableRowColumn style={ColumnStyles.AMOUNT}>
-                    {numericValue(item.sum)}
+                    {numericValue(item.sum, {showCurrency: false, currency: currencyISOCode})}
                 </TableRowColumn>
                 <TableRowColumn>
                     <span style={{float: 'left'}}>{flags}</span>

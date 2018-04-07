@@ -1,4 +1,5 @@
 import 'normalize.css';
+import 'react-tippy/dist/tippy.css'
 import './Responsive.css';
 import 'babel-polyfill';
 import injectTapEventPlugin from 'react-tap-event-plugin';
