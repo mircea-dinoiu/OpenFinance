@@ -13,6 +13,7 @@ const enableSourceMaps = isProduction === false;
 
 module.exports = {
     devtool: isProduction ? false : 'cheap-source-map',
+    mode: isProduction ? 'production' : 'development',
     entry: {
         'bundles/Responsive': path.resolve('sources/mobile/index.js'),
         'bundles/Desktop': path.resolve('sources/desktop/Desktop.js'),
@@ -53,8 +54,6 @@ module.exports = {
         isProduction && new webpack.LoaderOptionsPlugin({
             minimize: true
         }),
-        new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify(env)}}),
-        isProduction && new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, sourceMap: false}),
         isProduction && new CompressionPlugin({
             algorithm: 'gzip'
         }),

@@ -3,7 +3,9 @@
     ["env", {
       "targets": {
         "browsers": [
-          "last 1 versions"
+          "last 1 chrome version",
+          "last 1 safari version",
+          "last 1 firefox version"
         ]
       },
       "modules": false,
