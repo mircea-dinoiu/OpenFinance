@@ -83,6 +83,10 @@ class SummaryCategory extends PureComponent {
         this.setState({expanded: expanded});
     };
 
+    static defaultProps = {
+        showSumInHeader: true,
+    };
+
     render() {
         const {
             backgroundColor,
@@ -91,7 +95,8 @@ class SummaryCategory extends PureComponent {
             expandedByDefault,
             entities,
             entityIdField = 'id',
-            entityNameField = 'name'
+            entityNameField = 'name',
+            showSumInHeader,
         } = this.props;
         const headerColor = 'rgba(255, 255, 255, 0.9)';
         const shouldGroup = summaryObject.every(each => each.hasOwnProperty('group'));
@@ -109,9 +114,11 @@ class SummaryCategory extends PureComponent {
                 >
                     <div style={{color: headerColor}}>
                         {title}
-                        <div style={{fontSize: '12px'}}>
-                            {this.numericValue(summaryObject.reduce((acc, each) => acc + each.sum, 0), {currencyStyle: {color: headerColor}})}
-                        </div>
+                        {showSumInHeader && (
+                            <div style={{fontSize: '12px'}}>
+                                {this.numericValue(summaryObject.reduce((acc, each) => acc + each.sum, 0), {currencyStyle: {color: headerColor}})}
+                            </div>
+                        )}
                     </div>
                 </CardHeader>
 

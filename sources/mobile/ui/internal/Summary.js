@@ -14,6 +14,7 @@ import {getStartDate, formatYMD} from 'common/utils/dates';
 import {greyedOut} from 'common/defs/styles';
 import {Sizes} from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
+import {getPreference, PREFERENCE_INCLUDE_RESULTS, setPreference} from 'common/utils/preferences';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -24,7 +25,7 @@ class Summary extends React.PureComponent<TypeProps> {
         firstLoad: true,
         results: null,
         refreshing: false,
-        include: 'ut'
+        include: getPreference(PREFERENCE_INCLUDE_RESULTS, 'ut'),
     };
 
     componentDidMount() {
@@ -95,7 +96,8 @@ class Summary extends React.PureComponent<TypeProps> {
                     title: 'Expenses by category',
                     summaryObject: results.expensesByCategory,
                     entities: this.props.categories,
-                    entityNameField: 'name'
+                    entityNameField: 'name',
+                    showSumInHeader: false,
                 })}
 
                 {this.renderCategory({
@@ -116,7 +118,7 @@ class Summary extends React.PureComponent<TypeProps> {
 
                 {this.renderCategory({
                     backgroundColor: colors.lime900,
-                    title: 'Incomes by location',
+                    title: 'Income by location',
                     summaryObject: results.incomesData.byML,
                     entities: this.props.moneyLocations,
                     entityNameField: 'full_name'
@@ -124,7 +126,7 @@ class Summary extends React.PureComponent<TypeProps> {
 
                 {this.renderCategory({
                     backgroundColor: colors.lime900,
-                    title: 'Incomes by user',
+                    title: 'Income by user',
                     summaryObject: results.incomesData.byUser,
                     entities: this.props.user.get('list'),
                     entityNameField: 'full_name'
@@ -135,6 +137,8 @@ class Summary extends React.PureComponent<TypeProps> {
 
     onIncludeChange = (include) => {
         this.setState({include}, this.load);
+
+        setPreference(PREFERENCE_INCLUDE_RESULTS, include);
     };
 
     render() {
