@@ -104,7 +104,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     backgroundColor: colors.red500,
                     title: 'Expenses by location',
                     summaryObject: results.expensesData.byML,
-                    entities: this.props.moneyLocations,
+                    entities: this.props.moneyLocationTypes,
                     entityNameField: 'name'
                 })}
 
@@ -120,8 +120,8 @@ class Summary extends React.PureComponent<TypeProps> {
                     backgroundColor: colors.lime900,
                     title: 'Income by location',
                     summaryObject: results.incomesData.byML,
-                    entities: this.props.moneyLocations,
-                    entityNameField: 'full_name'
+                    entities: this.props.moneyLocationTypes,
+                    entityNameField: 'name'
                 })}
 
                 {this.renderCategory({

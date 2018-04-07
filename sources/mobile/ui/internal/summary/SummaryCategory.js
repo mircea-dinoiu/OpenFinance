@@ -1,6 +1,6 @@
 // @flow
 import React, {PureComponent} from 'react';
-import {groupBy} from 'lodash';
+import {groupBy, sortBy} from 'lodash';
 import {
     Card, CardHeader, CardText, Table, TableBody, TableRow, TableRowColumn,
 } from 'material-ui';
@@ -26,7 +26,7 @@ class SummarySubCategory extends PureComponent {
 
         return (
             <React.Fragment>
-                {shouldGroup && (
+                {shouldGroup &&  (
                     <CardHeader
                         style={{
                             paddingTop: 0,
@@ -87,6 +87,14 @@ class SummaryCategory extends PureComponent {
         showSumInHeader: true,
     };
 
+    groupSorter = ([id, items]) => {
+        if (items.length && items[0].hasOwnProperty('index')) {
+            return items[0].index;
+        }
+
+        return id;
+    };
+
     render() {
         const {
             backgroundColor,
@@ -99,7 +107,6 @@ class SummaryCategory extends PureComponent {
             showSumInHeader,
         } = this.props;
         const headerColor = 'rgba(255, 255, 255, 0.9)';
-        const shouldGroup = summaryObject.every(each => each.hasOwnProperty('group'));
 
         return (
             <Card
@@ -123,19 +130,23 @@ class SummaryCategory extends PureComponent {
                 </CardHeader>
 
                 <CardText style={{padding: '0 5px'}} expandable={true}>
-                    {Object.entries(groupBy(summaryObject, 'group')).map(([id, items]) => (
-                        <SummarySubCategory
-                            key={id}
-                            shouldGroup={shouldGroup}
-                            id={id}
-                            items={items}
-                            numericValueFn={this.numericValue}
-                            entities={entities}
-                            entityIdField={entityIdField}
-                            entityNameField={entityNameField}
-                            expandedByDefault={expandedByDefault}
-                        />
-                    ))}
+                    {sortBy(Object.entries(groupBy(summaryObject, 'group')), this.groupSorter).map(([id, items]) => {
+                        const shouldGroup = items.every(each => each.hasOwnProperty('group'));
+
+                        return (
+                            <SummarySubCategory
+                                key={id}
+                                shouldGroup={shouldGroup}
+                                id={id}
+                                items={items}
+                                numericValueFn={this.numericValue}
+                                entities={entities}
+                                entityIdField={entityIdField}
+                                entityNameField={entityNameField}
+                                expandedByDefault={expandedByDefault}
+                            />
+                        )
+                    })}
                 </CardText>
             </Card>
         );

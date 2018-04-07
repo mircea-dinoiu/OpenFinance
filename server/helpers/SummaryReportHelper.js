@@ -57,7 +57,8 @@ module.exports = {
                 sum: mls[id],
                 description: this.description(name, {html}),
                 reference: id,
-                group: group
+                group: group,
+                index: id,
             });
         };
 
