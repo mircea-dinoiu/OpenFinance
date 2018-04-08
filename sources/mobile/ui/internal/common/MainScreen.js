@@ -18,7 +18,7 @@ class MainScreen extends PureComponent {
     renderList() {
         const List = this.props.listComponent;
 
-        return <List newRecord={this.state.newRecord}/>;
+        return <List newRecord={this.state.newRecord} />;
     }
 
     render() {
@@ -30,12 +30,14 @@ class MainScreen extends PureComponent {
 
         return (
             <Tabs>
-                <Tab icon={<AddIcon/>}>
-                    <Creator onReceiveNewRecord={newRecord => this.setState({newRecord})}/>
+                <Tab icon={<AddIcon />}>
+                    <Creator
+                        onReceiveNewRecord={(newRecord) =>
+                            this.setState({newRecord})
+                        }
+                    />
                 </Tab>
-                <Tab icon={<ViewListIcon/>}>
-                    {this.renderList()}
-                </Tab>
+                <Tab icon={<ViewListIcon />}>{this.renderList()}</Tab>
             </Tabs>
         );
     }

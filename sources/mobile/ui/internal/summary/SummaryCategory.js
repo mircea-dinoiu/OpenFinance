@@ -2,7 +2,13 @@
 import React, {PureComponent} from 'react';
 import {groupBy, sortBy} from 'lodash';
 import {
-    Card, CardHeader, CardText, Table, TableBody, TableRow, TableRowColumn,
+    Card,
+    CardHeader,
+    CardText,
+    Table,
+    TableBody,
+    TableRow,
+    TableRowColumn
 } from 'material-ui';
 import {numericValue} from 'mobile/ui/formatters';
 import {connect} from 'react-redux';
@@ -12,17 +18,22 @@ import {Col, Row} from 'react-grid-system';
 
 class SummarySubCategory extends PureComponent {
     state = {
-        expanded: Boolean(this.props.expandedByDefault),
+        expanded: Boolean(this.props.expandedByDefault)
     };
 
-    numericValue = (...args) => {
-        return this.props.numericValueFn(...args);
-    };
+    numericValue = (...args) => this.props.numericValueFn(...args);
 
     toggleExpanded = () => this.setState({expanded: !this.state.expanded});
 
     render() {
-        const {shouldGroup, entities, id, entityIdField, entityNameField, items} = this.props;
+        const {
+            shouldGroup,
+            entities,
+            id,
+            entityIdField,
+            entityNameField,
+            items
+        } = this.props;
 
         return (
             <React.Fragment>
@@ -38,15 +49,31 @@ class SummarySubCategory extends PureComponent {
                     >
                         <Row>
                             <Col xs={11}>
-                            {id == 0 ? <em>Unclassified</em> : entities.find(each => each.get(entityIdField) == id).get(entityNameField)}
-                            <div style={{fontSize: '10px'}}>
-                                {this.numericValue(
-                                    items.reduce((acc, each) => acc + each.sum, 0)
+                                {id == 0 ? (
+                                    <em>Unclassified</em>
+                                ) : (
+                                    entities
+                                        .find(
+                                            (each) =>
+                                                each.get(entityIdField) == id
+                                        )
+                                        .get(entityNameField)
                                 )}
-                            </div>
+                                <div style={{fontSize: '10px'}}>
+                                    {this.numericValue(
+                                        items.reduce(
+                                            (acc, each) => acc + each.sum,
+                                            0
+                                        )
+                                    )}
+                                </div>
                             </Col>
                             <Col xs={1}>
-                                {this.state.expanded ? <Collapse/> : <Expand/>}
+                                {this.state.expanded ? (
+                                    <Collapse />
+                                ) : (
+                                    <Expand />
+                                )}
                             </Col>
                         </Row>
                     </CardHeader>
@@ -55,9 +82,19 @@ class SummarySubCategory extends PureComponent {
                     <Table>
                         <TableBody displayRowCheckbox={false}>
                             {items.map((each, index) => (
-                                <TableRow selectable={false} key={index} style={{marginBottom: 5}}>
-                                    <TableRowColumn>{each.description}</TableRowColumn>
-                                    <TableRowColumn style={{textAlign: 'right'}}>{this.numericValue(each.sum)}</TableRowColumn>
+                                <TableRow
+                                    selectable={false}
+                                    key={index}
+                                    style={{marginBottom: 5}}
+                                >
+                                    <TableRowColumn>
+                                        {each.description}
+                                    </TableRowColumn>
+                                    <TableRowColumn
+                                        style={{textAlign: 'right'}}
+                                    >
+                                        {this.numericValue(each.sum)}
+                                    </TableRowColumn>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -70,11 +107,15 @@ class SummarySubCategory extends PureComponent {
 
 class SummaryCategory extends PureComponent {
     state = {
-        expanded: Boolean(this.props.expandedByDefault),
+        expanded: Boolean(this.props.expandedByDefault)
     };
 
     numericValue = (value, opts = {}) => {
-        const currency = this.props.currencies.getIn(['map', String(this.props.currencies.get('default')), 'iso_code']);
+        const currency = this.props.currencies.getIn([
+            'map',
+            String(this.props.currencies.get('default')),
+            'iso_code'
+        ]);
 
         return numericValue(value, {...opts, currency});
     };
@@ -84,7 +125,7 @@ class SummaryCategory extends PureComponent {
     };
 
     static defaultProps = {
-        showSumInHeader: true,
+        showSumInHeader: true
     };
 
     groupSorter = ([id, items]) => {
@@ -104,7 +145,7 @@ class SummaryCategory extends PureComponent {
             entities,
             entityIdField = 'id',
             entityNameField = 'name',
-            showSumInHeader,
+            showSumInHeader
         } = this.props;
         const headerColor = 'rgba(255, 255, 255, 0.9)';
 
@@ -123,15 +164,26 @@ class SummaryCategory extends PureComponent {
                         {title}
                         {showSumInHeader && (
                             <div style={{fontSize: '12px'}}>
-                                {this.numericValue(summaryObject.reduce((acc, each) => acc + each.sum, 0), {currencyStyle: {color: headerColor}})}
+                                {this.numericValue(
+                                    summaryObject.reduce(
+                                        (acc, each) => acc + each.sum,
+                                        0
+                                    ),
+                                    {currencyStyle: {color: headerColor}}
+                                )}
                             </div>
                         )}
                     </div>
                 </CardHeader>
 
                 <CardText style={{padding: '0 5px'}} expandable={true}>
-                    {sortBy(Object.entries(groupBy(summaryObject, 'group')), this.groupSorter).map(([id, items]) => {
-                        const shouldGroup = items.every(each => each.hasOwnProperty('group'));
+                    {sortBy(
+                        Object.entries(groupBy(summaryObject, 'group')),
+                        this.groupSorter
+                    ).map(([id, items]) => {
+                        const shouldGroup = items.every((each) =>
+                            each.hasOwnProperty('group')
+                        );
 
                         return (
                             <SummarySubCategory

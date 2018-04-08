@@ -8,23 +8,21 @@ import {PREFERENCE_END_DATE, setPreference} from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
 
-const screen = (state = getScreenQueries(), action) => {
-    return action.type === Actions.SET_SCREEN ? action.value : state;
-};
+const screen = (state = getScreenQueries(), action) => action.type === Actions.SET_SCREEN ? action.value : state;
 
-const refreshWidgets = (state = uniqueId(), action) => {
-    return action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
-};
+const refreshWidgets = (state = uniqueId(), action) => action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
 
 const bindToUpdateState = (prop, defaultValue) => {
     stateKeysWithoutReducers.push(prop);
 
     return (state = defaultValue, action) => {
         if (action.type === Actions.UPDATE_STATE) {
-            Object.keys(action.state).forEach(key => {
+            Object.keys(action.state).forEach((key) => {
                 if (!stateKeysWithoutReducers.includes(key)) {
                     throw new Error(
-                        `${key} has its own reducer. Please use action ${Actions.UPDATE_STATE} only for ${stateKeysWithoutReducers.join(', ')}`
+                        `${key} has its own reducer. Please use action ${
+                            Actions.UPDATE_STATE
+                        } only for ${stateKeysWithoutReducers.join(', ')}`
                     );
                 }
             });
@@ -38,9 +36,8 @@ const bindToUpdateState = (prop, defaultValue) => {
     };
 };
 
-const user = (state = null, action) => (
-    action.type === Actions.UPDATE_USER ? fromJS(action.user) : state
-);
+const user = (state = null, action) =>
+    action.type === Actions.UPDATE_USER ? fromJS(action.user) : state;
 
 const loading = (state = true, action) => {
     if (action.type === Actions.LOADING_ENABLE) {
@@ -57,10 +54,10 @@ const loading = (state = true, action) => {
 const endDate = (state = getInitialEndDate(), action) => {
     if (action.type === Actions.SET_END_DATE) {
         setPreference(PREFERENCE_END_DATE, action.value);
-        
+
         return action.value;
     }
-    
+
     return state;
 };
 
@@ -84,5 +81,5 @@ export const reducer = combineReducers({
     currencies,
     categories,
     moneyLocations,
-    moneyLocationTypes,
+    moneyLocationTypes
 });

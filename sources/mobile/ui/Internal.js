@@ -1,7 +1,10 @@
 // @flow
 import React, {PureComponent} from 'react';
 import {Paper, Tab, Tabs} from 'material-ui';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import {
+    BottomNavigation,
+    BottomNavigationItem
+} from 'material-ui/BottomNavigation';
 
 import Expenses from './internal/Expenses';
 import Incomes from './internal/Incomes';
@@ -16,7 +19,7 @@ import {Col, Row} from 'react-grid-system';
 import {flexColumn} from 'common/defs/styles';
 
 type TypeProps = {
-    screen: TypeScreenQueries,
+    screen: TypeScreenQueries
 };
 
 type TypeState = {
@@ -30,22 +33,17 @@ class Internal extends PureComponent<TypeProps, TypeState> {
         tab: null
     };
 
-    select = (index) => this.setState({selectedIndex: index, tab: this.createTab(index)});
+    select = (index) =>
+        this.setState({selectedIndex: index, tab: this.createTab(index)});
 
     createTab(index) {
         switch (index) {
             case 0:
-                return (
-                    <Summary/>
-                );
+                return <Summary />;
             case 1:
-                return (
-                    <Expenses/>
-                );
+                return <Expenses />;
             case 2:
-                return (
-                    <Incomes/>
-                );
+                return <Incomes />;
         }
     }
 
@@ -57,22 +55,19 @@ class Internal extends PureComponent<TypeProps, TypeState> {
         return (
             <Row nogutter>
                 <Col xs={2} style={{paddingRight: 0}}>
-                    <Summary/>
+                    <Summary />
                 </Col>
                 <Col xs={10} style={{paddingLeft: 0}}>
                     <Tabs>
                         <Tab label="Expenses">
-                            <Expenses/>
+                            <Expenses />
                         </Tab>
                         <Tab label="Incomes">
-                            <Incomes/>
+                            <Incomes />
                         </Tab>
-                        <Tab label="Categories">
-                        </Tab>
-                        <Tab label="Accounts">
-                        </Tab>
-                        <Tab label="Account Types">
-                        </Tab>
+                        <Tab label="Categories" />
+                        <Tab label="Accounts" />
+                        <Tab label="Account Types" />
                     </Tabs>
                 </Col>
             </Row>
@@ -81,25 +76,35 @@ class Internal extends PureComponent<TypeProps, TypeState> {
 
     renderMediumDown() {
         return (
-            <div style={{
-                paddingBottom: '56px'
-            }}>
+            <div
+                style={{
+                    paddingBottom: '56px'
+                }}
+            >
                 {this.state.tab}
-                <Paper zDepth={1} style={{position: 'fixed', bottom: 0, zIndex: 1, width: '100%'}}>
+                <Paper
+                    zDepth={1}
+                    style={{
+                        position: 'fixed',
+                        bottom: 0,
+                        zIndex: 1,
+                        width: '100%'
+                    }}
+                >
                     <BottomNavigation selectedIndex={this.state.selectedIndex}>
                         <BottomNavigationItem
                             label="Summary"
-                            icon={<AccountBalance/>}
+                            icon={<AccountBalance />}
                             onTouchTap={() => this.select(0)}
                         />
                         <BottomNavigationItem
                             label="Expenses"
-                            icon={<TrendingDown/>}
+                            icon={<TrendingDown />}
                             onTouchTap={() => this.select(1)}
                         />
                         <BottomNavigationItem
                             label="Incomes"
-                            icon={<TrendingUp/>}
+                            icon={<TrendingUp />}
                             onTouchTap={() => this.select(2)}
                         />
                     </BottomNavigation>
@@ -111,7 +116,9 @@ class Internal extends PureComponent<TypeProps, TypeState> {
     render() {
         return (
             <div style={flexColumn}>
-                {this.props.screen.isLarge ? this.renderLarge() : this.renderMediumDown()}
+                {this.props.screen.isLarge
+                    ? this.renderLarge()
+                    : this.renderMediumDown()}
             </div>
         );
     }

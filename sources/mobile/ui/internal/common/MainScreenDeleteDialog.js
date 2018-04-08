@@ -2,7 +2,13 @@ import React from 'react';
 
 import {Dialog, RaisedButton} from 'material-ui';
 
-const MainScreenDeleteDialog = ({open, entityName, onYes, onNo, ...props}) => {
+const MainScreenDeleteDialog = ({
+    open,
+    entityName,
+    onYes,
+    onNo,
+    ...props
+}) => {
     const actions = [
         <RaisedButton
             label="Yes"
@@ -10,11 +16,7 @@ const MainScreenDeleteDialog = ({open, entityName, onYes, onNo, ...props}) => {
             onTouchTap={onYes}
             style={{marginRight: 5}}
         />,
-        <RaisedButton
-            label="No"
-            primary={true}
-            onTouchTap={onNo}
-        />
+        <RaisedButton label="No" primary={true} onTouchTap={onNo} />
     ];
 
     return (

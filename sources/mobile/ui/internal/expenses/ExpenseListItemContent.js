@@ -16,48 +16,72 @@ const ExpenseListItemContent = (props) => {
     const item = props.item;
     const userList = props.data.user.get('list');
     const currenciesMap = props.data.currencies.get('map');
-    const currencyISOCode = currenciesMap.getIn([String(item.currency_id), 'iso_code']);
+    const currencyISOCode = currenciesMap.getIn([
+        String(item.currency_id),
+        'iso_code'
+    ]);
     const screen = props.screen;
 
     const personsDisplay = userList.map(
-        each => item.users.includes(each.get('id')) ? (
-            <Avatar key={each.get('id')} src={each.get('avatar')} size={20} style={{marginLeft: 5}}/>
-        ) : null
+        (each) =>
+            item.users.includes(each.get('id')) ? (
+                <Avatar
+                    key={each.get('id')}
+                    src={each.get('avatar')}
+                    size={20}
+                    style={{marginLeft: 5}}
+                />
+            ) : null
     );
     const descriptionDisplay = item.item;
-    const flags = <Flags entity="expense" item={item}/>;
-    const accountDisplay = (
-        item.money_location_id && (
-            <span style={{fontSize: 14, color: grey700}}>{props.data.moneyLocations.find(each => each.get('id') === item.money_location_id).get('name')}</span>
-        )
+    const flags = <Flags entity="expense" item={item} />;
+    const accountDisplay = item.money_location_id && (
+        <span style={{fontSize: 14, color: grey700}}>
+            {props.data.moneyLocations
+                .find((each) => each.get('id') === item.money_location_id)
+                .get('name')}
+        </span>
     );
     const categoriesDisplay = (
-        <div style={{
-            display: 'flex',
-            flexWrap: 'wrap'
-        }}>
-            {props.data.categories.map(each => item.categories.includes(each.get('id')) ? (
-                <Chip
-                    key={each.get('id')}
-                    style={{margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`}}
-                >
-                    {each.get('name')}
-                </Chip>
-            ) : null)}
+        <div
+            style={{
+                display: 'flex',
+                flexWrap: 'wrap'
+            }}
+        >
+            {props.data.categories.map(
+                (each) =>
+                    item.categories.includes(each.get('id')) ? (
+                        <Chip
+                            key={each.get('id')}
+                            style={{
+                                margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`
+                            }}
+                        >
+                            {each.get('name')}
+                        </Chip>
+                    ) : null
+            )}
         </div>
     );
-    const dateDisplay = <span style={{
-        fontSize: 14,
-        color: screen.isLarge ? 'inherit' : grey500,
-    }}>{moment(item.created_at).format('lll')}</span>;
-    const repeatsText = item.repeat ? RepeatOptions.filter(each => each[0] === item.repeat)[0][1] : '';
+    const dateDisplay = (
+        <span
+            style={{
+                fontSize: 14,
+                color: screen.isLarge ? 'inherit' : grey500
+            }}
+        >
+            {moment(item.created_at).format('lll')}
+        </span>
+    );
+    const repeatsText = item.repeat
+        ? RepeatOptions.filter((each) => each[0] === item.repeat)[0][1]
+        : '';
     const repeatsDisplay = (
         <span style={{fontSize: 14, color: grey500}}>
-            {screen.isLarge ? (
-                repeatsText
-            ) : (
-                repeatsText ? `Repeats ${repeatsText}` : 'Does not repeat'
-            )}
+            {screen.isLarge
+                ? repeatsText
+                : repeatsText ? `Repeats ${repeatsText}` : 'Does not repeat'}
         </span>
     );
 
@@ -68,21 +92,31 @@ const ExpenseListItemContent = (props) => {
                     {currencyISOCode}
                 </TableRowColumn>
                 <TableRowColumn style={ColumnStyles.AMOUNT}>
-                    {numericValue(item.sum, {showCurrency: false, currency: currencyISOCode})}
+                    {numericValue(item.sum, {
+                        showCurrency: false,
+                        currency: currencyISOCode
+                    })}
                 </TableRowColumn>
                 <TableRowColumn>
                     <span style={{float: 'left'}}>{flags}</span>
                     &nbsp;
-                    <span style={{fontSize: 14, float: 'left', lineHeight: '20px'}}>
+                    <span
+                        style={{
+                            fontSize: 14,
+                            float: 'left',
+                            lineHeight: '20px'
+                        }}
+                    >
                         {descriptionDisplay}
                     </span>
                 </TableRowColumn>
-                <TableRowColumn className="msl__date-column" style={ColumnStyles.DATE_TIME}>
+                <TableRowColumn
+                    className="msl__date-column"
+                    style={ColumnStyles.DATE_TIME}
+                >
                     {dateDisplay}
                 </TableRowColumn>
-                <TableRowColumn>
-                    {categoriesDisplay}
-                </TableRowColumn>
+                <TableRowColumn>{categoriesDisplay}</TableRowColumn>
                 <TableRowColumn style={ColumnStyles.ACCOUNT}>
                     {accountDisplay}
                 </TableRowColumn>
@@ -95,7 +129,7 @@ const ExpenseListItemContent = (props) => {
             </React.Fragment>
         );
     }
-    
+
     return (
         <div>
             <Row>
@@ -106,7 +140,13 @@ const ExpenseListItemContent = (props) => {
             </Row>
             <Row>
                 <Col xs={6}>
-                    <span style={{fontSize: 14, float: 'left', lineHeight: '20px'}}>
+                    <span
+                        style={{
+                            fontSize: 14,
+                            float: 'left',
+                            lineHeight: '20px'
+                        }}
+                    >
                         {numericValue(item.sum, {currency: currencyISOCode})}
                     </span>
                     &nbsp;
@@ -120,7 +160,9 @@ const ExpenseListItemContent = (props) => {
                 <div>
                     <Row>
                         <Col xs={6}>{dateDisplay}</Col>
-                        <Col xs={6} style={{textAlign: 'right'}}>{repeatsDisplay}</Col>
+                        <Col xs={6} style={{textAlign: 'right'}}>
+                            {repeatsDisplay}
+                        </Col>
                     </Row>
                     {categoriesDisplay}
                 </div>
@@ -129,4 +171,9 @@ const ExpenseListItemContent = (props) => {
     );
 };
 
-export default connect(({user, categories, currencies, moneyLocations, screen}) => ({screen, data: {user, categories, currencies, moneyLocations}}))(ExpenseListItemContent);
+export default connect(
+    ({user, categories, currencies, moneyLocations, screen}) => ({
+        screen,
+        data: {user, categories, currencies, moneyLocations}
+    })
+)(ExpenseListItemContent);

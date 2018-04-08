@@ -1,8 +1,6 @@
 import React from 'react';
 import {BigLoader} from '../components/loaders';
-import {
-    Paper
-} from 'material-ui';
+import {Paper} from 'material-ui';
 import * as colors from 'material-ui/styles/colors';
 import routes from '../../../common/defs/routes';
 import {stringify} from 'query-string';
@@ -14,10 +12,14 @@ import {getStartDate, formatYMD} from 'common/utils/dates';
 import {greyedOut} from 'common/defs/styles';
 import {Sizes} from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
-import {getPreference, PREFERENCE_INCLUDE_RESULTS, setPreference} from 'common/utils/preferences';
+import {
+    getPreference,
+    PREFERENCE_INCLUDE_RESULTS,
+    setPreference
+} from 'common/utils/preferences';
 
 type TypeProps = {
-    screen: TypeScreenQueries,
+    screen: TypeScreenQueries
 };
 
 class Summary extends React.PureComponent<TypeProps> {
@@ -25,7 +27,7 @@ class Summary extends React.PureComponent<TypeProps> {
         firstLoad: true,
         results: null,
         refreshing: false,
-        include: getPreference(PREFERENCE_INCLUDE_RESULTS, 'ut'),
+        include: getPreference(PREFERENCE_INCLUDE_RESULTS, 'ut')
     };
 
     componentDidMount() {
@@ -44,25 +46,31 @@ class Summary extends React.PureComponent<TypeProps> {
 
     load = async ({endDate = this.props.endDate} = {}) => {
         this.setState({
-            refreshing: true,
+            refreshing: true
         });
 
-        const response = await fetch(`${routes.report.summary}?${stringify({
-            ...pickBy({
-                end_date: this.state.include === 'ut' ? formatYMD() : endDate,
-                start_date: getStartDate({
-                    include: this.state.include,
-                    endDate,
-                }),
-            }, identity),
-            html: false
-        })}`);
+        const response = await fetch(
+            `${routes.report.summary}?${stringify({
+                ...pickBy(
+                    {
+                        end_date:
+                            this.state.include === 'ut' ? formatYMD() : endDate,
+                        start_date: getStartDate({
+                            include: this.state.include,
+                            endDate
+                        })
+                    },
+                    identity
+                ),
+                html: false
+            })}`
+        );
         const json = await response.json();
 
         this.setState({
             results: json,
             firstLoad: false,
-            refreshing: false,
+            refreshing: false
         });
     };
 
@@ -97,7 +105,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     summaryObject: results.expensesByCategory,
                     entities: this.props.categories,
                     entityNameField: 'name',
-                    showSumInHeader: false,
+                    showSumInHeader: false
                 })}
 
                 {this.renderCategory({
@@ -143,21 +151,25 @@ class Summary extends React.PureComponent<TypeProps> {
 
     render() {
         if (this.state.firstLoad) {
-            return <BigLoader/>;
+            return <BigLoader />;
         }
 
         return (
-            <div style={{
-                padding: '0 5px',
-                overflowY: 'auto',
-                overflowX: 'hidden',
-                height: `calc(100vh - ${Sizes.HEADER_SIZE})`
-            }}>
+            <div
+                style={{
+                    padding: '0 5px',
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                    height: `calc(100vh - ${Sizes.HEADER_SIZE})`
+                }}
+            >
                 <div style={this.state.refreshing ? greyedOut : {}}>
-                    <Paper style={{
-                        margin: '5px 0',
-                        padding: '0 10px'
-                    }}>
+                    <Paper
+                        style={{
+                            margin: '5px 0',
+                            padding: '0 10px'
+                        }}
+                    >
                         <IncludeDropdown
                             value={this.state.include}
                             onChange={this.onIncludeChange}
@@ -170,4 +182,4 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 }
 
-export default connect(state => state)(Summary);
+export default connect((state) => state)(Summary);

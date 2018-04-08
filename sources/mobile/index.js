@@ -11,12 +11,17 @@ import thunk from 'redux-thunk';
 const store = createStore(
     reducer,
     {},
-    compose(applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : noop => noop)
+    compose(
+        applyMiddleware(thunk),
+        window.__REDUX_DEVTOOLS_EXTENSION__
+            ? window.__REDUX_DEVTOOLS_EXTENSION__()
+            : (noop) => noop
+    )
 );
 
 render(
     <Provider store={store}>
-        <Responsive/>
+        <Responsive />
     </Provider>,
     document.getElementById('root')
 );

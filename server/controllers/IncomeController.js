@@ -17,7 +17,7 @@ module.exports = BaseController.extend({
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
         created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
+        currency_id: ['sometimes', 'isRequired', ['isId', Currency]]
     },
 
     createValidationRules: {
@@ -27,19 +27,16 @@ module.exports = BaseController.extend({
         repeat: ['sometimes', 'isRepeatValue'],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
+        currency_id: ['sometimes', 'isRequired', ['isId', Currency]]
     },
 
     sanitizeUpdateValues(record) {
-        const values = pickOwnProperties(
-            record,
-            [
-                'sum',
-                'description',
-                'user_id',
-                'money_location_id',
-            ]
-        );
+        const values = pickOwnProperties(record, [
+            'sum',
+            'description',
+            'user_id',
+            'money_location_id'
+        ]);
 
         if (record.hasOwnProperty('repeat')) {
             values.repeat = record.repeat;
@@ -57,7 +54,10 @@ module.exports = BaseController.extend({
             values.currency_id = record.currency_id;
         }
 
-        if (record.hasOwnProperty('status') && !values.hasOwnProperty('repeat')) {
+        if (
+            record.hasOwnProperty('status') &&
+            !values.hasOwnProperty('repeat')
+        ) {
             values.status = record.status;
 
             if (values.status === 'finished') {
@@ -74,7 +74,7 @@ module.exports = BaseController.extend({
             'description',
             'user_id',
             'repeat',
-            'money_location_id',
+            'money_location_id'
         ]);
 
         values.status = 'pending';
@@ -97,10 +97,13 @@ module.exports = BaseController.extend({
     parseRecord(record) {
         const workingRecord = Object.assign({}, record);
 
-        if (workingRecord.hasOwnProperty('money_location_id') && workingRecord.money_location_id == 0) {
+        if (
+            workingRecord.hasOwnProperty('money_location_id') &&
+            workingRecord.money_location_id == 0
+        ) {
             workingRecord.money_location_id = null;
         }
 
         return workingRecord;
-    },
+    }
 });

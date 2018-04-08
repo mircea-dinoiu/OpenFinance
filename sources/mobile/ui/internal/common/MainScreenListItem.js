@@ -17,9 +17,7 @@ import moment from 'moment';
 class ExpenseListItem extends PureComponent {
     props: {
         entityName: string,
-        editDialogProps: {
-
-        },
+        editDialogProps: {},
         contentComponent: any
     };
 
@@ -154,8 +152,16 @@ class ExpenseListItem extends PureComponent {
         );
         const menuItems = (
             <React.Fragment>
-                <MenuItem primaryText="Edit" leftIcon={<CreateIcon/>} onTouchTap={this.toggleEditDialog}/>
-                <MenuItem primaryText="Delete" leftIcon={<DeleteIcon/>} onTouchTap={this.toggleDeleteDialog}/>
+                <MenuItem
+                    primaryText="Edit"
+                    leftIcon={<CreateIcon />}
+                    onTouchTap={this.toggleEditDialog}
+                />
+                <MenuItem
+                    primaryText="Delete"
+                    leftIcon={<DeleteIcon />}
+                    onTouchTap={this.toggleDeleteDialog}
+                />
             </React.Fragment>
         );
 
@@ -173,34 +179,45 @@ class ExpenseListItem extends PureComponent {
             );
         }
 
-        return (
-            this.state.deleted ? (
-                    <ResponsiveListItem
-                        style={this.getStyle()}
-                        innerDivStyle={this.getInnerDivStyle()}
-                    >
-                        Deleted: <strong>{item[this.props.nameProperty]}</strong>
-                    </ResponsiveListItem>
-                ) : (
-                    <ResponsiveListItem onTouchTap={this.toggleDetails}
-                              style={this.getStyle()}
-                              innerDivStyle={this.getInnerDivStyle()}
-                              leftIcon={persist ? (
-                                  <IconMenu
-                                      iconButtonElement={<IconButton style={{padding: 0, width: 40}}><MoreVertIcon /></IconButton>}
-                                      anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                                      targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                                      style={{marginLeft: 0, left: 0}}
-                                      onTouchTap={event => event.stopPropagation()}
-                                  >
-                                      {menuItems}
-                                  </IconMenu>
-                              ) : null}
-                    >
-                        {dialogs}
-                        {itemContent}
-                    </ResponsiveListItem>
-                )
+        return this.state.deleted ? (
+            <ResponsiveListItem
+                style={this.getStyle()}
+                innerDivStyle={this.getInnerDivStyle()}
+            >
+                Deleted: <strong>{item[this.props.nameProperty]}</strong>
+            </ResponsiveListItem>
+        ) : (
+            <ResponsiveListItem
+                onTouchTap={this.toggleDetails}
+                style={this.getStyle()}
+                innerDivStyle={this.getInnerDivStyle()}
+                leftIcon={
+                    persist ? (
+                        <IconMenu
+                            iconButtonElement={
+                                <IconButton style={{padding: 0, width: 40}}>
+                                    <MoreVertIcon />
+                                </IconButton>
+                            }
+                            anchorOrigin={{
+                                horizontal: 'left',
+                                vertical: 'top'
+                            }}
+                            targetOrigin={{
+                                horizontal: 'left',
+                                vertical: 'top'
+                            }}
+                            style={{marginLeft: 0, left: 0}}
+                            onTouchTap={(event) => event.stopPropagation()}
+                        >
+                            {menuItems}
+                        </IconMenu>
+                    ) : null
+                }
+            >
+                {dialogs}
+                {itemContent}
+            </ResponsiveListItem>
         );
     }
 }

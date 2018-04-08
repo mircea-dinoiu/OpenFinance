@@ -18,7 +18,7 @@ module.exports = {
             end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
             filters: ['sometimes', 'isPlainObject'],
             page: ['sometimes', 'isInt'],
-            limit: ['sometimes', 'isInt'],
+            limit: ['sometimes', 'isInt']
         };
         const validator = new Validator(input, rules);
 
@@ -35,7 +35,7 @@ module.exports = {
             whereReplacements.push(input.end_date);
 
             if (input.filters) {
-                Object.keys(input.filters).forEach(key => {
+                Object.keys(input.filters).forEach((key) => {
                     const value = input.filters[key];
 
                     if (['status'].includes(key)) {
@@ -66,10 +66,10 @@ module.exports = {
                 })
             };
         }
-            
-return {
-                error: true,
-                json: validator.errors()
-            };
+
+        return {
+            error: true,
+            json: validator.errors()
+        };
     }
 };

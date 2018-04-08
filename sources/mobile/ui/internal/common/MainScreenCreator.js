@@ -46,7 +46,9 @@ class MainScreenCreator extends PureComponent {
 
         if (response.ok) {
             this.setState({
-                success: `The ${this.props.entityName} was successfully created`,
+                success: `The ${
+                    this.props.entityName
+                } was successfully created`,
                 createCount: this.state.createCount + 1,
                 saving: false
             });
@@ -71,15 +73,38 @@ class MainScreenCreator extends PureComponent {
             >
                 <Form
                     key={this.state.createCount}
-                    onFormChange={formData => this.formData = formData}
+                    onFormChange={(formData) => (this.formData = formData)}
                     initialValues={this.formDefaults}
                 />
-                <Col><RaisedButton disabled={this.state.saving} label={this.state.saving ? <ButtonProgress/> : 'Create'} primary={true} fullWidth={true} style={{margin: '20px 0 40px'}} onTouchTap={this.save}/></Col>
-                {this.state.error && <ErrorSnackbar key={Math.random()} message={this.state.error}/>}
-                {this.state.success && <SuccessSnackbar key={Math.random()} message={this.state.success}/>}
+                <Col>
+                    <RaisedButton
+                        disabled={this.state.saving}
+                        label={
+                            this.state.saving ? <ButtonProgress /> : 'Create'
+                        }
+                        primary={true}
+                        fullWidth={true}
+                        style={{margin: '20px 0 40px'}}
+                        onTouchTap={this.save}
+                    />
+                </Col>
+                {this.state.error && (
+                    <ErrorSnackbar
+                        key={Math.random()}
+                        message={this.state.error}
+                    />
+                )}
+                {this.state.success && (
+                    <SuccessSnackbar
+                        key={Math.random()}
+                        message={this.state.success}
+                    />
+                )}
             </div>
         );
     }
 }
 
-export default connect(({currencies, user}) => ({currencies, user}))(MainScreenCreator);
+export default connect(({currencies, user}) => ({currencies, user}))(
+    MainScreenCreator
+);

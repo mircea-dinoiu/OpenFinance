@@ -1,13 +1,15 @@
-module.exports = (sequelize, types) => {
-    return sequelize.define('money_locations', {
+module.exports = (sequelize, types) => sequelize.define(
+    'money_locations',
+    {
         id: {
             type: types.INTEGER,
             primaryKey: true,
-            autoIncrement: true,
+            autoIncrement: true
         },
         name: types.STRING,
-        type_id: types.INTEGER,
-    }, {
-        timestamps: false,
-    });
-};
+        type_id: types.INTEGER
+    },
+    {
+        timestamps: false
+    }
+);

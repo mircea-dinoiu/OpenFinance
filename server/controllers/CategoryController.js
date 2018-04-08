@@ -39,14 +39,16 @@ module.exports = BaseController.extend({
             group: ['id']
         });
 
-        res.json(categories.map((model) => {
-            const json = model.toJSON();
+        res.json(
+            categories.map((model) => {
+                const json = model.toJSON();
 
-            json.expenses = json.expenseCount;
+                json.expenses = json.expenseCount;
 
-            delete json.expenseCount;
+                delete json.expenseCount;
 
-            return json;
-        }));
-    },
+                return json;
+            })
+        );
+    }
 });

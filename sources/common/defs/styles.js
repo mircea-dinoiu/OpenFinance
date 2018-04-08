@@ -3,7 +3,7 @@ import transitions from 'material-ui/styles/transitions';
 export const flexColumn = {
     display: 'flex',
     flexDirection: 'column',
-    flex: 1,
+    flex: 1
 };
 
 export const greyedOut = {

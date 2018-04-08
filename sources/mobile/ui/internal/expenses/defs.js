@@ -5,5 +5,5 @@ export const ColumnStyles = {
     DATE_TIME: {textAlign: 'center'},
     ACCOUNT: {textAlign: 'center'},
     PERSONS: {textAlign: 'center', width: 50},
-    REPEAT: {textAlign: 'center'},
+    REPEAT: {textAlign: 'center'}
 };

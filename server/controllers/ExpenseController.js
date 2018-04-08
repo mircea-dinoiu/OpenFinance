@@ -1,4 +1,10 @@
-const {Expense: Model, User, Currency, MoneyLocation, Category} = require('../models');
+const {
+    Expense: Model,
+    User,
+    Currency,
+    MoneyLocation,
+    Category
+} = require('../models');
 const BaseController = require('./BaseController');
 const CurrencyController = require('./CurrencyController');
 const Service = require('../services/ExpenseService');
@@ -12,7 +18,10 @@ module.exports = BaseController.extend({
     parseRecord(record) {
         const workingRecord = Object.assign({}, record);
 
-        if (workingRecord.hasOwnProperty('money_location_id') && workingRecord.money_location_id == 0) {
+        if (
+            workingRecord.hasOwnProperty('money_location_id') &&
+            workingRecord.money_location_id == 0
+        ) {
             workingRecord.money_location_id = null;
         }
 
@@ -45,14 +54,20 @@ module.exports = BaseController.extend({
 
     async updateRelations({record, model}) {
         if (record.hasOwnProperty('categories')) {
-            await sql.query('DELETE FROM category_expense WHERE expense_id = ?', {
-                replacements: [model.id]
-            });
+            await sql.query(
+                'DELETE FROM category_expense WHERE expense_id = ?',
+                {
+                    replacements: [model.id]
+                }
+            );
 
             for (const id of record.categories) {
-                await sql.query('INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)', {
-                    replacements: [id, model.id]
-                });
+                await sql.query(
+                    'INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)',
+                    {
+                        replacements: [id, model.id]
+                    }
+                );
             }
         }
 
@@ -60,13 +75,16 @@ module.exports = BaseController.extend({
             const users = await User.findAll();
 
             for (const user of users) {
-                await sql.query('UPDATE expense_user SET blame = ? WHERE expense_id = ? AND user_id = ?', {
-                    replacements: [
-                        record.users.includes(user.id),
-                        model.id,
-                        user.id
-                    ]
-                });
+                await sql.query(
+                    'UPDATE expense_user SET blame = ? WHERE expense_id = ? AND user_id = ?',
+                    {
+                        replacements: [
+                            record.users.includes(user.id),
+                            model.id,
+                            user.id
+                        ]
+                    }
+                );
             }
         }
 
@@ -76,18 +94,29 @@ module.exports = BaseController.extend({
     async createRelations({record, model, req}) {
         if (record.hasOwnProperty('categories')) {
             for (const id of record.categories) {
-                await sql.query('INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)', {
-                    replacements: [id, model.id]
-                });
+                await sql.query(
+                    'INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)',
+                    {
+                        replacements: [id, model.id]
+                    }
+                );
             }
         }
 
         const users = await User.findAll();
 
         for (const user of users) {
-            await sql.query('INSERT INTO expense_user (user_id, expense_id, blame, seen) VALUES (?, ?, ?, ?)', {
-                replacements: [user.id, model.id, record.users.includes(user.id), user.id === req.user.id]
-            });
+            await sql.query(
+                'INSERT INTO expense_user (user_id, expense_id, blame, seen) VALUES (?, ?, ?, ?)',
+                {
+                    replacements: [
+                        user.id,
+                        model.id,
+                        record.users.includes(user.id),
+                        user.id === req.user.id
+                    ]
+                }
+            );
         }
 
         return this.Model.scope('default').findOne({where: {id: model.id}});
@@ -125,7 +154,7 @@ module.exports = BaseController.extend({
         const workingRecord = Object.assign({}, record);
         const values = pickOwnProperties(workingRecord, [
             'sum',
-            'money_location_id',
+            'money_location_id'
         ]);
 
         if (workingRecord.hasOwnProperty('item')) {

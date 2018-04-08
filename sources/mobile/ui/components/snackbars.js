@@ -13,25 +13,42 @@ const style = {
     transition: transitions.easeOut('0ms', 'visibility')
 };
 
-const getBodyStyle = ({screen}) => (screen.isLarge ? {} : {
-    borderRadius: '2px',
-    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px'
-});
+const getBodyStyle = ({screen}) =>
+    screen.isLarge
+        ? {}
+        : {
+            borderRadius: '2px',
+            boxShadow:
+                  'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px'
+        };
 
 const getDefaultProps = ({screen}) => ({
     autoHideDuration: 1500,
     open: true,
-    style: screen.isLarge ? undefined : style,
+    style: screen.isLarge ? undefined : style
 });
 
-const CustomSnackbar = connect(({screen}) => ({screen}))((props) => {
-    return <Snackbar {...getDefaultProps({screen: props.screen})} {...props} bodyStyle={{...getBodyStyle({screen: props.screen}), ...props.bodyStyle}}/>;
-});
+const CustomSnackbar = connect(({screen}) => ({screen}))((props) => (
+    <Snackbar
+        {...getDefaultProps({screen: props.screen})}
+        {...props}
+        bodyStyle={{
+            ...getBodyStyle({screen: props.screen}),
+            ...props.bodyStyle
+        }}
+    />
+));
 
 export const ErrorSnackbar = (props) => (
-    <CustomSnackbar {...props} bodyStyle={{...props.bodyStyle, backgroundColor: red500}}/>
+    <CustomSnackbar
+        {...props}
+        bodyStyle={{...props.bodyStyle, backgroundColor: red500}}
+    />
 );
 
 export const SuccessSnackbar = (props) => (
-    <CustomSnackbar {...props} bodyStyle={{...props.bodyStyle, backgroundColor: green500}}/>
+    <CustomSnackbar
+        {...props}
+        bodyStyle={{...props.bodyStyle, backgroundColor: green500}}
+    />
 );

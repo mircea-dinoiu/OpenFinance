@@ -13,7 +13,7 @@
     "flow": "flow",
     "test": "jest --bail --config package.json",
     "lint:js": "eslint server sources/mobile sources/common --fix",
-    "format": "prettier-eslint --single-quote server sources/mobile sources/common"
+    "format": "prettier-eslint --write --single-quote server/**/*.js sources/mobile/**/*.js sources/common/**/*.js"
   },
   "repository": {
     "type": "git",

@@ -37,7 +37,9 @@ module.exports = {
                 const output = [];
 
                 for (const record of validRecords) {
-                    let model = await this.Model.findOne({where: {id: record.id}});
+                    let model = await this.Model.findOne({
+                        where: {id: record.id}
+                    });
                     let values = this.sanitizeUpdateValues(record, model);
 
                     if (values instanceof Promise) {
@@ -45,7 +47,9 @@ module.exports = {
                     }
 
                     console.log(
-                        chalk.inverse(`Updating ${this.Model.name} #${record.id} with`),
+                        chalk.inverse(
+                            `Updating ${this.Model.name} #${record.id} with`
+                        ),
                         chalk.green(JSON.stringify(values, null, 2))
                     );
 
@@ -105,7 +109,9 @@ module.exports = {
                     }
 
                     console.log(
-                        chalk.inverse(`Updating ${this.Model.name} #${record.id} with`),
+                        chalk.inverse(
+                            `Updating ${this.Model.name} #${record.id} with`
+                        ),
                         chalk.green(JSON.stringify(values, null, 2))
                     );
 
@@ -137,7 +143,9 @@ module.exports = {
 
             for (const record of data) {
                 if (isPlainObject(record)) {
-                    const model = await this.Model.findOne({where: {id: record.id}});
+                    const model = await this.Model.findOne({
+                        where: {id: record.id}
+                    });
 
                     if (model) {
                         output.push(model.toJSON());

@@ -1,7 +1,8 @@
 const {standardDate} = require('../helpers');
 
-module.exports = (sequelize, types) => {
-    return sequelize.define('incomes', {
+module.exports = (sequelize, types) => sequelize.define(
+    'incomes',
+    {
         id: {
             type: types.INTEGER,
             primaryKey: true,
@@ -13,8 +14,9 @@ module.exports = (sequelize, types) => {
         repeat: types.STRING,
         status: types.STRING,
         sum: types.FLOAT,
-        user_id: types.INTEGER,
-    }, {
+        user_id: types.INTEGER
+    },
+    {
         underscored: true,
         instanceMethods: {
             toJSON() {
@@ -27,5 +29,5 @@ module.exports = (sequelize, types) => {
                 return values;
             }
         }
-    });
-};
+    }
+);

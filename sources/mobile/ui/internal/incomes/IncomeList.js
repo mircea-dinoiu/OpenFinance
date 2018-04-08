@@ -9,8 +9,8 @@ import ExpenseHeader from 'mobile/ui/internal/expenses/ExpenseHeader';
 
 const IncomeList = () => {
     return null;
-    
-return (
+
+    return (
         <MainScreenList
             api={routes.income}
             listItemComponent={IncomeListItem}

@@ -29,18 +29,20 @@ class Currencies extends PureComponent {
 
         return (
             <div>
-                <Subheader>
-                    Exchange Rates
-                </Subheader>
-                {map.toArray().map(each => (
-                    each.get('id') !== defaultCurrencyId && (
-                        <MenuItem key={each.get('id')}>
-                            <strong>{each.get('iso_code')}</strong>: {
-                            each.getIn(['rates', defaultCurrency.get('iso_code')])
-                        } <i>{defaultCurrency.get('symbol')}</i>
-                        </MenuItem>
-                    )
-                ))}
+                <Subheader>Exchange Rates</Subheader>
+                {map.toArray().map(
+                    (each) =>
+                        each.get('id') !== defaultCurrencyId && (
+                            <MenuItem key={each.get('id')}>
+                                <strong>{each.get('iso_code')}</strong>:{' '}
+                                {each.getIn([
+                                    'rates',
+                                    defaultCurrency.get('iso_code')
+                                ])}{' '}
+                                <i>{defaultCurrency.get('symbol')}</i>
+                            </MenuItem>
+                        )
+                )}
             </div>
         );
     }
@@ -48,9 +50,12 @@ class Currencies extends PureComponent {
 
 export default connect(
     ({user}) => ({user}),
-    dispatch => ({
-        actions: bindActionCreators({
-            fetchCurrencies
-        }, dispatch)
+    (dispatch) => ({
+        actions: bindActionCreators(
+            {
+                fetchCurrencies
+            },
+            dispatch
+        )
     })
 )(Currencies);

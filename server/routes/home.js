@@ -13,7 +13,9 @@ router.get('/', (req, res) => {
         csrfToken: req.csrfToken ? req.csrfToken() : '',
         debug,
         localDevMode,
-        assetHost: config.get('devServer.enable') ? config.get('devServer.hostname') : '',
+        assetHost: config.get('devServer.enable')
+            ? config.get('devServer.hostname')
+            : ''
     };
 
     const legacy = req.query.hasOwnProperty('legacy');
@@ -21,12 +23,25 @@ router.get('/', (req, res) => {
     if (!legacy) {
         res.render('responsive', data);
     } else {
-        fs.readFile(basePath(`${localDevMode ? 'sources/desktop' : 'public'}/microloader.html`), (err, microloader) => {
-            res.render('desktop', Object.assign({
-                theme: 'triton',
-                bootstrapScript: String(microloader)
-            }, data));
-        });
+        fs.readFile(
+            basePath(
+                `${
+                    localDevMode ? 'sources/desktop' : 'public'
+                }/microloader.html`
+            ),
+            (err, microloader) => {
+                res.render(
+                    'desktop',
+                    Object.assign(
+                        {
+                            theme: 'triton',
+                            bootstrapScript: String(microloader)
+                        },
+                        data
+                    )
+                );
+            }
+        );
     }
 });
 

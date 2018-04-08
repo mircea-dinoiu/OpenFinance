@@ -47,10 +47,10 @@ module.exports = {
                 })
             };
         }
-            
-return {
-                error: true,
-                json: validator.errors()
-            };
+
+        return {
+            error: true,
+            json: validator.errors()
+        };
     }
 };

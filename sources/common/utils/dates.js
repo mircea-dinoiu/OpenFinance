@@ -2,7 +2,13 @@
 import moment from 'moment';
 import {getPreference, PREFERENCE_END_DATE} from 'common/utils/preferences';
 
-export function getStartDate({endDate, include}: {endDate: string, include: string}): string {
+export function getStartDate({
+    endDate,
+    include
+}: {
+    endDate: string,
+    include: string
+}): string {
     let date = moment(endDate).toDate();
 
     date.setHours(0);

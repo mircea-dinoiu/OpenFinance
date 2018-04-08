@@ -4,11 +4,13 @@ let metas = null;
 const getMetas = () => {
     const metas = {};
 
-    [...document.querySelectorAll('meta')].forEach(meta => {
+    [...document.querySelectorAll('meta')].forEach((meta) => {
         const name = meta.getAttribute('name');
 
         if ('string' === typeof name && name.startsWith(metaPrefix)) {
-            metas[name.substr(metaPrefix.length)] = meta.getAttribute('content');
+            metas[name.substr(metaPrefix.length)] = meta.getAttribute(
+                'content'
+            );
         }
     });
 
@@ -19,7 +21,7 @@ const getMeta = (name) => {
     if (metas == null) {
         metas = getMetas();
     }
-    
+
     return metas[name];
 };
 

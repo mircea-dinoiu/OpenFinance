@@ -12,12 +12,12 @@ module.exports = {
                 this.getClonesFor({
                     record,
                     endDate
-                }).forEach(clone => {
+                }).forEach((clone) => {
                     ret.push(clone);
                 });
             }
         });
-        
+
         return ret;
     },
 
@@ -46,9 +46,14 @@ module.exports = {
                 if (day(newObject.created_at) > day(endDate)) {
                     break;
                 } else {
-                    out.push(Object.assign({
-                        toJSON: () => newObject
-                    }, newObject));
+                    out.push(
+                        Object.assign(
+                            {
+                                toJSON: () => newObject
+                            },
+                            newObject
+                        )
+                    );
                     repeats++;
                 }
             }
@@ -86,5 +91,5 @@ module.exports = {
         newObject.created_at = standardDate(date);
 
         return newObject;
-    },
+    }
 };

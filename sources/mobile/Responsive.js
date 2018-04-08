@@ -10,7 +10,7 @@ import {
     updateUser,
     toggleLoading,
     setScreen,
-    updateState,
+    updateState
 } from 'common/state/actions';
 
 import {Drawer} from 'material-ui';
@@ -42,7 +42,7 @@ const actions = {
     toggleLoading,
     setScreen,
     updateState,
-    fetchCurrencies,
+    fetchCurrencies
 };
 
 class Responsive extends PureComponent<{
@@ -63,7 +63,7 @@ class Responsive extends PureComponent<{
 
         if (props.user == null) {
             const response = await fetch(routes.user.list);
-            
+
             if (response.ok) {
                 props.actions.updateUser(fromJS(await response.json()));
             } else {
@@ -81,13 +81,13 @@ class Responsive extends PureComponent<{
                 fetch(routes.ml.list),
                 fetch(routes.mlType.list)
             ]);
-            
+
             props.actions.updateState({
                 categories: fromJS(await categoriesResponse.json()),
                 moneyLocations: fromJS(await mlResponse.json()),
                 moneyLocationTypes: fromJS(await mlTypesResponse.json()),
                 title: 'Financial',
-                ui: <Internal/>
+                ui: <Internal />
             });
             props.actions.toggleLoading(false);
         }
@@ -95,7 +95,7 @@ class Responsive extends PureComponent<{
 
     showLogin() {
         this.props.actions.updateState({
-            ui: <Login/>,
+            ui: <Login />,
             title: 'Please Login'
         });
         this.props.actions.updateUser(null);
@@ -125,11 +125,16 @@ class Responsive extends PureComponent<{
     render() {
         return (
             <MuiThemeProvider>
-                <div style={{
-                    paddingTop: Sizes.HEADER_SIZE,
-                    ...flexColumn,
-                }}>
-                    <EventListener target="window" onResize={this.onWindowResize}/>
+                <div
+                    style={{
+                        paddingTop: Sizes.HEADER_SIZE,
+                        ...flexColumn
+                    }}
+                >
+                    <EventListener
+                        target="window"
+                        onResize={this.onWindowResize}
+                    />
                     <TopBar
                         showCurrenciesDrawer={this.isCurrenciesDrawerReady()}
                         onLogout={this.onLogout}
@@ -139,24 +144,27 @@ class Responsive extends PureComponent<{
                             docked={false}
                             open={this.props.currenciesDrawerOpen}
                             openSecondary={true}
-                            onRequestChange={(currenciesDrawerOpen) => this.props.actions.updateState({currenciesDrawerOpen})}
+                            onRequestChange={(currenciesDrawerOpen) =>
+                                this.props.actions.updateState({
+                                    currenciesDrawerOpen
+                                })
+                            }
                         >
-                            <Currencies data={this.props.currencies}/>
+                            <Currencies data={this.props.currencies} />
                         </Drawer>
                     )}
-                    {
-                        this.props.loading ? (
-                            <BigLoader/>
-                        ) : this.props.ui
-                    }
+                    {this.props.loading ? <BigLoader /> : this.props.ui}
                 </div>
             </MuiThemeProvider>
         );
     }
 }
 
-const AppContainer = connect(state => state, dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-}))(Responsive);
+const AppContainer = connect(
+    (state) => state,
+    (dispatch) => ({
+        actions: bindActionCreators(actions, dispatch)
+    })
+)(Responsive);
 
 export default hot(module)(AppContainer);

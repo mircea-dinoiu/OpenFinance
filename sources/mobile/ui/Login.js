@@ -45,7 +45,7 @@ class Login extends PureComponent {
         }
     };
 
-    handleTextFieldKeyDown = event => {
+    handleTextFieldKeyDown = (event) => {
         switch (event.key) {
             case 'Enter':
                 this.submit();
@@ -73,7 +73,9 @@ class Login extends PureComponent {
                         hintText="Type in your e-mail"
                         floatingLabelText="E-mail"
                         value={this.state.email}
-                        onChange={event => this.setState({email: event.target.value})}
+                        onChange={(event) =>
+                            this.setState({email: event.target.value})
+                        }
                         disabled={this.state.loading}
                         fullWidth={true}
                         onKeyDown={this.handleTextFieldKeyDown}
@@ -83,7 +85,9 @@ class Login extends PureComponent {
                         floatingLabelText="Password"
                         type="password"
                         value={this.state.password}
-                        onChange={event => this.setState({password: event.target.value})}
+                        onChange={(event) =>
+                            this.setState({password: event.target.value})
+                        }
                         disabled={this.state.loading}
                         fullWidth={true}
                         onKeyDown={this.handleTextFieldKeyDown}
@@ -92,20 +96,22 @@ class Login extends PureComponent {
                         style={{margin: '20px 0 0'}}
                         label="Remember me"
                         toggled={this.state.rememberMe}
-                        onToggle={(event, toggle) => this.setState({rememberMe: toggle})}
+                        onToggle={(event, toggle) =>
+                            this.setState({rememberMe: toggle})
+                        }
                         disabled={this.state.loading}
                     />
                     <RaisedButton
-                        label={this.state.loading ? <ButtonProgress/> : 'Login'}
+                        label={
+                            this.state.loading ? <ButtonProgress /> : 'Login'
+                        }
                         primary={true}
                         style={{margin: '20px 0 0'}}
                         onTouchTap={this.submit}
                         disabled={this.state.loading}
                     />
                     {this.state.error != null && (
-                        <ErrorSnackbar
-                            message={this.state.error}
-                        />
+                        <ErrorSnackbar message={this.state.error} />
                     )}
                 </Col>
             </Row>
@@ -113,6 +119,6 @@ class Login extends PureComponent {
     }
 }
 
-export default connect(null, dispatch => ({
+export default connect(null, (dispatch) => ({
     actions: bindActionCreators({updateUser}, dispatch)
 }))(Login);
