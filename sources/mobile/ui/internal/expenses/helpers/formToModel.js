@@ -17,7 +17,7 @@ export default (data, props) => {
         categories: data.categories,
         money_location_id: data.paymentMethod,
         repeat: data.repeat,
-        users: users,
+        users,
         status: data.status || 'pending'
     };
 };

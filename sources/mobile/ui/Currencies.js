@@ -53,4 +53,4 @@ export default connect(
             fetchCurrencies
         }, dispatch)
     })
-)(Currencies)
+)(Currencies);

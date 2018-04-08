@@ -12,7 +12,7 @@ router.post(
     '/login',
     filters.guest,
     async (req, res, next) => {
-        passport.authenticate('local', function (err, user) {
+        passport.authenticate('local', (err, user) => {
             if (err) {
                 return next(err);
             }
@@ -20,7 +20,8 @@ router.post(
             if (!user) {
                 res.status(400);
                 res.json('Invalid email or password entered.');
-                return;
+                
+return;
             }
 
             req.logIn(user, async (err) => {

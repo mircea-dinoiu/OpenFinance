@@ -17,7 +17,7 @@ module.exports = (sequelize, types) => {
     }, {
         underscored: true,
         instanceMethods: {
-            toJSON: function () {
+            toJSON() {
                 const values = Object.assign({}, this.dataValues);
 
                 // FIXME TEMP WORKAROUND sources/desktop/app/model/IncomeModel.js:15

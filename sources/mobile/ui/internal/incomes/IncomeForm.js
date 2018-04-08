@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {TextField, DatePicker, TimePicker, SelectField, MenuItem} from 'material-ui';
 import {Row, Col} from 'react-grid-system';
 import RepeatOptions from 'common/defs/repeatOptions';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 
 class IncomeForm extends PureComponent {
     props: {

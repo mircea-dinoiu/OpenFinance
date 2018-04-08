@@ -13,5 +13,5 @@ export default (data) => {
         repeat: data.repeat,
         chargedPersons: data.users,
         status: data.status || 'pending'
-    }
-}
+    };
+};

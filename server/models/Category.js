@@ -9,7 +9,7 @@ module.exports = (sequelize, types) => {
     }, {
         underscored: true,
         classMethods: {
-            associate: function (models) {
+            associate(models) {
                 Category.belongsToMany(models.Expense, {
                     through: 'category_expense',
                     timestamps: false,

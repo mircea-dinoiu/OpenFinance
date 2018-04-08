@@ -8,5 +8,5 @@ export default function (data) {
         repeat: null,
         date: new Date(),
         time: new Date()
-    }
-};
+    };
+}

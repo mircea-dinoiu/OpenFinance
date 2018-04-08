@@ -27,4 +27,4 @@ export default {
     get csrfToken() {
         return getMeta('csrf-token');
     }
-}
+};

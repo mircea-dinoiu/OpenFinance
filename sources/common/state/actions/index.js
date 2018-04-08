@@ -21,7 +21,7 @@ export const updateUser = (user) => {
 export const toggleLoading = (value) => {
     return {
         type: value ? Actions.LOADING_ENABLE : Actions.LOADING_DISABLE,
-    }
+    };
 };
 
 export const setScreen = (value: TypeScreenQueries) => ({type: Actions.SET_SCREEN, value});
@@ -35,5 +35,5 @@ export const fetchCurrencies = (params = {}) => {
         dispatch(updateState({
             currencies: fromJS(await currenciesResponse.json())
         }));
-    }
+    };
 };

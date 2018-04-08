@@ -8,5 +8,5 @@ export const BigLoader = (props) => (
 );
 
 export const ButtonProgress = (props) => {
-    return <CircularProgress size={25} {...props} style={{margin: '5px 0 0', ...props.style}}/>
+    return <CircularProgress size={25} {...props} style={{margin: '5px 0 0', ...props.style}}/>;
 };

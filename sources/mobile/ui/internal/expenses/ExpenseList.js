@@ -13,7 +13,7 @@ const ExpenseList = () => {
             listItemComponent={ExpenseListItem}
             headerComponent={ExpenseHeader}
         />
-    )
+    );
 };
 
 export default ExpenseList;

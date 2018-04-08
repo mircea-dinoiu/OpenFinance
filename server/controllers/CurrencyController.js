@@ -83,10 +83,10 @@ module.exports = {
                 let chunks = [];
 
                 res
-                    .on('data', function (chunk) {
+                    .on('data', (chunk) => {
                         chunks.push(chunk);
                     })
-                    .on('end', function () {
+                    .on('end', () => {
                         chunks = Buffer.concat(chunks).toString();
 
                         const xml2js = require('xml2js');
@@ -103,7 +103,7 @@ module.exports = {
             });
 
             req
-                .on('error', function (e) {
+                .on('error', (e) => {
                     logError(e);
                     resolve(null);
                 });
@@ -118,6 +118,7 @@ module.exports = {
                 }
             });
             const dcISOCode = dcInstance.value;
+
             this.defaultCurrency = await Currency.findOne({
                 where: {
                     iso_code: dcISOCode
@@ -146,7 +147,8 @@ module.exports = {
 
         if (rates == null) {
             await this.fetchCachedData();
-            return;
+            
+return;
         }
 
         CurrencyHelper.appendRatesToCurrencies(map, {rates});
@@ -167,6 +169,7 @@ module.exports = {
         update = false
     } = {}) {
         let fromCache = false;
+
         if (update !== true) {
             if (await this.fetchCachedData() === false) {
                 await this.fetchFreshData();

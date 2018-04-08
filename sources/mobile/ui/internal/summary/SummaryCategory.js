@@ -26,7 +26,7 @@ class SummarySubCategory extends PureComponent {
 
         return (
             <React.Fragment>
-                {shouldGroup &&  (
+                {shouldGroup && (
                     <CardHeader
                         style={{
                             paddingTop: 0,
@@ -64,7 +64,7 @@ class SummarySubCategory extends PureComponent {
                     </Table>
                 )}
             </React.Fragment>
-        )
+        );
     }
 }
 
@@ -80,7 +80,7 @@ class SummaryCategory extends PureComponent {
     };
 
     handleExpandChange = (expanded) => {
-        this.setState({expanded: expanded});
+        this.setState({expanded});
     };
 
     static defaultProps = {
@@ -145,7 +145,7 @@ class SummaryCategory extends PureComponent {
                                 entityNameField={entityNameField}
                                 expandedByDefault={expandedByDefault}
                             />
-                        )
+                        );
                     })}
                 </CardText>
             </Card>

@@ -3,16 +3,14 @@ import moment from 'moment';
 
 import {Row, Col} from 'react-grid-system';
 
-import Warning from 'material-ui-icons/Warning';
-import Cached from 'material-ui-icons/Cached';
-import TrendingUp from 'material-ui-icons/TrendingUp';
-import {grey500, grey700, yellowA700, cyan500, red500} from 'material-ui/styles/colors';
-import {Avatar, Chip, TableRow, TableRowColumn} from 'material-ui';
+import {grey500, grey700} from 'material-ui/styles/colors';
+import {Avatar, Chip, TableRowColumn} from 'material-ui';
 
 import RepeatOptions from 'common/defs/repeatOptions';
 import {numericValue} from '../../formatters';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 import {ColumnStyles} from 'mobile/ui/internal/expenses/defs';
+import {Flags} from 'mobile/ui/internal/common/MainScreenFlags';
 
 const ExpenseListItemContent = (props) => {
     const item = props.item;
@@ -27,13 +25,7 @@ const ExpenseListItemContent = (props) => {
         ) : null
     );
     const descriptionDisplay = item.item;
-    const flags = (
-        <React.Fragment>
-            {item.status === 'pending' && <Warning style={{height: 20, width: 20}} color={yellowA700}/>}
-            {item.repeat != null && <Cached style={{height: 20, width: 20}} color={cyan500}/>}
-            {item.persist === false && <TrendingUp style={{height: 20, width: 20}} color={red500}/>}
-        </React.Fragment>
-    );
+    const flags = <Flags entity="expense" item={item}/>;
     const accountDisplay = (
         item.money_location_id && (
             <span style={{fontSize: 14, color: grey700}}>{props.data.moneyLocations.find(each => each.get('id') === item.money_location_id).get('name')}</span>

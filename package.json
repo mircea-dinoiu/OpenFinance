@@ -11,7 +11,8 @@
     "heroku-prebuild": "npm install --only=dev",
     "heroku-postbuild": "npm run build:prod",
     "flow": "flow",
-    "test": "jest --bail --config package.json"
+    "test": "jest --bail --config package.json",
+    "lint:js": "eslint server sources/mobile sources/common --fix"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,7 @@
   "homepage": "https://github.com/mircea-dinoiu/financial#readme",
   "devDependencies": {
     "babel-core": "^6.21.0",
-    "babel-eslint": "^7.1.1",
+    "babel-eslint": "^8.2.2",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.19.0",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
@@ -36,8 +37,8 @@
     "cross-env": "^4.0.0",
     "css-loader": "^0.28.1",
     "deep-extend": "^0.4.1",
-    "eslint": "^3.12.2",
-    "eslint-plugin-react": "^6.8.0",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.7.0",
     "flow-bin": "^0.55.0",
     "immutable": "^3.8.1",
     "jest": "^22.4.3",
@@ -45,8 +46,8 @@
     "material-ui-icons": "^1.0.0-alpha.3",
     "normalize.css": "^7.0.0",
     "query-string": "^6.0.0",
-    "react": "16.3.0",
-    "react-dom": "16.3.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
     "react-event-listener": "^0.5.3",
     "react-grid-system": "3.1.2",
     "react-hot-loader": "4.0.1",
@@ -70,6 +71,7 @@
     "cookie-parser": "^1.4.3",
     "csurf": "^1.9.0",
     "debug": "~2.6.3",
+    "eslint-plugin-flowtype": "^2.46.1",
     "express": "~4.15.2",
     "express-session": "^1.15.2",
     "hbs": "^4.0.1",

@@ -20,7 +20,7 @@ class Login extends PureComponent {
         loading: false
     };
 
-    submit = async() => {
+    submit = async () => {
         this.setState({
             loading: true
         });

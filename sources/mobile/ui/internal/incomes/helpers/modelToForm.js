@@ -12,5 +12,5 @@ export default (data) => {
         repeat: data.repeat,
         userId: data.user_id,
         status: data.status || 'pending'
-    }
-}
+    };
+};

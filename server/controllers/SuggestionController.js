@@ -51,7 +51,7 @@ module.exports = BaseController.extend({
                 ],
                 group: 'item',
                 order: 'usages DESC LIMIT 10'
-            }))
+            }));
         } else {
             res.status(400).json(validator.errors());
         }

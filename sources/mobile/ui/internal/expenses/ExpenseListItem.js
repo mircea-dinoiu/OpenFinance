@@ -19,7 +19,7 @@ const ExpenseListItem = (props) => {
             contentComponent={ExpenseListItemContent}
             {...props}
         />
-    )
+    );
 };
 
 export default ExpenseListItem;

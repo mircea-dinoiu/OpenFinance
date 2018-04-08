@@ -9,7 +9,7 @@ module.exports = (sequelize, types) => {
         tableName: 'expense_user',
         underscored: true,
         classMethods: {
-            associate: function (models) {
+            associate(models) {
                 ExpenseUser.hasMany(models.Expense, {
                     foreignKey: 'id',
                 });

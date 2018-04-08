@@ -10,7 +10,7 @@ module.exports = {
 
             if (record.repeat) {
                 this.getClonesFor({
-                    record: record,
+                    record,
                     endDate
                 }).forEach(clone => {
                     ret.push(clone);
@@ -64,7 +64,7 @@ module.exports = {
 
         switch (newObject.repeat) {
             case 'd':
-                date.setDate(date.getDate() + 1 * repeats);
+                date.setDate(date.getDate() + Number(repeats));
                 break;
             case 'w':
                 date.setDate(date.getDate() + 7 * repeats);
@@ -73,13 +73,13 @@ module.exports = {
                 date.setDate(date.getDate() + 7 * 2 * repeats);
                 break;
             case 'm':
-                date.setMonth(date.getMonth() + 1 * repeats);
+                date.setMonth(date.getMonth() + Number(repeats));
                 break;
             case '3m':
                 date.setMonth(date.getMonth() + 3 * repeats);
                 break;
             case 'y':
-                date.setFullYear(date.getFullYear() + 1 * repeats);
+                date.setFullYear(date.getFullYear() + Number(repeats));
                 break;
         }
 

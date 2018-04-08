@@ -91,7 +91,7 @@ class TopBar extends PureComponent<TypeProps> {
                     </Paper>
                 )}
             </AppBar>
-        )
+        );
     }
 }
 

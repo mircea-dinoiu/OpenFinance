@@ -27,18 +27,18 @@ module.exports = {
         if (expenseRecords.error) {
             res.status(400);
             res.json(expenseRecords.json);
-            return;
-        } else {
-            expenseRecords = expenseRecords.json;
+            
+return;
         }
+            expenseRecords = expenseRecords.json;
 
         if (incomeRecords.error) {
             res.status(400);
             res.json(incomeRecords.json);
-            return;
-        } else {
-            incomeRecords = incomeRecords.json;
+            
+return;
         }
+            incomeRecords = incomeRecords.json;
 
         const ret = {
             expensesData: await SummaryReportService.getExpensesData({
@@ -107,18 +107,18 @@ module.exports = {
         if (expenseRecords.error) {
             res.status(400);
             res.json(expenseRecords.json);
-            return;
-        } else {
-            expenseRecords = expenseRecords.json;
+            
+return;
         }
+            expenseRecords = expenseRecords.json;
 
         if (incomeRecords.error) {
             res.status(400);
             res.json(incomeRecords.json);
-            return;
-        } else {
-            incomeRecords = incomeRecords.json;
+            
+return;
         }
+            incomeRecords = incomeRecords.json;
 
         const series = [];
         const fields = [];
@@ -133,12 +133,12 @@ module.exports = {
             ChartReportHelper.addToTimeMap(timeMap, dataKey, record, sum, timeFormat);
         };
 
-        incomeRecords.forEach(function (record) {
+        incomeRecords.forEach((record) => {
             if (!ChartReportHelper.recordIsInRange(record, input.display)) {
                 return;
             }
 
-            const dataKey = 'data' + record.user_id + 'i';
+            const dataKey = `data${record.user_id}i`;
 
             addToTimeMap(dataKey, record, record.sum);
         });
@@ -160,14 +160,14 @@ module.exports = {
 
             sum /= users.length;
 
-            users.forEach(function (id) {
-                const dataKey = 'data' + id + 'e';
+            users.forEach((id) => {
+                const dataKey = `data${id}e`;
 
                 addToTimeMap(dataKey, json, sum);
             });
         }
 
-        fields.forEach(function (field) {
+        fields.forEach((field) => {
             const cleanField = field.replace(/data/, '');
             const id = cleanField.replace(/[ei]/g, '');
             const type = field.endsWith('e') ? 'Expenses' : 'Incomes';
@@ -179,9 +179,9 @@ module.exports = {
         });
 
         res.json({
-            fields: fields,
+            fields,
             map: timeMap,
-            series: series
+            series
         });
     },
 
@@ -218,10 +218,10 @@ module.exports = {
         if (expenseRecords.error) {
             res.status(400);
             res.json(expenseRecords.json);
-            return;
-        } else {
-            expenseRecords = expenseRecords.json;
+            
+return;
         }
+            expenseRecords = expenseRecords.json;
 
         for (const record of expenseRecords) {
             if (!ChartReportHelper.recordIsInRange(record, input.display)) {
@@ -237,7 +237,7 @@ module.exports = {
                     categoryIds.push(categoryId);
                 }
 
-                const dataKey = 'data' + categoryId;
+                const dataKey = `data${categoryId}`;
 
                 ChartReportHelper.addToTimeMap(timeMap, dataKey, json, rawCatSum / (recordCategories.length || 1), timeFormat);
             };
@@ -247,7 +247,7 @@ module.exports = {
             }
 
             if (recordCategories.length > 0) {
-                recordCategories.forEach(function (rawCategoryId) {
+                recordCategories.forEach((rawCategoryId) => {
                     let categoryId;
 
                     if (categoryRecords.find(each => each.id == rawCategoryId)) {
@@ -263,23 +263,23 @@ module.exports = {
             }
         }
 
-        categoryIds.forEach(function (id) {
+        categoryIds.forEach((id) => {
             const title = id == 0 ? '<i>Unclassified</i>' : categoryRecords.find(each => each.id == id).name;
 
             series.push({
                 title,
-                yField: 'data' + id
+                yField: `data${id}`
             });
         });
 
-        const categoryIdsAsFields = categoryIds.map(function (id) {
-            return 'data' + id;
+        const categoryIdsAsFields = categoryIds.map((id) => {
+            return `data${id}`;
         });
 
         res.json({
             fields: categoryIdsAsFields,
             map: timeMap,
-            series: series
+            series
         });
     }
 };

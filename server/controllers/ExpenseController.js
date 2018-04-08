@@ -87,7 +87,7 @@ module.exports = BaseController.extend({
         for (const user of users) {
             await sql.query('INSERT INTO expense_user (user_id, expense_id, blame, seen) VALUES (?, ?, ?, ?)', {
                 replacements: [user.id, model.id, record.users.includes(user.id), user.id === req.user.id]
-            })
+            });
         }
 
         return this.Model.scope('default').findOne({where: {id: model.id}});

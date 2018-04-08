@@ -16,7 +16,7 @@ module.exports = (sequelize, types) => {
     }, {
         underscored: true,
         classMethods: {
-            associate: function (models) {
+            associate(models) {
                 Expense.belongsToMany(models.User, {
                     through: models.ExpenseUser,
                     timestamps: false,
@@ -43,7 +43,7 @@ module.exports = (sequelize, types) => {
             }
         },
         instanceMethods: {
-            toJSON: function () {
+            toJSON() {
                 const values = Object.assign({}, this.dataValues);
 
                 if (values.userIds) {

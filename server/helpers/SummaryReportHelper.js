@@ -17,9 +17,9 @@ module.exports = {
         return uniq(concat(
             expenses,
             incomes
-        ).filter(function (item) {
+        ).filter((item) => {
             return item.isTotal !== true;
-        }).map(function (item) {
+        }).map((item) => {
             return parseInt(item.reference);
         }));
     },
@@ -27,11 +27,11 @@ module.exports = {
     getRemainingSum(expenses, incomes, id) {
         let filteredExpenses, filteredIncomes;
 
-        filteredExpenses = expenses.filter(function (expense) {
+        filteredExpenses = expenses.filter((expense) => {
             return expense.reference === id;
         })[0];
 
-        filteredIncomes = incomes.filter(function (income) {
+        filteredIncomes = incomes.filter((income) => {
             return income.reference === id;
         })[0];
 
@@ -57,7 +57,7 @@ module.exports = {
                 sum: mls[id],
                 description: this.description(name, {html}),
                 reference: id,
-                group: group,
+                group,
                 index: id,
             });
         };

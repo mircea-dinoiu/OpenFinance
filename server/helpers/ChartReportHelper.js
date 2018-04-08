@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 module.exports = {
-    addToTimeMap: function (timeMap, dataKey, record, sum, timeFormat) {
+    addToTimeMap(timeMap, dataKey, record, sum, timeFormat) {
         const timeDisplay = moment(record.created_at).format(timeFormat.display);
         const timeValue = moment(record.created_at).format(timeFormat.value);
 
@@ -41,7 +41,7 @@ module.exports = {
         };
     },
 
-    recordIsInRange: function (record, display) {
+    recordIsInRange(record, display) {
         switch (display) {
             case 'cm':
                 const format = 'YYYY-MM'; // 2005-01
@@ -49,7 +49,8 @@ module.exports = {
                 if (moment(record.created_at).format(format) === moment(new Date()).format(format)) {
                     return true;
                 }
-                return false;
+                
+return false;
         }
 
         return true;

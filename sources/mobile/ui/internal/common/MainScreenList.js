@@ -79,7 +79,7 @@ class MainScreenList extends PureComponent {
 
         const response = await fetch(`${this.props.api.list}?${stringify({
             end_date: endDate,
-            page: page,
+            page,
             limit: this.getLimit(),
         })}`);
 
@@ -111,7 +111,7 @@ class MainScreenList extends PureComponent {
         await fetchJSON(this.props.api.destroy, {
             method: 'POST',
             body: {
-                data: [{id: id}]
+                data: [{id}]
             }
         });
 
@@ -148,7 +148,7 @@ class MainScreenList extends PureComponent {
                 onUpdate={this.handleUpdate}
                 api={this.props.api}
             />
-        )
+        );
     }
 
     renderResults() {
@@ -183,10 +183,9 @@ class MainScreenList extends PureComponent {
                     </List>
                     <Divider/>
                 </div>
-            )
+            );
         });
     }
-
 
     render() {
         if (this.state.firstLoad) {

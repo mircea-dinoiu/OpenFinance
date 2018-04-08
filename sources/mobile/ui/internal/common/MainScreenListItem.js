@@ -7,7 +7,6 @@ import CreateIcon from 'material-ui-icons/Create';
 import {cyan50, red50} from 'material-ui/styles/colors';
 import {IconButton, MenuItem, IconMenu, TableRow} from 'material-ui';
 
-
 import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
 import ResponsiveListItem from 'common/components/ResponsiveListItem';

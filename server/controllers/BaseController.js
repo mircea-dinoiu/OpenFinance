@@ -56,7 +56,7 @@ module.exports = {
                     await model.update(values);
 
                     if (this.updateRelations) {
-                        model = await this.updateRelations({record,  model});
+                        model = await this.updateRelations({record, model});
                     }
 
                     output.push(model.toJSON());
@@ -136,7 +136,7 @@ module.exports = {
             const output = [];
 
             for (const record of data) {
-                if (isPlainObject(record) ) {
+                if (isPlainObject(record)) {
                     const model = await this.Model.findOne({where: {id: record.id}});
 
                     if (model) {

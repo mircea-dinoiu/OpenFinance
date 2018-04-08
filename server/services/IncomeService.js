@@ -46,11 +46,11 @@ module.exports = {
                     endDate: input.end_date
                 })
             };
-        } else {
-            return {
+        }
+            
+return {
                 error: true,
                 json: validator.errors()
             };
-        }
     }
 };

@@ -26,7 +26,7 @@ const MainScreenDeleteDialog = ({open, entityName, onYes, onNo, ...props}) => {
         >
             Are you sure you want to delete this {entityName}?
         </Dialog>
-    )
+    );
 };
 
 export default MainScreenDeleteDialog;

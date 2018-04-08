@@ -9,7 +9,7 @@ import {ButtonProgress} from '../../components/loaders';
 import {Col} from 'react-grid-system';
 
 import {RaisedButton} from 'material-ui';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 
 class MainScreenCreator extends PureComponent {
     state = {
@@ -78,7 +78,7 @@ class MainScreenCreator extends PureComponent {
                 {this.state.error && <ErrorSnackbar key={Math.random()} message={this.state.error}/>}
                 {this.state.success && <SuccessSnackbar key={Math.random()} message={this.state.success}/>}
             </div>
-        )
+        );
     }
 }
 

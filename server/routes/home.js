@@ -8,11 +8,11 @@ const config = require('config');
 const localDevMode = config.get('localDevMode');
 const debug = config.get('debug');
 
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
     const data = {
         csrfToken: req.csrfToken ? req.csrfToken() : '',
-        debug: debug,
-        localDevMode: localDevMode,
+        debug,
+        localDevMode,
         assetHost: config.get('devServer.enable') ? config.get('devServer.hostname') : '',
     };
 

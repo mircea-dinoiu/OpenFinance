@@ -17,7 +17,7 @@ export default class MainScreenEditDialog extends PureComponent {
     };
     formData = this.props.modelToForm(this.props.entity);
 
-    save = async() => {
+    save = async () => {
         const data = this.formData;
 
         this.setState({
@@ -94,4 +94,4 @@ export default class MainScreenEditDialog extends PureComponent {
             </Dialog>
         );
     }
-};
+}

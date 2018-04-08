@@ -19,7 +19,7 @@ const IncomeListItem = (props) => {
             contentComponent={IncomeListItemContent}
             {...props}
         />
-    )
+    );
 };
 
 export default IncomeListItem;

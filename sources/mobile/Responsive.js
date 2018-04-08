@@ -1,5 +1,5 @@
 import 'normalize.css';
-import 'react-tippy/dist/tippy.css'
+import 'react-tippy/dist/tippy.css';
 import './Responsive.css';
 import 'babel-polyfill';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -65,7 +65,7 @@ class Responsive extends PureComponent<{
             const response = await fetch(routes.user.list);
             
             if (response.ok) {
-                props.actions.updateUser(fromJS(await response.json()))
+                props.actions.updateUser(fromJS(await response.json()));
             } else {
                 this.showLogin();
             }
@@ -102,7 +102,7 @@ class Responsive extends PureComponent<{
         this.props.actions.toggleLoading(false);
     }
 
-    onLogout = async() => {
+    onLogout = async () => {
         this.props.actions.toggleLoading(true);
 
         const response = await fetch(routes.user.logout, {method: 'POST'});

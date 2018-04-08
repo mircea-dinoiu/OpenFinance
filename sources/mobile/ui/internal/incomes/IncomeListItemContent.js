@@ -11,13 +11,17 @@ import {Avatar} from 'material-ui';
 import {numericValue} from '../../formatters';
 
 import RepeatOptions from 'common/defs/repeatOptions';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 
 const IncomeListItemContent = (props) => {
     const item = props.item;
     const userList = props.data.user.get('list');
     const currenciesMap = props.data.currencies.get('map');
     const currencyISOCode = currenciesMap.getIn([String(item.currency_id), 'iso_code']);
+
+    if (props.screen.isLarge) {
+
+    }
 
     return (
         <div>

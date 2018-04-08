@@ -27,14 +27,14 @@ module.exports = {
         /**
          * Total remaining
          */
-        Object.keys(totalRemainingByUser).forEach(function (id) {
+        Object.keys(totalRemainingByUser).forEach((id) => {
             const sum = totalRemainingByUser[id];
 
             if (sum !== 0) {
                 const user = userRecords.find(each => each.id == id);
 
                 data.byUser.push({
-                    sum: sum,
+                    sum,
                     description: SummaryReportHelper.description(user.full_name, {html}),
                 });
             }
@@ -47,7 +47,7 @@ module.exports = {
                 const ml = mlRecords.find(each => each.id == id);
 
                 data.byML.push({
-                    sum: sum,
+                    sum,
                     description: SummaryReportHelper.description(SummaryReportHelper.formatMLName(id, {mlRecords, html}), {
                         html
                     }),
@@ -85,7 +85,7 @@ module.exports = {
             const sum = users[id];
 
             data.byUser.push({
-                sum: sum,
+                sum,
                 description: SummaryReportHelper.description(userRecords.find(each => each.id == id).full_name, {html}),
                 reference: Number(id)
             });
@@ -176,7 +176,7 @@ module.exports = {
                 const users = json.users;
                 const catSum = rawCatSum / users.length;
 
-                users.forEach(function (id) {
+                users.forEach((id) => {
                     if (!categories[categoryId].users[id]) {
                         categories[categoryId].users[id] = 0;
                     }
@@ -190,7 +190,7 @@ module.exports = {
             }
 
             if (recordCategories.length > 0) {
-                recordCategories.forEach(function (rawCategoryId) {
+                recordCategories.forEach((rawCategoryId) => {
                     let categoryId;
 
                     if (categoryRecords.find(each => each.id == rawCategoryId)) {
@@ -206,11 +206,11 @@ module.exports = {
             }
         }
 
-        const categoryIds = Object.keys(categories).map(function (id) {
+        const categoryIds = Object.keys(categories).map((id) => {
             return parseInt(id);
         });
 
-        categoryIds.sort(function (id1, id2) {
+        categoryIds.sort((id1, id2) => {
             if (id1 == 0) {
                 return -1;
             }
@@ -225,13 +225,13 @@ module.exports = {
             return sum1 > sum2 ? -1 : 1;
         });
 
-        categoryIds.forEach(function (categoryId, index) {
+        categoryIds.forEach((categoryId, index) => {
             Object.entries(categories[categoryId].users).forEach(([id, sum]) => {
                 data.push({
-                    sum: sum,
+                    sum,
                     description: SummaryReportHelper.description(userRecords.find(each => each.id == id).full_name, {html}),
                     group: categoryId,
-                    index: index
+                    index
                 });
             });
         });
