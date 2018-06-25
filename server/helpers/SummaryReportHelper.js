@@ -24,7 +24,9 @@ module.exports = {
     getRemainingSum(expenses, incomes, id) {
         let filteredExpenses, filteredIncomes;
 
-        filteredExpenses = expenses.filter((expense) => expense.reference === id)[0];
+        filteredExpenses = expenses.filter(
+            (expense) => expense.reference === id
+        )[0];
 
         filteredIncomes = incomes.filter((income) => income.reference === id)[0];
 

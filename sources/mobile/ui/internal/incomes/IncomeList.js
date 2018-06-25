@@ -5,18 +5,14 @@ import routes from 'common/defs/routes';
 
 import IncomeListItem from './IncomeListItem';
 import MainScreenList from '../common/MainScreenList';
-import ExpenseHeader from 'mobile/ui/internal/expenses/ExpenseHeader';
+import IncomeHeader from 'mobile/ui/internal/incomes/IncomeHeader';
 
-const IncomeList = () => {
-    return null;
-
-    return (
-        <MainScreenList
-            api={routes.income}
-            listItemComponent={IncomeListItem}
-            headerComponent={ExpenseHeader}
-        />
-    );
-};
+const IncomeList = () => (
+    <MainScreenList
+        api={routes.income}
+        listItemComponent={IncomeListItem}
+        headerComponent={IncomeHeader}
+    />
+);
 
 export default IncomeList;

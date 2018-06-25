@@ -8,9 +8,11 @@ import {PREFERENCE_END_DATE, setPreference} from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
 
-const screen = (state = getScreenQueries(), action) => action.type === Actions.SET_SCREEN ? action.value : state;
+const screen = (state = getScreenQueries(), action) =>
+    action.type === Actions.SET_SCREEN ? action.value : state;
 
-const refreshWidgets = (state = uniqueId(), action) => action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
+const refreshWidgets = (state = uniqueId(), action) =>
+    action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
 
 const bindToUpdateState = (prop, defaultValue) => {
     stateKeysWithoutReducers.push(prop);

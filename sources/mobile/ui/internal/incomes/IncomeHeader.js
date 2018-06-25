@@ -3,7 +3,7 @@ import React from 'react';
 import {TableHeaderColumn, TableRow} from 'material-ui';
 import {ColumnStyles} from './defs';
 
-const ExpenseHeader = () => (
+const IncomeHeader = () => (
     <TableRow>
         <TableHeaderColumn style={ColumnStyles.CURRENCY}>
             Currency
@@ -15,12 +15,11 @@ const ExpenseHeader = () => (
         <TableHeaderColumn style={ColumnStyles.DATE_TIME}>
             Date & Time
         </TableHeaderColumn>
-        <TableHeaderColumn>Categories</TableHeaderColumn>
-        <TableHeaderColumn style={ColumnStyles.ACCOUNT}>
-            Account
+        <TableHeaderColumn style={ColumnStyles.DESTINATION}>
+            Destination
         </TableHeaderColumn>
-        <TableHeaderColumn style={ColumnStyles.PERSONS}>
-            Person(s)
+        <TableHeaderColumn style={ColumnStyles.PERSON}>
+            Person
         </TableHeaderColumn>
         <TableHeaderColumn style={ColumnStyles.REPEAT}>
             Repeat
@@ -28,4 +27,4 @@ const ExpenseHeader = () => (
     </TableRow>
 );
 
-export default ExpenseHeader;
+export default IncomeHeader;

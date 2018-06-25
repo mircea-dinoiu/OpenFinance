@@ -312,7 +312,7 @@ class ExpenseForm extends PureComponent {
 
                         return (
                             <Chip
-                                style={{margin: '5px 5px 0 0'}}
+                                style={{margin: '5px 5px 0 0', height: 32}}
                                 key={id}
                                 onRequestDelete={() =>
                                     this.setState({
@@ -379,7 +379,7 @@ class ExpenseForm extends PureComponent {
 
                         return (
                             <Chip
-                                style={{margin: 5}}
+                                style={{margin: 5, height: 32}}
                                 key={id}
                                 onRequestDelete={() =>
                                     this.setState({

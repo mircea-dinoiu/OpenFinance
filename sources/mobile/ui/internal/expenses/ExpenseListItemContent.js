@@ -85,7 +85,7 @@ const ExpenseListItemContent = (props) => {
         </span>
     );
 
-    if (props.screen.isLarge) {
+    if (screen.isLarge) {
         return (
             <React.Fragment>
                 <TableRowColumn style={ColumnStyles.CURRENCY}>
@@ -98,8 +98,9 @@ const ExpenseListItemContent = (props) => {
                     })}
                 </TableRowColumn>
                 <TableRowColumn>
-                    <span style={{float: 'left'}}>{flags}</span>
-                    &nbsp;
+                    <span style={{float: 'left', marginRight: 5}}>
+                        {flags}
+                    </span>
                     <span
                         style={{
                             fontSize: 14,

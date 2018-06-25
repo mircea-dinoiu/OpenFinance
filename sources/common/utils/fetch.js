@@ -5,16 +5,17 @@ import config from './config';
 
 const globalNamespace = typeof self === 'undefined' ? this : self;
 
-const parseOpts = (opts) => deepExtend(
-    {
-        headers: {
-            'X-CSRF-Token': config.csrfToken,
-            'X-Requested-With': 'XMLHttpRequest'
+const parseOpts = (opts) =>
+    deepExtend(
+        {
+            headers: {
+                'X-CSRF-Token': config.csrfToken,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
         },
-        credentials: 'same-origin'
-    },
-    opts
-);
+        opts
+    );
 
 export const fetch = async (
     url: string,

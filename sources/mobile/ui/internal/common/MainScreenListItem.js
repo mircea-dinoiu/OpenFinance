@@ -1,3 +1,4 @@
+// @flow
 import React, {PureComponent} from 'react';
 
 import MoreVertIcon from 'material-ui-icons/MoreVert';
@@ -14,7 +15,7 @@ import {connect} from 'react-redux';
 import {formatYMD} from 'common/utils/dates';
 import moment from 'moment';
 
-class ExpenseListItem extends PureComponent {
+class MainScreenListItem extends PureComponent {
     props: {
         entityName: string,
         editDialogProps: {},
@@ -152,16 +153,20 @@ class ExpenseListItem extends PureComponent {
         );
         const menuItems = (
             <React.Fragment>
-                <MenuItem
-                    primaryText="Edit"
-                    leftIcon={<CreateIcon />}
-                    onTouchTap={this.toggleEditDialog}
-                />
-                <MenuItem
-                    primaryText="Delete"
-                    leftIcon={<DeleteIcon />}
-                    onTouchTap={this.toggleDeleteDialog}
-                />
+                {persist && (
+                    <MenuItem
+                        primaryText="Edit"
+                        leftIcon={<CreateIcon />}
+                        onTouchTap={this.toggleEditDialog}
+                    />
+                )}
+                {persist && (
+                    <MenuItem
+                        primaryText="Delete"
+                        leftIcon={<DeleteIcon />}
+                        onTouchTap={this.toggleDeleteDialog}
+                    />
+                )}
             </React.Fragment>
         );
 
@@ -171,7 +176,7 @@ class ExpenseListItem extends PureComponent {
                     style={this.getStyle()}
                     className={this.getClassName()}
                     hoverable={true}
-                    onDoubleClick={this.toggleEditDialog}
+                    onDoubleClick={persist ? this.toggleEditDialog : null}
                 >
                     {dialogs}
                     {itemContent}
@@ -222,4 +227,4 @@ class ExpenseListItem extends PureComponent {
     }
 }
 
-export default connect(({screen}) => ({screen}))(ExpenseListItem);
+export default connect(({screen}) => ({screen}))(MainScreenListItem);

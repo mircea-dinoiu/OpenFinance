@@ -5,8 +5,9 @@ const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const config = require('config');
 const db = {};
+
 const sql = new Sequelize(process.env.DATABASE_URL, {
-    timezone: config.get('timezone'),
+    timezone: process.env.TIMEZONE,
     logging: config.get('debug')
         ? (...args) => {
             console.log(
@@ -19,11 +20,12 @@ const sql = new Sequelize(process.env.DATABASE_URL, {
 
 fs
     .readdirSync(__dirname)
-    .filter((file) => (
-        file.indexOf('.') !== 0 &&
+    .filter(
+        (file) =>
+            file.indexOf('.') !== 0 &&
             file !== basename &&
             file.slice(-3) === '.js'
-    ))
+    )
     .forEach((file) => {
         const {name} = path.parse(file);
         const model = sql.import(path.join(__dirname, file));

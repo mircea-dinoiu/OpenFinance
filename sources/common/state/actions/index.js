@@ -29,9 +29,7 @@ export const setEndDate = (value: string | Date) => ({
 export const refreshWidgets = () => ({type: Actions.REFRESH_WIDGETS});
 
 export const fetchCurrencies = (params = {}) => async (dispatch) => {
-    const currenciesResponse = await fetch(
-        url(routes.getCurrencies, params)
-    );
+    const currenciesResponse = await fetch(url(routes.getCurrencies, params));
 
     dispatch(
         updateState({

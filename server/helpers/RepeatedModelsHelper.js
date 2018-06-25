@@ -6,7 +6,9 @@ module.exports = {
         const ret = [];
 
         records.forEach((record) => {
-            ret.push(record);
+            if (startDate == null || this.day(record) >= this.day(startDate)) {
+                ret.push(record);
+            }
 
             if (record.repeat) {
                 this.getClonesFor({
@@ -39,12 +41,17 @@ module.exports = {
                     repeats
                 );
 
+                if (startDate && day(newObject.created_at) < day(startDate)) {
+                    repeats++;
+                    continue;
+                }
+
                 newObject.original = record.id;
                 newObject.persist = false;
 
                 delete newObject.id;
 
-                if (day(newObject.created_at) < day(startDate) || day(newObject.created_at) > day(endDate)) {
+                if (day(newObject.created_at) > day(endDate)) {
                     break;
                 } else {
                     out.push(
