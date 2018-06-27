@@ -1,8 +1,14 @@
 import React, {PureComponent} from 'react';
-import {TextField, DatePicker, TimePicker, SelectField, MenuItem} from 'material-ui';
+import {
+    TextField,
+    DatePicker,
+    TimePicker,
+    SelectField,
+    MenuItem
+} from 'material-ui';
 import {Row, Col} from 'react-grid-system';
 import RepeatOptions from 'common/defs/repeatOptions';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 
 class IncomeForm extends PureComponent {
     props: {
@@ -20,14 +26,42 @@ class IncomeForm extends PureComponent {
 
     renderSum() {
         return (
-            <TextField
-                floatingLabelText="Sum"
-                floatingLabelFixed={true}
-                value={this.state.sum}
-                fullWidth={true}
-                type="number"
-                onChange={event => this.setState({sum: event.target.value})}
-            />
+            <Row>
+                <Col xs={4}>
+                    <SelectField
+                        floatingLabelText="Currency"
+                        floatingLabelFixed={true}
+                        value={this.state.currency}
+                        onChange={(e, i, value) =>
+                            this.setState({currency: value})
+                        }
+                        fullWidth={true}
+                    >
+                        {this.props.currencies
+                            .get('map')
+                            .map((map) => ({
+                                value: map.get('id'),
+                                primaryText: map.get('iso_code')
+                            }))
+                            .toArray()
+                            .map((props) => (
+                                <MenuItem key={props.value} {...props} />
+                            ))}
+                    </SelectField>
+                </Col>
+                <Col xs={8}>
+                    <TextField
+                        floatingLabelText="Sum"
+                        floatingLabelFixed={true}
+                        value={this.state.sum}
+                        fullWidth={true}
+                        type="number"
+                        onChange={(event) =>
+                            this.setState({sum: event.target.value})
+                        }
+                    />
+                </Col>
+            </Row>
         );
     }
 
@@ -38,7 +72,9 @@ class IncomeForm extends PureComponent {
                 floatingLabelFixed={true}
                 value={this.state.description}
                 fullWidth={true}
-                onChange={event => this.setState({description: event.target.value})}
+                onChange={(event) =>
+                    this.setState({description: event.target.value})
+                }
             />
         );
     }
@@ -74,14 +110,19 @@ class IncomeForm extends PureComponent {
                 floatingLabelText="Destination"
                 floatingLabelFixed={true}
                 value={this.state.paymentMethod}
-                onChange={(e, i, value) => this.setState({paymentMethod: value})}
+                onChange={(e, i, value) =>
+                    this.setState({paymentMethod: value})
+                }
                 fullWidth={true}
             >
-                {
-                    this.props.moneyLocations.sortBy(each => each.get('name')).map(
-                        map => ({value: map.get('id'), primaryText: map.get('name')})
-                    ).toJS().map(props => <MenuItem key={props.value} {...props}/>)
-                }
+                {this.props.moneyLocations
+                    .sortBy((each) => each.get('name'))
+                    .map((map) => ({
+                        value: map.get('id'),
+                        primaryText: map.get('name')
+                    }))
+                    .toJS()
+                    .map((props) => <MenuItem key={props.value} {...props} />)}
             </SelectField>
         );
     }
@@ -95,11 +136,15 @@ class IncomeForm extends PureComponent {
                 onChange={(e, i, value) => this.setState({userId: value})}
                 fullWidth={true}
             >
-                {
-                    this.props.user.get('list').sortBy(each => each.get('full_name')).map(
-                        map => ({value: map.get('id'), primaryText: map.get('full_name')})
-                    ).toJS().map(props => <MenuItem key={props.value} {...props}/>)
-                }
+                {this.props.user
+                    .get('list')
+                    .sortBy((each) => each.get('full_name'))
+                    .map((map) => ({
+                        value: map.get('id'),
+                        primaryText: map.get('full_name')
+                    }))
+                    .toJS()
+                    .map((props) => <MenuItem key={props.value} {...props} />)}
             </SelectField>
         );
     }
@@ -113,12 +158,10 @@ class IncomeForm extends PureComponent {
                 onChange={(e, i, value) => this.setState({repeat: value})}
                 fullWidth={true}
             >
-                {
-                    RepeatOptions.map(arr => ({
-                        value: arr[0],
-                        primaryText: arr[1]
-                    })).map(props => <MenuItem key={props.value} {...props}/>)
-                }
+                {RepeatOptions.map((arr) => ({
+                    value: arr[0],
+                    primaryText: arr[1]
+                })).map((props) => <MenuItem key={props.value} {...props} />)}
             </SelectField>
         );
     }
@@ -126,35 +169,19 @@ class IncomeForm extends PureComponent {
     render() {
         return (
             <Col>
-                <Row>
-                    <Col xs={6}>
-                        {this.renderSum()}
-                    </Col>
-                    <Col xs={6}>
-                        {this.renderRepeat()}
-                    </Col>
-                </Row>
+                {this.renderSum()}
                 {this.renderDescription()}
                 {this.renderDateTime()}
-                <Row>
-                    <Col xs={6}>
-                        {this.renderDestination()}
-                    </Col>
-                    <Col xs={6}>
-                        {this.renderFrom()}
-                    </Col>
-                </Row>
+                {this.renderDestination()}
+                {this.renderFrom()}
+                {this.renderRepeat()}
             </Col>
         );
     }
 }
 
-export default connect(
-    ({
-         moneyLocations,
-         user,
-     }) => ({
-        moneyLocations,
-        user,
-    })
-)(IncomeForm);
+export default connect(({currencies, moneyLocations, user}) => ({
+    currencies,
+    moneyLocations,
+    user
+}))(IncomeForm);

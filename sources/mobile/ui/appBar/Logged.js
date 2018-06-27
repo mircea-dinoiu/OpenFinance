@@ -9,12 +9,14 @@ const Logged = (rawProps) => {
         <IconMenu
             {...props}
             iconButtonElement={
-              <IconButton><MoreVertIcon color="white"/></IconButton>
+                <IconButton>
+                    <MoreVertIcon color="white" />
+                </IconButton>
             }
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
         >
-            <MenuItem primaryText="Logout" onTouchTap={onLogout}/>
+            <MenuItem primaryText="Logout" onTouchTap={onLogout} />
         </IconMenu>
     );
 };

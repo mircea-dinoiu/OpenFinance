@@ -46,4 +46,4 @@ export default {
             descriptions: '/suggestion/expense/descriptions'
         }
     }
-}
+};

@@ -6,20 +6,18 @@ import IncomeForm from './IncomeForm';
 import modelToForm from './helpers/modelToForm';
 import formToModel from './helpers/formToModel';
 
-const IncomeListItem = (props) => {
-    return (
-        <MainScreenListItem
-            entityName="income"
-            nameProperty="description"
-            editDialogProps={{
-                modelToForm,
-                formToModel,
-                formComponent: IncomeForm
-            }}
-            contentComponent={IncomeListItemContent}
-            {...props}
-        />
-    )
-};
+const IncomeListItem = (props) => (
+    <MainScreenListItem
+        entityName="income"
+        nameProperty="description"
+        editDialogProps={{
+            modelToForm,
+            formToModel,
+            formComponent: IncomeForm
+        }}
+        contentComponent={IncomeListItemContent}
+        {...props}
+    />
+);
 
 export default IncomeListItem;

@@ -17,7 +17,7 @@ export default class MainScreenEditDialog extends PureComponent {
     };
     formData = this.props.modelToForm(this.props.entity);
 
-    save = async() => {
+    save = async () => {
         const data = this.formData;
 
         this.setState({
@@ -34,7 +34,9 @@ export default class MainScreenEditDialog extends PureComponent {
 
         if (response.ok) {
             this.setState({
-                success: `The ${this.props.entityName} was successfully updated`,
+                success: `The ${
+                    this.props.entityName
+                } was successfully updated`,
                 saving: false
             });
 
@@ -64,7 +66,7 @@ export default class MainScreenEditDialog extends PureComponent {
             />,
             <RaisedButton
                 disabled={this.state.saving}
-                label={this.state.saving ? <ButtonProgress/> : 'Update'}
+                label={this.state.saving ? <ButtonProgress /> : 'Update'}
                 primary={true}
                 onTouchTap={this.save}
                 style={{float: 'right'}}
@@ -83,15 +85,25 @@ export default class MainScreenEditDialog extends PureComponent {
                 <Row>
                     <Form
                         {...this.props.data}
-                        onFormChange={formData => this.formData = formData}
+                        onFormChange={(formData) => (this.formData = formData)}
                         initialValues={this.formData}
                     />
                 </Row>
                 <Col>
-                    {this.state.error && <ErrorSnackbar key={Math.random()} message={this.state.error}/>}
-                    {this.state.success && <SuccessSnackbar key={Math.random()} message={this.state.success}/>}
+                    {this.state.error && (
+                        <ErrorSnackbar
+                            key={Math.random()}
+                            message={this.state.error}
+                        />
+                    )}
+                    {this.state.success && (
+                        <SuccessSnackbar
+                            key={Math.random()}
+                            message={this.state.success}
+                        />
+                    )}
                 </Col>
             </Dialog>
         );
     }
-};
+}

@@ -1,5 +1,10 @@
 export default (data, props) => {
-    const users = data.chargedPersons.length ? data.chargedPersons : props.user.get('list').map(each => each.get('id')).toArray();
+    const users = data.chargedPersons.length
+        ? data.chargedPersons
+        : props.user
+            .get('list')
+            .map((each) => each.get('id'))
+            .toArray();
 
     const date: Date = new Date(data.date.valueOf());
     const time: Date = data.time;
@@ -17,7 +22,7 @@ export default (data, props) => {
         categories: data.categories,
         money_location_id: data.paymentMethod,
         repeat: data.repeat,
-        users: users,
+        users,
         status: data.status || 'pending'
     };
 };

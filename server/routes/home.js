@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const PlatformService = require('../services/PlatformService');
 const {basePath} = require('../helpers');
 const fs = require('fs');
 
@@ -9,30 +8,40 @@ const config = require('config');
 const localDevMode = config.get('localDevMode');
 const debug = config.get('debug');
 
-router.get('/', function (req, res) {
-    PlatformService.detector = req.headers['user-agent'];
+router.get('/', (req, res) => {
+    const data = {
+        csrfToken: req.csrfToken ? req.csrfToken() : '',
+        debug,
+        localDevMode,
+        assetHost: config.get('devServer.enable')
+            ? config.get('devServer.hostname')
+            : ''
+    };
 
-    if (PlatformService.isSupported()) {
-        const data = {
-            isMobile: PlatformService.isMobile(),
-            csrfToken: req.csrfToken ? req.csrfToken() : '',
-            debug: debug,
-            localDevMode: localDevMode,
-            assetHost: config.get('devServer.enable') ? config.get('devServer.hostname') : '',
-        };
+    const legacy = req.query.hasOwnProperty('legacy');
 
-        if (PlatformService.isMobile()) {
-            res.render('mobile', data);
-        } else {
-            fs.readFile(basePath(`${localDevMode ? 'sources/desktop' : 'public'}/microloader.html`), (err, microloader) => {
-                res.render('desktop', Object.assign({
-                    theme: 'triton',
-                    bootstrapScript: String(microloader)
-                }, data));
-            });
-        }
+    if (!legacy) {
+        res.render('responsive', data);
     } else {
-        res.render('not-supported');
+        fs.readFile(
+            basePath(
+                `${
+                    localDevMode ? 'sources/desktop' : 'public'
+                }/microloader.html`
+            ),
+            (err, microloader) => {
+                res.render(
+                    'desktop',
+                    Object.assign(
+                        {
+                            theme: 'triton',
+                            bootstrapScript: String(microloader)
+                        },
+                        data
+                    )
+                );
+            }
+        );
     }
 });
 

@@ -10,7 +10,7 @@ module.exports = {
     pickOwnProperties(source, keys) {
         const dest = {};
 
-        keys.forEach(key => {
+        keys.forEach((key) => {
             if (source.hasOwnProperty(key)) {
                 dest[key] = source[key];
             }
@@ -25,6 +25,9 @@ module.exports = {
 
     logError(...args) {
         console.error(...args);
-        fs.appendFile(basePath('storage/error.log'), args.concat('').join('\n'));
+        fs.appendFile(
+            basePath('storage/error.log'),
+            args.concat('').join('\n')
+        );
     }
 };

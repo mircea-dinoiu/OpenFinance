@@ -33,7 +33,7 @@ module.exports = BaseController.extend({
     sanitizeCreateValues(record) {
         return {
             name: record.name.trim(),
-            type_id: record.type_id,
+            type_id: record.type_id
         };
-    },
+    }
 });

@@ -18,7 +18,10 @@ const appendRatesToCurrencies = (map, {rates, defaultCurrencyISOCode}) => {
             if (currencyInfo.iso_code === defaultCurrencyISOCode) {
                 value = floorToDigits(rates[eachISOCode], 4);
             } else {
-                value = floorToDigits(rates[eachISOCode] / rates[currencyInfo.iso_code], 4)
+                value = floorToDigits(
+                    rates[eachISOCode] / rates[currencyInfo.iso_code],
+                    4
+                );
             }
 
             map[id].rates[eachISOCode] = value;
@@ -44,20 +47,24 @@ module.exports = {
             }
         });
 
-
         if (defaultCurrencyISOCode !== origCurrencyISOCode) {
-            Object.keys(rates).forEach(key => {
+            Object.keys(rates).forEach((key) => {
                 if (key !== defaultCurrencyISOCode) {
-                    rates[key] = floorToDigits(1 / rates[defaultCurrencyISOCode] * rates[key], 4);
+                    rates[key] = floorToDigits(
+                        1 / rates[defaultCurrencyISOCode] * rates[key],
+                        4
+                    );
                 }
             });
 
-            rates[origCurrencyISOCode] = floorToDigits(1 / rates[defaultCurrencyISOCode], 4);
+            rates[origCurrencyISOCode] = floorToDigits(
+                1 / rates[defaultCurrencyISOCode],
+                4
+            );
             rates[defaultCurrencyISOCode] = 1;
         }
 
-
         return rates;
     },
-    appendRatesToCurrencies,
+    appendRatesToCurrencies
 };

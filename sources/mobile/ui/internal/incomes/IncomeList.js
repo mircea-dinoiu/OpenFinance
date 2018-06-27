@@ -1,17 +1,18 @@
+// @flow
 import React from 'react';
 
 import routes from 'common/defs/routes';
 
 import IncomeListItem from './IncomeListItem';
 import MainScreenList from '../common/MainScreenList';
+import IncomeHeader from 'mobile/ui/internal/incomes/IncomeHeader';
 
-const ExpenseList = () => {
-    return (
-        <MainScreenList
-            api={routes.income}
-            listItemComponent={IncomeListItem}
-        />
-    )
-};
+const IncomeList = () => (
+    <MainScreenList
+        api={routes.income}
+        listItemComponent={IncomeListItem}
+        headerComponent={IncomeHeader}
+    />
+);
 
-export default ExpenseList;
+export default IncomeList;

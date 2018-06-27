@@ -13,9 +13,7 @@ module.exports = BaseController.extend({
                     sql.fn('lower', sql.col('item')),
                     search.toLowerCase().trim()
                 ),
-                order: [
-                    [sql.col('created_at'), 'DESC']
-                ]
+                order: [[sql.col('created_at'), 'DESC']]
             });
 
             for (const record of response) {
@@ -39,19 +37,18 @@ module.exports = BaseController.extend({
         });
 
         if (await validator.passes()) {
-            res.json(await Expense.findAll({
-                attributes: [
-                    'item',
-                    [sql.fn('COUNT', 'item'), 'usages']
-                ],
-                where: [
-                    'DATE(created_at) <= ? AND LOWER(item) LIKE ?',
-                    query.end_date,
-                    `%${query.search}%`
-                ],
-                group: 'item',
-                order: 'usages DESC LIMIT 10'
-            }))
+            res.json(
+                await Expense.findAll({
+                    attributes: ['item', [sql.fn('COUNT', 'item'), 'usages']],
+                    where: [
+                        'DATE(created_at) <= ? AND LOWER(item) LIKE ?',
+                        query.end_date,
+                        `%${query.search}%`
+                    ],
+                    group: 'item',
+                    order: 'usages DESC LIMIT 10'
+                })
+            );
         } else {
             res.status(400).json(validator.errors());
         }

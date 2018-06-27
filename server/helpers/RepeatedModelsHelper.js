@@ -2,22 +2,25 @@ const moment = require('moment');
 const {standardDate} = require('../helpers');
 
 module.exports = {
-    generateClones({records, endDate}) {
+    generateClones({records, endDate, startDate}) {
         const ret = [];
 
         records.forEach((record) => {
-            ret.push(record);
+            if (startDate == null || this.day(record) >= this.day(startDate)) {
+                ret.push(record);
+            }
 
             if (record.repeat) {
                 this.getClonesFor({
-                    record: record,
-                    endDate
-                }).forEach(clone => {
+                    record,
+                    endDate,
+                    startDate,
+                }).forEach((clone) => {
                     ret.push(clone);
                 });
             }
         });
-        
+
         return ret;
     },
 
@@ -25,7 +28,7 @@ module.exports = {
         return moment(date).format('YYYY-MM-DD');
     },
 
-    getClonesFor({record, endDate}) {
+    getClonesFor({record, endDate, startDate}) {
         const out = [];
         const day = this.day;
 
@@ -38,6 +41,11 @@ module.exports = {
                     repeats
                 );
 
+                if (startDate && day(newObject.created_at) < day(startDate)) {
+                    repeats++;
+                    continue;
+                }
+
                 newObject.original = record.id;
                 newObject.persist = false;
 
@@ -46,9 +54,14 @@ module.exports = {
                 if (day(newObject.created_at) > day(endDate)) {
                     break;
                 } else {
-                    out.push(Object.assign({
-                        toJSON: () => newObject
-                    }, newObject));
+                    out.push(
+                        Object.assign(
+                            {
+                                toJSON: () => newObject
+                            },
+                            newObject
+                        )
+                    );
                     repeats++;
                 }
             }
@@ -64,7 +77,7 @@ module.exports = {
 
         switch (newObject.repeat) {
             case 'd':
-                date.setDate(date.getDate() + 1 * repeats);
+                date.setDate(date.getDate() + Number(repeats));
                 break;
             case 'w':
                 date.setDate(date.getDate() + 7 * repeats);
@@ -73,18 +86,18 @@ module.exports = {
                 date.setDate(date.getDate() + 7 * 2 * repeats);
                 break;
             case 'm':
-                date.setMonth(date.getMonth() + 1 * repeats);
+                date.setMonth(date.getMonth() + Number(repeats));
                 break;
             case '3m':
                 date.setMonth(date.getMonth() + 3 * repeats);
                 break;
             case 'y':
-                date.setFullYear(date.getFullYear() + 1 * repeats);
+                date.setFullYear(date.getFullYear() + Number(repeats));
                 break;
         }
 
         newObject.created_at = standardDate(date);
 
         return newObject;
-    },
+    }
 };

@@ -1,0 +1,22 @@
+body {
+    font-family: Roboto, sans-serif;
+    background: #EEEEEE;
+}
+
+.msl__today-row td {
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.msl__future-row td {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.msl__even-row .msl__date-column {
+    background: rgba(173, 216, 230, 0.75);
+}
+
+.msl__odd-row .msl__date-column {
+    background: rgba(240, 128, 128, 0.75);
+    color: white;
+}

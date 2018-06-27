@@ -1,0 +1,162 @@
+body > .x-mask {
+  background-color: rgba(0, 0, 0, .5) !important
+}
+
+.x-mask {
+  border: none !important
+}
+
+.item-usages {
+  opacity: .5;
+  float: right;
+  font-style: italic
+}
+
+.today-row td {
+  font-weight: 700;
+  background: rgba(0, 0, 0, .1)
+}
+
+.future-row td {
+  background: rgba(0, 0, 0, .05)
+}
+
+.even-row td.x-grid-cell.date {
+  background: rgba(173, 216, 230, .75)
+}
+
+.odd-row td.x-grid-cell.date {
+  background: hsla(0, 79%, 72%, .75);
+  color: #fff
+}
+
+.hidden {
+  display: none;
+  visibility: hidden
+}
+
+.report-grid.green > .x-panel-header, .report-grid.green > .x-panel-header .x-panel-header-title-default, .report-grid.green > .x-panel-header .x-tool-img {
+  background-color: #6aa84f !important;
+  color: hsla(0, 0%, 100%, .9)
+}
+
+.report-grid.orchid > .x-panel-header, .report-grid.orchid > .x-panel-header .x-panel-header-title-default, .report-grid.orchid > .x-panel-header .x-tool-img {
+  background-color: #a64d79 !important;
+  color: hsla(0, 0%, 100%, .9)
+}
+
+.report-grid.red > .x-panel-header, .report-grid.red > .x-panel-header .x-panel-header-title-default, .report-grid.red > .x-panel-header .x-tool-img {
+  background-color: #a83232 !important;
+  color: hsla(0, 0%, 100%, .9)
+}
+
+.report-grid.yellow > .x-panel-header, .report-grid.yellow > .x-panel-header .x-panel-header-title-default, .report-grid.yellow > .x-panel-header .x-tool-img {
+  background-color: #f1c232 !important;
+  color: rgba(0, 0, 0, .9)
+}
+
+.report-grid > .x-panel-header {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important
+}
+
+.report-grid > .x-panel-header .x-panel-header-title {
+  height: 44px !important
+}
+
+.report-grid > .x-panel-header .grid-custom-title {
+  position: relative
+}
+
+.report-grid > .x-panel-header .grid-custom-title .grid-title-name {
+  position: relative;
+  top: -7px
+}
+
+.report-grid > .x-panel-header .grid-custom-title .grid-title-sum {
+  position: absolute;
+  top: 9px;
+  left: 0;
+  font-size: 12px;
+  font-weight: 700
+}
+
+.report-grid .group-name, .report-grid .group-sum {
+  display: block;
+  width: 50%
+}
+
+.report-grid .group-sum {
+  font-weight: 700;
+  text-align: right
+}
+
+.user-icon {
+  width: 20px;
+  position: relative;
+  display: inline-block;
+  height: 12px
+}
+
+.user-icon img {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 0;
+  top: -3px;
+  border-radius: 50%
+}
+
+.user-icon:not(:first-child) {
+  margin-left: 5px
+}
+
+.x-toolbar .user-icon {
+  width: 16px;
+  margin-right: 5px
+}
+
+.x-toolbar .user-icon img {
+  width: 16px;
+  height: 16px;
+  top: 0
+}
+
+.display-block {
+  display: block !important
+}
+
+.inline-block {
+  display: inline-block !important
+}
+
+.text-center {
+  text-align: center !important
+}
+
+.ux-notification-window .x-title-icon {
+  height: auto !important
+}
+
+.ux-notification-window .x-window-body {
+  padding: 10px 15px
+}
+
+.report-grid .group-name, .report-grid .group-sum, .text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.left, .report-grid .group-name {
+  float: left !important
+}
+
+.report-grid .group-sum, .right {
+  float: right !important
+}
+
+.clearfix:after {
+  clear: both;
+  content: "";
+  display: block
+}

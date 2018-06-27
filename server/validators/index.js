@@ -22,15 +22,9 @@ Object.assign(validator, {
 
         return stringIsFloat(value);
     },
-    isArray: (value) => {
-        return Array.isArray(value);
-    },
-    isPlainObject: (value) => {
-        return isPlainObject(value);
-    },
-    isDateFormat: (value, format) => {
-        return moment(value, format).isValid();
-    },
+    isArray: (value) => Array.isArray(value),
+    isPlainObject: (value) => isPlainObject(value),
+    isDateFormat: (value, format) => moment(value, format).isValid(),
     isId: async (id, Model) => {
         if (!validator.isInt(id)) {
             return false;
@@ -48,25 +42,17 @@ Object.assign(validator, {
         }
 
         for (const id of array) {
-            if (await validator.isId(id, Model) !== true) {
+            if ((await validator.isId(id, Model)) !== true) {
                 return false;
             }
         }
 
         return true;
     },
-    isRepeatValue: (value) => {
-        return ['d', 'w', '2w', 'm', '3m', 'y'].includes(value);
-    },
-    isStatusValue: (value) => {
-        return ['finished', 'pending'].includes(value);
-    },
-    isNotZero: (value) => {
-        return Number(value) !== 0;
-    },
-    isString: (value) => {
-        return typeof value === 'string';
-    },
+    isRepeatValue: (value) => ['d', 'w', '2w', 'm', '3m', 'y'].includes(value),
+    isStatusValue: (value) => ['finished', 'pending'].includes(value),
+    isNotZero: (value) => Number(value) !== 0,
+    isString: (value) => typeof value === 'string',
     isRequired: (value) => {
         if (value == null) {
             return false;
@@ -116,13 +102,19 @@ class Validator {
                     const ruleFn = validator[ruleName];
 
                     if (!ruleFn) {
-                        throw new Error(`Invalid validation rule specified: "${ruleName}"`);
+                        throw new Error(
+                            `Invalid validation rule specified: "${ruleName}"`
+                        );
                     }
 
                     if (debug) {
                         console.log(
                             chalk.inverse('Validation rule called:'),
-                            chalk.green(`${dataKey}: validator.${ruleName}(${[value].concat(params).join(', ')})`)
+                            chalk.green(
+                                `${dataKey}: validator.${ruleName}(${[value]
+                                    .concat(params)
+                                    .join(', ')})`
+                            )
                         );
                     }
 

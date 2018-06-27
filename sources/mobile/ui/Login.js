@@ -8,8 +8,9 @@ import {stringify} from 'query-string';
 import {ErrorSnackbar} from './components/snackbars';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Actions} from 'mobile/state/reducers';
-import {updateUser} from 'mobile/state/actions';
+import {Actions} from 'common/state/reducers';
+import {updateUser} from 'common/state/actions';
+import {Row, Col} from 'react-grid-system';
 
 class Login extends PureComponent {
     state = {
@@ -19,7 +20,7 @@ class Login extends PureComponent {
         loading: false
     };
 
-    submit = async() => {
+    submit = async () => {
         this.setState({
             loading: true
         });
@@ -44,50 +45,80 @@ class Login extends PureComponent {
         }
     };
 
+    handleTextFieldKeyDown = (event) => {
+        switch (event.key) {
+            case 'Enter':
+                this.submit();
+                break;
+            default:
+                this.setState({error: null});
+                break;
+        }
+    };
+
     render() {
         return (
-            <div style={{padding: '10%'}}>
-                <TextField
-                    hintText="Type in your e-mail"
-                    floatingLabelText="E-mail"
-                    value={this.state.email}
-                    onChange={event => this.setState({email: event.target.value})}
-                    disabled={this.state.loading}
-                    fullWidth={true}
-                />
-                <TextField
-                    hintText="Type in your password"
-                    floatingLabelText="Password"
-                    type="password"
-                    value={this.state.password}
-                    onChange={event => this.setState({password: event.target.value})}
-                    disabled={this.state.loading}
-                    fullWidth={true}
-                />
-                <Toggle
-                    style={{margin: '20px 0 0'}}
-                    label="Remember me"
-                    toggled={this.state.rememberMe}
-                    onToggle={(event, toggle) => this.setState({rememberMe: toggle})}
-                    disabled={this.state.loading}
-                />
-                <RaisedButton
-                    label={this.state.loading ? <ButtonProgress/> : 'Login'}
-                    primary={true}
-                    style={{margin: '20px 0 0'}}
-                    onTouchTap={this.submit}
-                    disabled={this.state.loading}
-                />
-                {this.state.error != null && (
-                    <ErrorSnackbar
-                        message={this.state.error}
+            <Row nogutter>
+                <Col
+                    xs={10}
+                    md={6}
+                    lg={4}
+                    push={{
+                        xs: 1,
+                        md: 3,
+                        lg: 4
+                    }}
+                >
+                    <TextField
+                        hintText="Type in your e-mail"
+                        floatingLabelText="E-mail"
+                        value={this.state.email}
+                        onChange={(event) =>
+                            this.setState({email: event.target.value})
+                        }
+                        disabled={this.state.loading}
+                        fullWidth={true}
+                        onKeyDown={this.handleTextFieldKeyDown}
                     />
-                )}
-            </div>
+                    <TextField
+                        hintText="Type in your password"
+                        floatingLabelText="Password"
+                        type="password"
+                        value={this.state.password}
+                        onChange={(event) =>
+                            this.setState({password: event.target.value})
+                        }
+                        disabled={this.state.loading}
+                        fullWidth={true}
+                        onKeyDown={this.handleTextFieldKeyDown}
+                    />
+                    <Toggle
+                        style={{margin: '20px 0 0'}}
+                        label="Remember me"
+                        toggled={this.state.rememberMe}
+                        onToggle={(event, toggle) =>
+                            this.setState({rememberMe: toggle})
+                        }
+                        disabled={this.state.loading}
+                    />
+                    <RaisedButton
+                        label={
+                            this.state.loading ? <ButtonProgress /> : 'Login'
+                        }
+                        primary={true}
+                        style={{margin: '20px 0 0'}}
+                        onTouchTap={this.submit}
+                        disabled={this.state.loading}
+                    />
+                    {this.state.error != null && (
+                        <ErrorSnackbar message={this.state.error} />
+                    )}
+                </Col>
+            </Row>
         );
     }
 }
 
-export default connect(null, dispatch => ({
+export default connect(null, (dispatch) => ({
     actions: bindActionCreators({updateUser}, dispatch)
 }))(Login);

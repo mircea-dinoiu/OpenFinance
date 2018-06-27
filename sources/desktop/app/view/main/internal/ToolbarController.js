@@ -60,6 +60,7 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         return this.getEndDateButton().down('datepicker');
     },
 
+    // @ported
     initCurrenciesContainer: function (currenciesContainer) {
         window.clearTimeout(currenciesContainer.timeout);
 

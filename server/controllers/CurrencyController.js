@@ -37,7 +37,7 @@ module.exports = {
     async getCurrencyByProp(key, value) {
         const currencies = await this.getCurrencies();
 
-        return currencies.find(each => each[key] == value);
+        return currencies.find((each) => each[key] == value);
     },
 
     async convert(value, rawFrom, rawTo) {
@@ -70,23 +70,24 @@ module.exports = {
     },
 
     async fetchRates(allowedISOCodes) {
-        const defaultCurrencyISOCode = (await this.getDefaultCurrency()).iso_code;
+        const defaultCurrencyISOCode = (await this.getDefaultCurrency())
+            .iso_code;
 
         return new Promise((resolve) => {
             const options = {
                 host: 'www.bnr.ro',
                 port: 80,
-                path: '/nbrfxrates.xml',
+                path: '/nbrfxrates.xml'
             };
 
             const req = http.get(options, (res) => {
                 let chunks = [];
 
                 res
-                    .on('data', function (chunk) {
+                    .on('data', (chunk) => {
                         chunks.push(chunk);
                     })
-                    .on('end', function () {
+                    .on('end', () => {
                         chunks = Buffer.concat(chunks).toString();
 
                         const xml2js = require('xml2js');
@@ -94,7 +95,7 @@ module.exports = {
                         xml2js.parseString(chunks, (err, xml) => {
                             const rates = CurrencyHelper.xmlToRates(xml, {
                                 allowedISOCodes,
-                                defaultCurrencyISOCode,
+                                defaultCurrencyISOCode
                             });
 
                             resolve(rates);
@@ -102,11 +103,10 @@ module.exports = {
                     });
             });
 
-            req
-                .on('error', function (e) {
-                    logError(e);
-                    resolve(null);
-                });
+            req.on('error', (e) => {
+                logError(e);
+                resolve(null);
+            });
         });
     },
 
@@ -114,10 +114,11 @@ module.exports = {
         if (this.defaultCurrency == null) {
             const dcInstance = await Setting.findOne({
                 where: {
-                    key: 'default_currency',
+                    key: 'default_currency'
                 }
             });
             const dcISOCode = dcInstance.value;
+
             this.defaultCurrency = await Currency.findOne({
                 where: {
                     iso_code: dcISOCode
@@ -133,7 +134,7 @@ module.exports = {
         const rawData = await this.getCurrencies(true);
         const allowedISOCodes = [];
 
-        rawData.forEach(model => {
+        rawData.forEach((model) => {
             map[model.id] = model.toJSON();
 
             allowedISOCodes.push(model.iso_code);
@@ -141,11 +142,12 @@ module.exports = {
 
         const [rates, defaultCurrency] = await Promise.all([
             this.fetchRates(allowedISOCodes),
-            this.getDefaultCurrency(),
+            this.getDefaultCurrency()
         ]);
 
         if (rates == null) {
             await this.fetchCachedData();
+
             return;
         }
 
@@ -153,22 +155,25 @@ module.exports = {
 
         this.data = {
             map,
-            'default': defaultCurrency.id,
+            default: defaultCurrency.id
         };
     },
 
     async cacheData() {
         return new Promise((resolve) => {
-            fs.writeFile(this.cacheFilePath, JSON.stringify(this.data), resolve);
+            fs.writeFile(
+                this.cacheFilePath,
+                JSON.stringify(this.data),
+                resolve
+            );
         });
     },
 
-    async setupData({
-        update = false
-    } = {}) {
+    async setupData({update = false} = {}) {
         let fromCache = false;
+
         if (update !== true) {
-            if (await this.fetchCachedData() === false) {
+            if ((await this.fetchCachedData()) === false) {
                 await this.fetchFreshData();
                 await this.cacheData();
             } else {

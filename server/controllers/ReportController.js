@@ -27,18 +27,18 @@ module.exports = {
         if (expenseRecords.error) {
             res.status(400);
             res.json(expenseRecords.json);
+
             return;
-        } else {
-            expenseRecords = expenseRecords.json;
         }
+        expenseRecords = expenseRecords.json;
 
         if (incomeRecords.error) {
             res.status(400);
             res.json(incomeRecords.json);
+
             return;
-        } else {
-            incomeRecords = incomeRecords.json;
         }
+        incomeRecords = incomeRecords.json;
 
         const ret = {
             expensesData: await SummaryReportService.getExpensesData({
@@ -47,19 +47,24 @@ module.exports = {
                 mlRecords,
                 defaultCurrency,
                 incomeRecords,
+                html: req.query.html
             }),
             incomesData: await SummaryReportService.getIncomesData({
                 userRecords,
                 mlRecords,
                 defaultCurrency,
                 incomeRecords,
+                html: req.query.html
             }),
-            expensesByCategory: await SummaryReportService.getExpensesByCategory({
-                expenseRecords,
-                defaultCurrency,
-                categoryRecords,
-                userRecords,
-            })
+            expensesByCategory: await SummaryReportService.getExpensesByCategory(
+                {
+                    expenseRecords,
+                    defaultCurrency,
+                    categoryRecords,
+                    userRecords,
+                    html: req.query.html
+                }
+            )
         };
 
         ret.remainingData = SummaryReportService.getRemainingData({
@@ -82,7 +87,7 @@ module.exports = {
         };
         const validator = new Validator(input, rules);
 
-        if (false === await validator.passes()) {
+        if (false === (await validator.passes())) {
             res.status(400);
             res.json(validator.errors());
 
@@ -104,18 +109,18 @@ module.exports = {
         if (expenseRecords.error) {
             res.status(400);
             res.json(expenseRecords.json);
+
             return;
-        } else {
-            expenseRecords = expenseRecords.json;
         }
+        expenseRecords = expenseRecords.json;
 
         if (incomeRecords.error) {
             res.status(400);
             res.json(incomeRecords.json);
+
             return;
-        } else {
-            incomeRecords = incomeRecords.json;
         }
+        incomeRecords = incomeRecords.json;
 
         const series = [];
         const fields = [];
@@ -127,15 +132,21 @@ module.exports = {
                 fields.push(dataKey);
             }
 
-            ChartReportHelper.addToTimeMap(timeMap, dataKey, record, sum, timeFormat);
+            ChartReportHelper.addToTimeMap(
+                timeMap,
+                dataKey,
+                record,
+                sum,
+                timeFormat
+            );
         };
 
-        incomeRecords.forEach(function (record) {
+        incomeRecords.forEach((record) => {
             if (!ChartReportHelper.recordIsInRange(record, input.display)) {
                 return;
             }
 
-            const dataKey = 'data' + record.user_id + 'i';
+            const dataKey = `data${record.user_id}i`;
 
             addToTimeMap(dataKey, record, record.sum);
         });
@@ -152,33 +163,38 @@ module.exports = {
             let sum = json.sum;
 
             if (currencyId !== parseInt(defaultCurrency.id)) {
-                sum = await CurrencyController.convertToDefault(sum, currencyId);
+                sum = await CurrencyController.convertToDefault(
+                    sum,
+                    currencyId
+                );
             }
 
             sum /= users.length;
 
-            users.forEach(function (id) {
-                const dataKey = 'data' + id + 'e';
+            users.forEach((id) => {
+                const dataKey = `data${id}e`;
 
                 addToTimeMap(dataKey, json, sum);
             });
         }
 
-        fields.forEach(function (field) {
+        fields.forEach((field) => {
             const cleanField = field.replace(/data/, '');
             const id = cleanField.replace(/[ei]/g, '');
             const type = field.endsWith('e') ? 'Expenses' : 'Incomes';
 
             series.push({
-                title: `${userRecords.find(each => each.id == id).first_name}\'s ${type}`,
+                title: `${
+                    userRecords.find((each) => each.id == id).first_name
+                }\'s ${type}`,
                 yField: field
             });
         });
 
         res.json({
-            fields: fields,
+            fields,
             map: timeMap,
-            series: series
+            series
         });
     },
 
@@ -191,7 +207,7 @@ module.exports = {
         };
         const validator = new Validator(input, rules);
 
-        if (false === await validator.passes()) {
+        if (false === (await validator.passes())) {
             res.status(400);
             res.json(validator.errors());
 
@@ -215,10 +231,10 @@ module.exports = {
         if (expenseRecords.error) {
             res.status(400);
             res.json(expenseRecords.json);
+
             return;
-        } else {
-            expenseRecords = expenseRecords.json;
         }
+        expenseRecords = expenseRecords.json;
 
         for (const record of expenseRecords) {
             if (!ChartReportHelper.recordIsInRange(record, input.display)) {
@@ -234,20 +250,31 @@ module.exports = {
                     categoryIds.push(categoryId);
                 }
 
-                const dataKey = 'data' + categoryId;
+                const dataKey = `data${categoryId}`;
 
-                ChartReportHelper.addToTimeMap(timeMap, dataKey, json, rawCatSum / (recordCategories.length || 1), timeFormat);
+                ChartReportHelper.addToTimeMap(
+                    timeMap,
+                    dataKey,
+                    json,
+                    rawCatSum / (recordCategories.length || 1),
+                    timeFormat
+                );
             };
 
             if (json.currency_id !== parseInt(defaultCurrency.id)) {
-                sum = await CurrencyController.convertToDefault(sum, json.currency_id);
+                sum = await CurrencyController.convertToDefault(
+                    sum,
+                    json.currency_id
+                );
             }
 
             if (recordCategories.length > 0) {
-                recordCategories.forEach(function (rawCategoryId) {
+                recordCategories.forEach((rawCategoryId) => {
                     let categoryId;
 
-                    if (categoryRecords.find(each => each.id == rawCategoryId)) {
+                    if (
+                        categoryRecords.find((each) => each.id == rawCategoryId)
+                    ) {
                         categoryId = rawCategoryId;
                     } else {
                         categoryId = 0;
@@ -260,23 +287,24 @@ module.exports = {
             }
         }
 
-        categoryIds.forEach(function (id) {
-            const title = id == 0 ? '<i>Unclassified</i>' : categoryRecords.find(each => each.id == id).name;
+        categoryIds.forEach((id) => {
+            const title =
+                id == 0
+                    ? '<i>Unclassified</i>'
+                    : categoryRecords.find((each) => each.id == id).name;
 
             series.push({
                 title,
-                yField: 'data' + id
+                yField: `data${id}`
             });
         });
 
-        const categoryIdsAsFields = categoryIds.map(function (id) {
-            return 'data' + id;
-        });
+        const categoryIdsAsFields = categoryIds.map((id) => `data${id}`);
 
         res.json({
             fields: categoryIdsAsFields,
             map: timeMap,
-            series: series
+            series
         });
     }
 };

@@ -2,7 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
 
-const env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV || 'development';
+
+console.log('Webpack building for', env);
 
 const isProduction = env === 'production';
 const isHot = env === 'hot';
@@ -11,8 +13,9 @@ const enableSourceMaps = isProduction === false;
 
 module.exports = {
     devtool: isProduction ? false : 'cheap-source-map',
+    mode: isProduction ? 'production' : 'development',
     entry: {
-        'bundles/Mobile': path.resolve('sources/mobile/Mobile.js'),
+        'bundles/Responsive': path.resolve('sources/mobile/index.js'),
         'bundles/Desktop': path.resolve('sources/desktop/Desktop.js'),
     },
     devServer: isHot ? {
@@ -35,17 +38,8 @@ module.exports = {
                     /node_modules/
                 ],
                 use: [
-                    isHot ? {loader: 'react-hot-loader'} : null,
                     {loader: 'babel-loader', options: {cacheDirectory: true}}
                 ].filter(Boolean)
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    {loader: 'style-loader'},
-                    {loader: 'css-loader', options: {sourceMap: enableSourceMaps, url: false}},
-                    {loader: 'sass-loader', options: {sourceMap: enableSourceMaps}}
-                ]
             },
             {
                 test: /\.css$/,
@@ -60,11 +54,10 @@ module.exports = {
         isProduction && new webpack.LoaderOptionsPlugin({
             minimize: true
         }),
-        isProduction && new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}}),
-        isProduction && new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, sourceMap: false}),
         isProduction && new CompressionPlugin({
             algorithm: 'gzip'
-        })
+        }),
+        !isProduction && new webpack.NamedModulesPlugin(),
     ].filter(Boolean),
     resolve: {
         modules: [

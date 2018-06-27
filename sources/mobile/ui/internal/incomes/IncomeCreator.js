@@ -7,16 +7,14 @@ import MainScreenCreator from '../common/MainScreenCreator';
 import formToModel from './helpers/formToModel';
 import getFormDefaults from './helpers/getFormDefaults';
 
-const IncomeCreator = () => {
-    return (
-        <MainScreenCreator
-            getFormDefaults={getFormDefaults}
-            formToModel={formToModel}
-            formComponent={IncomeForm}
-            api={routes.income}
-            entityName="income"
-        />
-    );
-};
+const IncomeCreator = () => (
+    <MainScreenCreator
+        getFormDefaults={getFormDefaults}
+        formToModel={formToModel}
+        formComponent={IncomeForm}
+        api={routes.income}
+        entityName="income"
+    />
+);
 
 export default IncomeCreator;

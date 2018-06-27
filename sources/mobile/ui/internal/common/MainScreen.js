@@ -4,8 +4,9 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 
 import AddIcon from 'material-ui-icons/Add';
 import ViewListIcon from 'material-ui-icons/ViewList';
+import {connect} from 'react-redux';
 
-export default class Expenses extends PureComponent {
+class MainScreen extends PureComponent {
     state = {
         newRecord: null
     };
@@ -14,19 +15,32 @@ export default class Expenses extends PureComponent {
         listComponent: any
     };
 
-    render() {
-        const Creator = this.props.creatorComponent;
+    renderList() {
         const List = this.props.listComponent;
+
+        return <List newRecord={this.state.newRecord} />;
+    }
+
+    render() {
+        if (this.props.screen.isLarge) {
+            return this.renderList();
+        }
+
+        const Creator = this.props.creatorComponent;
 
         return (
             <Tabs>
-                <Tab icon={<AddIcon/>}>
-                    <Creator onReceiveNewRecord={newRecord => this.setState({newRecord})}/>
+                <Tab icon={<AddIcon />}>
+                    <Creator
+                        onReceiveNewRecord={(newRecord) =>
+                            this.setState({newRecord})
+                        }
+                    />
                 </Tab>
-                <Tab icon={<ViewListIcon/>}>
-                    <List newRecord={this.state.newRecord}/>
-                </Tab>
+                <Tab icon={<ViewListIcon />}>{this.renderList()}</Tab>
             </Tabs>
         );
     }
 }
+
+export default connect(({screen}) => ({screen}))(MainScreen);

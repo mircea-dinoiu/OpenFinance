@@ -5,6 +5,7 @@ Ext.define('Financial.store.data.ReportStore', {
 
     grouper: {
         property: 'group',
+        // @ported
         sorterFn: function (model1, model2) {
             var getIndex = function (model) {
                 return model.get('index') != null ? model.get('index') : model.get('group');

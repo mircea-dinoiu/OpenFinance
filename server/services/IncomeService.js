@@ -19,7 +19,7 @@ module.exports = {
             const whereReplacements = [];
 
             if (input.start_date) {
-                whereClause.push(`DATE(${Model.tableName}.created_at) >= ?`);
+                whereClause.push(`(DATE(${Model.tableName}.created_at) >= ? OR ${Model.tableName}.repeat IS NOT null)`);
                 whereReplacements.push(input.start_date);
             }
 
@@ -43,14 +43,15 @@ module.exports = {
                 error: false,
                 json: RepeatedModelsHelper.generateClones({
                     records: await Model.findAll(queryOpts),
-                    endDate: input.end_date
+                    endDate: input.end_date,
+                    startDate: input.start_date,
                 })
             };
-        } else {
-            return {
-                error: true,
-                json: validator.errors()
-            };
         }
+
+        return {
+            error: true,
+            json: validator.errors()
+        };
     }
 };

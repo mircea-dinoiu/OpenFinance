@@ -4,10 +4,10 @@
   "session": {
     "secret": "keyboard cat"
   },
-  "timezone": "Europe/Bucharest",
   "enableCSRF": true,
   "devServer": {
     "hostname": "http://localhost:8080",
     "enable": false
-  }
+  },
+  "memoryStore": false
 }

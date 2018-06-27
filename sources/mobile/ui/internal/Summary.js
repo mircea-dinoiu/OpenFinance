@@ -1,110 +1,185 @@
 import React from 'react';
 import {BigLoader} from '../components/loaders';
-import {Subheader, List, ListItem, RefreshIndicator, Card, CardHeader, CardText} from 'material-ui';
+import {Paper} from 'material-ui';
 import * as colors from 'material-ui/styles/colors';
-import ReactPullToRefresh from 'react-pull-to-refresh';
 import routes from '../../../common/defs/routes';
 import {stringify} from 'query-string';
 import {fetch} from '../../../common/utils/fetch';
-import {numericValue} from '../formatters';
-import {groupBy} from 'lodash';
+import {groupBy, pickBy, identity} from 'lodash';
 import {connect} from 'react-redux';
+import IncludeDropdown from 'common/components/IncludeDropdown';
+import {getStartDate, formatYMD} from 'common/utils/dates';
+import {greyedOut} from 'common/defs/styles';
+import {Sizes} from 'common/defs';
+import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
+import {
+    getPreference,
+    PREFERENCE_INCLUDE_RESULTS,
+    setPreference
+} from 'common/utils/preferences';
 
-class Summary extends React.PureComponent {
+type TypeProps = {
+    screen: TypeScreenQueries
+};
+
+class Summary extends React.PureComponent<TypeProps> {
     state = {
         firstLoad: true,
         results: null,
-        refreshing: false
-    };
-
-    handleRefresh = async() => {
-        this.setState({
-            refreshing: true
-        });
-
-        await this.load();
-
-        this.setState({
-            refreshing: false
-        });
+        refreshing: false,
+        include: getPreference(PREFERENCE_INCLUDE_RESULTS, 'ut')
     };
 
     componentDidMount() {
         this.load();
     }
 
-    load = async () => {
-        const response = await fetch(`${routes.report.summary}?${stringify({
-            end_date: this.props.endDate,
-            html: false
-        })}`);
+    componentWillReceiveProps({endDate, refreshWidgets}) {
+        if (endDate !== this.props.endDate) {
+            this.load({endDate});
+        }
+
+        if (refreshWidgets !== this.props.refreshWidgets) {
+            this.load();
+        }
+    }
+
+    load = async ({endDate = this.props.endDate} = {}) => {
+        this.setState({
+            refreshing: true
+        });
+
+        const response = await fetch(
+            `${routes.report.summary}?${stringify({
+                ...pickBy(
+                    {
+                        end_date:
+                            this.state.include === 'ut' ? formatYMD() : endDate,
+                        start_date: getStartDate({
+                            include: this.state.include,
+                            endDate
+                        })
+                    },
+                    identity
+                ),
+                html: false
+            })}`
+        );
         const json = await response.json();
 
         this.setState({
             results: json,
             firstLoad: false,
+            refreshing: false
         });
     };
 
-    numericValue(value) {
-        const currencyISOCode = this.props.currencies.getIn(['map', String(this.props.currencies.get('default')), 'iso_code']);
-
-        return numericValue(value, currencyISOCode);
+    renderCategory(props) {
+        return React.createElement(SummaryCategory, props);
     }
+
     renderResults() {
-        const {remainingData} = this.state.results;
-        const headerColor = 'rgba(255, 255, 255, 0.9)';
-        const balanceBg = '#6AA84F';
+        const {results} = this.state;
 
         return (
-            <div style={{margin: '0 10px 20px'}}>
-                <Card style={{backgroundColor: balanceBg}}>
-                    <CardHeader style={{paddingBottom: 0}} title={<span style={{color: headerColor}}>BALANCE BY LOCATION</span>}/>
-                    <CardText>
-                        {Object.entries(groupBy(remainingData.byML, 'group')).map(([id, items]) => (
-                            <Card style={{backgroundColor: id == 0 ? colors.grey200 : colors.white, marginBottom: 5}}>
-                                {id != 0 && <CardHeader style={{paddingBottom: 0}} title={this.props.moneyLocationTypes.find(mlType => mlType.get('id') == id).get('name').toUpperCase()}/>}
-                                <List>
-                                    {items.map(each => (
-                                        <ListItem
-                                            primaryText={each.description}
-                                            secondaryText={this.numericValue(each.sum)}
-                                        />
-                                    ))}
-                                </List>
-                            </Card>
-                        ))}
-                    </CardText>
-                </Card>
+            <div style={{margin: '0 0 20px'}}>
+                {this.renderCategory({
+                    backgroundColor: colors.green500,
+                    title: 'Balance by location',
+                    summaryObject: results.remainingData.byML,
+                    entities: this.props.moneyLocationTypes,
+                    expandedByDefault: true
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.green500,
+                    title: 'Balance by user',
+                    summaryObject: results.remainingData.byUser,
+                    entities: this.props.user.get('list'),
+                    entityNameField: 'full_name'
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.purple500,
+                    title: 'Expenses by category',
+                    summaryObject: results.expensesByCategory,
+                    entities: this.props.categories,
+                    entityNameField: 'name',
+                    showSumInHeader: false
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.red500,
+                    title: 'Expenses by location',
+                    summaryObject: results.expensesData.byML,
+                    entities: this.props.moneyLocationTypes,
+                    entityNameField: 'name'
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.red500,
+                    title: 'Expenses by user',
+                    summaryObject: results.expensesData.byUser,
+                    entities: this.props.user.get('list'),
+                    entityNameField: 'full_name'
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.lime900,
+                    title: 'Income by location',
+                    summaryObject: results.incomesData.byML,
+                    entities: this.props.moneyLocationTypes,
+                    entityNameField: 'name'
+                })}
+
+                {this.renderCategory({
+                    backgroundColor: colors.lime900,
+                    title: 'Income by user',
+                    summaryObject: results.incomesData.byUser,
+                    entities: this.props.user.get('list'),
+                    entityNameField: 'full_name'
+                })}
             </div>
         );
     }
 
+    onIncludeChange = (include) => {
+        this.setState({include}, this.load);
+
+        setPreference(PREFERENCE_INCLUDE_RESULTS, include);
+    };
+
     render() {
+        if (this.state.firstLoad) {
+            return <BigLoader />;
+        }
+
         return (
-            <div>
-                {this.state.firstLoad ? <BigLoader/> : (
-                    <div>
-                        <ReactPullToRefresh
-                            onRefresh={this.handleRefresh}
-                        >
-                            {this.state.refreshing && (
-                                <RefreshIndicator
-                                    size={40}
-                                    left={10}
-                                    top={0}
-                                    status="loading"
-                                    style={{display: 'block', position: 'relative', margin: '10px auto'}}
-                                />
-                            )}
-                            <Subheader style={{textAlign: 'center'}}>Pull down to refresh</Subheader>
-                        </ReactPullToRefresh>
-                    </div>
-                )}
-                {this.state.results && this.renderResults()}
+            <div
+                style={{
+                    padding: '0 5px',
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                    height: `calc(100vh - ${Sizes.HEADER_SIZE})`
+                }}
+            >
+                <div style={this.state.refreshing ? greyedOut : {}}>
+                    <Paper
+                        style={{
+                            margin: '5px 0',
+                            padding: '0 10px'
+                        }}
+                    >
+                        <IncludeDropdown
+                            value={this.state.include}
+                            onChange={this.onIncludeChange}
+                        />
+                    </Paper>
+                    {this.state.results && this.renderResults()}
+                </div>
             </div>
         );
     }
 }
 
-export default connect(state => state)(Summary);
+export default connect((state) => state)(Summary);
