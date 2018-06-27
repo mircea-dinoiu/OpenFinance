@@ -7,7 +7,10 @@ module.exports = {
         const data = {byUser: [], byML: []};
         const totalRemainingByUser = {};
         const totalRemainingByML = {};
-        const users = SummaryReportHelper.getUniques(expenses.byUser, incomes.byUser);
+        const users = SummaryReportHelper.getUniques(
+            expenses.byUser,
+            incomes.byUser
+        );
         const mls = SummaryReportHelper.getUniques(expenses.byML, incomes.byML);
 
         /**
