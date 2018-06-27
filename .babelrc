@@ -13,5 +13,22 @@
     }],
     "react"
   ],
-  "plugins": ["react-hot-loader/babel", "transform-class-properties", "transform-object-rest-spread"]
+  "plugins": ["react-hot-loader/babel", "transform-class-properties", "transform-object-rest-spread"],
+  "env": {
+    "test": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "browsers": [
+              "last 1 chrome version",
+              "last 1 safari version",
+              "last 1 firefox version"
+            ]
+          },
+          "debug": false
+        }],
+        "react"
+      ]
+    }
+  }
 }

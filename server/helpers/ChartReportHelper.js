@@ -1,6 +1,7 @@
 const moment = require('moment');
 
 module.exports = {
+    // eslint-disable-next-line max-params
     addToTimeMap(timeMap, dataKey, record, sum, timeFormat) {
         const timeDisplay = moment(record.created_at).format(
             timeFormat.display
@@ -46,13 +47,15 @@ module.exports = {
     recordIsInRange(record, display) {
         switch (display) {
             case 'cm':
-                const format = 'YYYY-MM'; // 2005-01
+                {
+                    const format = 'YYYY-MM'; // 2005-01
 
-                if (
-                    moment(record.created_at).format(format) ===
-                    moment(new Date()).format(format)
-                ) {
-                    return true;
+                    if (
+                        moment(record.created_at).format(format) ===
+                        moment(new Date()).format(format)
+                    ) {
+                        return true;
+                    }
                 }
 
                 return false;

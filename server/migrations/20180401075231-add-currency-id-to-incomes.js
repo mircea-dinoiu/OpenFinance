@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    up: (queryInterface, Sequelize) => {
+    up: (queryInterface) => {
         queryInterface.sequelize.query(`
 ALTER TABLE incomes
   ADD COLUMN currency_id INT UNSIGNED NOT NULL DEFAULT 2,
@@ -17,7 +17,7 @@ ALTER TABLE incomes
     */
     },
 
-    down: (queryInterface, Sequelize) => {
+    down: () => {
         /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.

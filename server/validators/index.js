@@ -3,7 +3,6 @@ const {isPlainObject} = require('lodash');
 const validator = require('validator');
 const debug = require('config').get('debug');
 const chalk = require('chalk');
-
 const stringIsInt = validator.isInt;
 const stringIsFloat = validator.isFloat;
 

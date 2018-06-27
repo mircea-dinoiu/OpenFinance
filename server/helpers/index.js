@@ -1,11 +1,10 @@
 const path = require('path');
 const moment = require('moment');
 const fs = require('fs');
+const basePath = (string = '') => path.join(__dirname, '../../', string);
 
 module.exports = {
-    basePath(string = '') {
-        return path.join(__dirname, '../../', string);
-    },
+    basePath,
 
     pickOwnProperties(source, keys) {
         const dest = {};

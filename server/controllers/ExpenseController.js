@@ -150,7 +150,7 @@ module.exports = BaseController.extend({
         return values;
     },
 
-    async sanitizeUpdateValues(record, model) {
+    async sanitizeUpdateValues(record) {
         const workingRecord = Object.assign({}, record);
         const values = pickOwnProperties(workingRecord, [
             'sum',

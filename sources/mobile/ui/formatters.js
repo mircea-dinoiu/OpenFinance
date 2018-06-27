@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import Tooltip from 'common/components/Tooltip';
 
 const formatNumericValue = (value) => new Intl.NumberFormat().format(value);
-
 const NumericValue = connect(({currencies}) => ({currencies}))(
     ({
         currencies,
@@ -24,19 +23,23 @@ const NumericValue = connect(({currencies}) => ({currencies}))(
                 {formatNumericValue(value)}
             </span>
         );
-
-        const tooltip = Object.values(
-            currencies
-                .get('map')
-                .find((each) => each.get('iso_code') === currency)
-                .get('rates')
-                .map((rateMulti, rateISO) => (
-                    <div>
-                        {rateISO} {formatNumericValue(value * rateMulti)}
-                    </div>
-                ))
-                .toJS()
-        );
+        const tooltip = [
+            <div key={currency} style={{backgroundColor: grey700, borderRadius: '3px', padding: '3px 5px', margin: '0 -5px 5px'}}>
+                {currency} {formatNumericValue(value)}
+            </div>,
+            ...Object.values(
+                currencies
+                    .get('map')
+                    .find((each) => each.get('iso_code') === currency)
+                    .get('rates')
+                    .map((rateMulti, rateISO) => (
+                        <div key={rateISO}>
+                            {rateISO} {formatNumericValue(value * rateMulti)}
+                        </div>
+                    ))
+                    .toJS()
+            )
+        ];
 
         return <Tooltip tooltip={tooltip}>{inner}</Tooltip>;
     }

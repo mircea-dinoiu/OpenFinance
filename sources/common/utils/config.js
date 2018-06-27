@@ -1,6 +1,5 @@
 const metaPrefix = 'financial_';
-let metas = null;
-
+let globalMetas = null;
 const getMetas = () => {
     const metas = {};
 
@@ -16,13 +15,12 @@ const getMetas = () => {
 
     return metas;
 };
-
 const getMeta = (name) => {
-    if (metas == null) {
-        metas = getMetas();
+    if (globalMetas == null) {
+        globalMetas = getMetas();
     }
 
-    return metas[name];
+    return globalMetas[name];
 };
 
 export default {

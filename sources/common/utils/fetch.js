@@ -4,7 +4,6 @@ import deepExtend from 'deep-extend';
 import config from './config';
 
 const globalNamespace = typeof self === 'undefined' ? this : self;
-
 const parseOpts = (opts) =>
     deepExtend(
         {
@@ -52,5 +51,3 @@ export const fetchJSON = async (
 };
 
 export default fetch;
-
-window._fetch = fetch;

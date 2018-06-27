@@ -1,6 +1,8 @@
 import React from 'react';
 import {cyan500, red500, yellowA700} from 'material-ui/styles/colors';
-import {Cached, TrendingUp, Warning} from 'material-ui-icons';
+import Cached from 'material-ui-icons/Cached';
+import TrendingUp from 'material-ui-icons/TrendingUp';
+import Warning from 'material-ui-icons/Warning';
 import Tooltip from 'common/components/Tooltip';
 import {startCase} from 'lodash';
 
@@ -22,7 +24,7 @@ export const GeneratedFlag = ({entity = ''}) => (
     </Tooltip>
 );
 
-export const Flags = ({entity, item}) => (
+export const Flags = ({item}) => (
     <React.Fragment>
         {item.status === 'pending' && <PendingReviewFlag entity="expense" />}
         {item.repeat != null && <RecurrentFlag entity="expense" />}

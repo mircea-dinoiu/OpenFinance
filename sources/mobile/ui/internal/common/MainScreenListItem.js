@@ -117,7 +117,6 @@ class MainScreenListItem extends PureComponent {
     render() {
         const item = this.props.item;
         const persist = item.persist !== false;
-
         const ListItemContent = this.props.contentComponent;
         const itemContent = (
             <ListItemContent

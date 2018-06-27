@@ -4,6 +4,4 @@ node_js:
 cache:
     yarn: true
 script:
-    - yarn test
-    - yarn run flow
-    - yarn run lint:js
+    - yarn run ci

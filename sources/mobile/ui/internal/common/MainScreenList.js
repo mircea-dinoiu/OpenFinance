@@ -21,6 +21,9 @@ import {
 } from 'material-ui';
 import {connect} from 'react-redux';
 import {greyedOut} from 'common/defs/styles';
+import {scrollIsAt} from 'common/utils/scroll';
+
+const PAGE_SIZE = 50;
 
 class MainScreenList extends PureComponent {
     props: {
@@ -43,15 +46,8 @@ class MainScreenList extends PureComponent {
         this.loadMore();
     }
 
-    getLimit() {
-        if (this.props.screen.isLarge) {
-            return 250;
-        }
-
-        return 50;
-    }
-
-    componentWillReceiveProps({newRecord, endDate, refreshWidgets}) {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps({newRecord, endDate, refreshWidgets}) {
         if (
             newRecord &&
             this.state.results.filter((each) => each.get('id') == newRecord.id)
@@ -94,10 +90,9 @@ class MainScreenList extends PureComponent {
             `${this.props.api.list}?${stringify({
                 end_date: endDate,
                 page,
-                limit: this.getLimit()
+                limit: PAGE_SIZE,
             })}`
         );
-
         const json = await response.json();
 
         this.setState({
@@ -172,21 +167,31 @@ class MainScreenList extends PureComponent {
         );
     }
 
+    onTableScroll = (event) => {
+        const element = event.target;
+
+        if (scrollIsAt(element, 80)) {
+            this.loadMore();
+        }
+    };
+
     renderResults() {
         if (this.props.screen.isLarge) {
             const Header = this.props.headerComponent;
 
             return (
-                <Table height="calc(100vh - 180px)">
-                    <TableHeader>
-                        <Header />
-                    </TableHeader>
-                    <TableBody>
-                        {this.getSortedResults().map((item) =>
-                            this.renderItem(item)
-                        )}
-                    </TableBody>
-                </Table>
+                <div onScroll={this.onTableScroll}>
+                    <Table height="calc(100vh - 180px)">
+                        <TableHeader>
+                            <Header />
+                        </TableHeader>
+                        <TableBody>
+                            {this.getSortedResults().map((item) =>
+                                this.renderItem(item)
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
             );
         }
 

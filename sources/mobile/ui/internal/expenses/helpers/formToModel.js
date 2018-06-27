@@ -1,3 +1,4 @@
+// @flow
 export default (data, props) => {
     const users = data.chargedPersons.length
         ? data.chargedPersons
@@ -5,7 +6,6 @@ export default (data, props) => {
             .get('list')
             .map((each) => each.get('id'))
             .toArray();
-
     const date: Date = new Date(data.date.valueOf());
     const time: Date = data.time;
 

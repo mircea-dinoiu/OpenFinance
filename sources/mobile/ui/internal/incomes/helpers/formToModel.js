@@ -1,3 +1,5 @@
+// @flow
+
 export default (data) => {
     const date: Date = new Date(data.date.valueOf());
     const time: Date = data.time;

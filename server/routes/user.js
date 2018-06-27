@@ -9,9 +9,9 @@ router.get('/list', filters.auth, async (req, res) => {
 });
 
 router.post('/login', filters.guest, async (req, res, next) => {
-    passport.authenticate('local', (err, user) => {
-        if (err) {
-            return next(err);
+    passport.authenticate('local', (authErr, user) => {
+        if (authErr) {
+            return next(authErr);
         }
 
         if (!user) {
@@ -21,9 +21,9 @@ router.post('/login', filters.guest, async (req, res, next) => {
             return;
         }
 
-        req.logIn(user, async (err) => {
-            if (err) {
-                return next(err);
+        req.logIn(user, async (loginErr) => {
+            if (loginErr) {
+                return next(loginErr);
             }
 
             if (req.body.remember_me === 'true') {

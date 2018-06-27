@@ -21,7 +21,6 @@ const ExpenseListItemContent = (props) => {
         'iso_code'
     ]);
     const screen = props.screen;
-
     const personsDisplay = userList.map(
         (each) =>
             item.users.includes(each.get('id')) ? (

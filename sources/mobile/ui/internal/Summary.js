@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import {BigLoader} from '../components/loaders';
 import {Paper} from 'material-ui';
@@ -5,7 +6,7 @@ import * as colors from 'material-ui/styles/colors';
 import routes from '../../../common/defs/routes';
 import {stringify} from 'query-string';
 import {fetch} from '../../../common/utils/fetch';
-import {groupBy, pickBy, identity} from 'lodash';
+import {pickBy, identity} from 'lodash';
 import {connect} from 'react-redux';
 import IncludeDropdown from 'common/components/IncludeDropdown';
 import {getStartDate, formatYMD} from 'common/utils/dates';
@@ -34,7 +35,8 @@ class Summary extends React.PureComponent<TypeProps> {
         this.load();
     }
 
-    componentWillReceiveProps({endDate, refreshWidgets}) {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps({endDate, refreshWidgets}) {
         if (endDate !== this.props.endDate) {
             this.load({endDate});
         }

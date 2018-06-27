@@ -14,7 +14,7 @@ module.exports = {
                 this.getClonesFor({
                     record,
                     endDate,
-                    startDate,
+                    startDate
                 }).forEach((clone) => {
                     ret.push(clone);
                 });
@@ -35,6 +35,7 @@ module.exports = {
         if (record.repeat != null) {
             let repeats = 1;
 
+            // eslint-disable-next-line no-constant-condition
             while (true) {
                 const newObject = this.advanceRepeatDate(
                     record.toJSON(),

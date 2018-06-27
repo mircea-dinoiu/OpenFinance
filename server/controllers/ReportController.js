@@ -8,7 +8,7 @@ const {Validator} = require('../validators');
 
 module.exports = {
     async getSummary(req, res) {
-        let [
+        const [
             expenseRecords,
             incomeRecords,
             userRecords,
@@ -30,35 +30,32 @@ module.exports = {
 
             return;
         }
-        expenseRecords = expenseRecords.json;
-
         if (incomeRecords.error) {
             res.status(400);
             res.json(incomeRecords.json);
 
             return;
         }
-        incomeRecords = incomeRecords.json;
 
         const ret = {
             expensesData: await SummaryReportService.getExpensesData({
-                expenseRecords,
+                expenseRecords: expenseRecords.json,
                 userRecords,
                 mlRecords,
                 defaultCurrency,
-                incomeRecords,
+                incomeRecords: incomeRecords.json,
                 html: req.query.html
             }),
             incomesData: await SummaryReportService.getIncomesData({
                 userRecords,
                 mlRecords,
                 defaultCurrency,
-                incomeRecords,
+                incomeRecords: incomeRecords.json,
                 html: req.query.html
             }),
             expensesByCategory: await SummaryReportService.getExpensesByCategory(
                 {
-                    expenseRecords,
+                    expenseRecords: expenseRecords.json,
                     defaultCurrency,
                     categoryRecords,
                     userRecords,
@@ -94,7 +91,7 @@ module.exports = {
             return;
         }
 
-        let [
+        const [
             expenseRecords,
             incomeRecords,
             userRecords,
@@ -112,21 +109,17 @@ module.exports = {
 
             return;
         }
-        expenseRecords = expenseRecords.json;
-
         if (incomeRecords.error) {
             res.status(400);
             res.json(incomeRecords.json);
 
             return;
         }
-        incomeRecords = incomeRecords.json;
 
         const series = [];
         const fields = [];
         const timeMap = {};
         const timeFormat = ChartReportHelper.getTimeFormat(input.display);
-
         const addToTimeMap = function (dataKey, record, sum) {
             if (fields.indexOf(dataKey) === -1) {
                 fields.push(dataKey);
@@ -141,7 +134,7 @@ module.exports = {
             );
         };
 
-        incomeRecords.forEach((record) => {
+        incomeRecords.json.forEach((record) => {
             if (!ChartReportHelper.recordIsInRange(record, input.display)) {
                 return;
             }
@@ -151,13 +144,12 @@ module.exports = {
             addToTimeMap(dataKey, record, record.sum);
         });
 
-        for (const record of expenseRecords) {
+        for (const record of expenseRecords.json) {
             if (!ChartReportHelper.recordIsInRange(record, input.display)) {
                 continue;
             }
 
             const json = record.toJSON();
-
             const users = json.users;
             const currencyId = json.currency_id;
             let sum = json.sum;
@@ -186,7 +178,7 @@ module.exports = {
             series.push({
                 title: `${
                     userRecords.find((each) => each.id == id).first_name
-                }\'s ${type}`,
+                }'s ${type}`,
                 yField: field
             });
         });
@@ -218,7 +210,7 @@ module.exports = {
         const categoryIds = [];
         const timeMap = {};
         const timeFormat = ChartReportHelper.getTimeFormat(input.display);
-        let [
+        const [
             expenseRecords,
             categoryRecords,
             defaultCurrency
@@ -234,15 +226,13 @@ module.exports = {
 
             return;
         }
-        expenseRecords = expenseRecords.json;
 
-        for (const record of expenseRecords) {
+        for (const record of expenseRecords.json) {
             if (!ChartReportHelper.recordIsInRange(record, input.display)) {
                 continue;
             }
 
             const json = record.toJSON();
-
             const recordCategories = json.categories;
             let sum = json.sum;
             const addData = function (categoryId, rawCatSum) {

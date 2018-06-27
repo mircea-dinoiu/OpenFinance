@@ -7,13 +7,8 @@ import {getInitialEndDate} from 'common/utils/dates';
 import {PREFERENCE_END_DATE, setPreference} from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
-
-const screen = (state = getScreenQueries(), action) =>
-    action.type === Actions.SET_SCREEN ? action.value : state;
-
-const refreshWidgets = (state = uniqueId(), action) =>
-    action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
-
+const screen = (state = getScreenQueries(), action) => action.type === Actions.SET_SCREEN ? action.value : state;
+const refreshWidgets = (state = uniqueId(), action) => action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
 const bindToUpdateState = (prop, defaultValue) => {
     stateKeysWithoutReducers.push(prop);
 
@@ -37,10 +32,7 @@ const bindToUpdateState = (prop, defaultValue) => {
         return state;
     };
 };
-
-const user = (state = null, action) =>
-    action.type === Actions.UPDATE_USER ? fromJS(action.user) : state;
-
+const user = (state = null, action) => action.type === Actions.UPDATE_USER ? fromJS(action.user) : state;
 const loading = (state = true, action) => {
     if (action.type === Actions.LOADING_ENABLE) {
         return true;
@@ -52,7 +44,6 @@ const loading = (state = true, action) => {
 
     return state;
 };
-
 const endDate = (state = getInitialEndDate(), action) => {
     if (action.type === Actions.SET_END_DATE) {
         setPreference(PREFERENCE_END_DATE, action.value);
@@ -62,7 +53,6 @@ const endDate = (state = getInitialEndDate(), action) => {
 
     return state;
 };
-
 const title = bindToUpdateState('title', 'Loading...');
 const ui = bindToUpdateState('ui', null);
 const currenciesDrawerOpen = bindToUpdateState('currenciesDrawerOpen', false);

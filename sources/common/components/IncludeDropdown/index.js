@@ -8,7 +8,7 @@ const IncludeDropdown = ({onChange, value}) => (
         floatingLabelText="Include results"
         floatingLabelFixed={true}
         value={value}
-        onChange={(e, i, value) => onChange(value)}
+        onChange={(e, i, newValue) => onChange(newValue)}
         fullWidth={true}
         style={{margin: '-10px 0 0'}}
     >

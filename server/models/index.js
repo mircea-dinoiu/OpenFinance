@@ -5,7 +5,6 @@ const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const config = require('config');
 const db = {};
-
 const sql = new Sequelize(process.env.DATABASE_URL, {
     timezone: process.env.TIMEZONE,
     logging: config.get('debug')
@@ -18,8 +17,7 @@ const sql = new Sequelize(process.env.DATABASE_URL, {
         : false
 });
 
-fs
-    .readdirSync(__dirname)
+fs.readdirSync(__dirname)
     .filter(
         (file) =>
             file.indexOf('.') !== 0 &&
