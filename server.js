@@ -65,7 +65,7 @@ app.use(session({
     secret: config.get('session.secret'),
     resave: false,
     saveUninitialized: false,
-    store: localDevMode ? new session.MemoryStore() : new SequelizeStore({
+    store: config.get('memoryStore') ? new session.MemoryStore() : new SequelizeStore({
         db: require('./server/models').sql
     })
 }));
