@@ -56,22 +56,24 @@ export default class MainScreenEditDialog extends PureComponent {
     };
 
     render() {
-        const actions = [
-            <RaisedButton
-                disabled={this.state.saving}
-                label="Cancel"
-                primary={false}
-                onTouchTap={this.props.onCancel}
-                style={{marginRight: 5}}
-            />,
-            <RaisedButton
-                disabled={this.state.saving}
-                label={this.state.saving ? <ButtonProgress /> : 'Update'}
-                primary={true}
-                onTouchTap={this.save}
-                style={{float: 'right'}}
-            />
-        ];
+        const actions = (
+            <React.Fragment>
+                <RaisedButton
+                    disabled={this.state.saving}
+                    label="Cancel"
+                    primary={false}
+                    onTouchTap={this.props.onCancel}
+                    style={{marginRight: 5}}
+                />,
+                <RaisedButton
+                    disabled={this.state.saving}
+                    label={this.state.saving ? <ButtonProgress /> : 'Update'}
+                    primary={true}
+                    onTouchTap={this.save}
+                    style={{float: 'right'}}
+                />
+            </React.Fragment>
+        );
         const Form = this.props.formComponent;
 
         return (

@@ -10,7 +10,8 @@ import {
     updateUser,
     toggleLoading,
     setScreen,
-    updateState
+    updateState,
+    fetchCurrencies
 } from 'common/state/actions';
 
 import {Drawer} from 'material-ui';
@@ -30,7 +31,6 @@ import getScreenQueries from 'common/utils/getScreenQueries';
 import EventListener from 'react-event-listener';
 import {flexColumn} from 'common/defs/styles';
 import {hot} from 'react-hot-loader';
-import {fetchCurrencies} from 'common/state/actions';
 import {Sizes} from 'common/defs';
 
 // Needed for onTouchTap
@@ -52,7 +52,8 @@ class Responsive extends PureComponent<{
         this.loadData();
     }
 
-    componentWillReceiveProps(nextProps) {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (this.props.user != nextProps.user && nextProps.user != null) {
             this.loadData(nextProps);
         }

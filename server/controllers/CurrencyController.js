@@ -79,28 +79,25 @@ module.exports = {
                 port: 80,
                 path: '/nbrfxrates.xml'
             };
-
             const req = http.get(options, (res) => {
                 let chunks = [];
 
-                res
-                    .on('data', (chunk) => {
-                        chunks.push(chunk);
-                    })
-                    .on('end', () => {
-                        chunks = Buffer.concat(chunks).toString();
+                res.on('data', (chunk) => {
+                    chunks.push(chunk);
+                }).on('end', () => {
+                    chunks = Buffer.concat(chunks).toString();
 
-                        const xml2js = require('xml2js');
+                    const xml2js = require('xml2js');
 
-                        xml2js.parseString(chunks, (err, xml) => {
-                            const rates = CurrencyHelper.xmlToRates(xml, {
-                                allowedISOCodes,
-                                defaultCurrencyISOCode
-                            });
-
-                            resolve(rates);
+                    xml2js.parseString(chunks, (err, xml) => {
+                        const rates = CurrencyHelper.xmlToRates(xml, {
+                            allowedISOCodes,
+                            defaultCurrencyISOCode
                         });
+
+                        resolve(rates);
                     });
+                });
             });
 
             req.on('error', (e) => {

@@ -1,6 +1,5 @@
 const {MoneyLocation: Model, MLType} = require('../models');
 const BaseController = require('./BaseController');
-const Messages = require('../Messages');
 
 module.exports = BaseController.extend({
     Model,

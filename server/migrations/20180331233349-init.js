@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    up: (queryInterface, Sequelize) => {
+    up: (queryInterface) => {
         queryInterface.sequelize.query(`
 create table categories
 (
@@ -256,7 +256,7 @@ alter table incomes
     */
     },
 
-    down: (queryInterface, Sequelize) => {
+    down: () => {
         /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.

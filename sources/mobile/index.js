@@ -5,7 +5,6 @@ import {render} from 'react-dom';
 import {createStore, applyMiddleware, compose} from 'redux';
 import {reducer} from 'common/state/reducers';
 import Responsive from './Responsive';
-import {uniqueId} from 'lodash';
 import thunk from 'redux-thunk';
 
 const store = createStore(
@@ -13,7 +12,9 @@ const store = createStore(
     {},
     compose(
         applyMiddleware(thunk),
+        // eslint-disable-next-line no-underscore-dangle
         window.__REDUX_DEVTOOLS_EXTENSION__
+            // eslint-disable-next-line no-underscore-dangle
             ? window.__REDUX_DEVTOOLS_EXTENSION__()
             : (noop) => noop
     )

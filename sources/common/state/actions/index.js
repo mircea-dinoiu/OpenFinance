@@ -1,3 +1,4 @@
+// @flow
 import {Actions} from 'common/state';
 import {fromJS} from 'immutable';
 import routes from 'common/defs/routes';

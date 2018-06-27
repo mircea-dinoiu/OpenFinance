@@ -51,7 +51,8 @@ class MainScreenList extends PureComponent {
         return 50;
     }
 
-    componentWillReceiveProps({newRecord, endDate, refreshWidgets}) {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps({newRecord, endDate, refreshWidgets}) {
         if (
             newRecord &&
             this.state.results.filter((each) => each.get('id') == newRecord.id)
@@ -97,7 +98,6 @@ class MainScreenList extends PureComponent {
                 limit: this.getLimit()
             })}`
         );
-
         const json = await response.json();
 
         this.setState({

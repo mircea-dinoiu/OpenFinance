@@ -9,15 +9,17 @@ const MainScreenDeleteDialog = ({
     onNo,
     ...props
 }) => {
-    const actions = [
-        <RaisedButton
-            label="Yes"
-            primary={false}
-            onTouchTap={onYes}
-            style={{marginRight: 5}}
-        />,
-        <RaisedButton label="No" primary={true} onTouchTap={onNo} />
-    ];
+    const actions = (
+        <React.Fragment>
+            <RaisedButton
+                label="Yes"
+                primary={false}
+                onTouchTap={onYes}
+                style={{marginRight: 5}}
+            />,
+            <RaisedButton label="No" primary={true} onTouchTap={onNo} />
+        </React.Fragment>
+    );
 
     return (
         <Dialog

@@ -3,7 +3,6 @@ const floorToDigits = (value, digits) => {
 
     return Math.floor(value * multiplier) / multiplier;
 };
-
 const appendRatesToCurrencies = (map, {rates, defaultCurrencyISOCode}) => {
     Object.entries(map).forEach(([id, currencyInfo]) => {
         map[id].rates = {};
@@ -51,7 +50,7 @@ module.exports = {
             Object.keys(rates).forEach((key) => {
                 if (key !== defaultCurrencyISOCode) {
                     rates[key] = floorToDigits(
-                        1 / rates[defaultCurrencyISOCode] * rates[key],
+                        (1 / rates[defaultCurrencyISOCode]) * rates[key],
                         4
                     );
                 }

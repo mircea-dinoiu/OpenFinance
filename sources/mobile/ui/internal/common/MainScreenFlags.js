@@ -22,7 +22,7 @@ export const GeneratedFlag = ({entity = ''}) => (
     </Tooltip>
 );
 
-export const Flags = ({entity, item}) => (
+export const Flags = ({item}) => (
     <React.Fragment>
         {item.status === 'pending' && <PendingReviewFlag entity="expense" />}
         {item.repeat != null && <RecurrentFlag entity="expense" />}

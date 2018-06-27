@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const {basePath} = require('../helpers');
 const fs = require('fs');
-
 // config
 const config = require('config');
 const localDevMode = config.get('localDevMode');
@@ -17,7 +16,6 @@ router.get('/', (req, res) => {
             ? config.get('devServer.hostname')
             : ''
     };
-
     const legacy = req.query.hasOwnProperty('legacy');
 
     if (!legacy) {

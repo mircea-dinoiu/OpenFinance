@@ -6,7 +6,7 @@
   },
   "description": "This application is made to track down your monthly expenses and incomes in the family and help you understand better where your money are going and how can you be more careful what you're spending money on.",
   "scripts": {
-    "ci": "run-p --aggregate-output test flow lint:js",
+    "ci": "run-p --aggregate-output test lint:js",
     "build": "webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:hot": "cross-env NODE_ENV=hot webpack-dev-server --hot --inline",
@@ -16,7 +16,7 @@
     "heroku-postbuild": "npm run build:prod",
     "flow": "flow",
     "test": "jest --bail --config package.json",
-    "lint:js": "eslint server sources/mobile sources/common --fix",
+    "lint:js": "eslint server sources/mobile sources/common --quiet",
     "format": "prettier-eslint --write --single-quote",
     "format:js": "yarn run format server/**/*.js sources/mobile/**/*.js sources/common/**/*.js"
   },
@@ -32,7 +32,7 @@
   "homepage": "https://github.com/mircea-dinoiu/financial#readme",
   "devDependencies": {
     "babel-core": "6.21.0",
-    "babel-eslint": "8.2.2",
+    "babel-eslint": "8.2.5",
     "babel-loader": "7.0.0",
     "babel-plugin-transform-class-properties": "6.19.0",
     "babel-plugin-transform-object-rest-spread": "6.20.2",
@@ -43,8 +43,8 @@
     "cross-env": "4.0.0",
     "css-loader": "0.28.1",
     "deep-extend": "0.4.1",
-    "eslint": "4.19.1",
-    "eslint-plugin-react": "7.7.0",
+    "eslint": "5.0.1",
+    "eslint-plugin-react": "7.10.0",
     "flow-bin": "0.55.0",
     "immutable": "3.8.1",
     "jest": "22.4.3",
@@ -68,6 +68,7 @@
     "webpack": "4.5.0",
     "webpack-cli": "2.0.14",
     "webpack-dev-server": "3.1.1",
+    "eslint-plugin-flowtype": "2.49.3",
     "whatwg-fetch": "2.0.3"
   },
   "dependencies": {
@@ -79,7 +80,6 @@
     "cookie-parser": "1.4.3",
     "csurf": "1.9.0",
     "debug": "2.6.3",
-    "eslint-plugin-flowtype": "2.46.1",
     "express": "4.15.2",
     "express-session": "1.15.2",
     "hbs": "4.0.1",

@@ -1,5 +1,4 @@
 const {xmlToRates, appendRatesToCurrencies} = require('./CurrencyHelper');
-
 const allowedISOCodes = ['USD', 'RON', 'EUR'];
 const xml = {
     DataSet: {

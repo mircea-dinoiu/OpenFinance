@@ -12,7 +12,6 @@ const style = {
     transform: 'translate(-50%, 0)',
     transition: transitions.easeOut('0ms', 'visibility')
 };
-
 const getBodyStyle = ({screen}) =>
     screen.isLarge
         ? {}
@@ -21,13 +20,11 @@ const getBodyStyle = ({screen}) =>
             boxShadow:
                   'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px'
         };
-
 const getDefaultProps = ({screen}) => ({
     autoHideDuration: 1500,
     open: true,
     style: screen.isLarge ? undefined : style
 });
-
 const CustomSnackbar = connect(({screen}) => ({screen}))((props) => (
     <Snackbar
         {...getDefaultProps({screen: props.screen})}

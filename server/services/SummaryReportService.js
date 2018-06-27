@@ -4,14 +4,11 @@ const {sortBy} = require('lodash');
 
 module.exports = {
     getRemainingData({expenses, incomes, userRecords, mlRecords, html}) {
-        let data = {byUser: [], byML: []},
-            users,
-            mls,
-            totalRemainingByUser = {},
-            totalRemainingByML = {};
-
-        users = SummaryReportHelper.getUniques(expenses.byUser, incomes.byUser);
-        mls = SummaryReportHelper.getUniques(expenses.byML, incomes.byML);
+        const data = {byUser: [], byML: []};
+        const totalRemainingByUser = {};
+        const totalRemainingByML = {};
+        const users = SummaryReportHelper.getUniques(expenses.byUser, incomes.byUser);
+        const mls = SummaryReportHelper.getUniques(expenses.byML, incomes.byML);
 
         /**
          * Remaining present
@@ -86,9 +83,9 @@ module.exports = {
         defaultCurrency,
         html
     }) {
-        const data = {byUser: [], byML: []},
-            users = {},
-            mls = {};
+        const data = {byUser: [], byML: []};
+        const users = {};
+        const mls = {};
 
         for (const record of incomeRecords) {
             const uId = record.user_id;

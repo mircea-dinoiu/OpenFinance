@@ -8,7 +8,6 @@ import {stringify} from 'query-string';
 import {ErrorSnackbar} from './components/snackbars';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Actions} from 'common/state/reducers';
 import {updateUser} from 'common/state/actions';
 import {Row, Col} from 'react-grid-system';
 
@@ -119,6 +118,9 @@ class Login extends PureComponent {
     }
 }
 
-export default connect(null, (dispatch) => ({
-    actions: bindActionCreators({updateUser}, dispatch)
-}))(Login);
+export default connect(
+    null,
+    (dispatch) => ({
+        actions: bindActionCreators({updateUser}, dispatch)
+    })
+)(Login);

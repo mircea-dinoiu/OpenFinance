@@ -2,13 +2,16 @@
 import moment from 'moment';
 import {getPreference, PREFERENCE_END_DATE} from 'common/utils/preferences';
 
-export function getStartDate({
+export const formatYMD = (date: Date = new Date()): string =>
+    moment(date).format('YYYY-MM-DD');
+
+export const getStartDate = ({
     endDate,
     include
 }: {
     endDate: string,
     include: string
-}): string {
+}): string => {
     let date = moment(endDate).toDate();
 
     date.setHours(0);
@@ -34,13 +37,9 @@ export function getStartDate({
     }
 
     return date ? formatYMD(date) : '';
-}
+};
 
-export function formatYMD(date: Date = new Date()): string {
-    return moment(date).format('YYYY-MM-DD');
-}
-
-export function getInitialEndDate(): string {
+export const getInitialEndDate = (): string => {
     const date = new Date();
 
     date.setDate(1);
@@ -49,4 +48,4 @@ export function getInitialEndDate(): string {
     const defaultDate = formatYMD(date);
 
     return getPreference(PREFERENCE_END_DATE, defaultDate);
-}
+};
