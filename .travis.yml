@@ -3,7 +3,7 @@ node_js:
     - "10.4.1"
 cache:
     yarn: true
-script
+script:
     - yarn test
     - yarn run flow
     - yarn run lint:js
