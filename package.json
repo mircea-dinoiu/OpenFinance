@@ -6,7 +6,7 @@
   },
   "description": "This application is made to track down your monthly expenses and incomes in the family and help you understand better where your money are going and how can you be more careful what you're spending money on.",
   "scripts": {
-    "ci": "yarn test && flow && yarn run lint:js",
+    "ci": "run-p --aggregate-output test flow lint:js",
     "build": "webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:hot": "cross-env NODE_ENV=hot webpack-dev-server --hot --inline",
@@ -51,6 +51,7 @@
     "material-ui": "0.20.0",
     "material-ui-icons": "1.0.0-alpha.3",
     "normalize.css": "7.0.0",
+    "npm-run-all": "4.1.3",
     "prettier-eslint-cli": "4.7.1",
     "query-string": "6.0.0",
     "react": "16.3.1",
