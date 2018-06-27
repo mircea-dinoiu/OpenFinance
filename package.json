@@ -44,10 +44,13 @@
     "css-loader": "0.28.1",
     "deep-extend": "0.4.1",
     "eslint": "5.0.1",
+    "eslint-plugin-flowtype": "2.49.3",
     "eslint-plugin-react": "7.10.0",
     "flow-bin": "0.55.0",
+    "husky": "0.14.3",
     "immutable": "3.8.1",
     "jest": "22.4.3",
+    "lint-staged": "7.2.0",
     "material-ui": "0.20.0",
     "material-ui-icons": "1.0.0-alpha.3",
     "normalize.css": "7.0.0",
@@ -68,7 +71,6 @@
     "webpack": "4.5.0",
     "webpack-cli": "2.0.14",
     "webpack-dev-server": "3.1.1",
-    "eslint-plugin-flowtype": "2.49.3",
     "whatwg-fetch": "2.0.3"
   },
   "dependencies": {
@@ -100,6 +102,13 @@
     "modulePathIgnorePatterns": [
       "package.json",
       "sources/desktop/ext"
+    ]
+  },
+  "lint-staged": {
+    "*.js": [
+      "yarn run format",
+      "eslint --quiet",
+      "git add"
     ]
   }
 }
