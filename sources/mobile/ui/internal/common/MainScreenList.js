@@ -229,7 +229,7 @@ class MainScreenList extends PureComponent {
                                 }
                                 fullWidth={true}
                                 onTouchTap={this.loadMore}
-                                style={{margin: '20px 0 40px'}}
+                                style={{margin: '20px 0 60px'}}
                                 disabled={this.state.loadingMore}
                             />
                         </Col>

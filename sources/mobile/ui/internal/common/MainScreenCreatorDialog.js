@@ -1,21 +1,33 @@
 // @flow
 import React, {PureComponent} from 'react';
-
-import {Dialog, RaisedButton} from 'material-ui';
-
-import {Row, Col} from 'react-grid-system';
+import {fetchJSON} from 'common/utils/fetch';
+import {parseCRUDError} from 'common/parsers';
 
 import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
 import {ButtonProgress} from '../../components/loaders';
 
-import {fetchJSON} from 'common/utils/fetch';
-import {parseCRUDError} from 'common/parsers';
+import {Col, Row} from 'react-grid-system';
 
-export default class MainScreenEditDialog extends PureComponent {
+import {Dialog, RaisedButton} from 'material-ui';
+import {connect} from 'react-redux';
+
+class MainScreenCreatorDialog extends PureComponent {
     state = {
+        createCount: 1,
         saving: false
     };
-    formData = this.props.modelToForm(this.props.entity);
+    props: {
+        getFormDefaults: Function,
+        formToModel: Function,
+        entityName: string,
+        onReceiveNewRecord: Function,
+        formComponent: any,
+        api: {
+            create: string
+        }
+    };
+    formDefaults = this.props.getFormDefaults(this.props);
+    formData = this.props.getFormDefaults(this.props);
 
     save = async () => {
         const data = this.formData;
@@ -26,7 +38,7 @@ export default class MainScreenEditDialog extends PureComponent {
             saving: true
         });
 
-        const response = await fetchJSON(this.props.api.update, {
+        const response = await fetchJSON(this.props.api.create, {
             method: 'POST',
             body: {data: [this.props.formToModel(data, this.props)]}
         });
@@ -36,17 +48,12 @@ export default class MainScreenEditDialog extends PureComponent {
             this.setState({
                 success: `The ${
                     this.props.entityName
-                } was successfully updated`,
+                } was successfully created`,
+                createCount: this.state.createCount + 1,
                 saving: false
             });
 
-            setTimeout(() => {
-                this.setState({
-                    error: null,
-                    success: null
-                });
-                this.props.onSave(json[0]);
-            }, 500);
+            this.props.onReceiveNewRecord(json[0]);
         } else {
             this.setState({
                 error: parseCRUDError(json),
@@ -56,6 +63,7 @@ export default class MainScreenEditDialog extends PureComponent {
     };
 
     render() {
+        const Form = this.props.formComponent;
         const actions = (
             <React.Fragment>
                 <RaisedButton
@@ -67,18 +75,17 @@ export default class MainScreenEditDialog extends PureComponent {
                 />
                 <RaisedButton
                     disabled={this.state.saving}
-                    label={this.state.saving ? <ButtonProgress /> : 'Update'}
+                    label={this.state.saving ? <ButtonProgress /> : 'Create'}
                     primary={true}
                     onTouchTap={this.save}
                     style={{float: 'right'}}
                 />
             </React.Fragment>
         );
-        const Form = this.props.formComponent;
 
         return (
             <Dialog
-                title={`Edit ${this.props.entityName}`}
+                title={`Create ${this.props.entityName}`}
                 open={this.props.open}
                 autoScrollBodyContent={true}
                 actions={actions}
@@ -86,9 +93,9 @@ export default class MainScreenEditDialog extends PureComponent {
             >
                 <Row>
                     <Form
-                        {...this.props.data}
+                        key={this.state.createCount}
                         onFormChange={(formData) => (this.formData = formData)}
-                        initialValues={this.formData}
+                        initialValues={this.formDefaults}
                     />
                 </Row>
                 <Col>
@@ -109,3 +116,7 @@ export default class MainScreenEditDialog extends PureComponent {
         );
     }
 }
+
+export default connect(({currencies, user}) => ({currencies, user}))(
+    MainScreenCreatorDialog
+);

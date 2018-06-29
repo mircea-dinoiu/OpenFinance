@@ -4,6 +4,7 @@ import {Snackbar} from 'material-ui';
 import {red500, green500} from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 import {connect} from 'react-redux';
+import {omit} from 'lodash';
 
 const style = {
     bottom: 'auto',
@@ -28,7 +29,7 @@ const getDefaultProps = ({screen}) => ({
 const CustomSnackbar = connect(({screen}) => ({screen}))((props) => (
     <Snackbar
         {...getDefaultProps({screen: props.screen})}
-        {...props}
+        {...omit(props, 'dispatch')}
         bodyStyle={{
             ...getBodyStyle({screen: props.screen}),
             ...props.bodyStyle

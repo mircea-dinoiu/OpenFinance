@@ -48,7 +48,7 @@ class SummarySubCategory extends PureComponent {
                         onClick={this.toggleExpanded}
                     >
                         <Row>
-                            <Col xs={11}>
+                            <Col xs={10}>
                                 {id == 0 ? (
                                     <em>Unclassified</em>
                                 ) : (
@@ -68,7 +68,7 @@ class SummarySubCategory extends PureComponent {
                                     )}
                                 </div>
                             </Col>
-                            <Col xs={1}>
+                            <Col xs={2}>
                                 {this.state.expanded ? (
                                     <Collapse />
                                 ) : (

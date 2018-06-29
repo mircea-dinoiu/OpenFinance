@@ -442,9 +442,10 @@ class ExpenseForm extends PureComponent {
     }
 }
 
-export default connect(({currencies, categories, moneyLocations, user}) => ({
+export default connect(({currencies, endDate, categories, moneyLocations, user}) => ({
     currencies,
     categories,
+    endDate,
     moneyLocations,
     user
 }))(ExpenseForm);

@@ -1,18 +1,21 @@
 // @flow
 import React, {PureComponent} from 'react';
-import {Tabs, Tab} from 'material-ui/Tabs';
 
 import AddIcon from 'material-ui-icons/Add';
-import ViewListIcon from 'material-ui-icons/ViewList';
 import {connect} from 'react-redux';
+import {FloatingActionButton} from 'material-ui';
 
-class MainScreen extends PureComponent {
+type TypeProps =  {
+    creatorComponent: any,
+    listComponent: any
+};
+
+type TypeState = {};
+
+class MainScreen extends PureComponent<TypeProps, TypeState> {
     state = {
-        newRecord: null
-    };
-    props: {
-        creatorComponent: any,
-        listComponent: any
+        newRecord: null,
+        addModalOpened: false,
     };
 
     renderList() {
@@ -21,24 +24,41 @@ class MainScreen extends PureComponent {
         return <List newRecord={this.state.newRecord} />;
     }
 
-    render() {
-        if (this.props.screen.isLarge) {
-            return this.renderList();
-        }
+    getAddButtonStyle() {
+        return {
+            position: this.props.screen.isLarge ? 'absolute' : 'fixed',
+            bottom: this.props.screen.isLarge ? '20px' : '70px',
+            right: this.props.screen.isLarge ? '30px' : '10px',
+            zIndex: 1
+        };
+    }
 
+    toggleAddModal = () => {
+        this.setState((state) => ({
+            addModalOpened: !state.addModalOpened,
+        }));
+    };
+
+    render() {
         const Creator = this.props.creatorComponent;
 
         return (
-            <Tabs>
-                <Tab icon={<AddIcon />}>
-                    <Creator
-                        onReceiveNewRecord={(newRecord) =>
-                            this.setState({newRecord})
-                        }
-                    />
-                </Tab>
-                <Tab icon={<ViewListIcon />}>{this.renderList()}</Tab>
-            </Tabs>
+            <React.Fragment>
+                <Creator
+                    onReceiveNewRecord={(newRecord) => {
+                        this.setState({newRecord});
+                        this.toggleAddModal();
+                    }}
+                    onCancel={this.toggleAddModal}
+                    open={this.state.addModalOpened}
+                />
+                <FloatingActionButton
+                    onClick={this.toggleAddModal}
+                    mini={!this.props.screen.isLarge} style={this.getAddButtonStyle()}>
+                    <AddIcon />
+                </FloatingActionButton>
+                {this.renderList()}
+            </React.Fragment>
         );
     }
 }
