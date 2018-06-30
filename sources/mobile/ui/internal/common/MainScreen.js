@@ -5,9 +5,10 @@ import AddIcon from 'material-ui-icons/Add';
 import {connect} from 'react-redux';
 import {FloatingActionButton} from 'material-ui';
 
-type TypeProps =  {
+type TypeProps = {
     creatorComponent: any,
-    listComponent: any
+    listComponent: any,
+    screen: TypeScreenQueries,
 };
 
 type TypeState = {};
