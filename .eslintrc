@@ -138,7 +138,8 @@
     "wrap-iife": "error",
     "react/prop-types": "warn",
     "no-console": "off",
-    "one-var": ["error", "never"]
+    "one-var": ["error", "never"],
+    "react/display-name": "warn"
   },
   "settings": {
     "flowtype": {
