@@ -94,26 +94,6 @@ class MainScreenListItem extends PureComponent {
         return {paddingLeft: 40};
     }
 
-    getClassName(): string {
-        const classes = [];
-        const day = formatYMD;
-        const item = this.props.item;
-
-        if (moment(item.created_at).date() % 2 === 0) {
-            classes.push('msl__even-row');
-        } else {
-            classes.push('msl__odd-row');
-        }
-
-        if (day(item.created_at) === day(new Date())) {
-            classes.push('msl__today-row');
-        } else if (day(item.created_at) > day(new Date())) {
-            classes.push('msl__future-row');
-        }
-
-        return classes.join(' ');
-    }
-
     render() {
         const item = this.props.item;
         const persist = item.persist !== false;

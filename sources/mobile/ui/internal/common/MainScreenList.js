@@ -22,6 +22,8 @@ import {
 import {connect} from 'react-redux';
 import {greyedOut} from 'common/defs/styles';
 import {scrollIsAt} from 'common/utils/scroll';
+import FinancialTable from 'common/components/FinancialTable';
+import {formatYMD} from 'common/utils/dates';
 
 const PAGE_SIZE = 50;
 
@@ -47,7 +49,7 @@ class MainScreenList extends PureComponent {
     }
 
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({newRecord, endDate, refreshWidgets}) {
+    UNSAFE_componentWillReceiveProps({newRecord, preferences, refreshWidgets}) {
         if (
             newRecord &&
             this.state.results.filter((each) => each.get('id') == newRecord.id)
@@ -67,6 +69,8 @@ class MainScreenList extends PureComponent {
         if (refreshWidgets !== this.props.refreshWidgets) {
             this.refresh();
         }
+
+        const {endDate} = preferences;
 
         if (endDate !== this.props.preferences.endDate) {
             this.refresh({endDate});
@@ -90,7 +94,7 @@ class MainScreenList extends PureComponent {
             `${this.props.api.list}?${stringify({
                 end_date: endDate,
                 page,
-                limit: PAGE_SIZE,
+                limit: PAGE_SIZE
             })}`
         );
         const json = await response.json();
@@ -175,22 +179,46 @@ class MainScreenList extends PureComponent {
         }
     };
 
+    getTrClassName(item): string {
+        const classes = [];
+        const day = formatYMD;
+
+        if (moment(item.created_at).date() % 2 === 0) {
+            classes.push('msl__even-row');
+        } else {
+            classes.push('msl__odd-row');
+        }
+
+        if (day(item.created_at) === day(new Date())) {
+            classes.push('msl__today-row');
+        } else if (day(item.created_at) > day(new Date())) {
+            classes.push('msl__future-row');
+        }
+
+        return classes.join(' ');
+    }
+
+    getTrProps = (state, item) => {
+        return {
+            className: this.getTrClassName(item.original),
+        };
+    };
+
     renderResults() {
         if (this.props.screen.isLarge) {
-            const Header = this.props.headerComponent;
+            const results = this.getSortedResults().toJS();
 
             return (
                 <div onScroll={this.onTableScroll}>
-                    <Table height="calc(100vh - 180px)">
-                        <TableHeader>
-                            <Header />
-                        </TableHeader>
-                        <TableBody>
-                            {this.getSortedResults().map((item) =>
-                                this.renderItem(item)
-                            )}
-                        </TableBody>
-                    </Table>
+                    <FinancialTable
+                        style={{
+                            height: 'calc(100vh - 120px)'
+                        }}
+                        loading={this.state.loadingMore}
+                        data={results}
+                        columns={this.props.tableColumns}
+                        getTrProps={this.getTrProps}
+                    />
                 </div>
             );
         }

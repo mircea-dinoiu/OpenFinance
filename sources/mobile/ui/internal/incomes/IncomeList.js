@@ -5,13 +5,13 @@ import routes from 'common/defs/routes';
 
 import IncomeListItem from './IncomeListItem';
 import MainScreenList from '../common/MainScreenList';
-import IncomeHeader from 'mobile/ui/internal/incomes/IncomeHeader';
+import IncomeTableColumns from 'mobile/ui/internal/incomes/IncomeTableColumns';
 
 const IncomeList = () => (
     <MainScreenList
         api={routes.income}
         listItemComponent={IncomeListItem}
-        headerComponent={IncomeHeader}
+        tableColumns={IncomeTableColumns}
     />
 );
 
