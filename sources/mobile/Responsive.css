@@ -3,12 +3,12 @@ body {
     background: #EEEEEE;
 }
 
-.msl__today-row td {
+.msl__today-row {
     font-weight: bold;
     background: rgba(0, 0, 0, 0.1);
 }
 
-.msl__future-row td {
+.msl__future-row {
   background: rgba(0, 0, 0, 0.05);
 }
 

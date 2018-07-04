@@ -32,7 +32,9 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({endDate, refreshWidgets}) {
+    UNSAFE_componentWillReceiveProps({preferences, refreshWidgets}) {
+        const {endDate} = preferences;
+
         if (endDate !== this.props.preferences.endDate) {
             this.load({endDate});
         }

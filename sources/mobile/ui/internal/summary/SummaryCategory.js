@@ -2,20 +2,13 @@
 import React, {PureComponent} from 'react';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
-import {
-    Card,
-    CardHeader,
-    CardText,
-    Table,
-    TableBody,
-    TableRow,
-    TableRowColumn
-} from 'material-ui';
+import {Card, CardHeader, CardText} from 'material-ui';
 import {numericValue} from 'mobile/ui/formatters';
 import {connect} from 'react-redux';
 import Expand from 'material-ui-icons/ExpandMore';
 import Collapse from 'material-ui-icons/ExpandLess';
 import {Col, Row} from 'react-grid-system';
+import FinancialTable from 'common/components/FinancialTable';
 
 class SummarySubCategory extends PureComponent {
     state = {
@@ -37,12 +30,11 @@ class SummarySubCategory extends PureComponent {
         } = this.props;
 
         return (
-            <React.Fragment>
+            <div style={{padding: '0 5px'}}>
                 {shouldGroup && (
                     <CardHeader
                         style={{
-                            paddingTop: 0,
-                            paddingBottom: 0,
+                            padding: 0,
                             marginTop: id == 0 ? 5 : 0,
                             cursor: 'pointer'
                         }}
@@ -69,7 +61,7 @@ class SummarySubCategory extends PureComponent {
                                     )}
                                 </div>
                             </Col>
-                            <Col xs={2}>
+                            <Col xs={2} style={{textAlign: 'right'}}>
                                 {this.state.expanded ? (
                                     <Collapse />
                                 ) : (
@@ -80,28 +72,22 @@ class SummarySubCategory extends PureComponent {
                     </CardHeader>
                 )}
                 {(shouldGroup === false || this.state.expanded) && (
-                    <Table>
-                        <TableBody displayRowCheckbox={false}>
-                            {items.map((each, index) => (
-                                <TableRow
-                                    selectable={false}
-                                    key={index}
-                                    style={{marginBottom: 5}}
-                                >
-                                    <TableRowColumn>
-                                        {each.description}
-                                    </TableRowColumn>
-                                    <TableRowColumn
-                                        style={{textAlign: 'right'}}
-                                    >
-                                        {this.numericValue(each.sum)}
-                                    </TableRowColumn>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    <FinancialTable
+                        data={items}
+                        modifiers={{hideHeader: true}}
+                        columns={[
+                            {
+                                accessor: 'description'
+                            },
+                            {
+                                id: 'sum',
+                                accessor: (each) => this.numericValue(each.sum),
+                                style: {textAlign: 'right'}
+                            }
+                        ]}
+                    />
                 )}
-            </React.Fragment>
+            </div>
         );
     }
 }

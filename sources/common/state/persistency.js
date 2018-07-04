@@ -2,9 +2,7 @@
 import pick from 'lodash/pick';
 
 const key = 'FINANCIAL_STATE';
-const persistentReducers = [
-    'preferences',
-];
+const persistentReducers = ['preferences'];
 
 export const readState = () => {
     try {

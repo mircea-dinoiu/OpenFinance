@@ -53,9 +53,15 @@ const getMomentArgsForDateShift = (option) => {
     throw new Error(`${option} is not specified in ShiftDateOptions`);
 };
 
-export const shiftDateForward = (date, by) => moment(date).add(...getMomentArgsForDateShift(by)).toDate();
+export const shiftDateForward = (date, by) =>
+    moment(date)
+        .add(...getMomentArgsForDateShift(by))
+        .toDate();
 
-export const shiftDateBack = (date, by) => moment(date).subtract(...getMomentArgsForDateShift(by)).toDate();
+export const shiftDateBack = (date, by) =>
+    moment(date)
+        .subtract(...getMomentArgsForDateShift(by))
+        .toDate();
 
 export const getInitialEndDate = (): string => {
     const date = new Date();

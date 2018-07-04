@@ -24,7 +24,15 @@ const NumericValue = connect(({currencies}) => ({currencies}))(
             </span>
         );
         const tooltip = [
-            <div key={currency} style={{backgroundColor: grey700, borderRadius: '3px', padding: '3px 5px', margin: '0 -5px 5px'}}>
+            <div
+                key={currency}
+                style={{
+                    backgroundColor: grey700,
+                    borderRadius: '3px',
+                    padding: '3px 5px',
+                    margin: '0 -5px 5px'
+                }}
+            >
                 {currency} {formatNumericValue(value)}
             </div>,
             ...Object.values(
