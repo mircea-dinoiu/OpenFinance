@@ -4,7 +4,7 @@ import {Snackbar} from 'material-ui';
 import {red500, green500} from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 import {connect} from 'react-redux';
-import {omit} from 'lodash';
+import omit from 'lodash/omit';
 
 const style = {
     bottom: 'auto',

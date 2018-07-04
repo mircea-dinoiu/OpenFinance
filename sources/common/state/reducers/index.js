@@ -1,10 +1,9 @@
 import {fromJS} from 'immutable';
 import {Actions} from 'common/state';
-import {uniqueId} from 'lodash';
+import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import {combineReducers} from 'redux';
-import {getInitialEndDate} from 'common/utils/dates';
-import {PREFERENCE_END_DATE, setPreference} from 'common/utils/preferences';
+import {parsePreferences, readPreferences, savePreferences} from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
 const screen = (state = getScreenQueries(), action) => action.type === Actions.SET_SCREEN ? action.value : state;
@@ -44,11 +43,12 @@ const loading = (state = true, action) => {
 
     return state;
 };
-const endDate = (state = getInitialEndDate(), action) => {
-    if (action.type === Actions.SET_END_DATE) {
-        setPreference(PREFERENCE_END_DATE, action.value);
-
-        return action.value;
+const preferences = (state = {}, action) => {
+    switch (action.type) {
+        case Actions.$INIT:
+            return parsePreferences(state);
+        case Actions.UPDATE_PREFERENCES:
+            return {...state, ...action.value};
     }
 
     return state;
@@ -65,7 +65,6 @@ export const reducer = combineReducers({
     screen,
     title,
     loading,
-    endDate,
     ui,
     currenciesDrawerOpen,
     refreshWidgets,
@@ -73,5 +72,6 @@ export const reducer = combineReducers({
     currencies,
     categories,
     moneyLocations,
-    moneyLocationTypes
+    moneyLocationTypes,
+    preferences,
 });

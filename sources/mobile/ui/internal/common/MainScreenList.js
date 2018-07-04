@@ -68,7 +68,7 @@ class MainScreenList extends PureComponent {
             this.refresh();
         }
 
-        if (endDate !== this.props.endDate) {
+        if (endDate !== this.props.preferences.endDate) {
             this.refresh({endDate});
         }
     }
@@ -76,7 +76,7 @@ class MainScreenList extends PureComponent {
     loadMore = async ({
         page = this.state.page,
         results = this.state.results,
-        endDate = this.props.endDate
+        endDate = this.props.preferences.endDate
     } = {}) => {
         if (this.state.loadingMore === true) {
             return;
@@ -137,7 +137,7 @@ class MainScreenList extends PureComponent {
         }, 500);
     };
 
-    refresh = async ({endDate = this.props.endDate} = {}) => {
+    refresh = async ({endDate = this.props.preferences.endDate} = {}) => {
         this.setState({
             refreshing: true
         });
@@ -240,8 +240,8 @@ class MainScreenList extends PureComponent {
     }
 }
 
-export default connect(({endDate, screen, refreshWidgets}) => ({
-    endDate,
+export default connect(({preferences, screen, refreshWidgets}) => ({
+    preferences,
     screen,
     refreshWidgets
 }))(MainScreenList);

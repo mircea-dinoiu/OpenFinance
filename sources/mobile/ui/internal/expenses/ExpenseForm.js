@@ -173,7 +173,7 @@ class ExpenseForm extends PureComponent {
         const response = await fetch(
             `${routes.suggestion.expense.descriptions}?${stringify({
                 search,
-                end_date: this.props.endDate
+                end_date: this.props.preferences.endDate
             })}`
         );
         const descriptionSuggestions = await response.json();
@@ -442,10 +442,10 @@ class ExpenseForm extends PureComponent {
     }
 }
 
-export default connect(({currencies, endDate, categories, moneyLocations, user}) => ({
+export default connect(({currencies, preferences, categories, moneyLocations, user}) => ({
     currencies,
     categories,
-    endDate,
+    preferences,
     moneyLocations,
     user
 }))(ExpenseForm);

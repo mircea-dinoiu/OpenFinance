@@ -6,18 +6,15 @@ import * as colors from 'material-ui/styles/colors';
 import routes from '../../../common/defs/routes';
 import {stringify} from 'query-string';
 import {fetch} from '../../../common/utils/fetch';
-import {pickBy, identity} from 'lodash';
+import pickBy from 'lodash/pickBy';
+import identity from 'lodash/identity';
 import {connect} from 'react-redux';
 import IncludeDropdown from 'common/components/IncludeDropdown';
 import {getStartDate, formatYMD} from 'common/utils/dates';
 import {greyedOut} from 'common/defs/styles';
 import {Sizes} from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
-import {
-    getPreference,
-    PREFERENCE_INCLUDE_RESULTS,
-    setPreference
-} from 'common/utils/preferences';
+import {updatePreferences} from 'common/state/actions';
 
 type TypeProps = {
     screen: TypeScreenQueries
@@ -28,7 +25,6 @@ class Summary extends React.PureComponent<TypeProps> {
         firstLoad: true,
         results: null,
         refreshing: false,
-        include: getPreference(PREFERENCE_INCLUDE_RESULTS, 'ut')
     };
 
     componentDidMount() {
@@ -37,7 +33,7 @@ class Summary extends React.PureComponent<TypeProps> {
 
     // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps({endDate, refreshWidgets}) {
-        if (endDate !== this.props.endDate) {
+        if (endDate !== this.props.preferences.endDate) {
             this.load({endDate});
         }
 
@@ -46,7 +42,7 @@ class Summary extends React.PureComponent<TypeProps> {
         }
     }
 
-    load = async ({endDate = this.props.endDate} = {}) => {
+    load = async ({endDate = this.props.preferences.endDate, include = this.props.preferences.include} = {}) => {
         this.setState({
             refreshing: true
         });
@@ -56,9 +52,9 @@ class Summary extends React.PureComponent<TypeProps> {
                 ...pickBy(
                     {
                         end_date:
-                            this.state.include === 'ut' ? formatYMD() : endDate,
+                            include === 'ut' ? formatYMD() : endDate,
                         start_date: getStartDate({
-                            include: this.state.include,
+                            include,
                             endDate
                         })
                     },
@@ -146,9 +142,8 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 
     onIncludeChange = (include) => {
-        this.setState({include}, this.load);
-
-        setPreference(PREFERENCE_INCLUDE_RESULTS, include);
+        this.props.updatePreferences({include});
+        this.load({include});
     };
 
     render() {
@@ -173,7 +168,7 @@ class Summary extends React.PureComponent<TypeProps> {
                         }}
                     >
                         <IncludeDropdown
-                            value={this.state.include}
+                            value={this.props.preferences.include}
                             onChange={this.onIncludeChange}
                         />
                     </Paper>
@@ -184,4 +179,6 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 }
 
-export default connect((state) => state)(Summary);
+const mapDispatchToProps = {updatePreferences};
+
+export default connect((state) => state, mapDispatchToProps)(Summary);

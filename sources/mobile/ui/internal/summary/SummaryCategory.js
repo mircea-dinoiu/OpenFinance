@@ -1,6 +1,7 @@
 // @flow
 import React, {PureComponent} from 'react';
-import {groupBy, sortBy} from 'lodash';
+import groupBy from 'lodash/groupBy';
+import sortBy from 'lodash/sortBy';
 import {
     Card,
     CardHeader,

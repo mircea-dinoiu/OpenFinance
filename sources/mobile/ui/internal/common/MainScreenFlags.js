@@ -4,7 +4,7 @@ import Cached from 'material-ui-icons/Cached';
 import TrendingUp from 'material-ui-icons/TrendingUp';
 import Warning from 'material-ui-icons/Warning';
 import Tooltip from 'common/components/Tooltip';
-import {startCase} from 'lodash';
+import startCase from 'lodash/startCase';
 
 export const PendingReviewFlag = ({entity = ''}) => (
     <Tooltip tooltip={`${startCase(entity)} is pending review`}>
