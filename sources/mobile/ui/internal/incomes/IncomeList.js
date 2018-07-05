@@ -3,15 +3,26 @@ import React from 'react';
 
 import routes from 'common/defs/routes';
 
-import IncomeListItem from './IncomeListItem';
 import MainScreenList from '../common/MainScreenList';
 import IncomeTableColumns from 'mobile/ui/internal/incomes/IncomeTableColumns';
+import IncomeForm from 'mobile/ui/internal/incomes/IncomeForm';
+import IncomeListItemContent from 'mobile/ui/internal/incomes/IncomeListItemContent';
+import modelToForm from 'mobile/ui/internal/incomes/helpers/modelToForm';
+import formToModel from 'mobile/ui/internal/incomes/helpers/formToModel';
 
-const IncomeList = () => (
+const IncomeList = (props) => (
     <MainScreenList
         api={routes.income}
-        listItemComponent={IncomeListItem}
         tableColumns={IncomeTableColumns}
+        entityName="income"
+        nameProperty="description"
+        editDialogProps={{
+            modelToForm,
+            formToModel,
+            formComponent: IncomeForm
+        }}
+        contentComponent={IncomeListItemContent}
+        {...props}
     />
 );
 

@@ -4,17 +4,17 @@ import {Row, Col} from 'react-grid-system';
 
 import {Flags} from 'mobile/ui/internal/common/MainScreenFlags';
 import FromDisplay from 'mobile/ui/internal/incomes/cells/FromDisplay';
-import DestinationDisplay from 'mobile/ui/internal/incomes/cells/DestinationDisplay';
 import AmountDisplay from 'common/components/FinancialTable/cells/AmountDisplay';
 import RepeatsDisplay from 'common/components/FinancialTable/cells/RepeatsDisplay';
 import DateDisplay from 'common/components/FinancialTable/cells/DateDisplay';
+import MoneyLocationDisplay from 'common/components/FinancialTable/cells/MoneyLocationDisplay';
 
 type TypeProps = {};
 
 const IncomeListItemContent = ({item, expanded}: TypeProps) => {
     const descriptionDisplay = item.description;
     const flags = <Flags entity="income" item={item} />;
-    const destinationDisplay = <DestinationDisplay item={item} />;
+    const moneyLocationDisplay = <MoneyLocationDisplay item={item} />;
     const dateDisplay = <DateDisplay item={item} />;
     const repeatsDisplay = <RepeatsDisplay item={item} />;
     const fromDisplay = <FromDisplay item={item} />;
@@ -42,7 +42,7 @@ const IncomeListItemContent = ({item, expanded}: TypeProps) => {
                     {flags}
                 </Col>
                 <Col xs={6} style={{textAlign: 'right'}}>
-                    {destinationDisplay}
+                    {moneyLocationDisplay}
                 </Col>
             </Row>
             {expanded && (

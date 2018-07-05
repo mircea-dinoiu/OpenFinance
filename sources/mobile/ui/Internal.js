@@ -17,6 +17,7 @@ import TrendingDown from 'material-ui-icons/TrendingDown';
 import {connect} from 'react-redux';
 import {Col, Row} from 'react-grid-system';
 import {flexColumn} from 'common/defs/styles';
+import {grey700} from 'material-ui/styles/colors';
 
 type TypeProps = {
     screen: TypeScreenQueries
@@ -51,7 +52,24 @@ class Internal extends PureComponent<TypeProps, TypeState> {
         this.select(this.state.selectedIndex);
     }
 
+    renderComingSoon() {
+        return (
+            <div
+                style={{
+                    textAlign: 'center',
+                    padding: '100px',
+                    fontSize: '48px',
+                    color: grey700
+                }}
+            >
+                Coming soon
+            </div>
+        );
+    }
+
     renderLarge() {
+        const comingSoon = this.renderComingSoon();
+
         return (
             <Row nogutter>
                 <Col xs={2} style={{paddingRight: 0}}>
@@ -65,9 +83,9 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                         <Tab label="Incomes">
                             <Incomes />
                         </Tab>
-                        <Tab label="Categories" />
-                        <Tab label="Accounts" />
-                        <Tab label="Account Types" />
+                        <Tab label="Categories">{comingSoon}</Tab>
+                        <Tab label="Accounts">{comingSoon}</Tab>
+                        <Tab label="Account Types">{comingSoon}</Tab>
                     </Tabs>
                 </Col>
             </Row>

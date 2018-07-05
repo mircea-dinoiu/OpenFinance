@@ -24,6 +24,8 @@ import {greyedOut} from 'common/defs/styles';
 import {scrollIsAt} from 'common/utils/scroll';
 import FinancialTable from 'common/components/FinancialTable';
 import {formatYMD} from 'common/utils/dates';
+import {getTrProps} from 'common/components/MainScreen/Table/helpers';
+import MainScreenListGroup from 'mobile/ui/internal/common/MainScreenListGroup';
 
 const PAGE_SIZE = 50;
 
@@ -33,7 +35,6 @@ class MainScreenList extends PureComponent {
             destroy: string,
             list: string
         },
-        listItemComponent: any
     };
 
     state = {
@@ -49,7 +50,11 @@ class MainScreenList extends PureComponent {
     }
 
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({newRecord, preferences, refreshWidgets}) {
+    UNSAFE_componentWillReceiveProps({
+        newRecord,
+        preferences,
+        refreshWidgets
+    }) {
         if (
             newRecord &&
             this.state.results.filter((each) => each.get('id') == newRecord.id)
@@ -157,54 +162,28 @@ class MainScreenList extends PureComponent {
         });
     };
 
-    renderItem(item) {
-        const ListItem = this.props.listItemComponent;
-
-        return (
-            <ListItem
-                key={item.get('id')}
-                item={item.toJS()}
-                onDelete={this.handleDelete}
-                onUpdate={this.handleUpdate}
-                api={this.props.api}
-            />
-        );
-    }
-
     onTableScroll = (event) => {
         const element = event.target;
 
-        if (scrollIsAt(element, 80)) {
+        if (scrollIsAt(element, 90)) {
             this.loadMore();
         }
     };
 
-    getTrClassName(item): string {
-        const classes = [];
-        const day = formatYMD;
-
-        if (moment(item.created_at).date() % 2 === 0) {
-            classes.push('msl__even-row');
-        } else {
-            classes.push('msl__odd-row');
-        }
-
-        if (day(item.created_at) === day(new Date())) {
-            classes.push('msl__today-row');
-        } else if (day(item.created_at) > day(new Date())) {
-            classes.push('msl__future-row');
-        }
-
-        return classes.join(' ');
+    getCommonProps() {
+        return {
+            onDelete: this.handleDelete,
+            onUpdate: this.handleUpdate,
+            api: this.props.api,
+            entityName: this.props.entityName,
+            nameProperty: this.props.nameProperty,
+            editDialogProps: this.props.editDialogProps,
+        };
     }
 
-    getTrProps = (state, item) => {
-        return {
-            className: this.getTrClassName(item.original),
-        };
-    };
+    renderContent() {
+        const commonProps = this.getCommonProps();
 
-    renderResults() {
         if (this.props.screen.isLarge) {
             const results = this.getSortedResults().toJS();
 
@@ -217,22 +196,22 @@ class MainScreenList extends PureComponent {
                         loading={this.state.loadingMore}
                         data={results}
                         columns={this.props.tableColumns}
-                        getTrProps={this.getTrProps}
+                        getTrProps={getTrProps}
                     />
                 </div>
             );
         }
 
         return this.getGroupedResults().map(([date, items]) => (
-            <div key={date}>
-                <List>
-                    <Subheader style={{textAlign: 'center'}}>
-                        {moment(date).calendar(null, CalendarWithoutTime)}
-                    </Subheader>
-                    {items.map((item) => this.renderItem(item)).toArray()}
-                </List>
-                <Divider />
-            </div>
+            <MainScreenListGroup
+                key={date}
+                date={date}
+                items={items}
+                itemProps={{
+                    ...commonProps,
+                    contentComponent: this.props.contentComponent,
+                }}
+            />
         ));
     }
 
@@ -241,15 +220,21 @@ class MainScreenList extends PureComponent {
             return <BigLoader />;
         }
 
+        const {screen} = this.props;
+        const {loadingMore} = this.state;
+
         return (
             <div>
-                <div style={this.state.refreshing ? greyedOut : {}}>
-                    {this.renderResults()}
-                    {this.props.screen.isLarge ? null : (
+                <div style={{
+                    ...(this.state.refreshing ? greyedOut : {}),
+                    backgroundColor: screen.isLarge ? undefined : 'white',
+                }}>
+                    {this.renderContent()}
+                    {screen.isLarge ? null : (
                         <Col>
                             <RaisedButton
                                 label={
-                                    this.state.loadingMore ? (
+                                    loadingMore ? (
                                         <ButtonProgress />
                                     ) : (
                                         'Load More'
@@ -258,7 +243,7 @@ class MainScreenList extends PureComponent {
                                 fullWidth={true}
                                 onTouchTap={this.loadMore}
                                 style={{margin: '20px 0 60px'}}
-                                disabled={this.state.loadingMore}
+                                disabled={loadingMore}
                             />
                         </Col>
                     )}

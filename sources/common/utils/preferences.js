@@ -18,7 +18,7 @@ export const parsePreferences = (
     endDate: string
 } => {
     const endDateIncrement = state.endDateIncrement || '2w';
-    const include = state.include || 'all';
+    const include = state.include || 'ut';
     const endDate = state.endDate || getInitialEndDate();
 
     return {endDateIncrement, include, endDate};

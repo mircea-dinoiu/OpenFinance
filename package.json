@@ -17,8 +17,8 @@
     "flow": "flow",
     "test": "jest --bail --config package.json",
     "lint:js": "eslint server sources/mobile sources/common --quiet",
-    "format": "prettier-eslint --write --single-quote",
-    "format:js": "yarn run format server/**/*.js sources/mobile/**/*.js sources/common/**/*.js"
+    "format:js": "prettier-eslint --write --single-quote",
+    "format:all": "yarn run format server/**/*.js sources/mobile/**/*.js sources/common/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -115,7 +115,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "yarn run format",
+      "yarn run format:js",
       "eslint --quiet",
       "git add"
     ]

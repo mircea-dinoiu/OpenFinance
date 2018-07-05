@@ -6,14 +6,11 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import CreateIcon from 'material-ui-icons/Create';
 
 import {cyan50, red50} from 'material-ui/styles/colors';
-import {IconButton, MenuItem, IconMenu, TableRow} from 'material-ui';
+import {IconButton, MenuItem, IconMenu} from 'material-ui';
 
 import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
 import ResponsiveListItem from 'common/components/ResponsiveListItem';
-import {connect} from 'react-redux';
-import {formatYMD} from 'common/utils/dates';
-import moment from 'moment';
 
 class MainScreenListItem extends PureComponent {
     props: {
@@ -149,20 +146,6 @@ class MainScreenListItem extends PureComponent {
             </React.Fragment>
         );
 
-        if (this.props.screen.isLarge) {
-            return (
-                <TableRow
-                    style={this.getStyle()}
-                    className={this.getClassName()}
-                    hoverable={true}
-                    onDoubleClick={persist ? this.toggleEditDialog : null}
-                >
-                    {dialogs}
-                    {itemContent}
-                </TableRow>
-            );
-        }
-
         return this.state.deleted ? (
             <ResponsiveListItem
                 style={this.getStyle()}
@@ -206,4 +189,4 @@ class MainScreenListItem extends PureComponent {
     }
 }
 
-export default connect(({screen}) => ({screen}))(MainScreenListItem);
+export default MainScreenListItem;

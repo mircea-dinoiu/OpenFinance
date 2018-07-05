@@ -2,15 +2,26 @@ import React from 'react';
 
 import routes from 'common/defs/routes';
 
-import ExpenseListItem from './ExpenseListItem';
 import MainScreenList from '../common/MainScreenList';
-import ExpenseHeader from 'mobile/ui/internal/expenses/ExpenseHeader';
+import ExpenseTableColumns from 'mobile/ui/internal/expenses/ExpenseTableColumns';
+import ExpenseForm from 'mobile/ui/internal/expenses/ExpenseForm';
+import ExpenseListItemContent from 'mobile/ui/internal/expenses/ExpenseListItemContent';
+import formToModel from 'mobile/ui/internal/expenses/helpers/formToModel';
+import modelToForm from 'mobile/ui/internal/expenses/helpers/modelToForm';
 
-const ExpenseList = () => (
+const ExpenseList = (props) => (
     <MainScreenList
         api={routes.expense}
-        listItemComponent={ExpenseListItem}
-        headerComponent={ExpenseHeader}
+        tableColumns={ExpenseTableColumns}
+        entityName="expense"
+        nameProperty="item"
+        editDialogProps={{
+            modelToForm,
+            formToModel,
+            formComponent: ExpenseForm
+        }}
+        contentComponent={ExpenseListItemContent}
+        {...props}
     />
 );
 
