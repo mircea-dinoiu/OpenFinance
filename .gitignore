@@ -1,9 +1,11 @@
 # IDE stuff
 .idea
+.vscode
 
 # NPM stuff
 /node_modules
 public/dist
+build
 
 # EXT stuff
 public/ext
