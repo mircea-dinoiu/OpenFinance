@@ -16,6 +16,10 @@
   ],
   "parser": "babel-eslint",
   "rules": {
+    // off
+    "no-confusing-arrow": "off",
+    // warn
+    // error
     "jsx-quotes": "error",
     "flowtype/type-id-match": [
       2,
@@ -61,7 +65,6 @@
     "no-array-constructor": "error",
     "no-bitwise": "error",
     "no-caller": "error",
-    "no-confusing-arrow": "warn",
     "no-continue": "warn",
     "no-div-regex": "error",
     "no-duplicate-imports": "error",

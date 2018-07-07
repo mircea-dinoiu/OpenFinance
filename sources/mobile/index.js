@@ -13,12 +13,11 @@ import logger from 'redux-logger';
 const store = createStore(
     reducer,
     readState(),
+    /* eslint no-underscore-dangle: 0 */
     compose(
         applyMiddleware(thunk, logger),
-        // eslint-disable-next-line no-underscore-dangle
         window.__REDUX_DEVTOOLS_EXTENSION__
-            ? // eslint-disable-next-line no-underscore-dangle
-            window.__REDUX_DEVTOOLS_EXTENSION__()
+            ? window.__REDUX_DEVTOOLS_EXTENSION__()
             : (noop) => noop,
     ),
 );

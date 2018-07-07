@@ -55,6 +55,8 @@ export const getTrProps = ({
         onClick,
         onContextMenu: (event) => {
             const selected = onClick(event);
+
+            console.log(selected);
         },
     };
 };

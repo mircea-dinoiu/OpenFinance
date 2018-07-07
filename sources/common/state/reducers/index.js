@@ -5,8 +5,6 @@ import getScreenQueries from 'common/utils/getScreenQueries';
 import { combineReducers } from 'redux';
 import {
     parsePreferences,
-    readPreferences,
-    savePreferences,
 } from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
