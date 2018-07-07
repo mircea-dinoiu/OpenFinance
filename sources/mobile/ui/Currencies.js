@@ -1,17 +1,22 @@
 // @flow
 import React, {PureComponent} from 'react';
 import {MenuItem, Subheader} from 'material-ui';
-import {bindActionCreators} from 'redux';
 import {fetchCurrencies} from 'common/state/actions';
 import {connect} from 'react-redux';
 
-class Currencies extends PureComponent {
+type TypeProps = {
+    user: TypeUsers,
+    data: TypeCurrencies,
+    fetchCurrencies: typeof fetchCurrencies,
+};
+
+class Currencies extends PureComponent<TypeProps> {
     interval = null;
 
     componentDidMount() {
         this.interval = setInterval(() => {
             if (this.props.user) {
-                this.props.actions.fetchCurrencies({update: true});
+                this.props.fetchCurrencies({update: true});
             }
         }, 60 * 1000);
     }
@@ -50,12 +55,5 @@ class Currencies extends PureComponent {
 
 export default connect(
     ({user}) => ({user}),
-    (dispatch) => ({
-        actions: bindActionCreators(
-            {
-                fetchCurrencies
-            },
-            dispatch
-        )
-    })
+    {fetchCurrencies}
 )(Currencies);

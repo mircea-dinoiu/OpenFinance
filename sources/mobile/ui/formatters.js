@@ -2,12 +2,13 @@ import React from 'react';
 import {grey700} from 'material-ui/styles/colors';
 import {connect} from 'react-redux';
 import Tooltip from 'common/components/Tooltip';
+import {getDefaultCurrency} from '../../common/helpers/currency';
 
 const formatNumericValue = (value) => new Intl.NumberFormat().format(value);
 const NumericValue = connect(({currencies}) => ({currencies}))(
     ({
         currencies,
-        currency,
+        currency = getDefaultCurrency(currencies).get('iso_code'),
         showCurrency = true,
         value,
         currencyStyle = {}

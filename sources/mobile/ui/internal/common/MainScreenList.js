@@ -8,41 +8,58 @@ import Immutable from 'immutable';
 import {BigLoader, ButtonProgress} from '../../components/loaders';
 
 import fetch, {fetchJSON} from 'common/utils/fetch';
-import {CalendarWithoutTime} from 'common/defs/formats';
 
-import {List} from 'material-ui/List';
-import {
-    RaisedButton,
-    Subheader,
-    Divider,
-    Table,
-    TableBody,
-    TableHeader
-} from 'material-ui';
+import {RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {greyedOut} from 'common/defs/styles';
 import {scrollIsAt} from 'common/utils/scroll';
 import FinancialTable from 'common/components/FinancialTable';
-import {formatYMD} from 'common/utils/dates';
+import cssTable from 'common/components/FinancialTable/index.pcss';
 import {getTrProps} from 'common/components/MainScreen/Table/helpers';
 import MainScreenListGroup from 'mobile/ui/internal/common/MainScreenListGroup';
+import {isAccessor} from '../../../../../node_modules/typescript';
+import {convertCurrencyToDefault} from '../../../../common/helpers/currency';
+import { numericValue } from '../../formatters';
 
 const PAGE_SIZE = 50;
 
-class MainScreenList extends PureComponent {
-    props: {
-        api: {
-            destroy: string,
-            list: string
-        },
-    };
+type TypeProps = {
+    api: {
+        destroy: string,
+        list: string,
+    },
+    preferences: TypePreferences,
+    entityName: string,
+    nameProperty: string,
+    screen: TypeScreenQueries,
+    editDialogProps: {
+        // todo consider having stronger types here
+        modelToForm: Function,
+        formToModel: Function,
+        formComponent: React$PureComponent<any>,
+    },
+    tableColumns: Array<{}>,
+    contentComponent: React$PureComponent<any>,
+    currencies: TypeCurrencies,
+};
 
+type TypeState = {
+    firstLoad: boolean,
+    page: number,
+    results: Immutable.List,
+    loadingMore: boolean,
+    refreshing: boolean,
+    selectedIds: number[],
+};
+
+class MainScreenList extends PureComponent<TypeProps, TypeState> {
     state = {
         firstLoad: true,
         page: 1,
         results: Immutable.List(),
         loadingMore: false,
-        refreshing: false
+        refreshing: false,
+        selectedIds: [],
     };
 
     componentDidMount() {
@@ -53,7 +70,7 @@ class MainScreenList extends PureComponent {
     UNSAFE_componentWillReceiveProps({
         newRecord,
         preferences,
-        refreshWidgets
+        refreshWidgets,
     }) {
         if (
             newRecord &&
@@ -65,8 +82,8 @@ class MainScreenList extends PureComponent {
             } else {
                 this.setState({
                     results: this.state.results.concat(
-                        Immutable.fromJS([newRecord])
-                    )
+                        Immutable.fromJS([newRecord]),
+                    ),
                 });
             }
         }
@@ -85,22 +102,22 @@ class MainScreenList extends PureComponent {
     loadMore = async ({
         page = this.state.page,
         results = this.state.results,
-        endDate = this.props.preferences.endDate
+        endDate = this.props.preferences.endDate,
     } = {}) => {
         if (this.state.loadingMore === true) {
             return;
         }
 
         this.setState({
-            loadingMore: true
+            loadingMore: true,
         });
 
         const response = await fetch(
             `${this.props.api.list}?${stringify({
                 end_date: endDate,
                 page,
-                limit: PAGE_SIZE
-            })}`
+                limit: PAGE_SIZE,
+            })}`,
         );
         const json = await response.json();
 
@@ -108,7 +125,7 @@ class MainScreenList extends PureComponent {
             page: page + 1,
             results: results.concat(Immutable.fromJS(json)),
             firstLoad: false,
-            loadingMore: false
+            loadingMore: false,
         });
     };
 
@@ -123,7 +140,7 @@ class MainScreenList extends PureComponent {
 
         return results
             .groupBy((each) =>
-                moment(each.get('created_at')).format('YYYY-MM-DD')
+                moment(each.get('created_at')).format('YYYY-MM-DD'),
             )
             .entrySeq();
     }
@@ -136,8 +153,8 @@ class MainScreenList extends PureComponent {
         await fetchJSON(this.props.api.destroy, {
             method: 'POST',
             body: {
-                data: [{id}]
-            }
+                data: [{id}],
+            },
         });
 
         // Keep the nice deleted message a bit more
@@ -148,17 +165,17 @@ class MainScreenList extends PureComponent {
 
     refresh = async ({endDate = this.props.preferences.endDate} = {}) => {
         this.setState({
-            refreshing: true
+            refreshing: true,
         });
 
         await this.loadMore({
             page: 1,
             results: Immutable.List(),
-            endDate
+            endDate,
         });
 
         this.setState({
-            refreshing: false
+            refreshing: false,
         });
     };
 
@@ -181,6 +198,40 @@ class MainScreenList extends PureComponent {
         };
     }
 
+    getTrProps = (state, item) =>
+        getTrProps({
+            selectedIds: this.state.selectedIds,
+            onDoubleClick: () => {},
+            onReceiveSelectedIds: (selectedIds) => this.setState({selectedIds}),
+            item: item.original,
+        });
+
+    computeSelectedAmount() {
+        return this.state.results.reduce((acc, each) => {
+            if (this.state.selectedIds.includes(each.get('id'))) {
+                const sum = convertCurrencyToDefault(
+                    each.get('sum'),
+                    each.get('currency_id'),
+                    this.props.currencies,
+                );
+
+                return acc + sum;
+            }
+
+            return acc;
+        }, 0);
+    }
+
+    renderTableFooter() {
+        return (
+            <div className={cssTable.footer}>
+                Loaded: {this.state.results.size}, Selected:{' '}
+                {this.state.selectedIds.length}, Selected amount:{' '}
+                {numericValue(this.computeSelectedAmount())}
+            </div>
+        );
+    }
+
     renderContent() {
         const commonProps = this.getCommonProps();
 
@@ -191,13 +242,14 @@ class MainScreenList extends PureComponent {
                 <div onScroll={this.onTableScroll}>
                     <FinancialTable
                         style={{
-                            height: 'calc(100vh - 120px)'
+                            height: 'calc(100vh - 139px)',
                         }}
                         loading={this.state.loadingMore}
                         data={results}
                         columns={this.props.tableColumns}
-                        getTrProps={getTrProps}
+                        getTrProps={this.getTrProps}
                     />
+                    {this.renderTableFooter()}
                 </div>
             );
         }
@@ -225,10 +277,12 @@ class MainScreenList extends PureComponent {
 
         return (
             <div>
-                <div style={{
-                    ...(this.state.refreshing ? greyedOut : {}),
-                    backgroundColor: screen.isLarge ? undefined : 'white',
-                }}>
+                <div
+                    style={{
+                        ...(this.state.refreshing ? greyedOut : {}),
+                        backgroundColor: screen.isLarge ? undefined : 'white',
+                    }}
+                >
                     {this.renderContent()}
                     {screen.isLarge ? null : (
                         <Col>
@@ -253,8 +307,21 @@ class MainScreenList extends PureComponent {
     }
 }
 
-export default connect(({preferences, screen, refreshWidgets}) => ({
-    preferences,
-    screen,
-    refreshWidgets
-}))(MainScreenList);
+export default connect(
+    ({
+        preferences,
+        screen,
+        refreshWidgets,
+        currencies,
+    }): {
+        preferences: TypePreferences,
+        screen: TypeScreenQueries,
+        refreshWidgets: string,
+        currencies: TypeCurrencies,
+    } => ({
+        preferences,
+        screen,
+        refreshWidgets,
+        currencies,
+    }),
+)(MainScreenList);

@@ -1,16 +1,14 @@
 // @flow
 import React, {PureComponent} from 'react';
 
-import MoreVertIcon from 'material-ui-icons/MoreVert';
-import DeleteIcon from 'material-ui-icons/Delete';
-import CreateIcon from 'material-ui-icons/Create';
-
 import {cyan50, red50} from 'material-ui/styles/colors';
-import {IconButton, MenuItem, IconMenu} from 'material-ui';
 
 import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
 import ResponsiveListItem from 'common/components/ResponsiveListItem';
+import {IconButton, IconMenu} from 'material-ui';
+import MoreVertIcon from 'material-ui-icons/MoreVert';
+import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
 
 class MainScreenListItem extends PureComponent {
     props: {
@@ -127,24 +125,6 @@ class MainScreenListItem extends PureComponent {
                 )}
             </React.Fragment>
         );
-        const menuItems = (
-            <React.Fragment>
-                {persist && (
-                    <MenuItem
-                        primaryText="Edit"
-                        leftIcon={<CreateIcon />}
-                        onTouchTap={this.toggleEditDialog}
-                    />
-                )}
-                {persist && (
-                    <MenuItem
-                        primaryText="Delete"
-                        leftIcon={<DeleteIcon />}
-                        onTouchTap={this.toggleDeleteDialog}
-                    />
-                )}
-            </React.Fragment>
-        );
 
         return this.state.deleted ? (
             <ResponsiveListItem
@@ -175,9 +155,15 @@ class MainScreenListItem extends PureComponent {
                                 vertical: 'top'
                             }}
                             style={{marginLeft: 0, left: 0}}
-                            onTouchTap={(event) => event.stopPropagation()}
+                            onTouchTap={(event) => {
+                                event.stopPropagation();
+                            }}
                         >
-                            {menuItems}
+                            <ContextMenuItems
+                                onClickEdit={this.toggleEditDialog}
+                                onClickDelete={this.toggleDeleteDialog}
+                                selectedIds={[item.id]}
+                            />
                         </IconMenu>
                     ) : null
                 }

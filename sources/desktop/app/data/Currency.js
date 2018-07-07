@@ -1,3 +1,4 @@
+// @ported to common/helpers/currency.js
 Ext.define('Financial.data.Currency', {
     extend: 'Financial.base.StoreHandler',
 

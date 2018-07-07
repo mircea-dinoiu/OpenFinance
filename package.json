@@ -15,7 +15,8 @@
     "heroku-prebuild": "npm install --only=dev",
     "heroku-postbuild": "npm run build:prod",
     "flow": "flow",
-    "test": "jest --bail --config package.json",
+    "test": "jest --bail",
+    "test:cov": "open build/coverage/index.html",
     "lint:js": "eslint server sources/mobile sources/common --quiet",
     "format:js": "prettier-eslint --write --single-quote",
     "format:all": "yarn run format server/**/*.js sources/mobile/**/*.js sources/common/**/*.js"
@@ -102,16 +103,6 @@
     "serve-favicon": "2.4.2",
     "validator": "7.0.0",
     "xml2js": "0.4.17"
-  },
-  "jest": {
-    "modulePathIgnorePatterns": [
-      "package.json",
-      "sources/desktop/ext"
-    ],
-    "modulePaths": [
-      "<rootDir>/",
-      "<rootDir>/sources/"
-    ]
   },
   "lint-staged": {
     "*.js": [
