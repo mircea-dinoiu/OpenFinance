@@ -68,7 +68,7 @@
                 queryMode: 'local',
                 valueField: 'id',
                 displayField: 'name',
-                value: 'ut',
+                value: 'all',
                 forceSelection: true,
                 editable: false,
                 listeners: {

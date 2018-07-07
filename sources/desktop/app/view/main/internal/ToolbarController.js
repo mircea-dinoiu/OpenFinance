@@ -19,12 +19,22 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         return this.getDateDisplayValue(this.getEndDatePicker());
     },
 
-    shiftMonths: function (months) {
+    shiftWeeks: function (weeks) {
         var edPicker = this.getEndDatePicker(),
             ed = edPicker.getValue();
 
-        ed.setMonth(ed.getMonth() + months);
+        ed.setDate(ed.getDate() + 7 * weeks);
         edPicker.setValue(ed);
+
+        try {
+            localStorage.setItem('FINANCIAL_STATE', JSON.stringify({
+                preferences: {
+                    endDate: Ext.util.Format.date(ed, 'Y-m-d')
+                }
+            }))
+        } catch (e) {
+            // noop
+        }
 
         this.applyFilter(true);
     },
@@ -153,12 +163,12 @@ Ext.define('Financial.view.main.internal.ToolbarController', {
         );
     },
 
-    onPreviousMonthClick: function () {
-        this.shiftMonths(-1);
+    onPreviousPeriodClick: function () {
+        this.shiftWeeks(-2);
     },
 
-    onNextMonthClick: function () {
-        this.shiftMonths(1);
+    onNextPeriodClick: function () {
+        this.shiftWeeks(2);
     },
 
     onDateSelect: function (datePicker, date) {

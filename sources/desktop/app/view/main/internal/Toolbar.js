@@ -35,9 +35,9 @@ Ext.define('Financial.view.main.internal.Toolbar', {
         },
         {
             iconCls: 'x-fa fa-arrow-left',
-            tooltip: 'Shift back one month',
+            tooltip: 'Shift back 2 weeks',
             listeners: {
-                click: 'onPreviousMonthClick'
+                click: 'onPreviousPeriodClick'
             }
         },
         {
@@ -63,9 +63,9 @@ Ext.define('Financial.view.main.internal.Toolbar', {
         },
         {
             iconCls: 'x-fa fa-arrow-right',
-            tooltip: 'Shift forward one month',
+            tooltip: 'Shift forward 2 weeks',
             listeners: {
-                click: 'onNextMonthClick'
+                click: 'onNextPeriodClick'
             }
         },
         {
