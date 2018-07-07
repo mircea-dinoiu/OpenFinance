@@ -67,6 +67,10 @@ class Internal extends PureComponent<TypeProps, TypeState> {
         );
     }
 
+    shouldRenderExtraScreens() {
+        return false;
+    }
+
     renderLarge() {
         const comingSoon = this.renderComingSoon();
 
@@ -83,9 +87,13 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                         <Tab label="Incomes">
                             <Incomes />
                         </Tab>
-                        <Tab label="Categories">{comingSoon}</Tab>
-                        <Tab label="Accounts">{comingSoon}</Tab>
-                        <Tab label="Account Types">{comingSoon}</Tab>
+                        {this.shouldRenderExtraScreens() && (
+                            <React.Fragment>
+                                <Tab label="Categories">{comingSoon}</Tab>
+                                <Tab label="Accounts">{comingSoon}</Tab>
+                                <Tab label="Account Types">{comingSoon}</Tab>
+                            </React.Fragment>
+                        )}
                     </Tabs>
                 </Col>
             </Row>

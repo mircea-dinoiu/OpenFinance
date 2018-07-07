@@ -223,11 +223,15 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 
     renderTableFooter() {
+        const divider = ', ';
+
         return (
             <div className={cssTable.footer}>
-                Loaded: {this.state.results.size}, Selected:{' '}
-                {this.state.selectedIds.length}, Selected amount:{' '}
-                {numericValue(this.computeSelectedAmount())}
+                <strong>Loaded:</strong> {this.state.results.size}
+                {divider}
+                <strong>Selected:</strong> {this.state.selectedIds.length}
+                {divider}
+                <strong>Selected amount:</strong> {numericValue(this.computeSelectedAmount())}
             </div>
         );
     }
