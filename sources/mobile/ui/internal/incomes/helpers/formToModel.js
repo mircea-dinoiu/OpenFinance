@@ -17,6 +17,6 @@ export default (data) => {
         status: data.status || 'pending',
         created_at: parseInt(date.getTime() / 1000),
         user_id: data.userId,
-        money_location_id: data.paymentMethod
+        money_location_id: data.paymentMethod,
     };
 };

@@ -1,5 +1,5 @@
 const moment = require('moment');
-const {isPlainObject} = require('lodash');
+const { isPlainObject } = require('lodash');
 const validator = require('validator');
 const debug = require('config').get('debug');
 const chalk = require('chalk');
@@ -29,7 +29,7 @@ Object.assign(validator, {
             return false;
         }
 
-        return Boolean(await Model.find({where: {id}}));
+        return Boolean(await Model.find({ where: { id } }));
     },
     isIdArray: async (array, Model) => {
         if (!validator.isArray(array)) {
@@ -66,7 +66,7 @@ Object.assign(validator, {
         }
 
         return true;
-    }
+    },
 });
 
 class Validator {
@@ -102,7 +102,7 @@ class Validator {
 
                     if (!ruleFn) {
                         throw new Error(
-                            `Invalid validation rule specified: "${ruleName}"`
+                            `Invalid validation rule specified: "${ruleName}"`,
                         );
                     }
 
@@ -112,8 +112,8 @@ class Validator {
                             chalk.green(
                                 `${dataKey}: validator.${ruleName}(${[value]
                                     .concat(params)
-                                    .join(', ')})`
-                            )
+                                    .join(', ')})`,
+                            ),
                         );
                     }
 
@@ -154,5 +154,5 @@ class Validator {
 }
 
 module.exports = {
-    Validator
+    Validator,
 };

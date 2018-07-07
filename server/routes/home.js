@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {basePath} = require('../helpers');
+const { basePath } = require('../helpers');
 const fs = require('fs');
 // config
 const config = require('config');
@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
         localDevMode,
         assetHost: config.get('devServer.enable')
             ? config.get('devServer.hostname')
-            : ''
+            : '',
     };
     const legacy = req.query.hasOwnProperty('legacy');
 
@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
             basePath(
                 `${
                     localDevMode ? 'sources/desktop' : 'public'
-                }/microloader.html`
+                }/microloader.html`,
             ),
             (err, microloader) => {
                 res.render(
@@ -33,12 +33,12 @@ router.get('/', (req, res) => {
                     Object.assign(
                         {
                             theme: 'triton',
-                            bootstrapScript: String(microloader)
+                            bootstrapScript: String(microloader),
                         },
-                        data
-                    )
+                        data,
+                    ),
                 );
-            }
+            },
         );
     }
 });

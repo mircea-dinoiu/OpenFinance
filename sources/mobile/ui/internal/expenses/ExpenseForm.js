@@ -1,5 +1,5 @@
 // @flow
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
     AutoComplete,
     TextField,
@@ -8,36 +8,36 @@ import {
     SelectField,
     MenuItem,
     Chip,
-    Avatar
+    Avatar,
 } from 'material-ui';
-import {Row, Col} from 'react-grid-system';
-import {grey100} from 'material-ui/styles/colors';
+import { Row, Col } from 'react-grid-system';
+import { grey100 } from 'material-ui/styles/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
-import {fetch} from 'common/utils/fetch';
+import { fetch } from 'common/utils/fetch';
 import routes from 'common/defs/routes';
-import {stringify} from 'query-string';
-import {connect} from 'react-redux';
+import { stringify } from 'query-string';
+import { connect } from 'react-redux';
 
 const greyBoxStyle = {
     backgroundColor: grey100,
     paddingBottom: 10,
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
 };
 
 class ExpenseForm extends PureComponent {
     props: {
         initialValues: {},
-        onFormChange: Function
+        onFormChange: Function,
     };
 
     state = {
         descriptionSuggestions: [],
-        ...this.props.initialValues
+        ...this.props.initialValues,
     };
 
     setState(state) {
-        this.props.onFormChange({...this.state, ...state});
+        this.props.onFormChange({ ...this.state, ...state });
 
         return super.setState(state);
     }
@@ -48,19 +48,19 @@ class ExpenseForm extends PureComponent {
         multiple = true,
         defaultSearchText = '',
         forceSelection = true,
-        onUpdateInput = () => {}
+        onUpdateInput = () => {},
     }) {
         return {
             searchText: this.state[searchKey] || defaultSearchText,
             onUpdateInput: (value) => {
                 if (multiple) {
                     this.setState({
-                        [searchKey]: value
+                        [searchKey]: value,
                     });
                 } else {
                     this.setState({
                         [searchKey]: value,
-                        [valueKey]: forceSelection ? null : value
+                        [valueKey]: forceSelection ? null : value,
                     });
                 }
 
@@ -70,28 +70,28 @@ class ExpenseForm extends PureComponent {
             filter: AutoComplete.fuzzyFilter,
             listStyle: {
                 maxHeight: 200,
-                overflow: 'auto'
+                overflow: 'auto',
             },
             animated: false,
-            onNewRequest: ({value}) => {
+            onNewRequest: ({ value }) => {
                 if (multiple) {
                     this.setState({
                         [searchKey]: '',
                         [valueKey]: this.state[valueKey].concat(
-                            Number(value.key)
-                        )
+                            Number(value.key),
+                        ),
                     });
                 } else {
                     this.setState({
-                        [valueKey]: value.key
+                        [valueKey]: value.key,
                     });
                 }
             },
             popoverProps: {
                 style: {
-                    position: 'absolute'
-                }
-            }
+                    position: 'absolute',
+                },
+            },
         };
     }
 
@@ -104,7 +104,7 @@ class ExpenseForm extends PureComponent {
                         floatingLabelFixed={true}
                         value={this.state.currency}
                         onChange={(e, i, value) =>
-                            this.setState({currency: value})
+                            this.setState({ currency: value })
                         }
                         fullWidth={true}
                     >
@@ -112,7 +112,7 @@ class ExpenseForm extends PureComponent {
                             .get('map')
                             .map((map) => ({
                                 value: map.get('id'),
-                                primaryText: map.get('iso_code')
+                                primaryText: map.get('iso_code'),
                             }))
                             .toArray()
                             .map((props) => (
@@ -128,7 +128,7 @@ class ExpenseForm extends PureComponent {
                         fullWidth={true}
                         type="number"
                         onChange={(event) =>
-                            this.setState({sum: event.target.value})
+                            this.setState({ sum: event.target.value })
                         }
                     />
                 </Col>
@@ -151,7 +151,7 @@ class ExpenseForm extends PureComponent {
                     forceSelection: false,
                     onUpdateInput: (value) =>
                         this.fetchDescriptionSuggestions(value),
-                    defaultSearchText: this.state[valueKey]
+                    defaultSearchText: this.state[valueKey],
                 })}
                 fullWidth={true}
                 onBlur={this.onDescriptionBlur}
@@ -163,7 +163,7 @@ class ExpenseForm extends PureComponent {
                             primaryText={each.item}
                             secondaryText={<em>{each.usages} usages</em>}
                         />
-                    )
+                    ),
                 }))}
             />
         );
@@ -173,13 +173,13 @@ class ExpenseForm extends PureComponent {
         const response = await fetch(
             `${routes.suggestion.expense.descriptions}?${stringify({
                 search,
-                end_date: this.props.preferences.endDate
-            })}`
+                end_date: this.props.preferences.endDate,
+            })}`,
         );
         const descriptionSuggestions = await response.json();
 
         this.setState({
-            descriptionSuggestions
+            descriptionSuggestions,
         });
     }
 
@@ -189,13 +189,13 @@ class ExpenseForm extends PureComponent {
         if (search) {
             const response = await fetch(
                 `${routes.suggestion.expense.categories}?${stringify({
-                    search
-                })}`
+                    search,
+                })}`,
             );
             const categories = await response.json();
 
             this.setState({
-                categories
+                categories,
             });
         }
     };
@@ -209,7 +209,7 @@ class ExpenseForm extends PureComponent {
                         floatingLabelFixed={true}
                         fullWidth={true}
                         value={this.state.date}
-                        onChange={(e, value) => this.setState({date: value})}
+                        onChange={(e, value) => this.setState({ date: value })}
                     />
                 </Col>
                 <Col xs={6}>
@@ -218,7 +218,7 @@ class ExpenseForm extends PureComponent {
                         floatingLabelFixed={true}
                         fullWidth={true}
                         value={this.state.time}
-                        onChange={(e, value) => this.setState({time: value})}
+                        onChange={(e, value) => this.setState({ time: value })}
                     />
                 </Col>
             </Row>
@@ -242,22 +242,23 @@ class ExpenseForm extends PureComponent {
                             ? this.props.moneyLocations
                                 .find(
                                     (each) =>
-                                        each.get('id') == this.state[valueKey]
+                                        each.get('id') ==
+                                          this.state[valueKey],
                                 )
                                 .get('name')
-                            : ''
+                            : '',
                 })}
                 fullWidth={true}
                 dataSource={this.props.moneyLocations
                     .sortBy((each) => each.get('name'))
                     .map((map) => ({
                         value: map.get('id'),
-                        primaryText: map.get('name')
+                        primaryText: map.get('name'),
                     }))
                     .toJS()
                     .map((props) => ({
                         value: <MenuItem key={props.value} {...props} />,
-                        text: props.primaryText
+                        text: props.primaryText,
                     }))}
             />
         );
@@ -272,7 +273,7 @@ class ExpenseForm extends PureComponent {
                         floatingLabelFixed={true}
                         {...this.bindAutoComplete({
                             searchKey: 'usersSearch',
-                            valueKey: 'chargedPersons'
+                            valueKey: 'chargedPersons',
                         })}
                         fullWidth={true}
                         dataSource={this.props.user
@@ -281,8 +282,8 @@ class ExpenseForm extends PureComponent {
                             .filter(
                                 (each) =>
                                     !this.state.chargedPersons.includes(
-                                        each.get('id')
-                                    )
+                                        each.get('id'),
+                                    ),
                             )
                             .toJS()
                             .map((record) => ({
@@ -295,7 +296,7 @@ class ExpenseForm extends PureComponent {
                                         }
                                     />
                                 ),
-                                text: record.full_name
+                                text: record.full_name,
                             }))}
                     />
                 </Col>
@@ -303,7 +304,7 @@ class ExpenseForm extends PureComponent {
                 <Col
                     style={{
                         display: 'flex',
-                        flexWrap: 'wrap'
+                        flexWrap: 'wrap',
                     }}
                 >
                     {this.state.chargedPersons.map((id) => {
@@ -313,13 +314,13 @@ class ExpenseForm extends PureComponent {
 
                         return (
                             <Chip
-                                style={{margin: '5px 5px 0 0', height: 32}}
+                                style={{ margin: '5px 5px 0 0', height: 32 }}
                                 key={id}
                                 onRequestDelete={() =>
                                     this.setState({
                                         chargedPersons: this.state.chargedPersons.filter(
-                                            (each) => each !== id
-                                        )
+                                            (each) => each !== id,
+                                        ),
                                     })
                                 }
                             >
@@ -342,7 +343,7 @@ class ExpenseForm extends PureComponent {
                         floatingLabelFixed={true}
                         {...this.bindAutoComplete({
                             searchKey: 'categoriesSearch',
-                            valueKey: 'categories'
+                            valueKey: 'categories',
                         })}
                         fullWidth={true}
                         dataSource={this.props.categories
@@ -350,8 +351,8 @@ class ExpenseForm extends PureComponent {
                             .filter(
                                 (each) =>
                                     !this.state.categories.includes(
-                                        each.get('id')
-                                    )
+                                        each.get('id'),
+                                    ),
                             )
                             .toJS()
                             .map((record) => ({
@@ -362,7 +363,7 @@ class ExpenseForm extends PureComponent {
                                         secondaryText={record.expenses}
                                     />
                                 ),
-                                text: record.name
+                                text: record.name,
                             }))}
                     />
                 </Col>
@@ -370,23 +371,23 @@ class ExpenseForm extends PureComponent {
                 <Col
                     style={{
                         display: 'flex',
-                        flexWrap: 'wrap'
+                        flexWrap: 'wrap',
                     }}
                 >
                     {this.state.categories.map((id) => {
                         const [, entity] = this.props.categories.findEntry(
-                            (each) => each.get('id') == id
+                            (each) => each.get('id') == id,
                         );
 
                         return (
                             <Chip
-                                style={{margin: 5, height: 32}}
+                                style={{ margin: 5, height: 32 }}
                                 key={id}
                                 onRequestDelete={() =>
                                     this.setState({
                                         categories: this.state.categories.filter(
-                                            (each) => each !== id
-                                        )
+                                            (each) => each !== id,
+                                        ),
                                     })
                                 }
                             >
@@ -411,17 +412,17 @@ class ExpenseForm extends PureComponent {
                     defaultSearchText:
                         this.state.repeat != null
                             ? RepeatOptions.find(
-                                (each) => each[0] === this.state.repeat
+                                (each) => each[0] === this.state.repeat,
                             )[1]
-                            : ''
+                            : '',
                 })}
                 fullWidth={true}
                 dataSource={RepeatOptions.map((arr) => ({
                     value: arr[0],
-                    primaryText: arr[1]
+                    primaryText: arr[1],
                 })).map((props) => ({
                     value: <MenuItem key={props.value} {...props} />,
-                    text: props.primaryText
+                    text: props.primaryText,
                 }))}
             />
         );
@@ -442,10 +443,12 @@ class ExpenseForm extends PureComponent {
     }
 }
 
-export default connect(({currencies, preferences, categories, moneyLocations, user}) => ({
-    currencies,
-    categories,
-    preferences,
-    moneyLocations,
-    user
-}))(ExpenseForm);
+export default connect(
+    ({ currencies, preferences, categories, moneyLocations, user }) => ({
+        currencies,
+        categories,
+        preferences,
+        moneyLocations,
+        user,
+    }),
+)(ExpenseForm);

@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
-import {connect} from 'react-redux';
-import {Avatar} from 'material-ui';
+import { connect } from 'react-redux';
+import { Avatar } from 'material-ui';
 
-const PersonsDisplay = ({item, user}) => {
+const PersonsDisplay = ({ item, user }) => {
     const userList = user.get('list');
 
     return userList.map(
@@ -13,11 +13,11 @@ const PersonsDisplay = ({item, user}) => {
                     key={each.get('id')}
                     src={each.get('avatar')}
                     size={20}
-                    style={{marginLeft: 5}}
+                    style={{ marginLeft: 5 }}
                 />
-            ) : null
+            ) : null,
     );
 };
-const mapStateToProps = ({user}) => ({user});
+const mapStateToProps = ({ user }) => ({ user });
 
 export default connect(mapStateToProps)(PersonsDisplay);

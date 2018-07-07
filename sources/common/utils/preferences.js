@@ -1,5 +1,5 @@
 // @flow
-import {getInitialEndDate} from 'common/utils/dates';
+import { getInitialEndDate } from 'common/utils/dates';
 
 export const FINANCIAL_PREFERENCES = 'FINANCIAL_PREFERENCES';
 
@@ -11,15 +11,15 @@ export const savePreferences = (value) => {
 };
 
 export const parsePreferences = (
-    state
+    state,
 ): {
     endDateIncrement: string,
     include: string,
-    endDate: string
+    endDate: string,
 } => {
     const endDateIncrement = state.endDateIncrement || '2w';
     const include = state.include || 'ut';
     const endDate = state.endDate || getInitialEndDate();
 
-    return {endDateIncrement, include, endDate};
+    return { endDateIncrement, include, endDate };
 };

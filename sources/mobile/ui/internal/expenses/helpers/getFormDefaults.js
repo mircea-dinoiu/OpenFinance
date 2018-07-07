@@ -8,6 +8,6 @@ export default function (data) {
         categories: [],
         repeat: null,
         date: new Date(),
-        time: new Date()
+        time: new Date(),
     };
 }

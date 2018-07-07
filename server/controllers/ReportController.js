@@ -2,9 +2,9 @@ const ExpenseService = require('../services/ExpenseService');
 const IncomeService = require('../services/IncomeService');
 const SummaryReportService = require('../services/SummaryReportService');
 const CurrencyController = require('./CurrencyController');
-const {User, Category, MoneyLocation} = require('../models');
+const { User, Category, MoneyLocation } = require('../models');
 const ChartReportHelper = require('../helpers/ChartReportHelper');
-const {Validator} = require('../validators');
+const { Validator } = require('../validators');
 
 module.exports = {
     async getSummary(req, res) {
@@ -14,14 +14,14 @@ module.exports = {
             userRecords,
             mlRecords,
             categoryRecords,
-            defaultCurrency
+            defaultCurrency,
         ] = await Promise.all([
             ExpenseService.list(req.query),
             IncomeService.list(req.query),
             User.findAll(),
             MoneyLocation.findAll(),
             Category.findAll(),
-            CurrencyController.getDefaultCurrency()
+            CurrencyController.getDefaultCurrency(),
         ]);
 
         if (expenseRecords.error) {
@@ -44,14 +44,14 @@ module.exports = {
                 mlRecords,
                 defaultCurrency,
                 incomeRecords: incomeRecords.json,
-                html: req.query.html
+                html: req.query.html,
             }),
             incomesData: await SummaryReportService.getIncomesData({
                 userRecords,
                 mlRecords,
                 defaultCurrency,
                 incomeRecords: incomeRecords.json,
-                html: req.query.html
+                html: req.query.html,
             }),
             expensesByCategory: await SummaryReportService.getExpensesByCategory(
                 {
@@ -59,9 +59,9 @@ module.exports = {
                     defaultCurrency,
                     categoryRecords,
                     userRecords,
-                    html: req.query.html
-                }
-            )
+                    html: req.query.html,
+                },
+            ),
         };
 
         ret.remainingData = SummaryReportService.getRemainingData({
@@ -69,7 +69,7 @@ module.exports = {
             incomes: ret.incomesData,
             userRecords,
             mlRecords,
-            html: req.query.html
+            html: req.query.html,
         });
 
         res.json(ret);
@@ -77,10 +77,10 @@ module.exports = {
 
     async getExpensesIncomesByUser(req, res) {
         const input = {
-            display: req.query.display
+            display: req.query.display,
         };
         const rules = {
-            display: ['isRequired', ['isIn', ['am', 'cm', 'ay']]]
+            display: ['isRequired', ['isIn', ['am', 'cm', 'ay']]],
         };
         const validator = new Validator(input, rules);
 
@@ -95,12 +95,12 @@ module.exports = {
             expenseRecords,
             incomeRecords,
             userRecords,
-            defaultCurrency
+            defaultCurrency,
         ] = await Promise.all([
             ExpenseService.list(req.query),
             IncomeService.list(req.query),
             User.findAll(),
-            CurrencyController.getDefaultCurrency()
+            CurrencyController.getDefaultCurrency(),
         ]);
 
         if (expenseRecords.error) {
@@ -130,7 +130,7 @@ module.exports = {
                 dataKey,
                 record,
                 sum,
-                timeFormat
+                timeFormat,
             );
         };
 
@@ -157,7 +157,7 @@ module.exports = {
             if (currencyId !== parseInt(defaultCurrency.id)) {
                 sum = await CurrencyController.convertToDefault(
                     sum,
-                    currencyId
+                    currencyId,
                 );
             }
 
@@ -179,23 +179,23 @@ module.exports = {
                 title: `${
                     userRecords.find((each) => each.id == id).first_name
                 }'s ${type}`,
-                yField: field
+                yField: field,
             });
         });
 
         res.json({
             fields,
             map: timeMap,
-            series
+            series,
         });
     },
 
     async getExpensesByCategoryChart(req, res) {
         const input = {
-            display: req.query.display
+            display: req.query.display,
         };
         const rules = {
-            display: ['isRequired', ['isIn', ['am', 'cm', 'ay']]]
+            display: ['isRequired', ['isIn', ['am', 'cm', 'ay']]],
         };
         const validator = new Validator(input, rules);
 
@@ -213,11 +213,11 @@ module.exports = {
         const [
             expenseRecords,
             categoryRecords,
-            defaultCurrency
+            defaultCurrency,
         ] = await Promise.all([
             ExpenseService.list(req.query),
             Category.findAll(),
-            CurrencyController.getDefaultCurrency()
+            CurrencyController.getDefaultCurrency(),
         ]);
 
         if (expenseRecords.error) {
@@ -247,14 +247,14 @@ module.exports = {
                     dataKey,
                     json,
                     rawCatSum / (recordCategories.length || 1),
-                    timeFormat
+                    timeFormat,
                 );
             };
 
             if (json.currency_id !== parseInt(defaultCurrency.id)) {
                 sum = await CurrencyController.convertToDefault(
                     sum,
-                    json.currency_id
+                    json.currency_id,
                 );
             }
 
@@ -285,7 +285,7 @@ module.exports = {
 
             series.push({
                 title,
-                yField: `data${id}`
+                yField: `data${id}`,
             });
         });
 
@@ -294,7 +294,7 @@ module.exports = {
         res.json({
             fields: categoryIdsAsFields,
             map: timeMap,
-            series
+            series,
         });
-    }
+    },
 };

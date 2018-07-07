@@ -4,12 +4,13 @@ export const getById = (
     currencies: TypeCurrencies,
 ): TypeCurrency => currencies.getIn(['map', String(id)]);
 
-export const getDefaultCurrency = (
-    currencies: TypeCurrencies,
-): TypeCurrency => getById(currencies.get('default'), currencies);
+export const getDefaultCurrency = (currencies: TypeCurrencies): TypeCurrency =>
+    getById(currencies.get('default'), currencies);
 
-export const getCurrencyByISOCode = (ISOCode: string, currencies: TypeCurrencies) =>
-    currencies.get('map').find((each) => each.get('iso_code') === ISOCode);
+export const getCurrencyByISOCode = (
+    ISOCode: string,
+    currencies: TypeCurrencies,
+) => currencies.get('map').find((each) => each.get('iso_code') === ISOCode);
 
 export const convertCurrency = ({
     value,

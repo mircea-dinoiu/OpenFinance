@@ -10,12 +10,12 @@ import CurrencyColumn from 'common/components/FinancialTable/columns/CurrencyCol
 import RepeatColumn from 'common/components/FinancialTable/columns/RepeatColumn';
 
 const ColumnStyles = {
-    CURRENCY: {textAlign: 'center'},
-    AMOUNT: {textAlign: 'right'},
-    DATE_TIME: {textAlign: 'center', width: 150},
-    ACCOUNT: {textAlign: 'center'},
-    PERSONS: {textAlign: 'center', width: 50},
-    REPEAT: {textAlign: 'center'}
+    CURRENCY: { textAlign: 'center' },
+    AMOUNT: { textAlign: 'right' },
+    DATE_TIME: { textAlign: 'center', width: 150 },
+    ACCOUNT: { textAlign: 'center' },
+    PERSONS: { textAlign: 'center', width: 50 },
+    REPEAT: { textAlign: 'center' },
 };
 
 export default [
@@ -26,13 +26,13 @@ export default [
         accessor: (item) => (
             <DescriptionDisplay entity="expense" item={item} accessor="item" />
         ),
-        id: 'description'
+        id: 'description',
     },
     DateTimeColumn,
     {
         Header: 'Categories',
         accessor: (item) => <CategoriesDisplay item={item} />,
-        id: 'categories'
+        id: 'categories',
     },
     AccountColumn,
     {
@@ -41,8 +41,8 @@ export default [
         id: 'persons',
         //
         width: 100,
-        style: {textAlign: 'center'},
-        headerStyle: {textAlign: 'center'}
+        style: { textAlign: 'center' },
+        headerStyle: { textAlign: 'center' },
     },
     RepeatColumn,
 ];

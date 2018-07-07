@@ -3,7 +3,7 @@
 export const getScrollPct = (element) =>
     Math.round(
         (element.scrollTop / (element.scrollHeight - element.clientHeight)) *
-            100
+            100,
     );
 
 export const scrollIsAt = (element: Element, at: number) =>

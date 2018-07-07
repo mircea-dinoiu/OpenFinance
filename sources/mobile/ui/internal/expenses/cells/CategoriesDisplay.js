@@ -1,13 +1,13 @@
 // @flow
 import React from 'react';
-import {connect} from 'react-redux';
-import {Chip} from 'material-ui';
+import { connect } from 'react-redux';
+import { Chip } from 'material-ui';
 
-const CategoriesDisplay = ({item, categories, screen}) => (
+const CategoriesDisplay = ({ item, categories, screen }) => (
     <div
         style={{
             display: 'flex',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
         }}
     >
         {categories.map(
@@ -18,16 +18,20 @@ const CategoriesDisplay = ({item, categories, screen}) => (
                         style={{
                             margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`,
                         }}
-                        labelStyle={screen.isLarge ? {
-                            lineHeight: 'inherit'
-                        } : {}}
+                        labelStyle={
+                            screen.isLarge
+                                ? {
+                                    lineHeight: 'inherit',
+                                }
+                                : {}
+                        }
                     >
                         {each.get('name')}
                     </Chip>
-                ) : null
+                ) : null,
         )}
     </div>
 );
-const mapStateToProps = ({categories, screen}) => ({categories, screen});
+const mapStateToProps = ({ categories, screen }) => ({ categories, screen });
 
 export default connect(mapStateToProps)(CategoriesDisplay);

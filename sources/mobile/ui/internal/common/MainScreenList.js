@@ -1,24 +1,23 @@
 // @flow
-import React, {PureComponent} from 'react';
-import {Col} from 'react-grid-system';
-import {stringify} from 'query-string';
+import React, { PureComponent } from 'react';
+import { Col } from 'react-grid-system';
+import { stringify } from 'query-string';
 import moment from 'moment';
 import Immutable from 'immutable';
 
-import {BigLoader, ButtonProgress} from '../../components/loaders';
+import { BigLoader, ButtonProgress } from '../../components/loaders';
 
-import fetch, {fetchJSON} from 'common/utils/fetch';
+import fetch, { fetchJSON } from 'common/utils/fetch';
 
-import {RaisedButton} from 'material-ui';
-import {connect} from 'react-redux';
-import {greyedOut} from 'common/defs/styles';
-import {scrollIsAt} from 'common/utils/scroll';
+import { RaisedButton } from 'material-ui';
+import { connect } from 'react-redux';
+import { greyedOut } from 'common/defs/styles';
+import { scrollIsAt } from 'common/utils/scroll';
 import FinancialTable from 'common/components/FinancialTable';
 import cssTable from 'common/components/FinancialTable/index.pcss';
-import {getTrProps} from 'common/components/MainScreen/Table/helpers';
+import { getTrProps } from 'common/components/MainScreen/Table/helpers';
 import MainScreenListGroup from 'mobile/ui/internal/common/MainScreenListGroup';
-import {isAccessor} from '../../../../../node_modules/typescript';
-import {convertCurrencyToDefault} from '../../../../common/helpers/currency';
+import { convertCurrencyToDefault } from '../../../../common/helpers/currency';
 import { numericValue } from '../../formatters';
 
 const PAGE_SIZE = 50;
@@ -92,10 +91,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             this.refresh();
         }
 
-        const {endDate} = preferences;
+        const { endDate } = preferences;
 
         if (endDate !== this.props.preferences.endDate) {
-            this.refresh({endDate});
+            this.refresh({ endDate });
         }
     }
 
@@ -153,7 +152,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         await fetchJSON(this.props.api.destroy, {
             method: 'POST',
             body: {
-                data: [{id}],
+                data: [{ id }],
             },
         });
 
@@ -163,7 +162,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         }, 500);
     };
 
-    refresh = async ({endDate = this.props.preferences.endDate} = {}) => {
+    refresh = async ({ endDate = this.props.preferences.endDate } = {}) => {
         this.setState({
             refreshing: true,
         });
@@ -202,7 +201,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         getTrProps({
             selectedIds: this.state.selectedIds,
             onDoubleClick: () => {},
-            onReceiveSelectedIds: (selectedIds) => this.setState({selectedIds}),
+            onReceiveSelectedIds: (selectedIds) => this.setState({ selectedIds }),
             item: item.original,
         });
 
@@ -231,7 +230,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 {divider}
                 <strong>Selected:</strong> {this.state.selectedIds.length}
                 {divider}
-                <strong>Selected amount:</strong> {numericValue(this.computeSelectedAmount())}
+                <strong>Selected amount:</strong>{' '}
+                {numericValue(this.computeSelectedAmount())}
             </div>
         );
     }
@@ -276,8 +276,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             return <BigLoader />;
         }
 
-        const {screen} = this.props;
-        const {loadingMore} = this.state;
+        const { screen } = this.props;
+        const { loadingMore } = this.state;
 
         return (
             <div>
@@ -300,7 +300,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                                 }
                                 fullWidth={true}
                                 onTouchTap={this.loadMore}
-                                style={{margin: '20px 0 60px'}}
+                                style={{ margin: '20px 0 60px' }}
                                 disabled={loadingMore}
                             />
                         </Col>

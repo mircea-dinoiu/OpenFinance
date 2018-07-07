@@ -1,19 +1,19 @@
 // @flow
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
-import {Dialog, RaisedButton} from 'material-ui';
+import { Dialog, RaisedButton } from 'material-ui';
 
-import {Row, Col} from 'react-grid-system';
+import { Row, Col } from 'react-grid-system';
 
-import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
-import {ButtonProgress} from '../../components/loaders';
+import { ErrorSnackbar, SuccessSnackbar } from '../../components/snackbars';
+import { ButtonProgress } from '../../components/loaders';
 
-import {fetchJSON} from 'common/utils/fetch';
-import {parseCRUDError} from 'common/parsers';
+import { fetchJSON } from 'common/utils/fetch';
+import { parseCRUDError } from 'common/parsers';
 
 export default class MainScreenEditDialog extends PureComponent {
     state = {
-        saving: false
+        saving: false,
     };
     formData = this.props.modelToForm(this.props.entity);
 
@@ -23,12 +23,12 @@ export default class MainScreenEditDialog extends PureComponent {
         this.setState({
             error: null,
             success: null,
-            saving: true
+            saving: true,
         });
 
         const response = await fetchJSON(this.props.api.update, {
             method: 'POST',
-            body: {data: [this.props.formToModel(data, this.props)]}
+            body: { data: [this.props.formToModel(data, this.props)] },
         });
         const json = await response.json();
 
@@ -37,20 +37,20 @@ export default class MainScreenEditDialog extends PureComponent {
                 success: `The ${
                     this.props.entityName
                 } was successfully updated`,
-                saving: false
+                saving: false,
             });
 
             setTimeout(() => {
                 this.setState({
                     error: null,
-                    success: null
+                    success: null,
                 });
                 this.props.onSave(json[0]);
             }, 500);
         } else {
             this.setState({
                 error: parseCRUDError(json),
-                saving: false
+                saving: false,
             });
         }
     };
@@ -63,14 +63,14 @@ export default class MainScreenEditDialog extends PureComponent {
                     label="Cancel"
                     primary={false}
                     onTouchTap={this.props.onCancel}
-                    style={{marginRight: 5}}
+                    style={{ marginRight: 5 }}
                 />
                 <RaisedButton
                     disabled={this.state.saving}
                     label={this.state.saving ? <ButtonProgress /> : 'Update'}
                     primary={true}
                     onTouchTap={this.save}
-                    style={{float: 'right'}}
+                    style={{ float: 'right' }}
                 />
             </React.Fragment>
         );
@@ -82,7 +82,7 @@ export default class MainScreenEditDialog extends PureComponent {
                 open={this.props.open}
                 autoScrollBodyContent={true}
                 actions={actions}
-                contentStyle={{width: '95%'}}
+                contentStyle={{ width: '95%' }}
             >
                 <Row>
                     <Form

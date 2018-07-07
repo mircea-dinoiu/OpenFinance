@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
 import ReactTable from 'react-table';
-import {modifiersToClassName} from 'common/utils/style';
+import { modifiersToClassName } from 'common/utils/style';
 import css from './index.pcss';
 
-export default function FinancialTable({modifiers = {}, ...props}) {
+export default function FinancialTable({ modifiers = {}, ...props }) {
     return (
         <ReactTable
             className={`${css.main} ${modifiersToClassName(css, modifiers)}`}

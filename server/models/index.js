@@ -11,10 +11,10 @@ const sql = new Sequelize(process.env.DATABASE_URL, {
         ? (...args) => {
             console.log(
                 chalk.inverse('SQL:'),
-                ...args.map((arg) => chalk.cyan(arg))
+                ...args.map((arg) => chalk.cyan(arg)),
             );
         }
-        : false
+        : false,
 });
 
 fs.readdirSync(__dirname)
@@ -22,10 +22,10 @@ fs.readdirSync(__dirname)
         (file) =>
             file.indexOf('.') !== 0 &&
             file !== basename &&
-            file.slice(-3) === '.js'
+            file.slice(-3) === '.js',
     )
     .forEach((file) => {
-        const {name} = path.parse(file);
+        const { name } = path.parse(file);
         const model = sql.import(path.join(__dirname, file));
 
         db[name] = model;

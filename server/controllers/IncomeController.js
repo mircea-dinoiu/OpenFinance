@@ -1,8 +1,8 @@
-const {Income: Model, User, Currency, MoneyLocation} = require('../models');
+const { Income: Model, User, Currency, MoneyLocation } = require('../models');
 const BaseController = require('./BaseController');
 const CurrencyController = require('./CurrencyController');
 const Service = require('../services/IncomeService');
-const {pickOwnProperties, standardDate} = require('../helpers');
+const { pickOwnProperties, standardDate } = require('../helpers');
 
 module.exports = BaseController.extend({
     Model,
@@ -17,7 +17,7 @@ module.exports = BaseController.extend({
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
         created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]]
+        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
     },
 
     createValidationRules: {
@@ -27,7 +27,7 @@ module.exports = BaseController.extend({
         repeat: ['sometimes', 'isRepeatValue'],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]]
+        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
     },
 
     sanitizeUpdateValues(record) {
@@ -35,7 +35,7 @@ module.exports = BaseController.extend({
             'sum',
             'description',
             'user_id',
-            'money_location_id'
+            'money_location_id',
         ]);
 
         if (record.hasOwnProperty('repeat')) {
@@ -74,7 +74,7 @@ module.exports = BaseController.extend({
             'description',
             'user_id',
             'repeat',
-            'money_location_id'
+            'money_location_id',
         ]);
 
         values.status = 'pending';
@@ -105,5 +105,5 @@ module.exports = BaseController.extend({
         }
 
         return workingRecord;
-    }
+    },
 });

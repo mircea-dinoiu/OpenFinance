@@ -26,7 +26,7 @@ module.exports = {
         console.error(...args);
         fs.appendFile(
             basePath('storage/error.log'),
-            args.concat('').join('\n')
+            args.concat('').join('\n'),
         );
-    }
+    },
 };

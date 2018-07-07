@@ -1,6 +1,6 @@
-const {pick} = require('lodash');
-const {Validator} = require('../validators');
-const {Income: Model} = require('../models');
+const { pick } = require('lodash');
+const { Validator } = require('../validators');
+const { Income: Model } = require('../models');
 const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
             start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
             end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
             page: ['sometimes', 'isInt'],
-            limit: ['sometimes', 'isInt']
+            limit: ['sometimes', 'isInt'],
         };
         const validator = new Validator(input, rules);
 
@@ -22,7 +22,7 @@ module.exports = {
                 whereClause.push(
                     `(DATE(${Model.tableName}.created_at) >= ? OR ${
                         Model.tableName
-                    }.repeat IS NOT null)`
+                    }.repeat IS NOT null)`,
                 );
                 whereReplacements.push(input.start_date);
             }
@@ -31,7 +31,7 @@ module.exports = {
             whereReplacements.push(input.end_date);
 
             const queryOpts = {
-                where: [whereClause.join(' AND '), ...whereReplacements]
+                where: [whereClause.join(' AND '), ...whereReplacements],
             };
 
             if (input.page != null && input.limit != null) {
@@ -39,7 +39,7 @@ module.exports = {
 
                 Object.assign(queryOpts, {
                     // https://github.com/sequelize/sequelize/issues/3007
-                    order: `created_at DESC LIMIT ${offset}, ${input.limit}`
+                    order: `created_at DESC LIMIT ${offset}, ${input.limit}`,
                 });
             }
 
@@ -48,14 +48,14 @@ module.exports = {
                 json: RepeatedModelsHelper.generateClones({
                     records: await Model.findAll(queryOpts),
                     endDate: input.end_date,
-                    startDate: input.start_date
-                })
+                    startDate: input.start_date,
+                }),
             };
         }
 
         return {
             error: true,
-            json: validator.errors()
+            json: validator.errors(),
         };
-    }
+    },
 };

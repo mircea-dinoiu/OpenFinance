@@ -23,6 +23,6 @@ export default (data, props) => {
         money_location_id: data.paymentMethod,
         repeat: data.repeat,
         users,
-        status: data.status || 'pending'
+        status: data.status || 'pending',
     };
 };

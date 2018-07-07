@@ -2,7 +2,7 @@
 import React from 'react';
 import MoneyLocationDisplay from 'common/components/FinancialTable/cells/MoneyLocationDisplay';
 
-const style = {textAlign: 'center'};
+const style = { textAlign: 'center' };
 
 export default {
     Header: 'Account',
@@ -10,5 +10,5 @@ export default {
     id: 'account',
     //
     headerStyle: style,
-    style
+    style,
 };

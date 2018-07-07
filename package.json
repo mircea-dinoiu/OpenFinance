@@ -18,8 +18,9 @@
     "test": "jest --bail",
     "test:cov": "open build/coverage/index.html",
     "lint:js": "eslint server sources/mobile sources/common --quiet",
-    "format:js": "prettier-eslint --write --single-quote",
-    "format:all": "yarn run format server/**/*.js sources/mobile/**/*.js sources/common/**/*.js"
+    "format:css": "prettier --write \"sources/**/*.pcss\"",
+    "format:js": "prettier-eslint --write --single-quote --trailing-comma all",
+    "format:all": "yarn run format:css; yarn run format:js \"server/**/*.js\" \"sources/mobile/**/*.js\" \"sources/common/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -108,6 +109,10 @@
     "*.js": [
       "yarn run format:js",
       "eslint --quiet",
+      "git add"
+    ],
+    "*.pcss": [
+      "yarn run format:css",
       "git add"
     ]
   }

@@ -1,30 +1,30 @@
 import React from 'react';
-import {cyan500, red500, yellowA700} from 'material-ui/styles/colors';
+import { cyan500, red500, yellowA700 } from 'material-ui/styles/colors';
 import Cached from 'material-ui-icons/Cached';
 import TrendingUp from 'material-ui-icons/TrendingUp';
 import Warning from 'material-ui-icons/Warning';
 import Tooltip from 'common/components/Tooltip';
 import startCase from 'lodash/startCase';
 
-export const PendingReviewFlag = ({entity = ''}) => (
+export const PendingReviewFlag = ({ entity = '' }) => (
     <Tooltip tooltip={`${startCase(entity)} is pending review`}>
-        <Warning style={{height: 20, width: 20}} color={yellowA700} />
+        <Warning style={{ height: 20, width: 20 }} color={yellowA700} />
     </Tooltip>
 );
 
-export const RecurrentFlag = ({entity = ''}) => (
+export const RecurrentFlag = ({ entity = '' }) => (
     <Tooltip tooltip={`Recurrent ${entity}`}>
-        <Cached style={{height: 20, width: 20}} color={cyan500} />
+        <Cached style={{ height: 20, width: 20 }} color={cyan500} />
     </Tooltip>
 );
 
-export const GeneratedFlag = ({entity = ''}) => (
+export const GeneratedFlag = ({ entity = '' }) => (
     <Tooltip tooltip={`Generated ${entity}`}>
-        <TrendingUp style={{height: 20, width: 20}} color={red500} />
+        <TrendingUp style={{ height: 20, width: 20 }} color={red500} />
     </Tooltip>
 );
 
-export const Flags = ({item}) => (
+export const Flags = ({ item }) => (
     <React.Fragment>
         {item.status === 'pending' && <PendingReviewFlag entity="expense" />}
         {item.repeat != null && <RecurrentFlag entity="expense" />}

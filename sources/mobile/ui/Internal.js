@@ -1,9 +1,9 @@
 // @flow
-import React, {PureComponent} from 'react';
-import {Paper, Tab, Tabs} from 'material-ui';
+import React, { PureComponent } from 'react';
+import { Paper, Tab, Tabs } from 'material-ui';
 import {
     BottomNavigation,
-    BottomNavigationItem
+    BottomNavigationItem,
 } from 'material-ui/BottomNavigation';
 
 import Expenses from './internal/Expenses';
@@ -14,28 +14,28 @@ import AccountBalance from 'material-ui-icons/AccountBalance';
 import TrendingUp from 'material-ui-icons/TrendingUp';
 import TrendingDown from 'material-ui-icons/TrendingDown';
 
-import {connect} from 'react-redux';
-import {Col, Row} from 'react-grid-system';
-import {flexColumn} from 'common/defs/styles';
-import {grey700} from 'material-ui/styles/colors';
+import { connect } from 'react-redux';
+import { Col, Row } from 'react-grid-system';
+import { flexColumn } from 'common/defs/styles';
+import { grey700 } from 'material-ui/styles/colors';
 
 type TypeProps = {
-    screen: TypeScreenQueries
+    screen: TypeScreenQueries,
 };
 
 type TypeState = {
     selectedIndex: number,
-    tab: ?React$Element<any>
+    tab: ?React$Element<any>,
 };
 
 class Internal extends PureComponent<TypeProps, TypeState> {
     state = {
         selectedIndex: 1,
-        tab: null
+        tab: null,
     };
 
     select = (index) =>
-        this.setState({selectedIndex: index, tab: this.createTab(index)});
+        this.setState({ selectedIndex: index, tab: this.createTab(index) });
 
     createTab(index) {
         switch (index) {
@@ -59,7 +59,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                     textAlign: 'center',
                     padding: '100px',
                     fontSize: '48px',
-                    color: grey700
+                    color: grey700,
                 }}
             >
                 Coming soon
@@ -76,10 +76,10 @@ class Internal extends PureComponent<TypeProps, TypeState> {
 
         return (
             <Row nogutter>
-                <Col xs={2} style={{paddingRight: 0}}>
+                <Col xs={2} style={{ paddingRight: 0 }}>
                     <Summary />
                 </Col>
-                <Col xs={10} style={{paddingLeft: 0}}>
+                <Col xs={10} style={{ paddingLeft: 0 }}>
                     <Tabs>
                         <Tab label="Expenses">
                             <Expenses />
@@ -104,7 +104,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
         return (
             <div
                 style={{
-                    paddingBottom: '56px'
+                    paddingBottom: '56px',
                 }}
             >
                 {this.state.tab}
@@ -114,7 +114,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                         position: 'fixed',
                         bottom: 0,
                         zIndex: 1,
-                        width: '100%'
+                        width: '100%',
                     }}
                 >
                     <BottomNavigation selectedIndex={this.state.selectedIndex}>
@@ -150,4 +150,4 @@ class Internal extends PureComponent<TypeProps, TypeState> {
     }
 }
 
-export default connect(({screen}) => ({screen}))(Internal);
+export default connect(({ screen }) => ({ screen }))(Internal);

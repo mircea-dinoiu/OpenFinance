@@ -2,7 +2,7 @@
 import React from 'react';
 import AmountDisplay from 'common/components/FinancialTable/cells/AmountDisplay';
 
-const style = {textAlign: 'right'};
+const style = { textAlign: 'right' };
 
 export default {
     Header: 'Amount',
@@ -11,5 +11,5 @@ export default {
     //
     width: 100,
     headerStyle: style,
-    style
+    style,
 };

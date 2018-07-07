@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import {Row, Col} from 'react-grid-system';
+import { Row, Col } from 'react-grid-system';
 
-import {Flags} from 'mobile/ui/internal/common/MainScreenFlags';
+import { Flags } from 'mobile/ui/internal/common/MainScreenFlags';
 import FromDisplay from 'mobile/ui/internal/incomes/cells/FromDisplay';
 import AmountDisplay from 'common/components/FinancialTable/cells/AmountDisplay';
 import RepeatsDisplay from 'common/components/FinancialTable/cells/RepeatsDisplay';
@@ -11,7 +11,7 @@ import MoneyLocationDisplay from 'common/components/FinancialTable/cells/MoneyLo
 
 type TypeProps = {};
 
-const IncomeListItemContent = ({item, expanded}: TypeProps) => {
+const IncomeListItemContent = ({ item, expanded }: TypeProps) => {
     const descriptionDisplay = item.description;
     const flags = <Flags entity="income" item={item} />;
     const moneyLocationDisplay = <MoneyLocationDisplay item={item} />;
@@ -23,7 +23,7 @@ const IncomeListItemContent = ({item, expanded}: TypeProps) => {
         <div>
             <Row>
                 <Col xs={6}>{descriptionDisplay}</Col>
-                <Col xs={6} style={{textAlign: 'right'}}>
+                <Col xs={6} style={{ textAlign: 'right' }}>
                     {fromDisplay}
                 </Col>
             </Row>
@@ -33,7 +33,7 @@ const IncomeListItemContent = ({item, expanded}: TypeProps) => {
                         style={{
                             fontSize: 14,
                             float: 'left',
-                            lineHeight: '20px'
+                            lineHeight: '20px',
                         }}
                     >
                         <AmountDisplay showCurrency={true} item={item} />
@@ -41,7 +41,7 @@ const IncomeListItemContent = ({item, expanded}: TypeProps) => {
                     &nbsp;
                     {flags}
                 </Col>
-                <Col xs={6} style={{textAlign: 'right'}}>
+                <Col xs={6} style={{ textAlign: 'right' }}>
                     {moneyLocationDisplay}
                 </Col>
             </Row>
@@ -49,7 +49,7 @@ const IncomeListItemContent = ({item, expanded}: TypeProps) => {
                 <div>
                     <Row>
                         <Col xs={6}>{dateDisplay}</Col>
-                        <Col xs={6} style={{textAlign: 'right'}}>
+                        <Col xs={6} style={{ textAlign: 'right' }}>
                             {repeatsDisplay}
                         </Col>
                     </Row>

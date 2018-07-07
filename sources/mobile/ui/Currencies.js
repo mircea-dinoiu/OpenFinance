@@ -1,8 +1,8 @@
 // @flow
-import React, {PureComponent} from 'react';
-import {MenuItem, Subheader} from 'material-ui';
-import {fetchCurrencies} from 'common/state/actions';
-import {connect} from 'react-redux';
+import React, { PureComponent } from 'react';
+import { MenuItem, Subheader } from 'material-ui';
+import { fetchCurrencies } from 'common/state/actions';
+import { connect } from 'react-redux';
 
 type TypeProps = {
     user: TypeUsers,
@@ -16,7 +16,7 @@ class Currencies extends PureComponent<TypeProps> {
     componentDidMount() {
         this.interval = setInterval(() => {
             if (this.props.user) {
-                this.props.fetchCurrencies({update: true});
+                this.props.fetchCurrencies({ update: true });
             }
         }, 60 * 1000);
     }
@@ -42,11 +42,11 @@ class Currencies extends PureComponent<TypeProps> {
                                 <strong>{each.get('iso_code')}</strong>:{' '}
                                 {each.getIn([
                                     'rates',
-                                    defaultCurrency.get('iso_code')
+                                    defaultCurrency.get('iso_code'),
                                 ])}{' '}
                                 <i>{defaultCurrency.get('symbol')}</i>
                             </MenuItem>
-                        )
+                        ),
                 )}
             </div>
         );
@@ -54,6 +54,6 @@ class Currencies extends PureComponent<TypeProps> {
 }
 
 export default connect(
-    ({user}) => ({user}),
-    {fetchCurrencies}
+    ({ user }) => ({ user }),
+    { fetchCurrencies },
 )(Currencies);

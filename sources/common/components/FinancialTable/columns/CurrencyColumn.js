@@ -2,7 +2,7 @@
 import React from 'react';
 import CurrencyISOCodeDisplay from 'common/components/FinancialTable/cells/CurrencyISOCodeDisplay';
 
-const style = {textAlign: 'center'};
+const style = { textAlign: 'center' };
 
 export default {
     Header: 'Currency',
@@ -11,5 +11,5 @@ export default {
     //
     width: 80,
     headerStyle: style,
-    style
+    style,
 };

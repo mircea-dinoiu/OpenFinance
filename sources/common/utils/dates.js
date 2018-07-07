@@ -6,10 +6,10 @@ export const formatYMD = (date: Date = new Date()): string =>
 
 export const getStartDate = ({
     endDate,
-    include
+    include,
 }: {
     endDate: string,
-    include: string
+    include: string,
 }): string => {
     let date = moment(endDate).toDate();
 

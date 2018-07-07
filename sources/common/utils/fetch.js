@@ -9,17 +9,17 @@ const parseOpts = (opts) =>
         {
             headers: {
                 'X-CSRF-Token': config.csrfToken,
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
             },
-            credentials: 'same-origin'
+            credentials: 'same-origin',
         },
-        opts
+        opts,
     );
 
 export const fetch = async (
     url: string,
     opts: {} = {},
-    callback: ?Function = null
+    callback: ?Function = null,
 ) => {
     const parsedOpts = parseOpts(opts);
 
@@ -37,7 +37,7 @@ export const fetch = async (
 export const fetchJSON = async (
     url: string,
     opts: {} = {},
-    callback: ?Function = null
+    callback: ?Function = null,
 ) => {
     const parsedOpts = parseOpts(opts);
 

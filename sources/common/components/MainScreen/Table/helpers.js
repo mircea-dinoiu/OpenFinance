@@ -1,9 +1,9 @@
 // @flow
-import {formatYMD} from 'common/utils/dates';
+import { formatYMD } from 'common/utils/dates';
 import moment from 'moment';
 import cssTable from 'common/components/FinancialTable/index.pcss';
 
-export const getTrClassName = (item, {selectedIds}): string => {
+export const getTrClassName = (item, { selectedIds }): string => {
     const classes = [];
     const day = formatYMD;
 
@@ -30,7 +30,7 @@ export const getTrProps = ({
     onReceiveSelectedIds,
     onDoubleClick,
     selectedIds,
-    item
+    item,
 }) => {
     const onClick = (event) => {
         let newSelected;
@@ -49,13 +49,12 @@ export const getTrProps = ({
     };
 
     return {
-        className: getTrClassName(item, {selectedIds}),
-        onDoubleClick: () => (item.persist !== false ? onDoubleClick(item) : null),
+        className: getTrClassName(item, { selectedIds }),
+        onDoubleClick: () =>
+            item.persist !== false ? onDoubleClick(item) : null,
         onClick,
         onContextMenu: (event) => {
             const selected = onClick(event);
-
-
-        }
+        },
     };
 };

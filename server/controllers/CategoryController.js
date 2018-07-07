@@ -1,4 +1,4 @@
-const {Category: Model, Expense} = require('../models');
+const { Category: Model, Expense } = require('../models');
 const BaseController = require('./BaseController');
 
 module.exports = BaseController.extend({
@@ -6,11 +6,11 @@ module.exports = BaseController.extend({
 
     updateValidationRules: {
         id: ['isRequired', ['isId', Model]],
-        name: ['sometimes', 'isRequired', 'isString']
+        name: ['sometimes', 'isRequired', 'isString'],
     },
 
     createValidationRules: {
-        name: ['isRequired', 'isString']
+        name: ['isRequired', 'isString'],
     },
 
     sanitizeUpdateValues(record) {
@@ -25,17 +25,17 @@ module.exports = BaseController.extend({
 
     sanitizeCreateValues(record) {
         return {
-            name: record.name.trim()
+            name: record.name.trim(),
         };
     },
 
     async getList(req, res) {
         const categories = await Model.findAll({
             attributes: Object.keys(Model.rawAttributes).concat([
-                ['COUNT(expenses.id)', 'expenseCount']
+                ['COUNT(expenses.id)', 'expenseCount'],
             ]),
-            include: [{model: Expense, attributes: []}],
-            group: ['id']
+            include: [{ model: Expense, attributes: [] }],
+            group: ['id'],
         });
 
         res.json(
@@ -47,7 +47,7 @@ module.exports = BaseController.extend({
                 delete json.expenseCount;
 
                 return json;
-            })
+            }),
         );
-    }
+    },
 });

@@ -1,13 +1,19 @@
-import {fromJS} from 'immutable';
-import {Actions} from 'common/state';
+import { fromJS } from 'immutable';
+import { Actions } from 'common/state';
 import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'common/utils/getScreenQueries';
-import {combineReducers} from 'redux';
-import {parsePreferences, readPreferences, savePreferences} from 'common/utils/preferences';
+import { combineReducers } from 'redux';
+import {
+    parsePreferences,
+    readPreferences,
+    savePreferences,
+} from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
-const screen = (state = getScreenQueries(), action) => action.type === Actions.SET_SCREEN ? action.value : state;
-const refreshWidgets = (state = uniqueId(), action) => action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
+const screen = (state = getScreenQueries(), action) =>
+    action.type === Actions.SET_SCREEN ? action.value : state;
+const refreshWidgets = (state = uniqueId(), action) =>
+    action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
 const bindToUpdateState = (prop, defaultValue) => {
     stateKeysWithoutReducers.push(prop);
 
@@ -18,7 +24,7 @@ const bindToUpdateState = (prop, defaultValue) => {
                     throw new Error(
                         `${key} has its own reducer. Please use action ${
                             Actions.UPDATE_STATE
-                        } only for ${stateKeysWithoutReducers.join(', ')}`
+                        } only for ${stateKeysWithoutReducers.join(', ')}`,
                     );
                 }
             });
@@ -31,7 +37,8 @@ const bindToUpdateState = (prop, defaultValue) => {
         return state;
     };
 };
-const user = (state = null, action) => action.type === Actions.UPDATE_USER ? fromJS(action.user) : state;
+const user = (state = null, action) =>
+    action.type === Actions.UPDATE_USER ? fromJS(action.user) : state;
 const loading = (state = true, action) => {
     if (action.type === Actions.LOADING_ENABLE) {
         return true;
@@ -48,7 +55,7 @@ const preferences = (state = {}, action) => {
         case Actions.$INIT:
             return parsePreferences(state);
         case Actions.UPDATE_PREFERENCES:
-            return {...state, ...action.value};
+            return { ...state, ...action.value };
     }
 
     return state;

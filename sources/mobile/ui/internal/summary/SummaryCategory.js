@@ -1,23 +1,23 @@
 // @flow
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
-import {Card, CardHeader, CardText} from 'material-ui';
-import {numericValue} from 'mobile/ui/formatters';
-import {connect} from 'react-redux';
+import { Card, CardHeader, CardText } from 'material-ui';
+import { numericValue } from 'mobile/ui/formatters';
+import { connect } from 'react-redux';
 import Expand from 'material-ui-icons/ExpandMore';
 import Collapse from 'material-ui-icons/ExpandLess';
-import {Col, Row} from 'react-grid-system';
+import { Col, Row } from 'react-grid-system';
 import FinancialTable from 'common/components/FinancialTable';
 
 class SummarySubCategory extends PureComponent {
     state = {
-        expanded: Boolean(this.props.expandedByDefault)
+        expanded: Boolean(this.props.expandedByDefault),
     };
 
     numericValue = (...args) => this.props.numericValueFn(...args);
 
-    toggleExpanded = () => this.setState({expanded: !this.state.expanded});
+    toggleExpanded = () => this.setState({ expanded: !this.state.expanded });
 
     render() {
         const {
@@ -26,17 +26,17 @@ class SummarySubCategory extends PureComponent {
             id,
             entityIdField,
             entityNameField,
-            items
+            items,
         } = this.props;
 
         return (
-            <div style={{padding: '0 5px'}}>
+            <div style={{ padding: '0 5px' }}>
                 {shouldGroup && (
                     <CardHeader
                         style={{
                             padding: 0,
                             marginTop: id == 0 ? 5 : 0,
-                            cursor: 'pointer'
+                            cursor: 'pointer',
                         }}
                         onClick={this.toggleExpanded}
                     >
@@ -48,20 +48,20 @@ class SummarySubCategory extends PureComponent {
                                     entities
                                         .find(
                                             (each) =>
-                                                each.get(entityIdField) == id
+                                                each.get(entityIdField) == id,
                                         )
                                         .get(entityNameField)
                                 )}
-                                <div style={{fontSize: '10px'}}>
+                                <div style={{ fontSize: '10px' }}>
                                     {this.numericValue(
                                         items.reduce(
                                             (acc, each) => acc + each.sum,
-                                            0
-                                        )
+                                            0,
+                                        ),
                                     )}
                                 </div>
                             </Col>
-                            <Col xs={2} style={{textAlign: 'right'}}>
+                            <Col xs={2} style={{ textAlign: 'right' }}>
                                 {this.state.expanded ? (
                                     <Collapse />
                                 ) : (
@@ -74,16 +74,16 @@ class SummarySubCategory extends PureComponent {
                 {(shouldGroup === false || this.state.expanded) && (
                     <FinancialTable
                         data={items}
-                        modifiers={{hideHeader: true}}
+                        modifiers={{ hideHeader: true }}
                         columns={[
                             {
-                                accessor: 'description'
+                                accessor: 'description',
                             },
                             {
                                 id: 'sum',
                                 accessor: (each) => this.numericValue(each.sum),
-                                style: {textAlign: 'right'}
-                            }
+                                style: { textAlign: 'right' },
+                            },
                         ]}
                     />
                 )}
@@ -94,25 +94,25 @@ class SummarySubCategory extends PureComponent {
 
 class SummaryCategory extends PureComponent {
     state = {
-        expanded: Boolean(this.props.expandedByDefault)
+        expanded: Boolean(this.props.expandedByDefault),
     };
 
     numericValue = (value, opts = {}) => {
         const currency = this.props.currencies.getIn([
             'map',
             String(this.props.currencies.get('default')),
-            'iso_code'
+            'iso_code',
         ]);
 
-        return numericValue(value, {...opts, currency});
+        return numericValue(value, { ...opts, currency });
     };
 
     handleExpandChange = (expanded) => {
-        this.setState({expanded});
+        this.setState({ expanded });
     };
 
     static defaultProps = {
-        showSumInHeader: true
+        showSumInHeader: true,
     };
 
     groupSorter = ([id, items]) => {
@@ -132,44 +132,44 @@ class SummaryCategory extends PureComponent {
             entities,
             entityIdField = 'id',
             entityNameField = 'name',
-            showSumInHeader
+            showSumInHeader,
         } = this.props;
         const headerColor = 'rgba(255, 255, 255, 0.9)';
 
         return (
             <Card
-                style={{marginBottom: 10}}
+                style={{ marginBottom: 10 }}
                 expanded={this.state.expanded}
                 onExpandChange={this.handleExpandChange}
             >
                 <CardHeader
-                    style={{backgroundColor, paddingTop: 0}}
+                    style={{ backgroundColor, paddingTop: 0 }}
                     actAsExpander={true}
                     showExpandableButton={true}
                 >
-                    <div style={{color: headerColor}}>
+                    <div style={{ color: headerColor }}>
                         {title}
                         {showSumInHeader && (
-                            <div style={{fontSize: '12px'}}>
+                            <div style={{ fontSize: '12px' }}>
                                 {this.numericValue(
                                     summaryObject.reduce(
                                         (acc, each) => acc + each.sum,
-                                        0
+                                        0,
                                     ),
-                                    {currencyStyle: {color: headerColor}}
+                                    { currencyStyle: { color: headerColor } },
                                 )}
                             </div>
                         )}
                     </div>
                 </CardHeader>
 
-                <CardText style={{padding: '0 5px'}} expandable={true}>
+                <CardText style={{ padding: '0 5px' }} expandable={true}>
                     {sortBy(
                         Object.entries(groupBy(summaryObject, 'group')),
-                        this.groupSorter
+                        this.groupSorter,
                     ).map(([id, items]) => {
                         const shouldGroup = items.every((each) =>
-                            each.hasOwnProperty('group')
+                            each.hasOwnProperty('group'),
                         );
 
                         return (
@@ -192,4 +192,4 @@ class SummaryCategory extends PureComponent {
     }
 }
 
-export default connect(({currencies}) => ({currencies}))(SummaryCategory);
+export default connect(({ currencies }) => ({ currencies }))(SummaryCategory);

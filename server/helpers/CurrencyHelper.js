@@ -3,7 +3,7 @@ const floorToDigits = (value, digits) => {
 
     return Math.floor(value * multiplier) / multiplier;
 };
-const appendRatesToCurrencies = (map, {rates, defaultCurrencyISOCode}) => {
+const appendRatesToCurrencies = (map, { rates, defaultCurrencyISOCode }) => {
     Object.entries(map).forEach(([id, currencyInfo]) => {
         map[id].rates = {};
 
@@ -19,7 +19,7 @@ const appendRatesToCurrencies = (map, {rates, defaultCurrencyISOCode}) => {
             } else {
                 value = floorToDigits(
                     rates[eachISOCode] / rates[currencyInfo.iso_code],
-                    4
+                    4,
                 );
             }
 
@@ -29,7 +29,7 @@ const appendRatesToCurrencies = (map, {rates, defaultCurrencyISOCode}) => {
 };
 
 module.exports = {
-    xmlToRates: (xml, {allowedISOCodes, defaultCurrencyISOCode}) => {
+    xmlToRates: (xml, { allowedISOCodes, defaultCurrencyISOCode }) => {
         const body = xml.DataSet.Body[0];
         const origCurrencyISOCode = String(body.OrigCurrency[0]);
         const rates = {};
@@ -38,7 +38,7 @@ module.exports = {
 
         const Rate = body.Cube[0].Rate;
 
-        Rate.forEach(({_, $}) => {
+        Rate.forEach(({ _, $ }) => {
             const key = $.currency;
 
             if (allowedISOCodes.includes(key)) {
@@ -51,19 +51,19 @@ module.exports = {
                 if (key !== defaultCurrencyISOCode) {
                     rates[key] = floorToDigits(
                         (1 / rates[defaultCurrencyISOCode]) * rates[key],
-                        4
+                        4,
                     );
                 }
             });
 
             rates[origCurrencyISOCode] = floorToDigits(
                 1 / rates[defaultCurrencyISOCode],
-                4
+                4,
             );
             rates[defaultCurrencyISOCode] = 1;
         }
 
         return rates;
     },
-    appendRatesToCurrencies
+    appendRatesToCurrencies,
 };

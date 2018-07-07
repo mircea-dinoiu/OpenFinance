@@ -2,7 +2,7 @@
 import React from 'react';
 import RepeatsDisplay from 'common/components/FinancialTable/cells/RepeatsDisplay';
 
-const style = {textAlign: 'center'};
+const style = { textAlign: 'center' };
 
 export default {
     Header: 'Repeat',

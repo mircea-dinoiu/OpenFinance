@@ -1,23 +1,30 @@
 // @flow
-import React, {PureComponent} from 'react';
-import {connect} from 'react-redux';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import {
     AppBar,
     DatePicker,
-    IconButton, MenuItem,
-    Paper, SelectField,
-    ToolbarGroup
+    IconButton,
+    MenuItem,
+    Paper,
+    SelectField,
+    ToolbarGroup,
 } from 'material-ui';
 import MonetizationOn from 'material-ui-icons/MonetizationOn';
 import Refresh from 'material-ui-icons/Refresh';
 import ArrowBack from 'material-ui-icons/ArrowBack';
 import ArrowForward from 'material-ui-icons/ArrowForward';
 import Logged from 'mobile/ui/appBar/Logged';
-import {updateState, setEndDate, refreshWidgets, updatePreferences} from 'common/state/actions';
-import {bindActionCreators} from 'redux';
-import {formatYMD, shiftDateBack, shiftDateForward} from 'common/utils/dates';
+import {
+    updateState,
+    setEndDate,
+    refreshWidgets,
+    updatePreferences,
+} from 'common/state/actions';
+import { bindActionCreators } from 'redux';
+import { formatYMD, shiftDateBack, shiftDateForward } from 'common/utils/dates';
 import moment from 'moment';
-import {ShiftDateOptions} from 'common/defs';
+import { ShiftDateOptions } from 'common/defs';
 
 type TypeProps = {
     onLogout: Function,
@@ -26,37 +33,43 @@ type TypeProps = {
     actions: {
         setEndDate: typeof setEndDate,
         updateState: typeof updateState,
-        refreshWidgets: typeof refreshWidgets
-    }
+        refreshWidgets: typeof refreshWidgets,
+    },
 };
 
 class TopBar extends PureComponent<TypeProps> {
     onShiftBack = () => {
         this.props.actions.updatePreferences({
             endDate: formatYMD(
-                shiftDateBack(this.props.preferences.endDate, this.props.preferences.endDateIncrement)
-            )
+                shiftDateBack(
+                    this.props.preferences.endDate,
+                    this.props.preferences.endDateIncrement,
+                ),
+            ),
         });
     };
     onShiftForward = () => {
         this.props.actions.updatePreferences({
             endDate: formatYMD(
-                shiftDateForward(this.props.preferences.endDate, this.props.preferences.endDateIncrement)
-            )
+                shiftDateForward(
+                    this.props.preferences.endDate,
+                    this.props.preferences.endDateIncrement,
+                ),
+            ),
         });
     };
     onChangeEndDate = (nothing, date) => {
-        this.props.actions.updatePreferences({endDate: formatYMD(date)});
+        this.props.actions.updatePreferences({ endDate: formatYMD(date) });
     };
     onClickRefresh = () => {
         this.props.actions.refreshWidgets();
     };
     onClickCurrenciesDrawerTrigger = () => {
-        this.props.actions.updateState({currenciesDrawerOpen: true});
+        this.props.actions.updateState({ currenciesDrawerOpen: true });
     };
 
     handleEndDateIntervalDropdownChange = (e, i, newValue) => {
-        this.props.actions.updatePreferences({endDateIncrement: newValue});
+        this.props.actions.updatePreferences({ endDateIncrement: newValue });
     };
 
     renderEndDateIntervalSelect() {
@@ -65,15 +78,11 @@ class TopBar extends PureComponent<TypeProps> {
                 value={this.props.preferences.endDateIncrement}
                 onChange={this.handleEndDateIntervalDropdownChange}
                 style={{
-                    width: '120px'
+                    width: '120px',
                 }}
             >
                 {Object.entries(ShiftDateOptions).map(([id, name]) => (
-                    <MenuItem
-                        key={id}
-                        value={id}
-                        primaryText={name}
-                    />
+                    <MenuItem key={id} value={id} primaryText={name} />
                 ))}
             </SelectField>
         );
@@ -105,7 +114,7 @@ class TopBar extends PureComponent<TypeProps> {
                 }
                 style={{
                     position: 'fixed',
-                    top: 0
+                    top: 0,
                 }}
             >
                 {this.props.user &&
@@ -120,30 +129,40 @@ class TopBar extends PureComponent<TypeProps> {
                         }}
                     >
                         <IconButton
-                            style={{float: 'left'}}
-                            tooltip={`Shift back ${ShiftDateOptions[this.props.preferences.endDateIncrement]}`}
+                            style={{ float: 'left' }}
+                            tooltip={`Shift back ${
+                                ShiftDateOptions[
+                                    this.props.preferences.endDateIncrement
+                                ]
+                            }`}
                             onClick={this.onShiftBack}
                         >
                             <ArrowBack />
                         </IconButton>
                         <DatePicker
-                            style={{float: 'left'}}
+                            style={{ float: 'left' }}
                             textFieldStyle={{
                                 textAlign: 'center',
-                                width: '85px'
+                                width: '85px',
                             }}
                             hintText=""
                             value={
                                 this.props.preferences.endDate
-                                    ? moment(this.props.preferences.endDate).toDate()
+                                    ? moment(
+                                        this.props.preferences.endDate,
+                                    ).toDate()
                                     : null
                             }
                             container="inline"
                             onChange={this.onChangeEndDate}
                         />
                         <IconButton
-                            style={{float: 'left'}}
-                            tooltip={`Shift forward ${ShiftDateOptions[this.props.preferences.endDateIncrement]}`}
+                            style={{ float: 'left' }}
+                            tooltip={`Shift forward ${
+                                ShiftDateOptions[
+                                    this.props.preferences.endDateIncrement
+                                ]
+                            }`}
                             onClick={this.onShiftForward}
                         >
                             <ArrowForward />
@@ -157,7 +176,12 @@ class TopBar extends PureComponent<TypeProps> {
 }
 
 export default connect(
-    ({screen, user, title, preferences}) => ({screen, user, title, preferences}),
+    ({ screen, user, title, preferences }) => ({
+        screen,
+        user,
+        title,
+        preferences,
+    }),
     (dispatch) => ({
         actions: bindActionCreators(
             {
@@ -165,7 +189,7 @@ export default connect(
                 refreshWidgets,
                 updatePreferences,
             },
-            dispatch
-        )
-    })
+            dispatch,
+        ),
+    }),
 )(TopBar);

@@ -1,4 +1,4 @@
-const {standardDate} = require('../helpers');
+const { standardDate } = require('../helpers');
 
 module.exports = (sequelize, types) =>
     sequelize.define(
@@ -7,7 +7,7 @@ module.exports = (sequelize, types) =>
             id: {
                 type: types.INTEGER,
                 primaryKey: true,
-                autoIncrement: true
+                autoIncrement: true,
             },
             currency_id: types.INTEGER,
             description: types.STRING,
@@ -15,7 +15,7 @@ module.exports = (sequelize, types) =>
             repeat: types.STRING,
             status: types.STRING,
             sum: types.FLOAT,
-            user_id: types.INTEGER
+            user_id: types.INTEGER,
         },
         {
             underscored: true,
@@ -28,7 +28,7 @@ module.exports = (sequelize, types) =>
                     values.updated_at = standardDate(values.updated_at);
 
                     return values;
-                }
-            }
-        }
+                },
+            },
+        },
     );

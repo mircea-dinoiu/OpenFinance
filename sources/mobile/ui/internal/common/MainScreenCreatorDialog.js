@@ -1,20 +1,20 @@
 // @flow
-import React, {PureComponent} from 'react';
-import {fetchJSON} from 'common/utils/fetch';
-import {parseCRUDError} from 'common/parsers';
+import React, { PureComponent } from 'react';
+import { fetchJSON } from 'common/utils/fetch';
+import { parseCRUDError } from 'common/parsers';
 
-import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
-import {ButtonProgress} from '../../components/loaders';
+import { ErrorSnackbar, SuccessSnackbar } from '../../components/snackbars';
+import { ButtonProgress } from '../../components/loaders';
 
-import {Col, Row} from 'react-grid-system';
+import { Col, Row } from 'react-grid-system';
 
-import {Dialog, RaisedButton} from 'material-ui';
-import {connect} from 'react-redux';
+import { Dialog, RaisedButton } from 'material-ui';
+import { connect } from 'react-redux';
 
 class MainScreenCreatorDialog extends PureComponent {
     state = {
         createCount: 1,
-        saving: false
+        saving: false,
     };
     props: {
         getFormDefaults: Function,
@@ -23,8 +23,8 @@ class MainScreenCreatorDialog extends PureComponent {
         onReceiveNewRecord: Function,
         formComponent: any,
         api: {
-            create: string
-        }
+            create: string,
+        },
     };
     formDefaults = this.props.getFormDefaults(this.props);
     formData = this.props.getFormDefaults(this.props);
@@ -35,12 +35,12 @@ class MainScreenCreatorDialog extends PureComponent {
         this.setState({
             error: null,
             success: null,
-            saving: true
+            saving: true,
         });
 
         const response = await fetchJSON(this.props.api.create, {
             method: 'POST',
-            body: {data: [this.props.formToModel(data, this.props)]}
+            body: { data: [this.props.formToModel(data, this.props)] },
         });
         const json = await response.json();
 
@@ -50,14 +50,14 @@ class MainScreenCreatorDialog extends PureComponent {
                     this.props.entityName
                 } was successfully created`,
                 createCount: this.state.createCount + 1,
-                saving: false
+                saving: false,
             });
 
             this.props.onReceiveNewRecord(json[0]);
         } else {
             this.setState({
                 error: parseCRUDError(json),
-                saving: false
+                saving: false,
             });
         }
     };
@@ -71,14 +71,14 @@ class MainScreenCreatorDialog extends PureComponent {
                     label="Cancel"
                     primary={false}
                     onTouchTap={this.props.onCancel}
-                    style={{marginRight: 5}}
+                    style={{ marginRight: 5 }}
                 />
                 <RaisedButton
                     disabled={this.state.saving}
                     label={this.state.saving ? <ButtonProgress /> : 'Create'}
                     primary={true}
                     onTouchTap={this.save}
-                    style={{float: 'right'}}
+                    style={{ float: 'right' }}
                 />
             </React.Fragment>
         );
@@ -89,7 +89,7 @@ class MainScreenCreatorDialog extends PureComponent {
                 open={this.props.open}
                 autoScrollBodyContent={true}
                 actions={actions}
-                contentStyle={{width: '95%'}}
+                contentStyle={{ width: '95%' }}
             >
                 <Row>
                     <Form
@@ -117,6 +117,6 @@ class MainScreenCreatorDialog extends PureComponent {
     }
 }
 
-export default connect(({currencies, user}) => ({currencies, user}))(
-    MainScreenCreatorDialog
+export default connect(({ currencies, user }) => ({ currencies, user }))(
+    MainScreenCreatorDialog,
 );

@@ -19,7 +19,7 @@ const IncomeList = (props) => (
         editDialogProps={{
             modelToForm,
             formToModel,
-            formComponent: IncomeForm
+            formComponent: IncomeForm,
         }}
         contentComponent={IncomeListItemContent}
         {...props}

@@ -1,27 +1,27 @@
 // @flow
-import React, {PureComponent} from 'react';
-import {TextField, Toggle, RaisedButton} from 'material-ui';
-import {ButtonProgress} from './components/loaders';
+import React, { PureComponent } from 'react';
+import { TextField, Toggle, RaisedButton } from 'material-ui';
+import { ButtonProgress } from './components/loaders';
 import routes from 'common/defs/routes';
 import fetch from 'common/utils/fetch';
-import {stringify} from 'query-string';
-import {ErrorSnackbar} from './components/snackbars';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {updateUser} from 'common/state/actions';
-import {Row, Col} from 'react-grid-system';
+import { stringify } from 'query-string';
+import { ErrorSnackbar } from './components/snackbars';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { updateUser } from 'common/state/actions';
+import { Row, Col } from 'react-grid-system';
 
 class Login extends PureComponent {
     state = {
         email: '',
         password: '',
         rememberMe: true,
-        loading: false
+        loading: false,
     };
 
     submit = async () => {
         this.setState({
-            loading: true
+            loading: true,
         });
 
         const response = await fetch(routes.user.login, {
@@ -29,8 +29,8 @@ class Login extends PureComponent {
             body: stringify({
                 remember_me: this.state.rememberMe ? 'true' : null,
                 email: this.state.email,
-                password: this.state.password
-            })
+                password: this.state.password,
+            }),
         });
         const json = await response.json();
 
@@ -39,7 +39,7 @@ class Login extends PureComponent {
         } else {
             this.setState({
                 error: json,
-                loading: false
+                loading: false,
             });
         }
     };
@@ -50,7 +50,7 @@ class Login extends PureComponent {
                 this.submit();
                 break;
             default:
-                this.setState({error: null});
+                this.setState({ error: null });
                 break;
         }
     };
@@ -65,7 +65,7 @@ class Login extends PureComponent {
                     push={{
                         xs: 1,
                         md: 3,
-                        lg: 4
+                        lg: 4,
                     }}
                 >
                     <TextField
@@ -73,7 +73,7 @@ class Login extends PureComponent {
                         floatingLabelText="E-mail"
                         value={this.state.email}
                         onChange={(event) =>
-                            this.setState({email: event.target.value})
+                            this.setState({ email: event.target.value })
                         }
                         disabled={this.state.loading}
                         fullWidth={true}
@@ -85,18 +85,18 @@ class Login extends PureComponent {
                         type="password"
                         value={this.state.password}
                         onChange={(event) =>
-                            this.setState({password: event.target.value})
+                            this.setState({ password: event.target.value })
                         }
                         disabled={this.state.loading}
                         fullWidth={true}
                         onKeyDown={this.handleTextFieldKeyDown}
                     />
                     <Toggle
-                        style={{margin: '20px 0 0'}}
+                        style={{ margin: '20px 0 0' }}
                         label="Remember me"
                         toggled={this.state.rememberMe}
                         onToggle={(event, toggle) =>
-                            this.setState({rememberMe: toggle})
+                            this.setState({ rememberMe: toggle })
                         }
                         disabled={this.state.loading}
                     />
@@ -105,7 +105,7 @@ class Login extends PureComponent {
                             this.state.loading ? <ButtonProgress /> : 'Login'
                         }
                         primary={true}
-                        style={{margin: '20px 0 0'}}
+                        style={{ margin: '20px 0 0' }}
                         onTouchTap={this.submit}
                         disabled={this.state.loading}
                     />
@@ -121,6 +121,6 @@ class Login extends PureComponent {
 export default connect(
     null,
     (dispatch) => ({
-        actions: bindActionCreators({updateUser}, dispatch)
-    })
+        actions: bindActionCreators({ updateUser }, dispatch),
+    }),
 )(Login);

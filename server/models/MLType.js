@@ -5,11 +5,11 @@ module.exports = (sequelize, types) =>
             id: {
                 type: types.INTEGER,
                 primaryKey: true,
-                autoIncrement: true
+                autoIncrement: true,
             },
-            name: types.STRING
+            name: types.STRING,
         },
         {
-            timestamps: false
-        }
+            timestamps: false,
+        },
     );

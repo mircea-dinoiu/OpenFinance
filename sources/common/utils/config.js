@@ -8,7 +8,7 @@ const getMetas = () => {
 
         if ('string' === typeof name && name.startsWith(metaPrefix)) {
             metas[name.substr(metaPrefix.length)] = meta.getAttribute(
-                'content'
+                'content',
             );
         }
     });
@@ -26,5 +26,5 @@ const getMeta = (name) => {
 export default {
     get csrfToken() {
         return getMeta('csrf-token');
-    }
+    },
 };

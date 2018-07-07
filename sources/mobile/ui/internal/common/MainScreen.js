@@ -1,9 +1,9 @@
 // @flow
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
 import AddIcon from 'material-ui-icons/Add';
-import {connect} from 'react-redux';
-import {FloatingActionButton} from 'material-ui';
+import { connect } from 'react-redux';
+import { FloatingActionButton } from 'material-ui';
 
 type TypeProps = {
     creatorComponent: any,
@@ -30,7 +30,7 @@ class MainScreen extends PureComponent<TypeProps, TypeState> {
             position: this.props.screen.isLarge ? 'absolute' : 'fixed',
             bottom: this.props.screen.isLarge ? '20px' : '70px',
             right: this.props.screen.isLarge ? '30px' : '10px',
-            zIndex: 1
+            zIndex: 1,
         };
     }
 
@@ -47,7 +47,7 @@ class MainScreen extends PureComponent<TypeProps, TypeState> {
             <React.Fragment>
                 <Creator
                     onReceiveNewRecord={(newRecord) => {
-                        this.setState({newRecord});
+                        this.setState({ newRecord });
                         this.toggleAddModal();
                     }}
                     onCancel={this.toggleAddModal}
@@ -55,7 +55,9 @@ class MainScreen extends PureComponent<TypeProps, TypeState> {
                 />
                 <FloatingActionButton
                     onClick={this.toggleAddModal}
-                    mini={!this.props.screen.isLarge} style={this.getAddButtonStyle()}>
+                    mini={!this.props.screen.isLarge}
+                    style={this.getAddButtonStyle()}
+                >
                     <AddIcon />
                 </FloatingActionButton>
                 {this.renderList()}
@@ -64,4 +66,4 @@ class MainScreen extends PureComponent<TypeProps, TypeState> {
     }
 }
 
-export default connect(({screen}) => ({screen}))(MainScreen);
+export default connect(({ screen }) => ({ screen }))(MainScreen);

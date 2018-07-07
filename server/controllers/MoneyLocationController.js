@@ -1,4 +1,4 @@
-const {MoneyLocation: Model, MLType} = require('../models');
+const { MoneyLocation: Model, MLType } = require('../models');
 const BaseController = require('./BaseController');
 
 module.exports = BaseController.extend({
@@ -7,12 +7,12 @@ module.exports = BaseController.extend({
     updateValidationRules: {
         id: ['isRequired', ['isId', Model]],
         name: ['sometimes', 'isRequired', 'isString'],
-        type_id: ['sometimes', 'isRequired', ['isId', MLType]]
+        type_id: ['sometimes', 'isRequired', ['isId', MLType]],
     },
 
     createValidationRules: {
         name: ['isRequired', 'isString'],
-        type_id: ['isRequired', ['isId', MLType]]
+        type_id: ['isRequired', ['isId', MLType]],
     },
 
     sanitizeUpdateValues(record) {
@@ -32,7 +32,7 @@ module.exports = BaseController.extend({
     sanitizeCreateValues(record) {
         return {
             name: record.name.trim(),
-            type_id: record.type_id
+            type_id: record.type_id,
         };
-    }
+    },
 });

@@ -1,23 +1,23 @@
 // @flow
 import React from 'react';
-import {BigLoader} from '../components/loaders';
-import {Paper} from 'material-ui';
+import { BigLoader } from '../components/loaders';
+import { Paper } from 'material-ui';
 import * as colors from 'material-ui/styles/colors';
 import routes from '../../../common/defs/routes';
-import {stringify} from 'query-string';
-import {fetch} from '../../../common/utils/fetch';
+import { stringify } from 'query-string';
+import { fetch } from '../../../common/utils/fetch';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import IncludeDropdown from 'common/components/IncludeDropdown';
-import {getStartDate, formatYMD} from 'common/utils/dates';
-import {greyedOut} from 'common/defs/styles';
-import {Sizes} from 'common/defs';
+import { getStartDate, formatYMD } from 'common/utils/dates';
+import { greyedOut } from 'common/defs/styles';
+import { Sizes } from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
-import {updatePreferences} from 'common/state/actions';
+import { updatePreferences } from 'common/state/actions';
 
 type TypeProps = {
-    screen: TypeScreenQueries
+    screen: TypeScreenQueries,
 };
 
 class Summary extends React.PureComponent<TypeProps> {
@@ -32,11 +32,11 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({preferences, refreshWidgets}) {
-        const {endDate} = preferences;
+    UNSAFE_componentWillReceiveProps({ preferences, refreshWidgets }) {
+        const { endDate } = preferences;
 
         if (endDate !== this.props.preferences.endDate) {
-            this.load({endDate});
+            this.load({ endDate });
         }
 
         if (refreshWidgets !== this.props.refreshWidgets) {
@@ -44,33 +44,35 @@ class Summary extends React.PureComponent<TypeProps> {
         }
     }
 
-    load = async ({endDate = this.props.preferences.endDate, include = this.props.preferences.include} = {}) => {
+    load = async ({
+        endDate = this.props.preferences.endDate,
+        include = this.props.preferences.include,
+    } = {}) => {
         this.setState({
-            refreshing: true
+            refreshing: true,
         });
 
         const response = await fetch(
             `${routes.report.summary}?${stringify({
                 ...pickBy(
                     {
-                        end_date:
-                            include === 'ut' ? formatYMD() : endDate,
+                        end_date: include === 'ut' ? formatYMD() : endDate,
                         start_date: getStartDate({
                             include,
-                            endDate
-                        })
+                            endDate,
+                        }),
                     },
-                    identity
+                    identity,
                 ),
-                html: false
-            })}`
+                html: false,
+            })}`,
         );
         const json = await response.json();
 
         this.setState({
             results: json,
             firstLoad: false,
-            refreshing: false
+            refreshing: false,
         });
     };
 
@@ -79,16 +81,16 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 
     renderResults() {
-        const {results} = this.state;
+        const { results } = this.state;
 
         return (
-            <div style={{margin: '0 0 20px'}}>
+            <div style={{ margin: '0 0 20px' }}>
                 {this.renderCategory({
                     backgroundColor: colors.green500,
                     title: 'Balance by location',
                     summaryObject: results.remainingData.byML,
                     entities: this.props.moneyLocationTypes,
-                    expandedByDefault: true
+                    expandedByDefault: true,
                 })}
 
                 {this.renderCategory({
@@ -96,7 +98,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     title: 'Balance by user',
                     summaryObject: results.remainingData.byUser,
                     entities: this.props.user.get('list'),
-                    entityNameField: 'full_name'
+                    entityNameField: 'full_name',
                 })}
 
                 {this.renderCategory({
@@ -105,7 +107,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     summaryObject: results.expensesByCategory,
                     entities: this.props.categories,
                     entityNameField: 'name',
-                    showSumInHeader: false
+                    showSumInHeader: false,
                 })}
 
                 {this.renderCategory({
@@ -113,7 +115,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     title: 'Expenses by location',
                     summaryObject: results.expensesData.byML,
                     entities: this.props.moneyLocationTypes,
-                    entityNameField: 'name'
+                    entityNameField: 'name',
                 })}
 
                 {this.renderCategory({
@@ -121,7 +123,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     title: 'Expenses by user',
                     summaryObject: results.expensesData.byUser,
                     entities: this.props.user.get('list'),
-                    entityNameField: 'full_name'
+                    entityNameField: 'full_name',
                 })}
 
                 {this.renderCategory({
@@ -129,7 +131,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     title: 'Income by location',
                     summaryObject: results.incomesData.byML,
                     entities: this.props.moneyLocationTypes,
-                    entityNameField: 'name'
+                    entityNameField: 'name',
                 })}
 
                 {this.renderCategory({
@@ -137,15 +139,15 @@ class Summary extends React.PureComponent<TypeProps> {
                     title: 'Income by user',
                     summaryObject: results.incomesData.byUser,
                     entities: this.props.user.get('list'),
-                    entityNameField: 'full_name'
+                    entityNameField: 'full_name',
                 })}
             </div>
         );
     }
 
     onIncludeChange = (include) => {
-        this.props.updatePreferences({include});
-        this.load({include});
+        this.props.updatePreferences({ include });
+        this.load({ include });
     };
 
     render() {
@@ -159,14 +161,14 @@ class Summary extends React.PureComponent<TypeProps> {
                     padding: '0 5px',
                     overflowY: 'auto',
                     overflowX: 'hidden',
-                    height: `calc(100vh - ${Sizes.HEADER_SIZE})`
+                    height: `calc(100vh - ${Sizes.HEADER_SIZE})`,
                 }}
             >
                 <div style={this.state.refreshing ? greyedOut : {}}>
                     <Paper
                         style={{
                             margin: '5px 0',
-                            padding: '0 10px'
+                            padding: '0 10px',
                         }}
                     >
                         <IncludeDropdown
@@ -181,6 +183,9 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 }
 
-const mapDispatchToProps = {updatePreferences};
+const mapDispatchToProps = { updatePreferences };
 
-export default connect((state) => state, mapDispatchToProps)(Summary);
+export default connect(
+    (state) => state,
+    mapDispatchToProps,
+)(Summary);

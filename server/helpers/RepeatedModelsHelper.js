@@ -1,8 +1,8 @@
 const moment = require('moment');
-const {standardDate} = require('../helpers');
+const { standardDate } = require('../helpers');
 
 module.exports = {
-    generateClones({records, endDate, startDate}) {
+    generateClones({ records, endDate, startDate }) {
         const ret = [];
 
         records.forEach((record) => {
@@ -14,7 +14,7 @@ module.exports = {
                 this.getClonesFor({
                     record,
                     endDate,
-                    startDate
+                    startDate,
                 }).forEach((clone) => {
                     ret.push(clone);
                 });
@@ -28,7 +28,7 @@ module.exports = {
         return moment(date).format('YYYY-MM-DD');
     },
 
-    getClonesFor({record, endDate, startDate}) {
+    getClonesFor({ record, endDate, startDate }) {
         const out = [];
         const day = this.day;
 
@@ -39,7 +39,7 @@ module.exports = {
             while (true) {
                 const newObject = this.advanceRepeatDate(
                     record.toJSON(),
-                    repeats
+                    repeats,
                 );
 
                 if (startDate && day(newObject.created_at) < day(startDate)) {
@@ -58,10 +58,10 @@ module.exports = {
                     out.push(
                         Object.assign(
                             {
-                                toJSON: () => newObject
+                                toJSON: () => newObject,
                             },
-                            newObject
-                        )
+                            newObject,
+                        ),
                     );
                     repeats++;
                 }
@@ -100,5 +100,5 @@ module.exports = {
         newObject.created_at = standardDate(date);
 
         return newObject;
-    }
+    },
 };

@@ -1,10 +1,15 @@
 // @flow
 import React from 'react';
-import {MenuItem} from 'material-ui';
+import { MenuItem } from 'material-ui';
 import DeleteIcon from 'material-ui-icons/Delete';
 import CreateIcon from 'material-ui-icons/Create';
 
-export default function ContextMenuItems({onClickEdit, onClickDelete, selectedIds, desktop = false}) {
+export default function ContextMenuItems({
+    onClickEdit,
+    onClickDelete,
+    selectedIds,
+    desktop = false,
+}) {
     return (
         <React.Fragment>
             <MenuItem

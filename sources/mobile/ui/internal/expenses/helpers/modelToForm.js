@@ -11,5 +11,5 @@ export default (data) => ({
     paymentMethod: data.money_location_id,
     repeat: data.repeat,
     chargedPersons: data.users,
-    status: data.status || 'pending'
+    status: data.status || 'pending',
 });

@@ -1,11 +1,11 @@
 // @flow
 /* eslint no-unused-vars: 0 */
-import type {Map} from 'immutable';
+import type { Map } from 'immutable';
 
 type TypeScreenQueries = {
     isSmall: boolean,
     isMedium: boolean,
-    isLarge: boolean
+    isLarge: boolean,
 };
 
 type TypePreferences = {

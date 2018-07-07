@@ -14,7 +14,7 @@ export default [
     {
         Header: 'Description',
         accessor: (item) => <DescriptionDisplay entity="income" item={item} />,
-        id: 'description'
+        id: 'description',
     },
     DateTimeColumn,
     AccountColumn,
@@ -24,8 +24,8 @@ export default [
         id: 'from',
         //
         width: 100,
-        headerStyle: {textAlign: 'center'},
-        style: {textAlign: 'center'},
+        headerStyle: { textAlign: 'center' },
+        style: { textAlign: 'center' },
     },
     RepeatColumn,
 ];

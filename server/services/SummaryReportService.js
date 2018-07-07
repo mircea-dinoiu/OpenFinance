@@ -1,15 +1,15 @@
 const SummaryReportHelper = require('../helpers/SummaryReportHelper');
 const CurrencyController = require('../controllers/CurrencyController');
-const {sortBy} = require('lodash');
+const { sortBy } = require('lodash');
 
 module.exports = {
-    getRemainingData({expenses, incomes, userRecords, mlRecords, html}) {
-        const data = {byUser: [], byML: []};
+    getRemainingData({ expenses, incomes, userRecords, mlRecords, html }) {
+        const data = { byUser: [], byML: [] };
         const totalRemainingByUser = {};
         const totalRemainingByML = {};
         const users = SummaryReportHelper.getUniques(
             expenses.byUser,
-            incomes.byUser
+            incomes.byUser,
         );
         const mls = SummaryReportHelper.getUniques(expenses.byML, incomes.byML);
 
@@ -20,7 +20,7 @@ module.exports = {
             totalRemainingByML[id] = SummaryReportHelper.getRemainingSum(
                 expenses.byML,
                 incomes.byML,
-                id
+                id,
             );
         });
 
@@ -28,7 +28,7 @@ module.exports = {
             totalRemainingByUser[id] = SummaryReportHelper.getRemainingSum(
                 expenses.byUser,
                 incomes.byUser,
-                id
+                id,
             );
         });
 
@@ -45,8 +45,8 @@ module.exports = {
                     sum,
                     description: SummaryReportHelper.description(
                         user.full_name,
-                        {html}
-                    )
+                        { html },
+                    ),
                 });
             }
         });
@@ -62,20 +62,20 @@ module.exports = {
                     description: SummaryReportHelper.description(
                         SummaryReportHelper.formatMLName(id, {
                             mlRecords,
-                            html
+                            html,
                         }),
                         {
-                            html
-                        }
+                            html,
+                        },
                     ),
-                    group: (ml ? ml.type_id : 0) || 0
+                    group: (ml ? ml.type_id : 0) || 0,
                 });
             }
         });
 
         return {
             byML: sortBy(data.byML, 'description'),
-            byUser: sortBy(data.byUser, 'description')
+            byUser: sortBy(data.byUser, 'description'),
         };
     },
 
@@ -84,9 +84,9 @@ module.exports = {
         userRecords,
         mlRecords,
         defaultCurrency,
-        html
+        html,
     }) {
-        const data = {byUser: [], byML: []};
+        const data = { byUser: [], byML: [] };
         const users = {};
         const mls = {};
 
@@ -99,7 +99,7 @@ module.exports = {
             if (currencyId !== parseInt(defaultCurrency.id)) {
                 sum = await CurrencyController.convertToDefault(
                     sum,
-                    currencyId
+                    currencyId,
                 );
             }
 
@@ -114,9 +114,9 @@ module.exports = {
                 sum,
                 description: SummaryReportHelper.description(
                     userRecords.find((each) => each.id == id).full_name,
-                    {html}
+                    { html },
                 ),
-                reference: Number(id)
+                reference: Number(id),
             });
         });
 
@@ -124,7 +124,7 @@ module.exports = {
             html,
             data: data.byML,
             mls,
-            mlRecords
+            mlRecords,
         });
 
         return data;
@@ -135,7 +135,7 @@ module.exports = {
         userRecords,
         mlRecords,
         defaultCurrency,
-        html
+        html,
     }) {
         const users = {};
         const mls = {};
@@ -150,7 +150,7 @@ module.exports = {
             if (currencyId !== parseInt(defaultCurrency.id)) {
                 sum = await CurrencyController.convertToDefault(
                     sum,
-                    currencyId
+                    currencyId,
                 );
             }
 
@@ -165,7 +165,7 @@ module.exports = {
 
         const data = {
             byUser: [],
-            byML: []
+            byML: [],
         };
 
         userRecords.forEach((record) => {
@@ -177,10 +177,10 @@ module.exports = {
                     description: SummaryReportHelper.description(
                         record.full_name,
                         {
-                            html
-                        }
+                            html,
+                        },
                     ),
-                    reference: id
+                    reference: id,
                 });
             }
         });
@@ -189,7 +189,7 @@ module.exports = {
             html,
             data: data.byML,
             mls,
-            mlRecords
+            mlRecords,
         });
 
         return data;
@@ -200,7 +200,7 @@ module.exports = {
         defaultCurrency,
         categoryRecords,
         userRecords,
-        html
+        html,
     }) {
         const categories = {};
         const data = [];
@@ -212,7 +212,7 @@ module.exports = {
             const addData = function (categoryId, rawCatSum) {
                 if (!categories[categoryId]) {
                     categories[categoryId] = {
-                        users: {}
+                        users: {},
                     };
                 }
 
@@ -231,7 +231,7 @@ module.exports = {
             if (json.currency_id !== parseInt(defaultCurrency.id)) {
                 sum = await CurrencyController.convertToDefault(
                     sum,
-                    json.currency_id
+                    json.currency_id,
                 );
             }
 
@@ -267,11 +267,11 @@ module.exports = {
 
             const sum1 = Object.values(categories[id1].users).reduce(
                 (acc, el) => acc + el,
-                0
+                0,
             );
             const sum2 = Object.values(categories[id2].users).reduce(
                 (acc, el) => acc + el,
-                0
+                0,
             );
 
             return sum1 > sum2 ? -1 : 1;
@@ -284,15 +284,15 @@ module.exports = {
                         sum,
                         description: SummaryReportHelper.description(
                             userRecords.find((each) => each.id == id).full_name,
-                            {html}
+                            { html },
                         ),
                         group: categoryId,
-                        index
+                        index,
                     });
-                }
+                },
             );
         });
 
         return data;
-    }
+    },
 };

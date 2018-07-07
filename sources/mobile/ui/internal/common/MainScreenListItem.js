@@ -1,12 +1,12 @@
 // @flow
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
-import {cyan50, red50} from 'material-ui/styles/colors';
+import { cyan50, red50 } from 'material-ui/styles/colors';
 
 import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
 import ResponsiveListItem from 'common/components/ResponsiveListItem';
-import {IconButton, IconMenu} from 'material-ui';
+import { IconButton, IconMenu } from 'material-ui';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
 import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
 
@@ -14,7 +14,7 @@ class MainScreenListItem extends PureComponent {
     props: {
         entityName: string,
         editDialogProps: {},
-        contentComponent: any
+        contentComponent: any,
     };
 
     state = {
@@ -26,19 +26,19 @@ class MainScreenListItem extends PureComponent {
         editDialogKey: Date.now(),
 
         deleteDialogOpen: false,
-        createDeleteDialog: false
+        createDeleteDialog: false,
     };
 
     toggleDetails = () => {
         this.setState({
-            expanded: !this.state.expanded
+            expanded: !this.state.expanded,
         });
     };
 
     toggleDeleteDialog = () => {
         this.setState({
             createDeleteDialog: true,
-            deleteDialogOpen: !this.state.deleteDialogOpen
+            deleteDialogOpen: !this.state.deleteDialogOpen,
         });
     };
 
@@ -46,13 +46,13 @@ class MainScreenListItem extends PureComponent {
         this.setState({
             createEditDialog: true,
             editDialogKey: Date.now(),
-            editDialogOpen: !this.state.editDialogOpen
+            editDialogOpen: !this.state.editDialogOpen,
         });
     };
 
     submitDelete = () => {
         this.setState({
-            deleted: true
+            deleted: true,
         });
 
         this.toggleDeleteDialog();
@@ -68,13 +68,13 @@ class MainScreenListItem extends PureComponent {
         if (this.state.deleted) {
             return {
                 backgroundColor: red50,
-                textAlign: 'center'
+                textAlign: 'center',
             };
         }
 
         if (this.state.expanded) {
             return {
-                backgroundColor: cyan50
+                backgroundColor: cyan50,
             };
         }
 
@@ -86,7 +86,7 @@ class MainScreenListItem extends PureComponent {
             return {};
         }
 
-        return {paddingLeft: 40};
+        return { paddingLeft: 40 };
     }
 
     render() {
@@ -142,19 +142,19 @@ class MainScreenListItem extends PureComponent {
                     persist ? (
                         <IconMenu
                             iconButtonElement={
-                                <IconButton style={{padding: 0, width: 40}}>
+                                <IconButton style={{ padding: 0, width: 40 }}>
                                     <MoreVertIcon />
                                 </IconButton>
                             }
                             anchorOrigin={{
                                 horizontal: 'left',
-                                vertical: 'top'
+                                vertical: 'top',
                             }}
                             targetOrigin={{
                                 horizontal: 'left',
-                                vertical: 'top'
+                                vertical: 'top',
                             }}
-                            style={{marginLeft: 0, left: 0}}
+                            style={{ marginLeft: 0, left: 0 }}
                             onTouchTap={(event) => {
                                 event.stopPropagation();
                             }}
