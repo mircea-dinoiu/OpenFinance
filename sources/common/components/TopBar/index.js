@@ -25,6 +25,7 @@ import { bindActionCreators } from 'redux';
 import { formatYMD, shiftDateBack, shiftDateForward } from 'common/utils/dates';
 import moment from 'moment';
 import { ShiftDateOptions } from 'common/defs';
+import { Sizes } from 'common/defs';
 
 type TypeProps = {
     onLogout: Function,
@@ -36,6 +37,8 @@ type TypeProps = {
         refreshWidgets: typeof refreshWidgets,
     },
 };
+
+const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 
 class TopBar extends PureComponent<TypeProps> {
     onShiftBack = () => {
@@ -79,6 +82,7 @@ class TopBar extends PureComponent<TypeProps> {
                 onChange={this.handleEndDateIntervalDropdownChange}
                 style={{
                     width: '120px',
+                    height: INPUT_HEIGHT,
                 }}
             >
                 {Object.entries(ShiftDateOptions).map(([id, name]) => (
@@ -92,7 +96,14 @@ class TopBar extends PureComponent<TypeProps> {
         return (
             <AppBar
                 title={this.props.title}
+                titleStyle={{
+                    height: Sizes.HEADER_SIZE,
+                    lineHeight: Sizes.HEADER_SIZE,
+                }}
                 showMenuIconButton={false}
+                iconStyleRight={{
+                    margin: 0,
+                }}
                 iconElementRight={
                     <ToolbarGroup>
                         {this.props.showCurrenciesDrawer && (
@@ -115,6 +126,7 @@ class TopBar extends PureComponent<TypeProps> {
                 style={{
                     position: 'fixed',
                     top: 0,
+                    height: Sizes.HEADER_SIZE,
                 }}
             >
                 {this.props.user &&
@@ -123,13 +135,13 @@ class TopBar extends PureComponent<TypeProps> {
                         style={{
                             position: 'absolute',
                             left: '50%',
-                            top: '5px',
+                            top: '1px',
                             transform: 'translateX(-50%)',
-                            height: '48px',
+                            height: INPUT_HEIGHT,
                         }}
                     >
                         <IconButton
-                            style={{ float: 'left' }}
+                            style={{ float: 'left', height: INPUT_HEIGHT }}
                             tooltip={`Shift back ${
                                 ShiftDateOptions[
                                     this.props.preferences.endDateIncrement
@@ -144,6 +156,7 @@ class TopBar extends PureComponent<TypeProps> {
                             textFieldStyle={{
                                 textAlign: 'center',
                                 width: '85px',
+                                height: INPUT_HEIGHT,
                             }}
                             hintText=""
                             value={
@@ -157,7 +170,7 @@ class TopBar extends PureComponent<TypeProps> {
                             onChange={this.onChangeEndDate}
                         />
                         <IconButton
-                            style={{ float: 'left' }}
+                            style={{ float: 'left', height: INPUT_HEIGHT }}
                             tooltip={`Shift forward ${
                                 ShiftDateOptions[
                                     this.props.preferences.endDateIncrement

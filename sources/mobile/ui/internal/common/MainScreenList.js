@@ -19,6 +19,7 @@ import { getTrProps } from 'common/components/MainScreen/Table/helpers';
 import MainScreenListGroup from 'mobile/ui/internal/common/MainScreenListGroup';
 import { convertCurrencyToDefault } from '../../../../common/helpers/currency';
 import { numericValue } from '../../formatters';
+import { Sizes } from 'common/defs';
 
 const PAGE_SIZE = 50;
 
@@ -246,7 +247,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 <div onScroll={this.onTableScroll}>
                     <FinancialTable
                         style={{
-                            height: 'calc(100vh - 139px)',
+                            height: `calc(100vh - (75px + ${Sizes.HEADER_SIZE}))`,
                         }}
                         loading={this.state.loadingMore}
                         data={results}

@@ -1,5 +1,5 @@
 export const Sizes = {
-    HEADER_SIZE: '64px',
+    HEADER_SIZE: '48px',
 };
 
 export const ShiftDateOptions = {
