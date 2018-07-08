@@ -264,5 +264,5 @@ alter table incomes
       Example:
       return queryInterface.dropTable('users');
     */
-    }
+    },
 };

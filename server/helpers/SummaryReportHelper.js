@@ -1,7 +1,7 @@
-const {uniq, concat, sortBy} = require('lodash');
+const { uniq, concat, sortBy } = require('lodash');
 
 module.exports = {
-    description(text, {html} = {}) {
+    description(text, { html } = {}) {
         if (html === 'false') {
             return text;
         }
@@ -17,7 +17,7 @@ module.exports = {
         return uniq(
             concat(expenses, incomes)
                 .filter((item) => item.isTotal !== true)
-                .map((item) => parseInt(item.reference))
+                .map((item) => parseInt(item.reference)),
         );
     },
 
@@ -26,7 +26,7 @@ module.exports = {
         let filteredIncomes;
 
         filteredExpenses = expenses.filter(
-            (expense) => expense.reference === id
+            (expense) => expense.reference === id,
         )[0];
 
         filteredIncomes = incomes.filter((income) => income.reference === id)[0];
@@ -37,7 +37,7 @@ module.exports = {
         return this.safeNum(filteredIncomes - filteredExpenses);
     },
 
-    formatMLName(id, {mlRecords, html}) {
+    formatMLName(id, { mlRecords, html }) {
         if (id == 0) {
             const name = 'Unclassified';
 
@@ -47,19 +47,19 @@ module.exports = {
         return mlRecords.find((each) => each.id == id).name;
     },
 
-    addMLEntries({data, mls, mlRecords, html}) {
+    addMLEntries({ data, mls, mlRecords, html }) {
         const push = (id, name, group) => {
             data.push({
                 sum: mls[id],
-                description: this.description(name, {html}),
+                description: this.description(name, { html }),
                 reference: id,
                 group,
-                index: id
+                index: id,
             });
         };
 
         if (mls['0']) {
-            push(0, this.formatMLName(0, {mlRecords, html}));
+            push(0, this.formatMLName(0, { mlRecords, html }));
         }
 
         sortBy(mlRecords, 'name').forEach((record) => {
@@ -69,5 +69,5 @@ module.exports = {
                 push(id, record.name, record.type_id);
             }
         });
-    }
+    },
 };

@@ -6,8 +6,8 @@ module.exports = (sequelize, types) => {
             id: {
                 type: types.INTEGER,
                 primaryKey: true,
-                autoIncrement: true
-            }
+                autoIncrement: true,
+            },
         },
         {
             underscored: true,
@@ -15,11 +15,11 @@ module.exports = (sequelize, types) => {
                 associate(models) {
                     Category.belongsToMany(models.Expense, {
                         through: 'category_expense',
-                        timestamps: false
+                        timestamps: false,
                     });
-                }
-            }
-        }
+                },
+            },
+        },
     );
 
     return Category;

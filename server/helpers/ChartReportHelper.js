@@ -4,12 +4,12 @@ module.exports = {
     // eslint-disable-next-line max-params
     addToTimeMap(timeMap, dataKey, record, sum, timeFormat) {
         const timeDisplay = moment(record.created_at).format(
-            timeFormat.display
+            timeFormat.display,
         );
         const timeValue = moment(record.created_at).format(timeFormat.value);
 
         if (timeMap[timeValue] == null) {
-            timeMap[timeValue] = {time: timeDisplay, sortField: timeValue};
+            timeMap[timeValue] = { time: timeDisplay, sortField: timeValue };
         }
 
         if (timeMap[timeValue][dataKey] == null) {
@@ -40,7 +40,7 @@ module.exports = {
 
         return {
             display: timeDisplayFormat,
-            value: timeValueFormat
+            value: timeValueFormat,
         };
     },
 
@@ -62,5 +62,5 @@ module.exports = {
         }
 
         return true;
-    }
+    },
 };

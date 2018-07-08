@@ -1,0 +1,55 @@
+.main {
+  background: #fff;
+  font-size: 14px;
+  border: 0 !important;
+
+  &.hideHeader :global(.rt-thead) {
+    display: none;
+  }
+}
+
+.footer {
+  background: white;
+  padding: 5px 20px;
+  font-size: 14px;
+  border-top: 1px solid rgb(244, 244, 244);
+  box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.15);
+  position: absolute;
+  width: 100%;
+}
+
+.main :global(.rt-thead .rt-th) {
+  padding: 10px 5px !important;
+}
+
+.main :global(.rt-td) {
+  line-height: 20px;
+  padding-bottom: 2px;
+}
+
+.main :global(.rt-tr:hover) {
+  background: rgb(234, 239, 244);
+}
+
+.main .todayRow {
+  font-weight: 400;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.main .futureRow {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.main .evenRow .dateColumn {
+  background: rgba(173, 216, 230, 0.75);
+}
+
+.main .oddRow .dateColumn {
+  background: rgba(240, 128, 128, 0.75);
+  color: white;
+}
+
+.main .selectedRow,
+.main .selectedRow:hover {
+  background: rgb(244, 228, 179);
+}

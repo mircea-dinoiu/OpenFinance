@@ -1,45 +1,82 @@
 // @flow
-import React, {PureComponent} from 'react';
-import {Col} from 'react-grid-system';
-import {stringify} from 'query-string';
+import React, { PureComponent } from 'react';
+import { Col } from 'react-grid-system';
+import { stringify } from 'query-string';
 import moment from 'moment';
 import Immutable from 'immutable';
 
-import {BigLoader, ButtonProgress} from '../../components/loaders';
+import { BigLoader, ButtonProgress } from '../../components/loaders';
 
-import fetch, {fetchJSON} from 'common/utils/fetch';
-import {CalendarWithoutTime} from 'common/defs/formats';
+import fetch, { fetchJSON } from 'common/utils/fetch';
 
-import {List} from 'material-ui/List';
-import {
-    RaisedButton,
-    Subheader,
-    Divider,
-    Table,
-    TableBody,
-    TableHeader
-} from 'material-ui';
-import {connect} from 'react-redux';
-import {greyedOut} from 'common/defs/styles';
-import {scrollIsAt} from 'common/utils/scroll';
+import { RaisedButton } from 'material-ui';
+import { connect } from 'react-redux';
+import { greyedOut } from 'common/defs/styles';
+import { scrollIsAt } from 'common/utils/scroll';
+import BaseTable from 'common/components/BaseTable';
+import cssTable from 'common/components/BaseTable/index.pcss';
+import { getTrProps } from 'common/components/MainScreen/Table/helpers';
+import MainScreenListGroup from 'mobile/ui/internal/common/MainScreenListGroup';
+import { convertCurrencyToDefault } from '../../../../common/helpers/currency';
+import { numericValue } from '../../formatters';
+import { Sizes } from 'common/defs';
+import AnchoredContextMenu from 'common/components/MainScreen/ContextMenu/AnchoredContextMenu';
+import MainScreenDeleteDialog from './MainScreenDeleteDialog';
+import MainScreenEditDialog from './MainScreenEditDialog';
 
 const PAGE_SIZE = 50;
 
-class MainScreenList extends PureComponent {
-    props: {
-        api: {
-            destroy: string,
-            list: string
-        },
-        listItemComponent: any
-    };
+type TypeProps = {
+    api: {
+        destroy: string,
+        list: string,
+    },
+    preferences: TypePreferences,
+    entityName: string,
+    nameProperty: string,
+    screen: TypeScreenQueries,
+    editDialogProps: {
+        // todo consider having stronger types here
+        modelToForm: Function,
+        formToModel: Function,
+        formComponent: React$PureComponent<any>,
+    },
+    tableColumns: Array<{}>,
+    contentComponent: React$PureComponent<any>,
+    currencies: TypeCurrencies,
+    newRecord: {
+        id: number,
+        repeat: string,
+    },
+    refreshWidgets: string,
+};
 
+type TypeState = {
+    firstLoad: boolean,
+    page: number,
+    results: Immutable.List,
+    loadingMore: boolean,
+    refreshing: boolean,
+    selectedIds: number[],
+
+    editDialogOpen: boolean,
+    deleteDialogOpen: boolean,
+};
+
+class MainScreenList extends PureComponent<TypeProps, TypeState> {
     state = {
         firstLoad: true,
         page: 1,
         results: Immutable.List(),
         loadingMore: false,
-        refreshing: false
+        refreshing: false,
+        selectedIds: [],
+        contextMenuDisplay: false,
+        contextMenuTop: 0,
+        contextMenuLeft: 0,
+
+        editDialogOpen: false,
+        deleteDialogOpen: false,
     };
 
     componentDidMount() {
@@ -47,7 +84,11 @@ class MainScreenList extends PureComponent {
     }
 
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({newRecord, endDate, refreshWidgets}) {
+    UNSAFE_componentWillReceiveProps({
+        newRecord,
+        preferences,
+        refreshWidgets,
+    }) {
         if (
             newRecord &&
             this.state.results.filter((each) => each.get('id') == newRecord.id)
@@ -58,8 +99,8 @@ class MainScreenList extends PureComponent {
             } else {
                 this.setState({
                     results: this.state.results.concat(
-                        Immutable.fromJS([newRecord])
-                    )
+                        Immutable.fromJS([newRecord]),
+                    ),
                 });
             }
         }
@@ -68,22 +109,48 @@ class MainScreenList extends PureComponent {
             this.refresh();
         }
 
-        if (endDate !== this.props.endDate) {
-            this.refresh({endDate});
+        const { endDate } = preferences;
+
+        if (endDate !== this.props.preferences.endDate) {
+            this.refresh({ endDate });
         }
     }
+
+    handleOpenDeleteDialog = () => this.setState({ deleteDialogOpen: true });
+    handleCloseDeleteDialog = () => this.setState({ deleteDialogOpen: false });
+
+    handleOpenEditDialog = () => this.setState({ editDialogOpen: true });
+    handleCloseEditDialog = () => this.setState({ editDialogOpen: false });
+
+    handleDelete = async () => {
+        this.handleCloseDeleteDialog();
+
+        await fetchJSON(this.props.api.destroy, {
+            method: 'POST',
+            body: {
+                data: this.selectedItems.map((each) => ({ id: each.get('id') })),
+            },
+        });
+
+        this.refresh();
+    };
+
+    handleUpdate = () => {
+        this.handleCloseEditDialog();
+        this.refresh();
+    };
 
     loadMore = async ({
         page = this.state.page,
         results = this.state.results,
-        endDate = this.props.endDate
+        endDate = this.props.preferences.endDate,
     } = {}) => {
         if (this.state.loadingMore === true) {
             return;
         }
 
         this.setState({
-            loadingMore: true
+            loadingMore: true,
         });
 
         const response = await fetch(
@@ -91,7 +158,7 @@ class MainScreenList extends PureComponent {
                 end_date: endDate,
                 page,
                 limit: PAGE_SIZE,
-            })}`
+            })}`,
         );
         const json = await response.json();
 
@@ -99,7 +166,7 @@ class MainScreenList extends PureComponent {
             page: page + 1,
             results: results.concat(Immutable.fromJS(json)),
             firstLoad: false,
-            loadingMore: false
+            loadingMore: false,
         });
     };
 
@@ -114,98 +181,184 @@ class MainScreenList extends PureComponent {
 
         return results
             .groupBy((each) =>
-                moment(each.get('created_at')).format('YYYY-MM-DD')
+                moment(each.get('created_at')).format('YYYY-MM-DD'),
             )
             .entrySeq();
     }
 
-    handleUpdate = () => {
-        this.refresh();
-    };
-
-    handleDelete = async (id) => {
-        await fetchJSON(this.props.api.destroy, {
-            method: 'POST',
-            body: {
-                data: [{id}]
-            }
-        });
-
-        // Keep the nice deleted message a bit more
-        setTimeout(() => {
-            this.refresh();
-        }, 500);
-    };
-
-    refresh = async ({endDate = this.props.endDate} = {}) => {
+    refresh = async ({ endDate = this.props.preferences.endDate } = {}) => {
         this.setState({
-            refreshing: true
+            refreshing: true,
         });
 
         await this.loadMore({
             page: 1,
             results: Immutable.List(),
-            endDate
+            endDate,
         });
 
         this.setState({
-            refreshing: false
+            refreshing: false,
         });
     };
-
-    renderItem(item) {
-        const ListItem = this.props.listItemComponent;
-
-        return (
-            <ListItem
-                key={item.get('id')}
-                item={item.toJS()}
-                onDelete={this.handleDelete}
-                onUpdate={this.handleUpdate}
-                api={this.props.api}
-            />
-        );
-    }
 
     onTableScroll = (event) => {
         const element = event.target;
 
-        if (scrollIsAt(element, 80)) {
+        if (scrollIsAt(element, 90)) {
             this.loadMore();
         }
     };
 
-    renderResults() {
+    getCommonProps() {
+        return {
+            api: this.props.api,
+            entityName: this.props.entityName,
+            nameProperty: this.props.nameProperty,
+            editDialogProps: this.props.editDialogProps,
+        };
+    }
+
+    handleReceivedSelectedIds = (selectedIds) => this.setState({ selectedIds });
+    handleChangeContextMenu = ({
+        display,
+        top = 0,
+        left = 0,
+    }: {
+        display: boolean,
+        top?: number,
+        left?: number,
+    }) =>
+        this.setState({
+            contextMenuDisplay: display,
+            contextMenuTop: top,
+            contextMenuLeft: left,
+        });
+
+    getTrProps = (state, item) =>
+        getTrProps({
+            selectedIds: this.state.selectedIds,
+            onEdit: this.handleOpenEditDialog,
+            onReceiveSelectedIds: this.handleReceivedSelectedIds,
+            onChangeContextMenu: this.handleChangeContextMenu,
+            item: item.original,
+        });
+
+    get selectedItems() {
+        return this.state.results.filter((each) =>
+            this.state.selectedIds.includes(each.get('id')),
+        );
+    }
+
+    computeSelectedAmount() {
+        return this.selectedItems.reduce((acc, each) => {
+            const sum = convertCurrencyToDefault(
+                each.get('sum'),
+                each.get('currency_id'),
+                this.props.currencies,
+            );
+
+            return acc + sum;
+        }, 0);
+    }
+
+    renderTableFooter() {
+        const divider = ', ';
+
+        return (
+            <div className={cssTable.footer}>
+                <strong>Loaded:</strong> {this.state.results.size}
+                {divider}
+                <strong>Selected:</strong> {this.state.selectedIds.length}
+                {divider}
+                <strong>Selected amount:</strong>{' '}
+                {numericValue(this.computeSelectedAmount())}
+            </div>
+        );
+    }
+
+    handleCloseContextMenu = () =>
+        this.handleChangeContextMenu({ display: false });
+
+    getContextMenuItemsProps() {
+        return {
+            selectedIds: this.state.selectedIds,
+            onClickEdit: this.handleOpenEditDialog,
+            onClickDelete: this.handleOpenDeleteDialog,
+            onCloseContextMenu: this.handleCloseContextMenu,
+        };
+    }
+
+    renderContent() {
+        const commonProps = this.getCommonProps();
+
         if (this.props.screen.isLarge) {
-            const Header = this.props.headerComponent;
+            const results = this.getSortedResults().toJS();
 
             return (
                 <div onScroll={this.onTableScroll}>
-                    <Table height="calc(100vh - 180px)">
-                        <TableHeader>
-                            <Header />
-                        </TableHeader>
-                        <TableBody>
-                            {this.getSortedResults().map((item) =>
-                                this.renderItem(item)
-                            )}
-                        </TableBody>
-                    </Table>
+                    <BaseTable
+                        style={{
+                            height: `calc(100vh - (75px + ${
+                                Sizes.HEADER_SIZE
+                            }))`,
+                        }}
+                        loading={this.state.loadingMore}
+                        data={results}
+                        columns={this.props.tableColumns}
+                        getTrProps={this.getTrProps}
+                    />
+                    {this.renderTableFooter()}
+                    {this.state.contextMenuDisplay && (
+                        <AnchoredContextMenu
+                            left={this.state.contextMenuLeft}
+                            top={this.state.contextMenuTop}
+                            itemsProps={this.getContextMenuItemsProps()}
+                        />
+                    )}
                 </div>
             );
         }
 
         return this.getGroupedResults().map(([date, items]) => (
-            <div key={date}>
-                <List>
-                    <Subheader style={{textAlign: 'center'}}>
-                        {moment(date).calendar(null, CalendarWithoutTime)}
-                    </Subheader>
-                    {items.map((item) => this.renderItem(item)).toArray()}
-                </List>
-                <Divider />
-            </div>
+            <MainScreenListGroup
+                key={date}
+                date={date}
+                items={items}
+                itemProps={{
+                    ...commonProps,
+                    contentComponent: this.props.contentComponent,
+                    contextMenuItemsProps: this.getContextMenuItemsProps(),
+                    onReceiveSelectedIds: this.handleReceivedSelectedIds,
+                }}
+            />
         ));
+    }
+
+    renderDialogs() {
+        return (
+            <React.Fragment>
+                <MainScreenDeleteDialog
+                    open={this.state.deleteDialogOpen}
+                    onYes={this.handleDelete}
+                    onNo={this.handleCloseDeleteDialog}
+                    entityName={this.props.entityName}
+                    count={this.state.selectedIds.length}
+                />
+                {this.selectedItems.size > 0 && (
+                    <MainScreenEditDialog
+                        key={this.selectedItems.toJS()[0].id}
+                        open={this.state.editDialogOpen}
+                        item={this.selectedItems.toJS()[0]}
+                        onCancel={this.handleCloseEditDialog}
+                        onSave={this.handleUpdate}
+                        entityName={this.props.entityName}
+                        api={this.props.api}
+                        {...this.props.editDialogProps}
+                    />
+                )}
+            </React.Fragment>
+        );
     }
 
     render() {
@@ -213,15 +366,23 @@ class MainScreenList extends PureComponent {
             return <BigLoader />;
         }
 
+        const { screen } = this.props;
+        const { loadingMore } = this.state;
+
         return (
             <div>
-                <div style={this.state.refreshing ? greyedOut : {}}>
-                    {this.renderResults()}
-                    {this.props.screen.isLarge ? null : (
+                <div
+                    style={{
+                        ...(this.state.refreshing ? greyedOut : {}),
+                        backgroundColor: screen.isLarge ? undefined : 'white',
+                    }}
+                >
+                    {this.renderContent()}
+                    {screen.isLarge ? null : (
                         <Col>
                             <RaisedButton
                                 label={
-                                    this.state.loadingMore ? (
+                                    loadingMore ? (
                                         <ButtonProgress />
                                     ) : (
                                         'Load More'
@@ -229,19 +390,33 @@ class MainScreenList extends PureComponent {
                                 }
                                 fullWidth={true}
                                 onTouchTap={this.loadMore}
-                                style={{margin: '20px 0 40px'}}
-                                disabled={this.state.loadingMore}
+                                style={{ margin: '20px 0 60px' }}
+                                disabled={loadingMore}
                             />
                         </Col>
                     )}
+                    {this.renderDialogs()}
                 </div>
             </div>
         );
     }
 }
 
-export default connect(({endDate, screen, refreshWidgets}) => ({
-    endDate,
-    screen,
-    refreshWidgets
-}))(MainScreenList);
+export default connect(
+    ({
+        preferences,
+        screen,
+        refreshWidgets,
+        currencies,
+    }): {
+        preferences: TypePreferences,
+        screen: TypeScreenQueries,
+        refreshWidgets: string,
+        currencies: TypeCurrencies,
+    } => ({
+        preferences,
+        screen,
+        refreshWidgets,
+        currencies,
+    }),
+)(MainScreenList);

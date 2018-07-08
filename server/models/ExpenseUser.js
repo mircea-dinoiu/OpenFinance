@@ -5,7 +5,7 @@ module.exports = (sequelize, types) => {
             user_id: types.INTEGER,
             expense_id: types.INTEGER,
             blame: types.INTEGER,
-            seen: types.INTEGER
+            seen: types.INTEGER,
         },
         {
             timestamps: false,
@@ -14,14 +14,14 @@ module.exports = (sequelize, types) => {
             classMethods: {
                 associate(models) {
                     ExpenseUser.hasMany(models.Expense, {
-                        foreignKey: 'id'
+                        foreignKey: 'id',
                     });
                     ExpenseUser.hasMany(models.User, {
-                        foreignKey: 'id'
+                        foreignKey: 'id',
                     });
-                }
-            }
-        }
+                },
+            },
+        },
     );
 
     return ExpenseUser;

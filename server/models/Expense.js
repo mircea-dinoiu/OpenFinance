@@ -1,4 +1,4 @@
-const {standardDate} = require('../helpers');
+const { standardDate } = require('../helpers');
 
 module.exports = (sequelize, types) => {
     const Expense = sequelize.define(
@@ -8,13 +8,13 @@ module.exports = (sequelize, types) => {
             id: {
                 type: types.INTEGER,
                 primaryKey: true,
-                autoIncrement: true
+                autoIncrement: true,
             },
             item: types.STRING,
             money_location_id: types.INTEGER,
             repeat: types.STRING,
             status: types.STRING,
-            sum: types.FLOAT
+            sum: types.FLOAT,
         },
         {
             underscored: true,
@@ -22,11 +22,11 @@ module.exports = (sequelize, types) => {
                 associate(models) {
                     Expense.belongsToMany(models.User, {
                         through: models.ExpenseUser,
-                        timestamps: false
+                        timestamps: false,
                     });
                     Expense.belongsToMany(models.Category, {
                         through: 'category_expense',
-                        timestamps: false
+                        timestamps: false,
                     });
 
                     Expense.addScope('default', {
@@ -34,19 +34,19 @@ module.exports = (sequelize, types) => {
                             ['GROUP_CONCAT(DISTINCT `users`.`id`)', 'userIds'],
                             [
                                 'GROUP_CONCAT(DISTINCT `categories`.`id`)',
-                                'categoryIds'
-                            ]
+                                'categoryIds',
+                            ],
                         ]),
                         include: [
                             {
                                 model: models.User,
-                                where: ['`users.expense_user`.`blame` = 1']
+                                where: ['`users.expense_user`.`blame` = 1'],
                             },
-                            {model: models.Category, attributes: []}
+                            { model: models.Category, attributes: [] },
                         ],
-                        group: ['id']
+                        group: ['id'],
                     });
-                }
+                },
             },
             instanceMethods: {
                 toJSON() {
@@ -75,9 +75,9 @@ module.exports = (sequelize, types) => {
                     values.updated_at = standardDate(values.updated_at);
 
                     return values;
-                }
-            }
-        }
+                },
+            },
+        },
     );
 
     return Expense;

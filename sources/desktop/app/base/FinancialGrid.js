@@ -33,6 +33,7 @@ Ext.define('Financial.base.FinancialGrid', {
 
     getContextMenuItems: function () {
         return [
+            // @ported
             {
                 text: 'Detach',
                 iconCls: 'x-fa fa-unlink',
@@ -42,11 +43,13 @@ Ext.define('Financial.base.FinancialGrid', {
             {
                 xtype: 'menuseparator'
             },
+            // @ported
             {
                 text: 'Mark as reviewed',
                 iconCls: 'x-fa fa-lock',
                 handler: this.getController().onMarkSelectionAsFinishedClick.bind(this.getController())
             },
+            // @ported
             {
                 text: 'Mark as needs review',
                 iconCls: 'x-fa fa-unlock',
@@ -55,11 +58,13 @@ Ext.define('Financial.base.FinancialGrid', {
             {
                 xtype: 'menuseparator'
             },
+            // @ported
             {
                 text: 'Delete',
                 iconCls: 'x-fa fa-minus-circle',
                 handler: this.getController().onDeleteSelectedRecordsClick.bind(this.getController())
             },
+            // @ported
             {
                 text: 'Duplicate',
                 iconCls: 'x-fa fa-files-o',

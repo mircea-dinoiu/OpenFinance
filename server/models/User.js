@@ -1,5 +1,5 @@
 const md5 = require('md5');
-const {pick} = require('lodash');
+const { pick } = require('lodash');
 
 module.exports = (sequelize, types) =>
     sequelize.define(
@@ -7,29 +7,29 @@ module.exports = (sequelize, types) =>
         {
             id: {
                 type: types.INTEGER,
-                primaryKey: true
+                primaryKey: true,
             },
             email: types.STRING,
             password: types.STRING,
             first_name: types.STRING,
             last_name: types.STRING,
-            remember_token: types.STRING
+            remember_token: types.STRING,
         },
         {
             underscored: true,
             getterMethods: {
                 full_name() {
                     return `${this.getDataValue(
-                        'first_name'
+                        'first_name',
                     )} ${this.getDataValue('last_name')}`;
                 },
                 avatar() {
                     return `https://www.gravatar.com/avatar/${md5(
                         this.getDataValue('email')
                             .trim()
-                            .toLowerCase()
+                            .toLowerCase(),
                     )}`;
-                }
+                },
             },
             instanceMethods: {
                 toJSON() {
@@ -38,10 +38,10 @@ module.exports = (sequelize, types) =>
                         pick(this.dataValues, 'id', 'first_name', 'last_name'),
                         {
                             full_name: this.full_name,
-                            avatar: this.avatar
-                        }
+                            avatar: this.avatar,
+                        },
                     );
-                }
-            }
-        }
+                },
+            },
+        },
     );

@@ -3,13 +3,13 @@ const {
     User,
     Currency,
     MoneyLocation,
-    Category
+    Category,
 } = require('../models');
 const BaseController = require('./BaseController');
 const CurrencyController = require('./CurrencyController');
 const Service = require('../services/ExpenseService');
-const {pickOwnProperties, standardDate} = require('../helpers');
-const {sql} = require('../models');
+const { pickOwnProperties, standardDate } = require('../helpers');
+const { sql } = require('../models');
 
 module.exports = BaseController.extend({
     Model,
@@ -38,7 +38,7 @@ module.exports = BaseController.extend({
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
         users: ['sometimes', 'isRequired', ['isIdArray', User]],
-        categories: ['sometimes', ['isIdArray', Category]]
+        categories: ['sometimes', ['isIdArray', Category]],
     },
 
     createValidationRules: {
@@ -49,24 +49,24 @@ module.exports = BaseController.extend({
         created_at: ['sometimes', 'isRequired', 'isInt'],
         currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
-        categories: ['sometimes', ['isIdArray', Category]]
+        categories: ['sometimes', ['isIdArray', Category]],
     },
 
-    async updateRelations({record, model}) {
+    async updateRelations({ record, model }) {
         if (record.hasOwnProperty('categories')) {
             await sql.query(
                 'DELETE FROM category_expense WHERE expense_id = ?',
                 {
-                    replacements: [model.id]
-                }
+                    replacements: [model.id],
+                },
             );
 
             for (const id of record.categories) {
                 await sql.query(
                     'INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)',
                     {
-                        replacements: [id, model.id]
-                    }
+                        replacements: [id, model.id],
+                    },
                 );
             }
         }
@@ -81,24 +81,24 @@ module.exports = BaseController.extend({
                         replacements: [
                             record.users.includes(user.id),
                             model.id,
-                            user.id
-                        ]
-                    }
+                            user.id,
+                        ],
+                    },
                 );
             }
         }
 
-        return this.Model.scope('default').findOne({where: {id: model.id}});
+        return this.Model.scope('default').findOne({ where: { id: model.id } });
     },
 
-    async createRelations({record, model, req}) {
+    async createRelations({ record, model, req }) {
         if (record.hasOwnProperty('categories')) {
             for (const id of record.categories) {
                 await sql.query(
                     'INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)',
                     {
-                        replacements: [id, model.id]
-                    }
+                        replacements: [id, model.id],
+                    },
                 );
             }
         }
@@ -113,20 +113,20 @@ module.exports = BaseController.extend({
                         user.id,
                         model.id,
                         record.users.includes(user.id),
-                        user.id === req.user.id
-                    ]
-                }
+                        user.id === req.user.id,
+                    ],
+                },
             );
         }
 
-        return this.Model.scope('default').findOne({where: {id: model.id}});
+        return this.Model.scope('default').findOne({ where: { id: model.id } });
     },
 
     async sanitizeCreateValues(record) {
         const values = pickOwnProperties(record, [
             'sum',
             'repeat',
-            'money_location_id'
+            'money_location_id',
         ]);
 
         values.status = 'pending';
@@ -154,7 +154,7 @@ module.exports = BaseController.extend({
         const workingRecord = Object.assign({}, record);
         const values = pickOwnProperties(workingRecord, [
             'sum',
-            'money_location_id'
+            'money_location_id',
         ]);
 
         if (workingRecord.hasOwnProperty('item')) {
@@ -186,5 +186,5 @@ module.exports = BaseController.extend({
         }
 
         return values;
-    }
+    },
 });

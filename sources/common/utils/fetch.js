@@ -1,25 +1,25 @@
 // @flow
 import 'whatwg-fetch';
-import deepExtend from 'deep-extend';
+import merge from 'lodash/merge';
 import config from './config';
 
 const globalNamespace = typeof self === 'undefined' ? this : self;
 const parseOpts = (opts) =>
-    deepExtend(
+    merge(
         {
             headers: {
                 'X-CSRF-Token': config.csrfToken,
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
             },
-            credentials: 'same-origin'
+            credentials: 'same-origin',
         },
-        opts
+        opts,
     );
 
 export const fetch = async (
     url: string,
     opts: {} = {},
-    callback: ?Function = null
+    callback: ?Function = null,
 ) => {
     const parsedOpts = parseOpts(opts);
 
@@ -37,7 +37,7 @@ export const fetch = async (
 export const fetchJSON = async (
     url: string,
     opts: {} = {},
-    callback: ?Function = null
+    callback: ?Function = null,
 ) => {
     const parsedOpts = parseOpts(opts);
 

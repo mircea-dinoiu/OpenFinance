@@ -8,5 +8,5 @@ module.exports = {
     '/money-location': require('./money-location'),
     '/money-location-type': require('./money-location-type'),
     '/report': require('./report'),
-    '/suggestion': require('./suggestion')
+    '/suggestion': require('./suggestion'),
 };

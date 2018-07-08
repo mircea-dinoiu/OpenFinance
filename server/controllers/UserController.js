@@ -1,10 +1,10 @@
-const {User} = require('../models');
+const { User } = require('../models');
 
 module.exports = {
     async getList(req, res) {
         res.json({
             current: req.user,
-            list: await User.findAll()
+            list: await User.findAll(),
         });
-    }
+    },
 };

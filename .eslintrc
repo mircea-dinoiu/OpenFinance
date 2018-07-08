@@ -16,6 +16,10 @@
   ],
   "parser": "babel-eslint",
   "rules": {
+    // off
+    "no-confusing-arrow": "off",
+    // warn
+    // error
     "jsx-quotes": "error",
     "flowtype/type-id-match": [
       2,
@@ -61,7 +65,6 @@
     "no-array-constructor": "error",
     "no-bitwise": "error",
     "no-caller": "error",
-    "no-confusing-arrow": "warn",
     "no-continue": "warn",
     "no-div-regex": "error",
     "no-duplicate-imports": "error",
@@ -113,7 +116,7 @@
     "no-var": "error",
     "no-warning-comments": "warn",
     "no-whitespace-before-property": "error",
-    "object-curly-spacing": "error",
+    "object-curly-spacing": ["error", "always"],
     "object-property-newline": [2, {"allowMultiplePropertiesPerLine": true}],
     "object-shorthand": "error",
     "one-var-declaration-per-line": "error",
@@ -138,7 +141,8 @@
     "wrap-iife": "error",
     "react/prop-types": "warn",
     "no-console": "off",
-    "one-var": ["error", "never"]
+    "one-var": ["error", "never"],
+    "react/display-name": "warn"
   },
   "settings": {
     "flowtype": {

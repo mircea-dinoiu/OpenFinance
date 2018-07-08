@@ -25,5 +25,5 @@ ALTER TABLE incomes
       Example:
       return queryInterface.dropTable('users');
     */
-    }
+    },
 };

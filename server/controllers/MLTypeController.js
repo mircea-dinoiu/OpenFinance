@@ -1,4 +1,4 @@
-const {MLType: Model} = require('../models');
+const { MLType: Model } = require('../models');
 const BaseController = require('./BaseController');
 
 module.exports = BaseController.extend({
@@ -6,11 +6,11 @@ module.exports = BaseController.extend({
 
     updateValidationRules: {
         id: ['isRequired', ['isId', Model]],
-        name: ['sometimes', 'isRequired', 'isString']
+        name: ['sometimes', 'isRequired', 'isString'],
     },
 
     createValidationRules: {
-        name: ['isRequired', 'isString']
+        name: ['isRequired', 'isString'],
     },
 
     sanitizeUpdateValues(record) {
@@ -25,7 +25,7 @@ module.exports = BaseController.extend({
 
     sanitizeCreateValues(record) {
         return {
-            name: record.name.trim()
+            name: record.name.trim(),
         };
-    }
+    },
 });

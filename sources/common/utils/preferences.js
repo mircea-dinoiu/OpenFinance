@@ -1,9 +1,25 @@
-export const PREFERENCE_INCLUDE_RESULTS = 'PREFERENCE_INCLUDE_RESULTS';
-export const PREFERENCE_END_DATE = 'PREFERENCE_END_DATE';
+// @flow
+import { getInitialEndDate } from 'common/utils/dates';
 
-export const getPreference = (key, defaultValue = null) =>
-    localStorage.getItem(key) || defaultValue;
+export const FINANCIAL_PREFERENCES = 'FINANCIAL_PREFERENCES';
 
-export const setPreference = (key, value) => {
-    localStorage.setItem(key, String(value));
+export const readPreferences = () =>
+    JSON.parse(localStorage.getItem(FINANCIAL_PREFERENCES) || '{}');
+
+export const savePreferences = (value) => {
+    localStorage.setItem(FINANCIAL_PREFERENCES, JSON.stringify(value));
+};
+
+export const parsePreferences = (
+    state,
+): {
+    endDateIncrement: string,
+    include: string,
+    endDate: string,
+} => {
+    const endDateIncrement = state.endDateIncrement || '2w';
+    const include = state.include || 'all';
+    const endDate = state.endDate || getInitialEndDate();
+
+    return { endDateIncrement, include, endDate };
 };

@@ -7,6 +7,6 @@ export default function (data) {
         userId: data.user.getIn(['current', 'id']),
         repeat: null,
         date: new Date(),
-        time: new Date()
+        time: new Date(),
     };
 }

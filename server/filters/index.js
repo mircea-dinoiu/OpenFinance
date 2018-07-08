@@ -15,5 +15,5 @@ module.exports = {
             res.status(401);
             res.json('You are already logged in.');
         }
-    }
+    },
 };

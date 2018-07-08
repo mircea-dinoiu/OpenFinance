@@ -1,8 +1,8 @@
 const CurrencyHelper = require('..//helpers/CurrencyHelper');
 const config = require('config');
-const {basePath, logError} = require('../helpers');
+const { basePath, logError } = require('../helpers');
 const fs = require('fs');
-const {Currency, Setting} = require('../models');
+const { Currency, Setting } = require('../models');
 const http = require('http');
 
 module.exports = {
@@ -77,7 +77,7 @@ module.exports = {
             const options = {
                 host: 'www.bnr.ro',
                 port: 80,
-                path: '/nbrfxrates.xml'
+                path: '/nbrfxrates.xml',
             };
             const req = http.get(options, (res) => {
                 let chunks = [];
@@ -92,7 +92,7 @@ module.exports = {
                     xml2js.parseString(chunks, (err, xml) => {
                         const rates = CurrencyHelper.xmlToRates(xml, {
                             allowedISOCodes,
-                            defaultCurrencyISOCode
+                            defaultCurrencyISOCode,
                         });
 
                         resolve(rates);
@@ -111,15 +111,15 @@ module.exports = {
         if (this.defaultCurrency == null) {
             const dcInstance = await Setting.findOne({
                 where: {
-                    key: 'default_currency'
-                }
+                    key: 'default_currency',
+                },
             });
             const dcISOCode = dcInstance.value;
 
             this.defaultCurrency = await Currency.findOne({
                 where: {
-                    iso_code: dcISOCode
-                }
+                    iso_code: dcISOCode,
+                },
             });
         }
 
@@ -139,7 +139,7 @@ module.exports = {
 
         const [rates, defaultCurrency] = await Promise.all([
             this.fetchRates(allowedISOCodes),
-            this.getDefaultCurrency()
+            this.getDefaultCurrency(),
         ]);
 
         if (rates == null) {
@@ -148,11 +148,11 @@ module.exports = {
             return;
         }
 
-        CurrencyHelper.appendRatesToCurrencies(map, {rates});
+        CurrencyHelper.appendRatesToCurrencies(map, { rates });
 
         this.data = {
             map,
-            default: defaultCurrency.id
+            default: defaultCurrency.id,
         };
     },
 
@@ -161,12 +161,12 @@ module.exports = {
             fs.writeFile(
                 this.cacheFilePath,
                 JSON.stringify(this.data),
-                resolve
+                resolve,
             );
         });
     },
 
-    async setupData({update = false} = {}) {
+    async setupData({ update = false } = {}) {
         let fromCache = false;
 
         if (update !== true) {
@@ -195,8 +195,8 @@ module.exports = {
     async getList(req, res) {
         const update = req.query.update === 'true';
 
-        await this.setupData({update});
+        await this.setupData({ update });
 
         res.json(this.data);
-    }
+    },
 };

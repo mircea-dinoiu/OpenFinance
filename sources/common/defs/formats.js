@@ -4,5 +4,5 @@ export const CalendarWithoutTime = {
     nextDay: '[Tomorrow]',
     lastWeek: '[last] dddd',
     nextWeek: 'dddd',
-    sameElse: 'YYYY-MM-DD'
+    sameElse: 'YYYY-MM-DD',
 };

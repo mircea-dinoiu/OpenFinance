@@ -1,16 +1,15 @@
 // @flow
 import moment from 'moment';
-import {getPreference, PREFERENCE_END_DATE} from 'common/utils/preferences';
 
 export const formatYMD = (date: Date = new Date()): string =>
     moment(date).format('YYYY-MM-DD');
 
 export const getStartDate = ({
     endDate,
-    include
+    include,
 }: {
     endDate: string,
-    include: string
+    include: string,
 }): string => {
     let date = moment(endDate).toDate();
 
@@ -39,13 +38,36 @@ export const getStartDate = ({
     return date ? formatYMD(date) : '';
 };
 
+const getMomentArgsForDateShift = (option) => {
+    switch (option) {
+        case 'd':
+            return [1, 'day'];
+        case 'w':
+            return [1, 'week'];
+        case '2w':
+            return [2, 'week'];
+        case 'm':
+            return [1, 'month'];
+    }
+
+    throw new Error(`${option} is not specified in ShiftDateOptions`);
+};
+
+export const shiftDateForward = (date, by) =>
+    moment(date)
+        .add(...getMomentArgsForDateShift(by))
+        .toDate();
+
+export const shiftDateBack = (date, by) =>
+    moment(date)
+        .subtract(...getMomentArgsForDateShift(by))
+        .toDate();
+
 export const getInitialEndDate = (): string => {
     const date = new Date();
 
     date.setDate(1);
     date.setMonth(date.getMonth() + 1);
 
-    const defaultDate = formatYMD(date);
-
-    return getPreference(PREFERENCE_END_DATE, defaultDate);
+    return formatYMD(date);
 };

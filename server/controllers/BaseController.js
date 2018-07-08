@@ -1,6 +1,6 @@
-const {isPlainObject} = require('lodash');
+const { isPlainObject } = require('lodash');
 const Messages = require('../Messages');
-const {Validator} = require('../validators');
+const { Validator } = require('../validators');
 const chalk = require('chalk');
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
     },
 
     async postUpdate(req, res) {
-        const {data} = req.body;
+        const { data } = req.body;
         const rules = this.updateValidationRules;
 
         if (Array.isArray(data)) {
@@ -38,7 +38,7 @@ module.exports = {
 
                 for (const record of validRecords) {
                     let model = await this.Model.findOne({
-                        where: {id: record.id}
+                        where: { id: record.id },
                     });
                     let values = this.sanitizeUpdateValues(record, model);
 
@@ -48,9 +48,9 @@ module.exports = {
 
                     console.log(
                         chalk.inverse(
-                            `Updating ${this.Model.name} #${record.id} with`
+                            `Updating ${this.Model.name} #${record.id} with`,
                         ),
-                        chalk.green(JSON.stringify(values, null, 2))
+                        chalk.green(JSON.stringify(values, null, 2)),
                     );
 
                     if (values.hasOwnProperty('created_at')) {
@@ -60,7 +60,7 @@ module.exports = {
                     await model.update(values);
 
                     if (this.updateRelations) {
-                        model = await this.updateRelations({record, model});
+                        model = await this.updateRelations({ record, model });
                     }
 
                     output.push(model.toJSON());
@@ -74,7 +74,7 @@ module.exports = {
     },
 
     async postCreate(req, res) {
-        const {data} = req.body;
+        const { data } = req.body;
         const rules = this.createValidationRules;
 
         if (Array.isArray(data)) {
@@ -110,9 +110,9 @@ module.exports = {
 
                     console.log(
                         chalk.inverse(
-                            `Updating ${this.Model.name} #${record.id} with`
+                            `Updating ${this.Model.name} #${record.id} with`,
                         ),
-                        chalk.green(JSON.stringify(values, null, 2))
+                        chalk.green(JSON.stringify(values, null, 2)),
                     );
 
                     let model = await this.Model.create(values);
@@ -121,7 +121,7 @@ module.exports = {
                         model = await this.createRelations({
                             record,
                             model,
-                            req
+                            req,
                         });
                     }
 
@@ -136,7 +136,7 @@ module.exports = {
     },
 
     async postDelete(req, res) {
-        const {data} = req.body;
+        const { data } = req.body;
 
         if (Array.isArray(data)) {
             const output = [];
@@ -144,7 +144,7 @@ module.exports = {
             for (const record of data) {
                 if (isPlainObject(record)) {
                     const model = await this.Model.findOne({
-                        where: {id: record.id}
+                        where: { id: record.id },
                     });
 
                     if (model) {
@@ -153,7 +153,7 @@ module.exports = {
                         await model.destroy();
                     } else {
                         output.push({
-                            id: Messages.ERROR_INVALID_ID
+                            id: Messages.ERROR_INVALID_ID,
                         });
                     }
                 } else {
@@ -169,7 +169,7 @@ module.exports = {
 
     async getList(req, res) {
         if (this.Service) {
-            const {error, json} = await this.Service.list(req.query);
+            const { error, json } = await this.Service.list(req.query);
 
             if (error) {
                 res.status(400);
@@ -183,5 +183,5 @@ module.exports = {
 
     extend(overrides) {
         return Object.assign({}, this, overrides);
-    }
+    },
 };
