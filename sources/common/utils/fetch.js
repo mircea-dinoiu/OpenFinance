@@ -1,11 +1,11 @@
 // @flow
 import 'whatwg-fetch';
-import deepExtend from 'deep-extend';
+import merge from 'lodash/merge';
 import config from './config';
 
 const globalNamespace = typeof self === 'undefined' ? this : self;
 const parseOpts = (opts) =>
-    deepExtend(
+    merge(
         {
             headers: {
                 'X-CSRF-Token': config.csrfToken,
