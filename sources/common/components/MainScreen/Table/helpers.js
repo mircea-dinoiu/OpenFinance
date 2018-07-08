@@ -1,7 +1,7 @@
 // @flow
 import { formatYMD } from 'common/utils/dates';
 import moment from 'moment';
-import cssTable from 'common/components/FinancialTable/index.pcss';
+import cssTable from 'common/components/BaseTable/index.pcss';
 
 export const getTrClassName = (item, { selectedIds }): string => {
     const classes = [];

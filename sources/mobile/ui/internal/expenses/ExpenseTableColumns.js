@@ -1,13 +1,13 @@
 // @flow
 import React from 'react';
-import DescriptionDisplay from 'common/components/FinancialTable/cells/DescriptionDisplay';
-import AmountColumn from 'common/components/FinancialTable/columns/AmountColumn';
-import DateTimeColumn from 'common/components/FinancialTable/columns/DateTimeColumn';
+import DescriptionDisplay from 'common/components/BaseTable/cells/DescriptionDisplay';
+import AmountColumn from 'common/components/BaseTable/columns/AmountColumn';
+import DateTimeColumn from 'common/components/BaseTable/columns/DateTimeColumn';
 import CategoriesDisplay from 'mobile/ui/internal/expenses/cells/CategoriesDisplay';
-import AccountColumn from 'common/components/FinancialTable/columns/AccountColumn';
+import AccountColumn from 'common/components/BaseTable/columns/AccountColumn';
 import PersonsDisplay from 'mobile/ui/internal/expenses/cells/PersonsDisplay';
-import CurrencyColumn from 'common/components/FinancialTable/columns/CurrencyColumn';
-import RepeatColumn from 'common/components/FinancialTable/columns/RepeatColumn';
+import CurrencyColumn from 'common/components/BaseTable/columns/CurrencyColumn';
+import RepeatColumn from 'common/components/BaseTable/columns/RepeatColumn';
 
 export default [
     CurrencyColumn,

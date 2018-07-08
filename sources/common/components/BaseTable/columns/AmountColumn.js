@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import AmountDisplay from 'common/components/FinancialTable/cells/AmountDisplay';
+import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
 
 const style = { textAlign: 'right' };
 

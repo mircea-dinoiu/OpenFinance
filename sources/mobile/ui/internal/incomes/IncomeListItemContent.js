@@ -4,10 +4,10 @@ import { Row, Col } from 'react-grid-system';
 
 import { Flags } from 'mobile/ui/internal/common/MainScreenFlags';
 import FromDisplay from 'mobile/ui/internal/incomes/cells/FromDisplay';
-import AmountDisplay from 'common/components/FinancialTable/cells/AmountDisplay';
-import RepeatsDisplay from 'common/components/FinancialTable/cells/RepeatsDisplay';
-import DateDisplay from 'common/components/FinancialTable/cells/DateDisplay';
-import MoneyLocationDisplay from 'common/components/FinancialTable/cells/MoneyLocationDisplay';
+import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
+import RepeatsDisplay from 'common/components/BaseTable/cells/RepeatsDisplay';
+import DateDisplay from 'common/components/BaseTable/cells/DateDisplay';
+import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
 
 type TypeProps = {};
 

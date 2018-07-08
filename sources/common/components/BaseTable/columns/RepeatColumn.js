@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import RepeatsDisplay from 'common/components/FinancialTable/cells/RepeatsDisplay';
+import RepeatsDisplay from 'common/components/BaseTable/cells/RepeatsDisplay';
 
 const style = { textAlign: 'center' };
 

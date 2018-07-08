@@ -3,11 +3,11 @@ import React from 'react';
 import { Row, Col } from 'react-grid-system';
 
 import { Flags } from 'mobile/ui/internal/common/MainScreenFlags';
-import MoneyLocationDisplay from 'common/components/FinancialTable/cells/MoneyLocationDisplay';
-import RepeatsDisplay from 'common/components/FinancialTable/cells/RepeatsDisplay';
-import DateDisplay from 'common/components/FinancialTable/cells/DateDisplay';
+import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
+import RepeatsDisplay from 'common/components/BaseTable/cells/RepeatsDisplay';
+import DateDisplay from 'common/components/BaseTable/cells/DateDisplay';
 import CategoriesDisplay from 'mobile/ui/internal/expenses/cells/CategoriesDisplay';
-import AmountDisplay from 'common/components/FinancialTable/cells/AmountDisplay';
+import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
 import PersonsDisplay from 'mobile/ui/internal/expenses/cells/PersonsDisplay';
 
 const ExpenseListItemContent = ({ item, expanded }) => {

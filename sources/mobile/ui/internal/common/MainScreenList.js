@@ -13,8 +13,8 @@ import { RaisedButton } from 'material-ui';
 import { connect } from 'react-redux';
 import { greyedOut } from 'common/defs/styles';
 import { scrollIsAt } from 'common/utils/scroll';
-import FinancialTable from 'common/components/FinancialTable';
-import cssTable from 'common/components/FinancialTable/index.pcss';
+import BaseTable from 'common/components/BaseTable';
+import cssTable from 'common/components/BaseTable/index.pcss';
 import { getTrProps } from 'common/components/MainScreen/Table/helpers';
 import MainScreenListGroup from 'mobile/ui/internal/common/MainScreenListGroup';
 import { convertCurrencyToDefault } from '../../../../common/helpers/currency';
@@ -245,9 +245,11 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
             return (
                 <div onScroll={this.onTableScroll}>
-                    <FinancialTable
+                    <BaseTable
                         style={{
-                            height: `calc(100vh - (75px + ${Sizes.HEADER_SIZE}))`,
+                            height: `calc(100vh - (75px + ${
+                                Sizes.HEADER_SIZE
+                            }))`,
                         }}
                         loading={this.state.loadingMore}
                         data={results}

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
-import DateDisplay from 'common/components/FinancialTable/cells/DateDisplay';
-import cssTable from 'common/components/FinancialTable/index.pcss';
+import DateDisplay from 'common/components/BaseTable/cells/DateDisplay';
+import cssTable from 'common/components/BaseTable/index.pcss';
 
 const style = { textAlign: 'center' };
 

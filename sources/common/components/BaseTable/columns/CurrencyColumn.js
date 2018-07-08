@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import CurrencyISOCodeDisplay from 'common/components/FinancialTable/cells/CurrencyISOCodeDisplay';
+import CurrencyISOCodeDisplay from 'common/components/BaseTable/cells/CurrencyISOCodeDisplay';
 
 const style = { textAlign: 'center' };
 

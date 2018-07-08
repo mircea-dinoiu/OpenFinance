@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import Expand from 'material-ui-icons/ExpandMore';
 import Collapse from 'material-ui-icons/ExpandLess';
 import { Col, Row } from 'react-grid-system';
-import FinancialTable from 'common/components/FinancialTable';
+import BaseTable from 'common/components/BaseTable';
 
 class SummarySubCategory extends PureComponent {
     state = {
@@ -72,7 +72,7 @@ class SummarySubCategory extends PureComponent {
                     </CardHeader>
                 )}
                 {(shouldGroup === false || this.state.expanded) && (
-                    <FinancialTable
+                    <BaseTable
                         data={items}
                         modifiers={{ hideHeader: true }}
                         columns={[
