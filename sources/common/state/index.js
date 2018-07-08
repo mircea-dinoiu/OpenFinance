@@ -1,5 +1,4 @@
 export const Actions = {
-    $INIT: '@@INIT',
     UPDATE_STATE: 'UPDATE_STATE',
     LOADING_ENABLE: 'LOADING_ENABLE',
     LOADING_DISABLE: 'LOADING_DISABLE',

@@ -3,15 +3,8 @@ import { getInitialEndDate } from 'common/utils/dates';
 
 export const FINANCIAL_PREFERENCES = 'FINANCIAL_PREFERENCES';
 
-export const readPreferences = () =>
-    JSON.parse(localStorage.getItem(FINANCIAL_PREFERENCES) || '{}');
-
-export const savePreferences = (value) => {
-    localStorage.setItem(FINANCIAL_PREFERENCES, JSON.stringify(value));
-};
-
 export const parsePreferences = (
-    state,
+    state = {},
 ): {
     endDateIncrement: string,
     include: string,
@@ -22,4 +15,12 @@ export const parsePreferences = (
     const endDate = state.endDate || getInitialEndDate();
 
     return { endDateIncrement, include, endDate };
+};
+
+export const validatePreferences = (state = {}) => {
+    if (state.endDateIncrement && state.include && state.endDate) {
+        return state;
+    }
+
+    return parsePreferences(state);
 };
