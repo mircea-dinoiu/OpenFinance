@@ -102,7 +102,7 @@ class TopBar extends PureComponent<TypeProps> {
                 }}
                 showMenuIconButton={false}
                 iconStyleRight={{
-                    margin: 0,
+                    marginTop: 0,
                 }}
                 iconElementRight={
                     <ToolbarGroup>
