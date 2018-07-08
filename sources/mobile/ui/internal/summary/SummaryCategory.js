@@ -115,12 +115,21 @@ class SummaryCategory extends PureComponent {
         showSumInHeader: true,
     };
 
-    groupSorter = ([id, items]) => {
-        if (items.length && items[0].hasOwnProperty('index')) {
-            return items[0].index;
+    groupSorter = ([, items]) => {
+        if (items.length > 0) {
+            // $FlowFixMe
+            const [firstItem] = items;
+
+            if (firstItem.index != null) {
+                return firstItem.index;
+            }
+
+            if (firstItem.group != null) {
+                return firstItem.group;
+            }
         }
 
-        return id;
+        return 0;
     };
 
     render() {
