@@ -49,6 +49,11 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
         return { paddingLeft: 40 };
     }
 
+    handleBurgerClick = (event) => {
+        this.props.onReceiveSelectedIds([this.props.item.id]);
+        event.stopPropagation();
+    };
+
     render() {
         const item = this.props.item;
         const persist = item.persist !== false;
@@ -59,6 +64,7 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
 
         return (
             <ResponsiveListItem
+                onClick={this.toggleDetails}
                 onTouchTap={this.toggleDetails}
                 style={this.getStyle()}
                 innerDivStyle={this.getInnerDivStyle()}
@@ -79,10 +85,8 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
                                 vertical: 'top',
                             }}
                             style={{ marginLeft: 0, left: 0 }}
-                            onTouchTap={(event) => {
-                                this.props.onReceiveSelectedIds([item.id]);
-                                event.stopPropagation();
-                            }}
+                            onClick={this.handleBurgerClick}
+                            onTouchTap={this.handleBurgerClick}
                         >
                             <ContextMenuItems
                                 {...this.props.contextMenuItemsProps}

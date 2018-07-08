@@ -15,6 +15,7 @@ import Refresh from 'material-ui-icons/Refresh';
 import ArrowBack from 'material-ui-icons/ArrowBack';
 import ArrowForward from 'material-ui-icons/ArrowForward';
 import Logged from 'mobile/ui/appBar/Logged';
+import DateIcon from 'material-ui-icons/DateRange';
 import {
     updateState,
     setEndDate,
@@ -40,6 +41,10 @@ type TypeProps = {
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 
 class TopBar extends PureComponent<TypeProps> {
+    state = {
+        showDateRange: false,
+    };
+
     onShiftBack = () => {
         this.props.actions.updatePreferences({
             endDate: formatYMD(
@@ -74,6 +79,9 @@ class TopBar extends PureComponent<TypeProps> {
         this.props.actions.updatePreferences({ endDateIncrement: newValue });
     };
 
+    handleToggleDateRange = () =>
+        this.setState((state) => ({ showDateRange: !state.showDateRange }));
+
     renderEndDateIntervalSelect() {
         return (
             <SelectField
@@ -92,6 +100,8 @@ class TopBar extends PureComponent<TypeProps> {
     }
 
     render() {
+        const isSmall = this.props.screen.isSmall;
+
         return (
             <AppBar
                 title={this.props.title}
@@ -105,6 +115,14 @@ class TopBar extends PureComponent<TypeProps> {
                 }}
                 iconElementRight={
                     <ToolbarGroup>
+                        {this.props.user &&
+                            isSmall && (
+                            <IconButton
+                                onClick={this.handleToggleDateRange}
+                            >
+                                <DateIcon color="white" />
+                            </IconButton>
+                        )}
                         {this.props.showCurrenciesDrawer && (
                             <IconButton
                                 onClick={this.onClickCurrenciesDrawerTrigger}
@@ -128,15 +146,24 @@ class TopBar extends PureComponent<TypeProps> {
                     height: Sizes.HEADER_SIZE,
                 }}
             >
-                {this.props.user &&
-                    !this.props.screen.isSmall && (
+                {this.props.user && (
                     <Paper
                         style={{
-                            position: 'absolute',
-                            left: '50%',
-                            top: '1px',
-                            transform: 'translateX(-50%)',
                             height: INPUT_HEIGHT,
+                            ...(isSmall
+                                ? {
+                                    position: 'fixed',
+                                    display: this.state.showDateRange
+                                        ? 'block'
+                                        : 'none',
+                                    top: Sizes.HEADER_SIZE,
+                                }
+                                : {
+                                    position: 'absolute',
+                                    left: '50%',
+                                    top: '1px',
+                                    transform: 'translateX(-50%)',
+                                }),
                         }}
                     >
                         <IconButton

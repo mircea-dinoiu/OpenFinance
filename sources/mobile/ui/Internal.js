@@ -121,16 +121,19 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                         <BottomNavigationItem
                             label="Summary"
                             icon={<AccountBalance />}
+                            onClick={() => this.select(0)}
                             onTouchTap={() => this.select(0)}
                         />
                         <BottomNavigationItem
                             label="Expenses"
                             icon={<TrendingDown />}
+                            onClick={() => this.select(1)}
                             onTouchTap={() => this.select(1)}
                         />
                         <BottomNavigationItem
                             label="Incomes"
                             icon={<TrendingUp />}
+                            onClick={() => this.select(2)}
                             onTouchTap={() => this.select(2)}
                         />
                     </BottomNavigation>
