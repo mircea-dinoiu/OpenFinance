@@ -2,11 +2,8 @@ import React from 'react';
 
 import MainScreen from './common/MainScreen';
 
-import Creator from './expenses/ExpenseCreator';
 import List from './expenses/ExpenseList';
 
-const Expenses = () => (
-    <MainScreen listComponent={List} creatorComponent={Creator} />
-);
+const Expenses = () => <MainScreen listComponent={List} />;
 
 export default Expenses;

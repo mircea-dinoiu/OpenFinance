@@ -1,6 +1,5 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { fetchJSON } from 'common/utils/fetch';
 import { parseCRUDError } from 'common/parsers';
 
 import { ErrorSnackbar, SuccessSnackbar } from '../../components/snackbars';
@@ -22,9 +21,7 @@ class MainScreenCreatorDialog extends PureComponent {
         entityName: string,
         onReceiveNewRecord: Function,
         formComponent: any,
-        api: {
-            create: string,
-        },
+        onRequestCreate: Function,
     };
     formDefaults = this.props.getFormDefaults(this.props);
     formData = this.props.getFormDefaults(this.props);
@@ -38,10 +35,9 @@ class MainScreenCreatorDialog extends PureComponent {
             saving: true,
         });
 
-        const response = await fetchJSON(this.props.api.create, {
-            method: 'POST',
-            body: { data: [this.props.formToModel(data, this.props)] },
-        });
+        const response = await this.props.onRequestCreate([
+            this.props.formToModel(data, this.props),
+        ]);
         const json = await response.json();
 
         if (response.ok) {

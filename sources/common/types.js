@@ -46,3 +46,9 @@ type TypeUsers = Map<{
     currenc: TypeUser,
     list: TypeUser[],
 }>;
+
+type TypeMainScreenFeatures = {
+    repeat?: boolean,
+    status?: boolean,
+    duplicate?: boolean,
+};

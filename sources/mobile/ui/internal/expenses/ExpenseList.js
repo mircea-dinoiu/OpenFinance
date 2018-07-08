@@ -8,6 +8,7 @@ import ExpenseForm from 'mobile/ui/internal/expenses/ExpenseForm';
 import ExpenseListItemContent from 'mobile/ui/internal/expenses/ExpenseListItemContent';
 import formToModel from 'mobile/ui/internal/expenses/helpers/formToModel';
 import modelToForm from 'mobile/ui/internal/expenses/helpers/modelToForm';
+import getFormDefaults from './helpers/getFormDefaults';
 
 const ExpenseList = (props) => (
     <MainScreenList
@@ -15,7 +16,8 @@ const ExpenseList = (props) => (
         tableColumns={ExpenseTableColumns}
         entityName="expense"
         nameProperty="item"
-        editDialogProps={{
+        crudProps={{
+            getFormDefaults,
             modelToForm,
             formToModel,
             formComponent: ExpenseForm,

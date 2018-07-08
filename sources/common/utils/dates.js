@@ -1,8 +1,9 @@
 // @flow
 import moment from 'moment';
 
-export const formatYMD = (date: Date = new Date()): string =>
-    moment(date).format('YYYY-MM-DD');
+import { formatYMD } from 'shared/utils/dates';
+
+export { formatYMD };
 
 export const getStartDate = ({
     endDate,

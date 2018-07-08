@@ -1,5 +1,5 @@
-// flow-typed signature: 5f6b80ba0fa4571aac1e7ea6e5fea425
-// flow-typed version: f4a7859cd3/jest_v22.x.x/flow_>=v0.39.x
+// flow-typed signature: f59c1824b014b60b0889728b4ca2b637
+// flow-typed version: ada8d1a1dd/jest_v23.x.x/flow_>=v0.39.x
 
 type JestMockFn<TArguments: $ReadOnlyArray<*>, TReturn> = {
   (...args: TArguments): TReturn,
@@ -65,13 +65,29 @@ type JestMockFn<TArguments: $ReadOnlyArray<*>, TReturn> = {
    */
   mockReturnThis(): void,
   /**
-   * Deprecated: use jest.fn(() => value) instead
+   * Accepts a value that will be returned whenever the mock function is called.
    */
   mockReturnValue(value: TReturn): JestMockFn<TArguments, TReturn>,
   /**
    * Sugar for only returning a value once inside your mock
    */
-  mockReturnValueOnce(value: TReturn): JestMockFn<TArguments, TReturn>
+  mockReturnValueOnce(value: TReturn): JestMockFn<TArguments, TReturn>,
+  /**
+   * Sugar for jest.fn().mockImplementation(() => Promise.resolve(value))
+   */
+  mockResolvedValue(value: TReturn): JestMockFn<TArguments, Promise<TReturn>>,
+  /**
+   * Sugar for jest.fn().mockImplementationOnce(() => Promise.resolve(value))
+   */
+  mockResolvedValueOnce(value: TReturn): JestMockFn<TArguments, Promise<TReturn>>,
+  /**
+   * Sugar for jest.fn().mockImplementation(() => Promise.reject(value))
+   */
+  mockRejectedValue(value: TReturn): JestMockFn<TArguments, Promise<any>>,
+  /**
+   * Sugar for jest.fn().mockImplementationOnce(() => Promise.reject(value))
+   */
+  mockRejectedValueOnce(value: TReturn): JestMockFn<TArguments, Promise<any>>
 };
 
 type JestAsymmetricEqualityType = {
@@ -483,7 +499,7 @@ type JestExtendedMatchersType = {
     toIncludeMultiple(substring: string[]): void;
 };
 
-type JestExpectType = {
+interface JestExpectType {
   not: JestExpectType & EnzymeMatchersType & DomTestingLibraryType & JestJQueryMatchersType & JestExtendedMatchersType,
   /**
    * If you have a mock function, you can use .lastCalledWith to test what
@@ -495,10 +511,6 @@ type JestExpectType = {
    * strict equality.
    */
   toBe(value: any): void,
-  /**
-   * Use .toHaveBeenCalled to ensure that a mock function got called.
-   */
-  toBeCalled(): void,
   /**
    * Use .toBeCalledWith to ensure that a mock function was called with
    * specific arguments.
@@ -574,21 +586,55 @@ type JestExpectType = {
    * Use .toHaveBeenCalled to ensure that a mock function got called.
    */
   toHaveBeenCalled(): void,
+  toBeCalled(): void;
   /**
    * Use .toHaveBeenCalledTimes to ensure that a mock function got called exact
    * number of times.
    */
   toHaveBeenCalledTimes(number: number): void,
+  toBeCalledTimes(number: number): void;
+  /**
+   *
+   */
+  toHaveBeenNthCalledWith(nthCall: number, ...args: Array<any>): void;
+  nthCalledWith(nthCall: number, ...args: Array<any>): void;
+  /**
+   *
+   */
+  toHaveReturned(): void;
+  toReturn(): void;
+  /**
+   *
+   */
+  toHaveReturnedTimes(number: number): void;
+  toReturnTimes(number: number): void;
+  /**
+   *
+   */
+  toHaveReturnedWith(value: any): void;
+  toReturnWith(value: any): void;
+  /**
+   *
+   */
+  toHaveLastReturnedWith(value: any): void;
+  lastReturnedWith(value: any): void;
+  /**
+   *
+   */
+  toHaveNthReturnedWith(nthCall: number, value: any): void;
+  nthReturnedWith(nthCall: number, value: any): void;
   /**
    * Use .toHaveBeenCalledWith to ensure that a mock function was called with
    * specific arguments.
    */
   toHaveBeenCalledWith(...args: Array<any>): void,
+  toBeCalledWith(...args: Array<any>): void,
   /**
    * Use .toHaveBeenLastCalledWith to ensure that a mock function was last called
    * with specific arguments.
    */
   toHaveBeenLastCalledWith(...args: Array<any>): void,
+  lastCalledWith(...args: Array<any>): void,
   /**
    * Check that an object has a .length property and it is set to a certain
    * numeric value.
@@ -607,9 +653,17 @@ type JestExpectType = {
    */
   toMatchObject(object: Object | Array<Object>): void,
   /**
-   * This ensures that a React component matches the most recent snapshot.
+   * Use .toStrictEqual to check that a javascript object matches a subset of the properties of an object.
    */
-  toMatchSnapshot(name?: string): void,
+  toStrictEqual(value: any): void,
+  /**
+   * This ensures that an Object matches the most recent snapshot.
+   */
+  toMatchSnapshot(propertyMatchers?: {[key: string]: JestAsymmetricEqualityType}, name?: string): void,
+  /**
+   * This ensures that an Object matches the most recent snapshot.
+   */
+  toMatchSnapshot(name: string): void,
   /**
    * Use .toThrow to test that a function throws when it is called.
    * If you want to test that a specific error gets thrown, you can provide an
@@ -625,7 +679,7 @@ type JestExpectType = {
    * matching the most recent snapshot when it is called.
    */
   toThrowErrorMatchingSnapshot(): void
-};
+}
 
 type JestObjectType = {
   /**
@@ -844,6 +898,17 @@ declare var it: {
     timeout?: number
   ): void,
   /**
+   * each runs this test against array of argument arrays per each run
+   *
+   * @param {table} table of Test
+   */
+  each(
+    table: Array<Array<mixed>>
+  ): (
+    name: JestTestName,
+    fn?: (...args: Array<any>) => ?Promise<mixed>
+  ) => void,
+  /**
    * Only run this test
    *
    * @param {JestTestName} Name of Test
@@ -854,7 +919,14 @@ declare var it: {
     name: JestTestName,
     fn?: (done: () => void) => ?Promise<mixed>,
     timeout?: number
-  ): void,
+  ): {
+    each(
+      table: Array<Array<mixed>>
+    ): (
+      name: JestTestName,
+      fn?: (...args: Array<any>) => ?Promise<mixed>
+    ) => void,
+  },
   /**
    * Skip running this test
    *
@@ -958,7 +1030,13 @@ declare var expect: {
   objectContaining(value: Object): Object,
   /** Matches any received string that contains the exact expected string. */
   stringContaining(value: string): string,
-  stringMatching(value: string | RegExp): string
+  stringMatching(value: string | RegExp): string,
+  not: {
+    arrayContaining: (value: $ReadOnlyArray<mixed>) => Array<mixed>,
+    objectContaining: (value: {}) => Object,
+    stringContaining: (value: string) => string,
+    stringMatching: (value: string | RegExp) => string,
+  },
 };
 
 // TODO handle return type

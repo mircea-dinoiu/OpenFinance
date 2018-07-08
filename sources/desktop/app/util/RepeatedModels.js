@@ -1,6 +1,7 @@
 Ext.define('Financial.util.RepeatedModels', {
     singleton: true,
 
+    // @ported
     getRepeatColumnConfig: function () {
         var store = [
             ['d', 'Daily'],
@@ -35,6 +36,7 @@ Ext.define('Financial.util.RepeatedModels', {
         };
     },
 
+    // @ported
     advanceRepeatDate: function (obj, rawRepeats) {
         var newObject = Ext.clone(obj);
         var date = new Date(newObject.created_at);
@@ -66,6 +68,7 @@ Ext.define('Financial.util.RepeatedModels', {
         return newObject;
     },
 
+    // @wontport
     idColumnRenderer: function (value) {
         if (isNaN(parseInt(value))) {
             return '';

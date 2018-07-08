@@ -9,6 +9,7 @@ import IncomeForm from 'mobile/ui/internal/incomes/IncomeForm';
 import IncomeListItemContent from 'mobile/ui/internal/incomes/IncomeListItemContent';
 import modelToForm from 'mobile/ui/internal/incomes/helpers/modelToForm';
 import formToModel from 'mobile/ui/internal/incomes/helpers/formToModel';
+import getFormDefaults from './helpers/getFormDefaults';
 
 const IncomeList = (props) => (
     <MainScreenList
@@ -16,7 +17,8 @@ const IncomeList = (props) => (
         tableColumns={IncomeTableColumns}
         entityName="income"
         nameProperty="description"
-        editDialogProps={{
+        crudProps={{
+            getFormDefaults,
             modelToForm,
             formToModel,
             formComponent: IncomeForm,

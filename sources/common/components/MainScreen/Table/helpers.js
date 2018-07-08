@@ -4,7 +4,7 @@ import moment from 'moment';
 import cssTable from 'common/components/BaseTable/index.pcss';
 
 export const getTrClassName = (item, { selectedIds }): string => {
-    const classes = [];
+    const classes = [cssTable.notSelectable];
     const day = formatYMD;
 
     if (moment(item.created_at).date() % 2 === 0) {

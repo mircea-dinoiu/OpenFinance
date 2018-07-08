@@ -8,10 +8,13 @@ import { Row, Col } from 'react-grid-system';
 import { ErrorSnackbar, SuccessSnackbar } from '../../components/snackbars';
 import { ButtonProgress } from '../../components/loaders';
 
-import { fetchJSON } from 'common/utils/fetch';
 import { parseCRUDError } from 'common/parsers';
 
-export default class MainScreenEditDialog extends PureComponent {
+type TypeProps = {
+    onRequestUpdate: Function,
+};
+
+export default class MainScreenEditDialog extends PureComponent<TypeProps> {
     state = {
         saving: false,
     };
@@ -26,10 +29,9 @@ export default class MainScreenEditDialog extends PureComponent {
             saving: true,
         });
 
-        const response = await fetchJSON(this.props.api.update, {
-            method: 'POST',
-            body: { data: [this.props.formToModel(data, this.props)] },
-        });
+        const response = await this.props.onRequestUpdate([
+            this.props.formToModel(data, this.props),
+        ]);
         const json = await response.json();
 
         if (response.ok) {
