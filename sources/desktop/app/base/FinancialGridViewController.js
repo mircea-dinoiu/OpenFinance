@@ -75,6 +75,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
             );
         });
 
+        // @ported
         /**
          * Create bottom bar text
          */

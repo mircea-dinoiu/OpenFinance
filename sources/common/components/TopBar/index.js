@@ -24,8 +24,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { formatYMD, shiftDateBack, shiftDateForward } from 'common/utils/dates';
 import moment from 'moment';
-import { ShiftDateOptions } from 'common/defs';
-import { Sizes } from 'common/defs';
+import { ShiftDateOptions, Sizes } from 'common/defs';
 
 type TypeProps = {
     onLogout: Function,

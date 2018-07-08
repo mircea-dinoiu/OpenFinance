@@ -20,6 +20,7 @@ import MainScreenListGroup from 'mobile/ui/internal/common/MainScreenListGroup';
 import { convertCurrencyToDefault } from '../../../../common/helpers/currency';
 import { numericValue } from '../../formatters';
 import { Sizes } from 'common/defs';
+import AnchoredContextMenu from 'common/components/MainScreen/ContextMenu/AnchoredContextMenu';
 
 const PAGE_SIZE = 50;
 
@@ -60,6 +61,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         loadingMore: false,
         refreshing: false,
         selectedIds: [],
+        contextMenuDisplay: false,
+        contextMenuTop: 0,
+        contextMenuLeft: 0,
     };
 
     componentDidMount() {
@@ -198,27 +202,39 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         };
     }
 
+    handleReceivedSelectedIds = (selectedIds) => this.setState({ selectedIds });
+    handleEdit = () => {};
+    handleChangeContextMenu = ({ display, top, left }) =>
+        this.setState({
+            contextMenuDisplay: display,
+            contextMenuTop: top,
+            contextMenuLeft: left,
+        });
+
     getTrProps = (state, item) =>
         getTrProps({
             selectedIds: this.state.selectedIds,
-            onDoubleClick: () => {},
-            onReceiveSelectedIds: (selectedIds) => this.setState({ selectedIds }),
+            onDoubleClick: this.handleEdit,
+            onReceiveSelectedIds: this.handleReceivedSelectedIds,
+            onChangeContextMenu: this.handleChangeContextMenu,
             item: item.original,
         });
 
+    get selectedItems() {
+        return this.state.results.filter((each) =>
+            this.state.selectedIds.includes(each.get('id')),
+        );
+    }
+
     computeSelectedAmount() {
-        return this.state.results.reduce((acc, each) => {
-            if (this.state.selectedIds.includes(each.get('id'))) {
-                const sum = convertCurrencyToDefault(
-                    each.get('sum'),
-                    each.get('currency_id'),
-                    this.props.currencies,
-                );
+        return this.selectedItems.reduce((acc, each) => {
+            const sum = convertCurrencyToDefault(
+                each.get('sum'),
+                each.get('currency_id'),
+                this.props.currencies,
+            );
 
-                return acc + sum;
-            }
-
-            return acc;
+            return acc + sum;
         }, 0);
     }
 
@@ -257,6 +273,17 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         getTrProps={this.getTrProps}
                     />
                     {this.renderTableFooter()}
+                    {this.state.contextMenuDisplay && (
+                        <AnchoredContextMenu
+                            left={this.state.contextMenuLeft}
+                            top={this.state.contextMenuTop}
+                            itemsProps={{
+                                selectedIds: this.state.selectedIds,
+                                onClickEdit: () => console.log('edit'),
+                                onClickDelete: () => console.log('delete'),
+                            }}
+                        />
+                    )}
                 </div>
             );
         }

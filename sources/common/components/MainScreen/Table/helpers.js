@@ -30,9 +30,10 @@ export const getTrProps = ({
     onReceiveSelectedIds,
     onDoubleClick,
     selectedIds,
+    onChangeContextMenu,
     item,
 }) => {
-    const onClick = (event) => {
+    const adjustSelectedIdsFromEvent = (event) => {
         let newSelected;
 
         if (event.metaKey) {
@@ -44,19 +45,27 @@ export const getTrProps = ({
         }
 
         onReceiveSelectedIds(newSelected);
-
-        return newSelected;
     };
 
     return {
         className: getTrClassName(item, { selectedIds }),
         onDoubleClick: () =>
             item.persist !== false ? onDoubleClick(item) : null,
-        onClick,
-        onContextMenu: (event) => {
-            const selected = onClick(event);
+        onClick(event) {
+            onChangeContextMenu({ display: false });
 
-            console.log(selected);
+            adjustSelectedIdsFromEvent(event);
+        },
+        onContextMenu: (event) => {
+            event.preventDefault();
+
+            onChangeContextMenu({
+                display: true,
+                left: event.clientX,
+                top: event.clientY,
+            });
+
+            adjustSelectedIdsFromEvent(event);
         },
     };
 };
