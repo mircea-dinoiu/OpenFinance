@@ -3,7 +3,7 @@ import { Actions } from 'common/state';
 import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import { combineReducers } from 'redux';
-import { parsePreferences } from 'common/utils/preferences';
+import { validatePreferences, parsePreferences } from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
 const screen = (state = getScreenQueries(), action) =>
@@ -46,15 +46,13 @@ const loading = (state = true, action) => {
 
     return state;
 };
-const preferences = (state = {}, action) => {
+const preferences = (state = parsePreferences(), action) => {
     switch (action.type) {
-        case Actions.$INIT:
-            return parsePreferences(state);
         case Actions.UPDATE_PREFERENCES:
             return { ...state, ...action.value };
     }
 
-    return state;
+    return validatePreferences(state);
 };
 const title = bindToUpdateState('title', 'Loading...');
 const ui = bindToUpdateState('ui', null);
