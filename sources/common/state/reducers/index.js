@@ -3,9 +3,7 @@ import { Actions } from 'common/state';
 import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import { combineReducers } from 'redux';
-import {
-    parsePreferences,
-} from 'common/utils/preferences';
+import { parsePreferences } from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
 const screen = (state = getScreenQueries(), action) =>

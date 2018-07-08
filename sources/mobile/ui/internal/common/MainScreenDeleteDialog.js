@@ -7,6 +7,7 @@ const MainScreenDeleteDialog = ({
     entityName,
     onYes,
     onNo,
+    count = 1,
     ...props
 }) => {
     const actions = (
@@ -14,21 +15,29 @@ const MainScreenDeleteDialog = ({
             <RaisedButton
                 label="Yes"
                 primary={false}
+                onClick={onYes}
                 onTouchTap={onYes}
                 style={{ marginRight: 5 }}
-            />,
-            <RaisedButton label="No" primary={true} onTouchTap={onNo} />
+            />
+            <RaisedButton
+                label="No"
+                primary={true}
+                onClick={onNo}
+                onTouchTap={onNo}
+            />
         </React.Fragment>
     );
 
     return (
         <Dialog
-            title={`Delete ${entityName}?`}
+            title={`Delete ${entityName}${count === 1 ? '' : 's'}?`}
             open={open}
             actions={actions}
             {...props}
         >
-            Are you sure you want to delete this {entityName}?
+            Are you sure you want to delete {count === 1 ? 'this' : 'these'}{' '}
+            {entityName}
+            {count !== 1 && 's'}?
         </Dialog>
     );
 };

@@ -70,6 +70,7 @@ class MainScreenCreatorDialog extends PureComponent {
                     disabled={this.state.saving}
                     label="Cancel"
                     primary={false}
+                    onClick={this.props.onCancel}
                     onTouchTap={this.props.onCancel}
                     style={{ marginRight: 5 }}
                 />
@@ -77,6 +78,7 @@ class MainScreenCreatorDialog extends PureComponent {
                     disabled={this.state.saving}
                     label={this.state.saving ? <ButtonProgress /> : 'Create'}
                     primary={true}
+                    onClick={this.save}
                     onTouchTap={this.save}
                     style={{ float: 'right' }}
                 />

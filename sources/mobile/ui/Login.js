@@ -106,6 +106,7 @@ class Login extends PureComponent {
                         }
                         primary={true}
                         style={{ margin: '20px 0 0' }}
+                        onClick={this.submit}
                         onTouchTap={this.submit}
                         disabled={this.state.loading}
                     />

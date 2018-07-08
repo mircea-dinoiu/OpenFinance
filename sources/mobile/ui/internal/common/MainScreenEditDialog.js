@@ -15,7 +15,7 @@ export default class MainScreenEditDialog extends PureComponent {
     state = {
         saving: false,
     };
-    formData = this.props.modelToForm(this.props.entity);
+    formData = this.props.modelToForm(this.props.item);
 
     save = async () => {
         const data = this.formData;
@@ -62,6 +62,7 @@ export default class MainScreenEditDialog extends PureComponent {
                     disabled={this.state.saving}
                     label="Cancel"
                     primary={false}
+                    onClick={this.props.onCancel}
                     onTouchTap={this.props.onCancel}
                     style={{ marginRight: 5 }}
                 />
@@ -69,6 +70,7 @@ export default class MainScreenEditDialog extends PureComponent {
                     disabled={this.state.saving}
                     label={this.state.saving ? <ButtonProgress /> : 'Update'}
                     primary={true}
+                    onClick={this.save}
                     onTouchTap={this.save}
                     style={{ float: 'right' }}
                 />
@@ -86,7 +88,6 @@ export default class MainScreenEditDialog extends PureComponent {
             >
                 <Row>
                     <Form
-                        {...this.props.data}
                         onFormChange={(formData) => (this.formData = formData)}
                         initialValues={this.formData}
                     />

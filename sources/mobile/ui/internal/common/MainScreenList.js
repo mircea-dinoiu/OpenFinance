@@ -21,6 +21,8 @@ import { convertCurrencyToDefault } from '../../../../common/helpers/currency';
 import { numericValue } from '../../formatters';
 import { Sizes } from 'common/defs';
 import AnchoredContextMenu from 'common/components/MainScreen/ContextMenu/AnchoredContextMenu';
+import MainScreenDeleteDialog from './MainScreenDeleteDialog';
+import MainScreenEditDialog from './MainScreenEditDialog';
 
 const PAGE_SIZE = 50;
 
@@ -42,6 +44,11 @@ type TypeProps = {
     tableColumns: Array<{}>,
     contentComponent: React$PureComponent<any>,
     currencies: TypeCurrencies,
+    newRecord: {
+        id: number,
+        repeat: string,
+    },
+    refreshWidgets: string,
 };
 
 type TypeState = {
@@ -51,6 +58,9 @@ type TypeState = {
     loadingMore: boolean,
     refreshing: boolean,
     selectedIds: number[],
+
+    editDialogOpen: boolean,
+    deleteDialogOpen: boolean,
 };
 
 class MainScreenList extends PureComponent<TypeProps, TypeState> {
@@ -64,6 +74,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         contextMenuDisplay: false,
         contextMenuTop: 0,
         contextMenuLeft: 0,
+
+        editDialogOpen: false,
+        deleteDialogOpen: false,
     };
 
     componentDidMount() {
@@ -102,6 +115,30 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             this.refresh({ endDate });
         }
     }
+
+    handleOpenDeleteDialog = () => this.setState({ deleteDialogOpen: true });
+    handleCloseDeleteDialog = () => this.setState({ deleteDialogOpen: false });
+
+    handleOpenEditDialog = () => this.setState({ editDialogOpen: true });
+    handleCloseEditDialog = () => this.setState({ editDialogOpen: false });
+
+    handleDelete = async () => {
+        this.handleCloseDeleteDialog();
+
+        await fetchJSON(this.props.api.destroy, {
+            method: 'POST',
+            body: {
+                data: this.selectedItems.map((each) => ({ id: each.get('id') })),
+            },
+        });
+
+        this.refresh();
+    };
+
+    handleUpdate = () => {
+        this.handleCloseEditDialog();
+        this.refresh();
+    };
 
     loadMore = async ({
         page = this.state.page,
@@ -149,24 +186,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             .entrySeq();
     }
 
-    handleUpdate = () => {
-        this.refresh();
-    };
-
-    handleDelete = async (id) => {
-        await fetchJSON(this.props.api.destroy, {
-            method: 'POST',
-            body: {
-                data: [{ id }],
-            },
-        });
-
-        // Keep the nice deleted message a bit more
-        setTimeout(() => {
-            this.refresh();
-        }, 500);
-    };
-
     refresh = async ({ endDate = this.props.preferences.endDate } = {}) => {
         this.setState({
             refreshing: true,
@@ -193,8 +212,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
     getCommonProps() {
         return {
-            onDelete: this.handleDelete,
-            onUpdate: this.handleUpdate,
             api: this.props.api,
             entityName: this.props.entityName,
             nameProperty: this.props.nameProperty,
@@ -203,8 +220,15 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 
     handleReceivedSelectedIds = (selectedIds) => this.setState({ selectedIds });
-    handleEdit = () => {};
-    handleChangeContextMenu = ({ display, top, left }) =>
+    handleChangeContextMenu = ({
+        display,
+        top = 0,
+        left = 0,
+    }: {
+        display: boolean,
+        top?: number,
+        left?: number,
+    }) =>
         this.setState({
             contextMenuDisplay: display,
             contextMenuTop: top,
@@ -214,7 +238,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     getTrProps = (state, item) =>
         getTrProps({
             selectedIds: this.state.selectedIds,
-            onDoubleClick: this.handleEdit,
+            onEdit: this.handleOpenEditDialog,
             onReceiveSelectedIds: this.handleReceivedSelectedIds,
             onChangeContextMenu: this.handleChangeContextMenu,
             item: item.original,
@@ -253,6 +277,18 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         );
     }
 
+    handleCloseContextMenu = () =>
+        this.handleChangeContextMenu({ display: false });
+
+    getContextMenuItemsProps() {
+        return {
+            selectedIds: this.state.selectedIds,
+            onClickEdit: this.handleOpenEditDialog,
+            onClickDelete: this.handleOpenDeleteDialog,
+            onCloseContextMenu: this.handleCloseContextMenu,
+        };
+    }
+
     renderContent() {
         const commonProps = this.getCommonProps();
 
@@ -277,11 +313,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         <AnchoredContextMenu
                             left={this.state.contextMenuLeft}
                             top={this.state.contextMenuTop}
-                            itemsProps={{
-                                selectedIds: this.state.selectedIds,
-                                onClickEdit: () => console.log('edit'),
-                                onClickDelete: () => console.log('delete'),
-                            }}
+                            itemsProps={this.getContextMenuItemsProps()}
                         />
                     )}
                 </div>
@@ -296,9 +328,37 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 itemProps={{
                     ...commonProps,
                     contentComponent: this.props.contentComponent,
+                    contextMenuItemsProps: this.getContextMenuItemsProps(),
+                    onReceiveSelectedIds: this.handleReceivedSelectedIds,
                 }}
             />
         ));
+    }
+
+    renderDialogs() {
+        return (
+            <React.Fragment>
+                <MainScreenDeleteDialog
+                    open={this.state.deleteDialogOpen}
+                    onYes={this.handleDelete}
+                    onNo={this.handleCloseDeleteDialog}
+                    entityName={this.props.entityName}
+                    count={this.state.selectedIds.length}
+                />
+                {this.selectedItems.size > 0 && (
+                    <MainScreenEditDialog
+                        key={this.selectedItems.toJS()[0].id}
+                        open={this.state.editDialogOpen}
+                        item={this.selectedItems.toJS()[0]}
+                        onCancel={this.handleCloseEditDialog}
+                        onSave={this.handleUpdate}
+                        entityName={this.props.entityName}
+                        api={this.props.api}
+                        {...this.props.editDialogProps}
+                    />
+                )}
+            </React.Fragment>
+        );
     }
 
     render() {
@@ -335,6 +395,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                             />
                         </Col>
                     )}
+                    {this.renderDialogs()}
                 </div>
             </div>
         );

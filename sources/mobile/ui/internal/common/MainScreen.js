@@ -34,7 +34,7 @@ class MainScreen extends PureComponent<TypeProps, TypeState> {
         };
     }
 
-    toggleAddModal = () => {
+    handleToggleAddModal = () => {
         this.setState((state) => ({
             addModalOpened: !state.addModalOpened,
         }));
@@ -48,13 +48,13 @@ class MainScreen extends PureComponent<TypeProps, TypeState> {
                 <Creator
                     onReceiveNewRecord={(newRecord) => {
                         this.setState({ newRecord });
-                        this.toggleAddModal();
+                        this.handleToggleAddModal();
                     }}
-                    onCancel={this.toggleAddModal}
+                    onCancel={this.handleToggleAddModal}
                     open={this.state.addModalOpened}
                 />
                 <FloatingActionButton
-                    onClick={this.toggleAddModal}
+                    onClick={this.handleToggleAddModal}
                     mini={!this.props.screen.isLarge}
                     style={this.getAddButtonStyle()}
                 >

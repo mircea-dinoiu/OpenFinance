@@ -1,32 +1,32 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-import { cyan50, red50 } from 'material-ui/styles/colors';
+import { cyan50 } from 'material-ui/styles/colors';
 
-import MainScreenDeleteDialog from './MainScreenDeleteDialog';
-import MainScreenEditDialog from './MainScreenEditDialog';
 import ResponsiveListItem from 'common/components/ResponsiveListItem';
 import { IconButton, IconMenu } from 'material-ui';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
 import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
 
-class MainScreenListItem extends PureComponent {
-    props: {
-        entityName: string,
-        editDialogProps: {},
-        contentComponent: any,
-    };
+type TypeProps = {
+    entityName: string,
+    editDialogProps: {},
+    contentComponent: any,
+    onReceiveSelectedIds: (ids: number[]) => void,
+    contextMenuItemsProps: {},
+    item: {
+        id: number,
+        persist: boolean,
+    },
+};
 
+type TypeState = {
+    expanded: boolean,
+};
+
+class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
     state = {
         expanded: false,
-        deleted: false,
-
-        createEditDialog: false,
-        editDialogOpen: false,
-        editDialogKey: Date.now(),
-
-        deleteDialogOpen: false,
-        createDeleteDialog: false,
     };
 
     toggleDetails = () => {
@@ -35,43 +35,7 @@ class MainScreenListItem extends PureComponent {
         });
     };
 
-    toggleDeleteDialog = () => {
-        this.setState({
-            createDeleteDialog: true,
-            deleteDialogOpen: !this.state.deleteDialogOpen,
-        });
-    };
-
-    toggleEditDialog = () => {
-        this.setState({
-            createEditDialog: true,
-            editDialogKey: Date.now(),
-            editDialogOpen: !this.state.editDialogOpen,
-        });
-    };
-
-    submitDelete = () => {
-        this.setState({
-            deleted: true,
-        });
-
-        this.toggleDeleteDialog();
-        this.props.onDelete(this.props.item.id);
-    };
-
-    submitUpdate = (data) => {
-        this.toggleEditDialog();
-        this.props.onUpdate(data);
-    };
-
     getStyle() {
-        if (this.state.deleted) {
-            return {
-                backgroundColor: red50,
-                textAlign: 'center',
-            };
-        }
-
         if (this.state.expanded) {
             return {
                 backgroundColor: cyan50,
@@ -82,10 +46,6 @@ class MainScreenListItem extends PureComponent {
     }
 
     getInnerDivStyle() {
-        if (this.state.deleted) {
-            return {};
-        }
-
         return { paddingLeft: 40 };
     }
 
@@ -94,46 +54,10 @@ class MainScreenListItem extends PureComponent {
         const persist = item.persist !== false;
         const ListItemContent = this.props.contentComponent;
         const itemContent = (
-            <ListItemContent
-                item={item}
-                expanded={this.state.expanded}
-                data={this.props.data}
-            />
-        );
-        const dialogs = (
-            <React.Fragment>
-                {this.state.createDeleteDialog && (
-                    <MainScreenDeleteDialog
-                        open={this.state.deleteDialogOpen}
-                        onYes={this.submitDelete}
-                        onNo={this.toggleDeleteDialog}
-                        entityName={this.props.entityName}
-                    />
-                )}
-                {this.state.createEditDialog && (
-                    <MainScreenEditDialog
-                        key={this.editDialogKey}
-                        open={this.state.editDialogOpen}
-                        data={this.props.data}
-                        entity={item}
-                        onCancel={this.toggleEditDialog}
-                        onSave={this.submitUpdate}
-                        entityName={this.props.entityName}
-                        api={this.props.api}
-                        {...this.props.editDialogProps}
-                    />
-                )}
-            </React.Fragment>
+            <ListItemContent item={item} expanded={this.state.expanded} />
         );
 
-        return this.state.deleted ? (
-            <ResponsiveListItem
-                style={this.getStyle()}
-                innerDivStyle={this.getInnerDivStyle()}
-            >
-                Deleted: <strong>{item[this.props.nameProperty]}</strong>
-            </ResponsiveListItem>
-        ) : (
+        return (
             <ResponsiveListItem
                 onTouchTap={this.toggleDetails}
                 style={this.getStyle()}
@@ -156,19 +80,17 @@ class MainScreenListItem extends PureComponent {
                             }}
                             style={{ marginLeft: 0, left: 0 }}
                             onTouchTap={(event) => {
+                                this.props.onReceiveSelectedIds([item.id]);
                                 event.stopPropagation();
                             }}
                         >
                             <ContextMenuItems
-                                onClickEdit={this.toggleEditDialog}
-                                onClickDelete={this.toggleDeleteDialog}
-                                selectedIds={[item.id]}
+                                {...this.props.contextMenuItemsProps}
                             />
                         </IconMenu>
                     ) : null
                 }
             >
-                {dialogs}
                 {itemContent}
             </ResponsiveListItem>
         );

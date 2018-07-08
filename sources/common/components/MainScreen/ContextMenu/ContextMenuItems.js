@@ -7,6 +7,7 @@ import DuplicateIcon from 'material-ui-icons/ContentCopy';
 import DetachIcon from 'material-ui-icons/ViewAgenda';
 import LockIcon from 'material-ui-icons/Lock';
 import UnlockIcon from 'material-ui-icons/LockOpen';
+import compose from 'common/utils/compose';
 
 export default function ContextMenuItems({
     onClickEdit,
@@ -15,6 +16,7 @@ export default function ContextMenuItems({
     onClickDetach,
     onClickReviewed,
     onClickNeedsReview,
+    onCloseContextMenu,
     selectedIds,
     desktop = false,
 }) {
@@ -26,24 +28,42 @@ export default function ContextMenuItems({
             <MenuItem
                 primaryText="Edit"
                 leftIcon={<CreateIcon />}
-                onClick={onClickEdit}
-                onTouchTap={onClickEdit}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickEdit,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickEdit,
+                )}
                 disabled={disabledForMultiple}
                 desktop={desktop}
             />
             <MenuItem
                 primaryText="Duplicate"
                 leftIcon={<DuplicateIcon />}
-                onClick={onClickDuplicate}
-                onTouchTap={onClickDuplicate}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickDuplicate,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickDuplicate,
+                )}
                 disabled={disabledForZero}
                 desktop={desktop}
             />
             <MenuItem
                 primaryText="Delete"
                 leftIcon={<DeleteIcon />}
-                onClick={onClickDelete}
-                onTouchTap={onClickDelete}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickDelete,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickDelete,
+                )}
                 disabled={disabledForZero}
                 desktop={desktop}
             />
@@ -51,24 +71,42 @@ export default function ContextMenuItems({
             <MenuItem
                 primaryText="Detach"
                 leftIcon={<DetachIcon />}
-                onClick={onClickDetach}
-                onTouchTap={onClickDetach}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickDetach,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickDetach,
+                )}
                 disabled={disabledForZero}
                 desktop={desktop}
             />
             <MenuItem
                 primaryText="Mark as reviewed"
                 leftIcon={<LockIcon />}
-                onClick={onClickReviewed}
-                onTouchTap={onClickReviewed}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickReviewed,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickReviewed,
+                )}
                 disabled={disabledForZero}
                 desktop={desktop}
             />
             <MenuItem
                 primaryText="Mark as needs review"
                 leftIcon={<UnlockIcon />}
-                onClick={onClickNeedsReview}
-                onTouchTap={onClickNeedsReview}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickNeedsReview,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickNeedsReview,
+                )}
                 disabled={disabledForZero}
                 desktop={desktop}
             />
