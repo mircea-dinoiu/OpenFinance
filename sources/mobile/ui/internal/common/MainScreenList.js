@@ -450,7 +450,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             );
         }
 
-        return this.getGroupedResults().map(([date, items]) => (
+        return Object.entries(this.getGroupedResults()).map(([date, items]) => (
             <MainScreenListGroup
                 key={date}
                 date={date}
