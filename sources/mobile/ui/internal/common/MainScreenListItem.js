@@ -10,7 +10,6 @@ import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMe
 
 type TypeProps = {
     entityName: string,
-    editDialogProps: {},
     contentComponent: any,
     onReceiveSelectedIds: (ids: number[]) => void,
     contextMenuItemsProps: {},

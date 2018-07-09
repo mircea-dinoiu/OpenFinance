@@ -9,5 +9,11 @@ sources/common/types.js
 
 [options]
 module.system.node.resolve_dirname=node_modules
-module.system.node.resolve_dirname=sources
+module.ignore_non_literal_requires=true
 
+module.name_mapper='^shared/\(.*\)$' -> '<PROJECT_ROOT>/shared/\1'
+module.name_mapper='^common/\(.*\)$' -> '<PROJECT_ROOT>/sources/common/\1'
+module.name_mapper='^mobile/\(.*\)$' -> '<PROJECT_ROOT>/sources/mobile/\1'
+
+module.file_ext=.js
+module.file_ext=.pcss

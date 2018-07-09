@@ -19,6 +19,18 @@ export default function ContextMenuItems({
     onCloseContextMenu,
     selectedIds,
     desktop = false,
+    features,
+}: {
+    onClickEdit: Function,
+    onClickDelete: Function,
+    onClickDuplicate: Function,
+    onClickDetach: Function,
+    onClickReviewed: Function,
+    onClickNeedsReview: Function,
+    onCloseContextMenu: Function,
+    selectedIds: number[],
+    features: TypeMainScreenFeatures,
+    desktop: boolean,
 }) {
     const disabledForMultiple = selectedIds.length !== 1;
     const disabledForZero = selectedIds.length === 0;
@@ -39,20 +51,22 @@ export default function ContextMenuItems({
                 disabled={disabledForMultiple}
                 desktop={desktop}
             />
-            <MenuItem
-                primaryText="Duplicate"
-                leftIcon={<DuplicateIcon />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickDuplicate,
-                )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickDuplicate,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
+            {features.duplicate && (
+                <MenuItem
+                    primaryText="Duplicate"
+                    leftIcon={<DuplicateIcon />}
+                    onClick={compose(
+                        onCloseContextMenu,
+                        onClickDuplicate,
+                    )}
+                    onTouchTap={compose(
+                        onCloseContextMenu,
+                        onClickDuplicate,
+                    )}
+                    disabled={disabledForZero}
+                    desktop={desktop}
+                />
+            )}
             <MenuItem
                 primaryText="Delete"
                 leftIcon={<DeleteIcon />}
@@ -68,48 +82,54 @@ export default function ContextMenuItems({
                 desktop={desktop}
             />
             <Divider />
-            <MenuItem
-                primaryText="Detach"
-                leftIcon={<DetachIcon />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickDetach,
-                )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickDetach,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
-            <MenuItem
-                primaryText="Mark as reviewed"
-                leftIcon={<LockIcon />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickReviewed,
-                )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickReviewed,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
-            <MenuItem
-                primaryText="Mark as needs review"
-                leftIcon={<UnlockIcon />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickNeedsReview,
-                )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickNeedsReview,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
+            {features.repeat && (
+                <MenuItem
+                    primaryText="Detach"
+                    leftIcon={<DetachIcon />}
+                    onClick={compose(
+                        onCloseContextMenu,
+                        onClickDetach,
+                    )}
+                    onTouchTap={compose(
+                        onCloseContextMenu,
+                        onClickDetach,
+                    )}
+                    disabled={disabledForZero}
+                    desktop={desktop}
+                />
+            )}
+            {features.status && (
+                <React.Fragment>
+                    <MenuItem
+                        primaryText="Mark as reviewed"
+                        leftIcon={<LockIcon />}
+                        onClick={compose(
+                            onCloseContextMenu,
+                            onClickReviewed,
+                        )}
+                        onTouchTap={compose(
+                            onCloseContextMenu,
+                            onClickReviewed,
+                        )}
+                        disabled={disabledForZero}
+                        desktop={desktop}
+                    />
+                    <MenuItem
+                        primaryText="Mark as needs review"
+                        leftIcon={<UnlockIcon />}
+                        onClick={compose(
+                            onCloseContextMenu,
+                            onClickNeedsReview,
+                        )}
+                        onTouchTap={compose(
+                            onCloseContextMenu,
+                            onClickNeedsReview,
+                        )}
+                        disabled={disabledForZero}
+                        desktop={desktop}
+                    />
+                </React.Fragment>
+            )}
         </React.Fragment>
     );
 }

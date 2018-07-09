@@ -17,6 +17,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
         menu.down('[itemId="paste-column-value"]').setDisabled(this.clipboard == null);
     },
 
+    // @ported
     onBeforeRowEditing: function (rowEditing, context) {
         if (context.record.isGenerated()) {
             return false;
@@ -35,12 +36,14 @@ Ext.define('Financial.base.FinancialGridViewController', {
         grid.getSelectionModel().deselectAll();
     },
 
+    // @ported
     onRowEditing: function () {
         this.callParent(arguments);
 
         this.onStoreRefresh();
     },
 
+    // @toport
     togglePending: function (checkbox, value) {
         var store = this.getView().getStore();
         var filter = this.pendingFilter ? this.pendingFilter : new Ext.util.Filter({
@@ -112,6 +115,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
         grid.down('[itemId="statistics"]').setText(items.join(', '));
     },
 
+    // @ported
     onDuplicateSelectedRecordsClick: function () {
         var grid = this.getView();
         var store = grid.getStore();
@@ -127,6 +131,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
         store.sync();
     },
 
+    // @ported
     onDeleteSelectedRecordsClick: function () {
         var capitalize = Ext.util.Format.capitalize;
         var format = Ext.String.format;
@@ -151,6 +156,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
         });
     },
 
+    // @ported
     onDetachClick: function () {
         var grid = this.getView();
         var records = grid.getSelection();
@@ -181,7 +187,7 @@ Ext.define('Financial.base.FinancialGridViewController', {
     /**
      * STATUS CHANGING OPERATIONS
      */
-
+    // @ported
     setStatusToSelectedRecords: function (status) {
         var grid = this.getView();
         var records = grid.getSelection();
@@ -194,10 +200,12 @@ Ext.define('Financial.base.FinancialGridViewController', {
         store.sync();
     },
 
+    // @ported
     onMarkSelectionAsPendingClick: function () {
         this.setStatusToSelectedRecords('pending');
     },
 
+    // @ported
     onMarkSelectionAsFinishedClick: function () {
         this.setStatusToSelectedRecords('finished');
     },

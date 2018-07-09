@@ -14,8 +14,8 @@ const MainScreenListGroup = ({ date, items, itemProps }) => (
             {items
                 .map((item) => (
                     <MainScreenListItem
-                        key={item.get('id')}
-                        item={item.toJS()}
+                        key={item.id}
+                        item={item}
                         {...itemProps}
                     />
                 ))

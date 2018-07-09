@@ -1,5 +1,5 @@
+const { standardDate } = require('../../shared/utils/dates');
 const path = require('path');
-const moment = require('moment');
 const fs = require('fs');
 const basePath = (string = '') => path.join(__dirname, '../../', string);
 
@@ -18,9 +18,7 @@ module.exports = {
         return dest;
     },
 
-    standardDate(value, format) {
-        return moment(value, format).format('YYYY-MM-DD HH:mm:ss');
-    },
+    standardDate,
 
     logError(...args) {
         console.error(...args);

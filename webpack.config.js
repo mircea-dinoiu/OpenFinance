@@ -14,21 +14,21 @@ module.exports = {
     mode: isProduction ? 'production' : 'development',
     entry: {
         'bundles/Responsive': path.resolve('sources/mobile/index.js'),
-        'bundles/Desktop': path.resolve('sources/desktop/Desktop.js')
+        'bundles/Desktop': path.resolve('sources/desktop/Desktop.js'),
     },
     devServer: isHot
         ? {
             contentBase: path.resolve('./public'),
             headers: {
-                'Access-Control-Allow-Origin': '*'
-            }
+                'Access-Control-Allow-Origin': '*',
+            },
         }
         : undefined,
     output: {
         path: path.resolve('./public/dist'),
         // filename: isProduction ? '[name].[chunkhash].js' : '[name].js',
         filename: '[name].js',
-        publicPath: `${isHot ? 'http://localhost:8080' : ''}/dist/`
+        publicPath: `${isHot ? 'http://localhost:8080' : ''}/dist/`,
     },
     module: {
         rules: [
@@ -38,24 +38,24 @@ module.exports = {
                 use: [
                     {
                         loader: 'babel-loader',
-                        options: {cacheDirectory: true}
-                    }
-                ].filter(Boolean)
+                        options: { cacheDirectory: true },
+                    },
+                ].filter(Boolean),
             },
             {
                 test: /\.css$/,
                 use: [
-                    {loader: 'style-loader'},
+                    { loader: 'style-loader' },
                     {
                         loader: 'css-loader',
-                        options: {sourceMap: enableSourceMaps, url: false}
-                    }
-                ]
+                        options: { sourceMap: enableSourceMaps, url: false },
+                    },
+                ],
             },
             {
                 test: /\.pcss$/,
                 use: [
-                    {loader: 'style-loader'},
+                    { loader: 'style-loader' },
                     {
                         loader: 'css-loader',
                         options: {
@@ -64,26 +64,30 @@ module.exports = {
                             sourceMap: false,
                             url: false,
                             modules: true,
-                            importLoaders: 1
-                        }
+                            importLoaders: 1,
+                        },
                     },
-                    {loader: 'postcss-loader'}
-                ]
-            }
-        ]
+                    { loader: 'postcss-loader' },
+                ],
+            },
+        ],
     },
     plugins: [
         isProduction &&
             new webpack.LoaderOptionsPlugin({
-                minimize: true
+                minimize: true,
             }),
         isProduction &&
             new CompressionPlugin({
-                algorithm: 'gzip'
+                algorithm: 'gzip',
             }),
-        !isProduction && new webpack.NamedModulesPlugin()
+        !isProduction && new webpack.NamedModulesPlugin(),
     ].filter(Boolean),
     resolve: {
-        modules: [path.resolve('sources'), path.resolve('node_modules')]
-    }
+        alias: {
+            common: path.resolve(__dirname, 'sources/common'),
+            mobile: path.resolve(__dirname, 'sources/mobile'),
+            shared: path.resolve(__dirname, 'shared'),
+        }
+    },
 };
