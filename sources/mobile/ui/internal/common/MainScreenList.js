@@ -253,13 +253,15 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         });
 
     getTrProps = (state, item) =>
-        getTrProps({
-            selectedIds: this.state.selectedIds,
-            onEdit: this.handleToggleEditDialog,
-            onReceiveSelectedIds: this.handleReceivedSelectedIds,
-            onChangeContextMenu: this.handleChangeContextMenu,
-            item: item.original,
-        });
+        item
+            ? getTrProps({
+                selectedIds: this.state.selectedIds,
+                onEdit: this.handleToggleEditDialog,
+                onReceiveSelectedIds: this.handleReceivedSelectedIds,
+                onChangeContextMenu: this.handleChangeContextMenu,
+                item: item.original,
+            })
+            : {};
 
     get selectedItems() {
         return this.state.results.filter((each) =>
