@@ -8,12 +8,18 @@ import AccountColumn from 'common/components/BaseTable/columns/AccountColumn';
 import PersonsDisplay from 'mobile/ui/internal/expenses/cells/PersonsDisplay';
 import CurrencyColumn from 'common/components/BaseTable/columns/CurrencyColumn';
 import RepeatColumn from 'common/components/BaseTable/columns/RepeatColumn';
+import DescriptionFilter, {
+    filterMethod as descriptionFilterMethod,
+} from 'common/components/BaseTable/filters/DescriptionFilter';
 
 export default [
     CurrencyColumn,
     AmountColumn,
     {
         Header: 'Description',
+        filterable: true,
+        filterMethod: descriptionFilterMethod,
+        Filter: DescriptionFilter,
         accessor: (item) => (
             <DescriptionDisplay entity="expense" item={item} accessor="item" />
         ),
