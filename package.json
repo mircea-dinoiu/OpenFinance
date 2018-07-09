@@ -20,7 +20,8 @@
     "lint:js": "eslint server sources/mobile sources/common --quiet",
     "format:css": "prettier --write \"sources/**/*.pcss\"",
     "format:js": "prettier-eslint --write --single-quote --trailing-comma all",
-    "format:all": "yarn run format:css; yarn run format:js \"server/**/*.js\" \"sources/mobile/**/*.js\" \"sources/common/**/*.js\""
+    "format:all": "yarn run format:css; yarn run format:js \"server/**/*.js\" \"sources/mobile/**/*.js\" \"sources/common/**/*.js\"",
+    "sql": "sequelize"
   },
   "repository": {
     "type": "git",
