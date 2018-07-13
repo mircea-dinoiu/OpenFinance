@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { TextField, Toggle, RaisedButton } from 'material-ui';
+import { TextField, Toggle } from 'material-ui';
+import { Button } from '@material-ui/core';
 import { ButtonProgress } from './components/loaders';
 import routes from 'common/defs/routes';
 import fetch from 'common/utils/fetch';
@@ -100,16 +101,16 @@ class Login extends PureComponent {
                         }
                         disabled={this.state.loading}
                     />
-                    <RaisedButton
-                        label={
-                            this.state.loading ? <ButtonProgress /> : 'Login'
-                        }
-                        primary={true}
+                    <Button
+                        variant="contained"
+                        color="primary"
                         style={{ margin: '20px 0 0' }}
                         onClick={this.submit}
                         onTouchTap={this.submit}
                         disabled={this.state.loading}
-                    />
+                    >
+                        {this.state.loading ? <ButtonProgress /> : 'Login'}
+                    </Button>
                     {this.state.error != null && (
                         <ErrorSnackbar message={this.state.error} />
                     )}

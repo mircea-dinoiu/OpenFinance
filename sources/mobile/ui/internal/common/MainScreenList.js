@@ -11,7 +11,7 @@ import { BigLoader, ButtonProgress } from '../../components/loaders';
 
 import fetch, { fetchJSON } from 'common/utils/fetch';
 
-import { RaisedButton, FloatingActionButton } from 'material-ui';
+import { Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { greyedOut } from 'common/defs/styles';
 import { scrollIsAt } from 'common/utils/scroll';
@@ -26,7 +26,7 @@ import { Sizes } from 'common/defs';
 import AnchoredContextMenu from 'common/components/MainScreen/ContextMenu/AnchoredContextMenu';
 import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
-import AddIcon from 'material-ui-icons/Add';
+import AddIcon from '@material-ui/icons/Add';
 import { refreshWidgets as onRefreshWidgets } from 'common/state/actions';
 import { advanceRepeatDate } from 'shared/helpers/repeatedModels';
 
@@ -523,19 +523,21 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     {this.renderContent()}
                     {screen.isLarge ? null : (
                         <Col>
-                            <RaisedButton
-                                label={
-                                    loading ? <ButtonProgress /> : 'Load More'
-                                }
+                            <Button
+                                variant="contained"
                                 fullWidth={true}
                                 onTouchTap={this.loadMore}
                                 style={{ margin: '20px 0 60px' }}
                                 disabled={loading}
-                            />
+                            >
+                                {loading ? <ButtonProgress /> : 'Load More'}
+                            </Button>
                         </Col>
                     )}
                     {this.renderDialogs()}
-                    <FloatingActionButton
+                    <Button
+                        variant="fab"
+                        color="primary"
                         onClick={this.handleToggleAddModal}
                         mini={!this.props.screen.isLarge}
                         style={{
@@ -548,7 +550,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         }}
                     >
                         <AddIcon />
-                    </FloatingActionButton>
+                    </Button>
                 </div>
             </div>
         );

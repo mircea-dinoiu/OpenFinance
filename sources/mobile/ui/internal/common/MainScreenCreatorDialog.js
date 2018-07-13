@@ -7,8 +7,9 @@ import { ButtonProgress } from '../../components/loaders';
 
 import { Col, Row } from 'react-grid-system';
 
-import { Dialog, RaisedButton } from 'material-ui';
+import { Dialog } from 'material-ui';
 import { connect } from 'react-redux';
+import { Button } from '@material-ui/core';
 
 class MainScreenCreatorDialog extends PureComponent {
     state = {
@@ -62,22 +63,25 @@ class MainScreenCreatorDialog extends PureComponent {
         const Form = this.props.formComponent;
         const actions = (
             <React.Fragment>
-                <RaisedButton
+                <Button
+                    variant="contained"
                     disabled={this.state.saving}
-                    label="Cancel"
-                    primary={false}
                     onClick={this.props.onCancel}
                     onTouchTap={this.props.onCancel}
                     style={{ marginRight: 5 }}
-                />
-                <RaisedButton
+                >
+                    Cancel
+                </Button>
+                <Button
+                    variant="contained"
                     disabled={this.state.saving}
-                    label={this.state.saving ? <ButtonProgress /> : 'Create'}
-                    primary={true}
+                    color="primary"
                     onClick={this.save}
                     onTouchTap={this.save}
                     style={{ float: 'right' }}
-                />
+                >
+                    {this.state.saving ? <ButtonProgress /> : 'Create'}
+                </Button>
             </React.Fragment>
         );
 

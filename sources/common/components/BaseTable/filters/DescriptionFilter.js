@@ -32,7 +32,9 @@ const FlagIconMenu = ({ icon, filter, name, onChange }) => (
             Display {name}
             <RadioButtonGroup
                 name={name}
-                defaultSelected={(filter && filter.value && filter.value[name]) || YES}
+                defaultSelected={
+                    (filter && filter.value && filter.value[name]) || YES
+                }
                 style={{ margin: '10px 0 0' }}
                 onChange={(event) => onChange(name, event.target.value)}
             >

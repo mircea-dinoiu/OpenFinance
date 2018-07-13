@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Dialog, RaisedButton } from 'material-ui';
+import { Dialog } from 'material-ui';
+import { Button } from '@material-ui/core';
 
 const MainScreenDeleteDialog = ({
     open,
@@ -12,19 +13,22 @@ const MainScreenDeleteDialog = ({
 }) => {
     const actions = (
         <React.Fragment>
-            <RaisedButton
-                label="Yes"
-                primary={false}
+            <Button
+                variant="contained"
                 onClick={onYes}
                 onTouchTap={onYes}
                 style={{ marginRight: 5 }}
-            />
-            <RaisedButton
-                label="No"
-                primary={true}
+            >
+                Yes
+            </Button>
+            <Button
+                variant="contained"
+                color="primary"
                 onClick={onNo}
                 onTouchTap={onNo}
-            />
+            >
+                No
+            </Button>
         </React.Fragment>
     );
 

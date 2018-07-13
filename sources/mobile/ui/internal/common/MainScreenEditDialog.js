@@ -1,7 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-import { Dialog, RaisedButton } from 'material-ui';
+import { Dialog } from 'material-ui';
+import { Button } from '@material-ui/core';
 
 import { Row, Col } from 'react-grid-system';
 
@@ -60,22 +61,25 @@ export default class MainScreenEditDialog extends PureComponent<TypeProps> {
     render() {
         const actions = (
             <React.Fragment>
-                <RaisedButton
+                <Button
+                    variant="contained"
                     disabled={this.state.saving}
-                    label="Cancel"
-                    primary={false}
                     onClick={this.props.onCancel}
                     onTouchTap={this.props.onCancel}
                     style={{ marginRight: 5 }}
-                />
-                <RaisedButton
+                >
+                    Cancel
+                </Button>
+                <Button
+                    variant="contained"
                     disabled={this.state.saving}
-                    label={this.state.saving ? <ButtonProgress /> : 'Update'}
-                    primary={true}
+                    color="primary"
                     onClick={this.save}
                     onTouchTap={this.save}
                     style={{ float: 'right' }}
-                />
+                >
+                    {this.state.saving ? <ButtonProgress /> : 'Update'}
+                </Button>
             </React.Fragment>
         );
         const Form = this.props.formComponent;

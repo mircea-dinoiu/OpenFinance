@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Avatar } from 'material-ui';
+import { Avatar } from '@material-ui/core';
 import { connect } from 'react-redux';
 
 const FromDisplay = ({ item, user }) => {
