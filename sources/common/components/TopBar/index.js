@@ -10,12 +10,12 @@ import {
     SelectField,
     ToolbarGroup,
 } from 'material-ui';
-import MonetizationOn from 'material-ui-icons/MonetizationOn';
-import Refresh from 'material-ui-icons/Refresh';
-import ArrowBack from 'material-ui-icons/ArrowBack';
-import ArrowForward from 'material-ui-icons/ArrowForward';
+import MonetizationOn from '@material-ui/icons/MonetizationOn';
+import Refresh from '@material-ui/icons/Refresh';
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import ArrowForward from '@material-ui/icons/ArrowForward';
 import Logged from 'mobile/ui/appBar/Logged';
-import DateIcon from 'material-ui-icons/DateRange';
+import DateIcon from '@material-ui/icons/DateRange';
 import {
     updateState,
     setEndDate,
@@ -120,19 +120,19 @@ class TopBar extends PureComponent<TypeProps> {
                             <IconButton
                                 onClick={this.handleToggleDateRange}
                             >
-                                <DateIcon color="white" />
+                                <DateIcon nativeColor="white" />
                             </IconButton>
                         )}
                         {this.props.showCurrenciesDrawer && (
                             <IconButton
                                 onClick={this.onClickCurrenciesDrawerTrigger}
                             >
-                                <MonetizationOn color="white" />
+                                <MonetizationOn nativeColor="white" />
                             </IconButton>
                         )}
                         {this.props.user && (
                             <IconButton onClick={this.onClickRefresh}>
-                                <Refresh color="white" />
+                                <Refresh nativeColor="white" />
                             </IconButton>
                         )}
                         {this.props.user && (

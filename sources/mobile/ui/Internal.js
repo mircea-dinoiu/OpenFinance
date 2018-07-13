@@ -10,9 +10,9 @@ import Expenses from './internal/Expenses';
 import Incomes from './internal/Incomes';
 import Summary from './internal/Summary';
 
-import AccountBalance from 'material-ui-icons/AccountBalance';
-import TrendingUp from 'material-ui-icons/TrendingUp';
-import TrendingDown from 'material-ui-icons/TrendingDown';
+import AccountBalance from '@material-ui/icons/AccountBalance';
+import TrendingUp from '@material-ui/icons/TrendingUp';
+import TrendingDown from '@material-ui/icons/TrendingDown';
 
 import { connect } from 'react-redux';
 import { Col, Row } from 'react-grid-system';

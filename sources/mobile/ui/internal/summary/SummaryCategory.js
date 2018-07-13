@@ -5,8 +5,8 @@ import sortBy from 'lodash/sortBy';
 import { Card, CardHeader, CardText } from 'material-ui';
 import { numericValue } from 'mobile/ui/formatters';
 import { connect } from 'react-redux';
-import Expand from 'material-ui-icons/ExpandMore';
-import Collapse from 'material-ui-icons/ExpandLess';
+import Expand from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/icons/ExpandLess';
 import { Col, Row } from 'react-grid-system';
 import BaseTable from 'common/components/BaseTable';
 
