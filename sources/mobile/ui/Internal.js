@@ -1,10 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import { Paper, Tab, Tabs } from 'material-ui';
-import {
-    BottomNavigation,
-    BottomNavigationItem,
-} from 'material-ui/BottomNavigation';
+import {BottomNavigation, BottomNavigationAction} from '@material-ui/core';
 
 import Expenses from './internal/Expenses';
 import Incomes from './internal/Incomes';
@@ -117,20 +114,20 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                         width: '100%',
                     }}
                 >
-                    <BottomNavigation selectedIndex={this.state.selectedIndex}>
-                        <BottomNavigationItem
+                    <BottomNavigation value={this.state.selectedIndex}>
+                        <BottomNavigationAction
                             label="Summary"
                             icon={<AccountBalance />}
                             onClick={() => this.select(0)}
                             onTouchTap={() => this.select(0)}
                         />
-                        <BottomNavigationItem
+                        <BottomNavigationAction
                             label="Expenses"
                             icon={<TrendingDown />}
                             onClick={() => this.select(1)}
                             onTouchTap={() => this.select(1)}
                         />
-                        <BottomNavigationItem
+                        <BottomNavigationAction
                             label="Incomes"
                             icon={<TrendingUp />}
                             onClick={() => this.select(2)}
