@@ -40,7 +40,7 @@ export const getTrProps = ({
 
         let newSelected;
 
-        if (event.metaKey) {
+        if (event.metaKey || event.ctrlKey) {
             if (item.persist !== false) {
                 newSelected = selectedIds.includes(item.id)
                     ? selectedIds.filter((id) => id !== item.id)
