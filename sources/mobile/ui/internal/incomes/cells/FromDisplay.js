@@ -2,6 +2,7 @@
 import React from 'react';
 import { Avatar } from '@material-ui/core';
 import { connect } from 'react-redux';
+import {smallAvatar} from 'common/styles';
 
 const FromDisplay = ({ item, user }) => {
     const userList = user.get('list');
@@ -12,8 +13,7 @@ const FromDisplay = ({ item, user }) => {
                 <Avatar
                     key={each.get('id')}
                     src={each.get('avatar')}
-                    size={20}
-                    style={{ marginLeft: 5 }}
+                    style={smallAvatar}
                 />
             ) : null,
     );

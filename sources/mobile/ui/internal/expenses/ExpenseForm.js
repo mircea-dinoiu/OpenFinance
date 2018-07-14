@@ -8,9 +8,9 @@ import {
     SelectField,
     MenuItem,
     Chip,
-    Avatar,
 } from 'material-ui';
 import { Row, Col } from 'react-grid-system';
+
 import { grey } from '@material-ui/core/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
 import { fetch } from 'common/utils/fetch';
@@ -291,9 +291,6 @@ class ExpenseForm extends PureComponent {
                                     <MenuItem
                                         key={record.id}
                                         primaryText={record.full_name}
-                                        secondaryText={
-                                            <Avatar src={record.avatar} />
-                                        }
                                     />
                                 ),
                                 text: record.full_name,
@@ -324,7 +321,6 @@ class ExpenseForm extends PureComponent {
                                     })
                                 }
                             >
-                                <Avatar src={user.get('avatar')} />
                                 {user.get('full_name')}
                             </Chip>
                         );

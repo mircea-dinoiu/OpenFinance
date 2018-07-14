@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Avatar } from 'material-ui';
+import { Avatar } from '@material-ui/core';
+import {smallAvatar} from 'common/styles';
 
 const PersonsDisplay = ({ item, user }) => {
     const userList = user.get('list');
@@ -12,8 +13,7 @@ const PersonsDisplay = ({ item, user }) => {
                 <Avatar
                     key={each.get('id')}
                     src={each.get('avatar')}
-                    size={20}
-                    style={{ marginLeft: 5 }}
+                    style={smallAvatar}
                 />
             ) : null,
     );
