@@ -1,5 +1,5 @@
 import React from 'react';
-import { grey700 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
 import Tooltip from 'common/components/Tooltip';
 import { getDefaultCurrency } from '../../common/helpers/currency';
@@ -17,7 +17,7 @@ const NumericValue = connect(({ currencies }) => ({ currencies }))(
             <span>
                 {currency &&
                     showCurrency && (
-                    <span style={{ color: grey700, ...currencyStyle }}>
+                    <span style={{ color: grey[700], ...currencyStyle }}>
                         {currency}
                     </span>
                 )}{' '}
@@ -28,7 +28,7 @@ const NumericValue = connect(({ currencies }) => ({ currencies }))(
             <div
                 key={currency}
                 style={{
-                    backgroundColor: grey700,
+                    backgroundColor: grey[700],
                     borderRadius: '3px',
                     padding: '3px 5px',
                     margin: '0 -5px 5px',

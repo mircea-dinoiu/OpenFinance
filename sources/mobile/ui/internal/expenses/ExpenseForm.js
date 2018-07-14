@@ -11,7 +11,7 @@ import {
     Avatar,
 } from 'material-ui';
 import { Row, Col } from 'react-grid-system';
-import { grey100 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
 import { fetch } from 'common/utils/fetch';
 import routes from 'common/defs/routes';
@@ -19,7 +19,7 @@ import { stringify } from 'query-string';
 import { connect } from 'react-redux';
 
 const greyBoxStyle = {
-    backgroundColor: grey100,
+    backgroundColor: grey[100],
     paddingBottom: 10,
     marginTop: 10,
     marginBottom: 10,

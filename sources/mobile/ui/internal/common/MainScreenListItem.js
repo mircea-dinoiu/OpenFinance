@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-import { cyan50 } from 'material-ui/styles/colors';
+import { cyan } from '@material-ui/core/colors';
 
 import ResponsiveListItem from 'common/components/ResponsiveListItem';
 import { IconButton, IconMenu } from 'material-ui';
@@ -37,7 +37,7 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
     getStyle() {
         if (this.state.expanded) {
             return {
-                backgroundColor: cyan50,
+                backgroundColor: cyan[50],
             };
         }
 

@@ -1,8 +1,14 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
-import {withStyles} from '@material-ui/core/styles';
+import {
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
 import { Row, Col } from 'react-grid-system';
 
@@ -73,13 +79,13 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
                 classes={this.props.classes}
                 fullWidth={true}
             >
-                <DialogTitle>
-                    {`Edit ${this.props.entityName}`}
-                </DialogTitle>
+                <DialogTitle>{`Edit ${this.props.entityName}`}</DialogTitle>
                 <DialogContent>
                     <Row>
                         <Form
-                            onFormChange={(formData) => (this.formData = formData)}
+                            onFormChange={(formData) =>
+                                (this.formData = formData)
+                            }
                             initialValues={this.formData}
                         />
                     </Row>

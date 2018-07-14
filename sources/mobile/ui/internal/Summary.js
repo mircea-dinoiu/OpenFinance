@@ -2,7 +2,7 @@
 import React from 'react';
 import { BigLoader } from '../components/loaders';
 import { Paper } from 'material-ui';
-import * as colors from 'material-ui/styles/colors';
+import { green, purple, red, lime } from '@material-ui/core/colors';
 import routes from '../../../common/defs/routes';
 import { stringify } from 'query-string';
 import { fetch } from '../../../common/utils/fetch';
@@ -86,7 +86,7 @@ class Summary extends React.PureComponent<TypeProps> {
         return (
             <div style={{ margin: '0 0 20px' }}>
                 {this.renderCategory({
-                    backgroundColor: colors.green500,
+                    backgroundColor: green[500],
                     title: 'Balance by location',
                     summaryObject: results.remainingData.byML,
                     entities: this.props.moneyLocationTypes,
@@ -94,7 +94,7 @@ class Summary extends React.PureComponent<TypeProps> {
                 })}
 
                 {this.renderCategory({
-                    backgroundColor: colors.green500,
+                    backgroundColor: green[500],
                     title: 'Balance by user',
                     summaryObject: results.remainingData.byUser,
                     entities: this.props.user.get('list'),
@@ -102,7 +102,7 @@ class Summary extends React.PureComponent<TypeProps> {
                 })}
 
                 {this.renderCategory({
-                    backgroundColor: colors.purple500,
+                    backgroundColor: purple[500],
                     title: 'Expenses by category',
                     summaryObject: results.expensesByCategory,
                     entities: this.props.categories,
@@ -111,7 +111,7 @@ class Summary extends React.PureComponent<TypeProps> {
                 })}
 
                 {this.renderCategory({
-                    backgroundColor: colors.red500,
+                    backgroundColor: red[500],
                     title: 'Expenses by location',
                     summaryObject: results.expensesData.byML,
                     entities: this.props.moneyLocationTypes,
@@ -119,7 +119,7 @@ class Summary extends React.PureComponent<TypeProps> {
                 })}
 
                 {this.renderCategory({
-                    backgroundColor: colors.red500,
+                    backgroundColor: red[500],
                     title: 'Expenses by user',
                     summaryObject: results.expensesData.byUser,
                     entities: this.props.user.get('list'),
@@ -127,7 +127,7 @@ class Summary extends React.PureComponent<TypeProps> {
                 })}
 
                 {this.renderCategory({
-                    backgroundColor: colors.lime900,
+                    backgroundColor: lime[900],
                     title: 'Income by location',
                     summaryObject: results.incomesData.byML,
                     entities: this.props.moneyLocationTypes,
@@ -135,7 +135,7 @@ class Summary extends React.PureComponent<TypeProps> {
                 })}
 
                 {this.renderCategory({
-                    backgroundColor: colors.lime900,
+                    backgroundColor: lime[900],
                     title: 'Income by user',
                     summaryObject: results.incomesData.byUser,
                     entities: this.props.user.get('list'),

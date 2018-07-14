@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { grey500 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
 
 export default function RepeatsDisplay({ item }) {
@@ -8,7 +8,7 @@ export default function RepeatsDisplay({ item }) {
         ? RepeatOptions.filter((each) => each[0] === item.repeat)[0][1]
         : '';
     const repeatsDisplay = (
-        <span style={{ fontSize: 14, color: grey500 }}>
+        <span style={{ fontSize: 14, color: grey[500] }}>
             {screen.isLarge
                 ? repeatsText
                 : repeatsText

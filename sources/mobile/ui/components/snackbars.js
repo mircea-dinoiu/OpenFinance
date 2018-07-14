@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Snackbar } from 'material-ui';
-import { red500, green500 } from 'material-ui/styles/colors';
+import { red, green } from '@material-ui/core/colors';
 import transitions from 'material-ui/styles/transitions';
 import { connect } from 'react-redux';
 import omit from 'lodash/omit';
@@ -40,13 +40,13 @@ const CustomSnackbar = connect(({ screen }) => ({ screen }))((props) => (
 export const ErrorSnackbar = (props) => (
     <CustomSnackbar
         {...props}
-        bodyStyle={{ ...props.bodyStyle, backgroundColor: red500 }}
+        bodyStyle={{ ...props.bodyStyle, backgroundColor: red[500] }}
     />
 );
 
 export const SuccessSnackbar = (props) => (
     <CustomSnackbar
         {...props}
-        bodyStyle={{ ...props.bodyStyle, backgroundColor: green500 }}
+        bodyStyle={{ ...props.bodyStyle, backgroundColor: green[500] }}
     />
 );

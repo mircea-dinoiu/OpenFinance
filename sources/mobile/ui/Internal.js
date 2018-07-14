@@ -17,7 +17,7 @@ import TrendingDown from '@material-ui/icons/TrendingDown';
 import { connect } from 'react-redux';
 import { Col, Row } from 'react-grid-system';
 import { flexColumn } from 'common/defs/styles';
-import { grey700 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -59,7 +59,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                     textAlign: 'center',
                     padding: '100px',
                     fontSize: '48px',
-                    color: grey700,
+                    color: grey[700],
                 }}
             >
                 Coming soon
