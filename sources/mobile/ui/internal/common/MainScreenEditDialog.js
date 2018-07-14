@@ -1,8 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-import { Dialog } from 'material-ui';
-import { Button } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
 
 import { Row, Col } from 'react-grid-system';
 
@@ -15,7 +15,13 @@ type TypeProps = {
     onRequestUpdate: Function,
 };
 
-export default class MainScreenEditDialog extends PureComponent<TypeProps> {
+const styles = {
+    paper: {
+        margin: '0 10px',
+    },
+};
+
+class MainScreenEditDialog extends PureComponent<TypeProps> {
     state = {
         saving: false,
     };
@@ -59,60 +65,63 @@ export default class MainScreenEditDialog extends PureComponent<TypeProps> {
     };
 
     render() {
-        const actions = (
-            <React.Fragment>
-                <Button
-                    variant="contained"
-                    disabled={this.state.saving}
-                    onClick={this.props.onCancel}
-                    onTouchTap={this.props.onCancel}
-                    style={{ marginRight: 5 }}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    variant="contained"
-                    disabled={this.state.saving}
-                    color="primary"
-                    onClick={this.save}
-                    onTouchTap={this.save}
-                    style={{ float: 'right' }}
-                >
-                    {this.state.saving ? <ButtonProgress /> : 'Update'}
-                </Button>
-            </React.Fragment>
-        );
         const Form = this.props.formComponent;
 
         return (
             <Dialog
-                title={`Edit ${this.props.entityName}`}
                 open={this.props.open}
-                autoScrollBodyContent={true}
-                actions={actions}
-                contentStyle={{ width: '95%' }}
+                classes={this.props.classes}
+                fullWidth={true}
             >
-                <Row>
-                    <Form
-                        onFormChange={(formData) => (this.formData = formData)}
-                        initialValues={this.formData}
-                    />
-                </Row>
-                <Col>
-                    {this.state.error && (
-                        <ErrorSnackbar
-                            key={Math.random()}
-                            message={this.state.error}
+                <DialogTitle>
+                    {`Edit ${this.props.entityName}`}
+                </DialogTitle>
+                <DialogContent>
+                    <Row>
+                        <Form
+                            onFormChange={(formData) => (this.formData = formData)}
+                            initialValues={this.formData}
                         />
-                    )}
-                    {this.state.success && (
-                        <SuccessSnackbar
-                            key={Math.random()}
-                            message={this.state.success}
-                        />
-                    )}
-                </Col>
+                    </Row>
+                    <Col>
+                        {this.state.error && (
+                            <ErrorSnackbar
+                                key={Math.random()}
+                                message={this.state.error}
+                            />
+                        )}
+                        {this.state.success && (
+                            <SuccessSnackbar
+                                key={Math.random()}
+                                message={this.state.success}
+                            />
+                        )}
+                    </Col>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        disabled={this.state.saving}
+                        onClick={this.props.onCancel}
+                        onTouchTap={this.props.onCancel}
+                        style={{ marginRight: 5 }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="contained"
+                        disabled={this.state.saving}
+                        color="primary"
+                        onClick={this.save}
+                        onTouchTap={this.save}
+                        style={{ float: 'right' }}
+                    >
+                        {this.state.saving ? <ButtonProgress /> : 'Update'}
+                    </Button>
+                </DialogActions>
             </Dialog>
         );
     }
 }
+
+export default withStyles(styles)(MainScreenEditDialog);

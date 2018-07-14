@@ -7,9 +7,21 @@ import { ButtonProgress } from '../../components/loaders';
 
 import { Col, Row } from 'react-grid-system';
 
-import { Dialog } from 'material-ui';
 import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
+import {
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = {
+    paper: {
+        margin: '0 10px',
+    },
+};
 
 class MainScreenCreatorDialog extends PureComponent {
     state = {
@@ -61,64 +73,65 @@ class MainScreenCreatorDialog extends PureComponent {
 
     render() {
         const Form = this.props.formComponent;
-        const actions = (
-            <React.Fragment>
-                <Button
-                    variant="contained"
-                    disabled={this.state.saving}
-                    onClick={this.props.onCancel}
-                    onTouchTap={this.props.onCancel}
-                    style={{ marginRight: 5 }}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    variant="contained"
-                    disabled={this.state.saving}
-                    color="primary"
-                    onClick={this.save}
-                    onTouchTap={this.save}
-                    style={{ float: 'right' }}
-                >
-                    {this.state.saving ? <ButtonProgress /> : 'Create'}
-                </Button>
-            </React.Fragment>
-        );
 
         return (
             <Dialog
-                title={`Create ${this.props.entityName}`}
                 open={this.props.open}
-                autoScrollBodyContent={true}
-                actions={actions}
-                contentStyle={{ width: '95%' }}
+                classes={this.props.classes}
+                fullWidth={true}
             >
-                <Row>
-                    <Form
-                        key={this.state.createCount}
-                        onFormChange={(formData) => (this.formData = formData)}
-                        initialValues={this.formDefaults}
-                    />
-                </Row>
-                <Col>
-                    {this.state.error && (
-                        <ErrorSnackbar
-                            key={Math.random()}
-                            message={this.state.error}
+                <DialogTitle>{`Create ${this.props.entityName}`}</DialogTitle>
+                <DialogContent>
+                    <Row>
+                        <Form
+                            key={this.state.createCount}
+                            onFormChange={(formData) =>
+                                (this.formData = formData)
+                            }
+                            initialValues={this.formDefaults}
                         />
-                    )}
-                    {this.state.success && (
-                        <SuccessSnackbar
-                            key={Math.random()}
-                            message={this.state.success}
-                        />
-                    )}
-                </Col>
+                    </Row>
+                    <Col>
+                        {this.state.error && (
+                            <ErrorSnackbar
+                                key={Math.random()}
+                                message={this.state.error}
+                            />
+                        )}
+                        {this.state.success && (
+                            <SuccessSnackbar
+                                key={Math.random()}
+                                message={this.state.success}
+                            />
+                        )}
+                    </Col>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        disabled={this.state.saving}
+                        onClick={this.props.onCancel}
+                        onTouchTap={this.props.onCancel}
+                        style={{ marginRight: 5 }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="contained"
+                        disabled={this.state.saving}
+                        color="primary"
+                        onClick={this.save}
+                        onTouchTap={this.save}
+                        style={{ float: 'right' }}
+                    >
+                        {this.state.saving ? <ButtonProgress /> : 'Create'}
+                    </Button>
+                </DialogActions>
             </Dialog>
         );
     }
 }
 
 export default connect(({ currencies, user }) => ({ currencies, user }))(
-    MainScreenCreatorDialog,
+    withStyles(styles)(MainScreenCreatorDialog),
 );

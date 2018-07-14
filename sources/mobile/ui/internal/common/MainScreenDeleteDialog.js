@@ -1,18 +1,33 @@
 import React from 'react';
 
-import { Dialog } from 'material-ui';
-import { Button } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
 
+
+const styles = {
+    paper: {
+        margin: '0 10px',
+    },
+};
 const MainScreenDeleteDialog = ({
     open,
     entityName,
     onYes,
     onNo,
     count = 1,
+    classes,
     ...props
-}) => {
-    const actions = (
-        <React.Fragment>
+}) => (
+    <Dialog open={open} classes={classes} {...props}>
+        <DialogTitle>
+            {`Delete ${entityName}${count === 1 ? '' : 's'}?`}
+        </DialogTitle>
+        <DialogContent>
+            Are you sure you want to delete {count === 1 ? 'this' : 'these'}{' '}
+            {entityName}
+            {count !== 1 && 's'}?
+        </DialogContent>
+        <DialogActions>
             <Button
                 variant="contained"
                 onClick={onYes}
@@ -29,21 +44,8 @@ const MainScreenDeleteDialog = ({
             >
                 No
             </Button>
-        </React.Fragment>
-    );
+        </DialogActions>
+    </Dialog>
+);
 
-    return (
-        <Dialog
-            title={`Delete ${entityName}${count === 1 ? '' : 's'}?`}
-            open={open}
-            actions={actions}
-            {...props}
-        >
-            Are you sure you want to delete {count === 1 ? 'this' : 'these'}{' '}
-            {entityName}
-            {count !== 1 && 's'}?
-        </Dialog>
-    );
-};
-
-export default MainScreenDeleteDialog;
+export default withStyles(styles)(MainScreenDeleteDialog);
