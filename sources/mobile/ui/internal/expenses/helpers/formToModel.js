@@ -1,13 +1,15 @@
 // @flow
+import {csvToArr} from 'common/transformers';
+
 export default (data, props) => {
-    const users = data.chargedPersons.length
-        ? data.chargedPersons
+    const users = data.chargedPersons
+        ? csvToArr(data.chargedPersons).map(Number)
         : props.user
             .get('list')
             .map((each) => each.get('id'))
             .toArray();
-    const date: Date = new Date(data.date.valueOf());
-    const time: Date = data.time;
+    const date: Date = data.date.toDate();
+    const time: Date = data.time.toDate();
 
     date.setHours(time.getHours());
     date.setMinutes(time.getMinutes());
@@ -19,7 +21,7 @@ export default (data, props) => {
         sum: data.sum,
         item: data.description,
         created_at: parseInt(date.getTime() / 1000),
-        categories: data.categories,
+        categories: csvToArr(data.categories).map(Number),
         money_location_id: data.paymentMethod,
         repeat: data.repeat,
         users,

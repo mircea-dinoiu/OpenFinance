@@ -2,6 +2,7 @@
 import 'whatwg-fetch';
 import merge from 'lodash/merge';
 import config from './config';
+import flattenObject from 'common/utils/flattenObject';
 
 const globalNamespace = typeof self === 'undefined' ? this : self;
 const parseOpts = (opts) =>
@@ -15,6 +16,15 @@ const parseOpts = (opts) =>
         },
         opts,
     );
+const log = (data) => {
+    if ('function' === typeof console.table) {
+        console.table(
+            flattenObject(data)
+        );
+    } else {
+        console.info('[fetch]', data);
+    }
+};
 
 export const fetch = async (
     url: string,
@@ -31,6 +41,8 @@ export const fetch = async (
             'application/x-www-form-urlencoded; charset=UTF-8';
     }
 
+    log({ url, ...parsedOpts });
+
     return globalNamespace.fetch(url, parsedOpts, callback);
 };
 
@@ -42,6 +54,8 @@ export const fetchJSON = async (
     const parsedOpts = parseOpts(opts);
 
     parsedOpts.headers['Content-Type'] = 'application/json';
+
+    log({ url, ...parsedOpts });
 
     if ('object' === typeof parsedOpts.body) {
         parsedOpts.body = JSON.stringify(parsedOpts.body);

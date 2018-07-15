@@ -8,12 +8,8 @@ import {
     DialogTitle,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import {dialog} from 'common/defs/styles';
 
-const styles = {
-    paper: {
-        margin: '0 10px',
-    },
-};
 const MainScreenDeleteDialog = ({
     open,
     entityName,
@@ -53,4 +49,4 @@ const MainScreenDeleteDialog = ({
     </Dialog>
 );
 
-export default withStyles(styles)(MainScreenDeleteDialog);
+export default withStyles(dialog)(MainScreenDeleteDialog);

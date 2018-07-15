@@ -16,12 +16,7 @@ import {
     DialogActions,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-
-const styles = {
-    paper: {
-        margin: '0 10px',
-    },
-};
+import { dialog } from 'common/defs/styles';
 
 class MainScreenCreatorDialog extends PureComponent {
     state = {
@@ -81,7 +76,7 @@ class MainScreenCreatorDialog extends PureComponent {
                 fullWidth={true}
             >
                 <DialogTitle>{`Create ${this.props.entityName}`}</DialogTitle>
-                <DialogContent>
+                <DialogContent style={{overflow: 'visible'}}>
                     <Row>
                         <Form
                             key={this.state.createCount}
@@ -133,5 +128,5 @@ class MainScreenCreatorDialog extends PureComponent {
 }
 
 export default connect(({ currencies, user }) => ({ currencies, user }))(
-    withStyles(styles)(MainScreenCreatorDialog),
+    withStyles(dialog)(MainScreenCreatorDialog),
 );

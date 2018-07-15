@@ -1,8 +1,8 @@
 // @flow
 
 export default (data) => {
-    const date: Date = new Date(data.date.valueOf());
-    const time: Date = data.time;
+    const date: Date = data.date.toDate();
+    const time: Date = data.time.toDate();
 
     date.setHours(time.getHours());
     date.setMinutes(time.getMinutes());

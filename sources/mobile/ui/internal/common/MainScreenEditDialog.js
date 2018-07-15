@@ -16,15 +16,10 @@ import { ErrorSnackbar, SuccessSnackbar } from '../../components/snackbars';
 import { ButtonProgress } from '../../components/loaders';
 
 import { parseCRUDError } from 'common/parsers';
+import {dialog} from 'common/defs/styles';
 
 type TypeProps = {
     onRequestUpdate: Function,
-};
-
-const styles = {
-    paper: {
-        margin: '0 10px',
-    },
 };
 
 class MainScreenEditDialog extends PureComponent<TypeProps> {
@@ -130,4 +125,4 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
     }
 }
 
-export default withStyles(styles)(MainScreenEditDialog);
+export default withStyles(dialog)(MainScreenEditDialog);
