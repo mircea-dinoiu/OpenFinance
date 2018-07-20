@@ -5,10 +5,9 @@ import {
     DatePicker,
     IconButton,
     MenuItem,
-    Paper,
     SelectField,
 } from 'material-ui';
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Paper } from '@material-ui/core';
 
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';

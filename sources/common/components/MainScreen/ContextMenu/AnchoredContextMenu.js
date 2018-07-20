@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Menu } from 'material-ui';
-import {Paper} from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 
 import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
 
