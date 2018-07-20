@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Chip } from 'material-ui';
+import { Chip } from '@material-ui/core';
 
 const CategoriesDisplay = ({ item, categories, screen }) => (
     <div
@@ -17,17 +17,14 @@ const CategoriesDisplay = ({ item, categories, screen }) => (
                         key={each.get('id')}
                         style={{
                             margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`,
-                        }}
-                        labelStyle={
-                            screen.isLarge
+                            ...(screen.isLarge
                                 ? {
-                                    lineHeight: 'inherit',
+                                    height: 'auto',
                                 }
-                                : {}
-                        }
-                    >
-                        {each.get('name')}
-                    </Chip>
+                                : {}),
+                        }}
+                        label={each.get('name')}
+                    />
                 ) : null,
         )}
     </div>

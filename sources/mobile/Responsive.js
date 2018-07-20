@@ -3,6 +3,7 @@ import 'react-table/react-table.css';
 import 'react-tippy/dist/tippy.css';
 import './Responsive.pcss';
 import 'babel-polyfill';
+import { blue } from '@material-ui/core/colors';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React, { PureComponent } from 'react';
@@ -17,7 +18,8 @@ import {
 } from 'common/state/actions';
 
 import { Drawer } from 'material-ui';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider as V0MuiThemeProvider } from 'material-ui';
 
 import fetch from 'common/utils/fetch';
 import routes from 'common/defs/routes';
@@ -34,7 +36,7 @@ import EventListener from 'react-event-listener';
 import { flexColumn } from 'common/defs/styles';
 import { hot } from 'react-hot-loader';
 import { Sizes } from 'common/defs';
-import {MuiPickersUtilsProvider} from 'material-ui-pickers';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -47,6 +49,11 @@ const actions = {
     updateState,
     fetchCurrencies,
 };
+const theme = createMuiTheme({
+    palette: {
+        primary: blue,
+    },
+});
 
 class Responsive extends PureComponent<{
     actions: typeof actions,
@@ -129,37 +136,39 @@ class Responsive extends PureComponent<{
     render() {
         return (
             <MuiPickersUtilsProvider utils={MomentUtils}>
-                <MuiThemeProvider>
-                    <div
-                        style={{
-                            paddingTop: Sizes.HEADER_SIZE,
-                            ...flexColumn,
-                        }}
-                    >
-                        <EventListener
-                            target="window"
-                            onResize={this.onWindowResize}
-                        />
-                        <TopBar
-                            showCurrenciesDrawer={this.isCurrenciesDrawerReady()}
-                            onLogout={this.onLogout}
-                        />
-                        {this.isCurrenciesDrawerReady() && (
-                            <Drawer
-                                docked={false}
-                                open={this.props.currenciesDrawerOpen}
-                                openSecondary={true}
-                                onRequestChange={(currenciesDrawerOpen) =>
-                                    this.props.actions.updateState({
-                                        currenciesDrawerOpen,
-                                    })
-                                }
-                            >
-                                <Currencies data={this.props.currencies} />
-                            </Drawer>
-                        )}
-                        {this.props.loading ? <BigLoader /> : this.props.ui}
-                    </div>
+                <MuiThemeProvider theme={theme}>
+                    <V0MuiThemeProvider>
+                        <div
+                            style={{
+                                paddingTop: Sizes.HEADER_SIZE,
+                                ...flexColumn,
+                            }}
+                        >
+                            <EventListener
+                                target="window"
+                                onResize={this.onWindowResize}
+                            />
+                            <TopBar
+                                showCurrenciesDrawer={this.isCurrenciesDrawerReady()}
+                                onLogout={this.onLogout}
+                            />
+                            {this.isCurrenciesDrawerReady() && (
+                                <Drawer
+                                    docked={false}
+                                    open={this.props.currenciesDrawerOpen}
+                                    openSecondary={true}
+                                    onRequestChange={(currenciesDrawerOpen) =>
+                                        this.props.actions.updateState({
+                                            currenciesDrawerOpen,
+                                        })
+                                    }
+                                >
+                                    <Currencies data={this.props.currencies} />
+                                </Drawer>
+                            )}
+                            {this.props.loading ? <BigLoader /> : this.props.ui}
+                        </div>
+                    </V0MuiThemeProvider>
                 </MuiThemeProvider>
             </MuiPickersUtilsProvider>
         );

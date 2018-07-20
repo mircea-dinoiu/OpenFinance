@@ -1,7 +1,13 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { Paper, Tab, Tabs } from 'material-ui';
-import {BottomNavigation, BottomNavigationAction} from '@material-ui/core';
+import { Paper } from 'material-ui';
+import {
+    BottomNavigation,
+    BottomNavigationAction,
+    Tab,
+    Tabs,
+    AppBar,
+} from '@material-ui/core';
 
 import Expenses from './internal/Expenses';
 import Incomes from './internal/Incomes';
@@ -27,14 +33,16 @@ type TypeState = {
 
 class Internal extends PureComponent<TypeProps, TypeState> {
     state = {
-        selectedIndex: 1,
+        selectedIndex: 0,
         tab: null,
     };
+    handleChangeTab = this.handleChangeTab.bind(this);
 
-    select = (index) =>
-        this.setState({ selectedIndex: index, tab: this.createTab(index) });
+    handleChangeTab(index) {
+        this.setState({ selectedIndex: index });
+    }
 
-    createTab(index) {
+    renderMobileTab(index) {
         switch (index) {
             case 0:
                 return <Summary />;
@@ -43,10 +51,23 @@ class Internal extends PureComponent<TypeProps, TypeState> {
             case 2:
                 return <Incomes />;
         }
+
+        return null;
+    }
+
+    renderDesktopTab(index) {
+        switch (index) {
+            case 0:
+                return <Expenses />;
+            case 1:
+                return <Incomes />;
+        }
+
+        return this.renderComingSoon();
     }
 
     componentDidMount() {
-        this.select(this.state.selectedIndex);
+        this.handleChangeTab(this.state.selectedIndex);
     }
 
     renderComingSoon() {
@@ -69,29 +90,26 @@ class Internal extends PureComponent<TypeProps, TypeState> {
     }
 
     renderLarge() {
-        const comingSoon = this.renderComingSoon();
-
         return (
             <Row nogutter>
                 <Col xs={2} style={{ paddingRight: 0 }}>
                     <Summary />
                 </Col>
                 <Col xs={10} style={{ paddingLeft: 0 }}>
-                    <Tabs>
-                        <Tab label="Expenses">
-                            <Expenses />
-                        </Tab>
-                        <Tab label="Incomes">
-                            <Incomes />
-                        </Tab>
-                        {this.shouldRenderExtraScreens() && (
-                            <React.Fragment>
-                                <Tab label="Categories">{comingSoon}</Tab>
-                                <Tab label="Accounts">{comingSoon}</Tab>
-                                <Tab label="Account Types">{comingSoon}</Tab>
-                            </React.Fragment>
-                        )}
-                    </Tabs>
+                    <AppBar position="static">
+                        <Tabs value={this.state.selectedIndex} onChange={(event, index) => this.handleChangeTab(index)}>
+                            <Tab label="Expenses" />
+                            <Tab label="Incomes" />
+                            {this.shouldRenderExtraScreens() && (
+                                <React.Fragment>
+                                    <Tab label="Categories" />
+                                    <Tab label="Accounts" />
+                                    <Tab label="Account Types" />
+                                </React.Fragment>
+                            )}
+                        </Tabs>
+                    </AppBar>
+                    {this.renderDesktopTab(this.state.selectedIndex)}
                 </Col>
             </Row>
         );
@@ -104,7 +122,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                     paddingBottom: '56px',
                 }}
             >
-                {this.state.tab}
+                {this.renderMobileTab(this.state.selectedIndex)}
                 <Paper
                     zDepth={1}
                     style={{
@@ -118,20 +136,20 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                         <BottomNavigationAction
                             label="Summary"
                             icon={<AccountBalance />}
-                            onClick={() => this.select(0)}
-                            onTouchTap={() => this.select(0)}
+                            onClick={() => this.handleChangeTab(0)}
+                            onTouchTap={() => this.handleChangeTab(0)}
                         />
                         <BottomNavigationAction
                             label="Expenses"
                             icon={<TrendingDown />}
-                            onClick={() => this.select(1)}
-                            onTouchTap={() => this.select(1)}
+                            onClick={() => this.handleChangeTab(1)}
+                            onTouchTap={() => this.handleChangeTab(1)}
                         />
                         <BottomNavigationAction
                             label="Incomes"
                             icon={<TrendingUp />}
-                            onClick={() => this.select(2)}
-                            onTouchTap={() => this.select(2)}
+                            onClick={() => this.handleChangeTab(2)}
+                            onTouchTap={() => this.handleChangeTab(2)}
                         />
                     </BottomNavigation>
                 </Paper>
