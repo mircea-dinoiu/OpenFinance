@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
-import { Menu, Paper } from 'material-ui';
+import { Menu } from 'material-ui';
+import {Paper} from '@material-ui/core';
+
 import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
 
 export default function AnchoredContextMenu({ top, left, itemsProps }) {

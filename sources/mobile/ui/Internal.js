@@ -1,12 +1,12 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { Paper } from 'material-ui';
 import {
     BottomNavigation,
     BottomNavigationAction,
     Tab,
     Tabs,
     AppBar,
+    Paper,
 } from '@material-ui/core';
 
 import Expenses from './internal/Expenses';

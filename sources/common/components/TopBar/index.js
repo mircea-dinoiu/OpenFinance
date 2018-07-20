@@ -2,14 +2,14 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import {
-    AppBar,
     DatePicker,
     IconButton,
     MenuItem,
     Paper,
     SelectField,
-    ToolbarGroup,
 } from 'material-ui';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
+
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';
 import ArrowBack from '@material-ui/icons/ArrowBack';
@@ -104,111 +104,118 @@ class TopBar extends PureComponent<TypeProps> {
 
         return (
             <AppBar
-                title={this.props.title}
-                titleStyle={{
-                    height: Sizes.HEADER_SIZE,
-                    lineHeight: Sizes.HEADER_SIZE,
-                }}
-                showMenuIconButton={false}
-                iconStyleRight={{
-                    marginTop: 0,
-                }}
-                iconElementRight={
-                    <ToolbarGroup>
-                        {this.props.user &&
-                            isSmall && (
-                            <IconButton
-                                onClick={this.handleToggleDateRange}
-                            >
-                                <DateIcon nativeColor="white" />
-                            </IconButton>
-                        )}
-                        {this.props.showCurrenciesDrawer && (
-                            <IconButton
-                                onClick={this.onClickCurrenciesDrawerTrigger}
-                            >
-                                <MonetizationOn nativeColor="white" />
-                            </IconButton>
-                        )}
-                        {this.props.user && (
-                            <IconButton onClick={this.onClickRefresh}>
-                                <Refresh nativeColor="white" />
-                            </IconButton>
-                        )}
-                        {this.props.user && (
-                            <Logged onLogout={this.props.onLogout} />
-                        )}
-                    </ToolbarGroup>
-                }
+                position="fixed"
                 style={{
-                    position: 'fixed',
-                    top: 0,
                     height: Sizes.HEADER_SIZE,
                 }}
             >
-                {this.props.user && (
-                    <Paper
-                        style={{
-                            height: INPUT_HEIGHT,
-                            ...(isSmall
-                                ? {
-                                    position: 'fixed',
-                                    display: this.state.showDateRange
-                                        ? 'block'
-                                        : 'none',
-                                    top: Sizes.HEADER_SIZE,
+                <Toolbar
+                    style={{
+                        height: Sizes.HEADER_SIZE,
+                        minHeight: 'auto',
+                        paddingRight: 10,
+                    }}
+                >
+                    <Typography variant="title" color="inherit">
+                        {this.props.title}
+                    </Typography>
+                    {this.props.user && (
+                        <Paper
+                            style={{
+                                height: INPUT_HEIGHT,
+                                ...(isSmall
+                                    ? {
+                                        position: 'fixed',
+                                        display: this.state.showDateRange
+                                            ? 'block'
+                                            : 'none',
+                                        top: Sizes.HEADER_SIZE,
+                                    }
+                                    : {
+                                        position: 'absolute',
+                                        left: '50%',
+                                        top: '1px',
+                                        transform: 'translateX(-50%)',
+                                    }),
+                            }}
+                        >
+                            <IconButton
+                                style={{ float: 'left', height: INPUT_HEIGHT }}
+                                tooltip={`Shift back ${
+                                    ShiftDateOptions[
+                                        this.props.preferences.endDateIncrement
+                                    ]
+                                }`}
+                                onClick={this.onShiftBack}
+                            >
+                                <ArrowBack />
+                            </IconButton>
+                            <DatePicker
+                                style={{ float: 'left' }}
+                                textFieldStyle={{
+                                    textAlign: 'center',
+                                    width: '85px',
+                                    height: INPUT_HEIGHT,
+                                }}
+                                hintText=""
+                                value={
+                                    this.props.preferences.endDate
+                                        ? moment(
+                                            this.props.preferences.endDate,
+                                        ).toDate()
+                                        : null
                                 }
-                                : {
-                                    position: 'absolute',
-                                    left: '50%',
-                                    top: '1px',
-                                    transform: 'translateX(-50%)',
-                                }),
+                                container="inline"
+                                onChange={this.onChangeEndDate}
+                            />
+                            <IconButton
+                                style={{ float: 'left', height: INPUT_HEIGHT }}
+                                tooltip={`Shift forward ${
+                                    ShiftDateOptions[
+                                        this.props.preferences.endDateIncrement
+                                    ]
+                                }`}
+                                onClick={this.onShiftForward}
+                            >
+                                <ArrowForward />
+                            </IconButton>
+                            {this.renderEndDateIntervalSelect()}
+                        </Paper>
+                    )}
+                    <div
+                        style={{
+                            flex: 1,
                         }}
                     >
-                        <IconButton
-                            style={{ float: 'left', height: INPUT_HEIGHT }}
-                            tooltip={`Shift back ${
-                                ShiftDateOptions[
-                                    this.props.preferences.endDateIncrement
-                                ]
-                            }`}
-                            onClick={this.onShiftBack}
-                        >
-                            <ArrowBack />
-                        </IconButton>
-                        <DatePicker
-                            style={{ float: 'left' }}
-                            textFieldStyle={{
-                                textAlign: 'center',
-                                width: '85px',
-                                height: INPUT_HEIGHT,
-                            }}
-                            hintText=""
-                            value={
-                                this.props.preferences.endDate
-                                    ? moment(
-                                        this.props.preferences.endDate,
-                                    ).toDate()
-                                    : null
-                            }
-                            container="inline"
-                            onChange={this.onChangeEndDate}
-                        />
-                        <IconButton
-                            style={{ float: 'left', height: INPUT_HEIGHT }}
-                            tooltip={`Shift forward ${
-                                ShiftDateOptions[
-                                    this.props.preferences.endDateIncrement
-                                ]
-                            }`}
-                            onClick={this.onShiftForward}
-                        >
-                            <ArrowForward />
-                        </IconButton>
-                        {this.renderEndDateIntervalSelect()}
-                    </Paper>
-                )}
+                        <div style={{ float: 'right' }}>
+                            {this.props.user &&
+                                isSmall && (
+                                <IconButton
+                                    onClick={this.handleToggleDateRange}
+                                >
+                                    <DateIcon nativeColor="white" />
+                                </IconButton>
+                            )}
+                            {this.props.showCurrenciesDrawer && (
+                                <IconButton
+                                    onClick={
+                                        this.onClickCurrenciesDrawerTrigger
+                                    }
+                                >
+                                    <MonetizationOn nativeColor="white" />
+                                </IconButton>
+                            )}
+                            {this.props.user && (
+                                <IconButton onClick={this.onClickRefresh}>
+                                    <Refresh nativeColor="white" />
+                                </IconButton>
+                            )}
+                            {this.props.user && (
+                                <Logged onLogout={this.props.onLogout} />
+                            )}
+                        </div>
+                    </div>
+                </Toolbar>
             </AppBar>
         );
     }

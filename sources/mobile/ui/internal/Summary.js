@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { BigLoader } from '../components/loaders';
-import { Paper } from 'material-ui';
+import { Paper } from '@material-ui/core';
 import { green, purple, red, lime } from '@material-ui/core/colors';
 import routes from '../../../common/defs/routes';
 import { stringify } from 'query-string';
@@ -159,9 +159,11 @@ class Summary extends React.PureComponent<TypeProps> {
             <div
                 style={{
                     padding: '0 5px',
-                    overflowY: 'auto',
-                    overflowX: 'hidden',
-                    height: `calc(100vh - ${Sizes.HEADER_SIZE})`,
+                    ...(this.props.screen.isLarge ? {
+                        overflowY: 'auto',
+                        overflowX: 'hidden',
+                        height: `calc(100vh - ${Sizes.HEADER_SIZE})`
+                    } : {}),
                 }}
             >
                 <div style={this.state.refreshing ? greyedOut : {}}>
