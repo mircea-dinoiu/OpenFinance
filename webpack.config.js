@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const env = process.env.NODE_ENV || 'development';
 
 console.log('Webpack building for', env);
@@ -26,8 +27,7 @@ module.exports = {
         : undefined,
     output: {
         path: path.resolve('./public/dist'),
-        // filename: isProduction ? '[name].[chunkhash].js' : '[name].js',
-        filename: '[name].js',
+        filename: isProduction ? '[name].[chunkhash].js' : '[name].js',
         publicPath: `${isHot ? 'http://localhost:8080' : ''}/dist/`,
     },
     module: {
@@ -82,6 +82,7 @@ module.exports = {
                 algorithm: 'gzip',
             }),
         !isProduction && new webpack.NamedModulesPlugin(),
+        new ManifestPlugin(),
     ].filter(Boolean),
     resolve: {
         alias: {

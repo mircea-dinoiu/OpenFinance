@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { basePath } = require('../helpers');
+const { basePath, getScriptSrc } = require('../helpers');
 const fs = require('fs');
 // config
 const config = require('config');
@@ -19,7 +19,10 @@ router.get('/', (req, res) => {
     const legacy = req.query.hasOwnProperty('legacy');
 
     if (!legacy) {
-        res.render('responsive', data);
+        res.render('responsive', {
+            ...data,
+            scriptSrc: getScriptSrc('bundles/Responsive.js'),
+        });
     } else {
         fs.readFile(
             basePath(
@@ -34,6 +37,7 @@ router.get('/', (req, res) => {
                         {
                             theme: 'triton',
                             bootstrapScript: String(microloader),
+                            scriptSrc: getScriptSrc('bundles/Desktop.js'),
                         },
                         data,
                     ),
