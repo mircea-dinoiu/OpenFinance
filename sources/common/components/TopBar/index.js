@@ -1,12 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import {
-    DatePicker,
-    IconButton,
-    MenuItem,
-    SelectField,
-} from 'material-ui';
+import { DatePicker, IconButton, MenuItem, SelectField } from 'material-ui';
 import { AppBar, Toolbar, Typography, Paper } from '@material-ui/core';
 
 import MonetizationOn from '@material-ui/icons/MonetizationOn';

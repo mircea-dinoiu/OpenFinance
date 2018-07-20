@@ -18,9 +18,7 @@ const parseOpts = (opts) =>
     );
 const log = (data) => {
     if ('function' === typeof console.table) {
-        console.table(
-            flattenObject(data)
-        );
+        console.table(flattenObject(data));
     } else {
         console.info('[fetch]', data);
     }

@@ -8,7 +8,7 @@ import {
     DialogTitle,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import {dialog} from 'common/defs/styles';
+import { dialog } from 'common/defs/styles';
 
 const MainScreenDeleteDialog = ({
     open,

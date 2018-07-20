@@ -12,7 +12,9 @@ export const parseCRUDError = (json) => {
                         <li key={key}>
                             {key}
                             <ul>
-                                {messages.map((message) => <li key={message}>{message}</li>)}
+                                {messages.map((message) => (
+                                    <li key={message}>{message}</li>
+                                ))}
                             </ul>
                         </li>
                     )),

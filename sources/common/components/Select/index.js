@@ -10,7 +10,6 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ClearIcon from '@material-ui/icons/Clear';
 import Chip from '@material-ui/core/Chip';
 import Select from 'react-select';
-import {Creatable} from 'react-select';
 import 'react-select/dist/react-select.css';
 import uniqueId from 'lodash/uniqueId';
 
@@ -36,12 +35,11 @@ class Option extends React.Component {
     }
 }
 
-const  SelectWrapped = (props) => {
-    const { classes, creatable, ...other } = props;
-    const Component = creatable ? Creatable : Select;
+const SelectWrapped = (props) => {
+    const { classes, ...other } = props;
 
     return (
-        <Component
+        <Select
             optionComponent={Option}
             noResultsText={<Typography>{'No results found'}</Typography>}
             arrowRenderer={(arrowProps) =>
@@ -73,8 +71,7 @@ const  SelectWrapped = (props) => {
             {...other}
         />
     );
-}
-
+};
 const ITEM_HEIGHT = 48;
 const styles = (theme) => ({
     root: {

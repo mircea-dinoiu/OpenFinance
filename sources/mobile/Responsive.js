@@ -17,9 +17,8 @@ import {
     fetchCurrencies,
 } from 'common/state/actions';
 
-import { Drawer } from 'material-ui';
+import { Drawer, MuiThemeProvider as V0MuiThemeProvider } from 'material-ui';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { MuiThemeProvider as V0MuiThemeProvider } from 'material-ui';
 
 import fetch from 'common/utils/fetch';
 import routes from 'common/defs/routes';

@@ -97,7 +97,12 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                 </Col>
                 <Col xs={10} style={{ paddingLeft: 0 }}>
                     <AppBar position="static">
-                        <Tabs value={this.state.selectedIndex} onChange={(event, index) => this.handleChangeTab(index)}>
+                        <Tabs
+                            value={this.state.selectedIndex}
+                            onChange={(event, index) =>
+                                this.handleChangeTab(index)
+                            }
+                        >
                             <Tab label="Expenses" />
                             <Tab label="Incomes" />
                             {this.shouldRenderExtraScreens() && (

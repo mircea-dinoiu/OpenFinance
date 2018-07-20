@@ -1,5 +1,5 @@
 // @flow
-import {csvToArr} from 'common/transformers';
+import { csvToArr } from 'common/transformers';
 
 export default (data, props) => {
     const users = data.chargedPersons

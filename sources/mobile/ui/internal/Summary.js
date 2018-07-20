@@ -159,11 +159,13 @@ class Summary extends React.PureComponent<TypeProps> {
             <div
                 style={{
                     padding: '0 5px',
-                    ...(this.props.screen.isLarge ? {
-                        overflowY: 'auto',
-                        overflowX: 'hidden',
-                        height: `calc(100vh - ${Sizes.HEADER_SIZE})`
-                    } : {}),
+                    ...(this.props.screen.isLarge
+                        ? {
+                            overflowY: 'auto',
+                            overflowX: 'hidden',
+                            height: `calc(100vh - ${Sizes.HEADER_SIZE})`,
+                        }
+                        : {}),
                 }}
             >
                 <div style={this.state.refreshing ? greyedOut : {}}>

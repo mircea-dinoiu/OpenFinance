@@ -2,7 +2,7 @@
 import extend from 'lodash/extend';
 
 export default function flattenObject(object, prefix = '') {
-    const propName = prefix ? prefix + '.' : '';
+    const propName = prefix ? `${prefix}.` : '';
     const ret = {};
 
     Object.entries(object).forEach(([key, value]) => {

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Avatar } from '@material-ui/core';
 import { connect } from 'react-redux';
-import {smallAvatar} from 'common/defs/styles';
+import { smallAvatar } from 'common/defs/styles';
 
 const FromDisplay = ({ item, user }) => {
     const userList = user.get('list');

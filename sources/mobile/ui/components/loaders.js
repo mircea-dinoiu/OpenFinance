@@ -8,8 +8,5 @@ export const BigLoader = (props) => (
 );
 
 export const ButtonProgress = (props) => (
-    <CircularProgress
-        size={20}
-        {...props}
-    />
+    <CircularProgress size={20} {...props} />
 );

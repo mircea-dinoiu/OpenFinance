@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {arrToCsv} from 'common/transformers';
+import { arrToCsv } from 'common/transformers';
 
 export default (data) => ({
     id: data.id,
