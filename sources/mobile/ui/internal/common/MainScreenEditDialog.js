@@ -16,7 +16,7 @@ import { ErrorSnackbar, SuccessSnackbar } from '../../components/snackbars';
 import { ButtonProgress } from '../../components/loaders';
 
 import { parseCRUDError } from 'common/parsers';
-import {dialog} from 'common/defs/styles';
+import { dialog } from 'common/defs/styles';
 
 type TypeProps = {
     onRequestUpdate: Function,
@@ -75,7 +75,7 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
                 fullWidth={true}
             >
                 <DialogTitle>{`Edit ${this.props.entityName}`}</DialogTitle>
-                <DialogContent>
+                <DialogContent style={{ overflow: 'visible' }}>
                     <Row>
                         <Form
                             onFormChange={(formData) =>

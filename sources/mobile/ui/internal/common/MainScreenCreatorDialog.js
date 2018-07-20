@@ -76,7 +76,7 @@ class MainScreenCreatorDialog extends PureComponent {
                 fullWidth={true}
             >
                 <DialogTitle>{`Create ${this.props.entityName}`}</DialogTitle>
-                <DialogContent style={{overflow: 'visible'}}>
+                <DialogContent style={{ overflow: 'visible' }}>
                     <Row>
                         <Form
                             key={this.state.createCount}
