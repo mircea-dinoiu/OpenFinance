@@ -173,9 +173,9 @@ class ExpenseForm extends PureComponent {
             );
             const categories = arrToCsv(await response.json());
 
-            this.setState({
-                categories,
-            });
+            this.setState((prevState) => ({
+                categories: prevState.categories ? prevState.categories : categories
+            }));
         }
     };
 
@@ -249,6 +249,9 @@ class ExpenseForm extends PureComponent {
                 {...this.bindSelect({
                     valueKey: 'categories',
                 })}
+                filterOption={(option, search) => {
+                    return option.filterText.toLowerCase().includes(search.toLowerCase());
+                }}
                 options={this.props.categories
                     .sortBy((each) => each.get('name'))
                     .map((each) => ({
@@ -261,6 +264,7 @@ class ExpenseForm extends PureComponent {
                                 {each.get('name')}
                             </StyledBadge>
                         ),
+                        filterText: each.get('name'),
                     }))
                     .toJS()}
             />
