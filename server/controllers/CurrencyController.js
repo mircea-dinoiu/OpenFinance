@@ -1,6 +1,7 @@
 const CurrencyHelper = require('..//helpers/CurrencyHelper');
 const config = require('config');
-const { basePath, logError } = require('../helpers');
+const { basePath } = require('../helpers');
+const logger = require('../helpers/logger');
 const fs = require('fs');
 const { Currency, Setting } = require('../models');
 const http = require('http');
@@ -101,7 +102,7 @@ module.exports = {
             });
 
             req.on('error', (e) => {
-                logError(e);
+                logger.error(e);
                 resolve(null);
             });
         });
@@ -181,7 +182,7 @@ module.exports = {
                 await this.fetchFreshData();
                 await this.cacheData();
             } catch (e) {
-                logError(e);
+                logger.error(e);
                 await this.fetchCachedData();
                 fromCache = true;
             }

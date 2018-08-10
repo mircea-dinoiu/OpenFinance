@@ -1,6 +1,5 @@
 const { standardDate } = require('../../shared/utils/dates');
 const path = require('path');
-const fs = require('fs');
 const basePath = (string = '') => path.join(__dirname, '../../', string);
 const config = require('config');
 
@@ -29,12 +28,4 @@ module.exports = {
     },
 
     standardDate,
-
-    logError(...args) {
-        console.error(...args);
-        fs.appendFile(
-            basePath('storage/error.log'),
-            args.concat('').join('\n'),
-        );
-    },
 };

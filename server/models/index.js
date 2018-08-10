@@ -5,14 +5,12 @@ const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const config = require('config');
 const db = {};
+const logger = require('../helpers/logger');
 const sql = new Sequelize(process.env.DATABASE_URL, {
     timezone: process.env.TIMEZONE,
     logging: config.get('debug')
         ? (...args) => {
-            console.log(
-                chalk.inverse('SQL:'),
-                ...args.map((arg) => chalk.cyan(arg)),
-            );
+            logger.log('SQL', ...args.map((arg) => chalk.cyan(arg)));
         }
         : false,
 });

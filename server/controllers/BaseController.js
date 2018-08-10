@@ -2,6 +2,7 @@ const { isPlainObject } = require('lodash');
 const Messages = require('../Messages');
 const { Validator } = require('../validators');
 const chalk = require('chalk');
+const logger = require('../helpers/logger');
 
 module.exports = {
     parseRecord(record) {
@@ -46,10 +47,8 @@ module.exports = {
                         values = await values;
                     }
 
-                    console.log(
-                        chalk.inverse(
-                            `Updating ${this.Model.name} #${record.id} with`,
-                        ),
+                    logger.log(
+                        `Updating ${this.Model.name} #${record.id} with`,
                         chalk.green(JSON.stringify(values, null, 2)),
                     );
 
@@ -108,10 +107,8 @@ module.exports = {
                         values = await values;
                     }
 
-                    console.log(
-                        chalk.inverse(
-                            `Updating ${this.Model.name} #${record.id} with`,
-                        ),
+                    logger.log(
+                        `Updating ${this.Model.name} #${record.id} with`,
                         chalk.green(JSON.stringify(values, null, 2)),
                     );
 

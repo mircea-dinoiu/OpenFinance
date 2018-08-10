@@ -5,6 +5,7 @@ const debug = require('config').get('debug');
 const chalk = require('chalk');
 const stringIsInt = validator.isInt;
 const stringIsFloat = validator.isFloat;
+const logger = require('../helpers/logger');
 
 Object.assign(validator, {
     isInt: (value) => {
@@ -108,8 +109,8 @@ class Validator {
                     }
 
                     if (debug) {
-                        console.log(
-                            chalk.inverse('Validation rule called:'),
+                        logger.log(
+                            'Validation rule called',
                             chalk.green(
                                 `${dataKey}: validator.${ruleName}(${[value]
                                     .concat(params)
