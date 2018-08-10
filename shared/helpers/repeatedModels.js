@@ -17,6 +17,9 @@ const advanceRepeatDate = (obj, rawRepeats) => {
         case 'm':
             date.setMonth(date.getMonth() + Number(repeats));
             break;
+        case '2m':
+            date.setMonth(date.getMonth() + 2 * repeats);
+            break;
         case '3m':
             date.setMonth(date.getMonth() + 3 * repeats);
             break;

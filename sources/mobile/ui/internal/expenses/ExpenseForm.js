@@ -42,7 +42,7 @@ class ExpenseForm extends PureComponent {
 
     state = {
         descriptionSuggestions: [],
-        descriptionNewOptions: [],
+        descriptionNewOptionText: '',
         ...this.props.initialValues,
     };
 
@@ -63,6 +63,22 @@ class ExpenseForm extends PureComponent {
             },
             value: this.state[valueKey],
         };
+    }
+
+    get descriptionNewOptions() {
+        const text =
+            this.state.descriptionNewOptionText || this.state.description;
+
+        if (text) {
+            return [
+                {
+                    value: text,
+                    label: text,
+                },
+            ];
+        }
+
+        return [];
     }
 
     renderSum() {
@@ -116,7 +132,7 @@ class ExpenseForm extends PureComponent {
                     onChange: this.handleDescriptionChange,
                 })}
                 onInputChange={this.handleDescriptionInputChange}
-                options={this.state.descriptionNewOptions.concat(
+                options={this.descriptionNewOptions.concat(
                     this.state.descriptionSuggestions.map((each) => ({
                         value: each.item,
                         label: (
@@ -152,12 +168,7 @@ class ExpenseForm extends PureComponent {
 
         if (value) {
             this.setState({
-                descriptionNewOptions: [
-                    {
-                        label: value,
-                        value,
-                    },
-                ],
+                descriptionNewOptionText: value,
             });
         }
 
@@ -174,7 +185,9 @@ class ExpenseForm extends PureComponent {
             const categories = arrToCsv(await response.json());
 
             this.setState((prevState) => ({
-                categories: prevState.categories ? prevState.categories : categories
+                categories: prevState.categories
+                    ? prevState.categories
+                    : categories,
             }));
         }
     };
@@ -249,9 +262,11 @@ class ExpenseForm extends PureComponent {
                 {...this.bindSelect({
                     valueKey: 'categories',
                 })}
-                filterOption={(option, search) => {
-                    return option.filterText.toLowerCase().includes(search.toLowerCase());
-                }}
+                filterOption={(option, search) =>
+                    option.filterText
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                }
                 options={this.props.categories
                     .sortBy((each) => each.get('name'))
                     .map((each) => ({

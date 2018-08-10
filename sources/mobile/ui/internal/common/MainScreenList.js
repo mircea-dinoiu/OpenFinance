@@ -29,6 +29,7 @@ import MainScreenEditDialog from './MainScreenEditDialog';
 import AddIcon from '@material-ui/icons/Add';
 import { refreshWidgets as onRefreshWidgets } from 'common/state/actions';
 import { advanceRepeatDate } from 'shared/helpers/repeatedModels';
+import { uniqueId } from 'lodash';
 
 const PAGE_SIZE = 50;
 
@@ -76,6 +77,7 @@ type TypeState = {
 
     addModalOpen: boolean,
     editDialogOpen: boolean,
+    editDialogKey: string,
     deleteDialogOpen: boolean,
 };
 
@@ -93,6 +95,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         addModalOpen: false,
         editDialogOpen: false,
+        editDialogKey: uniqueId(),
         deleteDialogOpen: false,
     };
 
@@ -138,7 +141,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     handleToggleDeleteDialog = () =>
         this.setState((state) => ({ deleteDialogOpen: !state.deleteDialogOpen }));
     handleToggleEditDialog = () =>
-        this.setState((state) => ({ editDialogOpen: !state.editDialogOpen }));
+        this.setState((state) => ({
+            editDialogOpen: !state.editDialogOpen,
+            editDialogKey: uniqueId(),
+        }));
     handleToggleAddModal = () =>
         this.setState((state) => ({
             addModalOpen: !state.addModalOpen,
@@ -490,7 +496,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 />
                 {this.selectedItems.length > 0 && (
                     <MainScreenEditDialog
-                        key={selectedItems[0].id}
+                        key={this.state.editDialogKey}
                         open={this.state.editDialogOpen}
                         item={selectedItems[0]}
                         onCancel={this.handleToggleEditDialog}

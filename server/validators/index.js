@@ -48,7 +48,8 @@ Object.assign(validator, {
 
         return true;
     },
-    isRepeatValue: (value) => ['d', 'w', '2w', 'm', '3m', 'y'].includes(value),
+    isRepeatValue: (value) =>
+        ['d', 'w', '2w', 'm', '2m', '3m', 'y'].includes(value),
     isStatusValue: (value) => ['finished', 'pending'].includes(value),
     isNotZero: (value) => Number(value) !== 0,
     isString: (value) => typeof value === 'string',
