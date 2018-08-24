@@ -15,9 +15,22 @@ import { greyedOut } from 'common/defs/styles';
 import { Sizes } from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
 import { updatePreferences } from 'common/state/actions';
+import moment from 'moment';
 
 type TypeProps = {
     screen: TypeScreenQueries,
+};
+
+const getEndDateBasedOnIncludePreference = (endDate, include) => {
+    if (include === 'ut') {
+        return formatYMD();
+    }
+
+    if (include === 'until-tmrw') {
+        return formatYMD(moment().add(1, 'day').toDate());
+    }
+
+    return endDate;
 };
 
 class Summary extends React.PureComponent<TypeProps> {
@@ -56,7 +69,7 @@ class Summary extends React.PureComponent<TypeProps> {
             `${routes.report.summary}?${stringify({
                 ...pickBy(
                     {
-                        end_date: include === 'ut' ? formatYMD() : endDate,
+                        end_date: getEndDateBasedOnIncludePreference(endDate, include),
                         start_date: getStartDate({
                             include,
                             endDate,
