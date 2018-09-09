@@ -9,7 +9,7 @@ import throttle from 'lodash/throttle';
 
 import { BigLoader, ButtonProgress } from '../../components/loaders';
 
-import fetch, { fetchJSON } from 'common/utils/fetch';
+import { createXHR } from 'common/utils/fetch';
 
 import { Button } from '@material-ui/core';
 import { connect } from 'react-redux';
@@ -176,14 +176,14 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         this.setState((state) => ({ loading: state.loading + 1 }));
 
-        const response = await fetch(
-            `${this.props.api.list}?${stringify({
+        const response = await createXHR({
+            url: `${this.props.api.list}?${stringify({
                 end_date: endDate,
                 page,
                 limit: PAGE_SIZE,
             })}`,
-        );
-        const json = await response.json();
+        });
+        const json = response.data;
 
         this.setState((state) => ({
             page: page + 1,
@@ -307,12 +307,15 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
     setStatusToSelectedRecords = async (status) => {
         const selectedItems = this.selectedItems;
-        const response = await this.handleRequestUpdate(
-            selectedItems.map((each) => ({ id: each.id, status })),
-        );
 
-        if (response.ok) {
-            this.updateResultsFromUpdateResponse(await response.json());
+        try {
+            const response = await this.handleRequestUpdate(
+                selectedItems.map((each) => ({ id: each.id, status })),
+            );
+
+            this.updateResultsFromUpdateResponse(response.data);
+        } catch (e) {
+            // todo
         }
     };
 
@@ -339,9 +342,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     };
 
     handleRequest = this.withLoading((data, api: string) =>
-        fetchJSON(api, {
+        createXHR({
+            url: api,
             method: 'POST',
-            body: { data },
+            data: { data },
         }),
     );
     handleRequestDelete = (data) =>

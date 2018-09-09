@@ -3,8 +3,8 @@ import 'whatwg-fetch';
 import merge from 'lodash/merge';
 import config from './config';
 import flattenObject from 'common/utils/flattenObject';
+import axios from 'axios';
 
-const globalNamespace = typeof self === 'undefined' ? this : self;
 const parseOpts = (opts) =>
     merge(
         {
@@ -24,42 +24,23 @@ const log = (data) => {
     }
 };
 
-export const fetch = async (
-    url: string,
-    opts: {} = {},
-    callback: ?Function = null,
-) => {
+export const createXHR = (opts: { url: string }) => {
     const parsedOpts = parseOpts(opts);
 
     if (
-        parsedOpts.hasOwnProperty('body') &&
+        parsedOpts.hasOwnProperty('data') &&
         !parsedOpts.headers.hasOwnProperty('Content-Type')
     ) {
-        parsedOpts.headers['Content-Type'] =
-            'application/x-www-form-urlencoded; charset=UTF-8';
+        if ('object' === typeof parsedOpts.data) {
+            parsedOpts.data = JSON.stringify(parsedOpts.data);
+            parsedOpts.headers['Content-Type'] = 'application/json';
+        } else {
+            parsedOpts.headers['Content-Type'] =
+                'application/x-www-form-urlencoded; charset=UTF-8';
+        }
     }
 
-    log({ url, ...parsedOpts });
+    log(parsedOpts);
 
-    return globalNamespace.fetch(url, parsedOpts, callback);
+    return axios(parsedOpts);
 };
-
-export const fetchJSON = async (
-    url: string,
-    opts: {} = {},
-    callback: ?Function = null,
-) => {
-    const parsedOpts = parseOpts(opts);
-
-    parsedOpts.headers['Content-Type'] = 'application/json';
-
-    log({ url, ...parsedOpts });
-
-    if ('object' === typeof parsedOpts.body) {
-        parsedOpts.body = JSON.stringify(parsedOpts.body);
-    }
-
-    return globalNamespace.fetch(url, parsedOpts, callback);
-};
-
-export default fetch;

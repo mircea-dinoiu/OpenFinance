@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
+import { createXHR } from 'common/utils/fetch';
 import { BigLoader } from '../components/loaders';
 import { Paper } from '@material-ui/core';
 import { green, purple, red, lime } from '@material-ui/core/colors';
 import routes from '../../../common/defs/routes';
 import { stringify } from 'query-string';
-import { fetch } from '../../../common/utils/fetch';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import { connect } from 'react-redux';
@@ -27,7 +27,11 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
     }
 
     if (include === 'until-tmrw') {
-        return formatYMD(moment().add(1, 'day').toDate());
+        return formatYMD(
+            moment()
+                .add(1, 'day')
+                .toDate(),
+        );
     }
 
     return endDate;
@@ -65,11 +69,14 @@ class Summary extends React.PureComponent<TypeProps> {
             refreshing: true,
         });
 
-        const response = await fetch(
-            `${routes.report.summary}?${stringify({
+        const response = await createXHR({
+            url: `${routes.report.summary}?${stringify({
                 ...pickBy(
                     {
-                        end_date: getEndDateBasedOnIncludePreference(endDate, include),
+                        end_date: getEndDateBasedOnIncludePreference(
+                            endDate,
+                            include,
+                        ),
                         start_date: getStartDate({
                             include,
                             endDate,
@@ -79,8 +86,8 @@ class Summary extends React.PureComponent<TypeProps> {
                 ),
                 html: false,
             })}`,
-        );
-        const json = await response.json();
+        });
+        const json = response.data;
 
         this.setState({
             results: json,

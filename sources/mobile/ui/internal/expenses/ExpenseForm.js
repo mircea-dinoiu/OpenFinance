@@ -4,7 +4,7 @@ import { Row, Col } from 'react-grid-system';
 import { Badge, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import RepeatOptions from 'common/defs/repeatOptions';
-import { fetch } from 'common/utils/fetch';
+import { createXHR } from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 import { stringify } from 'query-string';
 import { connect } from 'react-redux';
@@ -12,6 +12,7 @@ import { MultiSelect, SingleSelect } from 'common/components/Select';
 import { arrToCsv } from 'common/transformers';
 import { overflowVisible } from 'common/defs/styles';
 import { DatePicker, TimePicker } from 'material-ui-pickers';
+import { CancelToken } from 'axios';
 
 const boxStyle = {
     padding: '10px 0',
@@ -35,6 +36,9 @@ const badgeStyle = {
 const StyledBadge = withStyles(badgeStyle)(Badge);
 
 class ExpenseForm extends PureComponent {
+    descriptionSuggestionsCancelSource = CancelToken.source();
+    categoriesCancelSource;
+
     props: {
         initialValues: {},
         onFormChange: Function,
@@ -150,13 +154,20 @@ class ExpenseForm extends PureComponent {
     }
 
     fetchDescriptionSuggestions = async (search) => {
-        const response = await fetch(
-            `${routes.suggestion.expense.descriptions}?${stringify({
+        if (this.descriptionSuggestionsCancelSource) {
+            this.descriptionSuggestionsCancelSource.cancel();
+        }
+
+        this.descriptionSuggestionsCancelSource = CancelToken.source();
+
+        const response = await createXHR({
+            url: `${routes.suggestion.expense.descriptions}?${stringify({
                 search,
                 end_date: this.props.preferences.endDate,
             })}`,
-        );
-        const descriptionSuggestions = await response.json();
+            cancelToken: this.descriptionSuggestionsCancelSource.token,
+        });
+        const descriptionSuggestions = response.data;
 
         this.setState({
             descriptionSuggestions,
@@ -177,12 +188,19 @@ class ExpenseForm extends PureComponent {
 
     handleDescriptionChange = async (search) => {
         if (search) {
-            const response = await fetch(
-                `${routes.suggestion.expense.categories}?${stringify({
+            if (this.categoriesCancelSource) {
+                this.categoriesCancelSource.cancel();
+            }
+
+            this.categoriesCancelSource = CancelToken.source();
+
+            const response = await createXHR({
+                url: `${routes.suggestion.expense.categories}?${stringify({
                     search,
                 })}`,
-            );
-            const categories = arrToCsv(await response.json());
+                cancelToken: this.categoriesCancelSource.token,
+            });
+            const categories = arrToCsv(response.data);
 
             this.setState((prevState) => ({
                 categories: prevState.categories

@@ -43,12 +43,12 @@ class MainScreenCreatorDialog extends PureComponent {
             saving: true,
         });
 
-        const response = await this.props.onRequestCreate([
-            this.props.formToModel(data, this.props),
-        ]);
-        const json = await response.json();
+        try {
+            const response = await this.props.onRequestCreate([
+                this.props.formToModel(data, this.props),
+            ]);
+            const json = response.data;
 
-        if (response.ok) {
             this.setState({
                 success: `The ${
                     this.props.entityName
@@ -58,9 +58,9 @@ class MainScreenCreatorDialog extends PureComponent {
             });
 
             this.props.onReceiveNewRecord(json[0]);
-        } else {
+        } catch (e) {
             this.setState({
-                error: parseCRUDError(json),
+                error: parseCRUDError(e.response.data),
                 saving: false,
             });
         }
