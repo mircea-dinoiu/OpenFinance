@@ -41,6 +41,7 @@ module.exports = (sequelize, types) => {
                             {
                                 model: models.User,
                                 where: ['`users.expense_user`.`blame` = 1'],
+                                attributes: [],
                             },
                             { model: models.Category, attributes: [] },
                         ],
