@@ -2,6 +2,7 @@ const { standardDate } = require('../../shared/utils/dates');
 const path = require('path');
 const basePath = (string = '') => path.join(__dirname, '../../', string);
 const config = require('config');
+const Messages = require('../Messages');
 
 module.exports = {
     basePath,
@@ -28,4 +29,14 @@ module.exports = {
     },
 
     standardDate,
+
+    wrapPromise(promise) {
+        promise.catch((e) => {
+            console.error(e);
+            this.status(500);
+            this.json(Messages.ERROR_UNEXPECTED);
+        });
+
+        return promise;
+    }
 };

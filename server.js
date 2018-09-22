@@ -3,8 +3,7 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const app = express();
-const Messages = require('./server/Messages');
-
+const {wrapPromise} = require('./server/helpers');
 /**
  * Config
  */
@@ -12,48 +11,55 @@ const config = require('config');
 const localDevMode = config.get('localDevMode');
 const debug = config.get('debug');
 
-/**
- * View engine
+// uncomment after placing your favicon in /public
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+// HTTP request logger middleware for node.js
+app.use(logger('dev'));
+
+/*
+ * Serve static assets (before anything else!). We don't need session or filters when serving these.
+ */
+// Serve from sources/desktop when localDevMode is true
+if (localDevMode) {
+    app.use(express.static(path.join(__dirname, 'sources/desktop')));
+}
+// public should come after -- we need to prioritize the sources/desktop assets
+app.use(express.static(path.join(__dirname, 'public')));
+
+/*
+ * View engine (handlebars)
  */
 app.set('views', path.join(__dirname, 'server', 'views'));
 app.set('view engine', 'hbs');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-
-/**
+/*
  * Add promise rejection wrapper
  */
-const wrapPromise = function (promise) {
-    promise.catch(e => {
-        console.error(e);
-        this.status(500);
-        this.json(Messages.ERROR_UNEXPECTED);
-    });
-
-    return promise;
-};
-
 app.use((req, res, next) => {
     res.wrapPromise = wrapPromise;
+    req.connection.setNoDelay(true);
     next();
 });
 
-/**
+/*
  * Cookie parser
+ * -------------
+ * Parse Cookie header and populate req.cookies with an object keyed by the cookie names. Optionally you may enable signed cookie support by passing a secret string, which assigns req.secret so it may be used by other middleware.
  */
 const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
 
-/**
+/*
  * Body parser
+ * -----------
+ * Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
  */
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 /**
  * Session
@@ -61,14 +67,18 @@ app.use(bodyParser.urlencoded({extended: false}));
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
-app.use(session({
-    secret: config.get('session.secret'),
-    resave: false,
-    saveUninitialized: false,
-    store: config.get('memoryStore') ? new session.MemoryStore() : new SequelizeStore({
-        db: require('./server/models').sql
-    })
-}));
+app.use(
+    session({
+        secret: config.get('session.secret'),
+        resave: false,
+        saveUninitialized: false,
+        store: config.get('memoryStore')
+            ? new session.MemoryStore()
+            : new SequelizeStore({
+                db: require('./server/models').sql,
+            }),
+    }),
+);
 
 /**
  * Authentication
@@ -77,40 +87,50 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const bcrypt = require('bcrypt-nodejs');
 
-passport.use(new LocalStrategy({
-    usernameField: 'email',
-}, function (email, pass, cb) {
-    const {User} = require('./server/models');
+passport.use(
+    new LocalStrategy(
+        {
+            usernameField: 'email',
+        },
+        ((email, pass, cb) => {
+            const { User } = require('./server/models');
 
-    User.findOne({
-        where: {
-            email: email
-        }
-    }).then(function (user, err) {
-        if (err) {
-            return cb(err);
-        }
+            User.findOne({
+                where: {
+                    email,
+                },
+            }).then((user, err) => {
+                if (err) {
+                    return cb(err);
+                }
 
-        if (!user) {
-            return cb(null, false);
-        }
+                if (!user) {
+                    return cb(null, false);
+                }
 
-        if (!bcrypt.compareSync(pass, user.password.replace(/^\$2y(.+)$/i, '\$2a$1'))) {
-            return cb(null, false);
-        }
+                if (
+                    !bcrypt.compareSync(
+                        pass,
+                        user.password.replace(/^\$2y(.+)$/i, '$2a$1'),
+                    )
+                ) {
+                    return cb(null, false);
+                }
 
-        return cb(null, user);
-    })
-}));
+                return cb(null, user);
+            });
+        }),
+    ),
+);
 
-passport.serializeUser(function (user, cb) {
+passport.serializeUser((user, cb) => {
     cb(null, user.id);
 });
 
-passport.deserializeUser(function (id, cb) {
-    const {User} = require('./server/models');
+passport.deserializeUser((id, cb) => {
+    const { User } = require('./server/models');
 
-    User.findById(id).then(function (user) {
+    User.findById(id).then((user) => {
         cb(null, user);
     });
 });
@@ -124,8 +144,8 @@ app.use(passport.session());
 if (config.get('enableCSRF')) {
     const csrf = require('csurf');
 
-    app.use(csrf({cookie: true}));
-    app.use(function (err, req, res, next) {
+    app.use(csrf({ cookie: true }));
+    app.use((err, req, res, next) => {
         if (err.code !== 'EBADCSRFTOKEN') {
             return next(err);
         }
@@ -135,16 +155,6 @@ if (config.get('enableCSRF')) {
         res.send(debug ? 'Missing CSRF Token' : null);
     });
 }
-
-/**
- * Server static assets
- */
-// Serve from sources/desktop when localDevMode is true
-if (localDevMode) {
-    app.use(express.static(path.join(__dirname, 'sources/desktop')));
-}
-// public should come after -- we need to prioritize the sources/desktop assets
-app.use(express.static(path.join(__dirname, 'public')));
 
 /**
  * ROUTES
@@ -157,14 +167,15 @@ Object.entries(require('./server/routes')).forEach(([route, handler]) => {
  * ERROR HANDLING
  */
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     const err = new Error('Not Found');
+
     err.status = 404;
     next(err);
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
