@@ -28,21 +28,6 @@ if (localDevMode) {
 app.use(express.static(path.join(__dirname, 'public')));
 
 /*
- * View engine (handlebars)
- */
-app.set('views', path.join(__dirname, 'server', 'views'));
-app.set('view engine', 'hbs');
-
-/*
- * Add promise rejection wrapper
- */
-app.use((req, res, next) => {
-    res.wrapPromise = wrapPromise;
-    req.connection.setNoDelay(true);
-    next();
-});
-
-/*
  * Cookie parser
  * -------------
  * Parse Cookie header and populate req.cookies with an object keyed by the cookie names. Optionally you may enable signed cookie support by passing a secret string, which assigns req.secret so it may be used by other middleware.
@@ -60,6 +45,21 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+/*
+ * View engine (handlebars)
+ */
+app.set('views', path.join(__dirname, 'server', 'views'));
+app.set('view engine', 'hbs');
+
+/*
+ * Add promise rejection wrapper
+ */
+app.use((req, res, next) => {
+    res.wrapPromise = wrapPromise;
+    req.connection.setNoDelay(true);
+    next();
+});
 
 /**
  * Session
