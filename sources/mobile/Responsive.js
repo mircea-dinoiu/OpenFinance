@@ -5,7 +5,7 @@ import './Responsive.pcss';
 import 'babel-polyfill';
 import { blue } from '@material-ui/core/colors';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+// import injectTapEventPlugin from 'react-tap-event-plugin';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -39,7 +39,8 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
+// FIXME Temporarily disabled due to incompatibility with the infrastructure
+// injectTapEventPlugin();
 
 const actions = {
     updateUser,
