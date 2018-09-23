@@ -12,9 +12,12 @@ module.exports = (sequelize, types) => {
             },
             item: types.STRING,
             money_location_id: types.INTEGER,
-            repeat: types.STRING,
             status: types.STRING,
             sum: types.FLOAT,
+
+            repeat: types.STRING,
+            repeat_occurrences: types.INTEGER,
+            repeat_end_date: types.DATE,
         },
         {
             underscored: true,

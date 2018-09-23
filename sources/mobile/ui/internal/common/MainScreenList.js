@@ -81,6 +81,20 @@ type TypeState = {
     deleteDialogOpen: boolean,
 };
 
+export const getDetachedItemUpdates = (item) => {
+    const itemUpdates = { id: item.id, repeat: null };
+
+    if (item.repeat_occurrences) {
+        itemUpdates.repeat_occurrences = item.repeat_occurrences - 1;
+
+        if (itemUpdates.repeat_occurrences === 0) {
+            itemUpdates.repeat_occurrences = null;
+        }
+    }
+
+    return itemUpdates;
+};
+
 class MainScreenList extends PureComponent<TypeProps, TypeState> {
     state = {
         firstLoad: true,
@@ -396,7 +410,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.selectedItems.forEach((item) => {
             if (item.repeat != null) {
                 added.push(this.copyItem(advanceRepeatDate({ ...item })));
-                updated.push({ id: item.id, repeat: null });
+                updated.push(getDetachedItemUpdates(item));
             }
         });
 

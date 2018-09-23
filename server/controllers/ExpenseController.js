@@ -32,24 +32,30 @@ module.exports = BaseController.extend({
         id: ['isRequired', ['isId', Model]],
         sum: ['sometimes', 'isRequired', 'isFloat', 'isNotZero'],
         item: ['sometimes', 'isRequired', 'isString'],
-        repeat: ['sometimes', 'isRepeatValue'],
         created_at: ['sometimes', 'isRequired', 'isInt'],
         currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
         users: ['sometimes', 'isRequired', ['isIdArray', User]],
         categories: ['sometimes', ['isIdArray', Category]],
+
+        repeat: ['sometimes', 'isRepeatValue'],
+        repeat_end_date: ['sometimes', 'isInt'],
+        repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
     },
 
     createValidationRules: {
         sum: ['isRequired', 'isFloat', 'isNotZero'],
         item: ['isRequired', 'isString'],
-        repeat: ['sometimes', 'isRepeatValue'],
         users: ['isRequired', ['isIdArray', User]],
         created_at: ['sometimes', 'isRequired', 'isInt'],
         currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         categories: ['sometimes', ['isIdArray', Category]],
+
+        repeat: ['sometimes', 'isRepeatValue'],
+        repeat_end_date: ['sometimes', 'isInt'],
+        repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
     },
 
     async updateRelations({ record, model }) {
@@ -127,6 +133,7 @@ module.exports = BaseController.extend({
             'sum',
             'repeat',
             'money_location_id',
+            'repeat_occurrences',
         ]);
 
         values.status = 'pending';
@@ -150,11 +157,12 @@ module.exports = BaseController.extend({
         return values;
     },
 
-    async sanitizeUpdateValues(record) {
+    sanitizeUpdateValues(record) {
         const workingRecord = Object.assign({}, record);
         const values = pickOwnProperties(workingRecord, [
             'sum',
             'money_location_id',
+            'repeat_occurrences',
         ]);
 
         if (workingRecord.hasOwnProperty('item')) {
@@ -170,6 +178,9 @@ module.exports = BaseController.extend({
 
             if (values.repeat != null) {
                 values.status = 'pending';
+            } else {
+                values.repeat_occurrences = null;
+                values.repeat_end_date = null;
             }
         }
 

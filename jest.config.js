@@ -12,4 +12,7 @@ module.exports = {
         },
     },
     modulePaths: ['<rootDir>/', '<rootDir>/sources/'],
+    moduleNameMapper: {
+        '.pcss$': 'test/emptyObjectStub.js',
+    },
 };
