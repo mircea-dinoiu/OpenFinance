@@ -185,17 +185,17 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                             this.props.preferences.endDate,
                             this.props.preferences.endDateIncrement,
                         ).map((date) => {
-                            const dateAsYMD = formatYMD(date);
+                            const formattedDate = moment(date).format('ll');
 
                             return (
                                 <MenuItem2
-                                    key={dateAsYMD}
+                                    key={formattedDate}
                                     onClick={() => {
                                         this.handleCloseShiftMenu();
                                         this.shiftBack(date);
                                     }}
                                 >
-                                    {dateAsYMD}
+                                    {formattedDate}
                                 </MenuItem2>
                             );
                         })}
@@ -211,17 +211,17 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                             this.props.preferences.endDate,
                             this.props.preferences.endDateIncrement,
                         ).map((date) => {
-                            const dateAsYMD = formatYMD(date);
+                            const formattedDate = moment(date).format('ll');
 
                             return (
                                 <MenuItem2
-                                    key={dateAsYMD}
+                                    key={formattedDate}
                                     onClick={() => {
                                         this.handleCloseShiftMenu();
                                         this.shiftForward(date);
                                     }}
                                 >
-                                    {dateAsYMD}
+                                    {formattedDate}
                                 </MenuItem2>
                             );
                         })}
