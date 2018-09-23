@@ -306,16 +306,41 @@ class ExpenseForm extends PureComponent {
 
     renderRepeat() {
         return (
-            <SingleSelect
-                label="Repeat"
-                {...this.bindSelect({
-                    valueKey: 'repeat',
-                })}
-                options={RepeatOptions.map((arr) => ({
-                    value: arr[0],
-                    label: arr[1],
-                }))}
-            />
+            <Row>
+                <Col xs={6} style={{overflow: 'initial'}}>
+                    <SingleSelect
+                        label="Repeat"
+                        {...this.bindSelect({
+                            valueKey: 'repeat',
+                        })}
+                        options={RepeatOptions.map((arr) => ({
+                            value: arr[0],
+                            label: arr[1],
+                        }))}
+                    />
+                </Col>
+                <Col xs={6}>
+                    <TextField
+                        label="Occurrences"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={this.state.repeatOccurrences}
+                        fullWidth={true}
+                        type="number"
+                        margin="none"
+                        style={{
+                            marginTop: '2px',
+                        }}
+                        onChange={(event) =>
+                            this.setState({
+                                repeatOccurrences: event.target.value,
+                            })
+                        }
+                        disabled={this.state.repeat == null}
+                    />
+                </Col>
+            </Row>
         );
     }
 
