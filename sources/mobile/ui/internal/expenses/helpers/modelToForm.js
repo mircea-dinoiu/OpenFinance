@@ -1,16 +1,17 @@
 import moment from 'moment';
 import { arrToCsv } from 'common/transformers';
 
-export default (data) => ({
-    id: data.id,
-    currency: data.currency_id,
-    sum: data.sum,
-    description: data.item,
-    date: moment(data.created_at),
-    time: moment(data.created_at),
-    categories: arrToCsv(data.categories),
-    paymentMethod: data.money_location_id,
-    repeat: data.repeat,
-    chargedPersons: arrToCsv(data.users),
-    status: data.status || 'pending',
+export default (model) => ({
+    id: model.id,
+    currency: model.currency_id,
+    sum: model.sum,
+    description: model.item,
+    date: moment(model.created_at),
+    time: moment(model.created_at),
+    categories: arrToCsv(model.categories),
+    paymentMethod: model.money_location_id,
+    repeat: model.repeat,
+    repeatOccurrences: model.repeat_occurrences,
+    chargedPersons: arrToCsv(model.users),
+    status: model.status || 'pending',
 });

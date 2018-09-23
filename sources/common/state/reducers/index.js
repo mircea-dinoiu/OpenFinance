@@ -11,6 +11,8 @@ import {
 const stateKeysWithoutReducers = [];
 const screen = (state = getScreenQueries(), action) =>
     action.type === Actions.SET_SCREEN ? action.value : state;
+const screenSize = (state = getScreenQueries(), action) =>
+    action.type === Actions.SET_SCREEN ? action.value : state;
 const refreshWidgets = (state = uniqueId(), action) =>
     action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
 const bindToUpdateState = (prop, defaultValue) => {
@@ -66,7 +68,9 @@ const moneyLocations = bindToUpdateState('moneyLocations', null);
 const moneyLocationTypes = bindToUpdateState('moneyLocationTypes', null);
 
 export const reducer = combineReducers({
+    // @deprecated screen is a global in Window, use screenSize instead
     screen,
+    screenSize,
     title,
     loading,
     ui,

@@ -1,30 +1,31 @@
 // @flow
 import { csvToArr } from 'common/transformers';
 
-export default (data, props) => {
-    const users = data.chargedPersons
-        ? csvToArr(data.chargedPersons).map(Number)
+export default (form, props) => {
+    const users = form.chargedPersons
+        ? csvToArr(form.chargedPersons).map(Number)
         : props.user
             .get('list')
             .map((each) => each.get('id'))
             .toArray();
-    const date: Date = data.date.toDate();
-    const time: Date = data.time.toDate();
+    const date: Date = form.date.toDate();
+    const time: Date = form.time.toDate();
 
     date.setHours(time.getHours());
     date.setMinutes(time.getMinutes());
     date.setSeconds(time.getSeconds());
 
     return {
-        id: data.id,
-        currency_id: data.currency,
-        sum: data.sum,
-        item: data.description,
+        id: form.id,
+        currency_id: form.currency,
+        sum: form.sum,
+        item: form.description,
         created_at: parseInt(date.getTime() / 1000),
-        categories: csvToArr(data.categories).map(Number),
-        money_location_id: data.paymentMethod,
-        repeat: data.repeat,
+        categories: csvToArr(form.categories).map(Number),
+        money_location_id: form.paymentMethod,
+        repeat: form.repeat,
+        repeat_occurrences: form.repeatOccurrences,
         users,
-        status: data.status || 'pending',
+        status: form.status || 'pending',
     };
 };
