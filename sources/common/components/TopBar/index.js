@@ -21,7 +21,6 @@ import Logged from 'mobile/ui/appBar/Logged';
 import DateIcon from '@material-ui/icons/DateRange';
 import {
     updateState,
-    setEndDate,
     refreshWidgets,
     updatePreferences,
 } from 'common/state/actions';
@@ -35,7 +34,6 @@ type TypeProps = {
     title: string,
     showCurrenciesDrawer: boolean,
     actions: {
-        setEndDate: typeof setEndDate,
         updateState: typeof updateState,
         refreshWidgets: typeof refreshWidgets,
     },

@@ -307,7 +307,7 @@ class ExpenseForm extends PureComponent {
     renderRepeat() {
         return (
             <Row>
-                <Col xs={6} style={{overflow: 'initial'}}>
+                <Col xs={6} style={{ overflow: 'initial' }}>
                     <SingleSelect
                         label="Repeat"
                         {...this.bindSelect({
