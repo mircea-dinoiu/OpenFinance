@@ -1,9 +1,7 @@
 const { advanceRepeatDate } = require('../../shared/helpers/repeatedModels');
 const moment = require('moment');
 
-const day = (date) => {
-    return moment(date).format('YYYY-MM-DD');
-};
+const day = (date) => moment(date).format('YYYY-MM-DD');
 
 module.exports = {
     generateClones({ records, endDate, startDate }) {
@@ -39,14 +37,14 @@ module.exports = {
 
             // eslint-disable-next-line no-constant-condition
             while (true) {
-                if (record.repeat_occurrences && repeats > record.repeat_occurrences - 1) {
+                if (
+                    record.repeat_occurrences &&
+                    repeats > record.repeat_occurrences - 1
+                ) {
                     break;
                 }
 
-                const newObject = this.advanceRepeatDate(
-                    recordAsJSON,
-                    repeats,
-                );
+                const newObject = this.advanceRepeatDate(recordAsJSON, repeats);
 
                 if (startDate && day(newObject.created_at) < day(startDate)) {
                     repeats++;

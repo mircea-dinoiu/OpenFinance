@@ -17,24 +17,24 @@ describe('#getClonesFor()', () => {
                 endDate: '2019-01-01',
             });
 
-            expect(
-                JSON.stringify(actual)
-            ).toEqual(JSON.stringify([
-                {
-                    repeat: 'm',
-                    created_at: '2018-02-01 00:00:00',
-                    repeat_occurrences: 3,
-                    original: 5,
-                    persist: false,
-                },
-                {
-                    repeat: 'm',
-                    created_at: '2018-03-01 00:00:00',
-                    repeat_occurrences: 3,
-                    original: 5,
-                    persist: false,
-                },
-            ]));
+            expect(JSON.stringify(actual)).toEqual(
+                JSON.stringify([
+                    {
+                        repeat: 'm',
+                        created_at: '2018-02-01 00:00:00',
+                        repeat_occurrences: 3,
+                        original: 5,
+                        persist: false,
+                    },
+                    {
+                        repeat: 'm',
+                        created_at: '2018-03-01 00:00:00',
+                        repeat_occurrences: 3,
+                        original: 5,
+                        persist: false,
+                    },
+                ]),
+            );
         });
     });
 });
