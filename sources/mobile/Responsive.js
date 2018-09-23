@@ -2,7 +2,6 @@ import 'normalize.css';
 import 'react-table/react-table.css';
 import 'react-tippy/dist/tippy.css';
 import './Responsive.pcss';
-import 'babel-polyfill';
 import { blue } from '@material-ui/core/colors';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 // import injectTapEventPlugin from 'react-tap-event-plugin';

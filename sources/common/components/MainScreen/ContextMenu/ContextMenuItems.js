@@ -3,7 +3,7 @@ import React from 'react';
 import { MenuItem, Divider } from 'material-ui';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
-import DuplicateIcon from '@material-ui/icons/ContentCopy';
+import DuplicateIcon from '@material-ui/icons/FileCopy';
 import DetachIcon from '@material-ui/icons/ViewAgenda';
 import LockIcon from '@material-ui/icons/Lock';
 import UnlockIcon from '@material-ui/icons/LockOpen';

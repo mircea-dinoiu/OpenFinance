@@ -35,14 +35,14 @@ const badgeStyle = {
 };
 const StyledBadge = withStyles(badgeStyle)(Badge);
 
-class ExpenseForm extends PureComponent {
+type TypeProps = {
+    initialValues: {},
+    onFormChange: Function,
+};
+
+class ExpenseForm extends PureComponent<TypeProps> {
     descriptionSuggestionsCancelSource = CancelToken.source();
     categoriesCancelSource;
-
-    props: {
-        initialValues: {},
-        onFormChange: Function,
-    };
 
     state = {
         descriptionSuggestions: [],

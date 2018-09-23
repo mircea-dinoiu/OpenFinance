@@ -11,12 +11,12 @@ import { Row, Col } from 'react-grid-system';
 import RepeatOptions from 'common/defs/repeatOptions';
 import { connect } from 'react-redux';
 
-class IncomeForm extends PureComponent {
-    props: {
-        initialValues: {},
-        onFormChange: Function,
-    };
+type TypeProps = {
+    initialValues: {},
+    onFormChange: Function,
+};
 
+class IncomeForm extends PureComponent<TypeProps> {
     state = this.props.initialValues;
 
     setState(state) {

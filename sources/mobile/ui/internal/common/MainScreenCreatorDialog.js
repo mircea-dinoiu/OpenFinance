@@ -18,18 +18,19 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import { dialog } from 'common/defs/styles';
 
-class MainScreenCreatorDialog extends PureComponent {
+type TypeProps = {
+    getFormDefaults: Function,
+    formToModel: Function,
+    entityName: string,
+    onReceiveNewRecord: Function,
+    formComponent: any,
+    onRequestCreate: Function,
+};
+
+class MainScreenCreatorDialog extends PureComponent<TypeProps> {
     state = {
         createCount: 1,
         saving: false,
-    };
-    props: {
-        getFormDefaults: Function,
-        formToModel: Function,
-        entityName: string,
-        onReceiveNewRecord: Function,
-        formComponent: any,
-        onRequestCreate: Function,
     };
     formDefaults = this.props.getFormDefaults(this.props);
     formData = this.props.getFormDefaults(this.props);

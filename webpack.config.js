@@ -11,7 +11,7 @@ const isHot = env === 'hot';
 const enableSourceMaps = isProduction === false;
 
 module.exports = {
-    devtool: isProduction ? false : 'cheap-source-map',
+    devtool: isProduction ? false : process.env.DEVTOOL || 'eval-source-map',
     mode: isProduction ? 'production' : 'development',
     entry: {
         'bundles/Responsive': path.resolve('sources/mobile/index.js'),
