@@ -1,7 +1,7 @@
 const { advanceRepeatDate } = require('../../shared/helpers/repeatedModels');
-const moment = require('moment');
+const { formatYMD } = require('../../shared/utils/dates');
 
-const day = (date) => moment(date).format('YYYY-MM-DD');
+const day = formatYMD;
 
 module.exports = {
     generateClones({ records, endDate, startDate }) {

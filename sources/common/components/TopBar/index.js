@@ -1,8 +1,17 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { Col, Row } from 'react-grid-system';
 import { connect } from 'react-redux';
 import { DatePicker, IconButton, MenuItem, SelectField } from 'material-ui';
-import { AppBar, Toolbar, Typography, Paper } from '@material-ui/core';
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    Paper,
+    Menu,
+    MenuItem as MenuItem2,
+    FormLabel,
+} from '@material-ui/core';
 
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';
@@ -32,32 +41,55 @@ type TypeProps = {
     },
 };
 
-const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
+type TypeState = {};
 
-class TopBar extends PureComponent<TypeProps> {
+const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
+const MAX_TIMES = 10;
+
+export const getShiftBackOptions = (date, by) =>
+    new Array(MAX_TIMES)
+        .fill(null)
+        .map((each, index) => shiftDateBack(date, by, index + 1));
+
+export const getShiftForwardOptions = (date, by) =>
+    new Array(MAX_TIMES)
+        .fill(null)
+        .map((each, index) => shiftDateForward(date, by, index + 1));
+
+class TopBar extends PureComponent<TypeProps, TypeState> {
     state = {
         showDateRange: false,
+        showShiftMenu: false,
+        shiftMenuAnchor: null,
     };
 
-    onShiftBack = () => {
+    shiftBack(date) {
         this.props.actions.updatePreferences({
-            endDate: formatYMD(
-                shiftDateBack(
-                    this.props.preferences.endDate,
-                    this.props.preferences.endDateIncrement,
-                ),
-            ),
+            endDate: formatYMD(date),
         });
+    }
+
+    shiftForward(date) {
+        this.props.actions.updatePreferences({
+            endDate: formatYMD(date),
+        });
+    }
+
+    handleShiftBack = () => {
+        this.shiftBack(
+            shiftDateBack(
+                this.props.preferences.endDate,
+                this.props.preferences.endDateIncrement,
+            ),
+        );
     };
-    onShiftForward = () => {
-        this.props.actions.updatePreferences({
-            endDate: formatYMD(
-                shiftDateForward(
-                    this.props.preferences.endDate,
-                    this.props.preferences.endDateIncrement,
-                ),
+    handleShiftForward = () => {
+        this.shiftForward(
+            shiftDateForward(
+                this.props.preferences.endDate,
+                this.props.preferences.endDateIncrement,
             ),
-        });
+        );
     };
     onChangeEndDate = (nothing, date) => {
         this.props.actions.updatePreferences({ endDate: formatYMD(date) });
@@ -93,8 +125,116 @@ class TopBar extends PureComponent<TypeProps> {
         );
     }
 
+    handleOpenShiftMenu = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.setState({
+            showShiftMenu: true,
+            shiftMenuAnchor: event.currentTarget,
+        });
+    };
+
+    handleCloseShiftMenu = () => {
+        this.setState({ showShiftMenu: false });
+    };
+
+    renderShiftBack() {
+        return (
+            <IconButton
+                style={{ float: 'left', height: INPUT_HEIGHT }}
+                tooltip={`Shift back ${
+                    ShiftDateOptions[this.props.preferences.endDateIncrement]
+                }`}
+                onClick={this.handleShiftBack}
+            >
+                <ArrowBack />
+            </IconButton>
+        );
+    }
+
+    renderShiftForward() {
+        return (
+            <IconButton
+                style={{ float: 'left', height: INPUT_HEIGHT }}
+                tooltip={`Shift forward ${
+                    ShiftDateOptions[this.props.preferences.endDateIncrement]
+                }`}
+                onClick={this.handleShiftForward}
+            >
+                <ArrowForward />
+            </IconButton>
+        );
+    }
+
+    renderShiftMenu() {
+        return (
+            <Menu
+                open={this.state.showShiftMenu}
+                anchorEl={this.state.shiftMenuAnchor}
+                style={{ marginTop: 29, marginLeft: -49 }}
+                onClose={this.handleCloseShiftMenu}
+            >
+                <Row nogutter={true} style={{ outline: 'none' }}>
+                    <Col xs={6}>
+                        <FormLabel
+                            component="legend"
+                            style={{ textAlign: 'center' }}
+                        >
+                            Previous
+                        </FormLabel>
+                        {getShiftBackOptions(
+                            this.props.preferences.endDate,
+                            this.props.preferences.endDateIncrement,
+                        ).map((date) => {
+                            const dateAsYMD = formatYMD(date);
+
+                            return (
+                                <MenuItem2
+                                    key={dateAsYMD}
+                                    onClick={() => {
+                                        this.handleCloseShiftMenu();
+                                        this.shiftBack(date);
+                                    }}
+                                >
+                                    {dateAsYMD}
+                                </MenuItem2>
+                            );
+                        })}
+                    </Col>
+                    <Col xs={6}>
+                        <FormLabel
+                            component="legend"
+                            style={{ textAlign: 'center' }}
+                        >
+                            Next
+                        </FormLabel>
+                        {getShiftForwardOptions(
+                            this.props.preferences.endDate,
+                            this.props.preferences.endDateIncrement,
+                        ).map((date) => {
+                            const dateAsYMD = formatYMD(date);
+
+                            return (
+                                <MenuItem2
+                                    key={dateAsYMD}
+                                    onClick={() => {
+                                        this.handleCloseShiftMenu();
+                                        this.shiftForward(date);
+                                    }}
+                                >
+                                    {dateAsYMD}
+                                </MenuItem2>
+                            );
+                        })}
+                    </Col>
+                </Row>
+            </Menu>
+        );
+    }
+
     render() {
-        const isSmall = this.props.screen.isSmall;
+        const isSmall = this.props.screenSize.isSmall;
 
         return (
             <AppBar
@@ -133,17 +273,7 @@ class TopBar extends PureComponent<TypeProps> {
                                     }),
                             }}
                         >
-                            <IconButton
-                                style={{ float: 'left', height: INPUT_HEIGHT }}
-                                tooltip={`Shift back ${
-                                    ShiftDateOptions[
-                                        this.props.preferences.endDateIncrement
-                                    ]
-                                }`}
-                                onClick={this.onShiftBack}
-                            >
-                                <ArrowBack />
-                            </IconButton>
+                            {this.renderShiftBack()}
                             <DatePicker
                                 style={{ float: 'left' }}
                                 textFieldStyle={{
@@ -161,18 +291,10 @@ class TopBar extends PureComponent<TypeProps> {
                                 }
                                 container="inline"
                                 onChange={this.onChangeEndDate}
+                                onContextMenu={this.handleOpenShiftMenu}
                             />
-                            <IconButton
-                                style={{ float: 'left', height: INPUT_HEIGHT }}
-                                tooltip={`Shift forward ${
-                                    ShiftDateOptions[
-                                        this.props.preferences.endDateIncrement
-                                    ]
-                                }`}
-                                onClick={this.onShiftForward}
-                            >
-                                <ArrowForward />
-                            </IconButton>
+                            {this.renderShiftMenu()}
+                            {this.renderShiftForward()}
                             {this.renderEndDateIntervalSelect()}
                         </Paper>
                     )}
@@ -216,8 +338,9 @@ class TopBar extends PureComponent<TypeProps> {
 }
 
 export default connect(
-    ({ screen, user, title, preferences }) => ({
+    ({ screen, screenSize, user, title, preferences }) => ({
         screen,
+        screenSize,
         user,
         title,
         preferences,

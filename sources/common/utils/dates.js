@@ -39,29 +39,31 @@ export const getStartDate = ({
     return date ? formatYMD(date) : '';
 };
 
-const getMomentArgsForDateShift = (option) => {
+const getMomentArgsForDateShift = (option, times = 1) => {
+    const one = 1;
+
     switch (option) {
         case 'd':
-            return [1, 'day'];
+            return [one * Number(times), 'day'];
         case 'w':
-            return [1, 'week'];
+            return [one * Number(times), 'week'];
         case '2w':
-            return [2, 'week'];
+            return [2 * Number(times), 'week'];
         case 'm':
-            return [1, 'month'];
+            return [one * Number(times), 'month'];
     }
 
     throw new Error(`${option} is not specified in ShiftDateOptions`);
 };
 
-export const shiftDateForward = (date, by) =>
+export const shiftDateForward = (date, by, times) =>
     moment(date)
-        .add(...getMomentArgsForDateShift(by))
+        .add(...getMomentArgsForDateShift(by, times))
         .toDate();
 
-export const shiftDateBack = (date, by) =>
+export const shiftDateBack = (date, by, times) =>
     moment(date)
-        .subtract(...getMomentArgsForDateShift(by))
+        .subtract(...getMomentArgsForDateShift(by, times))
         .toDate();
 
 export const getInitialEndDate = (): string => {
