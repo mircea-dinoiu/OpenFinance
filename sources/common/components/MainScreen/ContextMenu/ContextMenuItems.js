@@ -36,7 +36,7 @@ export default function ContextMenuItems({
     const disabledForZero = selectedIds.length === 0;
 
     return (
-        <React.Fragment>
+        <>
             <MenuItem
                 primaryText="Edit"
                 leftIcon={<CreateIcon />}
@@ -99,7 +99,7 @@ export default function ContextMenuItems({
                 />
             )}
             {features.status && (
-                <React.Fragment>
+                <>
                     <MenuItem
                         primaryText="Mark as reviewed"
                         leftIcon={<LockIcon />}
@@ -128,8 +128,8 @@ export default function ContextMenuItems({
                         disabled={disabledForZero}
                         desktop={desktop}
                     />
-                </React.Fragment>
+                </>
             )}
-        </React.Fragment>
+        </>
     );
 }

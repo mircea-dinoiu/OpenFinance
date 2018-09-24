@@ -106,11 +106,11 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                             <Tab label="Expenses" />
                             <Tab label="Incomes" />
                             {this.shouldRenderExtraScreens() && (
-                                <React.Fragment>
+                                <>
                                     <Tab label="Categories" />
                                     <Tab label="Accounts" />
                                     <Tab label="Account Types" />
-                                </React.Fragment>
+                                </>
                             )}
                         </Tabs>
                     </AppBar>

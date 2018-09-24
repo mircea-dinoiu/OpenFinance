@@ -501,7 +501,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         const selectedItems = this.selectedItems;
 
         return (
-            <React.Fragment>
+            <>
                 <MainScreenCreatorDialog
                     onReceiveNewRecord={(newRecord) => {
                         this.handleReceiveNewRecord(newRecord);
@@ -532,7 +532,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         {...this.props.crudProps}
                     />
                 )}
-            </React.Fragment>
+            </>
         );
     }
 

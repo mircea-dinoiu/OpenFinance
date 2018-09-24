@@ -25,9 +25,9 @@ export const GeneratedFlag = ({ entity = 'Item' }) => (
 );
 
 export const Flags = ({ item }) => (
-    <React.Fragment>
+    <>
         {item.status === 'pending' && <PendingReviewFlag entity="expense" />}
         {item.repeat != null && <RecurrentFlag entity="expense" />}
         {item.persist === false && <GeneratedFlag entity="expense" />}
-    </React.Fragment>
+    </>
 );
