@@ -15,7 +15,6 @@ module.exports = {
     mode: isProduction ? 'production' : 'development',
     entry: {
         'bundles/Responsive': path.resolve('sources/mobile/index.js'),
-        'bundles/Desktop': path.resolve('sources/desktop/Desktop.js'),
     },
     devServer: isHot
         ? {
