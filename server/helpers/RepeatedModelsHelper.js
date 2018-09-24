@@ -62,6 +62,7 @@ module.exports = {
                     out.push(
                         Object.assign(
                             {
+                                dataValues: record.dataValues,
                                 toJSON: () => newObject,
                             },
                             newObject,
