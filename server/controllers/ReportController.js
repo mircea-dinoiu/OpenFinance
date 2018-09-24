@@ -9,6 +9,8 @@ const logger = require('../helpers/logger');
 
 module.exports = {
     async getSummary(req, res) {
+        const pullStart = Date.now();
+
         const [
             expenseRecords,
             incomeRecords,
@@ -24,6 +26,13 @@ module.exports = {
             Category.findAll(),
             Currency.findAll(),
         ]);
+
+        logger.log(
+            'ReportController.getSummary',
+            'Pulling took',
+            Date.now() - pullStart,
+            'millis',
+        );
 
         if (expenseRecords.error) {
             res.status(400);
@@ -62,30 +71,30 @@ module.exports = {
             html: req.query.html,
         };
 
-        const ret = {
-            expensesData: await SummaryReportService.getExpensesData({
-                expenseRecords: expenseRecords.json,
-                userRecords,
-                mlRecords,
-                ...common,
-            }),
-            incomesData: await SummaryReportService.getIncomesData({
-                mlRecords,
-                incomeRecords: incomeRecords.json,
-                ...common,
-            }),
-            expensesByCategory: await SummaryReportService.getExpensesByCategory(
-                {
-                    expenseRecords: expenseRecords.json,
-                    categoryRecords,
-                    ...common,
-                },
-            ),
-        };
+        const expensesData = SummaryReportService.getExpensesData({
+            expenseRecords: expenseRecords.json,
+            userRecords,
+            mlRecords,
+            ...common,
+        });
 
-        ret.remainingData = SummaryReportService.getRemainingData({
-            expenses: ret.expensesData,
-            incomes: ret.incomesData,
+        const incomesData = SummaryReportService.getIncomesData({
+            mlRecords,
+            incomeRecords: incomeRecords.json,
+            ...common,
+        });
+
+        const expensesByCategory = SummaryReportService.getExpensesByCategory(
+            {
+                expenseRecords: expenseRecords.json,
+                categoryRecords,
+                ...common,
+            },
+        );
+
+        const remainingData = SummaryReportService.getRemainingData({
+            expenses: expensesData,
+            incomes: incomesData,
             mlRecords,
             ...common,
         });
@@ -95,9 +104,15 @@ module.exports = {
             'Processing took',
             Date.now() - processingStart,
             'millis',
+            `(expenses: ${expenseRecords.json.length})`
         );
 
-        res.json(ret);
+        res.json({
+            expensesData,
+            incomesData,
+            expensesByCategory,
+            remainingData,
+        });
     },
 
     async getExpensesIncomesByUser(req, res) {

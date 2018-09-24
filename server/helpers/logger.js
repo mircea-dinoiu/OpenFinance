@@ -7,7 +7,7 @@ module.exports = {
     log(label, ...args) {
         console.log(
             chalk.inverse(label),
-            chalk.inverse(moment().format('MMMM Do YYYY, h:mm:ss a')),
+            chalk.inverse(moment().format('lll')),
             ...args,
         );
     },

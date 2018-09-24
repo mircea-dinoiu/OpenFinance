@@ -1,6 +1,7 @@
 const BaseController = require('./BaseController');
 const { Expense, sql } = require('../models');
 const { Validator } = require('../validators');
+const { extractIdsFromModel } = require('../helpers');
 
 module.exports = BaseController.extend({
     async getCategories(req, res) {
@@ -17,10 +18,10 @@ module.exports = BaseController.extend({
             });
 
             for (const record of response) {
-                const json = record.toJSON();
+                const categories = extractIdsFromModel(record, 'categoryIds');
 
-                if (json.categories.length) {
-                    ret = json.categories;
+                if (categories.length) {
+                    ret = categories;
                     break;
                 }
             }

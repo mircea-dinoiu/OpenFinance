@@ -1,4 +1,4 @@
-const { standardDate } = require('../helpers');
+const { extractIdsFromModel } = require('../helpers');
 
 module.exports = (sequelize, types) => {
     const Expense = sequelize.define(
@@ -55,27 +55,11 @@ module.exports = (sequelize, types) => {
                 toJSON() {
                     const values = Object.assign({}, this.dataValues);
 
-                    if (values.userIds) {
-                        values.users = values.userIds.split(',').map(Number);
-                    } else {
-                        values.users = [];
-                    }
-
+                    values.users = extractIdsFromModel(this, 'userIds');
                     delete values.userIds;
 
-                    if (values.categoryIds) {
-                        values.categories = values.categoryIds
-                            .split(',')
-                            .map(Number);
-                    } else {
-                        values.categories = [];
-                    }
-
+                    values.categories = extractIdsFromModel(this, 'categoryIds');
                     delete values.categoryIds;
-
-                    // FIXME TEMP WORKAROUND sources/desktop/app/model/ExpenseModel.js:15
-                    values.created_at = standardDate(values.created_at);
-                    values.updated_at = standardDate(values.updated_at);
 
                     return values;
                 },

@@ -1,4 +1,5 @@
 const SummaryReportHelper = require('../helpers/SummaryReportHelper');
+const { extractIdsFromModel } = require('../helpers');
 const { sortBy } = require('lodash');
 
 module.exports = {
@@ -88,7 +89,7 @@ module.exports = {
         };
     },
 
-    async getIncomesData({
+    getIncomesData({
         incomeRecords,
         mlIdToCurrencyId,
         mlRecords,
@@ -139,7 +140,7 @@ module.exports = {
         return data;
     },
 
-    async getExpensesData({
+    getExpensesData({
         expenseRecords,
         userRecords,
         mlRecords,
@@ -150,10 +151,9 @@ module.exports = {
         const users = {};
         const mls = {};
 
-        for (const rawRecord of expenseRecords) {
-            const record = rawRecord.toJSON();
+        for (const record of expenseRecords) {
             let sum = record.sum;
-            const recordUsers = record.users;
+            const recordUsers = extractIdsFromModel(record, 'userIds');
             const mlId = record.money_location_id;
             const currencyId = mlIdToCurrencyId[mlId];
 
@@ -206,7 +206,7 @@ module.exports = {
         return data;
     },
 
-    async getExpensesByCategory({
+    getExpensesByCategory({
         expenseRecords,
         mlIdToCurrencyId,
         categoryRecords,
@@ -223,10 +223,13 @@ module.exports = {
         }, {});
 
         for (const record of expenseRecords) {
-            const json = record.toJSON();
-            const recordCategories = json.categories;
-            const sum = json.sum;
-            const currencyId = mlIdToCurrencyId[json.money_location_id];
+            const users = extractIdsFromModel(record, 'userIds');
+            const recordCategories = extractIdsFromModel(
+                record,
+                'categoryIds',
+            );
+            const sum = record.sum;
+            const currencyId = mlIdToCurrencyId[record.money_location_id];
             const addData = function (categoryId, rawCatSum) {
                 if (!categories[categoryId]) {
                     categories[categoryId] = {
@@ -234,7 +237,6 @@ module.exports = {
                     };
                 }
 
-                const users = json.users;
                 const catSum = rawCatSum / users.length;
 
                 users.forEach((id) => {

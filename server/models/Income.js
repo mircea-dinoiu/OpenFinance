@@ -1,5 +1,3 @@
-const { standardDate } = require('../helpers');
-
 module.exports = (sequelize, types) =>
     sequelize.define(
         'incomes',
@@ -18,16 +16,5 @@ module.exports = (sequelize, types) =>
         },
         {
             underscored: true,
-            instanceMethods: {
-                toJSON() {
-                    const values = Object.assign({}, this.dataValues);
-
-                    // FIXME TEMP WORKAROUND sources/desktop/app/model/IncomeModel.js:15
-                    values.created_at = standardDate(values.created_at);
-                    values.updated_at = standardDate(values.updated_at);
-
-                    return values;
-                },
-            },
         },
     );

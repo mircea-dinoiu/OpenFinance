@@ -4,8 +4,20 @@ const basePath = (string = '') => path.join(__dirname, '../../', string);
 const config = require('config');
 const Messages = require('../Messages');
 
+const extractIdsFromModel = (model, key) => {
+    const ids = model.dataValues[key];
+
+    if (ids) {
+        return ids.split(',').map(Number);
+    }
+
+    return [];
+};
+
 module.exports = {
     basePath,
+
+    extractIdsFromModel,
 
     pickOwnProperties(source, keys) {
         const dest = {};
