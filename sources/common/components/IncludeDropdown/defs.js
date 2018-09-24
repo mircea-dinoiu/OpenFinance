@@ -6,12 +6,16 @@ export const IncludeOptions = [
         name: 'Everything',
     },
     {
+        id: 'until-tmrw',
+        name: 'Until tomorrow',
+    },
+    {
         id: 'ut',
         name: 'Until today',
     },
     {
-        id: 'until-tmrw',
-        name: 'Until tomorrow',
+        id: 'until-yd',
+        name: 'Until yesterday',
     },
     {
         id: 'ld',

@@ -34,6 +34,14 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
         );
     }
 
+    if (include === 'until-yd') {
+        return formatYMD(
+            moment()
+                .subtract(1, 'day')
+                .toDate(),
+        );
+    }
+
     return endDate;
 };
 

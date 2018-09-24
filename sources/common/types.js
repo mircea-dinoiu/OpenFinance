@@ -11,7 +11,7 @@ type TypeScreenQueries = {
 type TypePreferences = {
     endDate: string,
     endDateIncrement: 'd' | 'w' | '2w' | 'm',
-    include: 'ut' | 'until-tmrw' | 'all' | 'ld' | 'ld' | 'lw' | 'lm' | 'ly',
+    include: 'ut' | 'until-yd' | 'until-tmrw' | 'all' | 'ld' | 'ld' | 'lw' | 'lm' | 'ly',
 };
 
 type TypeCurrency = Map<{
