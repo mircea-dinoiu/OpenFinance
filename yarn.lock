@@ -6795,12 +6795,12 @@ react-event-listener@0.6.4, react-event-listener@^0.6.2:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
-react-grid-system@4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/react-grid-system/-/react-grid-system-4.3.1.tgz#10c115d2fae05c30a1f5720701e7f0229048eda0"
+react-grid-system@3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/react-grid-system/-/react-grid-system-3.1.2.tgz#23c5e58b07e8ee0f7f42ef8c03c7b78c240a3458"
   dependencies:
-    lodash "^4.17.10"
-    prop-types "^15.6.2"
+    lodash "^4.17.4"
+    prop-types "^15.6.0"
 
 react-hot-loader@4.3.11:
   version "4.3.11"
