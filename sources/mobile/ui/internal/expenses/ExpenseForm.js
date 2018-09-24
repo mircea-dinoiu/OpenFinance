@@ -169,6 +169,10 @@ class ExpenseForm extends PureComponent<TypeProps> {
     }
 
     fetchDescriptionSuggestions = async (search) => {
+        if (!search) {
+            return;
+        }
+
         if (this.descriptionSuggestionsCancelSource) {
             this.descriptionSuggestionsCancelSource.cancel();
         }
