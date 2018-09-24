@@ -1,12 +1,5 @@
-const {
-    Expense: Model,
-    User,
-    Currency,
-    MoneyLocation,
-    Category,
-} = require('../models');
+const { Expense: Model, User, MoneyLocation, Category } = require('../models');
 const BaseController = require('./BaseController');
-const CurrencyController = require('./CurrencyController');
 const Service = require('../services/ExpenseService');
 const { pickOwnProperties, standardDate } = require('../helpers');
 const { sql } = require('../models');
@@ -15,25 +8,11 @@ module.exports = BaseController.extend({
     Model,
     Service,
 
-    parseRecord(record) {
-        const workingRecord = Object.assign({}, record);
-
-        if (
-            workingRecord.hasOwnProperty('money_location_id') &&
-            workingRecord.money_location_id == 0
-        ) {
-            workingRecord.money_location_id = null;
-        }
-
-        return workingRecord;
-    },
-
     updateValidationRules: {
         id: ['isRequired', ['isId', Model]],
         sum: ['sometimes', 'isRequired', 'isFloat', 'isNotZero'],
         item: ['sometimes', 'isRequired', 'isString'],
         created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
         users: ['sometimes', 'isRequired', ['isIdArray', User]],
@@ -49,8 +28,7 @@ module.exports = BaseController.extend({
         item: ['isRequired', 'isString'],
         users: ['isRequired', ['isIdArray', User]],
         created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
-        money_location_id: ['sometimes', ['isId', MoneyLocation]],
+        money_location_id: ['isRequired', ['isId', MoneyLocation]],
         categories: ['sometimes', ['isIdArray', Category]],
 
         repeat: ['sometimes', 'isRepeatValue'],
@@ -128,7 +106,7 @@ module.exports = BaseController.extend({
         return this.Model.scope('default').findOne({ where: { id: model.id } });
     },
 
-    async sanitizeCreateValues(record) {
+    sanitizeCreateValues(record) {
         const values = pickOwnProperties(record, [
             'sum',
             'repeat',
@@ -140,14 +118,6 @@ module.exports = BaseController.extend({
 
         if (record.hasOwnProperty('item')) {
             values.item = record.item.trim();
-        }
-
-        if (record.hasOwnProperty('currency_id')) {
-            values.currency_id = record.currency_id;
-        } else {
-            const defaultCurrency = await CurrencyController.getDefaultCurrency();
-
-            values.currency_id = defaultCurrency.id;
         }
 
         if (record.hasOwnProperty('created_at')) {
@@ -182,10 +152,6 @@ module.exports = BaseController.extend({
                 values.repeat_occurrences = null;
                 values.repeat_end_date = null;
             }
-        }
-
-        if (workingRecord.hasOwnProperty('currency_id')) {
-            values.currency_id = workingRecord.currency_id;
         }
 
         if (workingRecord.hasOwnProperty('status')) {

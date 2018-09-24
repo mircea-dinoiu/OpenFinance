@@ -1,3 +1,5 @@
+import { convertCurrencyToDefault } from 'common/helpers/currency';
+
 // @flow
 import React, { PureComponent } from 'react';
 import groupBy from 'lodash/groupBy';
@@ -9,6 +11,7 @@ import Expand from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/icons/ExpandLess';
 import { Col, Row } from 'react-grid-system';
 import BaseTable from 'common/components/BaseTable';
+import { financialNum } from 'shared/utils/numbers';
 
 class SummarySubCategory extends PureComponent {
     state = {
@@ -55,7 +58,13 @@ class SummarySubCategory extends PureComponent {
                                 <div style={{ fontSize: '10px' }}>
                                     {this.numericValue(
                                         items.reduce(
-                                            (acc, each) => acc + each.sum,
+                                            (acc, each) =>
+                                                acc +
+                                                convertCurrencyToDefault(
+                                                    each.sum,
+                                                    each.currencyId,
+                                                    this.props.currencies,
+                                                ),
                                             0,
                                         ),
                                     )}
@@ -81,7 +90,10 @@ class SummarySubCategory extends PureComponent {
                             },
                             {
                                 id: 'sum',
-                                accessor: (each) => this.numericValue(each.sum),
+                                accessor: (each) =>
+                                    this.numericValue(each.sum, {
+                                        currencyId: each.currencyId,
+                                    }),
                                 style: { textAlign: 'right' },
                             },
                         ]}
@@ -97,10 +109,13 @@ class SummaryCategory extends PureComponent {
         expanded: Boolean(this.props.expandedByDefault),
     };
 
-    numericValue = (value, opts = {}) => {
+    numericValue = (
+        value,
+        { currencyId = this.props.currencies.get('default'), ...opts } = {},
+    ) => {
         const currency = this.props.currencies.getIn([
             'map',
-            String(this.props.currencies.get('default')),
+            String(currencyId),
             'iso_code',
         ]);
 
@@ -161,9 +176,17 @@ class SummaryCategory extends PureComponent {
                         {showSumInHeader && (
                             <div style={{ fontSize: '12px' }}>
                                 {this.numericValue(
-                                    summaryObject.reduce(
-                                        (acc, each) => acc + each.sum,
-                                        0,
+                                    financialNum(
+                                        summaryObject.reduce(
+                                            (acc, each) =>
+                                                acc +
+                                                convertCurrencyToDefault(
+                                                    each.sum,
+                                                    each.currencyId,
+                                                    this.props.currencies,
+                                                ),
+                                            0,
+                                        ),
                                     ),
                                     { currencyStyle: { color: headerColor } },
                                 )}
@@ -192,6 +215,7 @@ class SummaryCategory extends PureComponent {
                                 entityIdField={entityIdField}
                                 entityNameField={entityNameField}
                                 expandedByDefault={expandedByDefault}
+                                currencies={this.props.currencies}
                             />
                         );
                     })}

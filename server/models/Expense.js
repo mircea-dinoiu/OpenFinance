@@ -4,7 +4,6 @@ module.exports = (sequelize, types) => {
     const Expense = sequelize.define(
         'expenses',
         {
-            currency_id: types.INTEGER,
             id: {
                 type: types.INTEGER,
                 primaryKey: true,

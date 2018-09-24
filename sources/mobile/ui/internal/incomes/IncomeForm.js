@@ -1,3 +1,5 @@
+import { getById } from 'common/helpers/currency';
+
 // @flow
 import React, { PureComponent } from 'react';
 import {
@@ -10,6 +12,7 @@ import {
 import { Row, Col } from 'react-grid-system';
 import RepeatOptions from 'common/defs/repeatOptions';
 import { connect } from 'react-redux';
+import { TextField as TextField2 } from '@material-ui/core';
 
 type TypeProps = {
     initialValues: {},
@@ -29,26 +32,32 @@ class IncomeForm extends PureComponent<TypeProps> {
         return (
             <Row>
                 <Col xs={4}>
-                    <SelectField
-                        floatingLabelText="Currency"
-                        floatingLabelFixed={true}
-                        value={this.state.currency}
-                        onChange={(e, i, value) =>
-                            this.setState({ currency: value })
+                    <TextField2
+                        label="Currency"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={
+                            this.state.paymentMethod
+                                ? getById(
+                                    this.props.moneyLocations
+                                        .toJSON()
+                                        .find(
+                                            (each) =>
+                                                each.id ==
+                                                  this.state.paymentMethod,
+                                        ).currency_id,
+                                    this.props.currencies,
+                                ).get('iso_code')
+                                : null
                         }
                         fullWidth={true}
-                    >
-                        {this.props.currencies
-                            .get('map')
-                            .map((map) => ({
-                                value: map.get('id'),
-                                primaryText: map.get('iso_code'),
-                            }))
-                            .toArray()
-                            .map((props) => (
-                                <MenuItem key={props.value} {...props} />
-                            ))}
-                    </SelectField>
+                        margin="none"
+                        style={{
+                            marginTop: '16px',
+                        }}
+                        disabled={true}
+                    />
                 </Col>
                 <Col xs={8}>
                     <TextField
@@ -105,10 +114,10 @@ class IncomeForm extends PureComponent<TypeProps> {
         );
     }
 
-    renderDestination() {
+    renderAccount() {
         return (
             <SelectField
-                floatingLabelText="Destination"
+                floatingLabelText="Account"
                 floatingLabelFixed={true}
                 value={this.state.paymentMethod}
                 onChange={(e, i, value) =>
@@ -123,7 +132,9 @@ class IncomeForm extends PureComponent<TypeProps> {
                         primaryText: map.get('name'),
                     }))
                     .toJS()
-                    .map((props) => <MenuItem key={props.value} {...props} />)}
+                    .map((props) => (
+                        <MenuItem key={props.value} {...props} />
+                    ))}
             </SelectField>
         );
     }
@@ -145,7 +156,9 @@ class IncomeForm extends PureComponent<TypeProps> {
                         primaryText: map.get('full_name'),
                     }))
                     .toJS()
-                    .map((props) => <MenuItem key={props.value} {...props} />)}
+                    .map((props) => (
+                        <MenuItem key={props.value} {...props} />
+                    ))}
             </SelectField>
         );
     }
@@ -162,7 +175,9 @@ class IncomeForm extends PureComponent<TypeProps> {
                 {RepeatOptions.map((arr) => ({
                     value: arr[0],
                     primaryText: arr[1],
-                })).map((props) => <MenuItem key={props.value} {...props} />)}
+                })).map((props) => (
+                    <MenuItem key={props.value} {...props} />
+                ))}
             </SelectField>
         );
     }
@@ -170,10 +185,10 @@ class IncomeForm extends PureComponent<TypeProps> {
     render() {
         return (
             <Col>
-                {this.renderSum()}
                 {this.renderDescription()}
+                {this.renderAccount()}
+                {this.renderSum()}
                 {this.renderDateTime()}
-                {this.renderDestination()}
                 {this.renderFrom()}
                 {this.renderRepeat()}
             </Col>

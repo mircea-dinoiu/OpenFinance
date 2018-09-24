@@ -1,6 +1,5 @@
-const { Income: Model, User, Currency, MoneyLocation } = require('../models');
+const { Income: Model, User, MoneyLocation } = require('../models');
 const BaseController = require('./BaseController');
-const CurrencyController = require('./CurrencyController');
 const Service = require('../services/IncomeService');
 const { pickOwnProperties, standardDate } = require('../helpers');
 
@@ -17,7 +16,6 @@ module.exports = BaseController.extend({
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
         created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
     },
 
     createValidationRules: {
@@ -25,9 +23,8 @@ module.exports = BaseController.extend({
         description: ['isRequired', 'isString'],
         user_id: ['isRequired', ['isId', User]],
         repeat: ['sometimes', 'isRepeatValue'],
-        money_location_id: ['sometimes', ['isId', MoneyLocation]],
+        money_location_id: ['isRequired', ['isId', MoneyLocation]],
         created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
     },
 
     sanitizeUpdateValues(record) {
@@ -50,10 +47,6 @@ module.exports = BaseController.extend({
             values.created_at = standardDate(record.created_at, 'X');
         }
 
-        if (record.hasOwnProperty('currency_id')) {
-            values.currency_id = record.currency_id;
-        }
-
         if (
             record.hasOwnProperty('status') &&
             !values.hasOwnProperty('repeat')
@@ -68,7 +61,7 @@ module.exports = BaseController.extend({
         return values;
     },
 
-    async sanitizeCreateValues(record) {
+    sanitizeCreateValues(record) {
         const values = pickOwnProperties(record, [
             'sum',
             'description',
@@ -79,31 +72,10 @@ module.exports = BaseController.extend({
 
         values.status = 'pending';
 
-        if (record.hasOwnProperty('currency_id')) {
-            values.currency_id = record.currency_id;
-        } else {
-            const defaultCurrency = await CurrencyController.getDefaultCurrency();
-
-            values.currency_id = defaultCurrency.id;
-        }
-
         if (record.hasOwnProperty('created_at')) {
             values.created_at = standardDate(record.created_at, 'X');
         }
 
         return values;
-    },
-
-    parseRecord(record) {
-        const workingRecord = Object.assign({}, record);
-
-        if (
-            workingRecord.hasOwnProperty('money_location_id') &&
-            workingRecord.money_location_id == 0
-        ) {
-            workingRecord.money_location_id = null;
-        }
-
-        return workingRecord;
     },
 });

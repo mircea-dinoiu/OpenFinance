@@ -1,3 +1,5 @@
+import { getById } from 'common/helpers/currency';
+
 // @flow
 import React, { PureComponent } from 'react';
 import { Row, Col } from 'react-grid-system';
@@ -89,18 +91,31 @@ class ExpenseForm extends PureComponent<TypeProps> {
         return (
             <Row>
                 <Col xs={4} style={overflowVisible}>
-                    <SingleSelect
+                    <TextField
                         label="Currency"
-                        {...this.bindSelect({
-                            valueKey: 'currency',
-                        })}
-                        options={this.props.currencies
-                            .get('map')
-                            .map((map) => ({
-                                value: map.get('id'),
-                                label: map.get('iso_code'),
-                            }))
-                            .toArray()}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={
+                            this.state.paymentMethod
+                                ? getById(
+                                    this.props.moneyLocations
+                                        .toJSON()
+                                        .find(
+                                            (each) =>
+                                                each.id ==
+                                                  this.state.paymentMethod,
+                                        ).currency_id,
+                                    this.props.currencies,
+                                ).get('iso_code')
+                                : null
+                        }
+                        fullWidth={true}
+                        margin="none"
+                        style={{
+                            marginTop: '2px',
+                        }}
+                        disabled={true}
                     />
                 </Col>
                 <Col xs={8}>
@@ -236,10 +251,10 @@ class ExpenseForm extends PureComponent<TypeProps> {
         );
     }
 
-    renderPaymentMethod() {
+    renderAccount() {
         return (
             <SingleSelect
-                label="Payment Method"
+                label="Account"
                 {...this.bindSelect({
                     valueKey: 'paymentMethod',
                 })}
@@ -348,10 +363,10 @@ class ExpenseForm extends PureComponent<TypeProps> {
         return (
             <Col style={overflowVisible}>
                 <div style={boxStyle}>{this.renderDescription()}</div>
+                <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
                 <div style={boxStyle}>{this.renderDateTime()}</div>
                 <div style={boxStyle}>{this.renderCategories()}</div>
-                <div style={boxStyle}>{this.renderPaymentMethod()}</div>
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
                 <div style={boxStyle}>{this.renderRepeat()}</div>
             </Col>

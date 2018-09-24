@@ -2,9 +2,10 @@ const ExpenseService = require('../services/ExpenseService');
 const IncomeService = require('../services/IncomeService');
 const SummaryReportService = require('../services/SummaryReportService');
 const CurrencyController = require('./CurrencyController');
-const { User, Category, MoneyLocation } = require('../models');
+const { User, Category, MoneyLocation, Currency } = require('../models');
 const ChartReportHelper = require('../helpers/ChartReportHelper');
 const { Validator } = require('../validators');
+const logger = require('../helpers/logger');
 
 module.exports = {
     async getSummary(req, res) {
@@ -14,14 +15,14 @@ module.exports = {
             userRecords,
             mlRecords,
             categoryRecords,
-            defaultCurrency,
+            currencyRecords,
         ] = await Promise.all([
             ExpenseService.list(req.query),
             IncomeService.list(req.query),
             User.findAll(),
             MoneyLocation.findAll(),
             Category.findAll(),
-            CurrencyController.getDefaultCurrency(),
+            Currency.findAll(),
         ]);
 
         if (expenseRecords.error) {
@@ -37,29 +38,47 @@ module.exports = {
             return;
         }
 
+        const processingStart = Date.now();
+
+        const mlIdToCurrencyId = mlRecords.reduce((acc, each) => {
+            acc[each.id] = each.currency_id;
+
+            return acc;
+        }, {});
+        const userIdToFullName = userRecords.reduce((acc, each) => {
+            acc[each.id] = each.full_name;
+
+            return acc;
+        }, {});
+        const currencyIdToISOCode = currencyRecords.reduce((acc, each) => {
+            acc[each.id] = each.iso_code;
+
+            return acc;
+        }, {});
+        const common = {
+            mlIdToCurrencyId,
+            userIdToFullName,
+            currencyIdToISOCode,
+            html: req.query.html,
+        };
+
         const ret = {
             expensesData: await SummaryReportService.getExpensesData({
                 expenseRecords: expenseRecords.json,
                 userRecords,
                 mlRecords,
-                defaultCurrency,
-                incomeRecords: incomeRecords.json,
-                html: req.query.html,
+                ...common,
             }),
             incomesData: await SummaryReportService.getIncomesData({
-                userRecords,
                 mlRecords,
-                defaultCurrency,
                 incomeRecords: incomeRecords.json,
-                html: req.query.html,
+                ...common,
             }),
             expensesByCategory: await SummaryReportService.getExpensesByCategory(
                 {
                     expenseRecords: expenseRecords.json,
-                    defaultCurrency,
                     categoryRecords,
-                    userRecords,
-                    html: req.query.html,
+                    ...common,
                 },
             ),
         };
@@ -67,10 +86,16 @@ module.exports = {
         ret.remainingData = SummaryReportService.getRemainingData({
             expenses: ret.expensesData,
             incomes: ret.incomesData,
-            userRecords,
             mlRecords,
-            html: req.query.html,
+            ...common,
         });
+
+        logger.log(
+            'ReportController.getSummary',
+            'Processing took',
+            Date.now() - processingStart,
+            'millis',
+        );
 
         res.json(ret);
     },

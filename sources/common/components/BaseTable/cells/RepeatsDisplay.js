@@ -17,8 +17,7 @@ const RepeatsDisplay = ({ item, screenSize }) => {
                     : 'Does not repeat'}
             {item.repeat_occurrences && (
                 <React.Fragment>
-                    <br />
-                    ({item.repeat_occurrences} occurrences)
+                    <br />({item.repeat_occurrences} occurrences)
                 </React.Fragment>
             )}
         </span>

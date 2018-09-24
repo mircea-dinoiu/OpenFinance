@@ -1,13 +1,4 @@
 import ExpenseController from './ExpenseController';
-import CurrencyController from './CurrencyController';
-
-jest.mock('./CurrencyController');
-
-beforeEach(() => {
-    CurrencyController.getDefaultCurrency.mockImplementationOnce(() => ({
-        id: 3,
-    }));
-});
 
 describe('#sanitizeCreateValues()', () => {
     it('should pick properties that do not need sanitizing', async () => {
@@ -25,7 +16,6 @@ describe('#sanitizeCreateValues()', () => {
             money_location_id: 3,
             repeat_occurrences: 30,
             status: 'pending',
-            currency_id: 3,
         });
     });
 });

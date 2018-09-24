@@ -2,9 +2,11 @@ import React from 'react';
 import { grey } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
 import Tooltip from 'common/components/Tooltip';
+import { financialNum } from 'shared/utils/numbers';
 import { getDefaultCurrency } from '../../common/helpers/currency';
 
-const formatNumericValue = (value) => new Intl.NumberFormat().format(value);
+const formatNumericValue = (value) =>
+    new Intl.NumberFormat().format(financialNum(value));
 const NumericValue = connect(({ currencies }) => ({ currencies }))(
     ({
         currencies,

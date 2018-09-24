@@ -290,10 +290,18 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 
     computeSelectedAmount() {
+        const mlIdToCurrencyId = this.props.moneyLocations
+            .toJSON()
+            .reduce((acc, each) => {
+                acc[each.id] = each.currency_id;
+
+                return acc;
+            }, {});
+
         return this.selectedItems.reduce((acc, each) => {
             const sum = convertCurrencyToDefault(
                 each.sum,
-                each.currency_id,
+                mlIdToCurrencyId[each.money_location_id],
                 this.props.currencies,
             );
 
@@ -589,6 +597,7 @@ export default connect(
         screen,
         refreshWidgets,
         currencies,
+        moneyLocations,
     }): {
         preferences: TypePreferences,
         screen: TypeScreenQueries,
@@ -599,6 +608,7 @@ export default connect(
         screen,
         refreshWidgets,
         currencies,
+        moneyLocations,
     }),
     mapDispatchToProps,
 )(MainScreenList);
