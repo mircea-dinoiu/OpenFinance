@@ -1,22 +1,22 @@
 // @flow
 
-export default (data) => {
-    const date: Date = data.date.toDate();
-    const time: Date = data.time.toDate();
+export default (form) => {
+    const date: Date = form.date.toDate();
+    const time: Date = form.time.toDate();
 
     date.setHours(time.getHours());
     date.setMinutes(time.getMinutes());
     date.setSeconds(time.getSeconds());
 
     return {
-        id: data.id,
-        currency_id: data.currency,
-        sum: data.sum,
-        description: data.description,
-        repeat: data.repeat,
-        status: data.status || 'pending',
+        id: form.id,
+        currency_id: form.currency,
+        sum: form.sum,
+        description: form.description,
+        repeat: form.repeat,
+        status: form.status || 'pending',
         created_at: parseInt(date.getTime() / 1000),
-        user_id: data.userId,
-        money_location_id: data.paymentMethod,
+        user_id: form.userId,
+        money_location_id: form.paymentMethod,
     };
 };

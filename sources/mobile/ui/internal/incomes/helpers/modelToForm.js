@@ -1,14 +1,14 @@
 import moment from 'moment';
 
-export default (data) => ({
-    id: data.id,
-    currency: data.currency_id,
-    sum: data.sum,
-    description: data.description,
-    date: moment(data.created_at),
-    time: moment(data.created_at),
-    paymentMethod: data.money_location_id,
-    repeat: data.repeat,
-    userId: data.user_id,
-    status: data.status || 'pending',
+export default (model) => ({
+    id: model.id,
+    currency: model.currency_id,
+    sum: model.sum,
+    description: model.description,
+    date: moment(model.created_at),
+    time: moment(model.created_at),
+    paymentMethod: model.money_location_id,
+    repeat: model.repeat,
+    userId: model.user_id,
+    status: model.status || 'pending',
 });
