@@ -28,12 +28,13 @@ export default function ContextMenuItems({
     onClickReviewed: Function,
     onClickNeedsReview: Function,
     onCloseContextMenu: Function,
-    selectedIds: number[],
+    selectedIds: {},
     features: TypeMainScreenFeatures,
     desktop: boolean,
 }) {
-    const disabledForMultiple = selectedIds.length !== 1;
-    const disabledForZero = selectedIds.length === 0;
+    const selectedIdsLength = Object.values(selectedIds).filter(Boolean).length;
+    const disabledForMultiple = selectedIdsLength !== 1;
+    const disabledForZero = selectedIdsLength === 0;
 
     return (
         <>

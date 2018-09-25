@@ -12,7 +12,7 @@ export const getTrClassName = (item, { selectedIds }): string => {
         classes.push(cssTable.futureRow);
     }
 
-    if (selectedIds.includes(item.id)) {
+    if (selectedIds[item.id]) {
         classes.push(cssTable.selectedRow);
     }
 
@@ -29,10 +29,10 @@ export const getTrProps = ({
     className: getTrClassName(item, { selectedIds }),
     onDoubleClick: () => {
         if (item.persist !== false) {
-            onReceiveSelectedIds([item.id]);
+            onReceiveSelectedIds({ [item.id]: true });
             onEdit();
         } else {
-            onReceiveSelectedIds([]);
+            onReceiveSelectedIds({});
         }
     },
     onClick(event) {
@@ -42,14 +42,14 @@ export const getTrProps = ({
 
         if (event.metaKey || event.ctrlKey) {
             if (item.persist !== false) {
-                newSelected = selectedIds.includes(item.id)
-                    ? selectedIds.filter((id) => id !== item.id)
-                    : selectedIds.concat(item.id);
+                newSelected = { ...selectedIds };
+
+                newSelected[item.id] = !selectedIds[item.id];
             } else {
-                newSelected = selectedIds;
+                return;
             }
         } else {
-            newSelected = item.persist !== false ? [item.id] : [];
+            newSelected = item.persist !== false ? { [item.id]: true } : {};
         }
 
         onReceiveSelectedIds(newSelected);
@@ -64,8 +64,8 @@ export const getTrProps = ({
                 top: event.clientY,
             });
 
-            if (!selectedIds.includes(item.id)) {
-                onReceiveSelectedIds([item.id]);
+            if (!selectedIds[item.id]) {
+                onReceiveSelectedIds({ [item.id]: true });
             }
         }
     },

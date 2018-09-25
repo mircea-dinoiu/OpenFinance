@@ -69,7 +69,7 @@ type TypeState = {
     }>,
     loading: number,
     refreshing: boolean,
-    selectedIds: number[],
+    selectedIds: {},
 
     addModalOpen: boolean,
     editDialogOpen: boolean,
@@ -98,7 +98,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         results: [],
         loading: 0,
         refreshing: false,
-        selectedIds: [],
+        selectedIds: {},
         contextMenuDisplay: false,
         contextMenuTop: 0,
         contextMenuLeft: 0,
@@ -280,8 +280,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             : {};
 
     get selectedItems() {
-        return this.state.results.filter((each) =>
-            this.state.selectedIds.includes(each.id),
+        return this.state.results.filter(
+            (each) => Boolean(this.state.selectedIds[each.id]),
         );
     }
 
@@ -312,7 +312,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             <div className={cssTable.footer}>
                 <strong>Loaded:</strong> {this.state.results.length}
                 {divider}
-                <strong>Selected:</strong> {this.state.selectedIds.length}
+                <strong>Selected:</strong> {Object.values(this.state.selectedIds).filter(Boolean).length}
                 {divider}
                 <strong>Selected amount:</strong>{' '}
                 {numericValue(this.computeSelectedAmount())}
@@ -457,7 +457,11 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 <>
                     <BaseTable
                         pageSize={this.pageSize}
-                        pages={results.length >= this.pageSize ? this.state.page + 1 : this.state.page}
+                        pages={
+                            results.length >= this.pageSize
+                                ? this.state.page + 1
+                                : this.state.page
+                        }
                         style={{
                             height: `calc(100vh - (75px + ${
                                 Sizes.HEADER_SIZE
@@ -528,7 +532,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     onYes={this.handleDelete}
                     onNo={this.handleToggleDeleteDialog}
                     entityName={this.props.entityName}
-                    count={this.state.selectedIds.length}
+                    count={
+                        Object.values(this.state.selectedIds).filter(Boolean)
+                            .length
+                    }
                 />
                 {this.selectedItems.length > 0 && (
                     <MainScreenEditDialog
@@ -583,9 +590,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         onClick={this.handleToggleAddModal}
                         mini={!isDesktop}
                         style={{
-                            position: isDesktop
-                                ? 'absolute'
-                                : 'fixed',
+                            position: isDesktop ? 'absolute' : 'fixed',
                             bottom: isDesktop ? '20px' : '70px',
                             right: isDesktop ? '30px' : '10px',
                             zIndex: 1,
