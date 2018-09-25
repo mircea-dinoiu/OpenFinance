@@ -29,6 +29,6 @@ export const dialog = {
     },
     paper: {
         margin: '0 auto !important',
-        overflow: 'visible',
+        maxHeight: '100%',
     },
 };
