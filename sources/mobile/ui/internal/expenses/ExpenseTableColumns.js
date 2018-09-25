@@ -17,7 +17,7 @@ export default [
     AmountColumn,
     {
         Header: 'Description',
-        filterable: true,
+        filterable: false,
         filterMethod: descriptionFilterMethod,
         Filter: DescriptionFilter,
         accessor: (item) => (

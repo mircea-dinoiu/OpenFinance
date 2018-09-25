@@ -5,7 +5,6 @@ import { stringify } from 'query-string';
 import moment from 'moment';
 import sortBy from 'lodash/sortBy';
 import groupBy from 'lodash/groupBy';
-import throttle from 'lodash/throttle';
 
 import { BigLoader, ButtonProgress } from '../../components/loaders';
 
@@ -14,7 +13,6 @@ import { createXHR } from 'common/utils/fetch';
 import { Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { greyedOut } from 'common/defs/styles';
-import { scrollIsAt } from 'common/utils/scroll';
 import BaseTable from 'common/components/BaseTable';
 import cssTable from 'common/components/BaseTable/index.pcss';
 import { getTrProps } from 'common/components/MainScreen/Table/helpers';
@@ -30,8 +28,6 @@ import AddIcon from '@material-ui/icons/Add';
 import { refreshWidgets as onRefreshWidgets } from 'common/state/actions';
 import { advanceRepeatDate } from 'shared/helpers/repeatedModels';
 import { uniqueId } from 'lodash';
-
-const PAGE_SIZE = 50;
 
 type TypeProps = {
     api: {
@@ -113,6 +109,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         deleteDialogOpen: false,
     };
 
+    get pageSize() {
+        return this.isDesktop() ? 100 : 50;
+    }
+
     static defaultProps = {
         features: {
             duplicate: true,
@@ -122,7 +122,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     };
 
     componentDidMount() {
-        this.loadMore();
+        if (!this.isDesktop()) {
+            this.loadMore();
+        }
     }
 
     handleReceiveNewRecord(newRecord) {
@@ -184,6 +186,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         results = this.state.results,
         endDate = this.props.preferences.endDate,
     } = {}) => {
+        const infiniteScroll = !this.isDesktop();
+
         if (this.state.loading) {
             return;
         }
@@ -194,14 +198,14 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             url: `${this.props.api.list}?${stringify({
                 end_date: endDate,
                 page,
-                limit: PAGE_SIZE,
+                limit: this.pageSize,
             })}`,
         });
         const json = response.data;
 
         this.setState((state) => ({
-            page: page + 1,
-            results: results.concat(json),
+            page: infiniteScroll ? page + 1 : page,
+            results: infiniteScroll ? results.concat(json) : json,
             firstLoad: false,
             loading: state.loading - 1,
         }));
@@ -225,7 +229,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         });
 
         await this.loadMore({
-            page: 1,
+            page: this.isDesktop() ? this.state.page : 1,
             results: [],
             endDate,
         });
@@ -235,18 +239,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         });
     };
 
-    handleTableScroll = (event) => {
-        this.handleTableScrollThrottled(event.target);
-    };
-
-    handleTableScrollThrottled = throttle((element) => {
-        this.handleCloseContextMenu();
-
-        if (scrollIsAt(element, 90)) {
-            this.loadMore();
-        }
-    });
-
     getCommonProps() {
         return {
             api: this.props.api,
@@ -254,6 +246,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             nameProperty: this.props.nameProperty,
             crudProps: this.props.crudProps,
         };
+    }
+
+    isDesktop() {
+        return this.props.screen.isLarge;
     }
 
     handleReceivedSelectedIds = (selectedIds) => this.setState({ selectedIds });
@@ -454,21 +450,35 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     renderContent() {
         const commonProps = this.getCommonProps();
 
-        if (this.props.screen.isLarge) {
+        if (this.isDesktop()) {
             const results = this.getSortedResults();
 
             return (
-                <div onScroll={this.handleTableScroll}>
+                <>
                     <BaseTable
+                        pageSize={this.pageSize}
+                        pages={results.length >= this.pageSize ? this.state.page + 1 : this.state.page}
                         style={{
                             height: `calc(100vh - (75px + ${
                                 Sizes.HEADER_SIZE
                             }))`,
                         }}
+                        showPagination={true}
+                        showPageSizeOptions={false}
+                        manual={true}
                         loading={this.state.loading > 0}
                         data={results}
                         columns={this.props.tableColumns}
                         getTrProps={this.getTrProps}
+                        onFetchData={(state) => {
+                            this.handleCloseContextMenu();
+
+                            console.error(state.page, state);
+
+                            this.loadMore({
+                                page: state.page + 1,
+                            });
+                        }}
                     />
                     {this.renderTableFooter()}
                     {this.state.contextMenuDisplay && (
@@ -478,7 +488,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                             itemsProps={this.getContextMenuItemsProps()}
                         />
                     )}
-                </div>
+                </>
             );
         }
 
@@ -537,23 +547,23 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 
     render() {
-        if (this.state.firstLoad) {
+        if (!this.isDesktop() && this.state.firstLoad) {
             return <BigLoader />;
         }
 
-        const { screen } = this.props;
         const { loading } = this.state;
+        const isDesktop = this.isDesktop();
 
         return (
             <div>
                 <div
                     style={{
                         ...(this.state.refreshing ? greyedOut : {}),
-                        backgroundColor: screen.isLarge ? undefined : 'white',
+                        backgroundColor: isDesktop ? undefined : 'white',
                     }}
                 >
                     {this.renderContent()}
-                    {screen.isLarge ? null : (
+                    {isDesktop ? null : (
                         <Col>
                             <Button
                                 variant="contained"
@@ -571,13 +581,13 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         variant="fab"
                         color="primary"
                         onClick={this.handleToggleAddModal}
-                        mini={!this.props.screen.isLarge}
+                        mini={!isDesktop}
                         style={{
-                            position: this.props.screen.isLarge
+                            position: isDesktop
                                 ? 'absolute'
                                 : 'fixed',
-                            bottom: this.props.screen.isLarge ? '20px' : '70px',
-                            right: this.props.screen.isLarge ? '30px' : '10px',
+                            bottom: isDesktop ? '20px' : '70px',
+                            right: isDesktop ? '30px' : '10px',
                             zIndex: 1,
                         }}
                     >
