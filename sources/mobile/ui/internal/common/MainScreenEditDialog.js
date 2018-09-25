@@ -1,4 +1,5 @@
 // @flow
+import { uniqueId } from 'lodash';
 import React, { PureComponent } from 'react';
 
 import {
@@ -58,10 +59,17 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
                 this.props.onSave(json[0]);
             }, 500);
         } catch (e) {
-            this.setState({
-                error: parseCRUDError(e.response.data),
-                saving: false,
-            });
+            if (e.response) {
+                this.setState({
+                    error: parseCRUDError(e.response.data),
+                    saving: false,
+                });
+            } else {
+                this.setState({
+                    error: e.message,
+                    saving: false,
+                });
+            }
         }
     };
 

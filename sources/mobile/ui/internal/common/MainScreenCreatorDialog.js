@@ -1,4 +1,6 @@
 // @flow
+import { uniqueId } from 'lodash';
+
 import React, { PureComponent } from 'react';
 import { parseCRUDError } from 'common/parsers';
 
@@ -29,7 +31,6 @@ type TypeProps = {
 
 class MainScreenCreatorDialog extends PureComponent<TypeProps> {
     state = {
-        createCount: 1,
         saving: false,
     };
     formDefaults = this.props.getFormDefaults(this.props);
@@ -54,16 +55,22 @@ class MainScreenCreatorDialog extends PureComponent<TypeProps> {
                 success: `The ${
                     this.props.entityName
                 } was successfully created`,
-                createCount: this.state.createCount + 1,
                 saving: false,
             });
 
             this.props.onReceiveNewRecord(json[0]);
         } catch (e) {
-            this.setState({
-                error: parseCRUDError(e.response.data),
-                saving: false,
-            });
+            if (e.response) {
+                this.setState({
+                    error: parseCRUDError(e.response.data),
+                    saving: false,
+                });
+            } else {
+                this.setState({
+                    error: e.message,
+                    saving: false,
+                });
+            }
         }
     };
 
@@ -80,7 +87,6 @@ class MainScreenCreatorDialog extends PureComponent<TypeProps> {
                 <DialogContent style={{ overflow: 'visible' }}>
                     <Row>
                         <Form
-                            key={this.state.createCount}
                             onFormChange={(formData) =>
                                 (this.formData = formData)
                             }
