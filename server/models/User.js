@@ -13,7 +13,6 @@ module.exports = (sequelize, types) =>
             password: types.STRING,
             first_name: types.STRING,
             last_name: types.STRING,
-            remember_token: types.STRING,
         },
         {
             underscored: true,
