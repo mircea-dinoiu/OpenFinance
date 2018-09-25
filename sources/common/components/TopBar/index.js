@@ -1,8 +1,9 @@
 // @flow
+import { SingleSelect } from 'common/components/Select';
 import React, { PureComponent } from 'react';
 import { Col, Row } from 'react-grid-system';
 import { connect } from 'react-redux';
-import { DatePicker, IconButton, MenuItem, SelectField } from 'material-ui';
+import { IconButton } from 'material-ui';
 import {
     AppBar,
     Toolbar,
@@ -28,6 +29,7 @@ import { bindActionCreators } from 'redux';
 import { formatYMD, shiftDateBack, shiftDateForward } from 'common/utils/dates';
 import moment from 'moment';
 import { ShiftDateOptions, Sizes } from 'common/defs';
+import { InlineDatePicker } from 'material-ui-pickers/DatePicker';
 
 type TypeProps = {
     onLogout: Function,
@@ -89,7 +91,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
             ),
         );
     };
-    onChangeEndDate = (nothing, date) => {
+    onChangeEndDate = (date) => {
         this.props.actions.updatePreferences({ endDate: formatYMD(date) });
     };
     onClickRefresh = () => {
@@ -99,7 +101,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
         this.props.actions.updateState({ currenciesDrawerOpen: true });
     };
 
-    handleEndDateIntervalDropdownChange = (e, i, newValue) => {
+    handleEndDateIntervalDropdownChange = (newValue) => {
         this.props.actions.updatePreferences({ endDateIncrement: newValue });
     };
 
@@ -108,18 +110,19 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
 
     renderEndDateIntervalSelect() {
         return (
-            <SelectField
-                value={this.props.preferences.endDateIncrement}
-                onChange={this.handleEndDateIntervalDropdownChange}
-                style={{
-                    width: '120px',
-                    height: INPUT_HEIGHT,
-                }}
-            >
-                {Object.entries(ShiftDateOptions).map(([id, name]) => (
-                    <MenuItem key={id} value={id} primaryText={name} />
-                ))}
-            </SelectField>
+            <div style={{ float: 'left', width: '120px', marginRight: 12 }}>
+                <SingleSelect
+                    value={this.props.preferences.endDateIncrement}
+                    onChange={this.handleEndDateIntervalDropdownChange}
+                    style={{
+                        marginTop: 3,
+                    }}
+                    clearable={false}
+                    options={Object.entries(ShiftDateOptions).map(
+                        ([id, name]) => ({ value: id, label: name }),
+                    )}
+                />
+            </div>
         );
     }
 
@@ -272,14 +275,15 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                             }}
                         >
                             {this.renderShiftBack()}
-                            <DatePicker
-                                style={{ float: 'left' }}
-                                textFieldStyle={{
+                            <InlineDatePicker
+                                style={{
+                                    float: 'left',
                                     textAlign: 'center',
                                     width: '85px',
-                                    height: INPUT_HEIGHT,
+                                    marginTop: 5,
                                 }}
-                                hintText=""
+                                format={'YYYY-MM-DD'}
+                                showTodayButton={true}
                                 value={
                                     this.props.preferences.endDate
                                         ? moment(
@@ -287,7 +291,6 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                                         ).toDate()
                                         : null
                                 }
-                                container="inline"
                                 onChange={this.onChangeEndDate}
                                 onContextMenu={this.handleOpenShiftMenu}
                             />

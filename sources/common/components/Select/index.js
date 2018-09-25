@@ -126,6 +126,7 @@ const styles = (theme) => ({
             outline: 0,
         },
         '.Select-placeholder, .Select--single .Select-value': {
+            color: 'inherit !important',
             position: 'absolute',
             top: 0,
             left: 0,
