@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 const AmountDisplay = ({
     item,
     currencies,
-    showCurrency = false,
+    showCurrency = true,
     moneyLocations,
 }) => {
     const currencyISOCode = getItemCurrencyISOCode({

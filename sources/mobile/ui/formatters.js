@@ -19,11 +19,11 @@ const NumericValue = connect(({ currencies }) => ({ currencies }))(
             <span>
                 {currency &&
                     showCurrency && (
-                    <span style={{ color: grey[700], ...currencyStyle }}>
+                    <span style={{ color: grey[500], ...currencyStyle }}>
                         {currency}
                     </span>
                 )}{' '}
-                {formatNumericValue(value)}
+                <strong>{formatNumericValue(value)}</strong>
             </span>
         );
         const tooltip = [

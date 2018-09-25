@@ -9,7 +9,7 @@ export default {
     accessor: (item) => <AmountDisplay item={item} />,
     id: 'amount',
     //
-    width: 100,
+    width: 130,
     headerStyle: style,
     style,
 };
