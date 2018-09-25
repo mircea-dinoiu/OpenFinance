@@ -1,7 +1,6 @@
 // @flow
 import { Actions } from 'common/state';
 import { createXHR } from 'common/utils/fetch';
-import { fromJS } from 'immutable';
 import routes from 'common/defs/routes';
 import url from 'common/utils/url';
 
@@ -29,14 +28,20 @@ export const updatePreferences = (value: {}) => ({
 });
 export const refreshWidgets = () => ({ type: Actions.REFRESH_WIDGETS });
 
+export const setBaseCurrencyId = (value) => ({
+    type: Actions.SET_BASE_CURRENCY_ID,
+    value,
+});
+
+export const updateCurrencies = (value) => ({
+    type: Actions.UPDATE_CURRENCIES,
+    value,
+});
+
 export const fetchCurrencies = (params = {}) => async (dispatch) => {
     const currenciesResponse = await createXHR({
         url: url(routes.getCurrencies, params),
     });
 
-    dispatch(
-        updateState({
-            currencies: fromJS(currenciesResponse.data),
-        }),
-    );
+    dispatch(updateCurrencies(currenciesResponse.data));
 };

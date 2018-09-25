@@ -3,12 +3,11 @@ const config = require('config');
 const { basePath } = require('../helpers');
 const logger = require('../helpers/logger');
 const fs = require('fs');
-const { Currency, Setting } = require('../models');
+const { Currency } = require('../models');
 const http = require('http');
 
 module.exports = {
     data: null,
-    defaultCurrency: null,
     cacheFilePath: basePath('storage/currencies.json'),
     currencies: null,
 
@@ -35,44 +34,8 @@ module.exports = {
         });
     },
 
-    async getCurrencyByProp(key, value) {
-        const currencies = await this.getCurrencies();
-
-        return currencies.find((each) => each[key] == value);
-    },
-
-    async convert(value, rawFrom, rawTo) {
-        this.setupData();
-
-        let from = rawFrom;
-        let to = rawTo;
-
-        if (typeof from === 'number') {
-            from = await this.getCurrencyByProp('id', from);
-        } else if (typeof from === 'string') {
-            from = await this.getCurrencyByProp('iso_code', from);
-        }
-
-        if (typeof to === 'number') {
-            to = await this.getCurrencyByProp('id', to);
-        } else if (typeof to === 'string') {
-            to = await this.getCurrencyByProp('iso_code', from);
-        }
-
-        if (from.iso_code === to.iso_code) {
-            return value;
-        }
-
-        return value * this.data.map[from.id].rates[to.iso_code];
-    },
-
-    async convertToDefault(value, from) {
-        return this.convert(value, from, (await this.getDefaultCurrency()).id);
-    },
-
     async fetchRates(allowedISOCodes) {
-        const defaultCurrencyISOCode = (await this.getDefaultCurrency())
-            .iso_code;
+        const defaultCurrencyISOCode = 'USD';
 
         return new Promise((resolve) => {
             const options = {
@@ -108,25 +71,6 @@ module.exports = {
         });
     },
 
-    async getDefaultCurrency() {
-        if (this.defaultCurrency == null) {
-            const dcInstance = await Setting.findOne({
-                where: {
-                    key: 'default_currency',
-                },
-            });
-            const dcISOCode = dcInstance.value;
-
-            this.defaultCurrency = await Currency.findOne({
-                where: {
-                    iso_code: dcISOCode,
-                },
-            });
-        }
-
-        return this.defaultCurrency;
-    },
-
     async fetchFreshData() {
         const map = {};
         const rawData = await this.getCurrencies(true);
@@ -138,10 +82,7 @@ module.exports = {
             allowedISOCodes.push(model.iso_code);
         });
 
-        const [rates, defaultCurrency] = await Promise.all([
-            this.fetchRates(allowedISOCodes),
-            this.getDefaultCurrency(),
-        ]);
+        const rates = await this.fetchRates(allowedISOCodes);
 
         if (rates == null) {
             await this.fetchCachedData();
@@ -153,7 +94,7 @@ module.exports = {
 
         this.data = {
             map,
-            default: defaultCurrency.id,
+            default: Number(Object.keys(map)[0]),
         };
     },
 

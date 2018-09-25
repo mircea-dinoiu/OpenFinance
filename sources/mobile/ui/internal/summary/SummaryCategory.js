@@ -111,13 +111,9 @@ class SummaryCategory extends PureComponent {
 
     numericValue = (
         value,
-        { currencyId = this.props.currencies.get('default'), ...opts } = {},
+        { currencyId = this.props.currencies.default, ...opts } = {},
     ) => {
-        const currency = this.props.currencies.getIn([
-            'map',
-            String(currencyId),
-            'iso_code',
-        ]);
+        const currency = this.props.currencies.map[currencyId].iso_code;
 
         return numericValue(value, { ...opts, currency });
     };

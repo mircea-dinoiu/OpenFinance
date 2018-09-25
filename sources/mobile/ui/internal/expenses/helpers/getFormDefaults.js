@@ -3,7 +3,7 @@ import moment from 'moment';
 
 export default function (data) {
     return {
-        currency: data.currencies.get('default'),
+        currency: data.currencies.default,
         description: '',
         sum: '',
         paymentMethod: null,

@@ -162,7 +162,7 @@ class Responsive extends PureComponent<{
                                         })
                                     }
                                 >
-                                    <Currencies data={this.props.currencies} />
+                                    <Currencies />
                                 </Drawer>
                             )}
                             {this.props.loading ? <BigLoader /> : this.props.ui}

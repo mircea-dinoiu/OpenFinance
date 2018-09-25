@@ -1,13 +1,15 @@
 // @flow
+import { SingleSelect } from 'common/components/Select';
 import React, { PureComponent } from 'react';
 import { MenuItem, Subheader } from 'material-ui';
-import { fetchCurrencies } from 'common/state/actions';
+import { fetchCurrencies, setBaseCurrencyId } from 'common/state/actions';
 import { connect } from 'react-redux';
 
 type TypeProps = {
     user: TypeUsers,
-    data: TypeCurrencies,
+    currencies: TypeCurrencies,
     fetchCurrencies: typeof fetchCurrencies,
+    setBaseCurrencyId: setBaseCurrencyId,
 };
 
 class Currencies extends PureComponent<TypeProps> {
@@ -27,33 +29,51 @@ class Currencies extends PureComponent<TypeProps> {
         }
     }
 
+    handleChangeBaseCurrency = (id: number) => {
+        this.props.setBaseCurrencyId(id);
+    };
+
     render() {
-        const map = this.props.data.get('map');
-        const defaultCurrencyId = this.props.data.get('default');
-        const defaultCurrency = map.get(String(defaultCurrencyId));
+        const map = this.props.currencies.map;
+        const defaultCurrencyId = this.props.currencies.default;
+        const defaultCurrency = map[defaultCurrencyId];
 
         return (
-            <div>
+            <>
+                <Subheader>Base Currency</Subheader>
+                <div
+                    style={{
+                        padding: '0 15px',
+                    }}
+                >
+                    <SingleSelect
+                        options={Object.values(map).map(
+                            (each: TypeCurrency) => ({
+                                value: each.id,
+                                label: each.iso_code,
+                            }),
+                        )}
+                        value={defaultCurrencyId}
+                        onChange={this.handleChangeBaseCurrency}
+                    />
+                </div>
+
                 <Subheader>Exchange Rates</Subheader>
-                {map.toArray().map(
-                    (each) =>
-                        each.get('id') !== defaultCurrencyId && (
-                            <MenuItem key={each.get('id')}>
-                                <strong>{each.get('iso_code')}</strong>:{' '}
-                                {each.getIn([
-                                    'rates',
-                                    defaultCurrency.get('iso_code'),
-                                ])}{' '}
-                                <i>{defaultCurrency.get('symbol')}</i>
+                {Object.values(map).map(
+                    (each: TypeCurrency) =>
+                        each.id !== defaultCurrencyId && (
+                            <MenuItem key={each.id}>
+                                <strong>{each.iso_code}</strong>:{' '}
+                                {each.rates[defaultCurrency.iso_code]}
                             </MenuItem>
                         ),
                 )}
-            </div>
+            </>
         );
     }
 }
 
 export default connect(
-    ({ user }) => ({ user }),
-    { fetchCurrencies },
+    ({ user, currencies }) => ({ user, currencies }),
+    { fetchCurrencies, setBaseCurrencyId },
 )(Currencies);

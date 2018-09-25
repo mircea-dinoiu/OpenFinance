@@ -62,7 +62,23 @@ const preferences = (state = parsePreferences(), action) => {
 const title = bindToUpdateState('title', 'Loading...');
 const ui = bindToUpdateState('ui', null);
 const currenciesDrawerOpen = bindToUpdateState('currenciesDrawerOpen', false);
-const currencies = bindToUpdateState('currencies', null);
+const currencies = (state = null, action) => {
+    if (action.type === Actions.SET_BASE_CURRENCY_ID) {
+        return {
+            ...state,
+            default: action.value,
+        };
+    }
+
+    if (action.type === Actions.UPDATE_CURRENCIES) {
+        return {
+            ...state,
+            ...action.value,
+        };
+    }
+
+    return state;
+};
 const categories = bindToUpdateState('categories', null);
 const moneyLocations = bindToUpdateState('moneyLocations', null);
 const moneyLocationTypes = bindToUpdateState('moneyLocationTypes', null);

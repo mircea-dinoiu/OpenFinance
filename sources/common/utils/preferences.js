@@ -1,8 +1,6 @@
 // @flow
 import { getInitialEndDate } from 'common/utils/dates';
 
-export const FINANCIAL_PREFERENCES = 'FINANCIAL_PREFERENCES';
-
 export const parsePreferences = (
     state = {},
 ): {

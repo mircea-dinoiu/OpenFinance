@@ -1,27 +1,26 @@
-import Immutable from 'immutable';
 import {
-    getById,
-    getDefaultCurrency,
+    findCurrencyById,
+    getBaseCurrency,
     getCurrencyByISOCode,
     convertCurrency,
     convertCurrencyToDefault,
 } from './currency';
 
-const RON = Immutable.fromJS({
+const RON = {
     id: 2,
     iso_code: 'RON',
     currency: 'Romanian leu',
     symbol: 'lei',
     rates: { EUR: 0.2144, GBP: 0.1897, USD: 0.2511 },
-});
-const USD = Immutable.fromJS({
+};
+const USD = {
     id: 1,
     iso_code: 'USD',
     currency: 'United States dollar',
     symbol: '$',
     rates: { RON: 3.9824, EUR: 0.8542, GBP: 0.7558 },
-});
-const currencies = Immutable.fromJS({
+};
+const currencies = {
     map: {
         '1': USD,
         '2': RON,
@@ -42,21 +41,23 @@ const currencies = Immutable.fromJS({
     },
     default: 1,
     from_cache: false,
-});
+};
 
-describe('#getById()', () => {
+describe('#findCurrencyById()', () => {
     it('should return the matching currency', () => {
-        expect(getById('2', currencies)).toEqual(RON);
+        expect(findCurrencyById('2', currencies)).toEqual(RON);
     });
 
     it('should work with numbers', () => {
-        expect(getById('2', currencies)).toEqual(getById(2, currencies));
+        expect(findCurrencyById('2', currencies)).toEqual(
+            findCurrencyById(2, currencies),
+        );
     });
 });
 
-describe('#getDefaultCurrency()', () => {
+describe('#getBaseCurrency()', () => {
     it('should return the default currency', () => {
-        expect(getDefaultCurrency(currencies)).toEqual(USD);
+        expect(getBaseCurrency(currencies)).toEqual(USD);
     });
 });
 

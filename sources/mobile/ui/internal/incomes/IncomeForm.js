@@ -1,4 +1,4 @@
-import { getById } from 'common/helpers/currency';
+import { findCurrencyById } from 'common/helpers/currency';
 
 // @flow
 import React, { PureComponent } from 'react';
@@ -39,7 +39,7 @@ class IncomeForm extends PureComponent<TypeProps> {
                         }}
                         value={
                             this.state.paymentMethod
-                                ? getById(
+                                ? findCurrencyById(
                                     this.props.moneyLocations
                                         .toJSON()
                                         .find(
@@ -48,7 +48,7 @@ class IncomeForm extends PureComponent<TypeProps> {
                                                   this.state.paymentMethod,
                                         ).currency_id,
                                     this.props.currencies,
-                                ).get('iso_code')
+                                ).iso_code
                                 : null
                         }
                         fullWidth={true}

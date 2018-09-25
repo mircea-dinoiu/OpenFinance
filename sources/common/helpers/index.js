@@ -9,5 +9,5 @@ export const getItemCurrencyISOCode = ({
         .toJSON()
         .find((each) => item.money_location_id === each.id).currency_id;
 
-    return currencies.getIn(['map', String(currencyId), 'iso_code']);
+    return currencies.map[currencyId].iso_code;
 };
