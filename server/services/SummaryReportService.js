@@ -44,11 +44,12 @@ module.exports = {
          */
         Object.keys(totalRemainingByUser).forEach((reference) => {
             const sum = totalRemainingByUser[reference];
-            const { id, currencyId } = JSON.parse(reference);
+            const [id, currencyId] = reference.split(':').map(Number);
 
             if (sum !== 0) {
                 data.byUser.push({
                     sum,
+                    reference,
                     description: SummaryReportHelper.description(
                         `${userIdToFullName[id]} (${
                             currencyIdToISOCode[currencyId]
@@ -77,6 +78,7 @@ module.exports = {
                             html,
                         },
                     ),
+                    reference: id,
                     currencyId: ml.currency_id,
                     group: (ml ? ml.type_id : 0) || 0,
                 });
@@ -124,7 +126,7 @@ module.exports = {
                         userIdToFullName[id],
                         { html },
                     ),
-                    reference: JSON.stringify({ id, currencyId }),
+                    reference: `${id}:${currencyId}`,
                     currencyId,
                 });
             });
@@ -189,7 +191,7 @@ module.exports = {
                                 html,
                             },
                         ),
-                        reference: JSON.stringify({ id, currencyId }),
+                        reference: `${id}:${currencyId}`,
                         currencyId,
                     });
                 });
@@ -224,10 +226,7 @@ module.exports = {
 
         for (const record of expenseRecords) {
             const users = extractIdsFromModel(record, 'userIds');
-            const recordCategories = extractIdsFromModel(
-                record,
-                'categoryIds',
-            );
+            const recordCategories = extractIdsFromModel(record, 'categoryIds');
             const sum = record.sum;
             const currencyId = mlIdToCurrencyId[record.money_location_id];
             const addData = function (categoryId, rawCatSum) {
@@ -293,6 +292,7 @@ module.exports = {
                                 })`,
                                 { html },
                             ),
+                            reference: `${categoryId}:${userId}:${currencyId}`,
                             group: categoryId,
                             currencyId: Number(currencyId),
                             index,
