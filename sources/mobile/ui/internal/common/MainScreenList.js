@@ -65,7 +65,6 @@ type TypeState = {
         id: number,
         created_at: string,
         sum: number,
-        currency_id: number,
     }>,
     loading: number,
     refreshing: boolean,

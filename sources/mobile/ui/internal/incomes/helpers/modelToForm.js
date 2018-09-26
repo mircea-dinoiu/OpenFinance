@@ -2,7 +2,6 @@ import moment from 'moment';
 
 export default (model) => ({
     id: model.id,
-    currency: model.currency_id,
     sum: model.sum,
     description: model.description,
     date: moment(model.created_at),

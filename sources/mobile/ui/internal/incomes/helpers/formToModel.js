@@ -10,7 +10,6 @@ export default (form) => {
 
     return {
         id: form.id,
-        currency_id: form.currency,
         sum: form.sum,
         description: form.description,
         repeat: form.repeat,

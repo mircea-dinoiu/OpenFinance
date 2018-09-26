@@ -17,7 +17,6 @@ export default (form, props) => {
 
     return {
         id: form.id,
-        currency_id: form.currency,
         sum: form.sum,
         item: form.description,
         created_at: parseInt(date.getTime() / 1000),

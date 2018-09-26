@@ -3,7 +3,6 @@ import { arrToCsv } from 'common/transformers';
 
 export default (model) => ({
     id: model.id,
-    currency: model.currency_id,
     sum: model.sum,
     description: model.item,
     date: moment(model.created_at),
