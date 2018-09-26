@@ -9,7 +9,6 @@ const logger = require('../helpers/logger');
 
 if (process.env.NODE_ENV !== 'test') {
     const sql = new Sequelize(process.env.DATABASE_URL, {
-        dialect: 'mariadb',
         dialectOptions: {
             timezone: process.env.TIMEZONE,
         },
