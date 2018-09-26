@@ -11,7 +11,7 @@ const Tooltip = ({
 }) => (
     <Tippy
         html={
-            <div style={{ fontSize: '12px', textAlign: 'left' }}>{tooltip}</div>
+            <div style={{ fontSize: '14px', textAlign: 'left' }}>{tooltip}</div>
         }
         position="bottom"
         trigger="mouseenter"
