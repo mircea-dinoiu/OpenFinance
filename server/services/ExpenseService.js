@@ -2,6 +2,11 @@ const { pick } = require('lodash');
 const { Validator } = require('../validators');
 const { Expense: Model } = require('../models');
 const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
+const {
+    mapInputToSorters,
+    mapSortersToSQL,
+    mapInputToLimitSQL,
+} = require('../helpers');
 
 module.exports = {
     async list(query) {
@@ -12,6 +17,7 @@ module.exports = {
             'filters',
             'page',
             'limit',
+            'sorters',
         );
         const rules = {
             start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
@@ -19,6 +25,7 @@ module.exports = {
             filters: ['sometimes', 'isPlainObject'],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
+            sorters: ['sometimes', ['isTableSorters', Model]],
         };
         const validator = new Validator(input, rules);
 
@@ -53,14 +60,10 @@ module.exports = {
                 where: [whereClause.join(' AND '), ...whereReplacements],
             };
 
-            if (input.page != null && input.limit != null) {
-                const offset = (input.page - 1) * input.limit;
+            const sorters = mapInputToSorters(input);
 
-                Object.assign(queryOpts, {
-                    // https://github.com/sequelize/sequelize/issues/3007
-                    order: `created_at DESC LIMIT ${offset}, ${input.limit}`,
-                });
-            }
+            queryOpts.order =
+                mapSortersToSQL(sorters) + mapInputToLimitSQL(input);
 
             return {
                 error: false,
@@ -68,6 +71,7 @@ module.exports = {
                     records: await Model.scope('default').findAll(queryOpts),
                     endDate: input.end_date,
                     startDate: input.start_date,
+                    sorters,
                 }),
             };
         }

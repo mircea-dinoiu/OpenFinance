@@ -7,7 +7,8 @@ const style = { textAlign: 'center' };
 export default {
     Header: 'Date & Time',
     accessor: (item) => <DateDisplay item={item} />,
-    id: 'datetime',
+    id: 'created_at',
+    defaultSortDesc: true,
     //
     width: 200,
     headerStyle: style,

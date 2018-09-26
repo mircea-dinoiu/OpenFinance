@@ -18,6 +18,7 @@ export default [
     AccountColumn,
     {
         Header: 'Person',
+        sortable: false,
         accessor: (item) => <FromDisplay item={item} />,
         id: 'from',
         //

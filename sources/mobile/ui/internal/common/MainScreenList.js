@@ -56,6 +56,7 @@ type TypeProps = {
     refreshWidgets: string,
     onRefreshWidgets: typeof onRefreshWidgets,
     features: TypeMainScreenFeatures,
+    defaultSorters: Array<{id: string, desc: boolean}>
 };
 
 type TypeState = {
@@ -118,6 +119,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             status: true,
             repeat: true,
         },
+        defaultSorters: [{ id: 'created_at', desc: true }],
     };
 
     componentDidMount() {
@@ -184,6 +186,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         page = this.state.page,
         results = this.state.results,
         endDate = this.props.preferences.endDate,
+        sorters = [],
     } = {}) => {
         const infiniteScroll = !this.isDesktop();
 
@@ -198,6 +201,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 end_date: endDate,
                 page,
                 limit: this.pageSize,
+                sorters: JSON.stringify(sorters),
             })}`,
         });
         const json = response.data;
@@ -211,7 +215,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     };
 
     getSortedResults() {
-        return sortBy(this.state.results, 'created_at').reverse();
+        return this.state.results;
     }
 
     getGroupedResults() {
@@ -279,8 +283,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             : {};
 
     get selectedItems() {
-        return this.state.results.filter(
-            (each) => Boolean(this.state.selectedIds[each.id]),
+        return this.state.results.filter((each) =>
+            Boolean(this.state.selectedIds[each.id]),
         );
     }
 
@@ -311,7 +315,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             <div className={cssTable.footer}>
                 <strong>Loaded:</strong> {this.state.results.length}
                 {divider}
-                <strong>Selected:</strong> {Object.values(this.state.selectedIds).filter(Boolean).length}
+                <strong>Selected:</strong>{' '}
+                {Object.values(this.state.selectedIds).filter(Boolean).length}
                 {divider}
                 <strong>Selected amount:</strong>{' '}
                 {numericValue(this.computeSelectedAmount())}
@@ -455,6 +460,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             return (
                 <>
                     <BaseTable
+                        defaultSorted={this.props.defaultSorters}
                         pageSize={this.pageSize}
                         pages={
                             results.length >= this.pageSize
@@ -476,10 +482,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         onFetchData={(state) => {
                             this.handleCloseContextMenu();
 
-                            console.error(state.page, state);
-
                             this.loadMore({
                                 page: state.page + 1,
+                                sorters: state.sorted,
+                                filters: state.filtered,
                             });
                         }}
                     />

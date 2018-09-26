@@ -9,7 +9,10 @@ const logger = require('../helpers/logger');
 
 if (process.env.NODE_ENV !== 'test') {
     const sql = new Sequelize(process.env.DATABASE_URL, {
-        timezone: process.env.TIMEZONE,
+        dialect: 'mariadb',
+        dialectOptions: {
+            timezone: process.env.TIMEZONE,
+        },
         logging: config.get('debug')
             ? (...args) => {
                 logger.log('SQL', ...args.map((arg) => chalk.cyan(arg)));

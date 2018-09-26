@@ -8,6 +8,7 @@ export default {
     Header: 'Account',
     accessor: (item) => <MoneyLocationDisplay item={item} />,
     id: 'account',
+    sortable: false,
     //
     headerStyle: style,
     style,

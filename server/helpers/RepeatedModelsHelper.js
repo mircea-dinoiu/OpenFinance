@@ -1,11 +1,14 @@
 const { advanceRepeatDate } = require('../../shared/helpers/repeatedModels');
 const { formatYMD } = require('../../shared/utils/dates');
+const logger = require('../helpers/logger');
+const { orderBy } = require('lodash');
 
 const day = formatYMD;
 
 module.exports = {
-    generateClones({ records, endDate, startDate }) {
-        const ret = [];
+    generateClones({ records, endDate, startDate, sorters = [] }) {
+        let ret = [];
+        const start = Date.now();
 
         records.forEach((record) => {
             if (startDate == null || day(record) >= day(startDate)) {
@@ -22,6 +25,14 @@ module.exports = {
                 });
             }
         });
+
+        ret = orderBy(
+            ret,
+            sorters.map((each) => each.id),
+            sorters.map((each) => (each.desc ? 'desc' : 'asc')),
+        );
+
+        logger.log('Generating clones took', Date.now() - start, 'millis');
 
         return ret;
     },

@@ -21,13 +21,14 @@ export default [
         accessor: (item) => (
             <DescriptionDisplay entity="expense" item={item} accessor="item" />
         ),
-        id: 'description',
+        id: 'item',
     },
     DateTimeColumn,
     {
         Header: 'Categories',
         accessor: (item) => <CategoriesDisplay item={item} />,
         id: 'categories',
+        sortable: false,
     },
     AccountColumn,
     {
@@ -38,6 +39,7 @@ export default [
         width: 100,
         style: { textAlign: 'center' },
         headerStyle: { textAlign: 'center' },
+        sortable: false,
     },
     RepeatColumn,
 ];

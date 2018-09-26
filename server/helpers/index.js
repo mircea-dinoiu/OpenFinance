@@ -14,6 +14,45 @@ const extractIdsFromModel = (model, key) => {
     return [];
 };
 
+const mapInputToSorters = (input) => {
+    let sorters = [{ id: 'created_at', desc: true }];
+
+    if (input.sorters) {
+        const parsed = JSON.parse(input.sorters);
+
+        if (parsed.length) {
+            sorters = parsed;
+        }
+    }
+
+    return sorters;
+};
+
+const mapSortersToSQL = (sorters) => sorters
+    .map((each) => `${each.id} ${each.desc ? 'DESC' : 'ASC'}`)
+    .join(', ');
+
+const mapInputToLimitOpts = (input) => {
+    if (input.page != null && input.limit != null) {
+        const offset = (input.page - 1) * input.limit;
+
+        return { offset, limit: input.limit };
+    }
+
+    return null;
+};
+
+// https://github.com/sequelize/sequelize/issues/3007
+const mapInputToLimitSQL = (input) => {
+    const opts = mapInputToLimitOpts(input);
+
+    if (opts != null) {
+        return ` LIMIT ${opts.offset}, ${opts.limit}`;
+    }
+
+    return '';
+};
+
 module.exports = {
     basePath,
 
@@ -51,4 +90,8 @@ module.exports = {
 
         return promise;
     },
+
+    mapSortersToSQL,
+    mapInputToLimitSQL,
+    mapInputToSorters,
 };

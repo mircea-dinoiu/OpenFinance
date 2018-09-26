@@ -7,7 +7,7 @@ const style = { textAlign: 'right' };
 export default {
     Header: 'Amount',
     accessor: (item) => <AmountDisplay item={item} />,
-    id: 'amount',
+    id: 'sum',
     //
     width: 130,
     headerStyle: style,
