@@ -105,6 +105,7 @@
     "md5": "2.2.1",
     "moment": "2.22.2",
     "morgan": "1.9.1",
+    "mysql": "2.16.0",
     "passport": "0.4.0",
     "passport-local": "1.0.0",
     "sequelize": "3.30.4",
