@@ -20,7 +20,7 @@ class Currencies extends PureComponent<TypeProps> {
             if (this.props.user) {
                 this.props.fetchCurrencies({ update: true });
             }
-        }, 60 * 1000);
+        }, 60 * 60 * 1000);
     }
 
     componentWillUnmount() {
