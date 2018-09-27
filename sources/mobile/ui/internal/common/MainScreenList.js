@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import { Col } from 'react-grid-system';
 import { stringify } from 'query-string';
 import moment from 'moment';
-import sortBy from 'lodash/sortBy';
 import groupBy from 'lodash/groupBy';
 
 import { BigLoader, ButtonProgress } from '../../components/loaders';
@@ -56,7 +55,7 @@ type TypeProps = {
     refreshWidgets: string,
     onRefreshWidgets: typeof onRefreshWidgets,
     features: TypeMainScreenFeatures,
-    defaultSorters: Array<{id: string, desc: boolean}>
+    defaultSorters: Array<{ id: string, desc: boolean }>,
 };
 
 type TypeState = {
@@ -108,6 +107,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         editDialogKey: uniqueId(),
         deleteDialogOpen: false,
     };
+    sorters = [];
+    filters = [];
 
     get pageSize() {
         return this.isDesktop() ? 100 : 50;
@@ -186,7 +187,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         page = this.state.page,
         results = this.state.results,
         endDate = this.props.preferences.endDate,
-        sorters = [],
     } = {}) => {
         const infiniteScroll = !this.isDesktop();
 
@@ -201,7 +201,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 end_date: endDate,
                 page,
                 limit: this.pageSize,
-                sorters: JSON.stringify(sorters),
+                sorters: JSON.stringify(this.sorters),
+                filters: JSON.stringify(this.filters),
             })}`,
         });
         const json = response.data;
@@ -456,39 +457,52 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         if (this.isDesktop()) {
             const results = this.getSortedResults();
+            const count = results.length;
 
             return (
                 <>
-                    <BaseTable
-                        defaultSorted={this.props.defaultSorters}
-                        pageSize={this.pageSize}
-                        pages={
-                            results.length >= this.pageSize
-                                ? this.state.page + 1
-                                : this.state.page
-                        }
+                    <div
                         style={{
                             height: `calc(100vh - (75px + ${
                                 Sizes.HEADER_SIZE
                             }))`,
+                            background: 'white'
                         }}
-                        showPagination={true}
-                        showPageSizeOptions={false}
-                        manual={true}
-                        loading={this.state.loading > 0}
-                        data={results}
-                        columns={this.props.tableColumns}
-                        getTrProps={this.getTrProps}
-                        onFetchData={(state) => {
-                            this.handleCloseContextMenu();
+                    >
+                        <BaseTable
+                            defaultSorted={this.props.defaultSorters}
+                            pageSize={
+                                count
+                                    ? Math.min(count, this.pageSize)
+                                    : this.pageSize
+                            }
+                            style={{
+                                maxHeight: '100%'
+                            }}
+                            pages={
+                                results.length >= this.pageSize
+                                    ? this.state.page + 1
+                                    : this.state.page
+                            }
+                            showPagination={true}
+                            showPageSizeOptions={false}
+                            manual={true}
+                            loading={this.state.loading > 0}
+                            data={results}
+                            columns={this.props.tableColumns}
+                            getTrProps={this.getTrProps}
+                            onFetchData={(state) => {
+                                this.handleCloseContextMenu();
 
-                            this.loadMore({
-                                page: state.page + 1,
-                                sorters: state.sorted,
-                                filters: state.filtered,
-                            });
-                        }}
-                    />
+                                this.sorters = state.sorted;
+                                this.filters = state.filtered;
+
+                                this.loadMore({
+                                    page: state.page + 1,
+                                });
+                            }}
+                        />
+                    </div>
                     {this.renderTableFooter()}
                     {this.state.contextMenuDisplay && (
                         <AnchoredContextMenu

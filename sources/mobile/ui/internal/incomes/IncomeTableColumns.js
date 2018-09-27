@@ -1,4 +1,5 @@
 // @flow
+import DescriptionFilter from 'common/components/BaseTable/filters/DescriptionFilter';
 import React from 'react';
 import DescriptionDisplay from 'common/components/BaseTable/cells/DescriptionDisplay';
 import FromDisplay from 'mobile/ui/internal/incomes/cells/FromDisplay';
@@ -11,6 +12,8 @@ export default [
     AmountColumn,
     {
         Header: 'Description',
+        filterable: true,
+        Filter: DescriptionFilter,
         accessor: (item) => <DescriptionDisplay entity="income" item={item} />,
         id: 'description',
     },

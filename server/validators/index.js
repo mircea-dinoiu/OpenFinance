@@ -68,6 +68,25 @@ Object.assign(validator, {
 
         return false;
     },
+    isTableFilters: (data, Model) => {
+        try {
+            const json = JSON.parse(data);
+
+            if (Array.isArray(json)) {
+                for (const pair of json) {
+                    if (!Model.attributes.hasOwnProperty(pair.id)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        } catch (e) {
+            logger.error(e);
+        }
+
+        return false;
+    },
     isRepeatValue: (value) =>
         ['d', 'w', '2w', 'm', '2m', '3m', 'y'].includes(value),
     isStatusValue: (value) => ['finished', 'pending'].includes(value),

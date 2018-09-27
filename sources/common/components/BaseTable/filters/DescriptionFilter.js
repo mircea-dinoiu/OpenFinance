@@ -11,6 +11,7 @@ import {
     RecurrentFlag,
     GeneratedFlag,
 } from 'mobile/ui/internal/common/MainScreenFlags';
+import { DebounceInput } from 'react-debounce-input';
 
 const PENDING = 'Pending';
 const RECURRENT = 'Recurrent';
@@ -25,6 +26,7 @@ const FlagIconMenu = ({ icon, filter, name, onChange }) => (
                 {icon}
             </IconButton>
         }
+        style={{ position: 'relative', top: 5 }}
         anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
         targetOrigin={{ horizontal: 'left', vertical: 'top' }}
     >
@@ -47,7 +49,7 @@ const FlagIconMenu = ({ icon, filter, name, onChange }) => (
 );
 const DescriptionFilter = ({ onChange, filter }) => {
     const handleChange = (name, value) => {
-        const newFilter = { ...filter };
+        const newFilter = { ...(filter && filter.value) };
 
         newFilter[name] = value;
 
@@ -55,7 +57,9 @@ const DescriptionFilter = ({ onChange, filter }) => {
     };
 
     return (
-        <div style={{ textAlign: 'left' }}>
+        <div
+            style={{ textAlign: 'left', display: 'flex', flexDirection: 'row' }}
+        >
             <FlagIconMenu
                 onChange={handleChange}
                 name={PENDING}
@@ -74,60 +78,17 @@ const DescriptionFilter = ({ onChange, filter }) => {
                 filter={filter}
                 icon={<GeneratedFlag />}
             />
+            <DebounceInput
+                value={(filter && filter.value && filter.value.text) || ''}
+                style={{
+                    flex: 1,
+                    marginLeft: 5,
+                }}
+                debounceTimeout={300}
+                onChange={(event) => handleChange('text', event.target.value)}
+            />
         </div>
     );
-};
-
-export const filterMethod = (filter, row) => {
-    const item = row._original; // eslint-disable-line
-    const value = filter.value || {};
-
-    if (value[PENDING]) {
-        switch (value[PENDING]) {
-            case NO:
-                if (item.status === 'pending') {
-                    return false;
-                }
-                break;
-            case ONLY:
-                if (item.status !== 'pending') {
-                    return false;
-                }
-                break;
-        }
-    }
-
-    if (value[RECURRENT]) {
-        switch (value[RECURRENT]) {
-            case NO:
-                if (item.repeat != null) {
-                    return false;
-                }
-                break;
-            case ONLY:
-                if (item.repeat == null) {
-                    return false;
-                }
-                break;
-        }
-    }
-
-    if (value[GENERATED]) {
-        switch (value[GENERATED]) {
-            case NO:
-                if (item.persist === false) {
-                    return false;
-                }
-                break;
-            case ONLY:
-                if (item.persist !== false) {
-                    return false;
-                }
-                break;
-        }
-    }
-
-    return true;
 };
 
 export default DescriptionFilter;

@@ -1,12 +1,16 @@
 const { pick } = require('lodash');
 const { Validator } = require('../validators');
-const { Expense: Model } = require('../models');
+const { Expense: Model, sql } = require('../models');
 const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
+const { sanitizeFilters, sanitizeSorters } = require('../helpers');
 const {
-    mapInputToSorters,
+    mapStartDateToSQL,
+    mapEndDateToSQL,
+    mapTextFilterToSQL,
+    mapFlagsToSQL,
     mapSortersToSQL,
     mapInputToLimitSQL,
-} = require('../helpers');
+} = require('../helpers/sql');
 
 module.exports = {
     async list(query) {
@@ -22,7 +26,7 @@ module.exports = {
         const rules = {
             start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
             end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
-            filters: ['sometimes', 'isPlainObject'],
+            filters: ['sometimes', ['isTableFilters', Model]],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
             sorters: ['sometimes', ['isTableSorters', Model]],
@@ -30,49 +34,55 @@ module.exports = {
         const validator = new Validator(input, rules);
 
         if (await validator.passes()) {
-            const whereClause = [];
-            const whereReplacements = [];
+            const where = [];
 
-            if (input.start_date) {
-                whereClause.push(
-                    `(DATE(${Model.tableName}.created_at) >= ? OR ${
-                        Model.tableName
-                    }.repeat IS NOT null)`,
-                );
-                whereReplacements.push(input.start_date);
-            }
+            where.push(mapStartDateToSQL(input.start_date, Model));
+            where.push(mapEndDateToSQL(input.end_date, Model));
 
-            whereClause.push(`DATE(${Model.tableName}.created_at) <= ?`);
-            whereReplacements.push(input.end_date);
+            let displayGenerated = 'yes';
 
-            if (input.filters) {
-                Object.keys(input.filters).forEach((key) => {
-                    const value = input.filters[key];
+            sanitizeFilters(input.filters).forEach(({ id, value }) => {
+                switch (id) {
+                    case 'item':
+                        where.push(mapTextFilterToSQL(id, value.text));
+                        where.push(mapFlagsToSQL(value));
 
-                    if (['status'].includes(key)) {
-                        whereClause.push(`${key} = ?`);
-                        whereReplacements.push(value);
-                    }
-                });
-            }
+                        if (value.Generated) {
+                            displayGenerated = value.Generated;
+                        }
+                        break;
+                    default:
+                        where.push({
+                            [id]: {
+                                $eq: value,
+                            },
+                        });
+                        break;
+                }
+            });
 
             const queryOpts = {
-                where: [whereClause.join(' AND '), ...whereReplacements],
+                where: sql.and(...where.filter(Boolean)),
             };
 
-            const sorters = mapInputToSorters(input);
+            const sorters = sanitizeSorters(input.sorters);
 
             queryOpts.order =
                 mapSortersToSQL(sorters) + mapInputToLimitSQL(input);
 
             return {
                 error: false,
-                json: RepeatedModelsHelper.generateClones({
-                    records: await Model.scope('default').findAll(queryOpts),
-                    endDate: input.end_date,
-                    startDate: input.start_date,
-                    sorters,
-                }),
+                json: RepeatedModelsHelper.filterClones(
+                    RepeatedModelsHelper.generateClones({
+                        records: await Model.scope('default').findAll(
+                            queryOpts,
+                        ),
+                        endDate: input.end_date,
+                        startDate: input.start_date,
+                        sorters,
+                    }),
+                    displayGenerated,
+                ),
             };
         }
 

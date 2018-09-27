@@ -6,6 +6,17 @@ const { orderBy } = require('lodash');
 const day = formatYMD;
 
 module.exports = {
+    filterClones(records, displayGenerated) {
+        switch (displayGenerated) {
+            case 'no':
+                return records.filter((each) => each.persist !== false);
+            case 'only':
+                return records.filter((each) => each.persist === false);
+            default:
+                return records;
+        }
+    },
+
     generateClones({ records, endDate, startDate, sorters = [] }) {
         let ret = [];
         const start = Date.now();
