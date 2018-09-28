@@ -44,7 +44,10 @@ class SelectFilter extends React.PureComponent<TypeProps> {
     };
 
     handleClose = () => {
-        this.setState({ anchorEl: null });
+        this.setState({
+            anchorEl: null,
+            radioValue: this.getRadioDefaulValue(),
+        });
     };
 
     renderText() {
@@ -76,11 +79,19 @@ class SelectFilter extends React.PureComponent<TypeProps> {
         }
     }
 
+    triggerChange(value) {
+        if (value === 'any') {
+            this.props.onChange(undefined);
+        } else {
+            this.props.onChange(value);
+        }
+    }
+
     handleChangeRadio = (event) => {
         const radioValue = event.target.value;
 
         if (radioValue !== 'custom') {
-            this.props.onChange(radioValue);
+            this.triggerChange(radioValue);
         }
 
         this.setState({ radioValue });
@@ -88,11 +99,11 @@ class SelectFilter extends React.PureComponent<TypeProps> {
 
     handleChangeSelect = (arg) => {
         if (arg) {
-            this.props.onChange(
+            this.triggerChange(
                 this.props.multi ? arg.split(',').map(Number) : arg,
             );
         } else {
-            this.props.onChange('any');
+            this.triggerChange('any');
         }
     };
 
@@ -119,7 +130,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
     getRadioDefaulValue() {
         const filterValue = this.getFilterValue();
 
-        if (Array.isArray(filterValue)) {
+        if (filterValue !== 'any' && filterValue !== 'none') {
             return 'custom';
         }
 
@@ -177,8 +188,10 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                                 />
                             ))}
                             <Select
-                                disabled={this.state.radioValue !== 'custom'}
                                 value={this.getSelectValue()}
+                                onOpen={() => {
+                                    this.setState({ radioValue: 'custom' });
+                                }}
                                 options={this.props.items.map((item) => ({
                                     value: item.id,
                                     label: item[this.props.nameKey],

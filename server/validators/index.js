@@ -74,6 +74,10 @@ Object.assign(validator, {
 
             if (Array.isArray(json)) {
                 for (const pair of json) {
+                    if (pair.value === undefined) {
+                        return false;
+                    }
+
                     if (!validAttrs.includes(pair.id)) {
                         return false;
                     }

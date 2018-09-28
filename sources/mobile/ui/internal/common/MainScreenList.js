@@ -495,7 +495,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                                 this.handleCloseContextMenu();
 
                                 this.sorters = state.sorted;
-                                this.filters = state.filtered;
+                                this.filters = state.filtered.filter((filter) =>
+                                    filter.value !== undefined,
+                                );
 
                                 this.loadMore({
                                     page: state.page + 1,

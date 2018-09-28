@@ -7,6 +7,7 @@ import AmountColumn from 'common/components/BaseTable/columns/AmountColumn';
 import DateTimeColumn from 'common/components/BaseTable/columns/DateTimeColumn';
 import AccountColumn from 'common/components/BaseTable/columns/AccountColumn';
 import RepeatColumn from 'common/components/BaseTable/columns/RepeatColumn';
+import UserFilter from 'common/components/BaseTable/filters/UserFilter';
 
 export default [
     AmountColumn,
@@ -23,7 +24,9 @@ export default [
         Header: 'Person',
         sortable: false,
         accessor: (item) => <FromDisplay item={item} />,
-        id: 'from',
+        Filter: UserFilter,
+        filterable: true,
+        id: 'user_id',
         //
         width: 100,
         headerStyle: { textAlign: 'center' },

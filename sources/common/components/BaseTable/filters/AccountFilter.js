@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
 import SelectFilter from './SelectFilter';
-import connect from 'react-redux/es/connect/connect';
+import { connect } from 'react-redux';
 
-const mapStateToProps = ({ moneyLocations }) => ({ items: moneyLocations.toJS() });
+const mapStateToProps = ({ moneyLocations }) => ({
+    items: moneyLocations.toJS(),
+});
 
 const ConnectedFilter = connect(mapStateToProps)(SelectFilter);
 

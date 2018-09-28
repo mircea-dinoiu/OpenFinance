@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import SelectFilter from './SelectFilter';
-import connect from 'react-redux/es/connect/connect';
+import { connect } from 'react-redux';
 
 const mapStateToProps = ({ user }) => ({ items: user.toJS().list });
 

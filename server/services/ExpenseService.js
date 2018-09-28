@@ -104,13 +104,11 @@ module.exports = {
                         }
                         break;
                     default:
-                        if (value !== 'any') {
-                            where.push({
-                                [id]: {
-                                    $eq: value,
-                                },
-                            });
-                        }
+                        where.push({
+                            [id]: {
+                                $eq: value,
+                            },
+                        });
                         break;
                 }
             });
