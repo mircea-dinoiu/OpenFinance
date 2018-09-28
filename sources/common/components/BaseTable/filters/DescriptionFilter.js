@@ -79,6 +79,7 @@ const DescriptionFilter = ({ onChange, filter }) => {
                 icon={<GeneratedFlag />}
             />
             <DebounceInput
+                placeholder="Type to search..."
                 type="search"
                 value={(filter && filter.value && filter.value.text) || ''}
                 style={{
