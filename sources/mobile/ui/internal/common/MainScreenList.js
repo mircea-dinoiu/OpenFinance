@@ -289,7 +289,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         );
     }
 
-    computeSelectedAmount() {
+    computeAmount(items) {
         const mlIdToCurrencyId = this.props.moneyLocations
             .toJSON()
             .reduce((acc, each) => {
@@ -298,7 +298,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 return acc;
             }, {});
 
-        return this.selectedItems.reduce((acc, each) => {
+        return items.reduce((acc, each) => {
             const sum = convertCurrencyToDefault(
                 each.sum,
                 mlIdToCurrencyId[each.money_location_id],
@@ -307,6 +307,14 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
             return acc + sum;
         }, 0);
+    }
+
+    computeSelectedAmount() {
+        return this.computeAmount(this.selectedItems);
+    }
+
+    computePageAmount() {
+        return this.computeAmount(this.state.results);
     }
 
     renderTableFooter() {
@@ -318,6 +326,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 {divider}
                 <strong>Selected:</strong>{' '}
                 {Object.values(this.state.selectedIds).filter(Boolean).length}
+                {divider}
+                <strong>Current Page amount:</strong>{' '}
+                {numericValue(this.computePageAmount())}
                 {divider}
                 <strong>Selected amount:</strong>{' '}
                 {numericValue(this.computeSelectedAmount())}
