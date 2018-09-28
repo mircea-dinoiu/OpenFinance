@@ -3,16 +3,16 @@ import React from 'react';
 import SelectFilter from './SelectFilter';
 import connect from 'react-redux/es/connect/connect';
 
-const mapStateToProps = ({ categories }) => ({ items: categories.toJS() });
+const mapStateToProps = ({ moneyLocations }) => ({ items: moneyLocations.toJS() });
 
 const ConnectedFilter = connect(mapStateToProps)(SelectFilter);
 
-const CategoriesFilter = ({ onChange, filter }) => (
+const AccountFilter = ({ onChange, filter }) => (
     <ConnectedFilter
         onChange={onChange}
         filter={filter}
-        multi={true}
+        allowNone={false}
     />
 );
 
-export default CategoriesFilter;
+export default AccountFilter;

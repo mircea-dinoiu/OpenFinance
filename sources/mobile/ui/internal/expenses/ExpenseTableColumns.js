@@ -9,6 +9,7 @@ import AccountColumn from 'common/components/BaseTable/columns/AccountColumn';
 import PersonsDisplay from 'mobile/ui/internal/expenses/cells/PersonsDisplay';
 import RepeatColumn from 'common/components/BaseTable/columns/RepeatColumn';
 import DescriptionFilter from 'common/components/BaseTable/filters/DescriptionFilter';
+import UsersFilter from 'common/components/BaseTable/filters/UsersFilter';
 
 export default [
     AmountColumn,
@@ -34,7 +35,9 @@ export default [
     {
         Header: 'Person(s)',
         accessor: (item) => <PersonsDisplay item={item} />,
-        id: 'persons',
+        Filter: UsersFilter,
+        filterable: true,
+        id: 'users',
         //
         width: 100,
         style: { textAlign: 'center' },

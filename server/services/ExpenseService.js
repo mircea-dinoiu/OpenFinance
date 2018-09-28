@@ -28,7 +28,10 @@ module.exports = {
             end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
             filters: [
                 'sometimes',
-                ['isTableFilters', Object.keys(Model.attributes).concat('categories')],
+                [
+                    'isTableFilters',
+                    [...Object.keys(Model.attributes), 'categories', 'users'],
+                ],
             ],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
@@ -57,24 +60,57 @@ module.exports = {
                     case 'categories':
                         if (Array.isArray(value)) {
                             where.push(
-                                sql.where(sql.col('categories.category_expense.category_id'), {
-                                    $in: value,
-                                }),
+                                sql.where(
+                                    sql.col(
+                                        'categories.category_expense.category_id',
+                                    ),
+                                    {
+                                        $in: value,
+                                    },
+                                ),
                             );
                         } else if (value === 'none') {
                             where.push(
-                                sql.where(sql.col('categories.category_expense.category_id'), {
-                                    $is: sql.literal('NULL'),
-                                }),
+                                sql.where(
+                                    sql.col(
+                                        'categories.category_expense.category_id',
+                                    ),
+                                    {
+                                        $is: sql.literal('NULL'),
+                                    },
+                                ),
+                            );
+                        }
+                        break;
+                    case 'users':
+                        if (Array.isArray(value)) {
+                            where.push(
+                                sql.where(
+                                    sql.col('users.expense_user.user_id'),
+                                    {
+                                        $in: value,
+                                    },
+                                ),
+                            );
+                        } else if (value === 'none') {
+                            where.push(
+                                sql.where(
+                                    sql.col('users.expense_user.user_id'),
+                                    {
+                                        $is: sql.literal('NULL'),
+                                    },
+                                ),
                             );
                         }
                         break;
                     default:
-                        where.push({
-                            [id]: {
-                                $eq: value,
-                            },
-                        });
+                        if (value !== 'any') {
+                            where.push({
+                                [id]: {
+                                    $eq: value,
+                                },
+                            });
+                        }
                         break;
                 }
             });
