@@ -612,7 +612,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         mini={!isDesktop}
                         style={{
                             position: isDesktop ? 'absolute' : 'fixed',
-                            bottom: isDesktop ? '20px' : '70px',
+                            bottom: isDesktop ? '80px' : '70px',
                             right: isDesktop ? '30px' : '10px',
                             zIndex: 1,
                         }}
