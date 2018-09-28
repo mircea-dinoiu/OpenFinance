@@ -68,13 +68,13 @@ Object.assign(validator, {
 
         return false;
     },
-    isTableFilters: (data, Model) => {
+    isTableFilters: (data, validAttrs) => {
         try {
             const json = JSON.parse(data);
 
             if (Array.isArray(json)) {
                 for (const pair of json) {
-                    if (!Model.attributes.hasOwnProperty(pair.id)) {
+                    if (!validAttrs.includes(pair.id)) {
                         return false;
                     }
                 }

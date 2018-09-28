@@ -1,4 +1,5 @@
 // @flow
+import CategoriesFilter from 'common/components/BaseTable/filters/CategoriesFilter';
 import React from 'react';
 import DescriptionDisplay from 'common/components/BaseTable/cells/DescriptionDisplay';
 import AmountColumn from 'common/components/BaseTable/columns/AmountColumn';
@@ -23,6 +24,8 @@ export default [
     DateTimeColumn,
     {
         Header: 'Categories',
+        filterable: true,
+        Filter: CategoriesFilter,
         accessor: (item) => <CategoriesDisplay item={item} />,
         id: 'categories',
         sortable: false,

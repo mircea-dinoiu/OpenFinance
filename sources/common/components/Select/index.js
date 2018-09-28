@@ -123,7 +123,6 @@ const styles = (theme) => ({
             fontFamily: 'inherit',
             fontSize: 'inherit',
             margin: 0,
-            outline: 0,
         },
         '.Select-placeholder, .Select--single .Select-value': {
             color: 'inherit !important',

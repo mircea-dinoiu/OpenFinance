@@ -26,7 +26,10 @@ module.exports = {
         const rules = {
             start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
             end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
-            filters: ['sometimes', ['isTableFilters', Model]],
+            filters: [
+                'sometimes',
+                ['isTableFilters', Object.keys(Model.attributes).concat('categories')],
+            ],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
             sorters: ['sometimes', ['isTableSorters', Model]],
@@ -49,6 +52,21 @@ module.exports = {
 
                         if (value.Generated) {
                             displayGenerated = value.Generated;
+                        }
+                        break;
+                    case 'categories':
+                        if (Array.isArray(value)) {
+                            where.push(
+                                sql.where(sql.col('categories.category_expense.category_id'), {
+                                    $in: value,
+                                }),
+                            );
+                        } else if (value === 'none') {
+                            where.push(
+                                sql.where(sql.col('categories.category_expense.category_id'), {
+                                    $is: sql.literal('NULL'),
+                                }),
+                            );
                         }
                         break;
                     default:

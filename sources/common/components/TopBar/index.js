@@ -176,7 +176,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                 style={{ marginTop: 29, marginLeft: -49 }}
                 onClose={this.handleCloseShiftMenu}
             >
-                <Row nogutter={true} style={{ outline: 'none' }}>
+                <Row nogutter={true}>
                     <Col xs={6}>
                         <FormLabel
                             component="legend"

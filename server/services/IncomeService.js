@@ -26,7 +26,7 @@ module.exports = {
         const rules = {
             start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
             end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
-            filters: ['sometimes', ['isTableFilters', Model]],
+            filters: ['sometimes', ['isTableFilters', Object.keys(Model.attributes)]],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
             sorters: ['sometimes', ['isTableSorters', Model]],
