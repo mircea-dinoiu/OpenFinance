@@ -1,5 +1,4 @@
-import { shiftDateForward } from 'common/utils/dates';
-import { formatYMD } from 'shared/utils/dates';
+import { formatYMD, shiftDateForward } from 'common/utils/dates';
 
 describe('#shiftDateForward()', () => {
     it('should default times to 1', () => {

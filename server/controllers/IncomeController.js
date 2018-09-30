@@ -1,7 +1,8 @@
 const { Income: Model, User, MoneyLocation } = require('../models');
 const BaseController = require('./BaseController');
 const Service = require('../services/IncomeService');
-const { pickOwnProperties, standardDate } = require('../helpers');
+const { pickOwnProperties } = require('../helpers');
+const defs = require('../../shared/defs');
 
 module.exports = BaseController.extend({
     Model,
@@ -15,7 +16,7 @@ module.exports = BaseController.extend({
         user_id: ['sometimes', 'isRequired', ['isId', User]],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
-        created_at: ['sometimes', 'isRequired', 'isInt'],
+        created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
     },
 
     createValidationRules: {
@@ -24,7 +25,7 @@ module.exports = BaseController.extend({
         user_id: ['isRequired', ['isId', User]],
         repeat: ['sometimes', 'isRepeatValue'],
         money_location_id: ['isRequired', ['isId', MoneyLocation]],
-        created_at: ['sometimes', 'isRequired', 'isInt'],
+        created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
     },
 
     sanitizeUpdateValues(record) {
@@ -44,7 +45,7 @@ module.exports = BaseController.extend({
         }
 
         if (record.hasOwnProperty('created_at')) {
-            values.created_at = standardDate(record.created_at, 'X');
+            values.created_at = record.created_at;
         }
 
         if (
@@ -73,7 +74,7 @@ module.exports = BaseController.extend({
         values.status = 'pending';
 
         if (record.hasOwnProperty('created_at')) {
-            values.created_at = standardDate(record.created_at, 'X');
+            values.created_at = record.created_at;
         }
 
         return values;

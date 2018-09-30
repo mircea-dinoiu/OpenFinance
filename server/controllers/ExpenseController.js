@@ -1,8 +1,9 @@
 const { Expense: Model, User, MoneyLocation, Category } = require('../models');
 const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
-const { pickOwnProperties, standardDate } = require('../helpers');
+const { pickOwnProperties } = require('../helpers');
 const { sql } = require('../models');
+const defs = require('../../shared/defs');
 
 module.exports = BaseController.extend({
     Model,
@@ -12,7 +13,7 @@ module.exports = BaseController.extend({
         id: ['isRequired', ['isId', Model]],
         sum: ['sometimes', 'isRequired', 'isFloat', 'isNotZero'],
         item: ['sometimes', 'isRequired', 'isString'],
-        created_at: ['sometimes', 'isRequired', 'isInt'],
+        created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
         users: ['sometimes', 'isRequired', ['isIdArray', User]],
@@ -27,7 +28,7 @@ module.exports = BaseController.extend({
         sum: ['isRequired', 'isFloat', 'isNotZero'],
         item: ['isRequired', 'isString'],
         users: ['isRequired', ['isIdArray', User]],
-        created_at: ['sometimes', 'isRequired', 'isInt'],
+        created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
         money_location_id: ['isRequired', ['isId', MoneyLocation]],
         categories: ['sometimes', ['isIdArray', Category]],
 
@@ -121,7 +122,7 @@ module.exports = BaseController.extend({
         }
 
         if (record.hasOwnProperty('created_at')) {
-            values.created_at = standardDate(record.created_at, 'X');
+            values.created_at = record.created_at;
         }
 
         return values;
@@ -140,7 +141,7 @@ module.exports = BaseController.extend({
         }
 
         if (workingRecord.hasOwnProperty('created_at')) {
-            values.created_at = standardDate(workingRecord.created_at, 'X');
+            values.created_at = workingRecord.created_at;
         }
 
         if (workingRecord.hasOwnProperty('repeat')) {

@@ -26,10 +26,11 @@ import {
     updatePreferences,
 } from 'common/state/actions';
 import { bindActionCreators } from 'redux';
-import { formatYMD, shiftDateBack, shiftDateForward } from 'common/utils/dates';
+import { shiftDateBack, shiftDateForward } from 'common/utils/dates';
 import moment from 'moment';
 import { ShiftDateOptions, Sizes } from 'common/defs';
 import { InlineDatePicker } from 'material-ui-pickers/DatePicker';
+import { endOfDayToISOString } from 'shared/utils/dates';
 
 type TypeProps = {
     onLogout: Function,
@@ -65,13 +66,13 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
 
     shiftBack(date) {
         this.props.actions.updatePreferences({
-            endDate: formatYMD(date),
+            endDate: endOfDayToISOString(date),
         });
     }
 
     shiftForward(date) {
         this.props.actions.updatePreferences({
-            endDate: formatYMD(date),
+            endDate: endOfDayToISOString(date),
         });
     }
 
@@ -92,7 +93,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
         );
     };
     onChangeEndDate = (date) => {
-        this.props.actions.updatePreferences({ endDate: formatYMD(date) });
+        this.props.actions.updatePreferences({ endDate: endOfDayToISOString(date) });
     };
     onClickRefresh = () => {
         this.props.actions.refreshWidgets();

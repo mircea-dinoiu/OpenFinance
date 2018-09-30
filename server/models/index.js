@@ -10,7 +10,7 @@ const logger = require('../helpers/logger');
 if (process.env.NODE_ENV !== 'test') {
     const sql = new Sequelize(process.env.DATABASE_URL, {
         dialectOptions: {
-            timezone: process.env.TIMEZONE,
+            timezone: config.get('timezone'),
         },
         logging: config.get('debug')
             ? (...args) => {

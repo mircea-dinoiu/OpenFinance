@@ -10,12 +10,13 @@ import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import { connect } from 'react-redux';
 import IncludeDropdown from 'common/components/IncludeDropdown';
-import { getStartDate, formatYMD } from 'common/utils/dates';
+import { getStartDate } from 'common/utils/dates';
 import { greyedOut } from 'common/defs/styles';
 import { Sizes } from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
 import { updatePreferences } from 'common/state/actions';
 import moment from 'moment';
+import {endOfDayToISOString} from 'shared/utils/dates';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -23,11 +24,11 @@ type TypeProps = {
 
 const getEndDateBasedOnIncludePreference = (endDate, include) => {
     if (include === 'ut') {
-        return formatYMD();
+        return endOfDayToISOString();
     }
 
     if (include === 'until-tmrw') {
-        return formatYMD(
+        return endOfDayToISOString(
             moment()
                 .add(1, 'day')
                 .toDate(),
@@ -35,7 +36,7 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
     }
 
     if (include === 'until-yd') {
-        return formatYMD(
+        return endOfDayToISOString(
             moment()
                 .subtract(1, 'day')
                 .toDate(),

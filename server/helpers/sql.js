@@ -1,4 +1,6 @@
 const sql = require('sequelize');
+const defs = require('../../shared/defs');
+const moment = require('moment');
 
 const mapTextFilterToSQL = (id, value) => {
     if (value) {
@@ -81,7 +83,7 @@ const exported = {
         if (startDate) {
             return sql.or(
                 sql.where(
-                    sql.fn('DATE', sql.col(`${Model.tableName}.created_at`)),
+                    sql.col(`${Model.tableName}.created_at`),
                     { $gte: startDate },
                 ),
                 sql.where(sql.col(`${Model.tableName}.repeat`), {
@@ -94,7 +96,7 @@ const exported = {
     },
     mapEndDateToSQL(endDate, Model) {
         return sql.where(
-            sql.fn('DATE', sql.col(`${Model.tableName}.created_at`)),
+            sql.col(`${Model.tableName}.created_at`),
             {
                 $lte: endDate,
             },

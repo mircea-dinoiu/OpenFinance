@@ -3,6 +3,7 @@ const { Validator } = require('../validators');
 const { Expense: Model, sql } = require('../models');
 const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
 const { sanitizeFilters, sanitizeSorters } = require('../helpers');
+const defs = require('../../shared/defs');
 const {
     mapStartDateToSQL,
     mapEndDateToSQL,
@@ -24,8 +25,8 @@ module.exports = {
             'sorters',
         );
         const rules = {
-            start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
-            end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
+            start_date: ['sometimes', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
+            end_date: ['isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
             filters: [
                 'sometimes',
                 [

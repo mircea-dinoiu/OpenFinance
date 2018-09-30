@@ -9,5 +9,6 @@
     "hostname": "http://localhost:8080",
     "enable": false
   },
-  "memoryStore": false
+  "memoryStore": false,
+  "timezone": "+00:00"
 }

@@ -1,4 +1,3 @@
-const { standardDate } = require('../../shared/utils/dates');
 const path = require('path');
 const basePath = (string = '') => path.join(__dirname, '../../', string);
 const config = require('config');
@@ -64,8 +63,6 @@ module.exports = {
 
         return assetHost + manifest[script];
     },
-
-    standardDate,
 
     wrapPromise(promise) {
         promise.catch((e) => {

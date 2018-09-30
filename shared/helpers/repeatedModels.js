@@ -1,4 +1,4 @@
-const { standardDate } = require('../utils/dates');
+const moment = require('moment');
 const advanceRepeatDate = (obj, rawRepeats) => {
     const newObject = Object.assign({}, obj);
     const date = new Date(newObject.created_at);
@@ -28,7 +28,7 @@ const advanceRepeatDate = (obj, rawRepeats) => {
             break;
     }
 
-    newObject.created_at = standardDate(date);
+    newObject.created_at = moment(date).toISOString();
 
     return newObject;
 };

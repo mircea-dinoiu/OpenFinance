@@ -1,9 +1,7 @@
 const { advanceRepeatDate } = require('../../shared/helpers/repeatedModels');
-const { formatYMD } = require('../../shared/utils/dates');
 const logger = require('../helpers/logger');
 const { orderBy } = require('lodash');
-
-const day = formatYMD;
+const moment = require('moment');
 
 module.exports = {
     filterClones(records, displayGenerated) {
@@ -22,7 +20,7 @@ module.exports = {
         const start = Date.now();
 
         records.forEach((record) => {
-            if (startDate == null || day(record) >= day(startDate)) {
+            if (startDate == null || moment(record.created_at).isSameOrAfter(startDate)) {
                 ret.push(record);
             }
 
@@ -48,8 +46,6 @@ module.exports = {
         return ret;
     },
 
-    day,
-
     getClonesFor({ record, endDate, startDate }) {
         const out = [];
         const recordAsJSON = record.toJSON();
@@ -68,7 +64,7 @@ module.exports = {
 
                 const newObject = this.advanceRepeatDate(recordAsJSON, repeats);
 
-                if (startDate && day(newObject.created_at) < day(startDate)) {
+                if (startDate && moment(newObject.created_at).isBefore(startDate)) {
                     repeats++;
                     continue;
                 }
@@ -78,7 +74,7 @@ module.exports = {
 
                 delete newObject.id;
 
-                if (day(newObject.created_at) > day(endDate)) {
+                if (moment(newObject.created_at).isAfter(endDate)) {
                     break;
                 } else {
                     out.push(

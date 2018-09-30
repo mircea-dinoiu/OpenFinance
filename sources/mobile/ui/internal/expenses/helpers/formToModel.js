@@ -1,5 +1,6 @@
 // @flow
 import { csvToArr } from 'common/transformers';
+import moment from 'moment';
 
 export default (form, props) => {
     const users = form.chargedPersons
@@ -19,7 +20,7 @@ export default (form, props) => {
         id: form.id,
         sum: form.sum,
         item: form.description,
-        created_at: parseInt(date.getTime() / 1000),
+        created_at: moment(date).toISOString(),
         categories: csvToArr(form.categories).map(Number),
         money_location_id: form.paymentMethod,
         repeat: form.repeat,

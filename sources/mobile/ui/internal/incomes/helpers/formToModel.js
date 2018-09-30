@@ -1,4 +1,5 @@
 // @flow
+import moment from 'moment';
 
 export default (form) => {
     const date: Date = form.date.toDate();
@@ -14,7 +15,7 @@ export default (form) => {
         description: form.description,
         repeat: form.repeat,
         status: form.status || 'pending',
-        created_at: parseInt(date.getTime() / 1000),
+        created_at: moment(date).toISOString(),
         user_id: form.userId,
         money_location_id: form.paymentMethod,
     };

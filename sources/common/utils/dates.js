@@ -1,9 +1,7 @@
 // @flow
 import moment from 'moment';
 
-import { formatYMD } from 'shared/utils/dates';
-
-export { formatYMD };
+import {endOfDayToISOString} from 'shared/utils/dates';
 
 export const getStartDate = ({
     endDate,
@@ -14,9 +12,7 @@ export const getStartDate = ({
 }): string => {
     let date = moment(endDate).toDate();
 
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setMilliseconds(0);
+    date.setHours(0, 0, 0, 0)
 
     switch (include) {
         case 'ly':
@@ -36,7 +32,7 @@ export const getStartDate = ({
             break;
     }
 
-    return date ? formatYMD(date) : '';
+    return date ? moment(date).toISOString() : '';
 };
 
 const getMomentArgsForDateShift = (option, times = 1) => {
@@ -72,5 +68,7 @@ export const getInitialEndDate = (): string => {
     date.setDate(1);
     date.setMonth(date.getMonth() + 1);
 
-    return formatYMD(date);
+    return endOfDayToISOString(date);
 };
+
+export const formatYMD = (date = new Date()) => moment(date).format('YYYY-MM-DD');
