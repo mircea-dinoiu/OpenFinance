@@ -28,7 +28,7 @@ const advanceRepeatDate = (obj, rawRepeats) => {
             break;
     }
 
-    newObject.created_at = moment(date).toISOString();
+    newObject.created_at = moment(date);
 
     return newObject;
 };
