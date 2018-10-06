@@ -14,6 +14,10 @@ export const IncludeOptions = [
         name: 'Until today',
     },
     {
+        id: 'until-now',
+        name: 'Until now',
+    },
+    {
         id: 'until-yd',
         name: 'Until yesterday',
     },

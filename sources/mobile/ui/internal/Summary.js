@@ -43,6 +43,10 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
         );
     }
 
+    if (include === 'until-now') {
+        return moment().toISOString();
+    }
+
     return endDate;
 };
 

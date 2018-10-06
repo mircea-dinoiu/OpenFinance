@@ -14,6 +14,7 @@ type TypePreferences = {
     include: | 'ut'
         | 'until-yd'
         | 'until-tmrw'
+        | 'until-now'
         | 'all'
         | 'ld'
         | 'ld'
