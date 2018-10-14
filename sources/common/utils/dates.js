@@ -47,6 +47,8 @@ const getMomentArgsForDateShift = (option, times = 1) => {
             return [2 * Number(times), 'week'];
         case 'm':
             return [one * Number(times), 'month'];
+        case '1y':
+            return [one * Number(times), 'year'];
     }
 
     throw new Error(`${option} is not specified in ShiftDateOptions`);
