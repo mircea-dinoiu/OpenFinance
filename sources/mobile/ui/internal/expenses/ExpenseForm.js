@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { MultiSelect, SingleSelect } from 'common/components/Select';
 import { arrToCsv } from 'common/transformers';
 import { overflowVisible } from 'common/defs/styles';
-import { DatePicker, TimePicker } from 'material-ui-pickers';
+import {InlineDateTimePicker, DateTimePicker} from 'material-ui-pickers';
 import { CancelToken } from 'axios';
 
 const boxStyle = {
@@ -231,27 +231,14 @@ class ExpenseForm extends PureComponent<TypeProps> {
 
     renderDateTime() {
         return (
-            <Row>
-                <Col xs={6}>
-                    <DatePicker
-                        style={{ width: '100%' }}
-                        label="Date"
-                        showTodayButton
-                        value={this.state.date}
-                        onChange={(value) => this.setState({ date: value })}
-                    />
-                </Col>
-                <Col xs={6}>
-                    <TimePicker
-                        style={{ width: '100%' }}
-                        label="Time"
-                        showTodayButton
-                        todayLabel="now"
-                        value={this.state.time}
-                        onChange={(value) => this.setState({ time: value })}
-                    />
-                </Col>
-            </Row>
+            <DateTimePicker
+                label="Date & Time"
+                value={this.state.date}
+                onChange={(value) => this.setState({ date: value })}
+                showTodayButton
+                style={{ width: '100%' }}
+                ampm={false}
+            />
         );
     }
 

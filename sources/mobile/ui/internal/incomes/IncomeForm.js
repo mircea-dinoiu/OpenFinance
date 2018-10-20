@@ -7,7 +7,7 @@ import { Row, Col } from 'react-grid-system';
 import RepeatOptions from 'common/defs/repeatOptions';
 import { connect } from 'react-redux';
 import { TextField as TextField2 } from '@material-ui/core';
-import { DatePicker, TimePicker } from 'material-ui-pickers';
+import {DateTimePicker} from 'material-ui-pickers';
 
 type TypeProps = {
     initialValues: {},
@@ -86,27 +86,14 @@ class IncomeForm extends PureComponent<TypeProps> {
 
     renderDateTime() {
         return (
-            <Row>
-                <Col xs={6}>
-                    <DatePicker
-                        style={{ width: '100%' }}
-                        label="Date"
-                        showTodayButton
-                        value={this.state.date}
-                        onChange={(value) => this.setState({ date: value })}
-                    />
-                </Col>
-                <Col xs={6}>
-                    <TimePicker
-                        style={{ width: '100%' }}
-                        label="Time"
-                        showTodayButton
-                        todayLabel="now"
-                        value={this.state.time}
-                        onChange={(value) => this.setState({ time: value })}
-                    />
-                </Col>
-            </Row>
+            <DateTimePicker
+                label="Date & Time"
+                value={this.state.date}
+                onChange={(value) => this.setState({ date: value })}
+                showTodayButton
+                style={{ width: '100%' }}
+                ampm={false}
+            />
         );
     }
 
