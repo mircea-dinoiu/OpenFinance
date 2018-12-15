@@ -21,6 +21,7 @@ type TypePreferences = {
         | 'lw'
         | 'lm'
         | 'ly',
+    includePending: boolean,
 };
 
 type TypeCurrency = {

@@ -7,12 +7,14 @@ export const parsePreferences = (
     endDateIncrement: string,
     include: string,
     endDate: string,
+    includePending: ?boolean,
 } => {
     const endDateIncrement = state.endDateIncrement || '2w';
     const include = state.include || 'until-now';
     const endDate = state.endDate || getInitialEndDate();
+    const includePending = Boolean(state.includePending);
 
-    return { endDateIncrement, include, endDate };
+    return { includePending, endDateIncrement, include, endDate };
 };
 
 export const validatePreferences = (state = {}) => {

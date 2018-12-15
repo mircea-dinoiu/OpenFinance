@@ -102,7 +102,7 @@ export default function ContextMenuItems({
             {features.status && (
                 <>
                     <MenuItem
-                        primaryText="Mark as reviewed"
+                        primaryText="Mark as posted"
                         leftIcon={<LockIcon />}
                         onClick={compose(
                             onCloseContextMenu,
@@ -116,7 +116,7 @@ export default function ContextMenuItems({
                         desktop={desktop}
                     />
                     <MenuItem
-                        primaryText="Mark as needs review"
+                        primaryText="Mark as pending"
                         leftIcon={<UnlockIcon />}
                         onClick={compose(
                             onCloseContextMenu,

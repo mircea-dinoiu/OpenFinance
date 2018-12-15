@@ -2,7 +2,7 @@
 import React from 'react';
 import { createXHR } from 'common/utils/fetch';
 import { BigLoader } from '../components/loaders';
-import { Paper } from '@material-ui/core';
+import { Paper, Checkbox, FormControlLabel } from '@material-ui/core';
 import { green, purple, red, lime } from '@material-ui/core/colors';
 import routes from '../../../common/defs/routes';
 import { stringify } from 'query-string';
@@ -16,7 +16,7 @@ import { Sizes } from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
 import { updatePreferences } from 'common/state/actions';
 import moment from 'moment';
-import {endOfDayToISOString} from 'shared/utils/dates';
+import { endOfDayToISOString } from 'shared/utils/dates';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -75,6 +75,7 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 
     load = async ({
+        includePending = this.props.preferences.includePending,
         endDate = this.props.preferences.endDate,
         include = this.props.preferences.include,
     } = {}) => {
@@ -98,6 +99,9 @@ class Summary extends React.PureComponent<TypeProps> {
                     identity,
                 ),
                 html: false,
+                filters: JSON.stringify(
+                    includePending ? [] : [{ id: 'status', value: 'finished' }],
+                ),
             })}`,
         });
         const json = response.data;
@@ -183,6 +187,13 @@ class Summary extends React.PureComponent<TypeProps> {
         this.load({ include });
     };
 
+    handleToggleIncludePending = () => {
+        const includePending = !this.props.preferences.includePending;
+
+        this.props.updatePreferences({ includePending });
+        this.load({ includePending });
+    };
+
     render() {
         if (this.state.firstLoad) {
             return <BigLoader />;
@@ -211,6 +222,18 @@ class Summary extends React.PureComponent<TypeProps> {
                         <IncludeDropdown
                             value={this.props.preferences.include}
                             onChange={this.onIncludeChange}
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={
+                                        this.props.preferences.includePending
+                                    }
+                                    onChange={this.handleToggleIncludePending}
+                                    color="default"
+                                />
+                            }
+                            label="Include pending transactions"
                         />
                     </Paper>
                     {this.state.results && this.renderResults()}
