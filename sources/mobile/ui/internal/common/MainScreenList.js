@@ -343,26 +343,15 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         const selectedItems = this.selectedItems;
 
         try {
-            const response = await this.handleRequestUpdate(
+            await this.handleRequestUpdate(
                 selectedItems.map((each) => ({ id: each.id, status })),
             );
 
-            this.updateResultsFromUpdateResponse(response.data);
+            this.props.onRefreshWidgets();
         } catch (e) {
+            console.error(e);
             // todo
         }
-    };
-
-    updateResultsFromUpdateResponse = (json) => {
-        const results = Array.from(this.state.results);
-
-        json.forEach((entry) => {
-            const index = results.findIndex((each) => each.id === entry.id);
-
-            results.splice(index, 1, entry);
-        });
-
-        this.setState({ results });
     };
 
     withLoading = (fn) => async (...args: any[]) => {
