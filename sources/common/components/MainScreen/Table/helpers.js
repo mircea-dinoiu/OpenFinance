@@ -1,15 +1,11 @@
 // @flow
-import { formatYMD } from 'common/utils/dates';
 import cssTable from 'common/components/BaseTable/index.pcss';
 
 export const getTrClassName = (item, { selectedIds }): string => {
     const classes = [cssTable.notSelectable];
-    const day = formatYMD;
 
-    if (day(item.created_at) === day(new Date())) {
-        classes.push(cssTable.todayRow);
-    } else if (day(item.created_at) > day(new Date())) {
-        classes.push(cssTable.futureRow);
+    if (item.status === 'pending') {
+        classes.push(cssTable.pendingRow);
     }
 
     if (selectedIds[item.id]) {

@@ -201,7 +201,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 end_date: endDate,
                 page,
                 limit: this.pageSize,
-                sorters: JSON.stringify(this.sorters),
+                sorters: JSON.stringify([{ id: 'status', desc: true }, ...this.sorters]),
                 filters: JSON.stringify(this.filters),
             })}`,
         });

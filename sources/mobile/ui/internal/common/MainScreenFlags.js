@@ -7,7 +7,7 @@ import Tooltip from 'common/components/Tooltip';
 import startCase from 'lodash/startCase';
 
 export const PendingReviewFlag = ({ entity = 'Item' }) => (
-    <Tooltip tooltip={`${startCase(entity)} is pending review`}>
+    <Tooltip tooltip={`${startCase(entity)} is pending`}>
         <Warning style={{ height: 20, width: 20 }} nativeColor={yellow.A700} />
     </Tooltip>
 );
