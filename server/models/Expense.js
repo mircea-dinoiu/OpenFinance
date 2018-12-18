@@ -13,6 +13,7 @@ module.exports = (sequelize, types) => {
             notes: types.STRING,
             money_location_id: types.INTEGER,
             status: types.STRING,
+            type: types.STRING,
             sum: types.FLOAT,
 
             repeat: types.STRING,

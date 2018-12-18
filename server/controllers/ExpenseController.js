@@ -21,6 +21,7 @@ module.exports = BaseController.extend({
         ],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
+        type: ['sometimes', 'isRequired', 'isTypeValue'],
         users: ['sometimes', 'isRequired', ['isIdArray', User]],
         categories: ['sometimes', ['isIdArray', Category]],
 
@@ -171,6 +172,10 @@ module.exports = BaseController.extend({
                 values.repeat_occurrences = null;
                 values.repeat_end_date = null;
             }
+        }
+
+        if (workingRecord.hasOwnProperty('type')) {
+            values.type = record.type;
         }
 
         if (workingRecord.hasOwnProperty('status')) {

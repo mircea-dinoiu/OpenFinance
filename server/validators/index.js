@@ -94,6 +94,7 @@ Object.assign(validator, {
     isRepeatValue: (value) =>
         ['d', 'w', '2w', 'm', '2m', '3m', 'y'].includes(value),
     isStatusValue: (value) => ['finished', 'pending'].includes(value),
+    isTypeValue: (value) => ['withdrawal', 'deposit'].includes(value),
     isNotZero: (value) => Number(value) !== 0,
     isString: (value) => typeof value === 'string',
     isRequired: (value) => {
