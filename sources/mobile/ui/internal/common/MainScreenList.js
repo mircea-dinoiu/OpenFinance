@@ -308,7 +308,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 this.props.currencies,
             );
 
-            return acc + sum;
+            return acc + (each.type === 'deposit' ? sum : -sum);
         }, 0);
     }
 
@@ -346,10 +346,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 <strong>Selected:</strong>{' '}
                 {Object.values(this.state.selectedIds).filter(Boolean).length}
                 {divider}
-                <strong>Current Page amount:</strong>{' '}
+                <strong>Current Page Balance:</strong>{' '}
                 {numericValue(this.computePageAmount())}
                 {divider}
-                <strong>Selected amount:</strong>{' '}
+                <strong>Selected Balance:</strong>{' '}
                 {numericValue(this.computeSelectedAmount())}
             </div>
         );
