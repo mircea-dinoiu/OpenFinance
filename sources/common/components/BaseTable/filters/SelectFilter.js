@@ -4,7 +4,6 @@ import {
     Button,
     Menu,
     Radio,
-    FormLabel,
     RadioGroup,
     FormControlLabel,
     withStyles,
@@ -90,7 +89,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
     handleChangeRadio = (event) => {
         const radioValue = event.target.value;
 
-        if (radioValue !== 'custom') {
+        if (radioValue !== 'one-of') {
             this.triggerChange(radioValue);
         }
 
@@ -131,7 +130,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
         const filterValue = this.getFilterValue();
 
         if (filterValue !== 'any' && filterValue !== 'none') {
-            return 'custom';
+            return 'one-of';
         }
 
         return filterValue;
@@ -141,7 +140,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
         return [
             ['any', 'Any'],
             this.props.allowNone ? ['none', 'None'] : null,
-            ['custom', 'Custom'],
+            ['one-of', 'One of'],
         ].filter(Boolean);
     }
 
@@ -173,7 +172,6 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                     classes={this.props.classes}
                 >
                     <div style={{ padding: '5px 10px', width: 200 }}>
-                        <FormLabel component="legend">Categories</FormLabel>
                         <RadioGroup
                             value={this.state.radioValue}
                             onChange={this.handleChangeRadio}
@@ -190,7 +188,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                             <Select
                                 value={this.getSelectValue()}
                                 onOpen={() => {
-                                    this.setState({ radioValue: 'custom' });
+                                    this.setState({ radioValue: 'one-of' });
                                 }}
                                 options={this.props.items.map((item) => ({
                                     value: item.id,
