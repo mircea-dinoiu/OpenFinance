@@ -1,0 +1,2 @@
+ALTER TABLE expenses MODIFY `repeat` TINYTEXT;
+ALTER TABLE incomes MODIFY `repeat` TINYTEXT;

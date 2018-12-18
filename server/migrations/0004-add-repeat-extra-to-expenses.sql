@@ -1,0 +1,3 @@
+ALTER TABLE expenses
+    ADD COLUMN repeat_end_date TIMESTAMP NULL DEFAULT NULL,
+    ADD COLUMN repeat_occurrences INT UNSIGNED NULL DEFAULT NULL;

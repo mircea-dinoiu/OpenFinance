@@ -1,0 +1,2 @@
+ALTER TABLE expenses MODIFY money_location_id INT UNSIGNED NOT NULL;
+ALTER TABLE incomes MODIFY COLUMN money_location_id INT UNSIGNED NOT NULL;
