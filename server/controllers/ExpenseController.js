@@ -133,7 +133,7 @@ module.exports = BaseController.extend({
         }
 
         if (record.hasOwnProperty('notes')) {
-            values.notes = record.notes.trim();
+            values.notes = record.notes && record.notes.trim();
         }
 
         if (record.hasOwnProperty('created_at')) {
@@ -156,7 +156,7 @@ module.exports = BaseController.extend({
         }
 
         if (workingRecord.hasOwnProperty('notes')) {
-            values.notes = workingRecord.notes.trim();
+            values.notes = workingRecord.notes && workingRecord.notes.trim();
         }
 
         if (workingRecord.hasOwnProperty('created_at')) {
