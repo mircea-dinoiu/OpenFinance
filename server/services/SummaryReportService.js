@@ -170,7 +170,7 @@ module.exports = {
         for (const record of expenseRecords) {
             const users = extractIdsFromModel(record, 'userIds');
             const recordCategories = extractIdsFromModel(record, 'categoryIds');
-            const sum = record.sum;
+            const sum = record.type === 'deposit' ? -record.sum : record.sum;
             const currencyId = mlIdToCurrencyId[record.money_location_id];
             const addData = function (categoryId, rawCatSum) {
                 if (!categories[categoryId]) {
