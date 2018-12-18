@@ -139,16 +139,10 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                             onTouchTap={() => this.handleChangeTab(0)}
                         />
                         <BottomNavigationAction
-                            label="Expenses"
+                            label="Transactions"
                             icon={<TrendingDown />}
                             onClick={() => this.handleChangeTab(1)}
                             onTouchTap={() => this.handleChangeTab(1)}
-                        />
-                        <BottomNavigationAction
-                            label="Incomes"
-                            icon={<TrendingUp />}
-                            onClick={() => this.handleChangeTab(2)}
-                            onTouchTap={() => this.handleChangeTab(2)}
                         />
                     </BottomNavigation>
                 </Paper>
