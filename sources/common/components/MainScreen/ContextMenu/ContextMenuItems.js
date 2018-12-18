@@ -7,6 +7,8 @@ import DuplicateIcon from '@material-ui/icons/FileCopy';
 import DetachIcon from '@material-ui/icons/ViewAgenda';
 import LockIcon from '@material-ui/icons/Lock';
 import UnlockIcon from '@material-ui/icons/LockOpen';
+import IconArrowDown from '@material-ui/icons/ArrowDownward';
+import IconArrowUp from '@material-ui/icons/ArrowUpward';
 import compose from 'common/utils/compose';
 
 export default function ContextMenuItems({
@@ -17,6 +19,8 @@ export default function ContextMenuItems({
     onClickReviewed,
     onClickNeedsReview,
     onCloseContextMenu,
+    onClickDeposit,
+    onClickWithdrawal,
     selectedIds,
     desktop = false,
     features,
@@ -99,10 +103,40 @@ export default function ContextMenuItems({
                     desktop={desktop}
                 />
             )}
+            <Divider />
+            <MenuItem
+                primaryText="Change to Deposit"
+                leftIcon={<IconArrowDown />}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickDeposit,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickDeposit,
+                )}
+                disabled={disabledForZero}
+                desktop={desktop}
+            />
+            <MenuItem
+                primaryText="Change to Withdrawal"
+                leftIcon={<IconArrowUp />}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickWithdrawal,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickWithdrawal,
+                )}
+                disabled={disabledForZero}
+                desktop={desktop}
+            />
+            <Divider />
             {features.status && (
                 <>
                     <MenuItem
-                        primaryText="Mark as posted"
+                        primaryText="Change to Posted"
                         leftIcon={<LockIcon />}
                         onClick={compose(
                             onCloseContextMenu,
@@ -116,7 +150,7 @@ export default function ContextMenuItems({
                         desktop={desktop}
                     />
                     <MenuItem
-                        primaryText="Mark as pending"
+                        primaryText="Change to Pending"
                         leftIcon={<UnlockIcon />}
                         onClick={compose(
                             onCloseContextMenu,

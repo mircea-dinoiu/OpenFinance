@@ -32,6 +32,23 @@ const mapFlagsToSQL = (flags) => {
             break;
     }
 
+    switch (flags.Deposit) {
+        case 'no':
+            where.push({
+                type: {
+                    $ne: 'deposit',
+                },
+            });
+            break;
+        case 'only':
+            where.push({
+                type: {
+                    $eq: 'deposit',
+                },
+            });
+            break;
+    }
+
     switch (flags.Recurrent) {
         case 'no':
             where.push({

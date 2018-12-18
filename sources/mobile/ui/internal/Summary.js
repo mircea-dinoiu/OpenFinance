@@ -162,22 +162,6 @@ class Summary extends React.PureComponent<TypeProps> {
                     entities: this.props.user.get('list'),
                     entityNameField: 'full_name',
                 })}
-
-                {this.renderCategory({
-                    backgroundColor: lime[900],
-                    title: 'Income by location',
-                    summaryObject: results.incomesData.byML,
-                    entities: this.props.moneyLocationTypes,
-                    entityNameField: 'name',
-                })}
-
-                {this.renderCategory({
-                    backgroundColor: lime[900],
-                    title: 'Income by user',
-                    summaryObject: results.incomesData.byUser,
-                    entities: this.props.user.get('list'),
-                    entityNameField: 'full_name',
-                })}
             </div>
         );
     }

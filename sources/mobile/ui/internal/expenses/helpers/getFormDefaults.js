@@ -5,6 +5,7 @@ export default function (data) {
     return {
         currency: data.currencies.default,
         description: '',
+        type: 'withdrawal',
         notes: '',
         sum: '',
         paymentMethod: null,

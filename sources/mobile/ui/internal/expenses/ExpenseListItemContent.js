@@ -13,7 +13,7 @@ import PersonsDisplay from 'mobile/ui/internal/expenses/cells/PersonsDisplay';
 const ExpenseListItemContent = ({ item, expanded }) => {
     const personsDisplay = <PersonsDisplay item={item} />;
     const descriptionDisplay = item.item;
-    const flags = <Flags entity="expense" item={item} />;
+    const flags = <Flags entity="transaction" item={item} />;
     const moneyLocationDisplay = <MoneyLocationDisplay item={item} />;
     const categoriesDisplay = <CategoriesDisplay item={item} />;
     const dateDisplay = <DateDisplay item={item} />;

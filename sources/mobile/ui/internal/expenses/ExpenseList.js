@@ -14,7 +14,7 @@ const ExpenseList = (props) => (
     <MainScreenList
         api={routes.expense}
         tableColumns={ExpenseTableColumns}
-        entityName="expense"
+        entityName="transaction"
         nameProperty="item"
         crudProps={{
             getFormDefaults,

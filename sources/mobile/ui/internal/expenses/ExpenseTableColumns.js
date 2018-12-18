@@ -18,7 +18,11 @@ export default [
         filterable: true,
         Filter: DescriptionFilter,
         accessor: (item) => (
-            <DescriptionDisplay entity="expense" item={item} accessor="item" />
+            <DescriptionDisplay
+                entity="transaction"
+                item={item}
+                accessor="item"
+            />
         ),
         id: 'item',
     },

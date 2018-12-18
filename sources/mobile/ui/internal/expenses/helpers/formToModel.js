@@ -21,5 +21,6 @@ export default (form, props) => {
         repeat_occurrences: form.repeatOccurrences,
         users,
         status: form.status || 'pending',
+        type: form.type || 'withdrawal',
     };
 };

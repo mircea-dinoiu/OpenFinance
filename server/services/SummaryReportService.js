@@ -3,9 +3,8 @@ const { extractIdsFromModel } = require('../helpers');
 const { sortBy } = require('lodash');
 
 module.exports = {
-    getRemainingData({
+    getBalances({
         expenses,
-        incomes,
         userIdToFullName,
         mlRecords,
         currencyIdToISOCode,
@@ -14,11 +13,8 @@ module.exports = {
         const data = { byUser: [], byML: [] };
         const totalRemainingByUser = {};
         const totalRemainingByML = {};
-        const users = SummaryReportHelper.getUniques(
-            expenses.byUser,
-            incomes.byUser,
-        );
-        const mls = SummaryReportHelper.getUniques(expenses.byML, incomes.byML);
+        const users = SummaryReportHelper.getUniques(expenses.byUser);
+        const mls = SummaryReportHelper.getUniques(expenses.byML);
 
         /**
          * Remaining present
@@ -26,7 +22,6 @@ module.exports = {
         mls.forEach((id) => {
             totalRemainingByML[id] = SummaryReportHelper.getRemainingSum(
                 expenses.byML,
-                incomes.byML,
                 id,
             );
         });
@@ -34,7 +29,6 @@ module.exports = {
         users.forEach((id) => {
             totalRemainingByUser[id] = SummaryReportHelper.getRemainingSum(
                 expenses.byUser,
-                incomes.byUser,
                 id,
             );
         });
@@ -91,58 +85,7 @@ module.exports = {
         };
     },
 
-    getIncomesData({
-        incomeRecords,
-        mlIdToCurrencyId,
-        mlRecords,
-        html,
-        userIdToFullName,
-    }) {
-        const data = { byUser: [], byML: [] };
-        const users = {};
-        const mls = {};
-
-        for (const record of incomeRecords) {
-            const userId = record.user_id;
-            const mlId = record.money_location_id;
-            const sum = record.sum;
-            const currencyId = mlIdToCurrencyId[mlId];
-
-            mls[mlId] = SummaryReportHelper.safeNum((mls[mlId] || 0) + sum);
-
-            users[userId] = users[userId] || {};
-            users[userId][currencyId] = SummaryReportHelper.safeNum(
-                (users[userId][currencyId] || 0) + sum,
-            );
-        }
-
-        Object.keys(users).forEach((unsafeId) => {
-            const id = Number(unsafeId);
-
-            Object.entries(users[id]).forEach(([currencyId, sum]) => {
-                data.byUser.push({
-                    sum,
-                    description: SummaryReportHelper.description(
-                        userIdToFullName[id],
-                        { html },
-                    ),
-                    reference: `${id}:${currencyId}`,
-                    currencyId,
-                });
-            });
-        });
-
-        SummaryReportHelper.addMLEntries({
-            html,
-            data: data.byML,
-            mls,
-            mlRecords,
-        });
-
-        return data;
-    },
-
-    getExpensesData({
+    getTransactions({
         expenseRecords,
         userRecords,
         mlRecords,
@@ -154,7 +97,7 @@ module.exports = {
         const mls = {};
 
         for (const record of expenseRecords) {
-            let sum = record.sum;
+            let sum = record.type === 'deposit' ? -record.sum : record.sum;
             const recordUsers = extractIdsFromModel(record, 'userIds');
             const mlId = record.money_location_id;
             const currencyId = mlIdToCurrencyId[mlId];

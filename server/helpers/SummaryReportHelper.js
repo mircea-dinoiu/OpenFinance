@@ -1,4 +1,4 @@
-const { uniq, concat, sortBy } = require('lodash');
+const { uniq, sortBy } = require('lodash');
 const { financialNum } = require('../../shared/utils/numbers');
 
 const safeNum = financialNum;
@@ -14,28 +14,24 @@ module.exports = {
 
     safeNum,
 
-    getUniques(expenses, incomes) {
+    getUniques(records) {
         return uniq(
-            concat(expenses, incomes)
+            records
                 .filter((item) => item.isTotal !== true)
                 .map((item) => item.reference),
         );
     },
 
-    getRemainingSum(expenses, incomes, id) {
-        let filteredExpenses;
-        let filteredIncomes;
+    getRemainingSum(transactions, id) {
+        let filteredTransactions;
 
-        filteredExpenses = expenses.filter(
-            (expense) => expense.reference === id,
-        )[0];
+        filteredTransactions = transactions.filter((t) => t.reference === id)[0];
 
-        filteredIncomes = incomes.filter((income) => income.reference === id)[0];
+        filteredTransactions = filteredTransactions
+            ? filteredTransactions.sum
+            : 0;
 
-        filteredExpenses = filteredExpenses ? filteredExpenses.sum : 0;
-        filteredIncomes = filteredIncomes ? filteredIncomes.sum : 0;
-
-        return this.safeNum(filteredIncomes - filteredExpenses);
+        return this.safeNum(-filteredTransactions);
     },
 
     formatMLName(id, { mlRecords }) {

@@ -13,4 +13,5 @@ export default (model) => ({
     repeatOccurrences: model.repeat_occurrences,
     chargedPersons: arrToCsv(model.users),
     status: model.status || 'pending',
+    type: model.type || 'withdrawal',
 });

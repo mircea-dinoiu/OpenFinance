@@ -1,6 +1,10 @@
+// @flow
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import { findCurrencyById } from 'common/helpers/currency';
 
-// @flow
 import React, { PureComponent } from 'react';
 import { Row, Col } from 'react-grid-system';
 import { Badge, TextField } from '@material-ui/core';
@@ -13,7 +17,7 @@ import { connect } from 'react-redux';
 import { MultiSelect, SingleSelect } from 'common/components/Select';
 import { arrToCsv } from 'common/transformers';
 import { overflowVisible } from 'common/defs/styles';
-import { InlineDateTimePicker, DateTimePicker } from 'material-ui-pickers';
+import { DateTimePicker } from 'material-ui-pickers';
 import { CancelToken } from 'axios';
 
 const boxStyle = {
@@ -283,7 +287,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
     renderChargedPersons() {
         return (
             <MultiSelect
-                label="Charged Persons"
+                label="Person(s)"
                 {...this.bindSelect({
                     valueKey: 'chargedPersons',
                 })}
@@ -373,6 +377,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
     render() {
         return (
             <Col style={overflowVisible}>
+                <div>{this.renderType()}</div>
                 <div style={boxStyle}>{this.renderDescription()}</div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
@@ -384,6 +389,36 @@ class ExpenseForm extends PureComponent<TypeProps> {
             </Col>
         );
     }
+
+    renderType() {
+        return (
+            <>
+                <FormLabel>Type</FormLabel>
+                <RadioGroup
+                    value={this.state.type}
+                    onChange={this.handleChangeType}
+                    row
+                >
+                    <FormControlLabel
+                        value="withdrawal"
+                        control={<Radio color="primary" />}
+                        label="Withdrawal"
+                        className="inlineBlock"
+                    />
+                    <FormControlLabel
+                        value="deposit"
+                        control={<Radio color="primary" />}
+                        label="Deposit"
+                        className="inlineBlock"
+                    />
+                </RadioGroup>
+            </>
+        );
+    }
+
+    handleChangeType = (event) => {
+        this.setState({ type: event.target.value });
+    };
 }
 
 export default connect(

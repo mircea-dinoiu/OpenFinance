@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core';
 
 import Expenses from './internal/Expenses';
-import Incomes from './internal/Incomes';
 import Summary from './internal/Summary';
 
 import AccountBalance from '@material-ui/icons/AccountBalance';
@@ -48,8 +47,6 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                 return <Summary />;
             case 1:
                 return <Expenses />;
-            case 2:
-                return <Incomes />;
         }
 
         return null;
@@ -59,8 +56,6 @@ class Internal extends PureComponent<TypeProps, TypeState> {
         switch (index) {
             case 0:
                 return <Expenses />;
-            case 1:
-                return <Incomes />;
         }
 
         return this.renderComingSoon();
@@ -103,8 +98,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                                 this.handleChangeTab(index)
                             }
                         >
-                            <Tab label="Expenses" />
-                            <Tab label="Incomes" />
+                            <Tab label="Transactions" />
                             {this.shouldRenderExtraScreens() && (
                                 <>
                                     <Tab label="Categories" />

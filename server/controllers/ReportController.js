@@ -1,5 +1,4 @@
 const ExpenseService = require('../services/ExpenseService');
-const IncomeService = require('../services/IncomeService');
 const SummaryReportService = require('../services/SummaryReportService');
 const { User, Category, MoneyLocation, Currency } = require('../models');
 const logger = require('../helpers/logger');
@@ -10,14 +9,12 @@ module.exports = {
 
         const [
             expenseRecords,
-            incomeRecords,
             userRecords,
             mlRecords,
             categoryRecords,
             currencyRecords,
         ] = await Promise.all([
             ExpenseService.list(req.query),
-            IncomeService.list(req.query),
             User.findAll(),
             MoneyLocation.findAll(),
             Category.findAll(),
@@ -34,12 +31,6 @@ module.exports = {
         if (expenseRecords.error) {
             res.status(400);
             res.json(expenseRecords.json);
-
-            return;
-        }
-        if (incomeRecords.error) {
-            res.status(400);
-            res.json(incomeRecords.json);
 
             return;
         }
@@ -67,29 +58,31 @@ module.exports = {
             currencyIdToISOCode,
             html: req.query.html,
         };
+        const expenseRecordsAsJSON = expenseRecords.json;
 
-        const expensesData = SummaryReportService.getExpensesData({
-            expenseRecords: expenseRecords.json,
+        const transactions = SummaryReportService.getTransactions({
+            expenseRecords: expenseRecordsAsJSON,
+            userRecords,
+            mlRecords,
+            ...common,
+        });
+        const expenses = SummaryReportService.getTransactions({
+            expenseRecords: expenseRecordsAsJSON.filter(
+                (transaction) => transaction.type !== 'deposit',
+            ),
             userRecords,
             mlRecords,
             ...common,
         });
 
-        const incomesData = SummaryReportService.getIncomesData({
-            mlRecords,
-            incomeRecords: incomeRecords.json,
-            ...common,
-        });
-
         const expensesByCategory = SummaryReportService.getExpensesByCategory({
-            expenseRecords: expenseRecords.json,
+            expenseRecords: expenseRecordsAsJSON,
             categoryRecords,
             ...common,
         });
 
-        const remainingData = SummaryReportService.getRemainingData({
-            expenses: expensesData,
-            incomes: incomesData,
+        const remainingData = SummaryReportService.getBalances({
+            expenses: transactions,
             mlRecords,
             ...common,
         });
@@ -103,8 +96,7 @@ module.exports = {
         );
 
         res.json({
-            expensesData,
-            incomesData,
+            expensesData: expenses,
             expensesByCategory,
             remainingData,
         });

@@ -320,11 +320,27 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         return this.computeAmount(this.state.results);
     }
 
+    handleSelectAll = (event) => {
+        event.preventDefault();
+
+        this.handleReceivedSelectedIds(
+            this.state.results.reduce((acc, each) => {
+                acc[each.id] = true;
+
+                return acc;
+            }, {}),
+        );
+    };
+
     renderTableFooter() {
-        const divider = ', ';
+        const divider = ' | ';
 
         return (
             <div className={cssTable.footer}>
+                <a href="#" onClick={this.handleSelectAll}>
+                    Select All
+                </a>
+                {divider}
                 <strong>Loaded:</strong> {this.state.results.length}
                 {divider}
                 <strong>Selected:</strong>{' '}
@@ -342,12 +358,12 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     handleCloseContextMenu = () =>
         this.handleChangeContextMenu({ display: false });
 
-    setStatusToSelectedRecords = async (status) => {
+    updateSelectedRecords = async (data) => {
         const selectedItems = this.selectedItems;
 
         try {
             await this.handleRequestUpdate(
-                selectedItems.map((each) => ({ id: each.id, status })),
+                selectedItems.map((each) => ({ id: each.id, ...data })),
             );
 
             this.props.onRefreshWidgets();
@@ -412,8 +428,13 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.props.onRefreshWidgets();
     };
 
-    handleClickReviewed = () => this.setStatusToSelectedRecords('finished');
-    handleClickNeedsReview = () => this.setStatusToSelectedRecords('pending');
+    handleClickReviewed = () =>
+        this.updateSelectedRecords({ status: 'finished' });
+    handleClickNeedsReview = () =>
+        this.updateSelectedRecords({ status: 'pending' });
+    handleClickDeposit = () => this.updateSelectedRecords({ type: 'deposit' });
+    handleClickWithdrawal = () =>
+        this.updateSelectedRecords({ type: 'withdrawal' });
     handleDetach = async () => {
         const added = [];
         const updated = [];
@@ -449,6 +470,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             onClickDuplicate: this.handleDuplicate,
             onClickDetach: this.handleDetach,
             onCloseContextMenu: this.handleCloseContextMenu,
+            onClickDeposit: this.handleClickDeposit,
+            onClickWithdrawal: this.handleClickWithdrawal,
             onClickReviewed: this.handleClickReviewed,
             onClickNeedsReview: this.handleClickNeedsReview,
             features: this.props.features,

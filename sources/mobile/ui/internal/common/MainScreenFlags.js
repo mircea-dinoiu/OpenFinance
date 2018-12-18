@@ -1,7 +1,16 @@
 import React from 'react';
-import { blue, red, yellow, grey } from '@material-ui/core/colors';
+import {
+    blue,
+    red,
+    yellow,
+    grey,
+    green,
+    purple,
+} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';
 import TrendingUp from '@material-ui/icons/TrendingUp';
+import ArrowDown from '@material-ui/icons/ArrowDownward';
+import ArrowUp from '@material-ui/icons/ArrowUpward';
 import Warning from '@material-ui/icons/Warning';
 import SpeakerNotes from '@material-ui/icons/SpeakerNotes';
 import Tooltip from 'common/components/Tooltip';
@@ -23,7 +32,19 @@ export const RecurrentFlag = ({ entity = 'Item' }) => (
 
 export const GeneratedFlag = ({ entity = 'Item' }) => (
     <Tooltip tooltip={`Generated ${entity}`}>
-        <TrendingUp style={ICON_STYLE} nativeColor={red[500]} />
+        <TrendingUp style={ICON_STYLE} nativeColor={purple[500]} />
+    </Tooltip>
+);
+
+export const DepositFlag = () => (
+    <Tooltip tooltip="Deposit">
+        <ArrowDown style={ICON_STYLE} nativeColor={green[500]} />
+    </Tooltip>
+);
+
+export const WithdrawalFlag = () => (
+    <Tooltip tooltip="Withdrawal">
+        <ArrowUp style={ICON_STYLE} nativeColor={red[500]} />
     </Tooltip>
 );
 
@@ -33,11 +54,12 @@ export const NotesFlag = ({ children }) => (
     </Tooltip>
 );
 
-export const Flags = ({ item }) => (
+export const Flags = ({ item, entity }) => (
     <>
-        {item.status === 'pending' && <PendingReviewFlag entity="expense" />}
-        {item.repeat != null && <RecurrentFlag entity="expense" />}
+        {item.type === 'deposit' ? <DepositFlag /> : <WithdrawalFlag />}
+        {item.status === 'pending' && <PendingReviewFlag entity={entity} />}
+        {item.repeat != null && <RecurrentFlag entity={entity} />}
         {item.notes && <NotesFlag>{item.notes}</NotesFlag>}
-        {item.persist === false && <GeneratedFlag entity="expense" />}
+        {item.persist === false && <GeneratedFlag entity={entity} />}
     </>
 );
