@@ -10,6 +10,7 @@ module.exports = (sequelize, types) => {
                 autoIncrement: true,
             },
             item: types.STRING,
+            notes: types.STRING,
             money_location_id: types.INTEGER,
             status: types.STRING,
             sum: types.FLOAT,
