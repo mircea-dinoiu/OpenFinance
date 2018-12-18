@@ -25,9 +25,18 @@ module.exports = {
             'sorters',
         );
         const rules = {
-            start_date: ['sometimes', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
-            end_date: ['isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
-            filters: ['sometimes', ['isTableFilters', Object.keys(Model.attributes)]],
+            start_date: [
+                'sometimes',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
+            end_date: [
+                'isRequired',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
+            filters: [
+                'sometimes',
+                ['isTableFilters', Object.keys(Model.attributes)],
+            ],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
             sorters: ['sometimes', ['isTableSorters', Model]],

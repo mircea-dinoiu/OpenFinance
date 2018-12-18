@@ -7,7 +7,7 @@ import { Row, Col } from 'react-grid-system';
 import RepeatOptions from 'common/defs/repeatOptions';
 import { connect } from 'react-redux';
 import { TextField as TextField2 } from '@material-ui/core';
-import {DateTimePicker} from 'material-ui-pickers';
+import { DateTimePicker } from 'material-ui-pickers';
 
 type TypeProps = {
     initialValues: {},

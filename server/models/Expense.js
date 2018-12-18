@@ -59,7 +59,10 @@ module.exports = (sequelize, types) => {
                     values.users = extractIdsFromModel(this, 'userIds');
                     delete values.userIds;
 
-                    values.categories = extractIdsFromModel(this, 'categoryIds');
+                    values.categories = extractIdsFromModel(
+                        this,
+                        'categoryIds',
+                    );
                     delete values.categoryIds;
 
                     return values;

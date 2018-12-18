@@ -10,22 +10,21 @@ const CategoriesDisplay = ({ item, categories, screen }) => (
             flexWrap: 'wrap',
         }}
     >
-        {categories.map(
-            (each) =>
-                item.categories.includes(each.get('id')) ? (
-                    <Chip
-                        key={each.get('id')}
-                        style={{
-                            margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`,
-                            ...(screen.isLarge
-                                ? {
-                                    height: 'auto',
-                                }
-                                : {}),
-                        }}
-                        label={each.get('name')}
-                    />
-                ) : null,
+        {categories.map((each) =>
+            item.categories.includes(each.get('id')) ? (
+                <Chip
+                    key={each.get('id')}
+                    style={{
+                        margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`,
+                        ...(screen.isLarge
+                            ? {
+                                height: 'auto',
+                            }
+                            : {}),
+                    }}
+                    label={each.get('name')}
+                />
+            ) : null,
         )}
     </div>
 );

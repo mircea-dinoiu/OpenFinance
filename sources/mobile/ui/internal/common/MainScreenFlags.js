@@ -27,8 +27,8 @@ export const GeneratedFlag = ({ entity = 'Item' }) => (
     </Tooltip>
 );
 
-export const NotesFlag = ({children}) => (
-    <Tooltip tooltip={<div style={{whiteSpace: 'pre-line'}}>{children}</div>}>
+export const NotesFlag = ({ children }) => (
+    <Tooltip tooltip={<pre>{children}</pre>}>
         <SpeakerNotes style={ICON_STYLE} nativeColor={grey[500]} />
     </Tooltip>
 );

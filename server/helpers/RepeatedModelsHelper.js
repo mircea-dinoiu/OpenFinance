@@ -20,7 +20,10 @@ module.exports = {
         const start = Date.now();
 
         records.forEach((record) => {
-            if (startDate == null || moment(record.created_at).isSameOrAfter(startDate)) {
+            if (
+                startDate == null ||
+                moment(record.created_at).isSameOrAfter(startDate)
+            ) {
                 ret.push(record);
             }
 
@@ -64,7 +67,10 @@ module.exports = {
 
                 const newObject = this.advanceRepeatDate(recordAsJSON, repeats);
 
-                if (startDate && moment(newObject.created_at).isBefore(startDate)) {
+                if (
+                    startDate &&
+                    moment(newObject.created_at).isBefore(startDate)
+                ) {
                     repeats++;
                     continue;
                 }

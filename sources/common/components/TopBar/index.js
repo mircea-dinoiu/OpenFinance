@@ -93,7 +93,9 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
         );
     };
     onChangeEndDate = (date) => {
-        this.props.actions.updatePreferences({ endDate: endOfDayToISOString(date) });
+        this.props.actions.updatePreferences({
+            endDate: endOfDayToISOString(date),
+        });
     };
     onClickRefresh = () => {
         this.props.actions.refreshWidgets();
@@ -306,8 +308,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                         }}
                     >
                         <div style={{ float: 'right' }}>
-                            {this.props.user &&
-                                isSmall && (
+                            {this.props.user && isSmall && (
                                 <IconButton
                                     onClick={this.handleToggleDateRange}
                                 >

@@ -35,7 +35,10 @@ module.exports = BaseController.extend({
         const { query } = req;
         const validator = new Validator(query, {
             search: ['isString'],
-            end_date: ['isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
+            end_date: [
+                'isRequired',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
         });
 
         if (await validator.passes()) {

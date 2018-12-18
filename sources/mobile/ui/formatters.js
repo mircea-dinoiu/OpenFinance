@@ -17,8 +17,7 @@ const NumericValue = connect(({ currencies }) => ({ currencies }))(
     }) => {
         const inner = (
             <span>
-                {currency &&
-                    showCurrency && (
+                {currency && showCurrency && (
                     <span style={{ color: grey[500], ...currencyStyle }}>
                         {currency}
                     </span>

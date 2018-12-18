@@ -82,10 +82,9 @@ const exported = {
     mapStartDateToSQL(startDate, Model) {
         if (startDate) {
             return sql.or(
-                sql.where(
-                    sql.col(`${Model.tableName}.created_at`),
-                    { $gte: startDate },
-                ),
+                sql.where(sql.col(`${Model.tableName}.created_at`), {
+                    $gte: startDate,
+                }),
                 sql.where(sql.col(`${Model.tableName}.repeat`), {
                     $ne: null,
                 }),
@@ -95,12 +94,9 @@ const exported = {
         return null;
     },
     mapEndDateToSQL(endDate, Model) {
-        return sql.where(
-            sql.col(`${Model.tableName}.created_at`),
-            {
-                $lte: endDate,
-            },
-        );
+        return sql.where(sql.col(`${Model.tableName}.created_at`), {
+            $lte: endDate,
+        });
     },
     mapTextFilterToSQL,
     mapFlagsToSQL,

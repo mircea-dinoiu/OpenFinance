@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { MultiSelect, SingleSelect } from 'common/components/Select';
 import { arrToCsv } from 'common/transformers';
 import { overflowVisible } from 'common/defs/styles';
-import {InlineDateTimePicker, DateTimePicker} from 'material-ui-pickers';
+import { InlineDateTimePicker, DateTimePicker } from 'material-ui-pickers';
 import { CancelToken } from 'axios';
 
 const boxStyle = {
@@ -169,8 +169,8 @@ class ExpenseForm extends PureComponent<TypeProps> {
     }
 
     handleNotesChange = (event) => {
-        this.setState({notes: event.target.value})
-    }
+        this.setState({ notes: event.target.value });
+    };
 
     renderNotes() {
         return (

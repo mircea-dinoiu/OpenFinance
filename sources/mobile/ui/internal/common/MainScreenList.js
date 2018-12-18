@@ -201,7 +201,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 end_date: endDate,
                 page,
                 limit: this.pageSize,
-                sorters: JSON.stringify([{ id: 'status', desc: true }, ...this.sorters]),
+                sorters: JSON.stringify([
+                    { id: 'status', desc: true },
+                    ...this.sorters,
+                ]),
                 filters: JSON.stringify(this.filters),
             })}`,
         });
@@ -466,7 +469,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                             height: `calc(100vh - (75px + ${
                                 Sizes.HEADER_SIZE
                             }))`,
-                            background: 'white'
+                            background: 'white',
                         }}
                     >
                         <BaseTable
@@ -477,7 +480,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                                     : this.pageSize
                             }
                             style={{
-                                maxHeight: '100%'
+                                maxHeight: '100%',
                             }}
                             pages={
                                 results.length >= this.pageSize
@@ -495,8 +498,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                                 this.handleCloseContextMenu();
 
                                 this.sorters = state.sorted;
-                                this.filters = state.filtered.filter((filter) =>
-                                    filter.value !== undefined,
+                                this.filters = state.filtered.filter(
+                                    (filter) => filter.value !== undefined,
                                 );
 
                                 this.loadMore({

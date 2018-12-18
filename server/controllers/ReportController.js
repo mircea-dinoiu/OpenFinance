@@ -81,13 +81,11 @@ module.exports = {
             ...common,
         });
 
-        const expensesByCategory = SummaryReportService.getExpensesByCategory(
-            {
-                expenseRecords: expenseRecords.json,
-                categoryRecords,
-                ...common,
-            },
-        );
+        const expensesByCategory = SummaryReportService.getExpensesByCategory({
+            expenseRecords: expenseRecords.json,
+            categoryRecords,
+            ...common,
+        });
 
         const remainingData = SummaryReportService.getRemainingData({
             expenses: expensesData,
@@ -101,7 +99,7 @@ module.exports = {
             'Processing took',
             Date.now() - processingStart,
             'millis',
-            `(expenses: ${expenseRecords.json.length})`
+            `(expenses: ${expenseRecords.json.length})`,
         );
 
         res.json({

@@ -14,7 +14,11 @@ module.exports = BaseController.extend({
         sum: ['sometimes', 'isRequired', 'isFloat', 'isNotZero'],
         item: ['sometimes', 'isRequired', 'isString'],
         notes: ['sometimes', 'isString'],
-        created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
+        created_at: [
+            'sometimes',
+            'isRequired',
+            ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+        ],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
         users: ['sometimes', 'isRequired', ['isIdArray', User]],
@@ -30,7 +34,11 @@ module.exports = BaseController.extend({
         item: ['isRequired', 'isString'],
         notes: ['sometimes', 'isString'],
         users: ['isRequired', ['isIdArray', User]],
-        created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
+        created_at: [
+            'sometimes',
+            'isRequired',
+            ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+        ],
         money_location_id: ['isRequired', ['isId', MoneyLocation]],
         categories: ['sometimes', ['isIdArray', Category]],
 

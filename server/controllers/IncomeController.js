@@ -16,7 +16,11 @@ module.exports = BaseController.extend({
         user_id: ['sometimes', 'isRequired', ['isId', User]],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
-        created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
+        created_at: [
+            'sometimes',
+            'isRequired',
+            ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+        ],
     },
 
     createValidationRules: {
@@ -25,7 +29,11 @@ module.exports = BaseController.extend({
         user_id: ['isRequired', ['isId', User]],
         repeat: ['sometimes', 'isRepeatValue'],
         money_location_id: ['isRequired', ['isId', MoneyLocation]],
-        created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
+        created_at: [
+            'sometimes',
+            'isRequired',
+            ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+        ],
     },
 
     sanitizeUpdateValues(record) {

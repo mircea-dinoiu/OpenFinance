@@ -25,8 +25,14 @@ module.exports = {
             'sorters',
         );
         const rules = {
-            start_date: ['sometimes', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
-            end_date: ['isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
+            start_date: [
+                'sometimes',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
+            end_date: [
+                'isRequired',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
             filters: [
                 'sometimes',
                 [

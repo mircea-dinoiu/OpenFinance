@@ -10,11 +10,7 @@ const mapStateToProps = ({ moneyLocations }) => ({
 const ConnectedFilter = connect(mapStateToProps)(SelectFilter);
 
 const AccountFilter = ({ onChange, filter }) => (
-    <ConnectedFilter
-        onChange={onChange}
-        filter={filter}
-        allowNone={false}
-    />
+    <ConnectedFilter onChange={onChange} filter={filter} allowNone={false} />
 );
 
 export default AccountFilter;
