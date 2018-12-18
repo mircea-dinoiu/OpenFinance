@@ -168,6 +168,26 @@ class ExpenseForm extends PureComponent<TypeProps> {
         );
     }
 
+    handleNotesChange = (event) => {
+        this.setState({notes: event.target.value})
+    }
+
+    renderNotes() {
+        return (
+            <TextField
+                value={this.state.notes}
+                label="Notes"
+                multiline
+                margin="none"
+                fullWidth={true}
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                onChange={this.handleNotesChange}
+            />
+        );
+    }
+
     fetchDescriptionSuggestions = async (search) => {
         if (!search) {
             return;
@@ -360,6 +380,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                 <div style={boxStyle}>{this.renderCategories()}</div>
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
                 <div style={boxStyle}>{this.renderRepeat()}</div>
+                <div style={boxStyle}>{this.renderNotes()}</div>
             </Col>
         );
     }

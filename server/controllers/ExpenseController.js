@@ -13,6 +13,7 @@ module.exports = BaseController.extend({
         id: ['isRequired', ['isId', Model]],
         sum: ['sometimes', 'isRequired', 'isFloat', 'isNotZero'],
         item: ['sometimes', 'isRequired', 'isString'],
+        notes: ['sometimes', 'isString'],
         created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
@@ -27,6 +28,7 @@ module.exports = BaseController.extend({
     createValidationRules: {
         sum: ['isRequired', 'isFloat', 'isNotZero'],
         item: ['isRequired', 'isString'],
+        notes: ['sometimes', 'isString'],
         users: ['isRequired', ['isIdArray', User]],
         created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
         money_location_id: ['isRequired', ['isId', MoneyLocation]],
@@ -121,6 +123,10 @@ module.exports = BaseController.extend({
             values.item = record.item.trim();
         }
 
+        if (record.hasOwnProperty('notes')) {
+            values.notes = record.notes.trim();
+        }
+
         if (record.hasOwnProperty('created_at')) {
             values.created_at = record.created_at;
         }
@@ -138,6 +144,10 @@ module.exports = BaseController.extend({
 
         if (workingRecord.hasOwnProperty('item')) {
             values.item = workingRecord.item.trim();
+        }
+
+        if (workingRecord.hasOwnProperty('notes')) {
+            values.notes = workingRecord.notes.trim();
         }
 
         if (workingRecord.hasOwnProperty('created_at')) {

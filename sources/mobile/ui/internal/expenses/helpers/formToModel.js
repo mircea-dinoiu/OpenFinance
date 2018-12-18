@@ -13,6 +13,7 @@ export default (form, props) => {
         id: form.id,
         sum: form.sum,
         item: form.description,
+        notes: form.notes,
         created_at: form.date.toISOString(),
         categories: csvToArr(form.categories).map(Number),
         money_location_id: form.paymentMethod,

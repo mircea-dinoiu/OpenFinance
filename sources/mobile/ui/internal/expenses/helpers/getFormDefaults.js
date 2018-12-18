@@ -5,6 +5,7 @@ export default function (data) {
     return {
         currency: data.currencies.default,
         description: '',
+        notes: '',
         sum: '',
         paymentMethod: null,
         chargedPersons: arrToCsv([data.user.getIn(['current', 'id'])]),

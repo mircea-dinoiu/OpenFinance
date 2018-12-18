@@ -5,6 +5,7 @@ export default (model) => ({
     id: model.id,
     sum: model.sum,
     description: model.item,
+    notes: model.notes,
     date: moment(model.created_at),
     categories: arrToCsv(model.categories),
     paymentMethod: model.money_location_id,
