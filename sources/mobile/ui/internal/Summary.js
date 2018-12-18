@@ -124,7 +124,7 @@ class Summary extends React.PureComponent<TypeProps> {
             <div style={{ margin: '0 0 20px' }}>
                 {this.renderCategory({
                     backgroundColor: green[500],
-                    title: 'Balance by location',
+                    title: 'Balance by Account',
                     summaryObject: results.remainingData.byML,
                     entities: this.props.moneyLocationTypes,
                     expandedByDefault: true,
@@ -132,7 +132,7 @@ class Summary extends React.PureComponent<TypeProps> {
 
                 {this.renderCategory({
                     backgroundColor: green[500],
-                    title: 'Balance by user',
+                    title: 'Balance by Person',
                     summaryObject: results.remainingData.byUser,
                     entities: this.props.user.get('list'),
                     entityNameField: 'full_name',
@@ -140,7 +140,7 @@ class Summary extends React.PureComponent<TypeProps> {
 
                 {this.renderCategory({
                     backgroundColor: purple[500],
-                    title: 'Expenses by category',
+                    title: 'Transactions by Category',
                     summaryObject: results.expensesByCategory,
                     entities: this.props.categories,
                     entityNameField: 'name',
@@ -149,7 +149,7 @@ class Summary extends React.PureComponent<TypeProps> {
 
                 {this.renderCategory({
                     backgroundColor: red[500],
-                    title: 'Expenses by location',
+                    title: 'Expenses by Account',
                     summaryObject: results.expensesData.byML,
                     entities: this.props.moneyLocationTypes,
                     entityNameField: 'name',
@@ -157,7 +157,7 @@ class Summary extends React.PureComponent<TypeProps> {
 
                 {this.renderCategory({
                     backgroundColor: red[500],
-                    title: 'Expenses by user',
+                    title: 'Expenses by Person',
                     summaryObject: results.expensesData.byUser,
                     entities: this.props.user.get('list'),
                     entityNameField: 'full_name',
