@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 // @flow
 import React, { PureComponent } from 'react';
 
@@ -26,7 +28,20 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
     state = {
         saving: false,
     };
-    formData = this.props.modelToForm(this.props.item);
+    formData = this.props.items.map(this.props.modelToForm);
+    initialData = this.props.items.map(this.props.modelToForm);
+
+    getUpdates() {
+        const updates = {};
+
+        for (const key in this.initialData[0]) {
+            if (!isEqual(this.initialData[0][key], this.formData[0][key])) {
+                updates[key] = this.formData[0][key];
+            }
+        }
+
+        return updates;
+    }
 
     save = async () => {
         const data = this.formData;
@@ -38,9 +53,15 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
         });
 
         try {
-            const response = await this.props.onRequestUpdate([
-                this.props.formToModel(data, this.props),
-            ]);
+            const updates = this.getUpdates();
+
+            console.info('[UPDATES]', updates);
+
+            const response = await this.props.onRequestUpdate(
+                data.map((each) =>
+                    this.props.formToModel({ ...each, ...updates }, this.props),
+                ),
+            );
             const json = response.data;
 
             this.setState({
@@ -81,14 +102,14 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
                 classes={this.props.classes}
                 fullWidth={true}
             >
-                <DialogTitle>{`Edit ${this.props.entityName}`}</DialogTitle>
+                <DialogTitle>{`Edit ${this.props.entityName}${this.props.items.length === 1 ? '' : 's'}`}</DialogTitle>
                 <DialogContent style={{ overflow: 'visible' }}>
                     <Row>
                         <Form
                             onFormChange={(formData) =>
-                                (this.formData = formData)
+                                (this.formData[0] = formData)
                             }
-                            initialValues={this.formData}
+                            initialValues={this.formData[0]}
                         />
                     </Row>
                     <Col>
@@ -124,7 +145,13 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
                         onTouchTap={this.save}
                         style={{ float: 'right' }}
                     >
-                        {this.state.saving ? <ButtonProgress /> : 'Update'}
+                        {this.state.saving ? (
+                            <ButtonProgress />
+                        ) : this.props.items.length === 1 ? (
+                            'Update'
+                        ) : (
+                            'Update Multiple'
+                        )}
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -37,13 +37,14 @@ export default function ContextMenuItems({
     desktop: boolean,
 }) {
     const selectedIdsLength = Object.values(selectedIds).filter(Boolean).length;
-    const disabledForMultiple = selectedIdsLength !== 1;
     const disabledForZero = selectedIdsLength === 0;
 
     return (
         <>
             <MenuItem
-                primaryText="Edit"
+                primaryText={
+                    selectedIdsLength === 1 ? 'Edit' : 'Edit Multiple'
+                }
                 leftIcon={<CreateIcon />}
                 onClick={compose(
                     onCloseContextMenu,
@@ -53,7 +54,7 @@ export default function ContextMenuItems({
                     onCloseContextMenu,
                     onClickEdit,
                 )}
-                disabled={disabledForMultiple}
+                disabled={disabledForZero}
                 desktop={desktop}
             />
             {features.duplicate && (

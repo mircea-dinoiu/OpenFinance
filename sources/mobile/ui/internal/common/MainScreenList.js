@@ -588,7 +588,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     <MainScreenEditDialog
                         key={this.state.editDialogKey}
                         open={this.state.editDialogOpen}
-                        item={selectedItems[0]}
+                        items={selectedItems}
                         onCancel={this.handleToggleEditDialog}
                         onSave={this.handleUpdate}
                         entityName={this.props.entityName}
