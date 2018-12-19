@@ -102,7 +102,9 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
                 classes={this.props.classes}
                 fullWidth={true}
             >
-                <DialogTitle>{`Edit ${this.props.entityName}${this.props.items.length === 1 ? '' : 's'}`}</DialogTitle>
+                <DialogTitle>{`Edit ${this.props.entityName}${
+                    this.props.items.length === 1 ? '' : 's'
+                }`}</DialogTitle>
                 <DialogContent style={{ overflow: 'visible' }}>
                     <Row>
                         <Form

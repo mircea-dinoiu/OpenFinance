@@ -93,9 +93,28 @@ const mapInputToLimitSQL = (input) => {
     return '';
 };
 
+const mapGroupConcatToHavingSQL = (value, groupConcatName, columnId) => {
+    if (Array.isArray(value)) {
+        const ors = [];
+
+        value.forEach((eachId) => {
+            ors.push(sql.fn('Find_In_Set', eachId, sql.col(groupConcatName)));
+        });
+
+        return sql.or(...ors);
+    } else if (value === 'none') {
+        return sql.where(sql.col(columnId), {
+            $is: sql.literal('NULL'),
+        });
+    }
+
+    return null;
+};
+
 const exported = {
     mapSortersToSQL,
     mapInputToLimitSQL,
+    mapGroupConcatToHavingSQL,
     mapStartDateToSQL(startDate, Model) {
         if (startDate) {
             return sql.or(

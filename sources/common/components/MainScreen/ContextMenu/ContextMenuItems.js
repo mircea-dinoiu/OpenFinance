@@ -42,9 +42,7 @@ export default function ContextMenuItems({
     return (
         <>
             <MenuItem
-                primaryText={
-                    selectedIdsLength === 1 ? 'Edit' : 'Edit Multiple'
-                }
+                primaryText={selectedIdsLength === 1 ? 'Edit' : 'Edit Multiple'}
                 leftIcon={<CreateIcon />}
                 onClick={compose(
                     onCloseContextMenu,

@@ -11,6 +11,7 @@ const {
     mapFlagsToSQL,
     mapSortersToSQL,
     mapInputToLimitSQL,
+    mapGroupConcatToHavingSQL,
 } = require('../helpers/sql');
 
 module.exports = {
@@ -48,6 +49,7 @@ module.exports = {
 
         if (await validator.passes()) {
             const where = [];
+            let having = [];
 
             where.push(mapStartDateToSQL(input.start_date, Model));
             where.push(mapEndDateToSQL(input.end_date, Model));
@@ -65,50 +67,22 @@ module.exports = {
                         }
                         break;
                     case 'categories':
-                        if (Array.isArray(value)) {
-                            where.push(
-                                sql.where(
-                                    sql.col(
-                                        'categories.category_expense.category_id',
-                                    ),
-                                    {
-                                        $in: value,
-                                    },
-                                ),
-                            );
-                        } else if (value === 'none') {
-                            where.push(
-                                sql.where(
-                                    sql.col(
-                                        'categories.category_expense.category_id',
-                                    ),
-                                    {
-                                        $is: sql.literal('NULL'),
-                                    },
-                                ),
-                            );
-                        }
+                        having.push(
+                            mapGroupConcatToHavingSQL(
+                                value,
+                                'categoryIds',
+                                'categories.category_expense.category_id',
+                            ),
+                        );
                         break;
                     case 'users':
-                        if (Array.isArray(value)) {
-                            where.push(
-                                sql.where(
-                                    sql.col('users.expense_user.user_id'),
-                                    {
-                                        $in: value,
-                                    },
-                                ),
-                            );
-                        } else if (value === 'none') {
-                            where.push(
-                                sql.where(
-                                    sql.col('users.expense_user.user_id'),
-                                    {
-                                        $is: sql.literal('NULL'),
-                                    },
-                                ),
-                            );
-                        }
+                        having.push(
+                            mapGroupConcatToHavingSQL(
+                                value,
+                                'userIds',
+                                'users.expense_user.user_id',
+                            ),
+                        );
                         break;
                     default:
                         where.push({
@@ -123,6 +97,12 @@ module.exports = {
             const queryOpts = {
                 where: sql.and(...where.filter(Boolean)),
             };
+
+            having = having.filter(Boolean);
+
+            if (having.length) {
+                queryOpts.having = sql.and(...having);
+            }
 
             const sorters = sanitizeSorters(input.sorters);
 
