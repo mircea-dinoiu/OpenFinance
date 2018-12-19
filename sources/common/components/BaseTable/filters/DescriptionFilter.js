@@ -33,7 +33,7 @@ const FlagIconMenu = ({ icon, filter, name, onChange }) => (
         targetOrigin={{ horizontal: 'left', vertical: 'top' }}
     >
         <div style={{ padding: '0 10px' }}>
-            Display {name}
+            Display {name} Transactions
             <RadioButtonGroup
                 name={name}
                 defaultSelected={
@@ -64,15 +64,15 @@ const DescriptionFilter = ({ onChange, filter }) => {
         >
             <FlagIconMenu
                 onChange={handleChange}
-                name={PENDING}
-                filter={filter}
-                icon={<PendingReviewFlag />}
-            />
-            <FlagIconMenu
-                onChange={handleChange}
                 name={DEPOSIT}
                 filter={filter}
                 icon={<DepositFlag />}
+            />
+            <FlagIconMenu
+                onChange={handleChange}
+                name={PENDING}
+                filter={filter}
+                icon={<PendingReviewFlag />}
             />
             <FlagIconMenu
                 onChange={handleChange}
