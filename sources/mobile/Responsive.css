@@ -1,0 +1,7 @@
+.inlineBlock {
+    display: inline-block;
+}
+
+.hPadded:not(:last-child) {
+    margin-right: 10px;
+}

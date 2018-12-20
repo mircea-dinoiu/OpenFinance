@@ -9,7 +9,7 @@ import { BigLoader, ButtonProgress } from '../../components/loaders';
 
 import { createXHR } from 'common/utils/fetch';
 
-import { Button } from '@material-ui/core';
+import { Button, FormControlLabel, Checkbox } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { greyedOut } from 'common/defs/styles';
 import BaseTable from 'common/components/BaseTable';
@@ -27,6 +27,10 @@ import AddIcon from '@material-ui/icons/Add';
 import { refreshWidgets as onRefreshWidgets } from 'common/state/actions';
 import { advanceRepeatDate } from 'shared/helpers/repeatedModels';
 import { uniqueId } from 'lodash';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import IconSplit from '@material-ui/icons/CallSplitRounded';
 
 type TypeProps = {
     api: {
@@ -106,6 +110,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         editDialogOpen: false,
         editDialogKey: uniqueId(),
         deleteDialogOpen: false,
+
+        pendingTransactionsFirst: true,
+        splitAmount: '',
     };
     sorters = [];
     filters = [];
@@ -201,10 +208,14 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 end_date: endDate,
                 page,
                 limit: this.pageSize,
-                sorters: JSON.stringify([
-                    { id: 'status', desc: true },
-                    ...this.sorters,
-                ]),
+                sorters: JSON.stringify(
+                    [
+                        this.state.pendingTransactionsFirst
+                            ? { id: 'status', desc: true }
+                            : null,
+                        ...this.sorters,
+                    ].filter(Boolean),
+                ),
                 filters: JSON.stringify(this.filters),
             })}`,
         });
@@ -332,14 +343,123 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         );
     };
 
+    renderTableHeader() {
+        return (
+            <div className={cssTable.header}>
+                <div className="inlineBlock hPadded">
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={this.handleSelectAll}
+                    >
+                        Select All
+                    </Button>
+                </div>
+                <div className="inlineBlock hPadded">
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={this.state.pendingTransactionsFirst}
+                                onChange={
+                                    this.handleTogglePendingTransactionsFirst
+                                }
+                                color="default"
+                            />
+                        }
+                        label="Pending Transactions First"
+                    />
+                </div>
+                <div className="inlineBlock hPadded">
+                    <TextField
+                        error={isNaN(
+                            this.parseSplitAmount(this.state.splitAmount),
+                        )}
+                        label="Split"
+                        value={this.state.splitAmount}
+                        onChange={this.handleChangeSplitAmount}
+                        margin="normal"
+                        variant="outlined"
+                        style={{ width: '100px', margin: '-18px 0 0' }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={this.handleClickSplit}
+                                        disabled={!this.isSplitAmountValid()}
+                                    >
+                                        <IconSplit />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    isSplitAmountValid() {
+        const amount = this.parseSplitAmount(this.state.splitAmount);
+
+        if (isNaN(amount)) {
+            return false;
+        }
+
+        if (amount <= 0) {
+            return false;
+        }
+
+        return this.selectedItems.every((each) => each.sum > amount);
+    }
+
+    parseSplitAmount(number) {
+        const working = number.trim();
+
+        if (!working) {
+            return 0;
+        }
+
+        return Number(working);
+    }
+
+    handleChangeSplitAmount = (event) => {
+        this.setState({ splitAmount: event.target.value });
+    };
+
+    handleClickSplit = async () => {
+        const selectedItems = this.selectedItems;
+        const splitBy = this.parseSplitAmount(this.state.splitAmount);
+
+        await this.handleRequestCreate(
+            selectedItems.map((each) => {
+                const res = this.copyItem(each);
+
+                res.sum = splitBy;
+
+                return res;
+            }),
+        );
+
+        await this.handleRequestUpdate(
+            selectedItems.map((each) => ({ ...each, sum: Math.floor((each.sum - splitBy) * 100) / 100})),
+        );
+
+        this.props.onRefreshWidgets();
+    };
+
+    handleTogglePendingTransactionsFirst = () =>
+        this.setState(
+            (state) => ({
+                pendingTransactionsFirst: !state.pendingTransactionsFirst,
+            }),
+            this.refresh,
+        );
+
     renderTableFooter() {
         const divider = ' | ';
 
         return (
             <div className={cssTable.footer}>
-                <a href="#" onClick={this.handleSelectAll}>
-                    Select All
-                </a>
                 {divider}
                 <strong>Loaded:</strong> {this.state.results.length}
                 {divider}
@@ -405,7 +525,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     copyItem = (item) => {
         const copy = this.sanitizeItem(item);
 
-        delete item.id;
+        delete copy.id;
 
         return copy;
     };
@@ -487,9 +607,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
             return (
                 <>
+                    {this.renderTableHeader()}
                     <div
                         style={{
-                            height: `calc(100vh - (75px + ${
+                            height: `calc(100vh - (150px + ${
                                 Sizes.HEADER_SIZE
                             }))`,
                             background: 'white',

@@ -126,7 +126,7 @@ module.exports = BaseController.extend({
             'repeat_occurrences',
         ]);
 
-        values.status = 'pending';
+        values.status = record.status || 'pending';
 
         if (record.hasOwnProperty('item')) {
             values.item = record.item.trim();
