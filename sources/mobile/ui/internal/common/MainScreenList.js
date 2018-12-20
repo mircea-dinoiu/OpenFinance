@@ -347,15 +347,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         return (
             <div className={cssTable.header}>
                 <div className="inlineBlock hPadded">
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={this.handleSelectAll}
-                    >
-                        Select All
-                    </Button>
-                </div>
-                <div className="inlineBlock hPadded">
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -370,16 +361,25 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     />
                 </div>
                 <div className="inlineBlock hPadded">
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={this.handleSelectAll}
+                    >
+                        Select All
+                    </Button>
+                </div>
+                <div className="inlineBlock hPadded">
                     <TextField
                         error={isNaN(
                             this.parseSplitAmount(this.state.splitAmount),
                         )}
-                        label="Split"
+                        placeholder="Split"
                         value={this.state.splitAmount}
                         onChange={this.handleChangeSplitAmount}
                         margin="normal"
                         variant="outlined"
-                        style={{ width: '100px', margin: '-18px 0 0' }}
+                        style={{ width: '150px', height: '32px', margin: '-7px 0 0' }}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -409,7 +409,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             return false;
         }
 
-        return this.selectedItems.every((each) => each.sum > amount);
+        const selectedItems = this.selectedItems;
+
+        return selectedItems.length > 1 && selectedItems.every((each) => each.sum > amount);
     }
 
     parseSplitAmount(number) {
@@ -460,7 +462,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         return (
             <div className={cssTable.footer}>
-                {divider}
                 <strong>Loaded:</strong> {this.state.results.length}
                 {divider}
                 <strong>Selected:</strong>{' '}
