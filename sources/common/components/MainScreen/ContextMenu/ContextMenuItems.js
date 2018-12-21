@@ -103,35 +103,6 @@ export default function ContextMenuItems({
                 />
             )}
             <Divider />
-            <MenuItem
-                primaryText="Change to Deposit"
-                leftIcon={<IconArrowDown />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickDeposit,
-                )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickDeposit,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
-            <MenuItem
-                primaryText="Change to Withdrawal"
-                leftIcon={<IconArrowUp />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickWithdrawal,
-                )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickWithdrawal,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
-            <Divider />
             {features.status && (
                 <>
                     <MenuItem
@@ -164,6 +135,35 @@ export default function ContextMenuItems({
                     />
                 </>
             )}
+            <Divider />
+            <MenuItem
+                primaryText="Change to Deposit"
+                leftIcon={<IconArrowDown />}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickDeposit,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickDeposit,
+                )}
+                disabled={disabledForZero}
+                desktop={desktop}
+            />
+            <MenuItem
+                primaryText="Change to Withdrawal"
+                leftIcon={<IconArrowUp />}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickWithdrawal,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickWithdrawal,
+                )}
+                disabled={disabledForZero}
+                desktop={desktop}
+            />
         </>
     );
 }

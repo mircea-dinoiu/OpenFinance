@@ -378,6 +378,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
         return (
             <Col style={overflowVisible}>
                 <div>{this.renderType()}</div>
+                <div>{this.renderStatus()}</div>
                 <div style={boxStyle}>{this.renderDescription()}</div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
@@ -418,6 +419,36 @@ class ExpenseForm extends PureComponent<TypeProps> {
 
     handleChangeType = (event) => {
         this.setState({ type: event.target.value });
+    };
+
+    renderStatus() {
+        return (
+            <>
+                <FormLabel>Status</FormLabel>
+                <RadioGroup
+                    value={this.state.status}
+                    onChange={this.handleChangeStatus}
+                    row
+                >
+                    <FormControlLabel
+                        value="pending"
+                        control={<Radio color="primary" />}
+                        label="Pending"
+                        className="inlineBlock"
+                    />
+                    <FormControlLabel
+                        value="finished"
+                        control={<Radio color="primary" />}
+                        label="Posted"
+                        className="inlineBlock"
+                    />
+                </RadioGroup>
+            </>
+        );
+    }
+
+    handleChangeStatus = (event) => {
+        this.setState({ status: event.target.value });
     };
 }
 

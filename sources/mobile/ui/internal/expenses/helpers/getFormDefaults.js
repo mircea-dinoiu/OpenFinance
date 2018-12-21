@@ -6,6 +6,7 @@ export default function (data) {
         currency: data.currencies.default,
         description: '',
         type: 'withdrawal',
+        status: 'pending',
         notes: '',
         sum: '',
         paymentMethod: null,
