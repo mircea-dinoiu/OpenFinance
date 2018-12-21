@@ -411,7 +411,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         const selectedItems = this.selectedItems;
 
-        return selectedItems.length > 1 && selectedItems.every((each) => each.sum > amount);
+        return selectedItems.length >= 1 && selectedItems.every((each) => each.sum > amount);
     }
 
     parseSplitAmount(number) {
