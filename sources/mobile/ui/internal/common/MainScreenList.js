@@ -379,7 +379,11 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         onChange={this.handleChangeSplitAmount}
                         margin="normal"
                         variant="outlined"
-                        style={{ width: '150px', height: '32px', margin: '-7px 0 0' }}
+                        style={{
+                            width: '150px',
+                            height: '32px',
+                            margin: '-7px 0 0',
+                        }}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -411,7 +415,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         const selectedItems = this.selectedItems;
 
-        return selectedItems.length >= 1 && selectedItems.every((each) => each.sum > amount);
+        return (
+            selectedItems.length >= 1 &&
+            selectedItems.every((each) => each.sum > amount)
+        );
     }
 
     parseSplitAmount(number) {
@@ -443,7 +450,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         );
 
         await this.handleRequestUpdate(
-            selectedItems.map((each) => ({ ...each, sum: Math.floor((each.sum - splitBy) * 100) / 100})),
+            selectedItems.map((each) => ({
+                ...each,
+                sum: Math.floor((each.sum - splitBy) * 100) / 100,
+            })),
         );
 
         this.props.onRefreshWidgets();

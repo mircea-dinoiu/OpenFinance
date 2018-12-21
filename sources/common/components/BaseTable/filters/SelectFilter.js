@@ -29,7 +29,7 @@ type TypeProps = {
 class SelectFilter extends React.PureComponent<TypeProps> {
     state = {
         anchorEl: null,
-        radioValue: this.getRadioDefaulValue(),
+        radioValue: this.getRadioDefaultValue(),
     };
 
     static defaultProps = {
@@ -45,14 +45,14 @@ class SelectFilter extends React.PureComponent<TypeProps> {
     handleClose = () => {
         this.setState({
             anchorEl: null,
-            radioValue: this.getRadioDefaulValue(),
+            radioValue: this.getRadioDefaultValue(),
         });
     };
 
     renderText() {
-        const value = this.getFilterValue();
+        const filter = this.getFilterValue();
 
-        switch (value) {
+        switch (filter) {
             case 'none':
                 return 'None';
             case 'any':
@@ -61,12 +61,12 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                 const selectOptions = this.props.items;
 
                 if (!this.props.multi) {
-                    return selectOptions.find((option) => option.id === value)[
-                        this.props.nameKey
-                    ];
+                    return selectOptions.find(
+                        (option) => option.id === filter.value,
+                    )[this.props.nameKey];
                 }
 
-                return value
+                return filter.value
                     .map(
                         (id) =>
                             selectOptions.find((option) => option.id === id)[
@@ -89,20 +89,30 @@ class SelectFilter extends React.PureComponent<TypeProps> {
     handleChangeRadio = (event) => {
         const radioValue = event.target.value;
 
-        if (radioValue !== 'one-of') {
+        if (['one-of', 'exclude'].includes(radioValue)) {
+            if (this.state[radioValue]) {
+                this.triggerChange({
+                    mode: radioValue,
+                    value: this.state[radioValue],
+                });
+            }
+        } else {
             this.triggerChange(radioValue);
         }
-
         this.setState({ radioValue });
     };
 
-    handleChangeSelect = (arg) => {
-        if (arg) {
-            this.triggerChange(
-                this.props.multi ? arg.split(',').map(Number) : arg,
-            );
-        } else {
-            this.triggerChange('any');
+    handleChangeSelect = (mode) => (arg) => {
+        const value = this.props.multi ? arg.split(',').map(Number) : arg;
+
+        this.setState({ [mode]: value });
+
+        if (this.state.radioValue === mode) {
+            if (arg) {
+                this.triggerChange({ mode, value });
+            } else {
+                this.triggerChange('any');
+            }
         }
     };
 
@@ -112,8 +122,8 @@ class SelectFilter extends React.PureComponent<TypeProps> {
         return (filter && filter.value) || 'any';
     }
 
-    getSelectValue() {
-        const filterValue = this.getFilterValue();
+    getSelectValue(name) {
+        const filterValue = this.state[name];
 
         if (this.props.multi) {
             if (Array.isArray(filterValue)) {
@@ -126,27 +136,47 @@ class SelectFilter extends React.PureComponent<TypeProps> {
         return filterValue;
     }
 
-    getRadioDefaulValue() {
+    getRadioDefaultValue() {
         const filterValue = this.getFilterValue();
 
         if (filterValue !== 'any' && filterValue !== 'none') {
-            return 'one-of';
+            return filterValue.mode;
         }
 
         return filterValue;
     }
 
-    getRadioOptions() {
-        return [
-            ['any', 'Any'],
-            this.props.allowNone ? ['none', 'None'] : null,
-            ['one-of', 'One of'],
-        ].filter(Boolean);
+    renderRadio({ value, label }) {
+        return (
+            <FormControlLabel
+                style={{ margin: 0 }}
+                value={value}
+                control={<Radio style={{ padding: 0 }} />}
+                label={label}
+            />
+        );
+    }
+
+    renderSelect(name) {
+        const Select = this.props.multi ? MultiSelect : SingleSelect;
+
+        return (
+            <Select
+                value={this.getSelectValue(name)}
+                onOpen={() => {
+                    this.setState({ radioValue: name });
+                }}
+                options={this.props.items.map((item) => ({
+                    value: item.id,
+                    label: item[this.props.nameKey],
+                }))}
+                onChange={this.handleChangeSelect(name)}
+            />
+        );
     }
 
     render() {
         const { anchorEl } = this.state;
-        const Select = this.props.multi ? MultiSelect : SingleSelect;
 
         return (
             <>
@@ -176,26 +206,22 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                             value={this.state.radioValue}
                             onChange={this.handleChangeRadio}
                         >
-                            {this.getRadioOptions().map(([value, label]) => (
-                                <FormControlLabel
-                                    key={value}
-                                    style={{ margin: 0 }}
-                                    value={value}
-                                    control={<Radio style={{ padding: 0 }} />}
-                                    label={label}
-                                />
-                            ))}
-                            <Select
-                                value={this.getSelectValue()}
-                                onOpen={() => {
-                                    this.setState({ radioValue: 'one-of' });
-                                }}
-                                options={this.props.items.map((item) => ({
-                                    value: item.id,
-                                    label: item[this.props.nameKey],
-                                }))}
-                                onChange={this.handleChangeSelect}
-                            />
+                            {this.renderRadio({ value: 'any', label: 'Any' })}
+                            {this.props.allowNone &&
+                                this.renderRadio({
+                                    value: 'none',
+                                    label: 'None',
+                                })}
+                            {this.renderRadio({
+                                value: 'one-of',
+                                label: 'One of',
+                            })}
+                            {this.renderSelect('one-of')}
+                            {this.renderRadio({
+                                value: 'exclude',
+                                label: 'Exclude',
+                            })}
+                            {this.renderSelect('exclude')}
                         </RadioGroup>
                     </div>
                 </Menu>

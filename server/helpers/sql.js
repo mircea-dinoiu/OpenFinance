@@ -93,16 +93,25 @@ const mapInputToLimitSQL = (input) => {
     return '';
 };
 
-const mapGroupConcatToHavingSQL = (value, groupConcatName, columnId) => {
-    if (Array.isArray(value)) {
-        const ors = [];
+const mapGroupConcatToHavingSQL = (filter, groupConcatName, columnId) => {
+    if (typeof filter === 'object') {
+        const conditions = [];
 
-        value.forEach((eachId) => {
-            ors.push(sql.fn('Find_In_Set', eachId, sql.col(groupConcatName)));
+        filter.value.forEach((eachId) => {
+            conditions.push(
+                sql.where(
+                    sql.fn('Find_In_Set', eachId, sql.col(groupConcatName)),
+                    {
+                        [filter.mode === 'exclude' ? '$eq' : '$gt']: 0,
+                    },
+                ),
+            );
         });
 
-        return sql.or(...ors);
-    } else if (value === 'none') {
+        return filter.mode === 'exclude'
+            ? sql.and(...conditions)
+            : sql.or(...conditions);
+    } else if (filter === 'none') {
         return sql.where(sql.col(columnId), {
             $is: sql.literal('NULL'),
         });
