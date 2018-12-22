@@ -113,13 +113,10 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
 
     renderEndDateIntervalSelect() {
         return (
-            <div style={{ float: 'left', width: '120px', marginRight: 12 }}>
+            <div style={{ float: 'left', width: '120px', marginRight: 12, marginTop: 2 }}>
                 <SingleSelect
                     value={this.props.preferences.endDateIncrement}
                     onChange={this.handleEndDateIntervalDropdownChange}
-                    style={{
-                        marginTop: 3,
-                    }}
                     clearable={false}
                     options={Object.entries(ShiftDateOptions).map(
                         ([id, name]) => ({ value: id, label: name }),

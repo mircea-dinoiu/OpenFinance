@@ -15,7 +15,6 @@ import routes from 'common/defs/routes';
 import { stringify } from 'query-string';
 import { connect } from 'react-redux';
 import { MultiSelect, SingleSelect } from 'common/components/Select';
-import { arrToCsv } from 'common/transformers';
 import { overflowVisible } from 'common/defs/styles';
 import { DateTimePicker } from 'material-ui-pickers';
 import { CancelToken } from 'axios';
@@ -52,7 +51,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
 
     state = {
         descriptionSuggestions: [],
-        descriptionNewOptionText: '',
+        descriptionNewOptionText: this.props.initialValues.description || '',
         ...this.props.initialValues,
     };
 
@@ -76,19 +75,26 @@ class ExpenseForm extends PureComponent<TypeProps> {
     }
 
     get descriptionNewOptions() {
-        const text =
-            this.state.descriptionNewOptionText || this.state.description;
+        const text = this.state.descriptionNewOptionText;
+        const arr = [];
 
         if (text) {
-            return [
-                {
-                    value: text,
-                    label: text,
-                },
-            ];
+            arr.push({
+                value: text,
+                label: text,
+            });
         }
 
-        return [];
+        const initialDescription = this.props.initialValues.description;
+
+        if (initialDescription && initialDescription !== text) {
+            arr.push({
+                value: initialDescription,
+                label: initialDescription,
+            });
+        }
+
+        return arr;
     }
 
     renderSum() {
@@ -168,6 +174,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         ),
                     })),
                 )}
+                inputValue={this.state.descriptionNewOptionText}
             />
         );
     }
@@ -217,16 +224,14 @@ class ExpenseForm extends PureComponent<TypeProps> {
         });
     };
 
-    handleDescriptionInputChange = (value) => {
-        this.fetchDescriptionSuggestions(value);
-
-        if (value) {
+    handleDescriptionInputChange = (value, { action }) => {
+        if (action === 'input-change') {
             this.setState({
                 descriptionNewOptionText: value,
             });
-        }
 
-        return value;
+            this.fetchDescriptionSuggestions(value);
+        }
     };
 
     handleDescriptionChange = async (search) => {
@@ -243,7 +248,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                 })}`,
                 cancelToken: this.categoriesCancelSource.token,
             });
-            const categories = arrToCsv(response.data);
+            const categories = response.data;
 
             this.setState((prevState) => ({
                 categories: prevState.categories
@@ -311,7 +316,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                     valueKey: 'categories',
                 })}
                 filterOption={(option, search) =>
-                    option.filterText
+                    option.data.filterText
                         .toLowerCase()
                         .includes(search.toLowerCase())
                 }

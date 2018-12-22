@@ -1,4 +1,4 @@
-import { arrToCsv } from 'common/transformers';
+// @flow
 import moment from 'moment';
 
 export default function (data) {
@@ -10,7 +10,7 @@ export default function (data) {
         notes: '',
         sum: '',
         paymentMethod: null,
-        chargedPersons: arrToCsv([data.user.getIn(['current', 'id'])]),
+        chargedPersons: [data.user.getIn(['current', 'id'])],
         categories: '',
         repeat: null,
         date: moment(),

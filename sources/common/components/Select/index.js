@@ -1,242 +1,241 @@
 // @flow
 import React from 'react';
+import classNames from 'classnames';
+import Select from 'react-select/dist/react-select';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import CancelIcon from '@material-ui/icons/Cancel';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import ClearIcon from '@material-ui/icons/Clear';
+import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
-import uniqueId from 'lodash/uniqueId';
+import MenuItem from '@material-ui/core/MenuItem';
+import CancelIcon from '@material-ui/icons/Cancel';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import { find } from 'lodash';
 
-class Option extends React.Component {
-    handleClick = (event) => {
-        this.props.onSelect(this.props.option, event);
-    };
-
-    render() {
-        const { children, isFocused, isSelected, onFocus } = this.props;
-        const commonProps = {
-            onFocus,
-            selected: isFocused,
-            onClick: this.handleClick,
-            component: 'div',
-            style: {
-                fontWeight: isSelected ? 500 : 400,
-                padding: '5px 10px',
-            },
-        };
-
-        return <MenuItem {...commonProps}>{children}</MenuItem>;
-    }
-}
-
-const SelectWrapped = (props) => {
-    const { classes, ...other } = props;
-
-    return (
-        <Select
-            optionComponent={Option}
-            noResultsText={<Typography>{'No results found'}</Typography>}
-            arrowRenderer={(arrowProps) =>
-                arrowProps.isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />
-            }
-            clearRenderer={() => <ClearIcon />}
-            valueComponent={(valueProps) => {
-                const { value, children, onRemove } = valueProps;
-                const onDelete = (event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    onRemove(value);
-                };
-
-                if (onRemove) {
-                    return (
-                        <Chip
-                            tabIndex={-1}
-                            label={children}
-                            className={classes.chip}
-                            deleteIcon={<CancelIcon onTouchEnd={onDelete} />}
-                            onDelete={onDelete}
-                        />
-                    );
-                }
-
-                return <div className="Select-value">{children}</div>;
-            }}
-            {...other}
-        />
-    );
-};
-const ITEM_HEIGHT = 48;
 const styles = (theme) => ({
     root: {
         flexGrow: 1,
     },
-    chip: {
-        margin: theme.spacing.unit / 4,
+    input: {
+        display: 'flex',
+        padding: 0,
     },
-    // We had to use a lot of global selectors in order to style react-select.
-    // We are waiting on https://github.com/JedWatson/react-select/issues/1679
-    // to provide a much better implementation.
-    // Also, we had to reset the default style injected by the library.
-    '@global': {
-        '.Select-control': {
-            display: 'flex',
-            alignItems: 'center',
-            border: 0,
-            height: 'auto',
-            background: 'transparent',
-            '&:hover': {
-                boxShadow: 'none',
-            },
-        },
-        '.Select-multi-value-wrapper': {
-            flexGrow: 1,
-            display: 'flex',
-            flexWrap: 'wrap',
-        },
-        '.Select--multi .Select-input': {
-            margin: 0,
-        },
-        '.Select.has-value.is-clearable.Select--single > .Select-control .Select-value': {
-            padding: 0,
-        },
-        '.Select-noresults': {
-            padding: theme.spacing.unit * 2,
-        },
-        '.Select-input': {
-            display: 'inline-flex !important',
-            padding: 0,
-            height: 'auto',
-        },
-        '.Select-input input': {
-            background: 'transparent',
-            border: 0,
-            padding: 0,
-            cursor: 'default',
-            display: 'inline-block',
-            fontFamily: 'inherit',
-            fontSize: 'inherit',
-            margin: 0,
-        },
-        '.Select-placeholder, .Select--single .Select-value': {
-            color: 'inherit !important',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: 'flex',
-            alignItems: 'center',
-            fontFamily: theme.typography.fontFamily,
-            fontSize: theme.typography.pxToRem(16),
-            padding: 0,
-        },
-        '.Select-placeholder': {
-            opacity: 0.42,
-            color: theme.palette.common.black,
-        },
-        '.Select-menu-outer': {
-            backgroundColor: theme.palette.background.paper,
-            boxShadow: theme.shadows[2],
-            position: 'absolute',
-            left: 0,
-            top: `calc(100% + ${theme.spacing.unit}px)`,
-            width: '100%',
-            zIndex: 2,
-            maxHeight: ITEM_HEIGHT * 4.5,
-        },
-        '.Select.is-focused:not(.is-open) > .Select-control': {
-            boxShadow: 'none',
-        },
-        '.Select-menu': {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            overflowY: 'auto',
-        },
-        '.Select-menu div': {
-            boxSizing: 'content-box',
-        },
-        '.Select-arrow-zone, .Select-clear-zone': {
-            color: theme.palette.action.active,
-            cursor: 'pointer',
-            height: 21,
-            width: 21,
-            zIndex: 1,
-        },
-        // Only for screen readers. We can't use display none.
-        '.Select-aria-only': {
-            position: 'absolute',
-            overflow: 'hidden',
-            clip: 'rect(0 0 0 0)',
-            height: 1,
-            width: 1,
-            margin: -1,
-        },
+    valueContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flex: 1,
+        alignItems: 'center',
+        overflow: 'hidden',
+    },
+    chip: {
+        margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+    },
+    chipFocused: {
+        backgroundColor: emphasize(
+            theme.palette.type === 'light'
+                ? theme.palette.grey[300]
+                : theme.palette.grey[700],
+            0.08,
+        ),
+    },
+    noOptionsMessage: {
+        padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    },
+    singleValue: {
+        fontSize: 16,
+    },
+    placeholder: {
+        position: 'absolute',
+        left: 2,
+        fontSize: 16,
+    },
+    paper: {
+        position: 'absolute',
+        zIndex: 1,
+        marginTop: theme.spacing.unit,
+        left: 0,
+        right: 0,
+    },
+    divider: {
+        height: theme.spacing.unit * 2,
     },
 });
 
-export const SingleSelect = withStyles(styles)(
-    ({ classes, options, label, ...props }) => {
-        const id = uniqueId('react-select-single');
+function NoOptionsMessage(props) {
+    return (
+        <Typography
+            color="textSecondary"
+            className={props.selectProps.classes.noOptionsMessage}
+            {...props.innerProps}
+        >
+            {props.children}
+        </Typography>
+    );
+}
 
-        return (
-            <div className={classes.root}>
-                <TextField
-                    fullWidth
-                    name={id}
-                    InputLabelProps={{
+function inputComponent({ inputRef, ...props }) {
+    return <div ref={inputRef} {...props} />;
+}
+
+function Control(props) {
+    return (
+        <TextField
+            fullWidth
+            InputProps={{
+                inputComponent,
+                inputProps: {
+                    className: props.selectProps.classes.input,
+                    inputRef: props.innerRef,
+                    children: props.children,
+                    ...props.innerProps,
+                },
+            }}
+            {...props.selectProps.textFieldProps}
+        />
+    );
+}
+
+function Option(props) {
+    return (
+        <MenuItem
+            buttonRef={props.innerRef}
+            selected={props.isFocused}
+            component="div"
+            style={{
+                fontWeight: props.isSelected ? 500 : 400,
+            }}
+            {...props.innerProps}
+        >
+            {props.children}
+        </MenuItem>
+    );
+}
+
+function Placeholder(props) {
+    return (
+        <Typography
+            color="textSecondary"
+            className={props.selectProps.classes.placeholder}
+            {...props.innerProps}
+        >
+            {props.children}
+        </Typography>
+    );
+}
+
+function SingleValue(props) {
+    return (
+        <Typography
+            className={props.selectProps.classes.singleValue}
+            {...props.innerProps}
+        >
+            {props.children}
+        </Typography>
+    );
+}
+
+function ValueContainer(props) {
+    return (
+        <div className={props.selectProps.classes.valueContainer}>
+            {props.children}
+        </div>
+    );
+}
+
+function MultiValue(props) {
+    return (
+        <Chip
+            tabIndex={-1}
+            label={props.children}
+            className={classNames(props.selectProps.classes.chip, {
+                [props.selectProps.classes.chipFocused]: props.isFocused,
+            })}
+            onDelete={props.removeProps.onClick}
+            deleteIcon={<CancelIcon {...props.removeProps} />}
+        />
+    );
+}
+
+function Menu(props) {
+    return (
+        <Paper
+            square
+            className={props.selectProps.classes.paper}
+            {...props.innerProps}
+        >
+            {props.children}
+        </Paper>
+    );
+}
+
+const components = {
+    Control,
+    Menu,
+    MultiValue,
+    NoOptionsMessage,
+    Option,
+    Placeholder,
+    SingleValue,
+    ValueContainer,
+};
+
+const selectStyles = (theme) => ({
+    input: (base) => ({
+        ...base,
+        color: theme.palette.text.primary,
+        '& input': {
+            font: 'inherit',
+        },
+    }),
+});
+
+export const SingleSelect = withStyles(styles, { withTheme: true })(
+    ({ theme, classes, label = '', simpleValue = true, ...props }) => (
+        <div className={classes.root}>
+            <Select
+                classes={classes}
+                styles={selectStyles(theme)}
+                components={components}
+                textFieldProps={{
+                    label,
+                    InputLabelProps: {
                         shrink: true,
-                    }}
-                    InputProps={{
-                        inputComponent: SelectWrapped,
-                        inputProps: {
-                            classes,
-                            instanceId: id,
-                            id,
-                            simpleValue: true,
-                            options,
-                            ...props,
-                        },
-                    }}
-                    label={label}
-                />
-            </div>
-        );
-    },
+                    },
+                }}
+                {...props}
+                {...(simpleValue
+                    ? {
+                        value: find(props.options, { value: props.value }),
+                        onChange: (option) => props.onChange(option.value)
+                    }
+                    : {})}
+            />
+        </div>
+    ),
 );
 
-export const MultiSelect = withStyles(styles)(
-    ({ classes, options, label, ...props }) => {
-        const id = uniqueId('react-select-chip-label');
-
-        return (
-            <div className={classes.root}>
-                <TextField
-                    fullWidth
-                    name={id}
-                    InputLabelProps={{
+export const MultiSelect = withStyles(styles, {withTheme: true})(
+    ({ classes, theme, label, simpleValue = true, ...props }) => (
+        <div className={classes.root}>
+            <Select
+                classes={classes}
+                styles={selectStyles(theme)}
+                textFieldProps={{
+                    label,
+                    InputLabelProps: {
                         shrink: true,
-                    }}
-                    InputProps={{
-                        inputComponent: SelectWrapped,
-                        inputProps: {
-                            classes,
-                            multi: true,
-                            instanceId: id,
-                            id,
-                            simpleValue: true,
-                            options,
-                            ...props,
-                        },
-                    }}
-                    label={label}
-                />
-            </div>
-        );
-    },
+                    },
+                }}
+                components={components}
+                isMulti
+                {...props}
+                {...(simpleValue
+                    ? {
+                        value: props.options.filter(o => props.value.includes(o.value)),
+                        onChange: (options) => props.onChange(options.map(o => o.value))
+                    }
+                    : {})}
+            />
+        </div>
+    ),
 );
