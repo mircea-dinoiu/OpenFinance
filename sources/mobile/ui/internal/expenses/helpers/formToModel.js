@@ -14,6 +14,8 @@ export default (form, props) => {
         sum: form.sum,
         item: form.description,
         notes: form.notes,
+        favorite: form.favorite,
+        hidden: form.hidden,
         created_at: form.date.toISOString(),
         categories: form.categories,
         money_location_id: form.paymentMethod,

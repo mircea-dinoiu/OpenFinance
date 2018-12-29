@@ -98,6 +98,7 @@ Object.assign(validator, {
     isNotZero: (value) => Number(value) !== 0,
     isHTZero: (value) => Number(value) > 0,
     isString: (value) => typeof value === 'string',
+    isBool: (value) => typeof value === 'boolean',
     isRequired: (value) => {
         if (value == null) {
             return false;

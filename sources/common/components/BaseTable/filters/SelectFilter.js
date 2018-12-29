@@ -106,7 +106,11 @@ class SelectFilter extends React.PureComponent<TypeProps> {
         this.setState({ [mode]: value });
 
         if (this.state.radioValue === mode) {
-            if (value && ((Array.isArray(value) && value.length) || !Array.isArray(value))) {
+            if (
+                value &&
+                ((Array.isArray(value) && value.length) ||
+                    !Array.isArray(value))
+            ) {
                 this.triggerChange({ mode, value });
             } else {
                 this.triggerChange('any');

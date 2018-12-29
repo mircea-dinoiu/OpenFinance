@@ -15,6 +15,8 @@ module.exports = (sequelize, types) => {
             status: types.STRING,
             type: types.STRING,
             sum: types.FLOAT,
+            favorite: types.INTEGER,
+            hidden: types.INTEGER,
 
             repeat: types.STRING,
             repeat_occurrences: types.INTEGER,
@@ -65,6 +67,8 @@ module.exports = (sequelize, types) => {
                         'categoryIds',
                     );
                     delete values.categoryIds;
+                    values.favorite = Boolean(values.favorite);
+                    values.hidden = Boolean(values.hidden);
 
                     return values;
                 },

@@ -10,7 +10,7 @@ import {
     PendingReviewFlag,
     RecurrentFlag,
     GeneratedFlag,
-    DepositFlag,
+    DepositFlag, FavoriteFlag,
 } from 'mobile/ui/internal/common/MainScreenFlags';
 import { DebounceInput } from 'react-debounce-input';
 
@@ -18,6 +18,7 @@ const PENDING = 'Pending';
 const RECURRENT = 'Recurrent';
 const GENERATED = 'Generated';
 const DEPOSIT = 'Deposit';
+const FAVORITE = 'Favorite';
 const YES = 'yes';
 const NO = 'no';
 const ONLY = 'only';
@@ -44,7 +45,7 @@ const FlagIconMenu = ({ icon, filter, name, onChange }) => (
             >
                 <RadioButton value={YES} label="Yes" />
                 <RadioButton value={NO} label="No" />
-                <RadioButton value={ONLY} label="Only" />
+                <RadioButton value={ONLY} label="Exclusive" />
             </RadioButtonGroup>
         </div>
     </IconMenu>
@@ -62,6 +63,12 @@ const DescriptionFilter = ({ onChange, filter }) => {
         <div
             style={{ textAlign: 'left', display: 'flex', flexDirection: 'row' }}
         >
+            <FlagIconMenu
+                onChange={handleChange}
+                name={FAVORITE}
+                filter={filter}
+                icon={<FavoriteFlag />}
+            />
             <FlagIconMenu
                 onChange={handleChange}
                 name={DEPOSIT}

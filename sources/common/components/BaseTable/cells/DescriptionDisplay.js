@@ -10,9 +10,9 @@ export default function DescriptionDisplay({
     const flags = <Flags entity={entity} item={item} />;
 
     return (
-        <>
+        <span className="noWrap">
             <span style={{ float: 'left', marginRight: 5 }}>{flags}</span>
             <span style={{ float: 'left' }}>{item[accessor]}</span>
-        </>
+        </span>
     );
 }

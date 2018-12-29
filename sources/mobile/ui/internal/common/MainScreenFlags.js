@@ -12,6 +12,7 @@ import TrendingUp from '@material-ui/icons/TrendingUp';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import ArrowUp from '@material-ui/icons/ArrowUpward';
 import Warning from '@material-ui/icons/Warning';
+import IconFavorite from '@material-ui/icons/Star';
 import SpeakerNotes from '@material-ui/icons/SpeakerNotes';
 import Tooltip from 'common/components/Tooltip';
 import startCase from 'lodash/startCase';
@@ -48,6 +49,12 @@ export const WithdrawalFlag = () => (
     </Tooltip>
 );
 
+export const FavoriteFlag = () => (
+    <Tooltip tooltip="Favorite">
+        <IconFavorite style={ICON_STYLE} nativeColor={blue[500]} />
+    </Tooltip>
+);
+
 export const NotesFlag = ({ children }) => (
     <Tooltip tooltip={<pre>{children}</pre>}>
         <SpeakerNotes style={ICON_STYLE} nativeColor={grey[500]} />
@@ -56,6 +63,7 @@ export const NotesFlag = ({ children }) => (
 
 export const Flags = ({ item, entity }) => (
     <>
+        {item.favorite && <FavoriteFlag />}
         {item.type === 'deposit' ? <DepositFlag /> : <WithdrawalFlag />}
         {item.status === 'pending' && <PendingReviewFlag entity={entity} />}
         {item.repeat != null && <RecurrentFlag entity={entity} />}

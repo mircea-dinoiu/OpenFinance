@@ -5,3 +5,7 @@
 .hPadded:not(:last-child) {
     margin-right: 10px;
 }
+
+.noWrap {
+    white-space: nowrap;
+}

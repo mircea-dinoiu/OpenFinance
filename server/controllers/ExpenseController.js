@@ -14,6 +14,8 @@ module.exports = BaseController.extend({
         sum: ['sometimes', 'isRequired', 'isFloat', 'isHTZero'],
         item: ['sometimes', 'isRequired', 'isString'],
         notes: ['sometimes', 'isString'],
+        favorite: ['sometimes', 'isBool'],
+        hidden: ['sometimes', 'isBool'],
         created_at: [
             'sometimes',
             'isRequired',
@@ -34,6 +36,8 @@ module.exports = BaseController.extend({
         sum: ['isRequired', 'isFloat', 'isNotZero'],
         item: ['isRequired', 'isString'],
         notes: ['sometimes', 'isString'],
+        favorite: ['sometimes', 'isBool'],
+        hidden: ['sometimes', 'isBool'],
         users: ['isRequired', ['isIdArray', User]],
         created_at: [
             'sometimes',
@@ -136,6 +140,14 @@ module.exports = BaseController.extend({
             values.notes = record.notes && record.notes.trim();
         }
 
+        if (record.hasOwnProperty('favorite')) {
+            values.favorite = record.favorite;
+        }
+
+        if (record.hasOwnProperty('hidden')) {
+            values.hidden = record.hidden;
+        }
+
         if (record.hasOwnProperty('created_at')) {
             values.created_at = record.created_at;
         }
@@ -157,6 +169,14 @@ module.exports = BaseController.extend({
 
         if (workingRecord.hasOwnProperty('notes')) {
             values.notes = workingRecord.notes && workingRecord.notes.trim();
+        }
+
+        if (workingRecord.hasOwnProperty('hidden')) {
+            values.hidden = workingRecord.hidden;
+        }
+
+        if (workingRecord.hasOwnProperty('favorite')) {
+            values.favorite = workingRecord.favorite;
         }
 
         if (workingRecord.hasOwnProperty('created_at')) {

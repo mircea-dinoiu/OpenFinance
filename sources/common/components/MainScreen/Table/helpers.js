@@ -8,6 +8,10 @@ export const getTrClassName = (item, { selectedIds }): string => {
         classes.push(cssTable.pendingRow);
     }
 
+    if (item.hidden) {
+        classes.push(cssTable.hiddenRow);
+    }
+
     if (selectedIds[item.id]) {
         classes.push(cssTable.selectedRow);
     }

@@ -112,13 +112,14 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         deleteDialogOpen: false,
 
         pendingTransactionsFirst: true,
+        displayHidden: false,
         splitAmount: '',
     };
     sorters = [];
     filters = [];
 
     get pageSize() {
-        return this.isDesktop() ? 100 : 50;
+        return this.isDesktop() ? 200 : 50;
     }
 
     static defaultProps = {
@@ -216,7 +217,13 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         ...this.sorters,
                     ].filter(Boolean),
                 ),
-                filters: JSON.stringify(this.filters),
+                filters: JSON.stringify([
+                    this.state.displayHidden ? null : {
+                        id: 'hidden',
+                        value: false,
+                    },
+                    ...this.filters
+                ].filter(Boolean)),
             })}`,
         });
         const json = response.data;
@@ -361,6 +368,20 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     />
                 </div>
                 <div className="inlineBlock hPadded">
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={this.state.displayHidden}
+                                onChange={
+                                    this.handleToggleDisplayHidden
+                                }
+                                color="default"
+                            />
+                        }
+                        label="Display Hidden"
+                    />
+                </div>
+                <div className="inlineBlock hPadded">
                     <Button
                         variant="outlined"
                         size="small"
@@ -467,6 +488,14 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             this.refresh,
         );
 
+    handleToggleDisplayHidden = () =>
+        this.setState(
+            (state) => ({
+                displayHidden: !state.displayHidden,
+            }),
+            this.refresh,
+        );
+
     renderTableFooter() {
         const divider = ' | ';
 
@@ -563,6 +592,12 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.updateSelectedRecords({ status: 'finished' });
     handleClickNeedsReview = () =>
         this.updateSelectedRecords({ status: 'pending' });
+    handleClickAddFavorite = () =>
+        this.updateSelectedRecords({ favorite: true });
+    handleClickRemoveFavorite = () =>
+        this.updateSelectedRecords({ favorite: false });
+    handleClickHide = () => this.updateSelectedRecords({ hidden: true });
+    handleClickUnhide = () => this.updateSelectedRecords({ hidden: false });
     handleClickDeposit = () => this.updateSelectedRecords({ type: 'deposit' });
     handleClickWithdrawal = () =>
         this.updateSelectedRecords({ type: 'withdrawal' });
@@ -605,6 +640,13 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             onClickWithdrawal: this.handleClickWithdrawal,
             onClickReviewed: this.handleClickReviewed,
             onClickNeedsReview: this.handleClickNeedsReview,
+
+            onClickAddFavorite: this.handleClickAddFavorite,
+            onClickRemoveFavorite: this.handleClickRemoveFavorite,
+
+            onClickHide: this.handleClickHide,
+            onClickUnhide: this.handleClickUnhide,
+
             features: this.props.features,
         };
     }
