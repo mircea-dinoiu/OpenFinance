@@ -1,18 +1,11 @@
 // @flow
-import pick from 'lodash/pick';
-
-const key = 'FINANCIAL_STATE';
-const persistentReducers = ['preferences'];
+import { stringify, parse } from 'query-string';
 
 export const readState = () => {
     try {
-        const serialized = localStorage.getItem(key);
-
-        if (serialized === null) {
-            return undefined;
-        }
-
-        return JSON.parse(serialized);
+        return {
+            preferences: parse(location.search)
+        };
     } catch (e) {
         return undefined;
     }
@@ -20,9 +13,7 @@ export const readState = () => {
 
 export const saveState = (state) => {
     try {
-        const serialized = JSON.stringify(pick(state, ...persistentReducers));
-
-        localStorage.setItem(key, serialized);
+        history.replaceState({}, '', `/?${stringify(state.preferences)}`);
     } catch (e) {
         // noop
     }

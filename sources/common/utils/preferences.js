@@ -10,9 +10,9 @@ export const parsePreferences = (
     includePending: ?boolean,
 } => {
     const endDateIncrement = state.endDateIncrement || '2w';
-    const include = state.include || 'until-now';
+    const include = state.include || 'all';
     const endDate = state.endDate || getInitialEndDate();
-    const includePending = Boolean(state.includePending);
+    const includePending = state.includePending === 'true';
 
     return { includePending, endDateIncrement, include, endDate };
 };
