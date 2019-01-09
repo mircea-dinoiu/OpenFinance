@@ -1,10 +1,11 @@
 // @flow
+import {parsePreferences} from 'common/utils/preferences';
 import { stringify, parse } from 'query-string';
 
 export const readState = () => {
     try {
         return {
-            preferences: parse(location.search)
+            preferences: parsePreferences(parse(location.search)),
         };
     } catch (e) {
         return undefined;
