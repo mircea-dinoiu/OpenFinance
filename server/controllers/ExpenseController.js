@@ -45,6 +45,8 @@ module.exports = BaseController.extend({
             ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
         ],
         money_location_id: ['isRequired', ['isId', MoneyLocation]],
+        status: ['sometimes', 'isRequired', 'isStatusValue'],
+        type: ['sometimes', 'isRequired', 'isTypeValue'],
         categories: ['sometimes', ['isIdArray', Category]],
 
         repeat: ['sometimes', 'isRepeatValue'],
@@ -122,15 +124,12 @@ module.exports = BaseController.extend({
         return this.Model.scope('default').findOne({ where: { id: model.id } });
     },
 
-    sanitizeCreateValues(record) {
+    sanitizeValues(record) {
         const values = pickOwnProperties(record, [
             'sum',
-            'repeat',
             'money_location_id',
             'repeat_occurrences',
         ]);
-
-        values.status = record.status || 'pending';
 
         if (record.hasOwnProperty('item')) {
             values.item = record.item.trim();
@@ -148,43 +147,16 @@ module.exports = BaseController.extend({
             values.hidden = record.hidden;
         }
 
+        if (record.hasOwnProperty('type')) {
+            values.type = record.type;
+        }
+
         if (record.hasOwnProperty('created_at')) {
             values.created_at = record.created_at;
         }
 
-        return values;
-    },
-
-    sanitizeUpdateValues(record) {
-        const workingRecord = Object.assign({}, record);
-        const values = pickOwnProperties(workingRecord, [
-            'sum',
-            'money_location_id',
-            'repeat_occurrences',
-        ]);
-
-        if (workingRecord.hasOwnProperty('item')) {
-            values.item = workingRecord.item.trim();
-        }
-
-        if (workingRecord.hasOwnProperty('notes')) {
-            values.notes = workingRecord.notes && workingRecord.notes.trim();
-        }
-
-        if (workingRecord.hasOwnProperty('hidden')) {
-            values.hidden = workingRecord.hidden;
-        }
-
-        if (workingRecord.hasOwnProperty('favorite')) {
-            values.favorite = workingRecord.favorite;
-        }
-
-        if (workingRecord.hasOwnProperty('created_at')) {
-            values.created_at = workingRecord.created_at;
-        }
-
-        if (workingRecord.hasOwnProperty('repeat')) {
-            values.repeat = workingRecord.repeat;
+        if (record.hasOwnProperty('repeat')) {
+            values.repeat = record.repeat;
 
             if (values.repeat != null) {
                 values.status = 'pending';
@@ -194,11 +166,7 @@ module.exports = BaseController.extend({
             }
         }
 
-        if (workingRecord.hasOwnProperty('type')) {
-            values.type = record.type;
-        }
-
-        if (workingRecord.hasOwnProperty('status')) {
+        if (record.hasOwnProperty('status') && values.status == null) {
             values.status = record.status;
 
             if (values.status === 'finished') {
@@ -207,5 +175,13 @@ module.exports = BaseController.extend({
         }
 
         return values;
+    },
+
+    sanitizeCreateValues(record) {
+        return this.sanitizeValues(record);
+    },
+
+    sanitizeUpdateValues(record) {
+        return this.sanitizeValues(record);
     },
 });

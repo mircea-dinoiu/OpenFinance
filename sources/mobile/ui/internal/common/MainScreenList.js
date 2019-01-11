@@ -83,14 +83,6 @@ type TypeState = {
 export const getDetachedItemUpdates = (item) => {
     const itemUpdates = { id: item.id, repeat: null };
 
-    if (item.repeat_occurrences) {
-        itemUpdates.repeat_occurrences = item.repeat_occurrences - 1;
-
-        if (itemUpdates.repeat_occurrences === 0) {
-            itemUpdates.repeat_occurrences = null;
-        }
-    }
-
     return itemUpdates;
 };
 
@@ -608,7 +600,17 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         this.selectedItems.forEach((item) => {
             if (item.repeat != null) {
-                added.push(this.copyItem(advanceRepeatDate({ ...item })));
+                const extra = {};
+
+                if (item.repeat_occurrences) {
+                    extra.repeat_occurrences = item.repeat_occurrences - 1;
+
+                    if (extra.repeat_occurrences === 0) {
+                        extra.repeat_occurrences = null;
+                    }
+                }
+
+                added.push(this.copyItem(advanceRepeatDate({ ...item, ...extra })));
                 updated.push(getDetachedItemUpdates(item));
             }
         });
