@@ -13,6 +13,7 @@ const Tooltip = ({
         html={
             <div style={{ fontSize: '14px', textAlign: 'left' }}>{tooltip}</div>
         }
+        delay={500}
         position="bottom"
         trigger="mouseenter"
     >
