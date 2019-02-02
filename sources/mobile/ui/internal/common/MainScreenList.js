@@ -183,6 +183,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.props.onRefreshWidgets();
     };
 
+    get hasFiltersSet() {
+        return this.filters.filter((each) => each.value.text !== '').length > 0;
+    }
+
     loadMore = async ({
         page = this.state.page,
         results = this.state.results,
@@ -209,13 +213,17 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         ...this.sorters,
                     ].filter(Boolean),
                 ),
-                filters: JSON.stringify([
-                    this.state.displayHidden ? null : {
-                        id: 'hidden',
-                        value: false,
-                    },
-                    ...this.filters
-                ].filter(Boolean)),
+                filters: JSON.stringify(
+                    [
+                        this.state.displayHidden || this.hasFiltersSet
+                            ? null
+                            : {
+                                id: 'hidden',
+                                value: false,
+                            },
+                        ...this.filters,
+                    ].filter(Boolean),
+                ),
             })}`,
         });
         const json = response.data;
@@ -364,13 +372,11 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         control={
                             <Checkbox
                                 checked={this.state.displayHidden}
-                                onChange={
-                                    this.handleToggleDisplayHidden
-                                }
+                                onChange={this.handleToggleDisplayHidden}
                                 color="default"
                             />
                         }
-                        label="Display Hidden"
+                        label="Display Archived"
                     />
                 </div>
                 <div className="inlineBlock hPadded">
@@ -610,7 +616,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     }
                 }
 
-                added.push(this.copyItem(advanceRepeatDate({ ...item, ...extra })));
+                added.push(
+                    this.copyItem(advanceRepeatDate({ ...item, ...extra })),
+                );
                 updated.push(getDetachedItemUpdates(item));
             }
         });

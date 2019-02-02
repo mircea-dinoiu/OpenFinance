@@ -13,8 +13,8 @@ import IconArrowUp from '@material-ui/icons/ArrowUpward';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 
-import IconHide from '@material-ui/icons/FlipToBack';
-import IconUnhide from '@material-ui/icons/FlipToFront';
+import IconArchive from '@material-ui/icons/Archive';
+import IconUnarchive from '@material-ui/icons/Unarchive';
 
 import compose from 'common/utils/compose';
 
@@ -209,8 +209,8 @@ export default function ContextMenuItems({
             />
             <Divider />
             <MenuItem
-                primaryText="Hide"
-                leftIcon={<IconHide />}
+                primaryText="Archive"
+                leftIcon={<IconArchive />}
                 onClick={compose(
                     onCloseContextMenu,
                     onClickHide,
@@ -223,8 +223,8 @@ export default function ContextMenuItems({
                 desktop={desktop}
             />
             <MenuItem
-                primaryText="Unhide"
-                leftIcon={<IconUnhide />}
+                primaryText="Unarchive"
+                leftIcon={<IconUnarchive />}
                 onClick={compose(
                     onCloseContextMenu,
                     onClickUnhide,
