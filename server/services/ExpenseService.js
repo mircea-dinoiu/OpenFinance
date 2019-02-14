@@ -12,6 +12,7 @@ const {
     mapSortersToSQL,
     mapInputToLimitSQL,
     mapGroupConcatToHavingSQL,
+    mapEntityFilterToWhereSQL,
 } = require('../helpers/sql');
 
 module.exports = {
@@ -81,6 +82,14 @@ module.exports = {
                                 value,
                                 'userIds',
                                 'users.expense_user.user_id',
+                            ),
+                        );
+                        break;
+                    case 'money_location_id':
+                        where.push(
+                            mapEntityFilterToWhereSQL(
+                                value,
+                                'money_location_id',
                             ),
                         );
                         break;

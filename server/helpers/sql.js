@@ -1,6 +1,4 @@
 const sql = require('sequelize');
-const defs = require('../../shared/defs');
-const moment = require('moment');
 
 const mapTextFilterToSQL = (id, value) => {
     if (value) {
@@ -137,10 +135,29 @@ const mapGroupConcatToHavingSQL = (filter, groupConcatName, columnId) => {
     return null;
 };
 
+const mapEntityFilterToWhereSQL = (filter, columnId) => {
+    if (typeof filter === 'object') {
+        return {
+            [columnId]: {
+                [filter.mode === 'exclude' ? '$ne' : '$eq']: filter.value,
+            },
+        };
+    } else if (filter === 'none') {
+        return {
+            [columnId]: {
+                $eq: sql.literal('NULL'),
+            },
+        };
+    }
+
+    return null;
+};
+
 const exported = {
     mapSortersToSQL,
     mapInputToLimitSQL,
     mapGroupConcatToHavingSQL,
+    mapEntityFilterToWhereSQL,
     mapStartDateToSQL(startDate, Model) {
         if (startDate) {
             return sql.or(
