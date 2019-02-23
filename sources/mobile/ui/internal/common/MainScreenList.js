@@ -471,7 +471,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         await this.handleRequestUpdate(
             selectedItems.map((each) => ({
                 ...each,
-                sum: Math.floor((each.sum - splitBy) * 100) / 100,
+                sum: Math.round((each.sum - splitBy) * 100) / 100,
             })),
         );
 
