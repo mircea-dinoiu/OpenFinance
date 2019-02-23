@@ -6,6 +6,7 @@ const style = { textAlign: 'right' };
 
 export default {
     Header: 'Amount',
+    filterable: true,
     accessor: (item) => <AmountDisplay item={item} />,
     id: 'sum',
     //
