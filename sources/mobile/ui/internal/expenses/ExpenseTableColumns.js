@@ -4,6 +4,7 @@ import React from 'react';
 import DescriptionDisplay from 'common/components/BaseTable/cells/DescriptionDisplay';
 import AmountColumn from 'common/components/BaseTable/columns/AmountColumn';
 import DateTimeColumn from 'common/components/BaseTable/columns/DateTimeColumn';
+import WeightDisplay from 'mobile/ui/internal/expenses/cells/WeightDisplay';
 import CategoriesDisplay from 'mobile/ui/internal/expenses/cells/CategoriesDisplay';
 import AccountColumn from 'common/components/BaseTable/columns/AccountColumn';
 import PersonsDisplay from 'mobile/ui/internal/expenses/cells/PersonsDisplay';
@@ -47,6 +48,16 @@ export default [
         style: { textAlign: 'center' },
         headerStyle: { textAlign: 'center' },
         sortable: false,
+    },
+    {
+        Header: 'Weight',
+        filterable: true,
+        accessor: (item) => <WeightDisplay item={item} />,
+        id: 'weight',
+        //
+        width: 130,
+        headerStyle: { textAlign: 'center' },
+        style: { textAlign: 'right' },
     },
     RepeatColumn,
 ];

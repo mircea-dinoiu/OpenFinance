@@ -1,6 +1,8 @@
+import WeightDisplay from 'mobile/ui/internal/expenses/cells/WeightDisplay';
+
 // @flow
 import React, { PureComponent } from 'react';
-import { Col } from 'react-grid-system';
+import { Col, Row } from 'react-grid-system';
 import { stringify } from 'query-string';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -330,12 +332,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         }, 0);
     }
 
-    computeSelectedAmount() {
-        return this.computeAmount(this.selectedItems);
-    }
-
-    computePageAmount() {
-        return this.computeAmount(this.state.results);
+    computeWeight(items) {
+        return items.reduce((acc, each) => acc + (each.weight || 0), 0);
     }
 
     handleSelectAll = (event) => {
@@ -495,20 +493,63 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         );
 
     renderTableFooter() {
-        const divider = ' | ';
+        const page = this.state.results;
+        const selected = this.selectedItems;
 
         return (
             <div className={cssTable.footer}>
-                <strong>Loaded:</strong> {this.state.results.length}
-                {divider}
-                <strong>Selected:</strong>{' '}
-                {Object.values(this.state.selectedIds).filter(Boolean).length}
-                {divider}
-                <strong>Current Page Balance:</strong>{' '}
-                {numericValue(this.computePageAmount())}
-                {divider}
-                <strong>Selected Balance:</strong>{' '}
-                {numericValue(this.computeSelectedAmount())}
+                <Row>
+                    <Col xs={6}>
+                        <div className="bold uppercase textCenter">Current Page</div>
+                        <table className="centerBlock">
+                            <tbody>
+                                <th className="textRight">Count:</th>
+                                <td>{this.state.results.length}</td>
+                                <th className="textRight">Balance:</th>
+                                <td>
+                                    {numericValue(this.computeAmount(page))}
+                                </td>
+                                <th className="textRight">Weight:</th>
+                                <td>
+                                    <WeightDisplay
+                                        item={{
+                                            weight: this.computeWeight(page),
+                                        }}
+                                    />
+                                </td>
+                            </tbody>
+                        </table>
+                    </Col>
+                    <Col xs={6}>
+                        <div className="bold uppercase textCenter">Selected</div>
+                        <table className="centerBlock">
+                            <tbody>
+                                <th className="textRight">Count:</th>
+                                <td>
+                                    {
+                                        Object.values(
+                                            this.state.selectedIds,
+                                        ).filter(Boolean).length
+                                    }
+                                </td>
+                                <th className="textRight">Balance:</th>
+                                <td>
+                                    {numericValue(this.computeAmount(selected))}
+                                </td>
+                                <th className="textRight">Weight:</th>
+                                <td>
+                                    <WeightDisplay
+                                        item={{
+                                            weight: this.computeWeight(
+                                                selected,
+                                            ),
+                                        }}
+                                    />
+                                </td>
+                            </tbody>
+                        </table>
+                    </Col>
+                </Row>
             </div>
         );
     }

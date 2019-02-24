@@ -30,6 +30,8 @@ module.exports = BaseController.extend({
         repeat: ['sometimes', 'isRepeatValue'],
         repeat_end_date: ['sometimes', 'isInt'],
         repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
+
+        weight: ['sometimes', 'isNotZero', 'isInt'],
     },
 
     createValidationRules: {
@@ -52,6 +54,8 @@ module.exports = BaseController.extend({
         repeat: ['sometimes', 'isRepeatValue'],
         repeat_end_date: ['sometimes', 'isInt'],
         repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
+
+        weight: ['sometimes', 'isNotZero', 'isInt'],
     },
 
     async updateRelations({ record, model }) {
@@ -129,6 +133,7 @@ module.exports = BaseController.extend({
             'sum',
             'money_location_id',
             'repeat_occurrences',
+            'weight',
         ]);
 
         if (record.hasOwnProperty('item')) {

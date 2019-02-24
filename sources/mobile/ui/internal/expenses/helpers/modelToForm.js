@@ -12,6 +12,7 @@ export default (model) => ({
     paymentMethod: model.money_location_id,
     repeat: model.repeat,
     repeatOccurrences: model.repeat_occurrences,
+    weight: model.weight,
     chargedPersons: model.users,
     status: model.status || 'pending',
     type: model.type || 'withdrawal',

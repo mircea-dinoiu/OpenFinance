@@ -21,6 +21,7 @@ export default (form, props) => {
         money_location_id: form.paymentMethod,
         repeat: form.repeat,
         repeat_occurrences: form.repeatOccurrences,
+        weight: form.weight,
         users,
         status: form.status || 'pending',
         type: form.type || 'withdrawal',
