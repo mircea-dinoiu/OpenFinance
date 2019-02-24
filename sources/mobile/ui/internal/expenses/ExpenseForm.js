@@ -128,7 +128,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         disabled={true}
                     />
                 </Col>
-                <Col xs={8}>
+                <Col xs={4}>
                     <TextField
                         label="Sum"
                         InputLabelProps={{
@@ -146,28 +146,25 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         }
                     />
                 </Col>
+                <Col xs={4}>
+                    <TextField
+                        label="Weight (grams)"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={this.state.weight}
+                        fullWidth={true}
+                        type="number"
+                        margin="none"
+                        style={{
+                            marginTop: '2px',
+                        }}
+                        onChange={(event) =>
+                            this.setState({ weight: event.target.value })
+                        }
+                    />
+                </Col>
             </Row>
-        );
-    }
-
-    renderWeight() {
-        return (
-            <TextField
-                label="Weight (grams)"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                value={this.state.weight}
-                fullWidth={true}
-                type="number"
-                margin="none"
-                style={{
-                    marginTop: '2px',
-                }}
-                onChange={(event) =>
-                    this.setState({ weight: event.target.value })
-                }
-            />
         );
     }
 
@@ -412,7 +409,6 @@ class ExpenseForm extends PureComponent<TypeProps> {
                 <div style={boxStyle}>{this.renderCategories()}</div>
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
                 <div style={boxStyle}>{this.renderRepeat()}</div>
-                <div style={boxStyle}>{this.renderWeight()}</div>
                 <div style={boxStyle}>{this.renderNotes()}</div>
             </Col>
         );
