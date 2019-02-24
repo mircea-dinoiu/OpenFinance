@@ -11,7 +11,7 @@ module.exports = BaseController.extend({
 
     updateValidationRules: {
         id: ['isRequired', ['isId', Model]],
-        sum: ['sometimes', 'isRequired', 'isFloat', 'isHTZero'],
+        sum: ['sometimes', 'isRequired', 'isFloat', 'isNotNegative'],
         item: ['sometimes', 'isRequired', 'isString'],
         notes: ['sometimes', 'isString'],
         favorite: ['sometimes', 'isBool'],
@@ -35,7 +35,7 @@ module.exports = BaseController.extend({
     },
 
     createValidationRules: {
-        sum: ['isRequired', 'isFloat', 'isNotZero'],
+        sum: ['isRequired', 'isFloat', 'isNotNegative'],
         item: ['isRequired', 'isString'],
         notes: ['sometimes', 'isString'],
         favorite: ['sometimes', 'isBool'],

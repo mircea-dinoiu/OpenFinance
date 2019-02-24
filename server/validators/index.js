@@ -96,7 +96,7 @@ Object.assign(validator, {
     isStatusValue: (value) => ['finished', 'pending'].includes(value),
     isTypeValue: (value) => ['withdrawal', 'deposit'].includes(value),
     isNotZero: (value) => Number(value) !== 0,
-    isHTZero: (value) => Number(value) > 0,
+    isNotNegative: (value) => Number(value) >= 0,
     isString: (value) => typeof value === 'string',
     isBool: (value) => typeof value === 'boolean',
     isRequired: (value) => {
