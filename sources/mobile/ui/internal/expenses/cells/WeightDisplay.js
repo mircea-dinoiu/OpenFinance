@@ -1,4 +1,5 @@
 // @flow
+import { formatNumericValue } from 'mobile/ui/formatters';
 
 const WeightDisplay = ({ item }) => {
     if (item.weight == null) {
@@ -6,10 +7,10 @@ const WeightDisplay = ({ item }) => {
     }
 
     if (item.weight > 1000) {
-        return `${item.weight / 1000} kg`;
+        return `${formatNumericValue(item.weight / 1000)} kg`;
     }
 
-    return `${item.weight} g`;
+    return `${formatNumericValue(item.weight)} g`;
 };
 
 export default WeightDisplay;
