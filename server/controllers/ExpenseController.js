@@ -31,7 +31,7 @@ module.exports = BaseController.extend({
         repeat_end_date: ['sometimes', 'isInt'],
         repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
 
-        weight: ['sometimes', 'isNotZero', 'isInt'],
+        weight: ['sometimes', 'isNotNegative', 'isInt'],
     },
 
     createValidationRules: {
@@ -55,7 +55,7 @@ module.exports = BaseController.extend({
         repeat_end_date: ['sometimes', 'isInt'],
         repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
 
-        weight: ['sometimes', 'isNotZero', 'isInt'],
+        weight: ['sometimes', 'isNotNegative', 'isInt'],
     },
 
     async updateRelations({ record, model }) {

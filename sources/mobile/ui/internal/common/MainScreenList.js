@@ -105,7 +105,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         editDialogKey: uniqueId(),
         deleteDialogOpen: false,
 
-        pendingTransactionsFirst: true,
+        pendingFirst: true,
+        favoriteFirst: true,
         displayHidden: false,
         splitAmount: '',
     };
@@ -209,8 +210,11 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 limit: this.pageSize,
                 sorters: JSON.stringify(
                     [
-                        this.state.pendingTransactionsFirst
+                        this.state.pendingFirst
                             ? { id: 'status', desc: true }
+                            : null,
+                        this.state.favoriteFirst
+                            ? { id: 'favorite', desc: true }
                             : null,
                         ...this.sorters,
                     ].filter(Boolean),
@@ -355,14 +359,24 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={this.state.pendingTransactionsFirst}
-                                onChange={
-                                    this.handleTogglePendingTransactionsFirst
-                                }
+                                checked={this.state.pendingFirst}
+                                onChange={this.handleTogglePendingFirst}
                                 color="default"
                             />
                         }
-                        label="Pending Transactions First"
+                        label="Pending First"
+                    />
+                </div>
+                <div className="inlineBlock hPadded">
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={this.state.pendingFirst}
+                                onChange={this.handleToggleFavoriteFirst}
+                                color="default"
+                            />
+                        }
+                        label="Favorite First"
                     />
                 </div>
                 <div className="inlineBlock hPadded">
@@ -476,21 +490,18 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.props.onRefreshWidgets();
     };
 
-    handleTogglePendingTransactionsFirst = () =>
+    handleToggleStateKey = (key) => () => {
         this.setState(
             (state) => ({
-                pendingTransactionsFirst: !state.pendingTransactionsFirst,
+                [key]: !state[key],
             }),
             this.refresh,
         );
+    };
 
-    handleToggleDisplayHidden = () =>
-        this.setState(
-            (state) => ({
-                displayHidden: !state.displayHidden,
-            }),
-            this.refresh,
-        );
+    handleTogglePendingFirst = this.handleToggleStateKey('pendingFirst');
+    handleToggleFavoriteFirst = this.handleToggleStateKey('favoriteFirst');
+    handleToggleDisplayHidden = this.handleToggleStateKey('displayHidden');
 
     renderTableFooter() {
         const page = this.state.results;
@@ -500,7 +511,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             <div className={cssTable.footer}>
                 <Row>
                     <Col xs={6}>
-                        <div className="bold uppercase textCenter">Current Page</div>
+                        <div className="bold uppercase textCenter">
+                            Current Page
+                        </div>
                         <table className="centerBlock">
                             <tbody>
                                 <th className="textRight">Count:</th>
@@ -521,7 +534,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         </table>
                     </Col>
                     <Col xs={6}>
-                        <div className="bold uppercase textCenter">Selected</div>
+                        <div className="bold uppercase textCenter">
+                            Selected
+                        </div>
                         <table className="centerBlock">
                             <tbody>
                                 <th className="textRight">Count:</th>
