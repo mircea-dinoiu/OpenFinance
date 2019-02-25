@@ -371,7 +371,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={this.state.pendingFirst}
+                                checked={this.state.favoriteFirst}
                                 onChange={this.handleToggleFavoriteFirst}
                                 color="default"
                             />
