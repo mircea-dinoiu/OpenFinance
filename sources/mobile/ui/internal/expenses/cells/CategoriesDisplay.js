@@ -15,7 +15,7 @@ const CategoriesDisplay = ({ item, categories, screen }) => (
                 <Chip
                     key={each.get('id')}
                     style={{
-                        backgroundColor: each.get('color'),
+                        background: each.get('color'),
                         margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`,
                         ...(screen.isLarge
                             ? {
