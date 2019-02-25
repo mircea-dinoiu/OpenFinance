@@ -106,7 +106,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         deleteDialogOpen: false,
 
         pendingFirst: true,
-        favoriteFirst: true,
+        favoriteFirst: false,
         displayHidden: false,
         splitAmount: '',
     };
