@@ -5,7 +5,7 @@ import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
 const style = { textAlign: 'right' };
 
 export default {
-    Header: 'Amount',
+    Header: 'Sum',
     filterable: true,
     accessor: (item) => <AmountDisplay item={item} />,
     id: 'sum',

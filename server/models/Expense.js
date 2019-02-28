@@ -23,6 +23,13 @@ module.exports = (sequelize, types) => {
             repeat_end_date: types.DATE,
 
             weight: types.INTEGER,
+
+            sum_per_weight: {
+                type: types.VIRTUAL(
+                    types.FLOAT,
+                    '(`expenses`.sum / `expenses`.weight) as sum_per_weight',
+                ),
+            },
         },
         {
             underscored: true,
@@ -53,7 +60,10 @@ module.exports = (sequelize, types) => {
                                 attributes: [],
                             },
                             { model: models.Category, attributes: [] },
-                            { model: models.MoneyLocation, attributes: ['currency_id'] },
+                            {
+                                model: models.MoneyLocation,
+                                attributes: ['currency_id'],
+                            },
                         ],
                         group: ['id'],
                     });

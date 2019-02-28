@@ -1,3 +1,5 @@
+import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
+
 // @flow
 import CategoriesFilter from 'common/components/BaseTable/filters/CategoriesFilter';
 import React from 'react';
@@ -13,7 +15,7 @@ import DescriptionFilter from 'common/components/BaseTable/filters/DescriptionFi
 import UsersFilter from 'common/components/BaseTable/filters/UsersFilter';
 import RatingDisplay from 'mobile/ui/internal/expenses/cells/RatingDisplay';
 
-export default ({updateRecords}) => [
+export default ({ updateRecords }) => [
     AmountColumn,
     {
         Header: 'Description',
@@ -68,14 +70,35 @@ export default ({updateRecords}) => [
         style: { textAlign: 'center' },
     },
     {
-        Header: 'Weight',
+        Header: 'Weight (g)',
         filterable: true,
         accessor: (item) => <WeightDisplay item={item} />,
         id: 'weight',
         //
-        width: 130,
+        width: 110,
         headerStyle: { textAlign: 'center' },
         style: { textAlign: 'right' },
     },
-    RepeatColumn
+    {
+        Header: 'Price/g',
+        sortable: true,
+        accessor: (item) =>
+            item.sum_per_weight != null && (
+                <React.Fragment>
+                    <AmountDisplay
+                        item={{
+                            money_location: item.money_location,
+                            sum: item.sum_per_weight,
+                        }}
+                    />
+                    /g
+                </React.Fragment>
+            ),
+        id: 'sum_per_weight',
+        //
+        width: 100,
+        headerStyle: { textAlign: 'center' },
+        style: { textAlign: 'right' },
+    },
+    RepeatColumn,
 ];

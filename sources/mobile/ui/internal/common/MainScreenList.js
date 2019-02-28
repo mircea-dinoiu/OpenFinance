@@ -721,6 +721,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     >
                         <BaseTable
                             defaultSorted={this.props.defaultSorters}
+                            defaultSortDesc={true}
                             pageSize={
                                 count
                                     ? Math.min(count, this.pageSize)

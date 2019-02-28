@@ -18,6 +18,7 @@ module.exports = {
     generateClones({ records, endDate, startDate, sorters = [] }) {
         let ret = [];
         const start = Date.now();
+        let clones = 0;
 
         records.forEach((record) => {
             if (
@@ -34,15 +35,18 @@ module.exports = {
                     startDate,
                 }).forEach((clone) => {
                     ret.push(clone);
+                    clones++;
                 });
             }
         });
 
-        ret = orderBy(
-            ret,
-            sorters.map((each) => each.id),
-            sorters.map((each) => (each.desc ? 'desc' : 'asc')),
-        );
+        if (clones) {
+            ret = orderBy(
+                ret,
+                sorters.map((each) => each.id),
+                sorters.map((each) => (each.desc ? 'desc' : 'asc')),
+            );
+        }
 
         logger.log('Generating clones took', Date.now() - start, 'millis');
 
