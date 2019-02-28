@@ -27,7 +27,7 @@ export default ({updateRecords}) => [
             />
         ),
         id: 'item',
-        width: 500,
+        width: 400,
     },
     DateTimeColumn,
     {
