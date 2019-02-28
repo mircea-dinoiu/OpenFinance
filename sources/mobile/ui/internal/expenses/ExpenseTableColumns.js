@@ -1,6 +1,6 @@
-import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
-
 // @flow
+import CurrencyDisplay from 'common/components/BaseTable/cells/CurrencyDisplay';
+import PricePerGDisplay from 'common/components/BaseTable/cells/PricePerGDisplay';
 import CategoriesFilter from 'common/components/BaseTable/filters/CategoriesFilter';
 import React from 'react';
 import DescriptionDisplay from 'common/components/BaseTable/cells/DescriptionDisplay';
@@ -17,6 +17,14 @@ import RatingDisplay from 'mobile/ui/internal/expenses/cells/RatingDisplay';
 
 export default ({ updateRecords }) => [
     AmountColumn,
+    {
+        Header: '$',
+        filterable: false,
+        sortable: true,
+        accessor: (item) => <CurrencyDisplay item={item} />,
+        id: 'money_location.currency_id',
+        width: 40,
+    },
     {
         Header: 'Description',
         filterable: true,
@@ -82,18 +90,7 @@ export default ({ updateRecords }) => [
     {
         Header: 'Price/g',
         sortable: true,
-        accessor: (item) =>
-            item.sum_per_weight != null && (
-                <React.Fragment>
-                    <AmountDisplay
-                        item={{
-                            money_location: item.money_location,
-                            sum: item.sum_per_weight,
-                        }}
-                    />
-                    /g
-                </React.Fragment>
-            ),
+        accessor: (item) => <PricePerGDisplay item={item} />,
         id: 'sum_per_weight',
         //
         width: 100,

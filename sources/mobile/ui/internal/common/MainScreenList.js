@@ -208,10 +208,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         }
 
         this.sorters.forEach((sorter) => {
-            if (sorter.id === 'sum') {
-                sorters.push({ id: 'money_location.currency_id', desc: sorter.desc });
-            }
-
             sorters.push(sorter);
         });
 

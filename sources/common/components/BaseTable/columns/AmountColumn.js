@@ -7,10 +7,10 @@ const style = { textAlign: 'right' };
 export default {
     Header: 'Sum',
     filterable: true,
-    accessor: (item) => <AmountDisplay item={item} />,
+    accessor: (item) => <AmountDisplay showCurrency={false} item={item} />,
     id: 'sum',
     //
-    width: 130,
+    width: 100,
     headerStyle: style,
     style,
 };
