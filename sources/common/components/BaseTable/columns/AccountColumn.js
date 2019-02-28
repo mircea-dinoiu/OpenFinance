@@ -11,7 +11,7 @@ export default {
     Filter: AccountFilter,
     accessor: (item) => <MoneyLocationDisplay item={item} />,
     id: 'money_location_id',
-    sortable: false,
+    sortable: true,
     //
     headerStyle: style,
     style,
