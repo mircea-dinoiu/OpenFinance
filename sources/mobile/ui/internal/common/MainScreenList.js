@@ -631,7 +631,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.updateSelectedRecords({ status: 'finished' });
     handleClickNeedsReview = () =>
         this.updateSelectedRecords({ status: 'pending' });
-    handleClickHide = () => this.updateSelectedRecords({ hidden: true });
+    handleClickHide = () => this.updateSelectedRecords({ hidden: true, status: 'finished' });
     handleClickUnhide = () => this.updateSelectedRecords({ hidden: false });
     handleClickDeposit = () => this.updateSelectedRecords({ type: 'deposit' });
     handleClickWithdrawal = () =>
