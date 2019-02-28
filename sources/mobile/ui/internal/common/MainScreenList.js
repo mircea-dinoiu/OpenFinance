@@ -830,7 +830,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             <div>
                 <div
                     style={{
-                        ...(this.state.refreshing ? greyedOut : {}),
+                        ...(this.state.refreshing && !isDesktop ? greyedOut : {}),
                         backgroundColor: isDesktop ? undefined : 'white',
                     }}
                 >
