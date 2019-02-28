@@ -36,6 +36,7 @@ module.exports = (sequelize, types) => {
                         through: 'category_expense',
                         timestamps: false,
                     });
+                    Expense.belongsTo(models.MoneyLocation);
 
                     Expense.addScope('default', {
                         attributes: Object.keys(Expense.rawAttributes).concat([
@@ -52,6 +53,7 @@ module.exports = (sequelize, types) => {
                                 attributes: [],
                             },
                             { model: models.Category, attributes: [] },
+                            { model: models.MoneyLocation, attributes: ['currency_id'] },
                         ],
                         group: ['id'],
                     });

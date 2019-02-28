@@ -44,7 +44,7 @@ module.exports = {
             ],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
-            sorters: ['sometimes', ['isTableSorters', Model]],
+            sorters: ['sometimes', ['isTableSorters', Model, ['money_location.currency_id']]],
         };
         const validator = new Validator(input, rules);
 

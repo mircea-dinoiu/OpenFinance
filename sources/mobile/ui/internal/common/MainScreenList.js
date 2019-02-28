@@ -201,20 +201,26 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         }
 
         this.setState((state) => ({ loading: state.loading + 1 }));
+        const sorters = [];
+
+        if (this.state.pendingFirst) {
+            sorters.push({ id: 'status', desc: true });
+        }
+
+        this.sorters.forEach((sorter) => {
+            if (sorter.id === 'sum') {
+                sorters.push({ id: 'money_location.currency_id', desc: sorter.desc });
+            }
+
+            sorters.push(sorter);
+        });
 
         const response = await createXHR({
             url: `${this.props.api.list}?${stringify({
                 end_date: endDate,
                 page,
                 limit: this.pageSize,
-                sorters: JSON.stringify(
-                    [
-                        this.state.pendingFirst
-                            ? { id: 'status', desc: true }
-                            : null,
-                        ...this.sorters,
-                    ].filter(Boolean),
-                ),
+                sorters: JSON.stringify(sorters),
                 filters: JSON.stringify(
                     [
                         this.state.displayHidden || this.hasFiltersSet
@@ -557,9 +563,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
     updateRecords = async (ids, data) => {
         try {
-            await this.handleRequestUpdate(
-                ids.map((id) => ({ id, ...data })),
-            );
+            await this.handleRequestUpdate(ids.map((id) => ({ id, ...data })));
 
             this.props.onRefreshWidgets();
         } catch (e) {
@@ -568,9 +572,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         }
     };
 
-    updateSelectedRecords = (data) => {
-        return this.updateRecords(this.selectedItems.map(each => each.id), data);
-    };
+    updateSelectedRecords = (data) => this.updateRecords(
+        this.selectedItems.map((each) => each.id),
+        data,
+    );
 
     withLoading = (fn) => async (...args: any[]) => {
         this.setState((state) => ({ loading: state.loading + 1 }));
@@ -631,7 +636,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.updateSelectedRecords({ status: 'finished' });
     handleClickNeedsReview = () =>
         this.updateSelectedRecords({ status: 'pending' });
-    handleClickHide = () => this.updateSelectedRecords({ hidden: true, status: 'finished' });
+    handleClickHide = () =>
+        this.updateSelectedRecords({ hidden: true, status: 'finished' });
     handleClickUnhide = () => this.updateSelectedRecords({ hidden: false });
     handleClickDeposit = () => this.updateSelectedRecords({ type: 'deposit' });
     handleClickWithdrawal = () =>
@@ -733,7 +739,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                             manual={true}
                             loading={this.state.loading > 0}
                             data={results}
-                            columns={this.props.tableColumns({updateRecords: this.updateRecords})}
+                            columns={this.props.tableColumns({
+                                updateRecords: this.updateRecords,
+                            })}
                             getTrProps={this.getTrProps}
                             onFetchData={(state) => {
                                 this.handleCloseContextMenu();
@@ -830,7 +838,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             <div>
                 <div
                     style={{
-                        ...(this.state.refreshing && !isDesktop ? greyedOut : {}),
+                        ...(this.state.refreshing && !isDesktop
+                            ? greyedOut
+                            : {}),
                         backgroundColor: isDesktop ? undefined : 'white',
                     }}
                 >

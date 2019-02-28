@@ -7,12 +7,10 @@ const AmountDisplay = ({
     item,
     currencies,
     showCurrency = true,
-    moneyLocations,
 }) => {
     const currencyISOCode = getItemCurrencyISOCode({
         item,
         currencies,
-        moneyLocations,
     });
 
     return numericValue(item.sum, {
@@ -20,9 +18,8 @@ const AmountDisplay = ({
         currency: currencyISOCode,
     });
 };
-const mapStateToProps = ({ currencies, moneyLocations }) => ({
+const mapStateToProps = ({ currencies }) => ({
     currencies,
-    moneyLocations,
 });
 
 export default connect(mapStateToProps)(AmountDisplay);
