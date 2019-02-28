@@ -10,9 +10,6 @@ import UnlockIcon from '@material-ui/icons/LockOpen';
 import IconArrowDown from '@material-ui/icons/ArrowDownward';
 import IconArrowUp from '@material-ui/icons/ArrowUpward';
 
-import IconStar from '@material-ui/icons/Star';
-import IconStarBorder from '@material-ui/icons/StarBorder';
-
 import IconArchive from '@material-ui/icons/Archive';
 import IconUnarchive from '@material-ui/icons/Unarchive';
 
@@ -28,9 +25,6 @@ export default function ContextMenuItems({
     onCloseContextMenu,
     onClickDeposit,
     onClickWithdrawal,
-
-    onClickAddFavorite,
-    onClickRemoveFavorite,
 
     onClickHide,
     onClickUnhide,
@@ -174,35 +168,6 @@ export default function ContextMenuItems({
                 onTouchTap={compose(
                     onCloseContextMenu,
                     onClickWithdrawal,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
-            <Divider />
-            <MenuItem
-                primaryText="Add to Favorites"
-                leftIcon={<IconStar />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickAddFavorite,
-                )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickAddFavorite,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
-            <MenuItem
-                primaryText="Remove from Favorites"
-                leftIcon={<IconStarBorder />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickRemoveFavorite,
-                )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickRemoveFavorite,
                 )}
                 disabled={disabledForZero}
                 desktop={desktop}

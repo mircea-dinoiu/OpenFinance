@@ -47,23 +47,6 @@ const mapFlagsToSQL = (flags) => {
             break;
     }
 
-    switch (flags.Favorite) {
-        case 'no':
-            where.push({
-                favorite: {
-                    $ne: 1,
-                },
-            });
-            break;
-        case 'only':
-            where.push({
-                favorite: {
-                    $eq: 1,
-                },
-            });
-            break;
-    }
-
     switch (flags.Recurrent) {
         case 'no':
             where.push({

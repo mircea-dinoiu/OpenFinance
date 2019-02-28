@@ -11,8 +11,9 @@ import PersonsDisplay from 'mobile/ui/internal/expenses/cells/PersonsDisplay';
 import RepeatColumn from 'common/components/BaseTable/columns/RepeatColumn';
 import DescriptionFilter from 'common/components/BaseTable/filters/DescriptionFilter';
 import UsersFilter from 'common/components/BaseTable/filters/UsersFilter';
+import RatingDisplay from 'mobile/ui/internal/expenses/cells/RatingDisplay';
 
-export default [
+export default ({updateRecords}) => [
     AmountColumn,
     {
         Header: 'Description',
@@ -26,6 +27,7 @@ export default [
             />
         ),
         id: 'item',
+        width: 500,
     },
     DateTimeColumn,
     {
@@ -35,6 +37,7 @@ export default [
         accessor: (item) => <CategoriesDisplay item={item} />,
         id: 'categories',
         sortable: false,
+        width: 200,
     },
     AccountColumn,
     {
@@ -50,6 +53,21 @@ export default [
         sortable: false,
     },
     {
+        Header: 'Rating',
+        filterable: true,
+        sortable: true,
+        accessor: (item, ...args) => {
+            console.log(...args);
+
+            return <RatingDisplay item={item} updateRecords={updateRecords} />;
+        },
+        id: 'favorite',
+        //
+        width: 110,
+        headerStyle: { textAlign: 'center' },
+        style: { textAlign: 'center' },
+    },
+    {
         Header: 'Weight',
         filterable: true,
         accessor: (item) => <WeightDisplay item={item} />,
@@ -59,5 +77,5 @@ export default [
         headerStyle: { textAlign: 'center' },
         style: { textAlign: 'right' },
     },
-    RepeatColumn,
+    RepeatColumn
 ];

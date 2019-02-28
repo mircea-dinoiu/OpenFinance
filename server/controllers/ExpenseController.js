@@ -14,7 +14,7 @@ module.exports = BaseController.extend({
         sum: ['sometimes', 'isRequired', 'isFloat', 'isNotNegative'],
         item: ['sometimes', 'isRequired', 'isString'],
         notes: ['sometimes', 'isString'],
-        favorite: ['sometimes', 'isBool'],
+        favorite: ['sometimes', 'isInt'],
         hidden: ['sometimes', 'isBool'],
         created_at: [
             'sometimes',
@@ -38,7 +38,7 @@ module.exports = BaseController.extend({
         sum: ['isRequired', 'isFloat', 'isNotNegative'],
         item: ['isRequired', 'isString'],
         notes: ['sometimes', 'isString'],
-        favorite: ['sometimes', 'isBool'],
+        favorite: ['sometimes', 'isInt'],
         hidden: ['sometimes', 'isBool'],
         users: ['isRequired', ['isIdArray', User]],
         created_at: [

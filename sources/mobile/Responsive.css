@@ -34,3 +34,7 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.cursorPointer {
+    cursor: pointer;
+}

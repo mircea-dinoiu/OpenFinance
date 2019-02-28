@@ -69,7 +69,6 @@ module.exports = (sequelize, types) => {
                         'categoryIds',
                     );
                     delete values.categoryIds;
-                    values.favorite = Boolean(values.favorite);
                     values.hidden = Boolean(values.hidden);
 
                     return values;

@@ -15,4 +15,5 @@ export default {
     //
     headerStyle: style,
     style,
+    width: 150,
 };

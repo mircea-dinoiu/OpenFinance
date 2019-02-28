@@ -106,7 +106,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         deleteDialogOpen: false,
 
         pendingFirst: true,
-        favoriteFirst: false,
         displayHidden: false,
         splitAmount: '',
     };
@@ -212,9 +211,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     [
                         this.state.pendingFirst
                             ? { id: 'status', desc: true }
-                            : null,
-                        this.state.favoriteFirst
-                            ? { id: 'favorite', desc: true }
                             : null,
                         ...this.sorters,
                     ].filter(Boolean),
@@ -371,18 +367,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={this.state.favoriteFirst}
-                                onChange={this.handleToggleFavoriteFirst}
-                                color="default"
-                            />
-                        }
-                        label="Favorite First"
-                    />
-                </div>
-                <div className="inlineBlock hPadded">
-                    <FormControlLabel
-                        control={
-                            <Checkbox
                                 checked={this.state.displayHidden}
                                 onChange={this.handleToggleDisplayHidden}
                                 color="default"
@@ -500,7 +484,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     };
 
     handleTogglePendingFirst = this.handleToggleStateKey('pendingFirst');
-    handleToggleFavoriteFirst = this.handleToggleStateKey('favoriteFirst');
     handleToggleDisplayHidden = this.handleToggleStateKey('displayHidden');
 
     renderTableFooter() {
@@ -572,12 +555,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     handleCloseContextMenu = () =>
         this.handleChangeContextMenu({ display: false });
 
-    updateSelectedRecords = async (data) => {
-        const selectedItems = this.selectedItems;
-
+    updateRecords = async (ids, data) => {
         try {
             await this.handleRequestUpdate(
-                selectedItems.map((each) => ({ id: each.id, ...data })),
+                ids.map((id) => ({ id, ...data })),
             );
 
             this.props.onRefreshWidgets();
@@ -585,6 +566,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             console.error(e);
             // todo
         }
+    };
+
+    updateSelectedRecords = (data) => {
+        return this.updateRecords(this.selectedItems.map(each => each.id), data);
     };
 
     withLoading = (fn) => async (...args: any[]) => {
@@ -646,10 +631,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.updateSelectedRecords({ status: 'finished' });
     handleClickNeedsReview = () =>
         this.updateSelectedRecords({ status: 'pending' });
-    handleClickAddFavorite = () =>
-        this.updateSelectedRecords({ favorite: true });
-    handleClickRemoveFavorite = () =>
-        this.updateSelectedRecords({ favorite: false });
     handleClickHide = () => this.updateSelectedRecords({ hidden: true });
     handleClickUnhide = () => this.updateSelectedRecords({ hidden: false });
     handleClickDeposit = () => this.updateSelectedRecords({ type: 'deposit' });
@@ -707,9 +688,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             onClickReviewed: this.handleClickReviewed,
             onClickNeedsReview: this.handleClickNeedsReview,
 
-            onClickAddFavorite: this.handleClickAddFavorite,
-            onClickRemoveFavorite: this.handleClickRemoveFavorite,
-
             onClickHide: this.handleClickHide,
             onClickUnhide: this.handleClickUnhide,
 
@@ -755,7 +733,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                             manual={true}
                             loading={this.state.loading > 0}
                             data={results}
-                            columns={this.props.tableColumns}
+                            columns={this.props.tableColumns({updateRecords: this.updateRecords})}
                             getTrProps={this.getTrProps}
                             onFetchData={(state) => {
                                 this.handleCloseContextMenu();
