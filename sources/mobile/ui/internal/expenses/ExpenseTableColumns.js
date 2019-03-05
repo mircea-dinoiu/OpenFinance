@@ -47,7 +47,7 @@ export default ({ updateRecords }) => [
         accessor: (item) => <CategoriesDisplay item={item} />,
         id: 'categories',
         sortable: false,
-        width: 200,
+        width: 300,
     },
     AccountColumn,
     {
