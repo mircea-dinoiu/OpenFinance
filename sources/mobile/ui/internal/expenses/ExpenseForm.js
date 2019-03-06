@@ -1,9 +1,8 @@
-import Checkbox from '@material-ui/core/Checkbox';
-
 // @flow
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import { findCurrencyById } from 'common/helpers/currency';
