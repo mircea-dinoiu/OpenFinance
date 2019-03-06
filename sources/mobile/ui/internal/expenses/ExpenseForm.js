@@ -1,5 +1,8 @@
+import Checkbox from '@material-ui/core/Checkbox';
+
 // @flow
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -400,8 +403,13 @@ class ExpenseForm extends PureComponent<TypeProps> {
     render() {
         return (
             <Col style={overflowVisible}>
-                <div>{this.renderType()}</div>
-                <div>{this.renderStatus()}</div>
+                <Row>
+                    <Col xs={6}>
+                        <div>{this.renderType()}</div>
+                        <div>{this.renderStatus()}</div>
+                    </Col>
+                    <Col xs={6}>{this.renderFlags()}</Col>
+                </Row>
                 <div style={boxStyle}>{this.renderDescription()}</div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
@@ -443,6 +451,31 @@ class ExpenseForm extends PureComponent<TypeProps> {
     handleChangeType = (event) => {
         this.setState({ type: event.target.value });
     };
+
+    renderFlags() {
+        return (
+            <>
+                <FormLabel>Flags</FormLabel>
+                <FormGroup>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={this.state.hidden}
+                                onChange={(event) =>
+                                    this.setState({
+                                        hidden: event.target.checked,
+                                    })
+                                }
+                                color="primary"
+                                value="hidden"
+                            />
+                        }
+                        label="Archived"
+                    />
+                </FormGroup>
+            </>
+        );
+    }
 
     renderStatus() {
         return (
