@@ -1,5 +1,3 @@
-import WeightDisplay from 'mobile/ui/internal/expenses/cells/WeightDisplay';
-
 // @flow
 import React, { PureComponent } from 'react';
 import { Col, Row } from 'react-grid-system';
@@ -28,11 +26,16 @@ import MainScreenEditDialog from './MainScreenEditDialog';
 import AddIcon from '@material-ui/icons/Add';
 import { refreshWidgets as onRefreshWidgets } from 'common/state/actions';
 import { advanceRepeatDate } from 'shared/helpers/repeatedModels';
-import { uniqueId } from 'lodash';
+import { uniqueId, range } from 'lodash';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import IconSplit from '@material-ui/icons/CallSplitRounded';
+import Tooltip from 'common/components/Tooltip';
+import Chip from '@material-ui/core/Chip';
+import WeightDisplay from 'mobile/ui/internal/expenses/cells/WeightDisplay';
+import IconStar from '@material-ui/icons/Star';
+import IconStarBorder from '@material-ui/icons/StarBorder';
 
 type TypeProps = {
     api: {
@@ -488,68 +491,84 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     handleTogglePendingFirst = this.handleToggleStateKey('pendingFirst');
     handleToggleDisplayHidden = this.handleToggleStateKey('displayHidden');
 
+    renderStats(head, items) {
+        return (
+            <div style={{ display: 'inline-block', marginRight: 5 }}>
+                <Tooltip
+                    tooltip={
+                        <table className="centerBlock">
+                            <tbody>
+                                <tr>
+                                    <th>Balance:</th>
+                                    <td>
+                                        {numericValue(
+                                            this.computeAmount(items),
+                                        )}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Weight:</th>
+                                    <td>
+                                        <WeightDisplay
+                                            item={{
+                                                weight: this.computeWeight(
+                                                    items,
+                                                ),
+                                            }}
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+                >
+                    <Chip
+                        label={
+                            <React.Fragment>
+                                {head}&nbsp;<strong>({items.length})</strong>
+                            </React.Fragment>
+                        }
+                        variant="outlined"
+                    />
+                </Tooltip>
+            </div>
+        );
+    }
+
     renderTableFooter() {
         const page = this.state.results;
         const selected = this.selectedItems;
 
         return (
             <div className={cssTable.footer}>
-                <Row>
-                    <Col xs={6}>
-                        <div className="bold uppercase textCenter">
-                            Current Page
-                        </div>
-                        <table className="centerBlock">
-                            <tbody>
-                                <th className="textRight">Count:</th>
-                                <td>{this.state.results.length}</td>
-                                <th className="textRight">Balance:</th>
-                                <td>
-                                    {numericValue(this.computeAmount(page))}
-                                </td>
-                                <th className="textRight">Weight:</th>
-                                <td>
-                                    <WeightDisplay
-                                        item={{
-                                            weight: this.computeWeight(page),
+                {this.renderStats('Current Page', page)}
+                {this.renderStats('Selected', selected)}
+                {range(0, 6).map((rating) =>
+                    this.renderStats(
+                        <React.Fragment>
+                            {rating === 0 ? (
+                                <IconStarBorder
+                                    style={{ height: 20, width: 20 }}
+                                />
+                            ) : (
+                                range(0, rating).map((i) => (
+                                    <IconStar
+                                        key={i}
+                                        style={{
+                                            height: 20 - rating,
+                                            width: 20 - rating,
                                         }}
                                     />
-                                </td>
-                            </tbody>
-                        </table>
-                    </Col>
-                    <Col xs={6}>
-                        <div className="bold uppercase textCenter">
-                            Selected
-                        </div>
-                        <table className="centerBlock">
-                            <tbody>
-                                <th className="textRight">Count:</th>
-                                <td>
-                                    {
-                                        Object.values(
-                                            this.state.selectedIds,
-                                        ).filter(Boolean).length
-                                    }
-                                </td>
-                                <th className="textRight">Balance:</th>
-                                <td>
-                                    {numericValue(this.computeAmount(selected))}
-                                </td>
-                                <th className="textRight">Weight:</th>
-                                <td>
-                                    <WeightDisplay
-                                        item={{
-                                            weight: this.computeWeight(
-                                                selected,
-                                            ),
-                                        }}
-                                    />
-                                </td>
-                            </tbody>
-                        </table>
-                    </Col>
-                </Row>
+                                ))
+                            )}
+                        </React.Fragment>,
+                        page.filter((each) =>
+                            rating === 0
+                                ? each.favorite == null || each.favorite === 0
+                                : each.favorite === rating,
+                        ),
+                    ),
+                )}
             </div>
         );
     }
@@ -568,10 +587,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         }
     };
 
-    updateSelectedRecords = (data) => this.updateRecords(
-        this.selectedItems.map((each) => each.id),
-        data,
-    );
+    updateSelectedRecords = (data) =>
+        this.updateRecords(this.selectedItems.map((each) => each.id), data);
 
     withLoading = (fn) => async (...args: any[]) => {
         this.setState((state) => ({ loading: state.loading + 1 }));

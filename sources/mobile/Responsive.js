@@ -1,6 +1,5 @@
 import 'normalize.css';
 import 'react-table/react-table.css';
-import 'react-tippy/dist/tippy.css';
 import './Responsive.pcss';
 import './Responsive.css';
 import { blue } from '@material-ui/core/colors';

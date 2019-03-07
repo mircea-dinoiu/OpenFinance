@@ -1,24 +1,21 @@
 // @flow
 import React from 'react';
-import { Tooltip as Tippy } from 'react-tippy';
+import { Tooltip as MaterialUITooltip } from '@material-ui/core';
 
 const Tooltip = ({
     children,
-    tooltip,
+    tooltip: title,
 }: {
     children: React$Element<any>,
     tooltip: React$Element<any>,
 }) => (
-    <Tippy
-        html={
-            <div style={{ fontSize: '14px', textAlign: 'left' }}>{tooltip}</div>
-        }
-        delay={500}
-        position="bottom"
-        trigger="mouseenter"
+    <MaterialUITooltip
+        title={<div style={{fontSize: '1.5em'}}>{title}</div>}
+        disableFocusListener={true}
+        placement="bottom"
     >
-        {children}
-    </Tippy>
+        <span>{children}</span>
+    </MaterialUITooltip>
 );
 
 export default Tooltip;
