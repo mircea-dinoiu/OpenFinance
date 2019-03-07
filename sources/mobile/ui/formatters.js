@@ -6,7 +6,9 @@ import { financialNum } from 'shared/utils/numbers';
 import { getBaseCurrency } from '../../common/helpers/currency';
 
 export const formatNumericValue = (value) =>
-    new Intl.NumberFormat().format(financialNum(value));
+    new Intl.NumberFormat(undefined, { minimumFractionDigits: 2 }).format(
+        financialNum(value),
+    );
 const NumericValue = connect(({ currencies }) => ({ currencies }))(
     ({
         currencies,
