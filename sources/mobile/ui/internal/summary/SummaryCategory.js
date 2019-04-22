@@ -56,7 +56,7 @@ class SummarySubCategory extends PureComponent {
                                         )
                                         .get(entityNameField)
                                 )}
-                                <div style={{ fontSize: '10px' }}>
+                                <div style={{ fontSize: '12px' }}>
                                     {this.numericValue(
                                         items.reduce(
                                             (acc, each) =>

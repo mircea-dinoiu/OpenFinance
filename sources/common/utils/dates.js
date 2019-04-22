@@ -18,6 +18,12 @@ export const getStartDate = ({
         case 'ly':
             date.setYear(date.getFullYear() - 1);
             break;
+        case 'current-year':
+            date = new Date(date.getFullYear(), 0, 1);
+            break;
+        case 'previous-year':
+            date = new Date(date.getFullYear() - 1, 0, 1);
+            break;
         case 'lm':
             date.setMonth(date.getMonth() - 1);
             break;

@@ -3,7 +3,7 @@ import React from 'react';
 import { createXHR } from 'common/utils/fetch';
 import { BigLoader } from '../components/loaders';
 import { Paper, Checkbox, FormControlLabel } from '@material-ui/core';
-import { green, purple, red, lime } from '@material-ui/core/colors';
+import { green, purple, red } from '@material-ui/core/colors';
 import routes from '../../../common/defs/routes';
 import { stringify } from 'query-string';
 import pickBy from 'lodash/pickBy';
@@ -23,6 +23,27 @@ type TypeProps = {
 };
 
 const getEndDateBasedOnIncludePreference = (endDate, include) => {
+    if (include === 'previous-year') {
+        return endOfDayToISOString(
+            moment()
+                .month(0)
+                .date(1)
+                .subtract(1, 'day')
+                .toDate(),
+        );
+    }
+
+    if (include === 'current-year') {
+        return endOfDayToISOString(
+            moment()
+                .month(0)
+                .date(1)
+                .add(1, 'year')
+                .subtract(1, 'day')
+                .toDate(),
+        );
+    }
+
     if (include === 'ut') {
         return endOfDayToISOString();
     }
