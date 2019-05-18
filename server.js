@@ -8,7 +8,6 @@ const {wrapPromise} = require('./server/helpers');
  * Config
  */
 const config = require('config');
-const localDevMode = config.get('localDevMode');
 const debug = config.get('debug');
 
 // uncomment after placing your favicon in /public
@@ -20,11 +19,6 @@ app.use(logger('dev'));
 /*
  * Serve static assets (before anything else!). We don't need session or filters when serving these.
  */
-// Serve from sources/desktop when localDevMode is true
-if (localDevMode) {
-    app.use(express.static(path.join(__dirname, 'sources/desktop')));
-}
-// public should come after -- we need to prioritize the sources/desktop assets
 app.use(express.static(path.join(__dirname, 'public')));
 
 /*

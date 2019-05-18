@@ -1,6 +1,5 @@
 {
   "debug": false,
-  "localDevMode": false,
   "session": {
     "secret": "keyboard cat"
   },
