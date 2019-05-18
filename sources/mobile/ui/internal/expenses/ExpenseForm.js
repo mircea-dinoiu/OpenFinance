@@ -402,6 +402,14 @@ class ExpenseForm extends PureComponent<TypeProps> {
     render() {
         return (
             <Col style={overflowVisible}>
+                <div style={boxStyle}>{this.renderDescription()}</div>
+                <div style={boxStyle}>{this.renderSum()}</div>
+                <div style={boxStyle}>{this.renderAccount()}</div>
+                <div style={boxStyle}>{this.renderDateTime()}</div>
+                <div style={boxStyle}>{this.renderCategories()}</div>
+                <div style={boxStyle}>{this.renderChargedPersons()}</div>
+                <div style={boxStyle}>{this.renderRepeat()}</div>
+                <div style={boxStyle}>{this.renderNotes()}</div>
                 <Row>
                     <Col xs={6}>
                         <div>{this.renderType()}</div>
@@ -409,14 +417,6 @@ class ExpenseForm extends PureComponent<TypeProps> {
                     </Col>
                     <Col xs={6}>{this.renderFlags()}</Col>
                 </Row>
-                <div style={boxStyle}>{this.renderDescription()}</div>
-                <div style={boxStyle}>{this.renderAccount()}</div>
-                <div style={boxStyle}>{this.renderSum()}</div>
-                <div style={boxStyle}>{this.renderDateTime()}</div>
-                <div style={boxStyle}>{this.renderCategories()}</div>
-                <div style={boxStyle}>{this.renderChargedPersons()}</div>
-                <div style={boxStyle}>{this.renderRepeat()}</div>
-                <div style={boxStyle}>{this.renderNotes()}</div>
             </Col>
         );
     }
