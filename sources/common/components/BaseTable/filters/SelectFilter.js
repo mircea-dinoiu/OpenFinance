@@ -209,6 +209,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                             onChange={this.handleChangeRadio}
                         >
                             {this.renderRadio({ value: 'any', label: 'Any' })}
+
                             {this.props.allowNone &&
                                 this.renderRadio({
                                     value: 'none',
@@ -219,15 +220,12 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                                 label: 'One of',
                             })}
                             {this.renderSelect('one-of')}
-                            {this.props.multi && (
-                                <>
-                                    {this.renderRadio({
-                                        value: 'all',
-                                        label: 'All',
-                                    })}
-                                    {this.renderSelect('all')}
-                                </>
-                            )}
+
+                            {this.props.multi && this.renderRadio({
+                                value: 'all',
+                                label: 'All',
+                            })}
+                            {this.props.multi && this.renderSelect('all')}
 
                             {this.renderRadio({
                                 value: 'exclude',
