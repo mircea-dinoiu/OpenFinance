@@ -89,7 +89,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
     handleChangeRadio = (event) => {
         const radioValue = event.target.value;
 
-        if (['one-of', 'exclude'].includes(radioValue)) {
+        if (['one-of', 'all', 'exclude'].includes(radioValue)) {
             if (this.state[radioValue]) {
                 this.triggerChange({
                     mode: radioValue,
@@ -219,6 +219,16 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                                 label: 'One of',
                             })}
                             {this.renderSelect('one-of')}
+                            {this.props.multi && (
+                                <>
+                                    {this.renderRadio({
+                                        value: 'all',
+                                        label: 'All',
+                                    })}
+                                    {this.renderSelect('all')}
+                                </>
+                            )}
+
                             {this.renderRadio({
                                 value: 'exclude',
                                 label: 'Exclude',

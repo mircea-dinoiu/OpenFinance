@@ -106,7 +106,7 @@ const mapGroupConcatToHavingSQL = (filter, groupConcatName, columnId) => {
             );
         });
 
-        return filter.mode === 'exclude'
+        return ['exclude', 'all'].includes(filter.mode)
             ? sql.and(...conditions)
             : sql.or(...conditions);
     } else if (filter === 'none') {
