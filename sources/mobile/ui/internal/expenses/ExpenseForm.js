@@ -1,38 +1,59 @@
 // @flow
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormLabel from '@material-ui/core/FormLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import { findCurrencyById } from 'common/helpers/currency';
+
 import React, { PureComponent } from 'react';
-import {
-    AutoComplete,
-    TextField,
-    DatePicker,
-    TimePicker,
-    SelectField,
-    MenuItem,
-    Chip,
-    Avatar,
-} from 'material-ui';
 import { Row, Col } from 'react-grid-system';
-import { grey100 } from 'material-ui/styles/colors';
+import { Badge, TextField } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import RepeatOptions from 'common/defs/repeatOptions';
-import { fetch } from 'common/utils/fetch';
+import { createXHR } from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 import { stringify } from 'query-string';
 import { connect } from 'react-redux';
+import { MultiSelect, SingleSelect } from 'common/components/Select';
+import { overflowVisible } from 'common/defs/styles';
+import { DateTimePicker } from 'material-ui-pickers';
+import { CancelToken } from 'axios';
 
-const greyBoxStyle = {
-    backgroundColor: grey100,
-    paddingBottom: 10,
-    marginTop: 10,
-    marginBottom: 10,
+const boxStyle = {
+    padding: '10px 0',
+};
+const badgeStyle = {
+    root: {
+        lineHeight: '16px',
+    },
+    badge: {
+        top: 0,
+        right: 0,
+        position: 'relative',
+        margin: '0 5px',
+        height: 16,
+        lineHeight: '16px',
+        width: 'auto',
+        padding: '0 5px',
+        borderRadius: 3,
+    },
+};
+const StyledBadge = withStyles(badgeStyle)(Badge);
+
+type TypeProps = {
+    initialValues: {},
+    onFormChange: Function,
 };
 
-class ExpenseForm extends PureComponent {
-    props: {
-        initialValues: {},
-        onFormChange: Function,
-    };
+class ExpenseForm extends PureComponent<TypeProps> {
+    descriptionSuggestionsCancelSource = CancelToken.source();
+    categoriesCancelSource;
 
     state = {
         descriptionSuggestions: [],
+        descriptionNewOptionText: this.props.initialValues.description || '',
         ...this.props.initialValues,
     };
 
@@ -42,93 +63,106 @@ class ExpenseForm extends PureComponent {
         return super.setState(state);
     }
 
-    bindAutoComplete({
-        searchKey,
-        valueKey,
-        multiple = true,
-        defaultSearchText = '',
-        forceSelection = true,
-        onUpdateInput = () => {},
-    }) {
+    bindSelect({ valueKey, onChange = () => {} }) {
         return {
-            searchText: this.state[searchKey] || defaultSearchText,
-            onUpdateInput: (value) => {
-                if (multiple) {
-                    this.setState({
-                        [searchKey]: value,
-                    });
-                } else {
-                    this.setState({
-                        [searchKey]: value,
-                        [valueKey]: forceSelection ? null : value,
-                    });
-                }
+            onChange: (value) => {
+                this.setState({
+                    [valueKey]: value,
+                });
 
-                onUpdateInput(value);
+                onChange(value);
             },
-            openOnFocus: true,
-            filter: AutoComplete.fuzzyFilter,
-            listStyle: {
-                maxHeight: 200,
-                overflow: 'auto',
-            },
-            animated: false,
-            onNewRequest: ({ value }) => {
-                if (multiple) {
-                    this.setState({
-                        [searchKey]: '',
-                        [valueKey]: this.state[valueKey].concat(
-                            Number(value.key),
-                        ),
-                    });
-                } else {
-                    this.setState({
-                        [valueKey]: value.key,
-                    });
-                }
-            },
-            popoverProps: {
-                style: {
-                    position: 'absolute',
-                },
-            },
+            value: this.state[valueKey],
         };
+    }
+
+    get descriptionNewOptions() {
+        const text = this.state.descriptionNewOptionText;
+        const arr = [];
+
+        if (text) {
+            arr.push({
+                value: text,
+                label: text,
+            });
+        }
+
+        const initialDescription = this.props.initialValues.description;
+
+        if (initialDescription && initialDescription !== text) {
+            arr.push({
+                value: initialDescription,
+                label: initialDescription,
+            });
+        }
+
+        return arr;
     }
 
     renderSum() {
         return (
             <Row>
-                <Col xs={4}>
-                    <SelectField
-                        floatingLabelText="Currency"
-                        floatingLabelFixed={true}
-                        value={this.state.currency}
-                        onChange={(e, i, value) =>
-                            this.setState({ currency: value })
+                <Col xs={4} style={overflowVisible}>
+                    <TextField
+                        label="Currency"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={
+                            this.state.paymentMethod
+                                ? findCurrencyById(
+                                    this.props.moneyLocations
+                                        .toJSON()
+                                        .find(
+                                            (each) =>
+                                                each.id ==
+                                                  this.state.paymentMethod,
+                                        ).currency_id,
+                                    this.props.currencies,
+                                ).iso_code
+                                : null
                         }
                         fullWidth={true}
-                    >
-                        {this.props.currencies
-                            .get('map')
-                            .map((map) => ({
-                                value: map.get('id'),
-                                primaryText: map.get('iso_code'),
-                            }))
-                            .toArray()
-                            .map((props) => (
-                                <MenuItem key={props.value} {...props} />
-                            ))}
-                    </SelectField>
+                        margin="none"
+                        style={{
+                            marginTop: '2px',
+                        }}
+                        disabled={true}
+                    />
                 </Col>
-                <Col xs={8}>
+                <Col xs={4}>
                     <TextField
-                        floatingLabelText="Sum"
-                        floatingLabelFixed={true}
+                        label="Sum"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         value={this.state.sum}
                         fullWidth={true}
                         type="number"
+                        margin="none"
+                        style={{
+                            marginTop: '2px',
+                        }}
                         onChange={(event) =>
                             this.setState({ sum: event.target.value })
+                        }
+                    />
+                </Col>
+                <Col xs={4}>
+                    <TextField
+                        label="Weight (grams)"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={this.state.weight}
+                        fullWidth={true}
+                        type="number"
+                        margin="none"
+                        style={{
+                            marginTop: '2px',
+                        }}
+                        onChange={(event) =>
+                            this.setState({ weight: event.target.value })
                         }
                     />
                 </Col>
@@ -137,310 +171,340 @@ class ExpenseForm extends PureComponent {
     }
 
     renderDescription() {
-        const searchKey = 'descriptionSearch';
         const valueKey = 'description';
 
         return (
-            <AutoComplete
-                floatingLabelText="Description"
-                floatingLabelFixed={true}
-                {...this.bindAutoComplete({
-                    searchKey,
+            <SingleSelect
+                label="Description"
+                {...this.bindSelect({
                     valueKey,
-                    multiple: false,
-                    forceSelection: false,
-                    onUpdateInput: (value) =>
-                        this.fetchDescriptionSuggestions(value),
-                    defaultSearchText: this.state[valueKey],
+                    onChange: this.handleDescriptionChange,
                 })}
-                fullWidth={true}
-                onBlur={this.onDescriptionBlur}
-                dataSource={this.state.descriptionSuggestions.map((each) => ({
-                    text: each.item,
-                    value: (
-                        <MenuItem
-                            key={each.item}
-                            primaryText={each.item}
-                            secondaryText={<em>{each.usages} usages</em>}
-                        />
-                    ),
-                }))}
+                onInputChange={this.handleDescriptionInputChange}
+                options={this.descriptionNewOptions.concat(
+                    this.state.descriptionSuggestions.map((each) => ({
+                        value: each.item,
+                        label: (
+                            <StyledBadge
+                                color="primary"
+                                badgeContent={each.usages}
+                            >
+                                {each.item}
+                            </StyledBadge>
+                        ),
+                    })),
+                )}
+                inputValue={this.state.descriptionNewOptionText}
             />
         );
     }
 
-    async fetchDescriptionSuggestions(search) {
-        const response = await fetch(
-            `${routes.suggestion.expense.descriptions}?${stringify({
+    handleNotesChange = (event) => {
+        this.setState({ notes: event.target.value });
+    };
+
+    renderNotes() {
+        return (
+            <TextField
+                value={this.state.notes}
+                label="Notes"
+                multiline
+                margin="none"
+                fullWidth={true}
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                onChange={this.handleNotesChange}
+            />
+        );
+    }
+
+    fetchDescriptionSuggestions = async (search) => {
+        if (!search) {
+            return;
+        }
+
+        if (this.descriptionSuggestionsCancelSource) {
+            this.descriptionSuggestionsCancelSource.cancel();
+        }
+
+        this.descriptionSuggestionsCancelSource = CancelToken.source();
+
+        const response = await createXHR({
+            url: `${routes.suggestion.expense.descriptions}?${stringify({
                 search,
                 end_date: this.props.preferences.endDate,
             })}`,
-        );
-        const descriptionSuggestions = await response.json();
+            cancelToken: this.descriptionSuggestionsCancelSource.token,
+        });
+        const descriptionSuggestions = response.data;
 
         this.setState({
             descriptionSuggestions,
         });
-    }
+    };
 
-    onDescriptionBlur = async (event) => {
-        const search = event.target.value.toLowerCase().trim();
+    handleDescriptionInputChange = (value, { action }) => {
+        if (action === 'input-change') {
+            this.setState({
+                descriptionNewOptionText: value,
+            });
 
+            this.fetchDescriptionSuggestions(value);
+        }
+    };
+
+    handleDescriptionChange = async (search) => {
         if (search) {
-            const response = await fetch(
-                `${routes.suggestion.expense.categories}?${stringify({
+            if (this.categoriesCancelSource) {
+                this.categoriesCancelSource.cancel();
+            }
+
+            this.categoriesCancelSource = CancelToken.source();
+
+            const response = await createXHR({
+                url: `${routes.suggestion.expense.categories}?${stringify({
                     search,
                 })}`,
-            );
-            const categories = await response.json();
-
-            this.setState({
-                categories,
+                cancelToken: this.categoriesCancelSource.token,
             });
+            const categories = response.data;
+
+            this.setState((prevState) => ({
+                categories: prevState.categories
+                    ? prevState.categories
+                    : categories,
+            }));
         }
     };
 
     renderDateTime() {
         return (
-            <Row>
-                <Col xs={6}>
-                    <DatePicker
-                        floatingLabelText="Date"
-                        floatingLabelFixed={true}
-                        fullWidth={true}
-                        value={this.state.date}
-                        onChange={(e, value) => this.setState({ date: value })}
-                    />
-                </Col>
-                <Col xs={6}>
-                    <TimePicker
-                        floatingLabelText="Time"
-                        floatingLabelFixed={true}
-                        fullWidth={true}
-                        value={this.state.time}
-                        onChange={(e, value) => this.setState({ time: value })}
-                    />
-                </Col>
-            </Row>
+            <DateTimePicker
+                label="Date & Time"
+                value={this.state.date}
+                onChange={(value) => this.setState({ date: value })}
+                showTodayButton
+                style={{ width: '100%' }}
+                ampm={false}
+            />
         );
     }
 
-    renderPaymentMethod() {
-        const searchKey = 'paymentSearch';
-        const valueKey = 'paymentMethod';
-
+    renderAccount() {
         return (
-            <AutoComplete
-                floatingLabelText="Payment Method"
-                floatingLabelFixed={true}
-                {...this.bindAutoComplete({
-                    searchKey,
-                    valueKey,
-                    multiple: false,
-                    defaultSearchText:
-                        this.state[valueKey] != null
-                            ? this.props.moneyLocations
-                                .find(
-                                    (each) =>
-                                        each.get('id') ==
-                                          this.state[valueKey],
-                                )
-                                .get('name')
-                            : '',
+            <SingleSelect
+                label="Account"
+                {...this.bindSelect({
+                    valueKey: 'paymentMethod',
                 })}
-                fullWidth={true}
-                dataSource={this.props.moneyLocations
+                options={this.props.moneyLocations
                     .sortBy((each) => each.get('name'))
                     .map((map) => ({
                         value: map.get('id'),
-                        primaryText: map.get('name'),
+                        label: map.get('name'),
                     }))
-                    .toJS()
-                    .map((props) => ({
-                        value: <MenuItem key={props.value} {...props} />,
-                        text: props.primaryText,
-                    }))}
+                    .toJS()}
             />
         );
     }
 
     renderChargedPersons() {
         return (
-            <Row style={greyBoxStyle}>
-                <Col>
-                    <AutoComplete
-                        floatingLabelText="Charged Persons"
-                        floatingLabelFixed={true}
-                        {...this.bindAutoComplete({
-                            searchKey: 'usersSearch',
-                            valueKey: 'chargedPersons',
-                        })}
-                        fullWidth={true}
-                        dataSource={this.props.user
-                            .get('list')
-                            .sortBy((each) => each.get('full_name'))
-                            .filter(
-                                (each) =>
-                                    !this.state.chargedPersons.includes(
-                                        each.get('id'),
-                                    ),
-                            )
-                            .toJS()
-                            .map((record) => ({
-                                value: (
-                                    <MenuItem
-                                        key={record.id}
-                                        primaryText={record.full_name}
-                                        secondaryText={
-                                            <Avatar src={record.avatar} />
-                                        }
-                                    />
-                                ),
-                                text: record.full_name,
-                            }))}
-                    />
-                </Col>
-
-                <Col
-                    style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                    }}
-                >
-                    {this.state.chargedPersons.map((id) => {
-                        const [, user] = this.props.user
-                            .get('list')
-                            .findEntry((each) => each.get('id') == id);
-
-                        return (
-                            <Chip
-                                style={{ margin: '5px 5px 0 0', height: 32 }}
-                                key={id}
-                                onRequestDelete={() =>
-                                    this.setState({
-                                        chargedPersons: this.state.chargedPersons.filter(
-                                            (each) => each !== id,
-                                        ),
-                                    })
-                                }
-                            >
-                                <Avatar src={user.get('avatar')} />
-                                {user.get('full_name')}
-                            </Chip>
-                        );
-                    })}
-                </Col>
-            </Row>
+            <MultiSelect
+                label="Person(s)"
+                {...this.bindSelect({
+                    valueKey: 'chargedPersons',
+                })}
+                options={this.props.user
+                    .get('list')
+                    .sortBy((each) => each.get('full_name'))
+                    .map((each) => ({
+                        value: each.get('id'),
+                        label: each.get('full_name'),
+                    }))
+                    .toJS()}
+            />
         );
     }
 
     renderCategories() {
         return (
-            <Row style={greyBoxStyle}>
-                <Col>
-                    <AutoComplete
-                        floatingLabelText="Categories"
-                        floatingLabelFixed={true}
-                        {...this.bindAutoComplete({
-                            searchKey: 'categoriesSearch',
-                            valueKey: 'categories',
-                        })}
-                        fullWidth={true}
-                        dataSource={this.props.categories
-                            .sortBy((each) => each.get('name'))
-                            .filter(
-                                (each) =>
-                                    !this.state.categories.includes(
-                                        each.get('id'),
-                                    ),
-                            )
-                            .toJS()
-                            .map((record) => ({
-                                value: (
-                                    <MenuItem
-                                        key={record.id}
-                                        primaryText={record.name}
-                                        secondaryText={record.expenses}
-                                    />
-                                ),
-                                text: record.name,
-                            }))}
-                    />
-                </Col>
-
-                <Col
-                    style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                    }}
-                >
-                    {this.state.categories.map((id) => {
-                        const [, entity] = this.props.categories.findEntry(
-                            (each) => each.get('id') == id,
-                        );
-
-                        return (
-                            <Chip
-                                style={{ margin: 5, height: 32 }}
-                                key={id}
-                                onRequestDelete={() =>
-                                    this.setState({
-                                        categories: this.state.categories.filter(
-                                            (each) => each !== id,
-                                        ),
-                                    })
-                                }
+            <MultiSelect
+                label="Categories"
+                {...this.bindSelect({
+                    valueKey: 'categories',
+                })}
+                filterOption={(option, search) =>
+                    option.data.filterText
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                }
+                options={this.props.categories
+                    .sortBy((each) => each.get('name'))
+                    .map((each) => ({
+                        value: each.get('id'),
+                        label: (
+                            <StyledBadge
+                                color="primary"
+                                badgeContent={each.get('expenses')}
                             >
-                                {entity.get('name')}
-                            </Chip>
-                        );
-                    })}
-                </Col>
-            </Row>
+                                {each.get('name')}
+                            </StyledBadge>
+                        ),
+                        filterText: each.get('name'),
+                    }))
+                    .toJS()}
+            />
         );
     }
 
     renderRepeat() {
         return (
-            <AutoComplete
-                floatingLabelText="Repeat"
-                floatingLabelFixed={true}
-                {...this.bindAutoComplete({
-                    searchKey: 'repeatSearch',
-                    valueKey: 'repeat',
-                    multiple: false,
-                    defaultSearchText:
-                        this.state.repeat != null
-                            ? RepeatOptions.find(
-                                (each) => each[0] === this.state.repeat,
-                            )[1]
-                            : '',
-                })}
-                fullWidth={true}
-                dataSource={RepeatOptions.map((arr) => ({
-                    value: arr[0],
-                    primaryText: arr[1],
-                })).map((props) => ({
-                    value: <MenuItem key={props.value} {...props} />,
-                    text: props.primaryText,
-                }))}
-            />
+            <Row>
+                <Col xs={6} style={{ overflow: 'initial' }}>
+                    <SingleSelect
+                        label="Repeat"
+                        {...this.bindSelect({
+                            valueKey: 'repeat',
+                        })}
+                        options={RepeatOptions.map((arr) => ({
+                            value: arr[0],
+                            label: arr[1],
+                        }))}
+                    />
+                </Col>
+                <Col xs={6}>
+                    <TextField
+                        label="Occurrences"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={this.state.repeatOccurrences}
+                        fullWidth={true}
+                        type="number"
+                        margin="none"
+                        style={{
+                            marginTop: '2px',
+                        }}
+                        onChange={(event) =>
+                            this.setState({
+                                repeatOccurrences: event.target.value,
+                            })
+                        }
+                        disabled={this.state.repeat == null}
+                    />
+                </Col>
+            </Row>
         );
     }
 
     render() {
         return (
-            <Col>
-                {this.renderSum()}
-                {this.renderDescription()}
-                {this.renderDateTime()}
-                {this.renderCategories()}
-                {this.renderPaymentMethod()}
-                {this.renderChargedPersons()}
-                {this.renderRepeat()}
+            <Col style={overflowVisible}>
+                <div style={boxStyle}>{this.renderDescription()}</div>
+                <div style={boxStyle}>{this.renderSum()}</div>
+                <div style={boxStyle}>{this.renderAccount()}</div>
+                <div style={boxStyle}>{this.renderDateTime()}</div>
+                <div style={boxStyle}>{this.renderCategories()}</div>
+                <div style={boxStyle}>{this.renderChargedPersons()}</div>
+                <div style={boxStyle}>{this.renderRepeat()}</div>
+                <div style={boxStyle}>{this.renderNotes()}</div>
+                <Row>
+                    <Col xs={6}>
+                        <div>{this.renderType()}</div>
+                        <div>{this.renderStatus()}</div>
+                    </Col>
+                    <Col xs={6}>{this.renderFlags()}</Col>
+                </Row>
             </Col>
         );
     }
+
+    renderType() {
+        return (
+            <>
+                <FormLabel>Type</FormLabel>
+                <RadioGroup
+                    value={this.state.type}
+                    onChange={this.handleChangeType}
+                    row
+                >
+                    <FormControlLabel
+                        value="withdrawal"
+                        control={<Radio color="primary" />}
+                        label="Withdrawal"
+                        className="inlineBlock"
+                    />
+                    <FormControlLabel
+                        value="deposit"
+                        control={<Radio color="primary" />}
+                        label="Deposit"
+                        className="inlineBlock"
+                    />
+                </RadioGroup>
+            </>
+        );
+    }
+
+    handleChangeType = (event) => {
+        this.setState({ type: event.target.value });
+    };
+
+    renderFlags() {
+        return (
+            <>
+                <FormLabel>Flags</FormLabel>
+                <FormGroup>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={this.state.hidden}
+                                onChange={(event) =>
+                                    this.setState({
+                                        hidden: event.target.checked,
+                                    })
+                                }
+                                color="primary"
+                                value="hidden"
+                            />
+                        }
+                        label="Archived"
+                    />
+                </FormGroup>
+            </>
+        );
+    }
+
+    renderStatus() {
+        return (
+            <>
+                <FormLabel>Status</FormLabel>
+                <RadioGroup
+                    value={this.state.status}
+                    onChange={this.handleChangeStatus}
+                    row
+                >
+                    <FormControlLabel
+                        value="pending"
+                        control={<Radio color="primary" />}
+                        label="Pending"
+                        className="inlineBlock"
+                    />
+                    <FormControlLabel
+                        value="finished"
+                        control={<Radio color="primary" />}
+                        label="Posted"
+                        className="inlineBlock"
+                    />
+                </RadioGroup>
+            </>
+        );
+    }
+
+    handleChangeStatus = (event) => {
+        this.setState({ status: event.target.value });
+    };
 }
 
 export default connect(

@@ -1,9 +1,10 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { TextField, Toggle, RaisedButton } from 'material-ui';
+import { TextField, Toggle } from 'material-ui';
+import { Button } from '@material-ui/core';
 import { ButtonProgress } from './components/loaders';
 import routes from 'common/defs/routes';
-import fetch from 'common/utils/fetch';
+import { createXHR } from 'common/utils/fetch';
 import { stringify } from 'query-string';
 import { ErrorSnackbar } from './components/snackbars';
 import { bindActionCreators } from 'redux';
@@ -24,21 +25,22 @@ class Login extends PureComponent {
             loading: true,
         });
 
-        const response = await fetch(routes.user.login, {
-            method: 'POST',
-            body: stringify({
-                remember_me: this.state.rememberMe ? 'true' : null,
-                email: this.state.email,
-                password: this.state.password,
-            }),
-        });
-        const json = await response.json();
+        try {
+            const response = await createXHR({
+                url: routes.user.login,
+                method: 'POST',
+                data: stringify({
+                    remember_me: this.state.rememberMe ? 'true' : null,
+                    email: this.state.email,
+                    password: this.state.password,
+                }),
+            });
+            const json = response.data;
 
-        if (response.ok) {
             this.props.actions.updateUser(json);
-        } else {
+        } catch (e) {
             this.setState({
-                error: json,
+                error: e.response.data,
                 loading: false,
             });
         }
@@ -100,16 +102,16 @@ class Login extends PureComponent {
                         }
                         disabled={this.state.loading}
                     />
-                    <RaisedButton
-                        label={
-                            this.state.loading ? <ButtonProgress /> : 'Login'
-                        }
-                        primary={true}
+                    <Button
+                        variant="contained"
+                        color="primary"
                         style={{ margin: '20px 0 0' }}
                         onClick={this.submit}
                         onTouchTap={this.submit}
                         disabled={this.state.loading}
-                    />
+                    >
+                        {this.state.loading ? <ButtonProgress /> : 'Login'}
+                    </Button>
                     {this.state.error != null && (
                         <ErrorSnackbar message={this.state.error} />
                     )}

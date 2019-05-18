@@ -1,33 +1,65 @@
 import React from 'react';
-import { cyan500, red500, yellowA700 } from 'material-ui/styles/colors';
-import Cached from 'material-ui-icons/Cached';
-import TrendingUp from 'material-ui-icons/TrendingUp';
-import Warning from 'material-ui-icons/Warning';
+import {
+    blue,
+    red,
+    yellow,
+    grey,
+    green,
+    purple,
+} from '@material-ui/core/colors';
+import Cached from '@material-ui/icons/Cached';
+import TrendingUp from '@material-ui/icons/TrendingUp';
+import ArrowDown from '@material-ui/icons/ArrowDownward';
+import ArrowUp from '@material-ui/icons/ArrowUpward';
+import Warning from '@material-ui/icons/Warning';
+import SpeakerNotes from '@material-ui/icons/SpeakerNotes';
 import Tooltip from 'common/components/Tooltip';
 import startCase from 'lodash/startCase';
 
+const ICON_STYLE = { height: 20, width: 20 };
+
 export const PendingReviewFlag = ({ entity = 'Item' }) => (
-    <Tooltip tooltip={`${startCase(entity)} is pending review`}>
-        <Warning style={{ height: 20, width: 20 }} color={yellowA700} />
+    <Tooltip tooltip={`${startCase(entity)} is pending`}>
+        <Warning style={ICON_STYLE} nativeColor={yellow.A700} />
     </Tooltip>
 );
 
 export const RecurrentFlag = ({ entity = 'Item' }) => (
     <Tooltip tooltip={`Recurrent ${entity}`}>
-        <Cached style={{ height: 20, width: 20 }} color={cyan500} />
+        <Cached style={ICON_STYLE} nativeColor={blue[500]} />
     </Tooltip>
 );
 
 export const GeneratedFlag = ({ entity = 'Item' }) => (
     <Tooltip tooltip={`Generated ${entity}`}>
-        <TrendingUp style={{ height: 20, width: 20 }} color={red500} />
+        <TrendingUp style={ICON_STYLE} nativeColor={purple[500]} />
     </Tooltip>
 );
 
-export const Flags = ({ item }) => (
-    <React.Fragment>
-        {item.status === 'pending' && <PendingReviewFlag entity="expense" />}
-        {item.repeat != null && <RecurrentFlag entity="expense" />}
-        {item.persist === false && <GeneratedFlag entity="expense" />}
-    </React.Fragment>
+export const DepositFlag = () => (
+    <Tooltip tooltip="Deposit">
+        <ArrowDown style={ICON_STYLE} nativeColor={green[500]} />
+    </Tooltip>
+);
+
+export const WithdrawalFlag = () => (
+    <Tooltip tooltip="Withdrawal">
+        <ArrowUp style={ICON_STYLE} nativeColor={red[500]} />
+    </Tooltip>
+);
+
+export const NotesFlag = ({ children }) => (
+    <Tooltip tooltip={<pre>{children}</pre>}>
+        <SpeakerNotes style={ICON_STYLE} nativeColor={grey[500]} />
+    </Tooltip>
+);
+
+export const Flags = ({ item, entity }) => (
+    <>
+        {item.type === 'deposit' ? <DepositFlag /> : <WithdrawalFlag />}
+        {item.status === 'pending' && <PendingReviewFlag entity={entity} />}
+        {item.repeat != null && <RecurrentFlag entity={entity} />}
+        {item.notes && <NotesFlag>{item.notes}</NotesFlag>}
+        {item.persist === false && <GeneratedFlag entity={entity} />}
+    </>
 );

@@ -1,12 +1,30 @@
 const { advanceRepeatDate } = require('../../shared/helpers/repeatedModels');
+const logger = require('../helpers/logger');
+const { orderBy } = require('lodash');
 const moment = require('moment');
 
 module.exports = {
-    generateClones({ records, endDate, startDate }) {
-        const ret = [];
+    filterClones(records, displayGenerated) {
+        switch (displayGenerated) {
+            case 'no':
+                return records.filter((each) => each.persist !== false);
+            case 'only':
+                return records.filter((each) => each.persist === false);
+            default:
+                return records;
+        }
+    },
+
+    generateClones({ records, endDate, startDate, sorters = [] }) {
+        let ret = [];
+        const start = Date.now();
+        let clones = 0;
 
         records.forEach((record) => {
-            if (startDate == null || this.day(record) >= this.day(startDate)) {
+            if (
+                startDate == null ||
+                moment(record.created_at).isSameOrAfter(startDate)
+            ) {
                 ret.push(record);
             }
 
@@ -17,32 +35,46 @@ module.exports = {
                     startDate,
                 }).forEach((clone) => {
                     ret.push(clone);
+                    clones++;
                 });
             }
         });
 
-        return ret;
-    },
+        if (clones) {
+            ret = orderBy(
+                ret,
+                sorters.map((each) => each.id),
+                sorters.map((each) => (each.desc ? 'desc' : 'asc')),
+            );
+        }
 
-    day(date) {
-        return moment(date).format('YYYY-MM-DD');
+        logger.log('Generating clones took', Date.now() - start, 'millis');
+
+        return ret;
     },
 
     getClonesFor({ record, endDate, startDate }) {
         const out = [];
-        const day = this.day;
+        const recordAsJSON = record.toJSON();
 
         if (record.repeat != null) {
             let repeats = 1;
 
             // eslint-disable-next-line no-constant-condition
             while (true) {
-                const newObject = this.advanceRepeatDate(
-                    record.toJSON(),
-                    repeats,
-                );
+                if (
+                    record.repeat_occurrences &&
+                    repeats > record.repeat_occurrences - 1
+                ) {
+                    break;
+                }
 
-                if (startDate && day(newObject.created_at) < day(startDate)) {
+                const newObject = this.advanceRepeatDate(recordAsJSON, repeats);
+
+                if (
+                    startDate &&
+                    moment(newObject.created_at).isBefore(startDate)
+                ) {
                     repeats++;
                     continue;
                 }
@@ -52,12 +84,13 @@ module.exports = {
 
                 delete newObject.id;
 
-                if (day(newObject.created_at) > day(endDate)) {
+                if (moment(newObject.created_at).isAfter(endDate)) {
                     break;
                 } else {
                     out.push(
                         Object.assign(
                             {
+                                dataValues: record.dataValues,
                                 toJSON: () => newObject,
                             },
                             newObject,

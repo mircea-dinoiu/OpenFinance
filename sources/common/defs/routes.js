@@ -5,18 +5,8 @@ export default {
         update: '/expense/update',
         destroy: '/expense/delete',
     },
-    income: {
-        list: '/income/list',
-        create: '/income/create',
-        update: '/income/update',
-        destroy: '/income/delete',
-    },
     report: {
         summary: '/report/summary',
-        chart: {
-            expensesByCategory: '/report/chart/expenses-by-category',
-            expensesIncomesByUser: '/report/chart/expenses-incomes-by-user',
-        },
     },
     getCurrencies: '/get-currencies',
     user: {

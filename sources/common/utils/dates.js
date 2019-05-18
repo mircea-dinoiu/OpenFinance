@@ -1,9 +1,7 @@
 // @flow
 import moment from 'moment';
 
-import { formatYMD } from 'shared/utils/dates';
-
-export { formatYMD };
+import { endOfDayToISOString } from 'shared/utils/dates';
 
 export const getStartDate = ({
     endDate,
@@ -14,13 +12,17 @@ export const getStartDate = ({
 }): string => {
     let date = moment(endDate).toDate();
 
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setMilliseconds(0);
+    date.setHours(0, 0, 0, 0);
 
     switch (include) {
         case 'ly':
             date.setYear(date.getFullYear() - 1);
+            break;
+        case 'current-year':
+            date = new Date(date.getFullYear(), 0, 1);
+            break;
+        case 'previous-year':
+            date = new Date(date.getFullYear() - 1, 0, 1);
             break;
         case 'lm':
             date.setMonth(date.getMonth() - 1);
@@ -36,32 +38,36 @@ export const getStartDate = ({
             break;
     }
 
-    return date ? formatYMD(date) : '';
+    return date ? moment(date).toISOString() : '';
 };
 
-const getMomentArgsForDateShift = (option) => {
+const getMomentArgsForDateShift = (option, times = 1) => {
+    const one = 1;
+
     switch (option) {
         case 'd':
-            return [1, 'day'];
+            return [one * Number(times), 'day'];
         case 'w':
-            return [1, 'week'];
+            return [one * Number(times), 'week'];
         case '2w':
-            return [2, 'week'];
+            return [2 * Number(times), 'week'];
         case 'm':
-            return [1, 'month'];
+            return [one * Number(times), 'month'];
+        case '1y':
+            return [one * Number(times), 'year'];
     }
 
     throw new Error(`${option} is not specified in ShiftDateOptions`);
 };
 
-export const shiftDateForward = (date, by) =>
+export const shiftDateForward = (date, by, times) =>
     moment(date)
-        .add(...getMomentArgsForDateShift(by))
+        .add(...getMomentArgsForDateShift(by, times))
         .toDate();
 
-export const shiftDateBack = (date, by) =>
+export const shiftDateBack = (date, by, times) =>
     moment(date)
-        .subtract(...getMomentArgsForDateShift(by))
+        .subtract(...getMomentArgsForDateShift(by, times))
         .toDate();
 
 export const getInitialEndDate = (): string => {
@@ -70,5 +76,8 @@ export const getInitialEndDate = (): string => {
     date.setDate(1);
     date.setMonth(date.getMonth() + 1);
 
-    return formatYMD(date);
+    return endOfDayToISOString(date);
 };
+
+export const formatYMD = (date = new Date()) =>
+    moment(date).format('YYYY-MM-DD');

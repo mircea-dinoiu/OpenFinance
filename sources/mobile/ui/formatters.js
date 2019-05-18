@@ -1,34 +1,37 @@
 import React from 'react';
-import { grey700 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
 import Tooltip from 'common/components/Tooltip';
-import { getDefaultCurrency } from '../../common/helpers/currency';
+import { financialNum } from 'shared/utils/numbers';
+import { getBaseCurrency } from '../../common/helpers/currency';
 
-const formatNumericValue = (value) => new Intl.NumberFormat().format(value);
+export const formatNumericValue = (value) =>
+    new Intl.NumberFormat(undefined, { minimumFractionDigits: 2 }).format(
+        financialNum(value),
+    );
 const NumericValue = connect(({ currencies }) => ({ currencies }))(
     ({
         currencies,
-        currency = getDefaultCurrency(currencies).get('iso_code'),
+        currency = getBaseCurrency(currencies).iso_code,
         showCurrency = true,
         value,
         currencyStyle = {},
     }) => {
         const inner = (
             <span>
-                {currency &&
-                    showCurrency && (
-                    <span style={{ color: grey700, ...currencyStyle }}>
+                {currency && showCurrency && (
+                    <span style={{ color: grey[500], ...currencyStyle }}>
                         {currency}
                     </span>
                 )}{' '}
-                {formatNumericValue(value)}
+                <strong>{formatNumericValue(value)}</strong>
             </span>
         );
         const tooltip = [
             <div
                 key={currency}
                 style={{
-                    backgroundColor: grey700,
+                    backgroundColor: grey[700],
                     borderRadius: '3px',
                     padding: '3px 5px',
                     margin: '0 -5px 5px',
@@ -37,16 +40,15 @@ const NumericValue = connect(({ currencies }) => ({ currencies }))(
                 {currency} {formatNumericValue(value)}
             </div>,
             ...Object.values(
-                currencies
-                    .get('map')
-                    .find((each) => each.get('iso_code') === currency)
-                    .get('rates')
-                    .map((rateMulti, rateISO) => (
-                        <div key={rateISO}>
-                            {rateISO} {formatNumericValue(value * rateMulti)}
-                        </div>
-                    ))
-                    .toJS(),
+                Object.entries(
+                    Object.values(currencies.map).find(
+                        (each) => each.iso_code === currency,
+                    ).rates,
+                ).map(([rateISO, rateMulti]) => (
+                    <div key={rateISO}>
+                        {rateISO} {formatNumericValue(value * rateMulti)}
+                    </div>
+                )),
             ),
         ];
 

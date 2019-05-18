@@ -1,17 +1,22 @@
 // @flow
 import React from 'react';
-import { grey500 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import Tooltip from 'common/components/Tooltip';
 
 const DateDisplay = ({ item, screen }) => (
     <span
         style={{
             fontSize: 14,
-            color: screen.isLarge ? 'inherit' : grey500,
+            color: screen.isLarge ? 'inherit' : grey[500],
         }}
     >
-        {moment(item.created_at).format('lll')}
+        <Tooltip
+            tooltip={`Last updated: ${moment(item.updated_at).format('lll')}`}
+        >
+            {moment(item.created_at).format('lll')}
+        </Tooltip>
     </span>
 );
 const mapStateToProps = ({ screen }) => ({ screen });

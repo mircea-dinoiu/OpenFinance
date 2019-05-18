@@ -1,20 +1,35 @@
-const { standardDate } = require('../helpers');
+const { extractIdsFromModel } = require('../helpers');
 
 module.exports = (sequelize, types) => {
     const Expense = sequelize.define(
         'expenses',
         {
-            currency_id: types.INTEGER,
             id: {
                 type: types.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
             },
             item: types.STRING,
+            notes: types.STRING,
             money_location_id: types.INTEGER,
-            repeat: types.STRING,
             status: types.STRING,
+            type: types.STRING,
             sum: types.FLOAT,
+            favorite: types.INTEGER,
+            hidden: types.INTEGER,
+
+            repeat: types.STRING,
+            repeat_occurrences: types.INTEGER,
+            repeat_end_date: types.DATE,
+
+            weight: types.INTEGER,
+
+            sum_per_weight: {
+                type: types.VIRTUAL(
+                    types.FLOAT,
+                    '(`expenses`.sum / `expenses`.weight) as sum_per_weight',
+                ),
+            },
         },
         {
             underscored: true,
@@ -28,6 +43,7 @@ module.exports = (sequelize, types) => {
                         through: 'category_expense',
                         timestamps: false,
                     });
+                    Expense.belongsTo(models.MoneyLocation);
 
                     Expense.addScope('default', {
                         attributes: Object.keys(Expense.rawAttributes).concat([
@@ -41,8 +57,13 @@ module.exports = (sequelize, types) => {
                             {
                                 model: models.User,
                                 where: ['`users.expense_user`.`blame` = 1'],
+                                attributes: [],
                             },
                             { model: models.Category, attributes: [] },
+                            {
+                                model: models.MoneyLocation,
+                                attributes: ['currency_id'],
+                            },
                         ],
                         group: ['id'],
                     });
@@ -52,27 +73,15 @@ module.exports = (sequelize, types) => {
                 toJSON() {
                     const values = Object.assign({}, this.dataValues);
 
-                    if (values.userIds) {
-                        values.users = values.userIds.split(',').map(Number);
-                    } else {
-                        values.users = [];
-                    }
-
+                    values.users = extractIdsFromModel(this, 'userIds');
                     delete values.userIds;
 
-                    if (values.categoryIds) {
-                        values.categories = values.categoryIds
-                            .split(',')
-                            .map(Number);
-                    } else {
-                        values.categories = [];
-                    }
-
+                    values.categories = extractIdsFromModel(
+                        this,
+                        'categoryIds',
+                    );
                     delete values.categoryIds;
-
-                    // FIXME TEMP WORKAROUND sources/desktop/app/model/ExpenseModel.js:15
-                    values.created_at = standardDate(values.created_at);
-                    values.updated_at = standardDate(values.updated_at);
+                    values.hidden = Boolean(values.hidden);
 
                     return values;
                 },

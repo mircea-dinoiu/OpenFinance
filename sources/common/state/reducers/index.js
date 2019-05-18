@@ -11,6 +11,8 @@ import {
 const stateKeysWithoutReducers = [];
 const screen = (state = getScreenQueries(), action) =>
     action.type === Actions.SET_SCREEN ? action.value : state;
+const screenSize = (state = getScreenQueries(), action) =>
+    action.type === Actions.SET_SCREEN ? action.value : state;
 const refreshWidgets = (state = uniqueId(), action) =>
     action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
 const bindToUpdateState = (prop, defaultValue) => {
@@ -60,13 +62,31 @@ const preferences = (state = parsePreferences(), action) => {
 const title = bindToUpdateState('title', 'Loading...');
 const ui = bindToUpdateState('ui', null);
 const currenciesDrawerOpen = bindToUpdateState('currenciesDrawerOpen', false);
-const currencies = bindToUpdateState('currencies', null);
+const currencies = (state = null, action) => {
+    if (action.type === Actions.SET_BASE_CURRENCY_ID) {
+        return {
+            ...state,
+            default: action.value,
+        };
+    }
+
+    if (action.type === Actions.UPDATE_CURRENCIES) {
+        return {
+            ...state,
+            ...action.value,
+        };
+    }
+
+    return state;
+};
 const categories = bindToUpdateState('categories', null);
 const moneyLocations = bindToUpdateState('moneyLocations', null);
 const moneyLocationTypes = bindToUpdateState('moneyLocationTypes', null);
 
 export const reducer = combineReducers({
+    // @deprecated screen is a global in Window, use screenSize instead
     screen,
+    screenSize,
     title,
     loading,
     ui,

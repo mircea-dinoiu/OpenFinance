@@ -8,6 +8,14 @@
   }
 }
 
+.header {
+  background: white;
+  padding: 5px 20px;
+  font-size: 14px;
+  border-bottom: 1px solid rgb(244, 244, 244);
+  width: 100%;
+}
+
 .footer {
   background: white;
   padding: 5px 20px;
@@ -16,10 +24,6 @@
   box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.15);
   position: absolute;
   width: 100%;
-}
-
-.main :global(.rt-thead .rt-th) {
-  padding: 10px 5px !important;
 }
 
 .main :global(.rt-td) {
@@ -31,17 +35,21 @@
   background: rgb(234, 239, 244);
 }
 
-.main .todayRow {
-  font-weight: 400;
+.main .pendingRow {
+  background: rgba(0, 0, 0, 0.075);
 }
 
-.main .futureRow {
-  background: rgba(0, 0, 0, 0.05);
+.main .todayRow {
+  font-weight: 500;
 }
 
 .main .selectedRow,
 .main .selectedRow:hover {
   background: rgb(244, 228, 179);
+}
+
+.main .hiddenRow {
+  opacity: 0.5;
 }
 
 .main .notSelectable {

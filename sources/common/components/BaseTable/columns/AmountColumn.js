@@ -5,9 +5,10 @@ import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
 const style = { textAlign: 'right' };
 
 export default {
-    Header: 'Amount',
-    accessor: (item) => <AmountDisplay item={item} />,
-    id: 'amount',
+    Header: 'Sum',
+    filterable: true,
+    accessor: (item) => <AmountDisplay showCurrency={false} item={item} />,
+    id: 'sum',
     //
     width: 100,
     headerStyle: style,

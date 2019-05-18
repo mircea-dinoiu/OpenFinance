@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 
 export const parseCRUDError = (json) => {
@@ -5,11 +6,20 @@ export const parseCRUDError = (json) => {
 
     if (Array.isArray(json)) {
         error = (
-            <div>
-                {Object.values(json[0])
-                    .map((each) => each[0])
-                    .map((message) => <div key={message}>{message}</div>)}
-            </div>
+            <ul>
+                {json.map((each) =>
+                    Object.entries(each).map(([key, messages]) => (
+                        <li key={key}>
+                            {key}
+                            <ul>
+                                {messages.map((message) => (
+                                    <li key={message}>{message}</li>
+                                ))}
+                            </ul>
+                        </li>
+                    )),
+                )}
+            </ul>
         );
     }
 

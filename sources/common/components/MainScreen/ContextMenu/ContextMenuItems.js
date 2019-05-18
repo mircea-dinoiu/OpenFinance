@@ -1,12 +1,18 @@
 // @flow
 import React from 'react';
 import { MenuItem, Divider } from 'material-ui';
-import DeleteIcon from 'material-ui-icons/Delete';
-import CreateIcon from 'material-ui-icons/Create';
-import DuplicateIcon from 'material-ui-icons/ContentCopy';
-import DetachIcon from 'material-ui-icons/ViewAgenda';
-import LockIcon from 'material-ui-icons/Lock';
-import UnlockIcon from 'material-ui-icons/LockOpen';
+import DeleteIcon from '@material-ui/icons/Delete';
+import CreateIcon from '@material-ui/icons/Create';
+import DuplicateIcon from '@material-ui/icons/FileCopy';
+import DetachIcon from '@material-ui/icons/ViewAgenda';
+import LockIcon from '@material-ui/icons/Lock';
+import UnlockIcon from '@material-ui/icons/LockOpen';
+import IconArrowDown from '@material-ui/icons/ArrowDownward';
+import IconArrowUp from '@material-ui/icons/ArrowUpward';
+
+import IconArchive from '@material-ui/icons/Archive';
+import IconUnarchive from '@material-ui/icons/Unarchive';
+
 import compose from 'common/utils/compose';
 
 export default function ContextMenuItems({
@@ -17,6 +23,12 @@ export default function ContextMenuItems({
     onClickReviewed,
     onClickNeedsReview,
     onCloseContextMenu,
+    onClickDeposit,
+    onClickWithdrawal,
+
+    onClickHide,
+    onClickUnhide,
+
     selectedIds,
     desktop = false,
     features,
@@ -28,17 +40,17 @@ export default function ContextMenuItems({
     onClickReviewed: Function,
     onClickNeedsReview: Function,
     onCloseContextMenu: Function,
-    selectedIds: number[],
+    selectedIds: {},
     features: TypeMainScreenFeatures,
     desktop: boolean,
 }) {
-    const disabledForMultiple = selectedIds.length !== 1;
-    const disabledForZero = selectedIds.length === 0;
+    const selectedIdsLength = Object.values(selectedIds).filter(Boolean).length;
+    const disabledForZero = selectedIdsLength === 0;
 
     return (
-        <React.Fragment>
+        <>
             <MenuItem
-                primaryText="Edit"
+                primaryText={selectedIdsLength === 1 ? 'Edit' : 'Edit Multiple'}
                 leftIcon={<CreateIcon />}
                 onClick={compose(
                     onCloseContextMenu,
@@ -48,7 +60,7 @@ export default function ContextMenuItems({
                     onCloseContextMenu,
                     onClickEdit,
                 )}
-                disabled={disabledForMultiple}
+                disabled={disabledForZero}
                 desktop={desktop}
             />
             {features.duplicate && (
@@ -98,10 +110,11 @@ export default function ContextMenuItems({
                     desktop={desktop}
                 />
             )}
+            <Divider />
             {features.status && (
-                <React.Fragment>
+                <>
                     <MenuItem
-                        primaryText="Mark as reviewed"
+                        primaryText="Change to Posted"
                         leftIcon={<LockIcon />}
                         onClick={compose(
                             onCloseContextMenu,
@@ -115,7 +128,7 @@ export default function ContextMenuItems({
                         desktop={desktop}
                     />
                     <MenuItem
-                        primaryText="Mark as needs review"
+                        primaryText="Change to Pending"
                         leftIcon={<UnlockIcon />}
                         onClick={compose(
                             onCloseContextMenu,
@@ -128,8 +141,66 @@ export default function ContextMenuItems({
                         disabled={disabledForZero}
                         desktop={desktop}
                     />
-                </React.Fragment>
+                </>
             )}
-        </React.Fragment>
+            <Divider />
+            <MenuItem
+                primaryText="Change to Deposit"
+                leftIcon={<IconArrowDown />}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickDeposit,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickDeposit,
+                )}
+                disabled={disabledForZero}
+                desktop={desktop}
+            />
+            <MenuItem
+                primaryText="Change to Withdrawal"
+                leftIcon={<IconArrowUp />}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickWithdrawal,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickWithdrawal,
+                )}
+                disabled={disabledForZero}
+                desktop={desktop}
+            />
+            <Divider />
+            <MenuItem
+                primaryText="Archive"
+                leftIcon={<IconArchive />}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickHide,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickHide,
+                )}
+                disabled={disabledForZero}
+                desktop={desktop}
+            />
+            <MenuItem
+                primaryText="Unarchive"
+                leftIcon={<IconUnarchive />}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickUnhide,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickUnhide,
+                )}
+                disabled={disabledForZero}
+                desktop={desktop}
+            />
+        </>
     );
 }

@@ -1,28 +1,29 @@
 // @flow
-export default (data, props) => {
-    const users = data.chargedPersons.length
-        ? data.chargedPersons
-        : props.user
-            .get('list')
-            .map((each) => each.get('id'))
-            .toArray();
-    const date: Date = new Date(data.date.valueOf());
-    const time: Date = data.time;
 
-    date.setHours(time.getHours());
-    date.setMinutes(time.getMinutes());
-    date.setSeconds(time.getSeconds());
+export default (form, props) => {
+    const users =
+        form.chargedPersons.length > 0
+            ? form.chargedPersons
+            : props.user
+                .get('list')
+                .map((each) => each.get('id'))
+                .toArray();
 
     return {
-        id: data.id,
-        currency_id: data.currency,
-        sum: data.sum,
-        item: data.description,
-        created_at: parseInt(date.getTime() / 1000),
-        categories: data.categories,
-        money_location_id: data.paymentMethod,
-        repeat: data.repeat,
+        id: form.id,
+        sum: form.sum,
+        item: form.description,
+        notes: form.notes,
+        favorite: form.favorite,
+        hidden: form.hidden,
+        created_at: form.date.toISOString(),
+        categories: form.categories,
+        money_location_id: form.paymentMethod,
+        repeat: form.repeat,
+        repeat_occurrences: form.repeatOccurrences,
+        weight: form.weight === '' ? null : form.weight,
         users,
-        status: data.status || 'pending',
+        status: form.status || 'pending',
+        type: form.type || 'withdrawal',
     };
 };

@@ -1,55 +1,61 @@
-const {
-    Expense: Model,
-    User,
-    Currency,
-    MoneyLocation,
-    Category,
-} = require('../models');
+const { Expense: Model, User, MoneyLocation, Category } = require('../models');
 const BaseController = require('./BaseController');
-const CurrencyController = require('./CurrencyController');
 const Service = require('../services/ExpenseService');
-const { pickOwnProperties, standardDate } = require('../helpers');
+const { pickOwnProperties } = require('../helpers');
 const { sql } = require('../models');
+const defs = require('../../shared/defs');
 
 module.exports = BaseController.extend({
     Model,
     Service,
 
-    parseRecord(record) {
-        const workingRecord = Object.assign({}, record);
-
-        if (
-            workingRecord.hasOwnProperty('money_location_id') &&
-            workingRecord.money_location_id == 0
-        ) {
-            workingRecord.money_location_id = null;
-        }
-
-        return workingRecord;
-    },
-
     updateValidationRules: {
         id: ['isRequired', ['isId', Model]],
-        sum: ['sometimes', 'isRequired', 'isFloat', 'isNotZero'],
+        sum: ['sometimes', 'isRequired', 'isFloat', 'isNotNegative'],
         item: ['sometimes', 'isRequired', 'isString'],
-        repeat: ['sometimes', 'isRepeatValue'],
-        created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
+        notes: ['sometimes', 'isString'],
+        favorite: ['sometimes', 'isInt'],
+        hidden: ['sometimes', 'isBool'],
+        created_at: [
+            'sometimes',
+            'isRequired',
+            ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+        ],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
+        type: ['sometimes', 'isRequired', 'isTypeValue'],
         users: ['sometimes', 'isRequired', ['isIdArray', User]],
         categories: ['sometimes', ['isIdArray', Category]],
+
+        repeat: ['sometimes', 'isRepeatValue'],
+        repeat_end_date: ['sometimes', 'isInt'],
+        repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
+
+        weight: ['sometimes', 'isNotNegative', 'isInt'],
     },
 
     createValidationRules: {
-        sum: ['isRequired', 'isFloat', 'isNotZero'],
+        sum: ['isRequired', 'isFloat', 'isNotNegative'],
         item: ['isRequired', 'isString'],
-        repeat: ['sometimes', 'isRepeatValue'],
+        notes: ['sometimes', 'isString'],
+        favorite: ['sometimes', 'isInt'],
+        hidden: ['sometimes', 'isBool'],
         users: ['isRequired', ['isIdArray', User]],
-        created_at: ['sometimes', 'isRequired', 'isInt'],
-        currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
-        money_location_id: ['sometimes', ['isId', MoneyLocation]],
+        created_at: [
+            'sometimes',
+            'isRequired',
+            ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+        ],
+        money_location_id: ['isRequired', ['isId', MoneyLocation]],
+        status: ['sometimes', 'isRequired', 'isStatusValue'],
+        type: ['sometimes', 'isRequired', 'isTypeValue'],
         categories: ['sometimes', ['isIdArray', Category]],
+
+        repeat: ['sometimes', 'isRepeatValue'],
+        repeat_end_date: ['sometimes', 'isInt'],
+        repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
+
+        weight: ['sometimes', 'isNotNegative', 'isInt'],
     },
 
     async updateRelations({ record, model }) {
@@ -122,62 +128,50 @@ module.exports = BaseController.extend({
         return this.Model.scope('default').findOne({ where: { id: model.id } });
     },
 
-    async sanitizeCreateValues(record) {
+    sanitizeValues(record) {
         const values = pickOwnProperties(record, [
             'sum',
-            'repeat',
             'money_location_id',
+            'repeat_occurrences',
+            'weight',
         ]);
-
-        values.status = 'pending';
 
         if (record.hasOwnProperty('item')) {
             values.item = record.item.trim();
         }
 
-        if (record.hasOwnProperty('currency_id')) {
-            values.currency_id = record.currency_id;
-        } else {
-            const defaultCurrency = await CurrencyController.getDefaultCurrency();
+        if (record.hasOwnProperty('notes')) {
+            values.notes = record.notes && record.notes.trim();
+        }
 
-            values.currency_id = defaultCurrency.id;
+        if (record.hasOwnProperty('favorite')) {
+            values.favorite = record.favorite;
+        }
+
+        if (record.hasOwnProperty('hidden')) {
+            values.hidden = record.hidden;
+        }
+
+        if (record.hasOwnProperty('type')) {
+            values.type = record.type;
         }
 
         if (record.hasOwnProperty('created_at')) {
-            values.created_at = standardDate(record.created_at, 'X');
+            values.created_at = record.created_at;
         }
 
-        return values;
-    },
-
-    async sanitizeUpdateValues(record) {
-        const workingRecord = Object.assign({}, record);
-        const values = pickOwnProperties(workingRecord, [
-            'sum',
-            'money_location_id',
-        ]);
-
-        if (workingRecord.hasOwnProperty('item')) {
-            values.item = workingRecord.item.trim();
-        }
-
-        if (workingRecord.hasOwnProperty('created_at')) {
-            values.created_at = standardDate(workingRecord.created_at, 'X');
-        }
-
-        if (workingRecord.hasOwnProperty('repeat')) {
-            values.repeat = workingRecord.repeat;
+        if (record.hasOwnProperty('repeat')) {
+            values.repeat = record.repeat;
 
             if (values.repeat != null) {
                 values.status = 'pending';
+            } else {
+                values.repeat_occurrences = null;
+                values.repeat_end_date = null;
             }
         }
 
-        if (workingRecord.hasOwnProperty('currency_id')) {
-            values.currency_id = workingRecord.currency_id;
-        }
-
-        if (workingRecord.hasOwnProperty('status')) {
+        if (record.hasOwnProperty('status') && values.status == null) {
             values.status = record.status;
 
             if (values.status === 'finished') {
@@ -186,5 +180,13 @@ module.exports = BaseController.extend({
         }
 
         return values;
+    },
+
+    sanitizeCreateValues(record) {
+        return this.sanitizeValues(record);
+    },
+
+    sanitizeUpdateValues(record) {
+        return this.sanitizeValues(record);
     },
 });

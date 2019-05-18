@@ -1,6 +1,14 @@
 import React from 'react';
 
-import { Dialog, RaisedButton } from 'material-ui';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { dialog } from 'common/defs/styles';
 
 const MainScreenDeleteDialog = ({
     open,
@@ -8,38 +16,37 @@ const MainScreenDeleteDialog = ({
     onYes,
     onNo,
     count = 1,
+    classes,
     ...props
-}) => {
-    const actions = (
-        <React.Fragment>
-            <RaisedButton
-                label="Yes"
-                primary={false}
-                onClick={onYes}
-                onTouchTap={onYes}
-                style={{ marginRight: 5 }}
-            />
-            <RaisedButton
-                label="No"
-                primary={true}
-                onClick={onNo}
-                onTouchTap={onNo}
-            />
-        </React.Fragment>
-    );
-
-    return (
-        <Dialog
-            title={`Delete ${entityName}${count === 1 ? '' : 's'}?`}
-            open={open}
-            actions={actions}
-            {...props}
-        >
+}) => (
+    <Dialog open={open} classes={classes} {...props}>
+        <DialogTitle>
+            {`Delete ${entityName}${count === 1 ? '' : 's'}?`}
+        </DialogTitle>
+        <DialogContent>
             Are you sure you want to delete {count === 1 ? 'this' : 'these'}{' '}
             {entityName}
             {count !== 1 && 's'}?
-        </Dialog>
-    );
-};
+        </DialogContent>
+        <DialogActions>
+            <Button
+                variant="contained"
+                onClick={onYes}
+                onTouchTap={onYes}
+                style={{ marginRight: 5 }}
+            >
+                Yes
+            </Button>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={onNo}
+                onTouchTap={onNo}
+            >
+                No
+            </Button>
+        </DialogActions>
+    </Dialog>
+);
 
-export default MainScreenDeleteDialog;
+export default withStyles(dialog)(MainScreenDeleteDialog);

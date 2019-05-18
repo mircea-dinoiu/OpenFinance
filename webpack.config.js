@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const env = process.env.NODE_ENV || 'development';
 
 console.log('Webpack building for', env);
@@ -10,11 +11,10 @@ const isHot = env === 'hot';
 const enableSourceMaps = isProduction === false;
 
 module.exports = {
-    devtool: isProduction ? false : 'cheap-source-map',
+    devtool: isProduction ? false : process.env.DEVTOOL || 'eval-source-map',
     mode: isProduction ? 'production' : 'development',
     entry: {
         'bundles/Responsive': path.resolve('sources/mobile/index.js'),
-        'bundles/Desktop': path.resolve('sources/desktop/Desktop.js'),
     },
     devServer: isHot
         ? {
@@ -26,8 +26,7 @@ module.exports = {
         : undefined,
     output: {
         path: path.resolve('./public/dist'),
-        // filename: isProduction ? '[name].[chunkhash].js' : '[name].js',
-        filename: '[name].js',
+        filename: isProduction ? '[name].[chunkhash].js' : '[name].js',
         publicPath: `${isHot ? 'http://localhost:8080' : ''}/dist/`,
     },
     module: {
@@ -60,7 +59,7 @@ module.exports = {
                         loader: 'css-loader',
                         options: {
                             localIdentName:
-                                '[path][name]__[local]--[hash:base64:5]',
+                                '[name]__[local]--[hash:base64:5]',
                             sourceMap: false,
                             url: false,
                             modules: true,
@@ -82,6 +81,7 @@ module.exports = {
                 algorithm: 'gzip',
             }),
         !isProduction && new webpack.NamedModulesPlugin(),
+        new ManifestPlugin(),
     ].filter(Boolean),
     resolve: {
         alias: {

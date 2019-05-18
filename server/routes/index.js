@@ -1,6 +1,5 @@
 module.exports = {
     '/': require('./home'),
-    '/income': require('./income'),
     '/expense': require('./expense'),
     '/get-currencies': require('./currency'),
     '/category': require('./category'),

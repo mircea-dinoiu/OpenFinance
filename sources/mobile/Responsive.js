@@ -1,9 +1,10 @@
 import 'normalize.css';
 import 'react-table/react-table.css';
-import 'react-tippy/dist/tippy.css';
 import './Responsive.pcss';
-import 'babel-polyfill';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import './Responsive.css';
+import { blue } from '@material-ui/core/colors';
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+// import injectTapEventPlugin from 'react-tap-event-plugin';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -15,10 +16,10 @@ import {
     fetchCurrencies,
 } from 'common/state/actions';
 
-import { Drawer } from 'material-ui';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { Drawer, MuiThemeProvider as V0MuiThemeProvider } from 'material-ui';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-import fetch from 'common/utils/fetch';
+import { createXHR } from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 
 import Login from './ui/Login';
@@ -33,10 +34,12 @@ import EventListener from 'react-event-listener';
 import { flexColumn } from 'common/defs/styles';
 import { hot } from 'react-hot-loader';
 import { Sizes } from 'common/defs';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
+// FIXME Temporarily disabled due to incompatibility with the infrastructure
+// injectTapEventPlugin();
 
 const actions = {
     updateUser,
@@ -45,6 +48,11 @@ const actions = {
     updateState,
     fetchCurrencies,
 };
+const theme = createMuiTheme({
+    palette: {
+        primary: blue,
+    },
+});
 
 class Responsive extends PureComponent<{
     actions: typeof actions,
@@ -64,11 +72,11 @@ class Responsive extends PureComponent<{
         props.actions.toggleLoading(true);
 
         if (props.user == null) {
-            const response = await fetch(routes.user.list);
+            try {
+                const response = await createXHR({ url: routes.user.list });
 
-            if (response.ok) {
-                props.actions.updateUser(fromJS(await response.json()));
-            } else {
+                props.actions.updateUser(fromJS(response.data));
+            } catch (e) {
                 this.showLogin();
             }
         } else {
@@ -79,15 +87,15 @@ class Responsive extends PureComponent<{
                 mlResponse,
                 mlTypesResponse,
             ] = await Promise.all([
-                fetch(routes.category.list),
-                fetch(routes.ml.list),
-                fetch(routes.mlType.list),
+                createXHR({ url: routes.category.list }),
+                createXHR({ url: routes.ml.list }),
+                createXHR({ url: routes.mlType.list }),
             ]);
 
             props.actions.updateState({
-                categories: fromJS(await categoriesResponse.json()),
-                moneyLocations: fromJS(await mlResponse.json()),
-                moneyLocationTypes: fromJS(await mlTypesResponse.json()),
+                categories: fromJS(categoriesResponse.data),
+                moneyLocations: fromJS(mlResponse.data),
+                moneyLocationTypes: fromJS(mlTypesResponse.data),
                 title: 'Financial',
                 ui: <Internal />,
             });
@@ -107,11 +115,11 @@ class Responsive extends PureComponent<{
     onLogout = async () => {
         this.props.actions.toggleLoading(true);
 
-        const response = await fetch(routes.user.logout, { method: 'POST' });
+        try {
+            await createXHR({ url: routes.user.logout, method: 'POST' });
 
-        if (response.ok) {
             this.showLogin();
-        } else {
+        } catch (e) {
             location.reload();
         }
     };
@@ -126,38 +134,42 @@ class Responsive extends PureComponent<{
 
     render() {
         return (
-            <MuiThemeProvider>
-                <div
-                    style={{
-                        paddingTop: Sizes.HEADER_SIZE,
-                        ...flexColumn,
-                    }}
-                >
-                    <EventListener
-                        target="window"
-                        onResize={this.onWindowResize}
-                    />
-                    <TopBar
-                        showCurrenciesDrawer={this.isCurrenciesDrawerReady()}
-                        onLogout={this.onLogout}
-                    />
-                    {this.isCurrenciesDrawerReady() && (
-                        <Drawer
-                            docked={false}
-                            open={this.props.currenciesDrawerOpen}
-                            openSecondary={true}
-                            onRequestChange={(currenciesDrawerOpen) =>
-                                this.props.actions.updateState({
-                                    currenciesDrawerOpen,
-                                })
-                            }
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+                <MuiThemeProvider theme={theme}>
+                    <V0MuiThemeProvider>
+                        <div
+                            style={{
+                                paddingTop: Sizes.HEADER_SIZE,
+                                ...flexColumn,
+                            }}
                         >
-                            <Currencies data={this.props.currencies} />
-                        </Drawer>
-                    )}
-                    {this.props.loading ? <BigLoader /> : this.props.ui}
-                </div>
-            </MuiThemeProvider>
+                            <EventListener
+                                target="window"
+                                onResize={this.onWindowResize}
+                            />
+                            <TopBar
+                                showCurrenciesDrawer={this.isCurrenciesDrawerReady()}
+                                onLogout={this.onLogout}
+                            />
+                            {this.isCurrenciesDrawerReady() && (
+                                <Drawer
+                                    docked={false}
+                                    open={this.props.currenciesDrawerOpen}
+                                    openSecondary={true}
+                                    onRequestChange={(currenciesDrawerOpen) =>
+                                        this.props.actions.updateState({
+                                            currenciesDrawerOpen,
+                                        })
+                                    }
+                                >
+                                    <Currencies />
+                                </Drawer>
+                            )}
+                            {this.props.loading ? <BigLoader /> : this.props.ui}
+                        </div>
+                    </V0MuiThemeProvider>
+                </MuiThemeProvider>
+            </MuiPickersUtilsProvider>
         );
     }
 }

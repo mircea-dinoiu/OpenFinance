@@ -1,14 +1,18 @@
 // @flow
+import { convertCurrencyToDefault } from 'common/helpers/currency';
+
 import React, { PureComponent } from 'react';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import { Card, CardHeader, CardText } from 'material-ui';
 import { numericValue } from 'mobile/ui/formatters';
 import { connect } from 'react-redux';
-import Expand from 'material-ui-icons/ExpandMore';
-import Collapse from 'material-ui-icons/ExpandLess';
+import Expand from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/icons/ExpandLess';
 import { Col, Row } from 'react-grid-system';
 import BaseTable from 'common/components/BaseTable';
+import { financialNum } from 'shared/utils/numbers';
+import { FormControlLabel, Checkbox } from '@material-ui/core';
 
 class SummarySubCategory extends PureComponent {
     state = {
@@ -52,10 +56,20 @@ class SummarySubCategory extends PureComponent {
                                         )
                                         .get(entityNameField)
                                 )}
-                                <div style={{ fontSize: '10px' }}>
+                                <div style={{ fontSize: '12px' }}>
                                     {this.numericValue(
                                         items.reduce(
-                                            (acc, each) => acc + each.sum,
+                                            (acc, each) =>
+                                                acc +
+                                                (this.props.excluded[
+                                                    each.reference
+                                                ]
+                                                    ? 0
+                                                    : convertCurrencyToDefault(
+                                                        each.sum,
+                                                        each.currencyId,
+                                                        this.props.currencies,
+                                                    )),
                                             0,
                                         ),
                                     )}
@@ -77,11 +91,41 @@ class SummarySubCategory extends PureComponent {
                         modifiers={{ hideHeader: true }}
                         columns={[
                             {
-                                accessor: 'description',
+                                id: 'description',
+                                accessor: (each) => (
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                style={{
+                                                    padding: '0 5px 0 10px',
+                                                }}
+                                                checked={
+                                                    !this.props.excluded[
+                                                        each.reference
+                                                    ]
+                                                }
+                                                onChange={() =>
+                                                    this.props.onToggleExcluded(
+                                                        each.reference,
+                                                    )
+                                                }
+                                                color="default"
+                                            />
+                                        }
+                                        label={
+                                            <span style={{ fontWeight: 300 }}>
+                                                {each.description}
+                                            </span>
+                                        }
+                                    />
+                                ),
                             },
                             {
                                 id: 'sum',
-                                accessor: (each) => this.numericValue(each.sum),
+                                accessor: (each) =>
+                                    this.numericValue(each.sum, {
+                                        currencyId: each.currencyId,
+                                    }),
                                 style: { textAlign: 'right' },
                             },
                         ]}
@@ -95,14 +139,14 @@ class SummarySubCategory extends PureComponent {
 class SummaryCategory extends PureComponent {
     state = {
         expanded: Boolean(this.props.expandedByDefault),
+        excluded: {},
     };
 
-    numericValue = (value, opts = {}) => {
-        const currency = this.props.currencies.getIn([
-            'map',
-            String(this.props.currencies.get('default')),
-            'iso_code',
-        ]);
+    numericValue = (
+        value,
+        { currencyId = this.props.currencies.default, ...opts } = {},
+    ) => {
+        const currency = this.props.currencies.map[currencyId].iso_code;
 
         return numericValue(value, { ...opts, currency });
     };
@@ -130,6 +174,12 @@ class SummaryCategory extends PureComponent {
         }
 
         return 0;
+    };
+
+    handleToggleExcluded = (id) => {
+        this.setState((state) => ({
+            excluded: { ...state.excluded, [id]: !state.excluded[id] },
+        }));
     };
 
     render() {
@@ -161,9 +211,21 @@ class SummaryCategory extends PureComponent {
                         {showSumInHeader && (
                             <div style={{ fontSize: '12px' }}>
                                 {this.numericValue(
-                                    summaryObject.reduce(
-                                        (acc, each) => acc + each.sum,
-                                        0,
+                                    financialNum(
+                                        summaryObject.reduce(
+                                            (acc, each) =>
+                                                acc +
+                                                (this.state.excluded[
+                                                    each.reference
+                                                ]
+                                                    ? 0
+                                                    : convertCurrencyToDefault(
+                                                        each.sum,
+                                                        each.currencyId,
+                                                        this.props.currencies,
+                                                    )),
+                                            0,
+                                        ),
                                     ),
                                     { currencyStyle: { color: headerColor } },
                                 )}
@@ -184,6 +246,7 @@ class SummaryCategory extends PureComponent {
                         return (
                             <SummarySubCategory
                                 key={id}
+                                excluded={this.state.excluded}
                                 shouldGroup={shouldGroup}
                                 id={id}
                                 items={items}
@@ -192,6 +255,8 @@ class SummaryCategory extends PureComponent {
                                 entityIdField={entityIdField}
                                 entityNameField={entityNameField}
                                 expandedByDefault={expandedByDefault}
+                                currencies={this.props.currencies}
+                                onToggleExcluded={this.handleToggleExcluded}
                             />
                         );
                     })}

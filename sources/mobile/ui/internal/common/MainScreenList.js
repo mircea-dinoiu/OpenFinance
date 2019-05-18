@@ -1,20 +1,17 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { Col } from 'react-grid-system';
+import { Col, Row } from 'react-grid-system';
 import { stringify } from 'query-string';
 import moment from 'moment';
-import sortBy from 'lodash/sortBy';
 import groupBy from 'lodash/groupBy';
-import throttle from 'lodash/throttle';
 
 import { BigLoader, ButtonProgress } from '../../components/loaders';
 
-import fetch, { fetchJSON } from 'common/utils/fetch';
+import { createXHR } from 'common/utils/fetch';
 
-import { RaisedButton, FloatingActionButton } from 'material-ui';
+import { Button, FormControlLabel, Checkbox } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { greyedOut } from 'common/defs/styles';
-import { scrollIsAt } from 'common/utils/scroll';
 import BaseTable from 'common/components/BaseTable';
 import cssTable from 'common/components/BaseTable/index.pcss';
 import { getTrProps } from 'common/components/MainScreen/Table/helpers';
@@ -26,11 +23,19 @@ import { Sizes } from 'common/defs';
 import AnchoredContextMenu from 'common/components/MainScreen/ContextMenu/AnchoredContextMenu';
 import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
-import AddIcon from 'material-ui-icons/Add';
+import AddIcon from '@material-ui/icons/Add';
 import { refreshWidgets as onRefreshWidgets } from 'common/state/actions';
 import { advanceRepeatDate } from 'shared/helpers/repeatedModels';
-
-const PAGE_SIZE = 50;
+import { uniqueId, range } from 'lodash';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import IconSplit from '@material-ui/icons/CallSplitRounded';
+import Tooltip from 'common/components/Tooltip';
+import Chip from '@material-ui/core/Chip';
+import WeightDisplay from 'mobile/ui/internal/expenses/cells/WeightDisplay';
+import IconStar from '@material-ui/icons/Star';
+import IconStarBorder from '@material-ui/icons/StarBorder';
 
 type TypeProps = {
     api: {
@@ -59,6 +64,7 @@ type TypeProps = {
     refreshWidgets: string,
     onRefreshWidgets: typeof onRefreshWidgets,
     features: TypeMainScreenFeatures,
+    defaultSorters: Array<{ id: string, desc: boolean }>,
 };
 
 type TypeState = {
@@ -68,15 +74,21 @@ type TypeState = {
         id: number,
         created_at: string,
         sum: number,
-        currency_id: number,
     }>,
     loading: number,
     refreshing: boolean,
-    selectedIds: number[],
+    selectedIds: {},
 
     addModalOpen: boolean,
     editDialogOpen: boolean,
+    editDialogKey: string,
     deleteDialogOpen: boolean,
+};
+
+export const getDetachedItemUpdates = (item) => {
+    const itemUpdates = { id: item.id, repeat: null };
+
+    return itemUpdates;
 };
 
 class MainScreenList extends PureComponent<TypeProps, TypeState> {
@@ -86,15 +98,26 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         results: [],
         loading: 0,
         refreshing: false,
-        selectedIds: [],
+        selectedIds: {},
         contextMenuDisplay: false,
         contextMenuTop: 0,
         contextMenuLeft: 0,
 
         addModalOpen: false,
         editDialogOpen: false,
+        editDialogKey: uniqueId(),
         deleteDialogOpen: false,
+
+        pendingFirst: true,
+        displayHidden: false,
+        splitAmount: '',
     };
+    sorters = [];
+    filters = [];
+
+    get pageSize() {
+        return this.isDesktop() ? 200 : 50;
+    }
 
     static defaultProps = {
         features: {
@@ -102,10 +125,13 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             status: true,
             repeat: true,
         },
+        defaultSorters: [{ id: 'created_at', desc: true }],
     };
 
     componentDidMount() {
-        this.loadMore();
+        if (!this.isDesktop()) {
+            this.loadMore();
+        }
     }
 
     handleReceiveNewRecord(newRecord) {
@@ -138,7 +164,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     handleToggleDeleteDialog = () =>
         this.setState((state) => ({ deleteDialogOpen: !state.deleteDialogOpen }));
     handleToggleEditDialog = () =>
-        this.setState((state) => ({ editDialogOpen: !state.editDialogOpen }));
+        this.setState((state) => ({
+            editDialogOpen: !state.editDialogOpen,
+            editDialogKey: uniqueId(),
+        }));
     handleToggleAddModal = () =>
         this.setState((state) => ({
             addModalOpen: !state.addModalOpen,
@@ -159,36 +188,63 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.props.onRefreshWidgets();
     };
 
+    get hasFiltersSet() {
+        return this.filters.filter((each) => each.value.text !== '').length > 0;
+    }
+
     loadMore = async ({
         page = this.state.page,
         results = this.state.results,
         endDate = this.props.preferences.endDate,
     } = {}) => {
+        const infiniteScroll = !this.isDesktop();
+
         if (this.state.loading) {
             return;
         }
 
         this.setState((state) => ({ loading: state.loading + 1 }));
+        const sorters = [];
 
-        const response = await fetch(
-            `${this.props.api.list}?${stringify({
+        if (this.state.pendingFirst) {
+            sorters.push({ id: 'status', desc: true });
+        }
+
+        this.sorters.forEach((sorter) => {
+            sorters.push(sorter);
+        });
+
+        const response = await createXHR({
+            url: `${this.props.api.list}?${stringify({
                 end_date: endDate,
                 page,
-                limit: PAGE_SIZE,
+                limit: this.pageSize,
+                sorters: JSON.stringify(sorters),
+                filters: JSON.stringify(
+                    [
+                        this.state.displayHidden || this.hasFiltersSet
+                            ? null
+                            : {
+                                id: 'hidden',
+                                value: false,
+                            },
+                        ...this.filters,
+                    ].filter(Boolean),
+                ),
             })}`,
-        );
-        const json = await response.json();
+        });
+        const json = response.data;
 
         this.setState((state) => ({
-            page: page + 1,
-            results: results.concat(json),
+            page: infiniteScroll ? page + 1 : page,
+            results: infiniteScroll ? results.concat(json) : json,
             firstLoad: false,
             loading: state.loading - 1,
         }));
     };
 
     getSortedResults() {
-        return sortBy(this.state.results, 'created_at').reverse();
+        return this.state.results;
     }
 
     getGroupedResults() {
@@ -205,7 +261,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         });
 
         await this.loadMore({
-            page: 1,
+            page: this.isDesktop() ? this.state.page : 1,
             results: [],
             endDate,
         });
@@ -215,18 +271,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         });
     };
 
-    handleTableScroll = (event) => {
-        this.handleTableScrollThrottled(event.target);
-    };
-
-    handleTableScrollThrottled = throttle((element) => {
-        this.handleCloseContextMenu();
-
-        if (scrollIsAt(element, 90)) {
-            this.loadMore();
-        }
-    });
-
     getCommonProps() {
         return {
             api: this.props.api,
@@ -234,6 +278,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             nameProperty: this.props.nameProperty,
             crudProps: this.props.crudProps,
         };
+    }
+
+    isDesktop() {
+        return this.props.screen.isLarge;
     }
 
     handleReceivedSelectedIds = (selectedIds) => this.setState({ selectedIds });
@@ -265,33 +313,262 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
     get selectedItems() {
         return this.state.results.filter((each) =>
-            this.state.selectedIds.includes(each.id),
+            Boolean(this.state.selectedIds[each.id]),
         );
     }
 
-    computeSelectedAmount() {
-        return this.selectedItems.reduce((acc, each) => {
+    computeAmount(items) {
+        const mlIdToCurrencyId = this.props.moneyLocations
+            .toJSON()
+            .reduce((acc, each) => {
+                acc[each.id] = each.currency_id;
+
+                return acc;
+            }, {});
+
+        return items.reduce((acc, each) => {
             const sum = convertCurrencyToDefault(
                 each.sum,
-                each.currency_id,
+                mlIdToCurrencyId[each.money_location_id],
                 this.props.currencies,
             );
 
-            return acc + sum;
+            return acc + (each.type === 'deposit' ? sum : -sum);
         }, 0);
     }
 
+    computeWeight(items) {
+        return items.reduce((acc, each) => acc + (each.weight || 0), 0);
+    }
+
+    handleSelectAll = (event) => {
+        event.preventDefault();
+
+        this.handleReceivedSelectedIds(
+            this.state.results.reduce((acc, each) => {
+                acc[each.id] = true;
+
+                return acc;
+            }, {}),
+        );
+    };
+
+    renderTableHeader() {
+        return (
+            <div className={cssTable.header}>
+                <div className="inlineBlock hPadded">
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={this.state.pendingFirst}
+                                onChange={this.handleTogglePendingFirst}
+                                color="default"
+                            />
+                        }
+                        label="Pending First"
+                    />
+                </div>
+                <div className="inlineBlock hPadded">
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={this.state.displayHidden}
+                                onChange={this.handleToggleDisplayHidden}
+                                color="default"
+                            />
+                        }
+                        label="Display Archived"
+                    />
+                </div>
+                <div className="inlineBlock hPadded">
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={this.handleSelectAll}
+                    >
+                        Select All
+                    </Button>
+                </div>
+                <div className="inlineBlock hPadded">
+                    <TextField
+                        error={isNaN(
+                            this.parseSplitAmount(this.state.splitAmount),
+                        )}
+                        placeholder="Split"
+                        value={this.state.splitAmount}
+                        onChange={this.handleChangeSplitAmount}
+                        margin="normal"
+                        variant="outlined"
+                        style={{
+                            width: '150px',
+                            height: '32px',
+                            margin: '-7px 0 0',
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={this.handleClickSplit}
+                                        disabled={!this.isSplitAmountValid()}
+                                    >
+                                        <IconSplit />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    isSplitAmountValid() {
+        const amount = this.parseSplitAmount(this.state.splitAmount);
+
+        if (isNaN(amount)) {
+            return false;
+        }
+
+        if (amount <= 0) {
+            return false;
+        }
+
+        const selectedItems = this.selectedItems;
+
+        return (
+            selectedItems.length >= 1 &&
+            selectedItems.every((each) => each.sum > amount)
+        );
+    }
+
+    parseSplitAmount(number) {
+        const working = number.trim();
+
+        if (!working) {
+            return 0;
+        }
+
+        return Number(working);
+    }
+
+    handleChangeSplitAmount = (event) => {
+        this.setState({ splitAmount: event.target.value });
+    };
+
+    handleClickSplit = async () => {
+        const selectedItems = this.selectedItems;
+        const splitBy = this.parseSplitAmount(this.state.splitAmount);
+
+        await this.handleRequestCreate(
+            selectedItems.map((each) => {
+                const res = this.copyItem(each);
+
+                res.sum = splitBy;
+
+                return res;
+            }),
+        );
+
+        await this.handleRequestUpdate(
+            selectedItems.map((each) => ({
+                ...each,
+                sum: Math.round((each.sum - splitBy) * 100) / 100,
+            })),
+        );
+
+        this.props.onRefreshWidgets();
+    };
+
+    handleToggleStateKey = (key) => () => {
+        this.setState(
+            (state) => ({
+                [key]: !state[key],
+            }),
+            this.refresh,
+        );
+    };
+
+    handleTogglePendingFirst = this.handleToggleStateKey('pendingFirst');
+    handleToggleDisplayHidden = this.handleToggleStateKey('displayHidden');
+
+    renderStats(head, items) {
+        return (
+            <div style={{ display: 'inline-block', marginRight: 5 }}>
+                <Tooltip
+                    tooltip={
+                        <table className="centerBlock">
+                            <tbody>
+                                <tr>
+                                    <th>Balance:</th>
+                                    <td>
+                                        {numericValue(
+                                            this.computeAmount(items),
+                                        )}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Weight:</th>
+                                    <td>
+                                        <WeightDisplay
+                                            item={{
+                                                weight: this.computeWeight(
+                                                    items,
+                                                ),
+                                            }}
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+                >
+                    <Chip
+                        label={
+                            <React.Fragment>
+                                {head}&nbsp;<strong>({items.length})</strong>
+                            </React.Fragment>
+                        }
+                        variant="outlined"
+                    />
+                </Tooltip>
+            </div>
+        );
+    }
+
     renderTableFooter() {
-        const divider = ', ';
+        const page = this.state.results;
+        const selected = this.selectedItems;
 
         return (
             <div className={cssTable.footer}>
-                <strong>Loaded:</strong> {this.state.results.length}
-                {divider}
-                <strong>Selected:</strong> {this.state.selectedIds.length}
-                {divider}
-                <strong>Selected amount:</strong>{' '}
-                {numericValue(this.computeSelectedAmount())}
+                {this.renderStats('Current Page', page)}
+                {this.renderStats('Selected', selected)}
+                {range(0, 6).map((rating) =>
+                    this.renderStats(
+                        <React.Fragment>
+                            {rating === 0 ? (
+                                <IconStarBorder
+                                    style={{ height: 20, width: 20 }}
+                                />
+                            ) : (
+                                range(0, rating).map((i) => (
+                                    <IconStar
+                                        key={i}
+                                        style={{
+                                            height: 20 - rating,
+                                            width: 20 - rating,
+                                        }}
+                                    />
+                                ))
+                            )}
+                        </React.Fragment>,
+                        page.filter((each) =>
+                            rating === 0
+                                ? each.favorite == null || each.favorite === 0
+                                : each.favorite === rating,
+                        ),
+                    ),
+                )}
             </div>
         );
     }
@@ -299,28 +576,19 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     handleCloseContextMenu = () =>
         this.handleChangeContextMenu({ display: false });
 
-    setStatusToSelectedRecords = async (status) => {
-        const selectedItems = this.selectedItems;
-        const response = await this.handleRequestUpdate(
-            selectedItems.map((each) => ({ id: each.id, status })),
-        );
+    updateRecords = async (ids, data) => {
+        try {
+            await this.handleRequestUpdate(ids.map((id) => ({ id, ...data })));
 
-        if (response.ok) {
-            this.updateResultsFromUpdateResponse(await response.json());
+            this.props.onRefreshWidgets();
+        } catch (e) {
+            console.error(e);
+            // todo
         }
     };
 
-    updateResultsFromUpdateResponse = (json) => {
-        const results = Array.from(this.state.results);
-
-        json.forEach((entry) => {
-            const index = results.findIndex((each) => each.id === entry.id);
-
-            results.splice(index, 1, entry);
-        });
-
-        this.setState({ results });
-    };
+    updateSelectedRecords = (data) =>
+        this.updateRecords(this.selectedItems.map((each) => each.id), data);
 
     withLoading = (fn) => async (...args: any[]) => {
         this.setState((state) => ({ loading: state.loading + 1 }));
@@ -333,9 +601,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     };
 
     handleRequest = this.withLoading((data, api: string) =>
-        fetchJSON(api, {
+        createXHR({
+            url: api,
             method: 'POST',
-            body: { data },
+            data: { data },
         }),
     );
     handleRequestDelete = (data) =>
@@ -353,7 +622,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     copyItem = (item) => {
         const copy = this.sanitizeItem(item);
 
-        delete item.id;
+        delete copy.id;
 
         return copy;
     };
@@ -376,8 +645,16 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.props.onRefreshWidgets();
     };
 
-    handleClickReviewed = () => this.setStatusToSelectedRecords('finished');
-    handleClickNeedsReview = () => this.setStatusToSelectedRecords('pending');
+    handleClickReviewed = () =>
+        this.updateSelectedRecords({ status: 'finished' });
+    handleClickNeedsReview = () =>
+        this.updateSelectedRecords({ status: 'pending' });
+    handleClickHide = () =>
+        this.updateSelectedRecords({ hidden: true, status: 'finished' });
+    handleClickUnhide = () => this.updateSelectedRecords({ hidden: false });
+    handleClickDeposit = () => this.updateSelectedRecords({ type: 'deposit' });
+    handleClickWithdrawal = () =>
+        this.updateSelectedRecords({ type: 'withdrawal' });
     handleDetach = async () => {
         const added = [];
         const updated = [];
@@ -385,8 +662,20 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         this.selectedItems.forEach((item) => {
             if (item.repeat != null) {
-                added.push(this.copyItem(advanceRepeatDate({ ...item })));
-                updated.push({ id: item.id, repeat: null });
+                const extra = {};
+
+                if (item.repeat_occurrences) {
+                    extra.repeat_occurrences = item.repeat_occurrences - 1;
+
+                    if (extra.repeat_occurrences === 0) {
+                        extra.repeat_occurrences = null;
+                    }
+                }
+
+                added.push(
+                    this.copyItem(advanceRepeatDate({ ...item, ...extra })),
+                );
+                updated.push(getDetachedItemUpdates(item));
             }
         });
 
@@ -413,8 +702,14 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             onClickDuplicate: this.handleDuplicate,
             onClickDetach: this.handleDetach,
             onCloseContextMenu: this.handleCloseContextMenu,
+            onClickDeposit: this.handleClickDeposit,
+            onClickWithdrawal: this.handleClickWithdrawal,
             onClickReviewed: this.handleClickReviewed,
             onClickNeedsReview: this.handleClickNeedsReview,
+
+            onClickHide: this.handleClickHide,
+            onClickUnhide: this.handleClickUnhide,
+
             features: this.props.features,
         };
     }
@@ -422,22 +717,60 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     renderContent() {
         const commonProps = this.getCommonProps();
 
-        if (this.props.screen.isLarge) {
+        if (this.isDesktop()) {
             const results = this.getSortedResults();
+            const count = results.length;
 
             return (
-                <div onScroll={this.handleTableScroll}>
-                    <BaseTable
+                <>
+                    {this.renderTableHeader()}
+                    <div
                         style={{
-                            height: `calc(100vh - (75px + ${
+                            height: `calc(100vh - (150px + ${
                                 Sizes.HEADER_SIZE
                             }))`,
+                            background: 'white',
                         }}
-                        loading={this.state.loading > 0}
-                        data={results}
-                        columns={this.props.tableColumns}
-                        getTrProps={this.getTrProps}
-                    />
+                    >
+                        <BaseTable
+                            defaultSorted={this.props.defaultSorters}
+                            defaultSortDesc={true}
+                            pageSize={
+                                count
+                                    ? Math.min(count, this.pageSize)
+                                    : this.pageSize
+                            }
+                            style={{
+                                maxHeight: '100%',
+                            }}
+                            pages={
+                                results.length >= this.pageSize
+                                    ? this.state.page + 1
+                                    : this.state.page
+                            }
+                            showPagination={true}
+                            showPageSizeOptions={false}
+                            manual={true}
+                            loading={this.state.loading > 0}
+                            data={results}
+                            columns={this.props.tableColumns({
+                                updateRecords: this.updateRecords,
+                            })}
+                            getTrProps={this.getTrProps}
+                            onFetchData={(state) => {
+                                this.handleCloseContextMenu();
+
+                                this.sorters = state.sorted;
+                                this.filters = state.filtered.filter(
+                                    (filter) => filter.value !== undefined,
+                                );
+
+                                this.loadMore({
+                                    page: state.page + 1,
+                                });
+                            }}
+                        />
+                    </div>
                     {this.renderTableFooter()}
                     {this.state.contextMenuDisplay && (
                         <AnchoredContextMenu
@@ -446,7 +779,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                             itemsProps={this.getContextMenuItemsProps()}
                         />
                     )}
-                </div>
+                </>
             );
         }
 
@@ -469,7 +802,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         const selectedItems = this.selectedItems;
 
         return (
-            <React.Fragment>
+            <>
                 <MainScreenCreatorDialog
                     onReceiveNewRecord={(newRecord) => {
                         this.handleReceiveNewRecord(newRecord);
@@ -486,13 +819,16 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     onYes={this.handleDelete}
                     onNo={this.handleToggleDeleteDialog}
                     entityName={this.props.entityName}
-                    count={this.state.selectedIds.length}
+                    count={
+                        Object.values(this.state.selectedIds).filter(Boolean)
+                            .length
+                    }
                 />
                 {this.selectedItems.length > 0 && (
                     <MainScreenEditDialog
-                        key={selectedItems[0].id}
+                        key={this.state.editDialogKey}
                         open={this.state.editDialogOpen}
-                        item={selectedItems[0]}
+                        items={selectedItems}
                         onCancel={this.handleToggleEditDialog}
                         onSave={this.handleUpdate}
                         entityName={this.props.entityName}
@@ -500,55 +836,57 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         {...this.props.crudProps}
                     />
                 )}
-            </React.Fragment>
+            </>
         );
     }
 
     render() {
-        if (this.state.firstLoad) {
+        if (!this.isDesktop() && this.state.firstLoad) {
             return <BigLoader />;
         }
 
-        const { screen } = this.props;
         const { loading } = this.state;
+        const isDesktop = this.isDesktop();
 
         return (
             <div>
                 <div
                     style={{
-                        ...(this.state.refreshing ? greyedOut : {}),
-                        backgroundColor: screen.isLarge ? undefined : 'white',
+                        ...(this.state.refreshing && !isDesktop
+                            ? greyedOut
+                            : {}),
+                        backgroundColor: isDesktop ? undefined : 'white',
                     }}
                 >
                     {this.renderContent()}
-                    {screen.isLarge ? null : (
+                    {isDesktop ? null : (
                         <Col>
-                            <RaisedButton
-                                label={
-                                    loading ? <ButtonProgress /> : 'Load More'
-                                }
+                            <Button
+                                variant="contained"
                                 fullWidth={true}
                                 onTouchTap={this.loadMore}
                                 style={{ margin: '20px 0 60px' }}
                                 disabled={loading}
-                            />
+                            >
+                                {loading ? <ButtonProgress /> : 'Load More'}
+                            </Button>
                         </Col>
                     )}
                     {this.renderDialogs()}
-                    <FloatingActionButton
+                    <Button
+                        variant="fab"
+                        color="primary"
                         onClick={this.handleToggleAddModal}
-                        mini={!this.props.screen.isLarge}
+                        mini={!isDesktop}
                         style={{
-                            position: this.props.screen.isLarge
-                                ? 'absolute'
-                                : 'fixed',
-                            bottom: this.props.screen.isLarge ? '20px' : '70px',
-                            right: this.props.screen.isLarge ? '30px' : '10px',
+                            position: isDesktop ? 'absolute' : 'fixed',
+                            bottom: isDesktop ? '80px' : '70px',
+                            right: isDesktop ? '30px' : '10px',
                             zIndex: 1,
                         }}
                     >
                         <AddIcon />
-                    </FloatingActionButton>
+                    </Button>
                 </div>
             </div>
         );
@@ -563,6 +901,7 @@ export default connect(
         screen,
         refreshWidgets,
         currencies,
+        moneyLocations,
     }): {
         preferences: TypePreferences,
         screen: TypeScreenQueries,
@@ -573,6 +912,7 @@ export default connect(
         screen,
         refreshWidgets,
         currencies,
+        moneyLocations,
     }),
     mapDispatchToProps,
 )(MainScreenList);

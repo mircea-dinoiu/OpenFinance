@@ -1,72 +1,101 @@
 // @flow
+import { SingleSelect } from 'common/components/Select';
 import React, { PureComponent } from 'react';
+import { Col, Row } from 'react-grid-system';
 import { connect } from 'react-redux';
+import { IconButton } from 'material-ui';
 import {
     AppBar,
-    DatePicker,
-    IconButton,
-    MenuItem,
+    Toolbar,
+    Typography,
     Paper,
-    SelectField,
-    ToolbarGroup,
-} from 'material-ui';
-import MonetizationOn from 'material-ui-icons/MonetizationOn';
-import Refresh from 'material-ui-icons/Refresh';
-import ArrowBack from 'material-ui-icons/ArrowBack';
-import ArrowForward from 'material-ui-icons/ArrowForward';
+    Menu,
+    MenuItem as MenuItem2,
+    FormLabel,
+} from '@material-ui/core';
+
+import MonetizationOn from '@material-ui/icons/MonetizationOn';
+import Refresh from '@material-ui/icons/Refresh';
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import ArrowForward from '@material-ui/icons/ArrowForward';
 import Logged from 'mobile/ui/appBar/Logged';
-import DateIcon from 'material-ui-icons/DateRange';
+import DateIcon from '@material-ui/icons/DateRange';
 import {
     updateState,
-    setEndDate,
     refreshWidgets,
     updatePreferences,
 } from 'common/state/actions';
 import { bindActionCreators } from 'redux';
-import { formatYMD, shiftDateBack, shiftDateForward } from 'common/utils/dates';
+import { shiftDateBack, shiftDateForward } from 'common/utils/dates';
 import moment from 'moment';
 import { ShiftDateOptions, Sizes } from 'common/defs';
+import { InlineDatePicker } from 'material-ui-pickers/DatePicker';
+import { endOfDayToISOString } from 'shared/utils/dates';
 
 type TypeProps = {
     onLogout: Function,
     title: string,
     showCurrenciesDrawer: boolean,
     actions: {
-        setEndDate: typeof setEndDate,
         updateState: typeof updateState,
         refreshWidgets: typeof refreshWidgets,
     },
 };
 
-const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
+type TypeState = {};
 
-class TopBar extends PureComponent<TypeProps> {
+const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
+const MAX_TIMES = 10;
+
+export const getShiftBackOptions = (date, by) =>
+    new Array(MAX_TIMES)
+        .fill(null)
+        .map((each, index) => shiftDateBack(date, by, index + 1));
+
+export const getShiftForwardOptions = (date, by) =>
+    new Array(MAX_TIMES)
+        .fill(null)
+        .map((each, index) => shiftDateForward(date, by, index + 1));
+
+class TopBar extends PureComponent<TypeProps, TypeState> {
     state = {
         showDateRange: false,
+        showShiftMenu: false,
+        shiftMenuAnchor: null,
     };
 
-    onShiftBack = () => {
+    shiftBack(date) {
         this.props.actions.updatePreferences({
-            endDate: formatYMD(
-                shiftDateBack(
-                    this.props.preferences.endDate,
-                    this.props.preferences.endDateIncrement,
-                ),
-            ),
+            endDate: endOfDayToISOString(date),
         });
-    };
-    onShiftForward = () => {
+    }
+
+    shiftForward(date) {
         this.props.actions.updatePreferences({
-            endDate: formatYMD(
-                shiftDateForward(
-                    this.props.preferences.endDate,
-                    this.props.preferences.endDateIncrement,
-                ),
-            ),
+            endDate: endOfDayToISOString(date),
         });
+    }
+
+    handleShiftBack = () => {
+        this.shiftBack(
+            shiftDateBack(
+                this.props.preferences.endDate,
+                this.props.preferences.endDateIncrement,
+            ),
+        );
     };
-    onChangeEndDate = (nothing, date) => {
-        this.props.actions.updatePreferences({ endDate: formatYMD(date) });
+    handleShiftForward = () => {
+        this.shiftForward(
+            shiftDateForward(
+                this.props.preferences.endDate,
+                this.props.preferences.endDateIncrement,
+            ),
+        );
+    };
+    onChangeEndDate = (date) => {
+        this.props.actions.updatePreferences({
+            endDate: endOfDayToISOString(date),
+        });
     };
     onClickRefresh = () => {
         this.props.actions.refreshWidgets();
@@ -75,7 +104,7 @@ class TopBar extends PureComponent<TypeProps> {
         this.props.actions.updateState({ currenciesDrawerOpen: true });
     };
 
-    handleEndDateIntervalDropdownChange = (e, i, newValue) => {
+    handleEndDateIntervalDropdownChange = (newValue) => {
         this.props.actions.updatePreferences({ endDateIncrement: newValue });
     };
 
@@ -84,139 +113,241 @@ class TopBar extends PureComponent<TypeProps> {
 
     renderEndDateIntervalSelect() {
         return (
-            <SelectField
-                value={this.props.preferences.endDateIncrement}
-                onChange={this.handleEndDateIntervalDropdownChange}
+            <div
                 style={{
+                    float: 'left',
                     width: '120px',
-                    height: INPUT_HEIGHT,
+                    marginRight: 12,
+                    marginTop: 2,
                 }}
             >
-                {Object.entries(ShiftDateOptions).map(([id, name]) => (
-                    <MenuItem key={id} value={id} primaryText={name} />
-                ))}
-            </SelectField>
+                <SingleSelect
+                    value={this.props.preferences.endDateIncrement}
+                    onChange={this.handleEndDateIntervalDropdownChange}
+                    clearable={false}
+                    options={Object.entries(ShiftDateOptions).map(
+                        ([id, name]) => ({ value: id, label: name }),
+                    )}
+                />
+            </div>
+        );
+    }
+
+    handleOpenShiftMenu = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.setState({
+            showShiftMenu: true,
+            shiftMenuAnchor: event.currentTarget,
+        });
+    };
+
+    handleCloseShiftMenu = () => {
+        this.setState({ showShiftMenu: false });
+    };
+
+    renderShiftBack() {
+        return (
+            <IconButton
+                style={{ float: 'left', height: INPUT_HEIGHT }}
+                tooltip={`Shift back ${
+                    ShiftDateOptions[this.props.preferences.endDateIncrement]
+                }`}
+                onClick={this.handleShiftBack}
+            >
+                <ArrowBack />
+            </IconButton>
+        );
+    }
+
+    renderShiftForward() {
+        return (
+            <IconButton
+                style={{ float: 'left', height: INPUT_HEIGHT }}
+                tooltip={`Shift forward ${
+                    ShiftDateOptions[this.props.preferences.endDateIncrement]
+                }`}
+                onClick={this.handleShiftForward}
+            >
+                <ArrowForward />
+            </IconButton>
+        );
+    }
+
+    renderShiftMenu() {
+        return (
+            <Menu
+                open={this.state.showShiftMenu}
+                anchorEl={this.state.shiftMenuAnchor}
+                style={{ marginTop: 29, marginLeft: -49 }}
+                onClose={this.handleCloseShiftMenu}
+            >
+                <Row nogutter={true}>
+                    <Col xs={6}>
+                        <FormLabel
+                            component="legend"
+                            style={{ textAlign: 'center' }}
+                        >
+                            Previous
+                        </FormLabel>
+                        {getShiftBackOptions(
+                            this.props.preferences.endDate,
+                            this.props.preferences.endDateIncrement,
+                        ).map((date) => {
+                            const formattedDate = moment(date).format('ll');
+
+                            return (
+                                <MenuItem2
+                                    key={formattedDate}
+                                    onClick={() => {
+                                        this.handleCloseShiftMenu();
+                                        this.shiftBack(date);
+                                    }}
+                                >
+                                    {formattedDate}
+                                </MenuItem2>
+                            );
+                        })}
+                    </Col>
+                    <Col xs={6}>
+                        <FormLabel
+                            component="legend"
+                            style={{ textAlign: 'center' }}
+                        >
+                            Next
+                        </FormLabel>
+                        {getShiftForwardOptions(
+                            this.props.preferences.endDate,
+                            this.props.preferences.endDateIncrement,
+                        ).map((date) => {
+                            const formattedDate = moment(date).format('ll');
+
+                            return (
+                                <MenuItem2
+                                    key={formattedDate}
+                                    onClick={() => {
+                                        this.handleCloseShiftMenu();
+                                        this.shiftForward(date);
+                                    }}
+                                >
+                                    {formattedDate}
+                                </MenuItem2>
+                            );
+                        })}
+                    </Col>
+                </Row>
+            </Menu>
         );
     }
 
     render() {
-        const isSmall = this.props.screen.isSmall;
+        const isSmall = this.props.screenSize.isSmall;
 
         return (
             <AppBar
-                title={this.props.title}
-                titleStyle={{
-                    height: Sizes.HEADER_SIZE,
-                    lineHeight: Sizes.HEADER_SIZE,
-                }}
-                showMenuIconButton={false}
-                iconStyleRight={{
-                    marginTop: 0,
-                }}
-                iconElementRight={
-                    <ToolbarGroup>
-                        {this.props.user &&
-                            isSmall && (
-                            <IconButton
-                                onClick={this.handleToggleDateRange}
-                            >
-                                <DateIcon color="white" />
-                            </IconButton>
-                        )}
-                        {this.props.showCurrenciesDrawer && (
-                            <IconButton
-                                onClick={this.onClickCurrenciesDrawerTrigger}
-                            >
-                                <MonetizationOn color="white" />
-                            </IconButton>
-                        )}
-                        {this.props.user && (
-                            <IconButton onClick={this.onClickRefresh}>
-                                <Refresh color="white" />
-                            </IconButton>
-                        )}
-                        {this.props.user && (
-                            <Logged onLogout={this.props.onLogout} />
-                        )}
-                    </ToolbarGroup>
-                }
+                position="fixed"
                 style={{
-                    position: 'fixed',
-                    top: 0,
                     height: Sizes.HEADER_SIZE,
                 }}
             >
-                {this.props.user && (
-                    <Paper
-                        style={{
-                            height: INPUT_HEIGHT,
-                            ...(isSmall
-                                ? {
-                                    position: 'fixed',
-                                    display: this.state.showDateRange
-                                        ? 'block'
-                                        : 'none',
-                                    top: Sizes.HEADER_SIZE,
+                <Toolbar
+                    style={{
+                        height: Sizes.HEADER_SIZE,
+                        minHeight: 'auto',
+                        paddingRight: 10,
+                    }}
+                >
+                    <Typography variant="title" color="inherit">
+                        {this.props.title}
+                    </Typography>
+                    {this.props.user && (
+                        <Paper
+                            style={{
+                                height: INPUT_HEIGHT,
+                                ...(isSmall
+                                    ? {
+                                        position: 'fixed',
+                                        display: this.state.showDateRange
+                                            ? 'block'
+                                            : 'none',
+                                        top: Sizes.HEADER_SIZE,
+                                    }
+                                    : {
+                                        position: 'absolute',
+                                        left: '50%',
+                                        top: '1px',
+                                        transform: 'translateX(-50%)',
+                                    }),
+                            }}
+                        >
+                            {this.renderShiftBack()}
+                            <InlineDatePicker
+                                style={{
+                                    float: 'left',
+                                    textAlign: 'center',
+                                    width: '85px',
+                                    marginTop: 5,
+                                }}
+                                format={'YYYY-MM-DD'}
+                                showTodayButton={true}
+                                value={
+                                    this.props.preferences.endDate
+                                        ? moment(
+                                            this.props.preferences.endDate,
+                                        ).toDate()
+                                        : null
                                 }
-                                : {
-                                    position: 'absolute',
-                                    left: '50%',
-                                    top: '1px',
-                                    transform: 'translateX(-50%)',
-                                }),
+                                onChange={this.onChangeEndDate}
+                                onContextMenu={this.handleOpenShiftMenu}
+                            />
+                            {this.renderShiftMenu()}
+                            {this.renderShiftForward()}
+                            {this.renderEndDateIntervalSelect()}
+                        </Paper>
+                    )}
+                    <div
+                        style={{
+                            flex: 1,
                         }}
                     >
-                        <IconButton
-                            style={{ float: 'left', height: INPUT_HEIGHT }}
-                            tooltip={`Shift back ${
-                                ShiftDateOptions[
-                                    this.props.preferences.endDateIncrement
-                                ]
-                            }`}
-                            onClick={this.onShiftBack}
-                        >
-                            <ArrowBack />
-                        </IconButton>
-                        <DatePicker
-                            style={{ float: 'left' }}
-                            textFieldStyle={{
-                                textAlign: 'center',
-                                width: '85px',
-                                height: INPUT_HEIGHT,
-                            }}
-                            hintText=""
-                            value={
-                                this.props.preferences.endDate
-                                    ? moment(
-                                        this.props.preferences.endDate,
-                                    ).toDate()
-                                    : null
-                            }
-                            container="inline"
-                            onChange={this.onChangeEndDate}
-                        />
-                        <IconButton
-                            style={{ float: 'left', height: INPUT_HEIGHT }}
-                            tooltip={`Shift forward ${
-                                ShiftDateOptions[
-                                    this.props.preferences.endDateIncrement
-                                ]
-                            }`}
-                            onClick={this.onShiftForward}
-                        >
-                            <ArrowForward />
-                        </IconButton>
-                        {this.renderEndDateIntervalSelect()}
-                    </Paper>
-                )}
+                        <div style={{ float: 'right' }}>
+                            {this.props.user && isSmall && (
+                                <IconButton
+                                    onClick={this.handleToggleDateRange}
+                                >
+                                    <DateIcon nativeColor="white" />
+                                </IconButton>
+                            )}
+                            {this.props.showCurrenciesDrawer && (
+                                <IconButton
+                                    onClick={
+                                        this.onClickCurrenciesDrawerTrigger
+                                    }
+                                >
+                                    <MonetizationOn nativeColor="white" />
+                                </IconButton>
+                            )}
+                            {this.props.user && (
+                                <IconButton onClick={this.onClickRefresh}>
+                                    <Refresh nativeColor="white" />
+                                </IconButton>
+                            )}
+                            {this.props.user && (
+                                <Logged onLogout={this.props.onLogout} />
+                            )}
+                        </div>
+                    </div>
+                </Toolbar>
             </AppBar>
         );
     }
 }
 
 export default connect(
-    ({ screen, user, title, preferences }) => ({
+    ({ screen, screenSize, user, title, preferences }) => ({
         screen,
+        screenSize,
         user,
         title,
         preferences,

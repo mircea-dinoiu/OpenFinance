@@ -11,10 +11,20 @@ type TypeScreenQueries = {
 type TypePreferences = {
     endDate: string,
     endDateIncrement: 'd' | 'w' | '2w' | 'm',
-    include: 'ut' | 'all' | 'ld' | 'ld' | 'lw' | 'lm' | 'ly',
+    include: | 'ut'
+        | 'until-yd'
+        | 'until-tmrw'
+        | 'until-now'
+        | 'all'
+        | 'ld'
+        | 'ld'
+        | 'lw'
+        | 'lm'
+        | 'ly',
+    includePending: boolean,
 };
 
-type TypeCurrency = Map<{
+type TypeCurrency = {
     id: number,
     iso_code: string,
     currency: string,
@@ -22,15 +32,15 @@ type TypeCurrency = Map<{
     rates: {
         [key: string]: number,
     },
-}>;
+};
 
-type TypeCurrencies = Map<{
+type TypeCurrencies = {
     default: number,
     from_cache: boolean,
     map: {
         [key: string]: TypeCurrencyMap,
     },
-}>;
+};
 
 type TypeCurrencyIdentifier = string | number | TypeCurrencyMap;
 

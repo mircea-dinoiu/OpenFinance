@@ -1,7 +1,16 @@
+import { isEqual } from 'lodash';
+
 // @flow
 import React, { PureComponent } from 'react';
 
-import { Dialog, RaisedButton } from 'material-ui';
+import {
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
 import { Row, Col } from 'react-grid-system';
 
@@ -9,16 +18,30 @@ import { ErrorSnackbar, SuccessSnackbar } from '../../components/snackbars';
 import { ButtonProgress } from '../../components/loaders';
 
 import { parseCRUDError } from 'common/parsers';
+import { dialog } from 'common/defs/styles';
 
 type TypeProps = {
     onRequestUpdate: Function,
 };
 
-export default class MainScreenEditDialog extends PureComponent<TypeProps> {
+class MainScreenEditDialog extends PureComponent<TypeProps> {
     state = {
         saving: false,
     };
-    formData = this.props.modelToForm(this.props.item);
+    formData = this.props.items.map(this.props.modelToForm);
+    initialData = this.props.items.map(this.props.modelToForm);
+
+    getUpdates() {
+        const updates = {};
+
+        for (const key in this.initialData[0]) {
+            if (!isEqual(this.initialData[0][key], this.formData[0][key])) {
+                updates[key] = this.formData[0][key];
+            }
+        }
+
+        return updates;
+    }
 
     save = async () => {
         const data = this.formData;
@@ -29,12 +52,18 @@ export default class MainScreenEditDialog extends PureComponent<TypeProps> {
             saving: true,
         });
 
-        const response = await this.props.onRequestUpdate([
-            this.props.formToModel(data, this.props),
-        ]);
-        const json = await response.json();
+        try {
+            const updates = this.getUpdates();
 
-        if (response.ok) {
+            console.info('[UPDATES]', updates);
+
+            const response = await this.props.onRequestUpdate(
+                data.map((each) =>
+                    this.props.formToModel({ ...each, ...updates }, this.props),
+                ),
+            );
+            const json = response.data;
+
             this.setState({
                 success: `The ${
                     this.props.entityName
@@ -49,66 +78,87 @@ export default class MainScreenEditDialog extends PureComponent<TypeProps> {
                 });
                 this.props.onSave(json[0]);
             }, 500);
-        } else {
-            this.setState({
-                error: parseCRUDError(json),
-                saving: false,
-            });
+        } catch (e) {
+            if (e.response) {
+                this.setState({
+                    error: parseCRUDError(e.response.data),
+                    saving: false,
+                });
+            } else {
+                this.setState({
+                    error: e.message,
+                    saving: false,
+                });
+            }
         }
     };
 
     render() {
-        const actions = (
-            <React.Fragment>
-                <RaisedButton
-                    disabled={this.state.saving}
-                    label="Cancel"
-                    primary={false}
-                    onClick={this.props.onCancel}
-                    onTouchTap={this.props.onCancel}
-                    style={{ marginRight: 5 }}
-                />
-                <RaisedButton
-                    disabled={this.state.saving}
-                    label={this.state.saving ? <ButtonProgress /> : 'Update'}
-                    primary={true}
-                    onClick={this.save}
-                    onTouchTap={this.save}
-                    style={{ float: 'right' }}
-                />
-            </React.Fragment>
-        );
         const Form = this.props.formComponent;
 
         return (
             <Dialog
-                title={`Edit ${this.props.entityName}`}
                 open={this.props.open}
-                autoScrollBodyContent={true}
-                actions={actions}
-                contentStyle={{ width: '95%' }}
+                classes={this.props.classes}
+                fullWidth={true}
             >
-                <Row>
-                    <Form
-                        onFormChange={(formData) => (this.formData = formData)}
-                        initialValues={this.formData}
-                    />
-                </Row>
-                <Col>
-                    {this.state.error && (
-                        <ErrorSnackbar
-                            key={Math.random()}
-                            message={this.state.error}
+                <DialogTitle>{`Edit ${this.props.entityName}${
+                    this.props.items.length === 1 ? '' : 's'
+                }`}</DialogTitle>
+                <DialogContent style={{ overflow: 'visible' }}>
+                    <Row>
+                        <Form
+                            onFormChange={(formData) =>
+                                (this.formData[0] = formData)
+                            }
+                            initialValues={this.formData[0]}
                         />
-                    )}
-                    {this.state.success && (
-                        <SuccessSnackbar
-                            key={Math.random()}
-                            message={this.state.success}
-                        />
-                    )}
-                </Col>
+                    </Row>
+                    <Col>
+                        {this.state.error && (
+                            <ErrorSnackbar
+                                key={Math.random()}
+                                message={this.state.error}
+                            />
+                        )}
+                        {this.state.success && (
+                            <SuccessSnackbar
+                                key={Math.random()}
+                                message={this.state.success}
+                            />
+                        )}
+                    </Col>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        disabled={this.state.saving}
+                        onClick={this.props.onCancel}
+                        onTouchTap={this.props.onCancel}
+                        style={{ marginRight: 5 }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="contained"
+                        disabled={this.state.saving}
+                        color="primary"
+                        onClick={this.save}
+                        onTouchTap={this.save}
+                        style={{ float: 'right' }}
+                    >
+                        {this.state.saving ? (
+                            <ButtonProgress />
+                        ) : this.props.items.length === 1 ? (
+                            'Update'
+                        ) : (
+                            'Update Multiple'
+                        )}
+                    </Button>
+                </DialogActions>
             </Dialog>
         );
     }
 }
+
+export default withStyles(dialog)(MainScreenEditDialog);

@@ -1,6 +1,8 @@
 const BaseController = require('./BaseController');
 const { Expense, sql } = require('../models');
 const { Validator } = require('../validators');
+const { extractIdsFromModel } = require('../helpers');
+const defs = require('../../shared/defs');
 
 module.exports = BaseController.extend({
     async getCategories(req, res) {
@@ -17,10 +19,10 @@ module.exports = BaseController.extend({
             });
 
             for (const record of response) {
-                const json = record.toJSON();
+                const categories = extractIdsFromModel(record, 'categoryIds');
 
-                if (json.categories.length) {
-                    ret = json.categories;
+                if (categories.length) {
+                    ret = categories;
                     break;
                 }
             }
@@ -33,7 +35,10 @@ module.exports = BaseController.extend({
         const { query } = req;
         const validator = new Validator(query, {
             search: ['isString'],
-            end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
+            end_date: [
+                'isRequired',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
         });
 
         if (await validator.passes()) {
@@ -41,7 +46,7 @@ module.exports = BaseController.extend({
                 await Expense.findAll({
                     attributes: ['item', [sql.fn('COUNT', 'item'), 'usages']],
                     where: [
-                        'DATE(created_at) <= ? AND LOWER(item) LIKE ?',
+                        'created_at <= ? AND LOWER(item) LIKE ?',
                         query.end_date,
                         `%${query.search}%`,
                     ],

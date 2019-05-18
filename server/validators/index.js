@@ -5,6 +5,7 @@ const debug = require('config').get('debug');
 const chalk = require('chalk');
 const stringIsInt = validator.isInt;
 const stringIsFloat = validator.isFloat;
+const logger = require('../helpers/logger');
 
 Object.assign(validator, {
     isInt: (value) => {
@@ -48,10 +49,56 @@ Object.assign(validator, {
 
         return true;
     },
-    isRepeatValue: (value) => ['d', 'w', '2w', 'm', '3m', 'y'].includes(value),
+    isTableSorters: (data, Model, extra = []) => {
+        try {
+            const json = JSON.parse(data);
+
+            if (Array.isArray(json)) {
+                for (const pair of json) {
+                    if (!Model.attributes.hasOwnProperty(pair.id) && !extra.includes(pair.id)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        } catch (e) {
+            logger.error(e);
+        }
+
+        return false;
+    },
+    isTableFilters: (data, validAttrs) => {
+        try {
+            const json = JSON.parse(data);
+
+            if (Array.isArray(json)) {
+                for (const pair of json) {
+                    if (pair.value === undefined) {
+                        return false;
+                    }
+
+                    if (!validAttrs.includes(pair.id)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        } catch (e) {
+            logger.error(e);
+        }
+
+        return false;
+    },
+    isRepeatValue: (value) =>
+        ['d', 'w', '2w', 'm', '2m', '3m', 'y'].includes(value),
     isStatusValue: (value) => ['finished', 'pending'].includes(value),
+    isTypeValue: (value) => ['withdrawal', 'deposit'].includes(value),
     isNotZero: (value) => Number(value) !== 0,
+    isNotNegative: (value) => Number(value) >= 0,
     isString: (value) => typeof value === 'string',
+    isBool: (value) => typeof value === 'boolean',
     isRequired: (value) => {
         if (value == null) {
             return false;
@@ -107,8 +154,8 @@ class Validator {
                     }
 
                     if (debug) {
-                        console.log(
-                            chalk.inverse('Validation rule called:'),
+                        logger.log(
+                            'Validation rule called',
                             chalk.green(
                                 `${dataKey}: validator.${ruleName}(${[value]
                                     .concat(params)

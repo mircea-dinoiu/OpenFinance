@@ -1,4 +1,6 @@
 // @flow
+import { uniqueId } from 'lodash';
+
 import React, { PureComponent } from 'react';
 import { parseCRUDError } from 'common/parsers';
 
@@ -7,21 +9,29 @@ import { ButtonProgress } from '../../components/loaders';
 
 import { Col, Row } from 'react-grid-system';
 
-import { Dialog, RaisedButton } from 'material-ui';
 import { connect } from 'react-redux';
+import {
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { dialog } from 'common/defs/styles';
 
-class MainScreenCreatorDialog extends PureComponent {
+type TypeProps = {
+    getFormDefaults: Function,
+    formToModel: Function,
+    entityName: string,
+    onReceiveNewRecord: Function,
+    formComponent: any,
+    onRequestCreate: Function,
+};
+
+class MainScreenCreatorDialog extends PureComponent<TypeProps> {
     state = {
-        createCount: 1,
         saving: false,
-    };
-    props: {
-        getFormDefaults: Function,
-        formToModel: Function,
-        entityName: string,
-        onReceiveNewRecord: Function,
-        formComponent: any,
-        onRequestCreate: Function,
     };
     formDefaults = this.props.getFormDefaults(this.props);
     formData = this.props.getFormDefaults(this.props);
@@ -35,86 +45,95 @@ class MainScreenCreatorDialog extends PureComponent {
             saving: true,
         });
 
-        const response = await this.props.onRequestCreate([
-            this.props.formToModel(data, this.props),
-        ]);
-        const json = await response.json();
+        try {
+            const response = await this.props.onRequestCreate([
+                this.props.formToModel(data, this.props),
+            ]);
+            const json = response.data;
 
-        if (response.ok) {
             this.setState({
                 success: `The ${
                     this.props.entityName
                 } was successfully created`,
-                createCount: this.state.createCount + 1,
                 saving: false,
             });
 
             this.props.onReceiveNewRecord(json[0]);
-        } else {
-            this.setState({
-                error: parseCRUDError(json),
-                saving: false,
-            });
+        } catch (e) {
+            if (e.response) {
+                this.setState({
+                    error: parseCRUDError(e.response.data),
+                    saving: false,
+                });
+            } else {
+                this.setState({
+                    error: e.message,
+                    saving: false,
+                });
+            }
         }
     };
 
     render() {
         const Form = this.props.formComponent;
-        const actions = (
-            <React.Fragment>
-                <RaisedButton
-                    disabled={this.state.saving}
-                    label="Cancel"
-                    primary={false}
-                    onClick={this.props.onCancel}
-                    onTouchTap={this.props.onCancel}
-                    style={{ marginRight: 5 }}
-                />
-                <RaisedButton
-                    disabled={this.state.saving}
-                    label={this.state.saving ? <ButtonProgress /> : 'Create'}
-                    primary={true}
-                    onClick={this.save}
-                    onTouchTap={this.save}
-                    style={{ float: 'right' }}
-                />
-            </React.Fragment>
-        );
 
         return (
             <Dialog
-                title={`Create ${this.props.entityName}`}
                 open={this.props.open}
-                autoScrollBodyContent={true}
-                actions={actions}
-                contentStyle={{ width: '95%' }}
+                classes={this.props.classes}
+                fullWidth={true}
             >
-                <Row>
-                    <Form
-                        key={this.state.createCount}
-                        onFormChange={(formData) => (this.formData = formData)}
-                        initialValues={this.formDefaults}
-                    />
-                </Row>
-                <Col>
-                    {this.state.error && (
-                        <ErrorSnackbar
-                            key={Math.random()}
-                            message={this.state.error}
+                <DialogTitle>{`Create ${this.props.entityName}`}</DialogTitle>
+                <DialogContent style={{ overflow: 'visible' }}>
+                    <Row>
+                        <Form
+                            onFormChange={(formData) =>
+                                (this.formData = formData)
+                            }
+                            initialValues={this.formDefaults}
                         />
-                    )}
-                    {this.state.success && (
-                        <SuccessSnackbar
-                            key={Math.random()}
-                            message={this.state.success}
-                        />
-                    )}
-                </Col>
+                    </Row>
+                    <Col>
+                        {this.state.error && (
+                            <ErrorSnackbar
+                                key={Math.random()}
+                                message={this.state.error}
+                            />
+                        )}
+                        {this.state.success && (
+                            <SuccessSnackbar
+                                key={Math.random()}
+                                message={this.state.success}
+                            />
+                        )}
+                    </Col>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        disabled={this.state.saving}
+                        onClick={this.props.onCancel}
+                        onTouchTap={this.props.onCancel}
+                        style={{ marginRight: 5 }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="contained"
+                        disabled={this.state.saving}
+                        color="primary"
+                        onClick={this.save}
+                        onTouchTap={this.save}
+                        style={{ float: 'right' }}
+                    >
+                        {this.state.saving ? <ButtonProgress /> : 'Create'}
+                    </Button>
+                </DialogActions>
             </Dialog>
         );
     }
 }
 
 export default connect(({ currencies, user }) => ({ currencies, user }))(
-    MainScreenCreatorDialog,
+    withStyles(dialog)(MainScreenCreatorDialog),
 );

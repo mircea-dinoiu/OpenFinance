@@ -29,3 +29,8 @@ pushd financial
 yarn run build
 yarn start
 ```
+
+# Env variables
+## Webpack
+- __BABEL_DEBUG=true__ displays babel debug information
+- __DEVTOOL=?__ sets source mapping (https://webpack.js.org/configuration/devtool/)

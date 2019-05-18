@@ -1,23 +1,25 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { Paper, Tab, Tabs } from 'material-ui';
 import {
     BottomNavigation,
-    BottomNavigationItem,
-} from 'material-ui/BottomNavigation';
+    BottomNavigationAction,
+    Tab,
+    Tabs,
+    AppBar,
+    Paper,
+} from '@material-ui/core';
 
 import Expenses from './internal/Expenses';
-import Incomes from './internal/Incomes';
 import Summary from './internal/Summary';
 
-import AccountBalance from 'material-ui-icons/AccountBalance';
-import TrendingUp from 'material-ui-icons/TrendingUp';
-import TrendingDown from 'material-ui-icons/TrendingDown';
+import AccountBalance from '@material-ui/icons/AccountBalance';
+import TrendingUp from '@material-ui/icons/TrendingUp';
+import TrendingDown from '@material-ui/icons/TrendingDown';
 
 import { connect } from 'react-redux';
 import { Col, Row } from 'react-grid-system';
 import { flexColumn } from 'common/defs/styles';
-import { grey700 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -30,26 +32,37 @@ type TypeState = {
 
 class Internal extends PureComponent<TypeProps, TypeState> {
     state = {
-        selectedIndex: 1,
+        selectedIndex: 0,
         tab: null,
     };
+    handleChangeTab = this.handleChangeTab.bind(this);
 
-    select = (index) =>
-        this.setState({ selectedIndex: index, tab: this.createTab(index) });
+    handleChangeTab(index) {
+        this.setState({ selectedIndex: index });
+    }
 
-    createTab(index) {
+    renderMobileTab(index) {
         switch (index) {
             case 0:
                 return <Summary />;
             case 1:
                 return <Expenses />;
-            case 2:
-                return <Incomes />;
         }
+
+        return null;
+    }
+
+    renderDesktopTab(index) {
+        switch (index) {
+            case 0:
+                return <Expenses />;
+        }
+
+        return this.renderComingSoon();
     }
 
     componentDidMount() {
-        this.select(this.state.selectedIndex);
+        this.handleChangeTab(this.state.selectedIndex);
     }
 
     renderComingSoon() {
@@ -59,7 +72,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                     textAlign: 'center',
                     padding: '100px',
                     fontSize: '48px',
-                    color: grey700,
+                    color: grey[700],
                 }}
             >
                 Coming soon
@@ -72,29 +85,30 @@ class Internal extends PureComponent<TypeProps, TypeState> {
     }
 
     renderLarge() {
-        const comingSoon = this.renderComingSoon();
-
         return (
             <Row nogutter>
                 <Col xs={2} style={{ paddingRight: 0 }}>
                     <Summary />
                 </Col>
                 <Col xs={10} style={{ paddingLeft: 0 }}>
-                    <Tabs>
-                        <Tab label="Expenses">
-                            <Expenses />
-                        </Tab>
-                        <Tab label="Incomes">
-                            <Incomes />
-                        </Tab>
-                        {this.shouldRenderExtraScreens() && (
-                            <React.Fragment>
-                                <Tab label="Categories">{comingSoon}</Tab>
-                                <Tab label="Accounts">{comingSoon}</Tab>
-                                <Tab label="Account Types">{comingSoon}</Tab>
-                            </React.Fragment>
-                        )}
-                    </Tabs>
+                    <AppBar position="static">
+                        <Tabs
+                            value={this.state.selectedIndex}
+                            onChange={(event, index) =>
+                                this.handleChangeTab(index)
+                            }
+                        >
+                            <Tab label="Transactions" />
+                            {this.shouldRenderExtraScreens() && (
+                                <>
+                                    <Tab label="Categories" />
+                                    <Tab label="Accounts" />
+                                    <Tab label="Account Types" />
+                                </>
+                            )}
+                        </Tabs>
+                    </AppBar>
+                    {this.renderDesktopTab(this.state.selectedIndex)}
                 </Col>
             </Row>
         );
@@ -107,7 +121,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                     paddingBottom: '56px',
                 }}
             >
-                {this.state.tab}
+                {this.renderMobileTab(this.state.selectedIndex)}
                 <Paper
                     zDepth={1}
                     style={{
@@ -117,24 +131,18 @@ class Internal extends PureComponent<TypeProps, TypeState> {
                         width: '100%',
                     }}
                 >
-                    <BottomNavigation selectedIndex={this.state.selectedIndex}>
-                        <BottomNavigationItem
+                    <BottomNavigation value={this.state.selectedIndex}>
+                        <BottomNavigationAction
                             label="Summary"
                             icon={<AccountBalance />}
-                            onClick={() => this.select(0)}
-                            onTouchTap={() => this.select(0)}
+                            onClick={() => this.handleChangeTab(0)}
+                            onTouchTap={() => this.handleChangeTab(0)}
                         />
-                        <BottomNavigationItem
-                            label="Expenses"
+                        <BottomNavigationAction
+                            label="Transactions"
                             icon={<TrendingDown />}
-                            onClick={() => this.select(1)}
-                            onTouchTap={() => this.select(1)}
-                        />
-                        <BottomNavigationItem
-                            label="Incomes"
-                            icon={<TrendingUp />}
-                            onClick={() => this.select(2)}
-                            onTouchTap={() => this.select(2)}
+                            onClick={() => this.handleChangeTab(1)}
+                            onTouchTap={() => this.handleChangeTab(1)}
                         />
                     </BottomNavigation>
                 </Paper>

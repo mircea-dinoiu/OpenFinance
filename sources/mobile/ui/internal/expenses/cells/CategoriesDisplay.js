@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Chip } from 'material-ui';
+import { Chip } from '@material-ui/core';
 
 const CategoriesDisplay = ({ item, categories, screen }) => (
     <div
@@ -10,25 +10,22 @@ const CategoriesDisplay = ({ item, categories, screen }) => (
             flexWrap: 'wrap',
         }}
     >
-        {categories.map(
-            (each) =>
-                item.categories.includes(each.get('id')) ? (
-                    <Chip
-                        key={each.get('id')}
-                        style={{
-                            margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`,
-                        }}
-                        labelStyle={
-                            screen.isLarge
-                                ? {
-                                    lineHeight: 'inherit',
-                                }
-                                : {}
-                        }
-                    >
-                        {each.get('name')}
-                    </Chip>
-                ) : null,
+        {categories.map((each) =>
+            item.categories.includes(each.get('id')) ? (
+                <Chip
+                    key={each.get('id')}
+                    style={{
+                        background: each.get('color'),
+                        margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`,
+                        ...(screen.isLarge
+                            ? {
+                                height: 'auto',
+                            }
+                            : {}),
+                    }}
+                    label={each.get('name')}
+                />
+            ) : null,
         )}
     </div>
 );

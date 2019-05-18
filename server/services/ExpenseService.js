@@ -1,7 +1,19 @@
 const { pick } = require('lodash');
 const { Validator } = require('../validators');
-const { Expense: Model } = require('../models');
+const { Expense: Model, sql } = require('../models');
 const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
+const { sanitizeFilters, sanitizeSorters } = require('../helpers');
+const defs = require('../../shared/defs');
+const {
+    mapStartDateToSQL,
+    mapEndDateToSQL,
+    mapTextFilterToSQL,
+    mapFlagsToSQL,
+    mapSortersToSQL,
+    mapInputToLimitSQL,
+    mapGroupConcatToHavingSQL,
+    mapEntityFilterToWhereSQL,
+} = require('../helpers/sql');
 
 module.exports = {
     async list(query) {
@@ -12,63 +24,113 @@ module.exports = {
             'filters',
             'page',
             'limit',
+            'sorters',
         );
         const rules = {
-            start_date: ['sometimes', ['isDateFormat', 'YYYY-MM-DD']],
-            end_date: ['isRequired', ['isDateFormat', 'YYYY-MM-DD']],
-            filters: ['sometimes', 'isPlainObject'],
+            start_date: [
+                'sometimes',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
+            end_date: [
+                'isRequired',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
+            filters: [
+                'sometimes',
+                [
+                    'isTableFilters',
+                    [...Object.keys(Model.attributes), 'categories', 'users'],
+                ],
+            ],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
+            sorters: ['sometimes', ['isTableSorters', Model, ['money_location.currency_id']]],
         };
         const validator = new Validator(input, rules);
 
         if (await validator.passes()) {
-            const whereClause = [];
-            const whereReplacements = [];
+            const where = [];
+            let having = [];
 
-            if (input.start_date) {
-                whereClause.push(
-                    `(DATE(${Model.tableName}.created_at) >= ? OR ${
-                        Model.tableName
-                    }.repeat IS NOT null)`,
-                );
-                whereReplacements.push(input.start_date);
-            }
+            where.push(mapStartDateToSQL(input.start_date, Model));
+            where.push(mapEndDateToSQL(input.end_date, Model));
 
-            whereClause.push(`DATE(${Model.tableName}.created_at) <= ?`);
-            whereReplacements.push(input.end_date);
+            let displayGenerated = 'yes';
 
-            if (input.filters) {
-                Object.keys(input.filters).forEach((key) => {
-                    const value = input.filters[key];
+            sanitizeFilters(input.filters).forEach(({ id, value }) => {
+                switch (id) {
+                    case 'item':
+                        where.push(mapTextFilterToSQL(id, value.text));
+                        where.push(mapFlagsToSQL(value));
 
-                    if (['status'].includes(key)) {
-                        whereClause.push(`${key} = ?`);
-                        whereReplacements.push(value);
-                    }
-                });
-            }
+                        if (value.Generated) {
+                            displayGenerated = value.Generated;
+                        }
+                        break;
+                    case 'categories':
+                        having.push(
+                            mapGroupConcatToHavingSQL(
+                                value,
+                                'categoryIds',
+                                'categories.category_expense.category_id',
+                            ),
+                        );
+                        break;
+                    case 'users':
+                        having.push(
+                            mapGroupConcatToHavingSQL(
+                                value,
+                                'userIds',
+                                'users.expense_user.user_id',
+                            ),
+                        );
+                        break;
+                    case 'money_location_id':
+                        where.push(
+                            mapEntityFilterToWhereSQL(
+                                value,
+                                'money_location_id',
+                            ),
+                        );
+                        break;
+                    default:
+                        where.push({
+                            [id]: {
+                                $eq: value,
+                            },
+                        });
+                        break;
+                }
+            });
 
             const queryOpts = {
-                where: [whereClause.join(' AND '), ...whereReplacements],
+                where: sql.and(...where.filter(Boolean)),
             };
 
-            if (input.page != null && input.limit != null) {
-                const offset = (input.page - 1) * input.limit;
+            having = having.filter(Boolean);
 
-                Object.assign(queryOpts, {
-                    // https://github.com/sequelize/sequelize/issues/3007
-                    order: `created_at DESC LIMIT ${offset}, ${input.limit}`,
-                });
+            if (having.length) {
+                queryOpts.having = sql.and(...having);
             }
+
+            const sorters = sanitizeSorters(input.sorters);
+
+            queryOpts.order =
+                mapSortersToSQL(sorters) + mapInputToLimitSQL(input);
 
             return {
                 error: false,
-                json: RepeatedModelsHelper.generateClones({
-                    records: await Model.scope('default').findAll(queryOpts),
-                    endDate: input.end_date,
-                    startDate: input.start_date,
-                }),
+                json: RepeatedModelsHelper.filterClones(
+                    RepeatedModelsHelper.generateClones({
+                        records: await Model.scope('default').findAll(
+                            queryOpts,
+                        ),
+                        endDate: input.end_date,
+                        startDate: input.start_date,
+                        sorters,
+                    }),
+                    displayGenerated,
+                ),
             };
         }
 
