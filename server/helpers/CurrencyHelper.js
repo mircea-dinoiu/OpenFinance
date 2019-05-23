@@ -15,11 +15,11 @@ const appendRatesToCurrencies = (map, { rates, defaultCurrencyISOCode }) => {
             let value;
 
             if (currencyInfo.iso_code === defaultCurrencyISOCode) {
-                value = floorToDigits(rates[eachISOCode], 4);
+                value = floorToDigits(rates[eachISOCode], 3);
             } else {
                 value = floorToDigits(
                     rates[eachISOCode] / rates[currencyInfo.iso_code],
-                    4,
+                    3,
                 );
             }
 
@@ -36,7 +36,7 @@ const jsonToRates = (json, { allowedISOCodes, defaultCurrencyISOCode }) => {
 
     Object.entries(json.rates).forEach(([key, value]) => {
         if (allowedISOCodes.includes(key)) {
-            rates[key] = floorToDigits(1 / value, 4);
+            rates[key] = floorToDigits(value, 3);
         }
     });
 
@@ -45,14 +45,14 @@ const jsonToRates = (json, { allowedISOCodes, defaultCurrencyISOCode }) => {
             if (key !== defaultCurrencyISOCode) {
                 rates[key] = floorToDigits(
                     (1 / rates[defaultCurrencyISOCode]) * rates[key],
-                    4,
+                    3,
                 );
             }
         });
 
         rates[origCurrencyISOCode] = floorToDigits(
             1 / rates[defaultCurrencyISOCode],
-            4,
+            3,
         );
         rates[defaultCurrencyISOCode] = 1;
     }

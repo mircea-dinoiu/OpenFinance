@@ -1,11 +1,11 @@
 const { jsonToRates, appendRatesToCurrencies } = require('./CurrencyHelper');
 const allowedISOCodes = ['USD', 'RON', 'EUR'];
 const json = {
-    base: 'RON',
+    base: 'EUR',
     rates: {
-        EUR: 4.6576,
-        USD: 3.7779,
-        GBP: 5.3000,
+        RON: 4.6576,
+        USD: 1.2320,
+        GBP: 1.1379,
     }
 };
 
@@ -16,7 +16,7 @@ describe('jsonToRates', () => {
                 allowedISOCodes,
                 defaultCurrencyISOCode: 'RON',
             }),
-        ).toEqual({ EUR: 0.2147, RON: 1, USD: 0.2646 });
+        ).toEqual({"EUR": 0.214, "RON": 1, "USD": 0.264});
     });
 
     it('should map correct rates when default currency is USD', () => {
@@ -25,7 +25,7 @@ describe('jsonToRates', () => {
                 allowedISOCodes,
                 defaultCurrencyISOCode: 'USD',
             }),
-        ).toEqual({ EUR: 0.8114, RON: 3.7792, USD: 1 });
+        ).toEqual({"EUR": 0.811, "RON": 3.780, "USD": 1});
     });
 });
 
@@ -41,13 +41,13 @@ describe('appendRatesToCurrencies', () => {
             iso_code: 'EUR',
         },
     };
-    const mutatedMap = {
-        '1': { iso_code: 'USD', rates: { EUR: 0.8114, RON: 3.7792 } },
-        '2': { iso_code: 'RON', rates: { EUR: 0.2147, USD: 0.2646 } },
-        '3': { iso_code: 'EUR', rates: { RON: 4.6576, USD: 1.2324 } },
-    };
 
     it('should provide correct mappings for RON', () => {
+        const mutatedMap = {
+            '1': { iso_code: 'USD', rates: { EUR: 0.810, RON: 3.787 } },
+            '2': { iso_code: 'RON', rates: { EUR: 0.214, USD: 0.264 } },
+            '3': { iso_code: 'EUR', rates: { RON: 4.672, USD: 1.233 } },
+        };
         const rates = jsonToRates(json, {
             allowedISOCodes,
             defaultCurrencyISOCode: 'RON',
@@ -62,6 +62,11 @@ describe('appendRatesToCurrencies', () => {
     });
 
     it('should provide correct mappings for USD', () => {
+        const mutatedMap = {
+            '1': { iso_code: 'USD', rates: { EUR: 0.811, RON: 3.780 } },
+            '2': { iso_code: 'RON', rates: { EUR: 0.214, USD: 0.264 } },
+            '3': { iso_code: 'EUR', rates: { RON: 4.660, USD: 1.233 } },
+        };
         const rates = jsonToRates(json, {
             allowedISOCodes,
             defaultCurrencyISOCode: 'USD',
