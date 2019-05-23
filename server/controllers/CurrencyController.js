@@ -39,9 +39,9 @@ module.exports = {
 
         return new Promise((resolve) => {
             const options = {
-                host: 'www.bnr.ro',
+                host: 'data.fixer.io',
                 port: 80,
-                path: '/nbrfxrates.xml',
+                path: `/api/latest?access_key=${process.env.FIXER_API_KEY}`,
             };
             const req = http.get(options, (res) => {
                 let chunks = [];
@@ -51,16 +51,12 @@ module.exports = {
                 }).on('end', () => {
                     chunks = Buffer.concat(chunks).toString();
 
-                    const xml2js = require('xml2js');
-
-                    xml2js.parseString(chunks, (err, xml) => {
-                        const rates = CurrencyHelper.xmlToRates(xml, {
-                            allowedISOCodes,
-                            defaultCurrencyISOCode,
-                        });
-
-                        resolve(rates);
+                    const rates = CurrencyHelper.jsonToRates(JSON.parse(chunks), {
+                        allowedISOCodes,
+                        defaultCurrencyISOCode,
                     });
+
+                    resolve(rates);
                 });
             });
 

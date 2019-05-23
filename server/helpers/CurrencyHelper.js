@@ -28,42 +28,39 @@ const appendRatesToCurrencies = (map, { rates, defaultCurrencyISOCode }) => {
     });
 };
 
-module.exports = {
-    xmlToRates: (xml, { allowedISOCodes, defaultCurrencyISOCode }) => {
-        const body = xml.DataSet.Body[0];
-        const origCurrencyISOCode = String(body.OrigCurrency[0]);
-        const rates = {};
+const jsonToRates = (json, { allowedISOCodes, defaultCurrencyISOCode }) => {
+    const origCurrencyISOCode = json.base;
+    const rates = {};
 
-        rates[origCurrencyISOCode] = 1;
+    rates[origCurrencyISOCode] = 1;
 
-        const Rate = body.Cube[0].Rate;
+    Object.entries(json.rates).forEach(([key, value]) => {
+        if (allowedISOCodes.includes(key)) {
+            rates[key] = floorToDigits(1 / value, 4);
+        }
+    });
 
-        Rate.forEach(({ _, $ }) => {
-            const key = $.currency;
-
-            if (allowedISOCodes.includes(key)) {
-                rates[key] = floorToDigits(1 / Number(_), 4);
+    if (defaultCurrencyISOCode !== origCurrencyISOCode) {
+        Object.keys(rates).forEach((key) => {
+            if (key !== defaultCurrencyISOCode) {
+                rates[key] = floorToDigits(
+                    (1 / rates[defaultCurrencyISOCode]) * rates[key],
+                    4,
+                );
             }
         });
 
-        if (defaultCurrencyISOCode !== origCurrencyISOCode) {
-            Object.keys(rates).forEach((key) => {
-                if (key !== defaultCurrencyISOCode) {
-                    rates[key] = floorToDigits(
-                        (1 / rates[defaultCurrencyISOCode]) * rates[key],
-                        4,
-                    );
-                }
-            });
+        rates[origCurrencyISOCode] = floorToDigits(
+            1 / rates[defaultCurrencyISOCode],
+            4,
+        );
+        rates[defaultCurrencyISOCode] = 1;
+    }
 
-            rates[origCurrencyISOCode] = floorToDigits(
-                1 / rates[defaultCurrencyISOCode],
-                4,
-            );
-            rates[defaultCurrencyISOCode] = 1;
-        }
+    return rates;
+};
 
-        return rates;
-    },
+module.exports = {
+    jsonToRates,
     appendRatesToCurrencies,
 };
