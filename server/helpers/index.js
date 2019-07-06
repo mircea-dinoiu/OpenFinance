@@ -2,6 +2,7 @@ const path = require('path');
 const basePath = (string = '') => path.join(__dirname, '../../', string);
 const config = require('config');
 const Messages = require('../Messages');
+const defs = require('../../shared/defs');
 
 const extractIdsFromModel = (model, key) => {
     const ids = model.dataValues[key];
@@ -23,7 +24,7 @@ const extractUsersFromModel = (model) => {
 
             // Support old style blame values (binary)
             if (workingValue === 1) {
-                workingValue = 100 / pairs.length;
+                workingValue = defs.PERC_MAX / pairs.length;
             }
 
             acc[key] = workingValue;

@@ -72,8 +72,10 @@ module.exports = (sequelize, types) => {
                 toJSON() {
                     const values = Object.assign({}, this.dataValues);
 
-                    values.users = extractUsersFromModel(this);
-                    delete values.userIds;
+                    if (values.userIds) {
+                        values.users = extractUsersFromModel(this);
+                        delete values.userIds;
+                    }
 
                     values.categories = extractIdsFromModel(
                         this,

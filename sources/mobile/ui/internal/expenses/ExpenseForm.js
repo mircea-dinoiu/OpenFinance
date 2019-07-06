@@ -1,16 +1,26 @@
 // @flow
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormLabel from '@material-ui/core/FormLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import { findCurrencyById } from 'common/helpers/currency';
 
 import React, { PureComponent } from 'react';
 import { Row, Col } from 'react-grid-system';
-import { Badge, TextField } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import {
+    Badge,
+    TextField,
+    FormControlLabel,
+    FormGroup,
+    FormLabel,
+    Checkbox,
+    Radio,
+    RadioGroup,
+    List,
+    ListItemAvatar,
+    ListItem,
+    Avatar,
+    ListItemText,
+    ListSubheader,
+    withStyles,
+} from '@material-ui/core';
+import { Slider } from '@material-ui/lab';
 import RepeatOptions from 'common/defs/repeatOptions';
 import { createXHR } from 'common/utils/fetch';
 import routes from 'common/defs/routes';
@@ -20,6 +30,8 @@ import { MultiSelect, SingleSelect } from 'common/components/Select';
 import { overflowVisible } from 'common/defs/styles';
 import { DateTimePicker } from '@material-ui/pickers';
 import { CancelToken } from 'axios';
+import * as defs from 'shared/defs';
+import { sumArray } from 'shared/utils/numbers';
 
 const boxStyle = {
     padding: '10px 0',
@@ -45,6 +57,38 @@ const StyledBadge = withStyles(badgeStyle)(Badge);
 type TypeProps = {
     initialValues: {},
     onFormChange: Function,
+};
+
+export const setChargedPersonValueFactory = (
+    id,
+    value,
+    adjust = true,
+) => (prevState) => {
+    const step = defs.PERC_STEP;
+    const nextChargedPersons = {
+        ...prevState.chargedPersons,
+        [id]: value,
+    };
+
+    if (adjust) {
+        let diffToMax;
+
+        while (
+            (diffToMax =
+                defs.PERC_MAX - sumArray(Object.values(nextChargedPersons)))
+        ) {
+            for (const key in nextChargedPersons) {
+                if (key !== id) {
+                    nextChargedPersons[key] += diffToMax > 0 ? step : -step;
+                    break;
+                }
+            }
+        }
+    }
+
+    return {
+        chargedPersons: nextChargedPersons,
+    };
 };
 
 class ExpenseForm extends PureComponent<TypeProps> {
@@ -310,30 +354,64 @@ class ExpenseForm extends PureComponent<TypeProps> {
     }
 
     renderChargedPersons() {
-        const selectedValues = Object.keys(this.state.chargedPersons);
+        const sortedUsers = this.props.user
+            .get('list')
+            .sortBy((each) => each.get('full_name'));
+        const { chargedPersons } = this.state;
+        const step = defs.PERC_STEP;
 
         return (
-            <MultiSelect
-                label="Person(s)"
-                onChange={(values) => {
-                    const chargedPersons = values.reduce((acc, id) => {
-                        acc[id] = 100 / values.length;
+            <List
+                subheader={
+                    <ListSubheader disableGutters={true}>
+                        Distribution per Person
+                    </ListSubheader>
+                }
+                disablePadding={true}
+                dense={true}
+            >
+                {sortedUsers.map((user) => {
+                    const id = String(user.get('id'));
 
-                        return acc;
-                    }, {});
+                    return (
+                        <ListItem key={id} disableGutters={true}>
+                            <ListItemAvatar>
+                                <Avatar
+                                    style={{ margin: 0 }}
+                                    alt={user.get('full_name')}
+                                    src={user.get('avatar')}
+                                />
+                            </ListItemAvatar>
 
-                    this.setState({ chargedPersons });
-                }}
-                value={selectedValues}
-                options={this.props.user
-                    .get('list')
-                    .sortBy((each) => each.get('full_name'))
-                    .map((each) => ({
-                        value: String(each.get('id')),
-                        label: each.get('full_name'),
-                    }))
-                    .toJS()}
-            />
+                            <Slider
+                                value={chargedPersons[id] || 0}
+                                valueLabelFormat={(value) => `${value}%`}
+                                step={step}
+                                marks={true}
+                                onChange={(event, value) =>
+                                    this.setState(
+                                        setChargedPersonValueFactory(id, value, false),
+                                    )
+                                }
+                                onChangeCommitted={(event, value) =>
+                                    this.setState(
+                                        setChargedPersonValueFactory(id, value),
+                                    )
+                                }
+                                valueLabelDisplay="on"
+                            />
+
+                            <ListItemText
+                                style={{
+                                    textAlign: 'right',
+                                }}
+                            >
+                                {user.get('full_name')}
+                            </ListItemText>
+                        </ListItem>
+                    );
+                })}
+            </List>
         );
     }
 
@@ -420,12 +498,14 @@ class ExpenseForm extends PureComponent<TypeProps> {
                 <div style={boxStyle}>{this.renderRepeat()}</div>
                 <div style={boxStyle}>{this.renderNotes()}</div>
                 <Row>
-                    <Col xs={6}>
+                    <Col xs={12} md={6}>
                         <div>{this.renderType()}</div>
+                    </Col>
+                    <Col xs={12} md={6}>
                         <div>{this.renderStatus()}</div>
                     </Col>
-                    <Col xs={6}>{this.renderFlags()}</Col>
                 </Row>
+                <div style={boxStyle}>{this.renderFlags()}</div>
             </Col>
         );
     }

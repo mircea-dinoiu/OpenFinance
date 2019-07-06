@@ -6,6 +6,8 @@ const chalk = require('chalk');
 const stringIsInt = validator.isInt;
 const stringIsFloat = validator.isFloat;
 const logger = require('../helpers/logger');
+const defs = require('../../shared/defs');
+const { sumArray } = require('../../shared/utils/numbers');
 
 Object.assign(validator, {
     isInt: (value) => {
@@ -56,12 +58,17 @@ Object.assign(validator, {
 
         const values = Object.values(obj);
 
-        if (values.reduce((acc, value) => acc + value, 0) !== 100) {
+        if (sumArray(values) !== defs.PERC_MAX) {
             return false;
         }
 
         if (
-            values.some((value) => value < 0 || value > 100 || parseInt(value) !== value)
+            values.some(
+                (value) =>
+                    value < defs.PERC_MIN ||
+                    value > defs.PERC_MAX ||
+                    !validator.isInt(value),
+            )
         ) {
             return false;
         }
