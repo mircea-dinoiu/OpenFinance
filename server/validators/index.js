@@ -49,13 +49,41 @@ Object.assign(validator, {
 
         return true;
     },
+    isPercentageObject: async (obj, Model) => {
+        if (!validator.isPlainObject(obj)) {
+            return false;
+        }
+
+        const values = Object.values(obj);
+
+        if (values.reduce((acc, value) => acc + value, 0) !== 100) {
+            return false;
+        }
+
+        if (
+            values.some((value) => value < 0 || value > 100 || parseInt(value) !== value)
+        ) {
+            return false;
+        }
+
+        for (const id in obj) {
+            if ((await validator.isId(id, Model)) !== true) {
+                return false;
+            }
+        }
+
+        return true;
+    },
     isTableSorters: (data, Model, extra = []) => {
         try {
             const json = JSON.parse(data);
 
             if (Array.isArray(json)) {
                 for (const pair of json) {
-                    if (!Model.attributes.hasOwnProperty(pair.id) && !extra.includes(pair.id)) {
+                    if (
+                        !Model.attributes.hasOwnProperty(pair.id) &&
+                        !extra.includes(pair.id)
+                    ) {
                         return false;
                     }
                 }

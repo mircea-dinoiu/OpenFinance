@@ -2,12 +2,9 @@
 
 export default (form, props) => {
     const users =
-        form.chargedPersons.length > 0
+        Object.keys(form.chargedPersons).length > 0
             ? form.chargedPersons
-            : props.user
-                .get('list')
-                .map((each) => each.get('id'))
-                .toArray();
+            : { [props.user.getIn(['current', 'id'])]: 100 };
 
     return {
         id: form.id,

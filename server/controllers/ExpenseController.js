@@ -24,7 +24,7 @@ module.exports = BaseController.extend({
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
         type: ['sometimes', 'isRequired', 'isTypeValue'],
-        users: ['sometimes', 'isRequired', ['isIdArray', User]],
+        users: ['sometimes', 'isRequired', ['isPercentageObject', User]],
         categories: ['sometimes', ['isIdArray', Category]],
 
         repeat: ['sometimes', 'isRepeatValue'],
@@ -40,7 +40,7 @@ module.exports = BaseController.extend({
         notes: ['sometimes', 'isString'],
         favorite: ['sometimes', 'isInt'],
         hidden: ['sometimes', 'isBool'],
-        users: ['isRequired', ['isIdArray', User]],
+        users: ['isRequired', ['isPercentageObject', User]],
         created_at: [
             'sometimes',
             'isRequired',
@@ -85,7 +85,7 @@ module.exports = BaseController.extend({
                     'UPDATE expense_user SET blame = ? WHERE expense_id = ? AND user_id = ?',
                     {
                         replacements: [
-                            record.users.includes(user.id),
+                            record.users[user.id] || 0,
                             model.id,
                             user.id,
                         ],
@@ -118,7 +118,7 @@ module.exports = BaseController.extend({
                     replacements: [
                         user.id,
                         model.id,
-                        record.users.includes(user.id),
+                        record.users[user.id] || 0,
                         user.id === req.user.id,
                     ],
                 },

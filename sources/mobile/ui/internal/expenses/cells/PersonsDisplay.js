@@ -8,7 +8,7 @@ const PersonsDisplay = ({ item, user }) => {
     const userList = user.get('list');
 
     return userList.map((each) =>
-        item.users.includes(each.get('id')) ? (
+        item.users[each.get('id')] ? (
             <Avatar
                 key={each.get('id')}
                 src={each.get('avatar')}

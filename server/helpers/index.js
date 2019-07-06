@@ -13,6 +13,25 @@ const extractIdsFromModel = (model, key) => {
     return [];
 };
 
+const extractUsersFromModel = (model) => {
+    const pairs = model.dataValues.userIds.split(',');
+
+    return pairs
+        .map((pair) => pair.split(':'))
+        .reduce((acc, [key, value]) => {
+            let workingValue = Number(value);
+
+            // Support old style blame values (binary)
+            if (workingValue === 1) {
+                workingValue = 100 / pairs.length;
+            }
+
+            acc[key] = workingValue;
+
+            return acc;
+        }, {});
+};
+
 const sanitizeSorters = (rawSorters) => {
     let sorters = [{ id: 'created_at', desc: true }];
 
@@ -42,6 +61,7 @@ module.exports = {
     basePath,
 
     extractIdsFromModel,
+    extractUsersFromModel,
 
     pickOwnProperties(source, keys) {
         const dest = {};

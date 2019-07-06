@@ -1,5 +1,5 @@
 const SummaryReportHelper = require('../helpers/SummaryReportHelper');
-const { extractIdsFromModel } = require('../helpers');
+const { extractIdsFromModel, extractUsersFromModel } = require('../helpers');
 const { sortBy } = require('lodash');
 
 module.exports = {
@@ -97,19 +97,17 @@ module.exports = {
         const mls = {};
 
         for (const record of expenseRecords) {
-            let sum = record.type === 'deposit' ? -record.sum : record.sum;
-            const recordUsers = extractIdsFromModel(record, 'userIds');
+            const sum = record.type === 'deposit' ? -record.sum : record.sum;
+            const recordUsers = extractUsersFromModel(record);
             const mlId = record.money_location_id;
             const currencyId = mlIdToCurrencyId[mlId];
 
             mls[mlId] = SummaryReportHelper.safeNum((mls[mlId] || 0) + sum);
 
-            sum /= recordUsers.length;
-
-            recordUsers.forEach((userId) => {
+            Object.entries(recordUsers).forEach(([userId, perc]) => {
                 users[userId] = users[userId] || {};
                 users[userId][currencyId] = SummaryReportHelper.safeNum(
-                    (users[userId][currencyId] || 0) + sum,
+                    (users[userId][currencyId] || 0) + (sum * perc / 100),
                 );
             });
         }
@@ -168,7 +166,7 @@ module.exports = {
         }, {});
 
         for (const record of expenseRecords) {
-            const users = extractIdsFromModel(record, 'userIds');
+            const users = extractUsersFromModel(record);
             const recordCategories = extractIdsFromModel(record, 'categoryIds');
             const sum = record.type === 'deposit' ? -record.sum : record.sum;
             const currencyId = mlIdToCurrencyId[record.money_location_id];
@@ -179,14 +177,12 @@ module.exports = {
                     };
                 }
 
-                const catSum = rawCatSum / users.length;
-
-                users.forEach((id) => {
+                Object.entries(users).forEach(([id, perc]) => {
                     categories[categoryId].users[id] =
                         categories[categoryId].users[id] || {};
                     categories[categoryId].users[id][currencyId] =
                         categories[categoryId].users[id][currencyId] || 0;
-                    categories[categoryId].users[id][currencyId] += catSum;
+                    categories[categoryId].users[id][currencyId] += rawCatSum * perc / 100;
                 });
             };
 

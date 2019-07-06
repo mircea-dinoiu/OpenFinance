@@ -310,17 +310,26 @@ class ExpenseForm extends PureComponent<TypeProps> {
     }
 
     renderChargedPersons() {
+        const selectedValues = Object.keys(this.state.chargedPersons);
+
         return (
             <MultiSelect
                 label="Person(s)"
-                {...this.bindSelect({
-                    valueKey: 'chargedPersons',
-                })}
+                onChange={(values) => {
+                    const chargedPersons = values.reduce((acc, id) => {
+                        acc[id] = 100 / values.length;
+
+                        return acc;
+                    }, {});
+
+                    this.setState({ chargedPersons });
+                }}
+                value={selectedValues}
                 options={this.props.user
                     .get('list')
                     .sortBy((each) => each.get('full_name'))
                     .map((each) => ({
-                        value: each.get('id'),
+                        value: String(each.get('id')),
                         label: each.get('full_name'),
                     }))
                     .toJS()}
