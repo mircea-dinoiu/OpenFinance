@@ -15,7 +15,7 @@ const extractIdsFromModel = (model, key) => {
 };
 
 const extractUsersFromModel = (model) => {
-    const pairs = model.dataValues.userIds.split(',');
+    const pairs = model.dataValues.userBlameMap.split(',');
 
     return pairs
         .map((pair) => pair.split(':'))

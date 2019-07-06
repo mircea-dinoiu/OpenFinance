@@ -47,7 +47,8 @@ module.exports = (sequelize, types) => {
 
                     Expense.addScope('default', {
                         attributes: Object.keys(Expense.rawAttributes).concat([
-                            ['GROUP_CONCAT(DISTINCT CONCAT(`users`.`id`, \':\', `users.expense_user`.`blame`))', 'userIds'],
+                            ['GROUP_CONCAT(DISTINCT CONCAT(`users`.`id`, \':\', `users.expense_user`.`blame`))', 'userBlameMap'],
+                            ['GROUP_CONCAT(DISTINCT `users`.`id`)', 'userIds'],
                             [
                                 'GROUP_CONCAT(DISTINCT `categories`.`id`)',
                                 'categoryIds',
@@ -72,16 +73,19 @@ module.exports = (sequelize, types) => {
                 toJSON() {
                     const values = Object.assign({}, this.dataValues);
 
-                    if (values.userIds) {
+                    if (values.userBlameMap) {
                         values.users = extractUsersFromModel(this);
-                        delete values.userIds;
                     }
 
                     values.categories = extractIdsFromModel(
                         this,
                         'categoryIds',
                     );
+
+                    delete values.userIds;
+                    delete values.userBlameMap;
                     delete values.categoryIds;
+
                     values.hidden = Boolean(values.hidden);
 
                     return values;
