@@ -1,4 +1,8 @@
 // @flow
+import {
+    getDetachedItemUpdates,
+    mergeItems,
+} from 'mobile/ui/internal/common/helpers';
 import React, { PureComponent } from 'react';
 import { Col } from 'react-grid-system';
 import { stringify } from 'query-string';
@@ -83,12 +87,6 @@ type TypeState = {
     editDialogOpen: boolean,
     editDialogKey: string,
     deleteDialogOpen: boolean,
-};
-
-export const getDetachedItemUpdates = (item) => {
-    const itemUpdates = { id: item.id, repeat: null };
-
-    return itemUpdates;
 };
 
 class MainScreenList extends PureComponent<TypeProps, TypeState> {
@@ -655,6 +653,18 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     handleClickDeposit = () => this.updateSelectedRecords({ type: 'deposit' });
     handleClickWithdrawal = () =>
         this.updateSelectedRecords({ type: 'withdrawal' });
+    handleMerge = async () => {
+        const items = this.selectedItems;
+        const [first, ...rest] = items;
+        const merged = mergeItems(items);
+
+        if (merged) {
+            await this.handleRequestUpdate([{ id: first.id, ...merged }]);
+            await this.handleRequestDelete(rest.map((each) => ({ id: each.id })));
+
+            this.props.onRefreshWidgets();
+        }
+    };
     handleDetach = async () => {
         const added = [];
         const updated = [];
@@ -701,6 +711,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             onClickDelete: this.handleToggleDeleteDialog,
             onClickDuplicate: this.handleDuplicate,
             onClickDetach: this.handleDetach,
+            onClickMerge: this.handleMerge,
             onCloseContextMenu: this.handleCloseContextMenu,
             onClickDeposit: this.handleClickDeposit,
             onClickWithdrawal: this.handleClickWithdrawal,

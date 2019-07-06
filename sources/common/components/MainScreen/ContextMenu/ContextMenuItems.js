@@ -5,6 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 import DuplicateIcon from '@material-ui/icons/FileCopy';
 import DetachIcon from '@material-ui/icons/ViewAgenda';
+import MergeIcon from '@material-ui/icons/MergeType';
 import LockIcon from '@material-ui/icons/Lock';
 import UnlockIcon from '@material-ui/icons/LockOpen';
 import IconArrowDown from '@material-ui/icons/ArrowDownward';
@@ -25,6 +26,7 @@ export default function ContextMenuItems({
     onCloseContextMenu,
     onClickDeposit,
     onClickWithdrawal,
+    onClickMerge,
 
     onClickHide,
     onClickUnhide,
@@ -37,6 +39,7 @@ export default function ContextMenuItems({
     onClickDelete: Function,
     onClickDuplicate: Function,
     onClickDetach: Function,
+    onClickMerge: Function,
     onClickReviewed: Function,
     onClickNeedsReview: Function,
     onCloseContextMenu: Function,
@@ -46,6 +49,7 @@ export default function ContextMenuItems({
 }) {
     const selectedIdsLength = Object.values(selectedIds).filter(Boolean).length;
     const disabledForZero = selectedIdsLength === 0;
+    const disabledForLessThanTwo = selectedIdsLength < 2;
 
     return (
         <>
@@ -110,6 +114,20 @@ export default function ContextMenuItems({
                     desktop={desktop}
                 />
             )}
+            <MenuItem
+                primaryText="Merge"
+                leftIcon={<MergeIcon />}
+                onClick={compose(
+                    onCloseContextMenu,
+                    onClickMerge,
+                )}
+                onTouchTap={compose(
+                    onCloseContextMenu,
+                    onClickMerge,
+                )}
+                disabled={disabledForLessThanTwo}
+                desktop={desktop}
+            />
             <Divider />
             {features.status && (
                 <>

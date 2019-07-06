@@ -62,10 +62,15 @@ type TypeProps = {
 export const setChargedPersonValueFactory = (
     id,
     value,
-    adjust = true,
+    { userIdsStringified, adjust = true },
 ) => (prevState) => {
     const step = defs.PERC_STEP;
     const nextChargedPersons = {
+        ...userIdsStringified.reduce((acc, idString) => {
+            acc[idString] = 0;
+
+            return acc;
+        }, {}),
         ...prevState.chargedPersons,
         [id]: value,
     };
@@ -359,6 +364,9 @@ class ExpenseForm extends PureComponent<TypeProps> {
             .sortBy((each) => each.get('full_name'));
         const { chargedPersons } = this.state;
         const step = defs.PERC_STEP;
+        const userIdsStringified = sortedUsers.map((user) =>
+            String(user.get('id')),
+        );
 
         return (
             <List
@@ -390,12 +398,13 @@ class ExpenseForm extends PureComponent<TypeProps> {
                                 marks={true}
                                 onChange={(event, value) =>
                                     this.setState(
-                                        setChargedPersonValueFactory(id, value, false),
-                                    )
-                                }
-                                onChangeCommitted={(event, value) =>
-                                    this.setState(
-                                        setChargedPersonValueFactory(id, value),
+                                        setChargedPersonValueFactory(
+                                            id,
+                                            value,
+                                            {
+                                                userIdsStringified,
+                                            },
+                                        ),
                                     )
                                 }
                                 valueLabelDisplay="on"

@@ -74,7 +74,7 @@ Object.assign(validator, {
         }
 
         for (const id in obj) {
-            if ((await validator.isId(id, Model)) !== true) {
+            if ((await validator.isId(Number(id), Model)) !== true) {
                 return false;
             }
         }
@@ -188,17 +188,6 @@ class Validator {
                         );
                     }
 
-                    if (debug) {
-                        logger.log(
-                            'Validation rule called',
-                            chalk.green(
-                                `${dataKey}: validator.${ruleName}(${[value]
-                                    .concat(params)
-                                    .join(', ')})`,
-                            ),
-                        );
-                    }
-
                     let result = false;
 
                     try {
@@ -214,6 +203,17 @@ class Validator {
                     if (result === false) {
                         error = 'Invalid input data';
                         break;
+                    }
+
+                    if (debug) {
+                        logger.log(
+                            result ? 'Validation rule passed' : 'Validation rule failed',
+                            chalk[result ? 'green' : 'red'](
+                                `${dataKey}: validator.${ruleName}(${[value]
+                                    .concat(params)
+                                    .join(', ')})`,
+                            ),
+                        );
                     }
                 }
             }
