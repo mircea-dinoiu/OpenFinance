@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { Col, Row } from 'react-grid-system';
+import { Col } from 'react-grid-system';
 import { stringify } from 'query-string';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -9,7 +9,7 @@ import { BigLoader, ButtonProgress } from '../../components/loaders';
 
 import { createXHR } from 'common/utils/fetch';
 
-import { Button, FormControlLabel, Checkbox } from '@material-ui/core';
+import { Button, FormControlLabel, Checkbox, Fab } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { greyedOut } from 'common/defs/styles';
 import BaseTable from 'common/components/BaseTable';
@@ -873,8 +873,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         </Col>
                     )}
                     {this.renderDialogs()}
-                    <Button
-                        variant="fab"
+                    <Fab
+                        variant="extended"
                         color="primary"
                         onClick={this.handleToggleAddModal}
                         mini={!isDesktop}
@@ -886,7 +886,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         }}
                     >
                         <AddIcon />
-                    </Button>
+                    </Fab>
                 </div>
             </div>
         );

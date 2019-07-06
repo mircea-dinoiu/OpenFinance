@@ -29,7 +29,7 @@ import { bindActionCreators } from 'redux';
 import { shiftDateBack, shiftDateForward } from 'common/utils/dates';
 import moment from 'moment';
 import { ShiftDateOptions, Sizes } from 'common/defs';
-import { InlineDatePicker } from 'material-ui-pickers/DatePicker';
+import { DatePicker } from '@material-ui/pickers';
 import { endOfDayToISOString } from 'shared/utils/dates';
 
 type TypeProps = {
@@ -258,7 +258,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                         paddingRight: 10,
                     }}
                 >
-                    <Typography variant="title" color="inherit">
+                    <Typography variant="h6" color="inherit">
                         {this.props.title}
                     </Typography>
                     {this.props.user && (
@@ -282,7 +282,8 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                             }}
                         >
                             {this.renderShiftBack()}
-                            <InlineDatePicker
+                            <DatePicker
+                                variant="inline"
                                 style={{
                                     float: 'left',
                                     textAlign: 'center',
@@ -316,7 +317,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                                 <IconButton
                                     onClick={this.handleToggleDateRange}
                                 >
-                                    <DateIcon nativeColor="white" />
+                                    <DateIcon htmlColor="white" />
                                 </IconButton>
                             )}
                             {this.props.showCurrenciesDrawer && (
@@ -325,12 +326,12 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                                         this.onClickCurrenciesDrawerTrigger
                                     }
                                 >
-                                    <MonetizationOn nativeColor="white" />
+                                    <MonetizationOn htmlColor="white" />
                                 </IconButton>
                             )}
                             {this.props.user && (
                                 <IconButton onClick={this.onClickRefresh}>
-                                    <Refresh nativeColor="white" />
+                                    <Refresh htmlColor="white" />
                                 </IconButton>
                             )}
                             {this.props.user && (

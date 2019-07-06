@@ -42,7 +42,7 @@ class RatingDisplay extends React.PureComponent<{
                                     height: 20,
                                     width: 20,
                                 },
-                                nativeColor: blue[500],
+                                htmlColor: blue[500],
                             },
                         )}
                     </span>

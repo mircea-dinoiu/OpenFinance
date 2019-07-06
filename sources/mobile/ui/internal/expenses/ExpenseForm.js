@@ -18,7 +18,7 @@ import { stringify } from 'query-string';
 import { connect } from 'react-redux';
 import { MultiSelect, SingleSelect } from 'common/components/Select';
 import { overflowVisible } from 'common/defs/styles';
-import { DateTimePicker } from 'material-ui-pickers';
+import { DateTimePicker } from '@material-ui/pickers';
 import { CancelToken } from 'axios';
 
 const boxStyle = {

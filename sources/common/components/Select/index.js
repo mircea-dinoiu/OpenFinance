@@ -19,6 +19,7 @@ const styles = (theme) => ({
     input: {
         display: 'flex',
         padding: 0,
+        height: 'auto',
     },
     valueContainer: {
         display: 'flex',
@@ -28,7 +29,7 @@ const styles = (theme) => ({
         overflow: 'hidden',
     },
     chip: {
-        margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+        margin: theme.spacing(0.5, 0.25),
     },
     chipFocused: {
         backgroundColor: emphasize(
@@ -39,7 +40,7 @@ const styles = (theme) => ({
         ),
     },
     noOptionsMessage: {
-        padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+        padding: theme.spacing(1, 2),
     },
     singleValue: {
         fontSize: 16,
@@ -47,17 +48,18 @@ const styles = (theme) => ({
     placeholder: {
         position: 'absolute',
         left: 2,
+        bottom: 6,
         fontSize: 16,
     },
     paper: {
         position: 'absolute',
         zIndex: 1,
-        marginTop: theme.spacing.unit,
+        marginTop: theme.spacing(1),
         left: 0,
         right: 0,
     },
     divider: {
-        height: theme.spacing.unit * 2,
+        height: theme.spacing(2),
     },
 });
 
@@ -85,12 +87,12 @@ function Control(props) {
                 inputComponent,
                 inputProps: {
                     className: props.selectProps.classes.input,
-                    inputRef: props.innerRef,
+                    ref: props.innerRef,
                     children: props.children,
                     ...props.innerProps,
                 },
             }}
-            {...props.selectProps.textFieldProps}
+            {...props.selectProps.TextFieldProps}
         />
     );
 }
@@ -98,7 +100,7 @@ function Control(props) {
 function Option(props) {
     return (
         <MenuItem
-            buttonRef={props.innerRef}
+            ref={props.innerRef}
             selected={props.isFocused}
             component="div"
             style={{
@@ -196,7 +198,7 @@ export const SingleSelect = withStyles(styles, { withTheme: true })(
                 classes={classes}
                 styles={selectStyles(theme)}
                 components={components}
-                textFieldProps={{
+                TextFieldProps={{
                     label,
                     InputLabelProps: {
                         shrink: true,
@@ -220,7 +222,7 @@ export const MultiSelect = withStyles(styles, { withTheme: true })(
             <Select
                 classes={classes}
                 styles={selectStyles(theme)}
-                textFieldProps={{
+                TextFieldProps={{
                     label,
                     InputLabelProps: {
                         shrink: true,

@@ -20,37 +20,37 @@ const ICON_STYLE = { height: 20, width: 20 };
 
 export const PendingReviewFlag = ({ entity = 'Item' }) => (
     <Tooltip tooltip={`${startCase(entity)} is pending`}>
-        <Warning style={ICON_STYLE} nativeColor={yellow.A700} />
+        <Warning style={ICON_STYLE} htmlColor={yellow.A700} />
     </Tooltip>
 );
 
 export const RecurrentFlag = ({ entity = 'Item' }) => (
     <Tooltip tooltip={`Recurrent ${entity}`}>
-        <Cached style={ICON_STYLE} nativeColor={blue[500]} />
+        <Cached style={ICON_STYLE} htmlColor={blue[500]} />
     </Tooltip>
 );
 
 export const GeneratedFlag = ({ entity = 'Item' }) => (
     <Tooltip tooltip={`Generated ${entity}`}>
-        <TrendingUp style={ICON_STYLE} nativeColor={purple[500]} />
+        <TrendingUp style={ICON_STYLE} htmlColor={purple[500]} />
     </Tooltip>
 );
 
 export const DepositFlag = () => (
     <Tooltip tooltip="Deposit">
-        <ArrowDown style={ICON_STYLE} nativeColor={green[500]} />
+        <ArrowDown style={ICON_STYLE} htmlColor={green[500]} />
     </Tooltip>
 );
 
 export const WithdrawalFlag = () => (
     <Tooltip tooltip="Withdrawal">
-        <ArrowUp style={ICON_STYLE} nativeColor={red[500]} />
+        <ArrowUp style={ICON_STYLE} htmlColor={red[500]} />
     </Tooltip>
 );
 
 export const NotesFlag = ({ children }) => (
     <Tooltip tooltip={<pre>{children}</pre>}>
-        <SpeakerNotes style={ICON_STYLE} nativeColor={grey[500]} />
+        <SpeakerNotes style={ICON_STYLE} htmlColor={grey[500]} />
     </Tooltip>
 );
 

@@ -3,7 +3,7 @@ import 'react-table/react-table.css';
 import './Responsive.pcss';
 import './Responsive.css';
 import { blue } from '@material-ui/core/colors';
-import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import MomentUtils from '@date-io/moment';
 // import injectTapEventPlugin from 'react-tap-event-plugin';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
@@ -32,9 +32,9 @@ import { fromJS } from 'immutable';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import EventListener from 'react-event-listener';
 import { flexColumn } from 'common/defs/styles';
-import { hot } from 'react-hot-loader';
+import { hot } from 'react-hot-loader/root';
 import { Sizes } from 'common/defs';
-import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -181,4 +181,4 @@ const AppContainer = connect(
     }),
 )(Responsive);
 
-export default hot(module)(AppContainer);
+export default hot(AppContainer);

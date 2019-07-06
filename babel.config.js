@@ -4,6 +4,7 @@ module.exports = {
             '@babel/preset-env',
             {
                 useBuiltIns: 'usage',
+                modules: false,
                 debug: process.env.BABEL_DEBUG === 'true',
             },
         ],

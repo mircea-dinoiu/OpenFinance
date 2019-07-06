@@ -10,7 +10,7 @@ const Logged = (rawProps) => {
             {...props}
             iconButtonElement={
                 <IconButton>
-                    <MoreVertIcon nativeColor="white" />
+                    <MoreVertIcon htmlColor="white" />
                 </IconButton>
             }
             targetOrigin={{ horizontal: 'right', vertical: 'top' }}
