@@ -5,25 +5,6 @@
     "node": "10.9.0"
   },
   "description": "This application is made to track down your monthly expenses and incomes in the family and help you understand better where your money are going and how can you be more careful what you're spending money on.",
-  "scripts": {
-    "ci": "run-p --aggregate-output test lint:js",
-    "build": "webpack",
-    "build:prod": "cross-env NODE_ENV=production webpack",
-    "build:hot": "cross-env NODE_ENV=hot webpack-dev-server --hot --inline",
-    "build:watch": "webpack --watch",
-    "start": "node ./bin/www",
-    "heroku-prebuild": "npm install --only=dev",
-    "heroku-postbuild": "npm run build:prod",
-    "flow": "flow",
-    "test": "jest --bail",
-    "test:cov": "open build/coverage/index.html",
-    "lint:js": "eslint server sources/mobile sources/common --quiet",
-    "format:css": "prettier --write \"sources/**/*.pcss\"",
-    "format:js": "prettier-eslint --write --single-quote --trailing-comma all",
-    "format:all": "yarn run format:css; yarn run format:js \"server/**/*.js\" \"sources/mobile/**/*.js\" \"sources/common/**/*.js\"",
-    "sql": "sequelize",
-    "nodemon": "nodemon --ignore sources/ --ignore '*.test.js*' --ignore storage/"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mircea-dinoiu/financial.git"
@@ -115,6 +96,25 @@
     "sequelize-cli": "4.1.1",
     "serve-favicon": "2.5.0",
     "validator": "10.7.1"
+  },
+  "scripts": {
+    "ci": "run-p --aggregate-output test lint:js",
+    "build": "webpack",
+    "build:prod": "cross-env NODE_ENV=production webpack",
+    "build:hot": "cross-env NODE_ENV=hot webpack-dev-server --hot --inline",
+    "build:watch": "webpack --watch",
+    "start": "node ./bin/www",
+    "heroku-prebuild": "npm install --only=dev",
+    "heroku-postbuild": "npm run build:prod",
+    "flow": "flow",
+    "test": "jest --bail",
+    "test:cov": "open build/coverage/index.html",
+    "lint:js": "eslint server sources/mobile sources/common --quiet",
+    "format:css": "prettier --write \"sources/**/*.pcss\"",
+    "format:js": "prettier-eslint --write --single-quote --trailing-comma all",
+    "format:all": "yarn run format:css; yarn run format:js \"server/**/*.js\" \"sources/mobile/**/*.js\" \"sources/common/**/*.js\"",
+    "sql": "sequelize",
+    "nodemon": "nodemon --ignore sources/ --ignore '*.test.js*' --ignore storage/"
   },
   "lint-staged": {
     "*.js": [
