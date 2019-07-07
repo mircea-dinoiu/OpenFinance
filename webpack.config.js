@@ -37,36 +37,35 @@ module.exports = {
                 use: [
                     {
                         loader: 'babel-loader',
-                        options: { cacheDirectory: true },
+                        options: {cacheDirectory: true},
                     },
                 ].filter(Boolean),
             },
             {
                 test: /\.css$/,
                 use: [
-                    { loader: 'style-loader' },
+                    {loader: 'style-loader'},
                     {
                         loader: 'css-loader',
-                        options: { sourceMap: enableSourceMaps, url: false },
+                        options: {sourceMap: enableSourceMaps, url: false},
                     },
                 ],
             },
             {
                 test: /\.pcss$/,
                 use: [
-                    { loader: 'style-loader' },
+                    {loader: 'style-loader'},
                     {
                         loader: 'css-loader',
                         options: {
-                            localIdentName:
-                                '[name]__[local]--[hash:base64:5]',
+                            localIdentName: '[name]__[local]--[hash:base64:5]',
                             sourceMap: false,
                             url: false,
                             modules: true,
                             importLoaders: 1,
                         },
                     },
-                    { loader: 'postcss-loader' },
+                    {loader: 'postcss-loader'},
                 ],
             },
         ],
@@ -88,6 +87,7 @@ module.exports = {
             common: path.resolve(__dirname, 'sources/common'),
             mobile: path.resolve(__dirname, 'sources/mobile'),
             shared: path.resolve(__dirname, 'shared'),
-        }
+            'react-dom': isProduction ? 'react-dom' : '@hot-loader/react-dom',
+        },
     },
 };
