@@ -1,4 +1,5 @@
 import RepeatedModelsHelper from './RepeatedModelsHelper';
+import moment from 'moment';
 
 describe('#getClonesFor()', () => {
     describe('When repeat_occurrences is defined', () => {
@@ -21,14 +22,14 @@ describe('#getClonesFor()', () => {
                 JSON.stringify([
                     {
                         repeat: 'm',
-                        created_at: '2018-02-01 00:00:00',
+                        created_at: moment('2018-02-01 00:00:00'),
                         repeat_occurrences: 3,
                         original: 5,
                         persist: false,
                     },
                     {
                         repeat: 'm',
-                        created_at: '2018-03-01 00:00:00',
+                        created_at: moment('2018-03-01 00:00:00'),
                         repeat_occurrences: 3,
                         original: 5,
                         persist: false,
