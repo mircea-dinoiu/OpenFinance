@@ -1,4 +1,5 @@
 // @flow
+import type {TypeTransactionModel} from 'common/types';
 import * as React from 'react';
 import RepeatsDisplay from 'common/components/BaseTable/cells/RepeatsDisplay';
 
@@ -6,7 +7,7 @@ const style = {textAlign: 'center'};
 
 export default {
     Header: 'Repeat',
-    accessor: (item) => <RepeatsDisplay item={item} />,
+    accessor: (item: TypeTransactionModel) => <RepeatsDisplay item={item} />,
     id: 'repeat',
     sortable: false,
     //

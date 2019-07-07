@@ -1,4 +1,5 @@
 // @flow
+import type {TypeScreenQueries} from 'common/types';
 import React, {PureComponent} from 'react';
 import {
     BottomNavigation,

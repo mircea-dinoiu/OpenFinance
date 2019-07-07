@@ -1,10 +1,14 @@
 // @flow
+import type {TypeTransactionModel} from 'common/types';
 import {formatYMD} from 'common/utils/dates';
 import cssTable from 'common/components/BaseTable/index.pcss';
 
 const today = formatYMD(new Date());
 
-export const getTrClassName = (item, {selectedIds}): string => {
+export const getTrClassName = (
+    item: TypeTransactionModel,
+    {selectedIds},
+): string => {
     const classes = [cssTable.notSelectable];
 
     if (formatYMD(item.created_at) === today) {
@@ -32,6 +36,8 @@ export const getTrProps = ({
     selectedIds,
     onChangeContextMenu,
     item,
+}: {
+    item: TypeTransactionModel,
 }) => ({
     className: getTrClassName(item, {selectedIds}),
     onDoubleClick: () => {
@@ -42,7 +48,7 @@ export const getTrProps = ({
             onReceiveSelectedIds({});
         }
     },
-    onClick(event) {
+    onClick(event: SyntheticMouseEvent<any>) {
         onChangeContextMenu({display: false});
 
         let newSelected;
@@ -61,7 +67,7 @@ export const getTrProps = ({
 
         onReceiveSelectedIds(newSelected);
     },
-    onContextMenu: (event) => {
+    onContextMenu: (event: SyntheticMouseEvent<any>) => {
         event.preventDefault();
 
         if (item.persist !== false) {

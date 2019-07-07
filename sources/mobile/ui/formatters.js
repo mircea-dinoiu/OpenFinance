@@ -1,3 +1,4 @@
+import {objectEntriesOfSameType, objectValuesOfSameType} from 'common/utils/collection';
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import {connect} from 'react-redux';
@@ -39,9 +40,9 @@ const NumericValue = connect(({currencies}) => ({currencies}))(
             >
                 {currency} {formatNumericValue(value)}
             </div>,
-            ...Object.values(
-                Object.entries(
-                    Object.values(currencies.map).find(
+            ...objectValuesOfSameType(
+                objectEntriesOfSameType(
+                    objectValuesOfSameType(currencies.map).find(
                         (each) => each.iso_code === currency,
                     ).rates,
                 ).map(([rateISO, rateMulti]) => (

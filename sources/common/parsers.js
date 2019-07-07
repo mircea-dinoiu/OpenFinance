@@ -1,4 +1,5 @@
 // @flow
+import {objectEntriesOfSameType} from 'common/utils/collection';
 import * as React from 'react';
 
 export const parseCRUDError = (json) => {
@@ -8,7 +9,7 @@ export const parseCRUDError = (json) => {
         error = (
             <ul>
                 {json.map((each) =>
-                    Object.entries(each).map(([key, messages]) => (
+                    objectEntriesOfSameType(each).map(([key, messages]) => (
                         <li key={key}>
                             {key}
                             <ul>

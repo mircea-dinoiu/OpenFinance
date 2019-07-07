@@ -1,34 +1,35 @@
-import {getDetachedItemUpdates, mergeItems} from './helpers';
+import {mapItemToRepeatedUpdates} from 'mobile/ui/internal/common/helpers';
+import {mapItemToDetachedUpdates, mergeItems} from './helpers';
 
-describe('#getDetachedItemUpdates()', () => {
-    it('should return item id + repeat null by default', () => {
-        expect(getDetachedItemUpdates({id: 300})).toEqual({
-            id: 300,
-            repeat: null,
-        });
-    });
-
+describe('#mapItemToRepeatedUpdates()', () => {
     describe('When repeat_occurrences is not null', () => {
         describe('When repeat_occurrences = 1', () => {
             it('should set it to null', () => {
                 expect(
-                    getDetachedItemUpdates({
-                        id: 300,
+                    mapItemToRepeatedUpdates({
                         repeat_occurrences: 1,
                     }),
-                ).toEqual({id: 300, repeat: null, repeat_occurrences: null});
+                ).toEqual({ repeat_occurrences: null});
             });
         });
 
         describe('When repeat_occurrences > 1', () => {
             it('should decrease it by 1', () => {
                 expect(
-                    getDetachedItemUpdates({
-                        id: 300,
+                    mapItemToRepeatedUpdates({
                         repeat_occurrences: 2,
                     }),
-                ).toEqual({id: 300, repeat: null, repeat_occurrences: 1});
+                ).toEqual({repeat_occurrences: 1});
             });
+        });
+    });
+});
+
+describe('#mapItemToDetachedUpdates()', () => {
+    it('should return item id + repeat null by default', () => {
+        expect(mapItemToDetachedUpdates({id: 300})).toEqual({
+            id: 300,
+            repeat: null,
         });
     });
 });
@@ -85,7 +86,6 @@ describe('#mergeItems()', () => {
                         },
                     ]),
                 ).toEqual({
-                    money_location_id: 1,
                     categories: [1, 2, 3],
                     favorite: 5,
                     item: 'Foo, Bar',

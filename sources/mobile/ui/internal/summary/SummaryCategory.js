@@ -1,5 +1,6 @@
 // @flow
 import {convertCurrencyToDefault} from 'common/helpers/currency';
+import {objectEntriesOfSameType} from 'common/utils/collection';
 
 import React, {PureComponent} from 'react';
 import groupBy from 'lodash/groupBy';
@@ -236,7 +237,7 @@ class SummaryCategory extends PureComponent {
 
                 <CardText style={{padding: '0 5px'}} expandable={true}>
                     {sortBy(
-                        Object.entries(groupBy(summaryObject, 'group')),
+                        objectEntriesOfSameType(groupBy(summaryObject, 'group')),
                         this.groupSorter,
                     ).map(([id, items]) => {
                         const shouldGroup = items.every((each) =>

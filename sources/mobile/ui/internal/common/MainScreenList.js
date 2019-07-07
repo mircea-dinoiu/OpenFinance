@@ -1,6 +1,17 @@
 // @flow
+import type {
+    TypeCurrencies,
+    TypeMainScreenFeatures,
+    TypePreferences,
+    TypeScreenQueries,
+} from 'common/types';
 import {
-    getDetachedItemUpdates,
+    objectEntriesOfSameType,
+    objectValuesOfSameType,
+} from 'common/utils/collection';
+import {
+    mapItemToRepeatedUpdates,
+    mapItemToDetachedUpdates,
     mergeItems,
 } from 'mobile/ui/internal/common/helpers';
 import React, {PureComponent} from 'react';
@@ -672,20 +683,12 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         this.selectedItems.forEach((item) => {
             if (item.repeat != null) {
-                const extra = {};
-
-                if (item.repeat_occurrences) {
-                    extra.repeat_occurrences = item.repeat_occurrences - 1;
-
-                    if (extra.repeat_occurrences === 0) {
-                        extra.repeat_occurrences = null;
-                    }
-                }
+                const extra = mapItemToRepeatedUpdates(item);
 
                 added.push(
                     this.copyItem(advanceRepeatDate({...item, ...extra})),
                 );
-                updated.push(getDetachedItemUpdates(item));
+                updated.push(mapItemToDetachedUpdates(item));
             }
         });
 
@@ -792,19 +795,21 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             );
         }
 
-        return Object.entries(this.getGroupedResults()).map(([date, items]) => (
-            <MainScreenListGroup
-                key={date}
-                date={date}
-                items={items}
-                itemProps={{
-                    ...commonProps,
-                    contentComponent: this.props.contentComponent,
-                    contextMenuItemsProps: this.getContextMenuItemsProps(),
-                    onReceiveSelectedIds: this.handleReceivedSelectedIds,
-                }}
-            />
-        ));
+        return objectEntriesOfSameType(this.getGroupedResults()).map(
+            ([date, items]) => (
+                <MainScreenListGroup
+                    key={date}
+                    date={date}
+                    items={items}
+                    itemProps={{
+                        ...commonProps,
+                        contentComponent: this.props.contentComponent,
+                        contextMenuItemsProps: this.getContextMenuItemsProps(),
+                        onReceiveSelectedIds: this.handleReceivedSelectedIds,
+                    }}
+                />
+            ),
+        );
     }
 
     renderDialogs() {
@@ -829,8 +834,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     onNo={this.handleToggleDeleteDialog}
                     entityName={this.props.entityName}
                     count={
-                        Object.values(this.state.selectedIds).filter(Boolean)
-                            .length
+                        objectValuesOfSameType(this.state.selectedIds).filter(
+                            Boolean,
+                        ).length
                     }
                 />
                 {this.selectedItems.length > 0 && (

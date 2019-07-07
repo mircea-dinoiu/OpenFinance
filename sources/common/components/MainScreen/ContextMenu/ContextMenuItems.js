@@ -1,4 +1,6 @@
 // @flow
+import type {TypeMainScreenFeatures} from 'common/types';
+import {objectValuesOfSameType} from 'common/utils/collection';
 import * as React from 'react';
 import {MenuItem, Divider} from 'material-ui';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -15,6 +17,8 @@ import IconArchive from '@material-ui/icons/Archive';
 import IconUnarchive from '@material-ui/icons/Unarchive';
 
 import compose from 'common/utils/compose';
+
+type TypeOnClick = () => any;
 
 export default function ContextMenuItems({
     onClickEdit,
@@ -35,19 +39,23 @@ export default function ContextMenuItems({
     desktop = false,
     features,
 }: {
-    onClickEdit: Function,
-    onClickDelete: Function,
-    onClickDuplicate: Function,
-    onClickDetach: Function,
-    onClickMerge: Function,
-    onClickReviewed: Function,
-    onClickNeedsReview: Function,
-    onCloseContextMenu: Function,
+    onClickEdit: TypeOnClick,
+    onClickDelete: TypeOnClick,
+    onClickDuplicate: TypeOnClick,
+    onClickDetach: TypeOnClick,
+    onClickMerge: TypeOnClick,
+    onClickReviewed: TypeOnClick,
+    onClickNeedsReview: TypeOnClick,
+    onCloseContextMenu: TypeOnClick,
+    onClickDeposit: TypeOnClick,
+    onClickWithdrawal: TypeOnClick,
+    onClickHide: TypeOnClick,
+    onClickUnhide: TypeOnClick,
     selectedIds: {},
     features: TypeMainScreenFeatures,
     desktop: boolean,
 }) {
-    const selectedIdsLength = Object.values(selectedIds).filter(Boolean).length;
+    const selectedIdsLength = objectValuesOfSameType(selectedIds).filter(Boolean).length;
     const disabledForZero = selectedIdsLength === 0;
     const disabledForLessThanTwo = selectedIdsLength < 2;
 

@@ -1,14 +1,25 @@
 // @flow
+import type {TypeTransactionModel} from 'common/types';
 import {map, flatten, uniqBy, uniq, mapValues} from 'lodash';
 import {sumArray} from 'shared/utils/numbers';
 
-export const getDetachedItemUpdates = (item) => {
-    const itemUpdates = {id: item.id, repeat: null};
+export const mapItemToRepeatedUpdates = (item: TypeTransactionModel) => {
+    const extra = {};
 
-    return itemUpdates;
+    if (item.repeat_occurrences) {
+        extra.repeat_occurrences = item.repeat_occurrences - 1;
+
+        if (extra.repeat_occurrences === 0) {
+            extra.repeat_occurrences = null;
+        }
+    }
+
+    return extra;
 };
 
-export const mergeItems = (items) => {
+export const mapItemToDetachedUpdates = (item: TypeTransactionModel) => ({id: item.id, repeat: null});
+
+export const mergeItems = (items: TypeTransactionModel[]) => {
     const [, ...rest] = items;
 
     if (!rest.length || uniqBy(items, 'money_location_id').length > 1) {

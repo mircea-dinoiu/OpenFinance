@@ -4,7 +4,6 @@
 [include]
 
 [libs]
-sources/common/types.js
 
 [options]
 module.system.node.resolve_dirname=node_modules

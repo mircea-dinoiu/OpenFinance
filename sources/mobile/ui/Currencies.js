@@ -1,5 +1,7 @@
 // @flow
 import {SingleSelect} from 'common/components/Select';
+import type {TypeCurrencies, TypeUsers} from 'common/types';
+import {objectValuesOfSameType} from 'common/utils/collection';
 import React, {PureComponent} from 'react';
 import {MenuItem, Subheader} from 'material-ui';
 import {fetchCurrencies, setBaseCurrencyId} from 'common/state/actions';
@@ -9,7 +11,7 @@ type TypeProps = {
     user: TypeUsers,
     currencies: TypeCurrencies,
     fetchCurrencies: typeof fetchCurrencies,
-    setBaseCurrencyId: setBaseCurrencyId,
+    setBaseCurrencyId: typeof setBaseCurrencyId,
 };
 
 class Currencies extends PureComponent<TypeProps> {
@@ -47,7 +49,7 @@ class Currencies extends PureComponent<TypeProps> {
                     }}
                 >
                     <SingleSelect
-                        options={Object.values(map).map(
+                        options={objectValuesOfSameType(map).map(
                             (each: TypeCurrency) => ({
                                 value: each.id,
                                 label: each.iso_code,
@@ -59,7 +61,7 @@ class Currencies extends PureComponent<TypeProps> {
                 </div>
 
                 <Subheader>Exchange Rates</Subheader>
-                {Object.values(map).map(
+                {objectValuesOfSameType(map).map(
                     (each: TypeCurrency) =>
                         each.id !== defaultCurrencyId && (
                             <MenuItem key={each.id}>

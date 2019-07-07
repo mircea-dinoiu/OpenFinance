@@ -1,8 +1,15 @@
 // @flow
+import type {
+    TypeCurrencies,
+    TypeCurrency,
+    TypeCurrencyIdentifier,
+} from 'common/types';
+import {objectValuesOfSameType} from 'common/utils/collection';
+
 export const findCurrencyById = (
-    id: number | string,
+    id: number,
     currencies: TypeCurrencies,
-): TypeCurrency => currencies.map[id];
+): TypeCurrency => currencies.map[String(id)];
 
 export const getBaseCurrency = (currencies: TypeCurrencies): TypeCurrency =>
     findCurrencyById(currencies.default, currencies);
@@ -10,7 +17,10 @@ export const getBaseCurrency = (currencies: TypeCurrencies): TypeCurrency =>
 export const getCurrencyByISOCode = (
     ISOCode: string,
     currencies: TypeCurrencies,
-) => Object.values(currencies.map).find((each) => each.iso_code === ISOCode);
+) =>
+    objectValuesOfSameType(currencies.map).find(
+        (each) => each.iso_code === ISOCode,
+    );
 
 export const convertCurrency = ({
     value,
@@ -38,12 +48,10 @@ export const convertCurrency = ({
         to = getCurrencyByISOCode(to, currencies);
     }
 
-    // $FlowFixMe from is currency map
     if (from.iso_code === to.iso_code) {
         return value;
     }
 
-    // $FlowFixMe from is a currency map
     return value * from.rates[to.iso_code];
 };
 

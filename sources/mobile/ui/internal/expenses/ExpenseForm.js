@@ -1,5 +1,6 @@
 // @flow
 import {findCurrencyById} from 'common/helpers/currency';
+import {objectValuesOfSameType} from 'common/utils/collection';
 
 import React, {PureComponent} from 'react';
 import {Row, Col} from 'react-grid-system';
@@ -80,7 +81,7 @@ export const setChargedPersonValueFactory = (
 
         while (
             (diffToMax =
-                defs.PERC_MAX - sumArray(Object.values(nextChargedPersons)))
+                defs.PERC_MAX - sumArray(objectValuesOfSameType(nextChargedPersons)))
         ) {
             for (const key in nextChargedPersons) {
                 if (key !== id) {

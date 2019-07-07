@@ -2,6 +2,7 @@
 import CurrencyDisplay from 'common/components/BaseTable/cells/CurrencyDisplay';
 import PricePerGDisplay from 'common/components/BaseTable/cells/PricePerGDisplay';
 import CategoriesFilter from 'common/components/BaseTable/filters/CategoriesFilter';
+import type {TypeTransactionModel} from 'common/types';
 import * as React from 'react';
 import DescriptionDisplay from 'common/components/BaseTable/cells/DescriptionDisplay';
 import AmountColumn from 'common/components/BaseTable/columns/AmountColumn';
@@ -21,7 +22,9 @@ export default ({updateRecords}) => [
         Header: '$',
         filterable: false,
         sortable: true,
-        accessor: (item) => <CurrencyDisplay item={item} />,
+        accessor: (item: TypeTransactionModel) => (
+            <CurrencyDisplay item={item} />
+        ),
         id: 'money_location.currency_id',
         width: 40,
     },
@@ -29,7 +32,7 @@ export default ({updateRecords}) => [
         Header: 'Description',
         filterable: true,
         Filter: DescriptionFilter,
-        accessor: (item) => (
+        accessor: (item: TypeTransactionModel) => (
             <DescriptionDisplay
                 entity="transaction"
                 item={item}
@@ -44,7 +47,9 @@ export default ({updateRecords}) => [
         Header: 'Categories',
         filterable: true,
         Filter: CategoriesFilter,
-        accessor: (item) => <CategoriesDisplay item={item} />,
+        accessor: (item: TypeTransactionModel) => (
+            <CategoriesDisplay item={item} />
+        ),
         id: 'categories',
         sortable: false,
         width: 300,
@@ -52,7 +57,9 @@ export default ({updateRecords}) => [
     AccountColumn,
     {
         Header: 'Person(s)',
-        accessor: (item) => <PersonsDisplay item={item} />,
+        accessor: (item: TypeTransactionModel) => (
+            <PersonsDisplay item={item} />
+        ),
         Filter: UsersFilter,
         filterable: true,
         id: 'users',
@@ -66,11 +73,7 @@ export default ({updateRecords}) => [
         Header: 'Rating',
         filterable: true,
         sortable: true,
-        accessor: (item, ...args) => {
-            console.log(...args);
-
-            return <RatingDisplay item={item} updateRecords={updateRecords} />;
-        },
+        accessor: (item: TypeTransactionModel) => <RatingDisplay item={item} updateRecords={updateRecords} />,
         id: 'favorite',
         //
         width: 110,
@@ -80,7 +83,7 @@ export default ({updateRecords}) => [
     {
         Header: 'Weight (g)',
         filterable: true,
-        accessor: (item) => <WeightDisplay item={item} />,
+        accessor: (item: TypeTransactionModel) => <WeightDisplay item={item} />,
         id: 'weight',
         //
         width: 110,
@@ -90,7 +93,9 @@ export default ({updateRecords}) => [
     {
         Header: 'Price/g',
         sortable: true,
-        accessor: (item) => <PricePerGDisplay item={item} />,
+        accessor: (item: TypeTransactionModel) => (
+            <PricePerGDisplay item={item} />
+        ),
         id: 'sum_per_weight',
         //
         width: 100,

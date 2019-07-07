@@ -1,4 +1,5 @@
 // @flow
+import type {TypeTransactionModel} from 'common/types';
 import * as React from 'react';
 import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
 import AccountFilter from 'common/components/BaseTable/filters/AccountFilter';
@@ -9,7 +10,7 @@ export default {
     Header: 'Account',
     filterable: true,
     Filter: AccountFilter,
-    accessor: (item) => <MoneyLocationDisplay item={item} />,
+    accessor: (item: TypeTransactionModel) => <MoneyLocationDisplay item={item} />,
     id: 'money_location_id',
     sortable: true,
     //

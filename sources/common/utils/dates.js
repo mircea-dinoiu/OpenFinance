@@ -1,4 +1,5 @@
 // @flow
+import type {TypeShiftDateOption} from 'common/types';
 import moment from 'moment';
 
 import {endOfDayToISOString} from 'shared/utils/dates';
@@ -41,7 +42,7 @@ export const getStartDate = ({
     return date ? moment(date).toISOString() : '';
 };
 
-const getMomentArgsForDateShift = (option, times = 1) => {
+const getMomentArgsForDateShift = (option: TypeShiftDateOption, times = 1) => {
     const one = 1;
 
     switch (option) {
@@ -60,12 +61,20 @@ const getMomentArgsForDateShift = (option, times = 1) => {
     throw new Error(`${option} is not specified in ShiftDateOptions`);
 };
 
-export const shiftDateForward = (date, by, times) =>
+export const shiftDateForward = (
+    date: string | Date,
+    by: TypeShiftDateOption,
+    times?: number,
+) =>
     moment(date)
         .add(...getMomentArgsForDateShift(by, times))
         .toDate();
 
-export const shiftDateBack = (date, by, times) =>
+export const shiftDateBack = (
+    date: string | Date,
+    by: TypeShiftDateOption,
+    times?: number,
+) =>
     moment(date)
         .subtract(...getMomentArgsForDateShift(by, times))
         .toDate();
@@ -79,5 +88,5 @@ export const getInitialEndDate = (): string => {
     return endOfDayToISOString(date);
 };
 
-export const formatYMD = (date = new Date()) =>
+export const formatYMD = (date: Date = new Date()) =>
     moment(date).format('YYYY-MM-DD');

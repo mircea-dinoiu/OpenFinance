@@ -2,7 +2,7 @@ const moment = require('moment');
 const {RepeatOption} = require('../defs');
 
 const advanceRepeatDate = (obj, rawRepeats) => {
-    const newObject = {...obj};
+    const newObject = Object.assign({}, obj);
     const date = moment(newObject.created_at);
     const repeats = Number(rawRepeats) || 1;
 
@@ -35,4 +35,4 @@ const advanceRepeatDate = (obj, rawRepeats) => {
     return newObject;
 };
 
-module.exports = { advanceRepeatDate };
+module.exports = {advanceRepeatDate};

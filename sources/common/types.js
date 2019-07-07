@@ -1,14 +1,15 @@
 // @flow
-/* eslint no-unused-vars: 0 */
+import {ShiftDateOptions} from 'common/defs';
 import type {Map} from 'immutable';
+import {RepeatOption} from 'shared/defs';
 
-type TypeScreenQueries = {
+export type TypeScreenQueries = {
     isSmall: boolean,
     isMedium: boolean,
     isLarge: boolean,
 };
 
-type TypePreferences = {
+export type TypePreferences = {
     endDate: string,
     endDateIncrement: 'd' | 'w' | '2w' | 'm',
     include: | 'ut'
@@ -24,7 +25,7 @@ type TypePreferences = {
     includePending: boolean,
 };
 
-type TypeCurrency = {
+export type TypeCurrency = {
     id: number,
     iso_code: string,
     currency: string,
@@ -34,17 +35,17 @@ type TypeCurrency = {
     },
 };
 
-type TypeCurrencies = {
+export type TypeCurrencies = {
     default: number,
     from_cache: boolean,
     map: {
-        [key: string]: TypeCurrencyMap,
+        [key: string]: TypeCurrency,
     },
 };
 
-type TypeCurrencyIdentifier = string | number | TypeCurrencyMap;
+export type TypeCurrencyIdentifier = string | number | TypeCurrency;
 
-type TypeUser = {
+export type TypeUser = {
     avatar: string,
     first_name: string,
     last_name: string,
@@ -52,13 +53,33 @@ type TypeUser = {
     id: number,
 };
 
-type TypeUsers = Map<{
-    currenc: TypeUser,
+export type TypeUsers = Map<{
+    currency: TypeUser,
     list: TypeUser[],
 }>;
 
-type TypeMainScreenFeatures = {
+export type TypeMainScreenFeatures = {
     repeat?: boolean,
     status?: boolean,
     duplicate?: boolean,
 };
+
+export type TypeTransactionForm = {||};
+
+export type TypeTransactionModel = {|
+    id: number,
+    categories: number[],
+    favorite: number,
+    item: string,
+    notes: string,
+    sum: number,
+    weight: number,
+    users: {
+        [key: string]: number,
+    },
+    repeat_occurrences: number,
+    repeat: null | $Values<typeof RepeatOption>,
+    persist: boolean,
+|};
+
+export type TypeShiftDateOption = $Keys<typeof ShiftDateOptions>;

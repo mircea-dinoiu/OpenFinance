@@ -1,5 +1,7 @@
 // @flow
 import {SingleSelect} from 'common/components/Select';
+import type {TypePreferences, TypeScreenQueries, TypeShiftDateOption, TypeUser} from 'common/types';
+import {objectEntriesOfSameType} from 'common/utils/collection';
 import React, {PureComponent} from 'react';
 import {Col, Row} from 'react-grid-system';
 import {connect} from 'react-redux';
@@ -39,20 +41,28 @@ type TypeProps = {
     actions: {
         updateState: typeof updateState,
         refreshWidgets: typeof refreshWidgets,
+        updatePreferences: typeof updatePreferences,
     },
+    screenSize: TypeScreenQueries,
+    preferences: TypePreferences,
+    user: TypeUser,
 };
 
-type TypeState = {};
+type TypeState = {
+    showShiftMenu: boolean,
+    showDateRange: boolean,
+    shiftMenuAnchor: null | HTMLElement,
+};
 
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 const MAX_TIMES = 10;
 
-export const getShiftBackOptions = (date, by) =>
+export const getShiftBackOptions = (date: string, by: TypeShiftDateOption): Date[] =>
     new Array(MAX_TIMES)
         .fill(null)
         .map((each, index) => shiftDateBack(date, by, index + 1));
 
-export const getShiftForwardOptions = (date, by) =>
+export const getShiftForwardOptions = (date: string, by: TypeShiftDateOption): Date[] =>
     new Array(MAX_TIMES)
         .fill(null)
         .map((each, index) => shiftDateForward(date, by, index + 1));
@@ -125,7 +135,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                     value={this.props.preferences.endDateIncrement}
                     onChange={this.handleEndDateIntervalDropdownChange}
                     clearable={false}
-                    options={Object.entries(ShiftDateOptions).map(
+                    options={objectEntriesOfSameType(ShiftDateOptions).map(
                         ([id, name]) => ({value: id, label: name}),
                     )}
                 />
