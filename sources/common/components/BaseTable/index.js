@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import ReactTable from 'react-table';
 import { modifiersToClassName } from 'common/utils/style';
 import css from './index.pcss';

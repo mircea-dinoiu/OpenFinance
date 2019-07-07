@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { createXHR } from 'common/utils/fetch';
 import { BigLoader } from '../components/loaders';
 import { Paper, Checkbox, FormControlLabel } from '@material-ui/core';

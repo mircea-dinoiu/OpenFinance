@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
 import AccountFilter from 'common/components/BaseTable/filters/AccountFilter';
 

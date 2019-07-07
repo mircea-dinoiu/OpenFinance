@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Menu } from 'material-ui';
 import { Paper } from '@material-ui/core';
 

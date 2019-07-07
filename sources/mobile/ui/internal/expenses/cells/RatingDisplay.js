@@ -2,7 +2,7 @@
 import { blue } from '@material-ui/core/colors';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
-import React from 'react';
+import * as React from 'react';
 import { range } from 'lodash';
 import Tooltip from 'common/components/Tooltip';
 

@@ -1,6 +1,6 @@
 // @flow
 import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
-import React from 'react';
+import * as React from 'react';
 
 const PricePerGDisplay = ({ item }) => (
     item.sum_per_weight != null && (

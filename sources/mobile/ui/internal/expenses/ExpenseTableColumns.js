@@ -2,7 +2,7 @@
 import CurrencyDisplay from 'common/components/BaseTable/cells/CurrencyDisplay';
 import PricePerGDisplay from 'common/components/BaseTable/cells/PricePerGDisplay';
 import CategoriesFilter from 'common/components/BaseTable/filters/CategoriesFilter';
-import React from 'react';
+import * as React from 'react';
 import DescriptionDisplay from 'common/components/BaseTable/cells/DescriptionDisplay';
 import AmountColumn from 'common/components/BaseTable/columns/AmountColumn';
 import DateTimeColumn from 'common/components/BaseTable/columns/DateTimeColumn';

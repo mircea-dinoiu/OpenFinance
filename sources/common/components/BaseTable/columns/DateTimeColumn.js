@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import DateDisplay from 'common/components/BaseTable/cells/DateDisplay';
 
 const style = { textAlign: 'center' };

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import Select from 'react-select/dist/react-select';
 import { withStyles } from '@material-ui/core/styles';

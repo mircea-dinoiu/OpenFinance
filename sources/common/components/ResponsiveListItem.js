@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { ListItem } from 'material-ui';
 import { connect } from 'react-redux';
 import omit from 'lodash/omit';

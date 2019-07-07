@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Tooltip as MaterialUITooltip } from '@material-ui/core';
 
 const Tooltip = ({

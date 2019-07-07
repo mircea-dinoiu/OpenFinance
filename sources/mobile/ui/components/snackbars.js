@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Snackbar } from 'material-ui';
 import { red, green } from '@material-ui/core/colors';
 import transitions from 'material-ui/styles/transitions';

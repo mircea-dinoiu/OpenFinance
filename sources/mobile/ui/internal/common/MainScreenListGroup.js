@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import moment from 'moment';
 import { CalendarWithoutTime } from 'common/defs/formats';
 import { Divider, List, Subheader } from 'material-ui';

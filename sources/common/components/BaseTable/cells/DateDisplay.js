@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { grey } from '@material-ui/core/colors';
 import moment from 'moment';
 import { connect } from 'react-redux';

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Flags } from 'mobile/ui/internal/common/MainScreenFlags';
 
 export default function DescriptionDisplay({

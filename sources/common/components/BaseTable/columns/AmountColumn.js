@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
 
 const style = { textAlign: 'right' };
