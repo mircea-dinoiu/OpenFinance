@@ -1,34 +1,36 @@
 const moment = require('moment');
+const {RepeatOption} = require('../defs');
+
 const advanceRepeatDate = (obj, rawRepeats) => {
-    const newObject = Object.assign({}, obj);
-    const date = new Date(newObject.created_at);
-    const repeats = rawRepeats || 1;
+    const newObject = {...obj};
+    const date = moment(newObject.created_at);
+    const repeats = Number(rawRepeats) || 1;
 
     switch (newObject.repeat) {
-        case 'd':
-            date.setDate(date.getDate() + Number(repeats));
+        case RepeatOption.DAILY:
+            date.add(repeats, 'day');
             break;
-        case 'w':
-            date.setDate(date.getDate() + 7 * repeats);
+        case RepeatOption.WEEKLY:
+            date.add(repeats, 'week');
             break;
-        case '2w':
-            date.setDate(date.getDate() + 7 * 2 * repeats);
+        case RepeatOption.WEEK_2:
+            date.add(2 * repeats, 'week');
             break;
-        case 'm':
-            date.setMonth(date.getMonth() + Number(repeats));
+        case RepeatOption.MONTHLY:
+            date.add(repeats, 'month');
             break;
-        case '2m':
-            date.setMonth(date.getMonth() + 2 * repeats);
+        case RepeatOption.MONTH_2:
+            date.add(2 * repeats, 'month');
             break;
-        case '3m':
-            date.setMonth(date.getMonth() + 3 * repeats);
+        case RepeatOption.MONTH_3:
+            date.add(3 * repeats, 'month');
             break;
-        case 'y':
-            date.setFullYear(date.getFullYear() + Number(repeats));
+        case RepeatOption.YEARLY:
+            date.add(repeats, 'year');
             break;
     }
 
-    newObject.created_at = moment(date);
+    newObject.created_at = date;
 
     return newObject;
 };
