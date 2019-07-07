@@ -13,15 +13,13 @@ It provides organizational tools like:
 # Tech stack
 Working with:
 - Backend with NodeJS & Express & Sequelize
-- Desktop UI with Sencha ExtJS 6
-- Mobile UI with React & MaterialUI
+- Responsive UI with React & MaterialUI
 
 # How to deploy:
 ```
 # Install the following:
 # - Git
 # - NodeJS
-# - Sencha Cmd (https://www.sencha.com/products/extjs/cmd-download/)
 
 git clone -b master git@github.com:mircea-dinoiu/financial.git
 
