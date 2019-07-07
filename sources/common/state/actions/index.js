@@ -1,5 +1,6 @@
 // @flow
 import {Actions} from 'common/state';
+import type {TypeSnackbar} from 'common/types';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 import url from 'common/utils/url';
@@ -45,3 +46,12 @@ export const fetchCurrencies = (params = {}) => async (dispatch) => {
 
     dispatch(updateCurrencies(currenciesResponse.data));
 };
+
+export const showSnackbar = (value: TypeSnackbar) => ({
+    type: Actions.SHOW_SNACKBAR,
+    value,
+});
+export const hideSnackbar = (value: string) => ({
+    type: Actions.HIDE_SNACKBAR,
+    value,
+});

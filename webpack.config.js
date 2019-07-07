@@ -87,7 +87,7 @@ module.exports = {
             common: path.resolve(__dirname, 'sources/common'),
             mobile: path.resolve(__dirname, 'sources/mobile'),
             shared: path.resolve(__dirname, 'shared'),
-            'react-dom': isProduction ? 'react-dom' : '@hot-loader/react-dom',
+            'react-dom': !isHot ? 'react-dom' : '@hot-loader/react-dom',
         },
     },
 };

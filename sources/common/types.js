@@ -1,4 +1,5 @@
 // @flow
+import * as React from 'react';
 import {ShiftDateOptions} from 'common/defs';
 import type {Map} from 'immutable';
 import {RepeatOption} from 'shared/defs';
@@ -83,3 +84,15 @@ export type TypeTransactionModel = {|
 |};
 
 export type TypeShiftDateOption = $Keys<typeof ShiftDateOptions>;
+
+export type TypeSnackbarOwnProps = {|
+    message: React.Node,
+    bodyStyle?: {
+        backgroundColor: string,
+    },
+|};
+
+export type TypeSnackbar = {|
+    id: string,
+    ...TypeSnackbarOwnProps,
+|};

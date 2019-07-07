@@ -4,6 +4,7 @@ import './Responsive.pcss';
 import './Responsive.css';
 import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
+import {CustomSnackbar} from 'mobile/ui/components/snackbars';
 // import injectTapEventPlugin from 'react-tap-event-plugin';
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
@@ -166,11 +167,18 @@ class Responsive extends PureComponent<{
                                 </Drawer>
                             )}
                             {this.props.loading ? <BigLoader /> : this.props.ui}
+                            {this.renderSnackbar()}
                         </div>
                     </V0MuiThemeProvider>
                 </MuiThemeProvider>
             </MuiPickersUtilsProvider>
         );
+    }
+
+    renderSnackbar() {
+        const [snackbar] = this.props.snackbars;
+
+        return <CustomSnackbar {...snackbar} open={snackbar != null} />;
     }
 }
 

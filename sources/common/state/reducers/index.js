@@ -56,6 +56,16 @@ const preferences = (state = parsePreferences(), action) => {
 
     return validatePreferences(state);
 };
+const snackbars = (state = [], action) => {
+    switch (action.type) {
+        case Actions.SHOW_SNACKBAR:
+            return state.concat(action.value);
+        case Actions.HIDE_SNACKBAR:
+            return state.filter((snackbar) => snackbar.id !== action.value);
+    }
+
+    return state;
+};
 const title = bindToUpdateState('title', 'Loading...');
 const ui = bindToUpdateState('ui', null);
 const currenciesDrawerOpen = bindToUpdateState('currenciesDrawerOpen', false);
@@ -95,4 +105,5 @@ export const reducer = combineReducers({
     moneyLocations,
     moneyLocationTypes,
     preferences,
+    snackbars,
 });

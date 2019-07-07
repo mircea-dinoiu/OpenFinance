@@ -1,26 +1,29 @@
 // @flow
 import {objectEntriesOfSameType} from 'common/utils/collection';
+import {startCase} from 'lodash';
 import * as React from 'react';
 
-export const parseCRUDError = (json) => {
+export const parseCRUDError = (
+    json: {
+        [key: string]: string[],
+    }[],
+) => {
     let error = json;
 
     if (Array.isArray(json)) {
         error = (
-            <ul>
-                {json.map((each) =>
-                    objectEntriesOfSameType(each).map(([key, messages]) => (
-                        <li key={key}>
-                            {key}
-                            <ul>
-                                {messages.map((message) => (
-                                    <li key={message}>{message}</li>
-                                ))}
-                            </ul>
-                        </li>
-                    )),
-                )}
-            </ul>
+            <>
+                <strong>The following errors occurred:</strong>
+                <ul style={{margin: 0}}>
+                    {json.map((each) =>
+                        objectEntriesOfSameType(each).map(([key, messages]) => (
+                            <li key={key}>
+                                {startCase(key)}: {messages.join(', ')}
+                            </li>
+                        )),
+                    )}
+                </ul>
+            </>
         );
     }
 

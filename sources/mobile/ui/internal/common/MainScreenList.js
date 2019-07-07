@@ -602,11 +602,13 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     withLoading = (fn) => async (...args: any[]) => {
         this.setState((state) => ({loading: state.loading + 1}));
 
-        const res = await fn(...args);
+        const promise = fn(...args);
 
-        this.setState((state) => ({loading: state.loading - 1}));
+        promise.finally(() => {
+            this.setState((state) => ({loading: state.loading - 1}));
+        });
 
-        return res;
+        return await promise;
     };
 
     handleRequest = this.withLoading((data, api: string) =>

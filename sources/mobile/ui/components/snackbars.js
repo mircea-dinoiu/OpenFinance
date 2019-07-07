@@ -1,52 +1,84 @@
 // @flow
+import {hideSnackbar, showSnackbar} from 'common/state/actions';
+import type {TypeSnackbarOwnProps} from 'common/types';
+import {uniqueId} from 'lodash';
 import * as React from 'react';
 import {Snackbar} from 'material-ui';
 import {red, green} from '@material-ui/core/colors';
-import transitions from 'material-ui/styles/transitions';
 import {connect} from 'react-redux';
-import omit from 'lodash/omit';
 
-const style = {
-    bottom: 'auto',
-    top: '50%',
-    width: '75%',
-    transform: 'translate(-50%, 0)',
-    transition: transitions.easeOut('0ms', 'visibility'),
-};
-const getBodyStyle = ({screen}) =>
-    screen.isLarge
-        ? {}
-        : {
-            borderRadius: '2px',
-            boxShadow:
-                  'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
-        };
-const getDefaultProps = ({screen}) => ({
-    autoHideDuration: 1500,
-    open: true,
-    style: screen.isLarge ? undefined : style,
-});
-const CustomSnackbar = connect(({screen}) => ({screen}))((props) => (
+export const CustomSnackbar = connect(({screen}) => ({screen}))((props) => (
     <Snackbar
-        {...getDefaultProps({screen: props.screen})}
-        {...omit(props, 'dispatch')}
+        open={props.open}
+        message={props.message}
         bodyStyle={{
-            ...getBodyStyle({screen: props.screen}),
+            height: 'auto',
+            lineHeight: 1.2,
+            padding: '10px 20px',
+            boxShadow:
+                'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
             ...props.bodyStyle,
         }}
     />
 ));
 
-export const ErrorSnackbar = (props) => (
-    <CustomSnackbar
-        {...props}
-        bodyStyle={{...props.bodyStyle, backgroundColor: red[500]}}
-    />
+const withSnackbarActionCreators = connect(
+    null,
+    {showSnackbar, hideSnackbar},
 );
 
-export const SuccessSnackbar = (props) => (
-    <CustomSnackbar
-        {...props}
-        bodyStyle={{...props.bodyStyle, backgroundColor: green[500]}}
-    />
+type TypeSnackbarProps = {|
+    ...TypeSnackbarOwnProps,
+    showSnackbar: typeof showSnackbar,
+    hideSnackbar: typeof hideSnackbar,
+|};
+
+export const ErrorSnackbar = withSnackbarActionCreators(
+    class extends React.PureComponent<TypeSnackbarProps> {
+        id = uniqueId();
+
+        componentDidMount(): void {
+            this.props.showSnackbar({
+                id: this.id,
+                message: this.props.message,
+                bodyStyle: {
+                    ...this.props.bodyStyle,
+                    backgroundColor: red[500],
+                },
+            });
+        }
+
+        componentWillUnmount(): void {
+            this.props.hideSnackbar(this.id);
+        }
+
+        render() {
+            return null;
+        }
+    },
+);
+
+export const SuccessSnackbar = withSnackbarActionCreators(
+    class extends React.PureComponent<TypeSnackbarProps> {
+        id = uniqueId();
+
+        componentDidMount(): void {
+            this.props.showSnackbar({
+                id: this.id,
+                message: this.props.message,
+                bodyStyle: {
+                    ...this.props.bodyStyle,
+                    backgroundColor: green[500],
+                },
+            });
+
+            setTimeout(() => {
+                this.props.hideSnackbar(this.id);
+            }, 1500);
+        }
+
+        render() {
+            return null;
+        }
+    },
 );
