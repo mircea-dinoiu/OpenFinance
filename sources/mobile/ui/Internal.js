@@ -13,7 +13,6 @@ import Expenses from './internal/Expenses';
 import Summary from './internal/Summary';
 
 import AccountBalance from '@material-ui/icons/AccountBalance';
-import TrendingUp from '@material-ui/icons/TrendingUp';
 import TrendingDown from '@material-ui/icons/TrendingDown';
 
 import {connect} from 'react-redux';

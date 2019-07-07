@@ -63,112 +63,96 @@ const styles = (theme) => ({
     },
 });
 
-function NoOptionsMessage(props) {
-    return (
-        <Typography
-            color="textSecondary"
-            className={props.selectProps.classes.noOptionsMessage}
-            {...props.innerProps}
-        >
-            {props.children}
-        </Typography>
-    );
-}
+const NoOptionsMessage = (props) => (
+    <Typography
+        color="textSecondary"
+        className={props.selectProps.classes.noOptionsMessage}
+        {...props.innerProps}
+    >
+        {props.children}
+    </Typography>
+);
 
-function inputComponent({inputRef, ...props}) {
-    return <div ref={inputRef} {...props} />;
-}
+const inputComponent = ({inputRef, ...props}) => (
+    <div ref={inputRef} {...props} />
+);
 
-function Control(props) {
-    return (
-        <TextField
-            fullWidth
-            InputProps={{
-                inputComponent,
-                inputProps: {
-                    className: props.selectProps.classes.input,
-                    ref: props.innerRef,
-                    children: props.children,
-                    ...props.innerProps,
-                },
-            }}
-            {...props.selectProps.TextFieldProps}
-        />
-    );
-}
+const Control = (props) => (
+    <TextField
+        fullWidth
+        InputProps={{
+            inputComponent,
+            inputProps: {
+                className: props.selectProps.classes.input,
+                ref: props.innerRef,
+                children: props.children,
+                ...props.innerProps,
+            },
+        }}
+        {...props.selectProps.TextFieldProps}
+    />
+);
 
-function Option(props) {
-    return (
-        <MenuItem
-            ref={props.innerRef}
-            selected={props.isFocused}
-            component="div"
-            style={{
-                fontWeight: props.isSelected ? 500 : 400,
-            }}
-            {...props.innerProps}
-        >
-            {props.children}
-        </MenuItem>
-    );
-}
+const Option = (props) => (
+    <MenuItem
+        ref={props.innerRef}
+        selected={props.isFocused}
+        component="div"
+        style={{
+            fontWeight: props.isSelected ? 500 : 400,
+        }}
+        {...props.innerProps}
+    >
+        {props.children}
+    </MenuItem>
+);
 
-function Placeholder(props) {
-    return (
-        <Typography
-            color="textSecondary"
-            className={props.selectProps.classes.placeholder}
-            {...props.innerProps}
-        >
-            {props.children}
-        </Typography>
-    );
-}
+const Placeholder = (props) => (
+    <Typography
+        color="textSecondary"
+        className={props.selectProps.classes.placeholder}
+        {...props.innerProps}
+    >
+        {props.children}
+    </Typography>
+);
 
-function SingleValue(props) {
-    return (
-        <Typography
-            className={props.selectProps.classes.singleValue}
-            {...props.innerProps}
-        >
-            {props.children}
-        </Typography>
-    );
-}
+const SingleValue = (props) => (
+    <Typography
+        className={props.selectProps.classes.singleValue}
+        {...props.innerProps}
+    >
+        {props.children}
+    </Typography>
+);
 
-function ValueContainer(props) {
-    return (
-        <div className={props.selectProps.classes.valueContainer}>
-            {props.children}
-        </div>
-    );
-}
+const ValueContainer = (props) => (
+    <div className={props.selectProps.classes.valueContainer}>
+        {props.children}
+    </div>
+);
 
-function MultiValue(props) {
-    return (
-        <Chip
-            tabIndex={-1}
-            label={props.children}
-            className={classNames(props.selectProps.classes.chip, {
-                [props.selectProps.classes.chipFocused]: props.isFocused,
-            })}
-            onDelete={props.removeProps.onClick}
-            deleteIcon={<CancelIcon {...props.removeProps} />}
-        />
-    );
-}
+const MultiValue = (props) => (
+    <Chip
+        tabIndex={-1}
+        label={props.children}
+        className={classNames(props.selectProps.classes.chip, {
+            [props.selectProps.classes.chipFocused]: props.isFocused,
+        })}
+        onDelete={props.removeProps.onClick}
+        deleteIcon={<CancelIcon {...props.removeProps} />}
+    />
+);
 
-function Menu(props) {
-    return (
-        <Paper
-            square
-            className={props.selectProps.classes.paper}
-            {...props.innerProps}
-        >
-            {props.children}
-        </Paper>
-    );
-}
+const Menu = (props) => (
+    <Paper
+        square
+        className={props.selectProps.classes.paper}
+        {...props.innerProps}
+    >
+        {props.children}
+    </Paper>
+);
 
 const components = {
     Control,

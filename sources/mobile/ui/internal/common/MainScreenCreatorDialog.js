@@ -1,6 +1,4 @@
 // @flow
-import {uniqueId} from 'lodash';
-
 import React, {PureComponent} from 'react';
 import {parseCRUDError} from 'common/parsers';
 
