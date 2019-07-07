@@ -38,7 +38,7 @@ app.use(cookieParser());
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 
 /*
  * View engine (handlebars)
@@ -86,8 +86,8 @@ passport.use(
         {
             usernameField: 'email',
         },
-        ((email, pass, cb) => {
-            const { User } = require('./server/models');
+        (email, pass, cb) => {
+            const {User} = require('./server/models');
 
             User.findOne({
                 where: {
@@ -113,7 +113,7 @@ passport.use(
 
                 return cb(null, user);
             });
-        }),
+        },
     ),
 );
 
@@ -122,7 +122,7 @@ passport.serializeUser((user, cb) => {
 });
 
 passport.deserializeUser((id, cb) => {
-    const { User } = require('./server/models');
+    const {User} = require('./server/models');
 
     User.findById(id).then((user) => {
         cb(null, user);
@@ -138,7 +138,7 @@ app.use(passport.session());
 if (config.get('enableCSRF')) {
     const csrf = require('csurf');
 
-    app.use(csrf({ cookie: true }));
+    app.use(csrf({cookie: true}));
     app.use((err, req, res, next) => {
         if (err.code !== 'EBADCSRFTOKEN') {
             return next(err);

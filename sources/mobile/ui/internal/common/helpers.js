@@ -17,7 +17,10 @@ export const mapItemToRepeatedUpdates = (item: TypeTransactionModel) => {
     return extra;
 };
 
-export const mapItemToDetachedUpdates = (item: TypeTransactionModel) => ({id: item.id, repeat: null});
+export const mapItemToDetachedUpdates = (item: TypeTransactionModel) => ({
+    id: item.id,
+    repeat: null,
+});
 
 export const mergeItems = (items: TypeTransactionModel[]) => {
     const [, ...rest] = items;

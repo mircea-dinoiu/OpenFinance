@@ -1,4 +1,7 @@
-import {objectEntriesOfSameType, objectValuesOfSameType} from 'common/utils/collection';
+import {
+    objectEntriesOfSameType,
+    objectValuesOfSameType,
+} from 'common/utils/collection';
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import {connect} from 'react-redux';

@@ -8,7 +8,9 @@ const style = {textAlign: 'right'};
 export default {
     Header: 'Sum',
     filterable: true,
-    accessor: (item: TypeTransactionModel) => <AmountDisplay showCurrency={false} item={item} />,
+    accessor: (item: TypeTransactionModel) => (
+        <AmountDisplay showCurrency={false} item={item} />
+    ),
     id: 'sum',
     //
     width: 100,

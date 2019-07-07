@@ -9,7 +9,7 @@ describe('#mapItemToRepeatedUpdates()', () => {
                     mapItemToRepeatedUpdates({
                         repeat_occurrences: 1,
                     }),
-                ).toEqual({ repeat_occurrences: null});
+                ).toEqual({repeat_occurrences: null});
             });
         });
 

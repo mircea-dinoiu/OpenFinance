@@ -73,7 +73,9 @@ export default ({updateRecords}) => [
         Header: 'Rating',
         filterable: true,
         sortable: true,
-        accessor: (item: TypeTransactionModel) => <RatingDisplay item={item} updateRecords={updateRecords} />,
+        accessor: (item: TypeTransactionModel) => (
+            <RatingDisplay item={item} updateRecords={updateRecords} />
+        ),
         id: 'favorite',
         //
         width: 110,

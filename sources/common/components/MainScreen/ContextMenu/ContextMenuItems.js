@@ -55,7 +55,9 @@ export default function ContextMenuItems({
     features: TypeMainScreenFeatures,
     desktop: boolean,
 }) {
-    const selectedIdsLength = objectValuesOfSameType(selectedIds).filter(Boolean).length;
+    const selectedIdsLength = objectValuesOfSameType(selectedIds).filter(
+        Boolean,
+    ).length;
     const disabledForZero = selectedIdsLength === 0;
     const disabledForLessThanTwo = selectedIdsLength < 2;
 

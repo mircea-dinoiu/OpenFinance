@@ -10,7 +10,9 @@ export default {
     Header: 'Account',
     filterable: true,
     Filter: AccountFilter,
-    accessor: (item: TypeTransactionModel) => <MoneyLocationDisplay item={item} />,
+    accessor: (item: TypeTransactionModel) => (
+        <MoneyLocationDisplay item={item} />
+    ),
     id: 'money_location_id',
     sortable: true,
     //

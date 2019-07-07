@@ -237,7 +237,9 @@ class SummaryCategory extends PureComponent {
 
                 <CardText style={{padding: '0 5px'}} expandable={true}>
                     {sortBy(
-                        objectEntriesOfSameType(groupBy(summaryObject, 'group')),
+                        objectEntriesOfSameType(
+                            groupBy(summaryObject, 'group'),
+                        ),
                         this.groupSorter,
                     ).map(([id, items]) => {
                         const shouldGroup = items.every((each) =>

@@ -1,6 +1,11 @@
 // @flow
 import {SingleSelect} from 'common/components/Select';
-import type {TypePreferences, TypeScreenQueries, TypeShiftDateOption, TypeUser} from 'common/types';
+import type {
+    TypePreferences,
+    TypeScreenQueries,
+    TypeShiftDateOption,
+    TypeUser,
+} from 'common/types';
 import {objectEntriesOfSameType} from 'common/utils/collection';
 import React, {PureComponent} from 'react';
 import {Col, Row} from 'react-grid-system';
@@ -57,12 +62,18 @@ type TypeState = {
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 const MAX_TIMES = 10;
 
-export const getShiftBackOptions = (date: string, by: TypeShiftDateOption): Date[] =>
+export const getShiftBackOptions = (
+    date: string,
+    by: TypeShiftDateOption,
+): Date[] =>
     new Array(MAX_TIMES)
         .fill(null)
         .map((each, index) => shiftDateBack(date, by, index + 1));
 
-export const getShiftForwardOptions = (date: string, by: TypeShiftDateOption): Date[] =>
+export const getShiftForwardOptions = (
+    date: string,
+    by: TypeShiftDateOption,
+): Date[] =>
     new Array(MAX_TIMES)
         .fill(null)
         .map((each, index) => shiftDateForward(date, by, index + 1));
@@ -301,7 +312,6 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                                     marginTop: 5,
                                 }}
                                 format={'YYYY-MM-DD'}
-                                showTodayButton={true}
                                 value={
                                     this.props.preferences.endDate
                                         ? moment(

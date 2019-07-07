@@ -19,9 +19,9 @@ import {
     Avatar,
     ListItemText,
     ListSubheader,
+    Slider,
     withStyles,
 } from '@material-ui/core';
-import {Slider} from '@material-ui/lab';
 import RepeatOptions from 'common/defs/repeatOptions';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
@@ -81,7 +81,8 @@ export const setChargedPersonValueFactory = (
 
         while (
             (diffToMax =
-                defs.PERC_MAX - sumArray(objectValuesOfSameType(nextChargedPersons)))
+                defs.PERC_MAX -
+                sumArray(objectValuesOfSameType(nextChargedPersons)))
         ) {
             for (const key in nextChargedPersons) {
                 if (key !== id) {
