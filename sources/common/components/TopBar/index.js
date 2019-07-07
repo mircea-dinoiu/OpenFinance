@@ -1,9 +1,9 @@
 // @flow
-import { SingleSelect } from 'common/components/Select';
-import React, { PureComponent } from 'react';
-import { Col, Row } from 'react-grid-system';
-import { connect } from 'react-redux';
-import { IconButton } from 'material-ui';
+import {SingleSelect} from 'common/components/Select';
+import React, {PureComponent} from 'react';
+import {Col, Row} from 'react-grid-system';
+import {connect} from 'react-redux';
+import {IconButton} from 'material-ui';
 import {
     AppBar,
     Toolbar,
@@ -25,12 +25,12 @@ import {
     refreshWidgets,
     updatePreferences,
 } from 'common/state/actions';
-import { bindActionCreators } from 'redux';
-import { shiftDateBack, shiftDateForward } from 'common/utils/dates';
+import {bindActionCreators} from 'redux';
+import {shiftDateBack, shiftDateForward} from 'common/utils/dates';
 import moment from 'moment';
-import { ShiftDateOptions, Sizes } from 'common/defs';
-import { DatePicker } from '@material-ui/pickers';
-import { endOfDayToISOString } from 'shared/utils/dates';
+import {ShiftDateOptions, Sizes} from 'common/defs';
+import {DatePicker} from '@material-ui/pickers';
+import {endOfDayToISOString} from 'shared/utils/dates';
 
 type TypeProps = {
     onLogout: Function,
@@ -101,15 +101,15 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
         this.props.actions.refreshWidgets();
     };
     onClickCurrenciesDrawerTrigger = () => {
-        this.props.actions.updateState({ currenciesDrawerOpen: true });
+        this.props.actions.updateState({currenciesDrawerOpen: true});
     };
 
     handleEndDateIntervalDropdownChange = (newValue) => {
-        this.props.actions.updatePreferences({ endDateIncrement: newValue });
+        this.props.actions.updatePreferences({endDateIncrement: newValue});
     };
 
     handleToggleDateRange = () =>
-        this.setState((state) => ({ showDateRange: !state.showDateRange }));
+        this.setState((state) => ({showDateRange: !state.showDateRange}));
 
     renderEndDateIntervalSelect() {
         return (
@@ -126,7 +126,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                     onChange={this.handleEndDateIntervalDropdownChange}
                     clearable={false}
                     options={Object.entries(ShiftDateOptions).map(
-                        ([id, name]) => ({ value: id, label: name }),
+                        ([id, name]) => ({value: id, label: name}),
                     )}
                 />
             </div>
@@ -144,13 +144,13 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
     };
 
     handleCloseShiftMenu = () => {
-        this.setState({ showShiftMenu: false });
+        this.setState({showShiftMenu: false});
     };
 
     renderShiftBack() {
         return (
             <IconButton
-                style={{ float: 'left', height: INPUT_HEIGHT }}
+                style={{float: 'left', height: INPUT_HEIGHT}}
                 tooltip={`Shift back ${
                     ShiftDateOptions[this.props.preferences.endDateIncrement]
                 }`}
@@ -164,7 +164,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
     renderShiftForward() {
         return (
             <IconButton
-                style={{ float: 'left', height: INPUT_HEIGHT }}
+                style={{float: 'left', height: INPUT_HEIGHT}}
                 tooltip={`Shift forward ${
                     ShiftDateOptions[this.props.preferences.endDateIncrement]
                 }`}
@@ -180,14 +180,14 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
             <Menu
                 open={this.state.showShiftMenu}
                 anchorEl={this.state.shiftMenuAnchor}
-                style={{ marginTop: 29, marginLeft: -49 }}
+                style={{marginTop: 29, marginLeft: -49}}
                 onClose={this.handleCloseShiftMenu}
             >
                 <Row nogutter={true}>
                     <Col xs={6}>
                         <FormLabel
                             component="legend"
-                            style={{ textAlign: 'center' }}
+                            style={{textAlign: 'center'}}
                         >
                             Previous
                         </FormLabel>
@@ -213,7 +213,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                     <Col xs={6}>
                         <FormLabel
                             component="legend"
-                            style={{ textAlign: 'center' }}
+                            style={{textAlign: 'center'}}
                         >
                             Next
                         </FormLabel>
@@ -312,7 +312,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                             flex: 1,
                         }}
                     >
-                        <div style={{ float: 'right' }}>
+                        <div style={{float: 'right'}}>
                             {this.props.user && isSmall && (
                                 <IconButton
                                     onClick={this.handleToggleDateRange}
@@ -346,7 +346,7 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
 }
 
 export default connect(
-    ({ screen, screenSize, user, title, preferences }) => ({
+    ({screen, screenSize, user, title, preferences}) => ({
         screen,
         screenSize,
         user,

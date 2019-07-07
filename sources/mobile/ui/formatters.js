@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { grey } from '@material-ui/core/colors';
-import { connect } from 'react-redux';
+import {grey} from '@material-ui/core/colors';
+import {connect} from 'react-redux';
 import Tooltip from 'common/components/Tooltip';
-import { financialNum } from 'shared/utils/numbers';
-import { getBaseCurrency } from '../../common/helpers/currency';
+import {financialNum} from 'shared/utils/numbers';
+import {getBaseCurrency} from '../../common/helpers/currency';
 
 export const formatNumericValue = (value) =>
-    new Intl.NumberFormat(undefined, { minimumFractionDigits: 2 }).format(
+    new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(
         financialNum(value),
     );
-const NumericValue = connect(({ currencies }) => ({ currencies }))(
+const NumericValue = connect(({currencies}) => ({currencies}))(
     ({
         currencies,
         currency = getBaseCurrency(currencies).iso_code,
@@ -20,7 +20,7 @@ const NumericValue = connect(({ currencies }) => ({ currencies }))(
         const inner = (
             <span>
                 {currency && showCurrency && (
-                    <span style={{ color: grey[500], ...currencyStyle }}>
+                    <span style={{color: grey[500], ...currencyStyle}}>
                         {currency}
                     </span>
                 )}{' '}
@@ -58,7 +58,7 @@ const NumericValue = connect(({ currencies }) => ({ currencies }))(
 
 export const numericValue = (
     value,
-    { currency, showCurrency = true, currencyStyle = {} } = {},
+    {currency, showCurrency = true, currencyStyle = {}} = {},
 ) => (
     <NumericValue
         value={value}

@@ -15,7 +15,7 @@ import DescriptionFilter from 'common/components/BaseTable/filters/DescriptionFi
 import UsersFilter from 'common/components/BaseTable/filters/UsersFilter';
 import RatingDisplay from 'mobile/ui/internal/expenses/cells/RatingDisplay';
 
-export default ({ updateRecords }) => [
+export default ({updateRecords}) => [
     AmountColumn,
     {
         Header: '$',
@@ -58,8 +58,8 @@ export default ({ updateRecords }) => [
         id: 'users',
         //
         width: 100,
-        style: { textAlign: 'center' },
-        headerStyle: { textAlign: 'center' },
+        style: {textAlign: 'center'},
+        headerStyle: {textAlign: 'center'},
         sortable: false,
     },
     {
@@ -74,8 +74,8 @@ export default ({ updateRecords }) => [
         id: 'favorite',
         //
         width: 110,
-        headerStyle: { textAlign: 'center' },
-        style: { textAlign: 'center' },
+        headerStyle: {textAlign: 'center'},
+        style: {textAlign: 'center'},
     },
     {
         Header: 'Weight (g)',
@@ -84,8 +84,8 @@ export default ({ updateRecords }) => [
         id: 'weight',
         //
         width: 110,
-        headerStyle: { textAlign: 'center' },
-        style: { textAlign: 'right' },
+        headerStyle: {textAlign: 'center'},
+        style: {textAlign: 'right'},
     },
     {
         Header: 'Price/g',
@@ -94,8 +94,8 @@ export default ({ updateRecords }) => [
         id: 'sum_per_weight',
         //
         width: 100,
-        headerStyle: { textAlign: 'center' },
-        style: { textAlign: 'right' },
+        headerStyle: {textAlign: 'center'},
+        style: {textAlign: 'right'},
     },
     RepeatColumn,
 ];

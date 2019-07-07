@@ -1,4 +1,4 @@
-const { extractIdsFromModel, extractUsersFromModel } = require('../helpers');
+const {extractIdsFromModel, extractUsersFromModel} = require('../helpers');
 
 module.exports = (sequelize, types) => {
     const Expense = sequelize.define(
@@ -47,7 +47,10 @@ module.exports = (sequelize, types) => {
 
                     Expense.addScope('default', {
                         attributes: Object.keys(Expense.rawAttributes).concat([
-                            ['GROUP_CONCAT(DISTINCT CONCAT(`users`.`id`, \':\', `users.expense_user`.`blame`))', 'userBlameMap'],
+                            [
+                                'GROUP_CONCAT(DISTINCT CONCAT(`users`.`id`, \':\', `users.expense_user`.`blame`))',
+                                'userBlameMap',
+                            ],
                             ['GROUP_CONCAT(DISTINCT `users`.`id`)', 'userIds'],
                             [
                                 'GROUP_CONCAT(DISTINCT `categories`.`id`)',
@@ -59,7 +62,7 @@ module.exports = (sequelize, types) => {
                                 model: models.User,
                                 where: ['`users.expense_user`.`blame` > 0'],
                             },
-                            { model: models.Category, attributes: [] },
+                            {model: models.Category, attributes: []},
                             {
                                 model: models.MoneyLocation,
                                 attributes: ['currency_id'],

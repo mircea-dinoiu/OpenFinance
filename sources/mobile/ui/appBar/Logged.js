@@ -1,9 +1,9 @@
 import * as React from 'react';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { IconMenu, IconButton, MenuItem } from 'material-ui';
+import {IconMenu, IconButton, MenuItem} from 'material-ui';
 
 const Logged = (rawProps) => {
-    const { onLogout, ...props } = rawProps;
+    const {onLogout, ...props} = rawProps;
 
     return (
         <IconMenu
@@ -13,8 +13,8 @@ const Logged = (rawProps) => {
                     <MoreVertIcon htmlColor="white" />
                 </IconButton>
             }
-            targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
         >
             <MenuItem
                 primaryText="Logout"

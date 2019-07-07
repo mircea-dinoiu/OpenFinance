@@ -1,22 +1,22 @@
 // @flow
 import * as React from 'react';
-import { createXHR } from 'common/utils/fetch';
-import { BigLoader } from '../components/loaders';
-import { Paper, Checkbox, FormControlLabel } from '@material-ui/core';
-import { green, purple, red } from '@material-ui/core/colors';
+import {createXHR} from 'common/utils/fetch';
+import {BigLoader} from '../components/loaders';
+import {Paper, Checkbox, FormControlLabel} from '@material-ui/core';
+import {green, purple, red} from '@material-ui/core/colors';
 import routes from '../../../common/defs/routes';
-import { stringify } from 'query-string';
+import {stringify} from 'query-string';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import IncludeDropdown from 'common/components/IncludeDropdown';
-import { getStartDate } from 'common/utils/dates';
-import { greyedOut } from 'common/defs/styles';
-import { Sizes } from 'common/defs';
+import {getStartDate} from 'common/utils/dates';
+import {greyedOut} from 'common/defs/styles';
+import {Sizes} from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
-import { updatePreferences } from 'common/state/actions';
+import {updatePreferences} from 'common/state/actions';
 import moment from 'moment';
-import { endOfDayToISOString } from 'shared/utils/dates';
+import {endOfDayToISOString} from 'shared/utils/dates';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -83,11 +83,11 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({ preferences, refreshWidgets }) {
-        const { endDate } = preferences;
+    UNSAFE_componentWillReceiveProps({preferences, refreshWidgets}) {
+        const {endDate} = preferences;
 
         if (endDate !== this.props.preferences.endDate) {
-            this.load({ endDate });
+            this.load({endDate});
         }
 
         if (refreshWidgets !== this.props.refreshWidgets) {
@@ -121,7 +121,7 @@ class Summary extends React.PureComponent<TypeProps> {
                 ),
                 html: false,
                 filters: JSON.stringify(
-                    includePending ? [] : [{ id: 'status', value: 'finished' }],
+                    includePending ? [] : [{id: 'status', value: 'finished'}],
                 ),
             })}`,
         });
@@ -139,10 +139,10 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 
     renderResults() {
-        const { results } = this.state;
+        const {results} = this.state;
 
         return (
-            <div style={{ margin: '0 0 20px' }}>
+            <div style={{margin: '0 0 20px'}}>
                 {this.renderCategory({
                     backgroundColor: green[500],
                     title: 'Balance by Account',
@@ -188,15 +188,15 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 
     onIncludeChange = (include) => {
-        this.props.updatePreferences({ include });
-        this.load({ include });
+        this.props.updatePreferences({include});
+        this.load({include});
     };
 
     handleToggleIncludePending = () => {
         const includePending = !this.props.preferences.includePending;
 
-        this.props.updatePreferences({ includePending });
-        this.load({ includePending });
+        this.props.updatePreferences({includePending});
+        this.load({includePending});
     };
 
     render() {
@@ -248,7 +248,7 @@ class Summary extends React.PureComponent<TypeProps> {
     }
 }
 
-const mapDispatchToProps = { updatePreferences };
+const mapDispatchToProps = {updatePreferences};
 
 export default connect(
     (state) => state,

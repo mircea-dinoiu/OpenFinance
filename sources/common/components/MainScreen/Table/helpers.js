@@ -1,10 +1,10 @@
 // @flow
-import { formatYMD } from 'common/utils/dates';
+import {formatYMD} from 'common/utils/dates';
 import cssTable from 'common/components/BaseTable/index.pcss';
 
 const today = formatYMD(new Date());
 
-export const getTrClassName = (item, { selectedIds }): string => {
+export const getTrClassName = (item, {selectedIds}): string => {
     const classes = [cssTable.notSelectable];
 
     if (formatYMD(item.created_at) === today) {
@@ -33,30 +33,30 @@ export const getTrProps = ({
     onChangeContextMenu,
     item,
 }) => ({
-    className: getTrClassName(item, { selectedIds }),
+    className: getTrClassName(item, {selectedIds}),
     onDoubleClick: () => {
         if (item.persist !== false) {
-            onReceiveSelectedIds({ [item.id]: true });
+            onReceiveSelectedIds({[item.id]: true});
             onEdit();
         } else {
             onReceiveSelectedIds({});
         }
     },
     onClick(event) {
-        onChangeContextMenu({ display: false });
+        onChangeContextMenu({display: false});
 
         let newSelected;
 
         if (event.metaKey || event.ctrlKey) {
             if (item.persist !== false) {
-                newSelected = { ...selectedIds };
+                newSelected = {...selectedIds};
 
                 newSelected[item.id] = !selectedIds[item.id];
             } else {
                 return;
             }
         } else {
-            newSelected = item.persist !== false ? { [item.id]: true } : {};
+            newSelected = item.persist !== false ? {[item.id]: true} : {};
         }
 
         onReceiveSelectedIds(newSelected);
@@ -72,7 +72,7 @@ export const getTrProps = ({
             });
 
             if (!selectedIds[item.id]) {
-                onReceiveSelectedIds({ [item.id]: true });
+                onReceiveSelectedIds({[item.id]: true});
             }
         }
     },

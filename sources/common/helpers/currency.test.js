@@ -11,14 +11,14 @@ const RON = {
     iso_code: 'RON',
     currency: 'Romanian leu',
     symbol: 'lei',
-    rates: { EUR: 0.2144, GBP: 0.1897, USD: 0.2511 },
+    rates: {EUR: 0.2144, GBP: 0.1897, USD: 0.2511},
 };
 const USD = {
     id: 1,
     iso_code: 'USD',
     currency: 'United States dollar',
     symbol: '$',
-    rates: { RON: 3.9824, EUR: 0.8542, GBP: 0.7558 },
+    rates: {RON: 3.9824, EUR: 0.8542, GBP: 0.7558},
 };
 const currencies = {
     map: {
@@ -29,14 +29,14 @@ const currencies = {
             iso_code: 'EUR',
             currency: 'Euro',
             symbol: '€',
-            rates: { RON: 4.6621, GBP: 0.8848, USD: 1.1706 },
+            rates: {RON: 4.6621, GBP: 0.8848, USD: 1.1706},
         },
         '4': {
             id: 4,
             iso_code: 'GBP',
             currency: 'Pound sterling',
             symbol: '£',
-            rates: { RON: 5.2691, EUR: 1.1301, USD: 1.3231 },
+            rates: {RON: 5.2691, EUR: 1.1301, USD: 1.3231},
         },
     },
     default: 1,

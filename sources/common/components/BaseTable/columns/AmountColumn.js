@@ -2,7 +2,7 @@
 import * as React from 'react';
 import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
 
-const style = { textAlign: 'right' };
+const style = {textAlign: 'right'};
 
 export default {
     Header: 'Sum',

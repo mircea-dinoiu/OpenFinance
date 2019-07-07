@@ -1,5 +1,5 @@
 const md5 = require('md5');
-const { pick } = require('lodash');
+const {pick} = require('lodash');
 
 module.exports = (sequelize, types) =>
     sequelize.define(

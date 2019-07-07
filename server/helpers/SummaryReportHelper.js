@@ -1,10 +1,10 @@
-const { uniq, sortBy } = require('lodash');
-const { financialNum } = require('../../shared/utils/numbers');
+const {uniq, sortBy} = require('lodash');
+const {financialNum} = require('../../shared/utils/numbers');
 
 const safeNum = financialNum;
 
 module.exports = {
-    description(text, { html } = {}) {
+    description(text, {html} = {}) {
         if (html === 'false') {
             return text;
         }
@@ -34,15 +34,15 @@ module.exports = {
         return this.safeNum(-filteredTransactions);
     },
 
-    formatMLName(id, { mlRecords }) {
+    formatMLName(id, {mlRecords}) {
         return mlRecords.find((each) => each.id == id).name;
     },
 
-    addMLEntries({ data, mls, mlRecords, html }) {
-        const push = ({ id, name, group, currencyId }) => {
+    addMLEntries({data, mls, mlRecords, html}) {
+        const push = ({id, name, group, currencyId}) => {
             data.push({
                 sum: mls[id],
-                description: this.description(name, { html }),
+                description: this.description(name, {html}),
                 reference: id,
                 group,
                 currencyId,

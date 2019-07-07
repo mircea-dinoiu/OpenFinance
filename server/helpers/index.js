@@ -34,7 +34,7 @@ const extractUsersFromModel = (model) => {
 };
 
 const sanitizeSorters = (rawSorters) => {
-    let sorters = [{ id: 'created_at', desc: true }];
+    let sorters = [{id: 'created_at', desc: true}];
 
     if (rawSorters) {
         const parsed = JSON.parse(rawSorters);

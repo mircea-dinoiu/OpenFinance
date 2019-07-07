@@ -27,7 +27,7 @@ if (process.env.NODE_ENV !== 'test') {
                 file.slice(-3) === '.js',
         )
         .forEach((file) => {
-            const { name } = path.parse(file);
+            const {name} = path.parse(file);
             const model = sql.import(path.join(__dirname, file));
 
             db[name] = model;

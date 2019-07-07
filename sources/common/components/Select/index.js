@@ -2,15 +2,15 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import Select from 'react-select/dist/react-select';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import { find } from 'lodash';
+import {emphasize} from '@material-ui/core/styles/colorManipulator';
+import {find} from 'lodash';
 
 const styles = (theme) => ({
     root: {
@@ -75,7 +75,7 @@ function NoOptionsMessage(props) {
     );
 }
 
-function inputComponent({ inputRef, ...props }) {
+function inputComponent({inputRef, ...props}) {
     return <div ref={inputRef} {...props} />;
 }
 
@@ -191,8 +191,8 @@ const selectStyles = (theme) => ({
     }),
 });
 
-export const SingleSelect = withStyles(styles, { withTheme: true })(
-    ({ theme, classes, label = '', simpleValue = true, ...props }) => (
+export const SingleSelect = withStyles(styles, {withTheme: true})(
+    ({theme, classes, label = '', simpleValue = true, ...props}) => (
         <div className={classes.root}>
             <Select
                 classes={classes}
@@ -207,7 +207,7 @@ export const SingleSelect = withStyles(styles, { withTheme: true })(
                 {...props}
                 {...(simpleValue
                     ? {
-                        value: find(props.options, { value: props.value }),
+                        value: find(props.options, {value: props.value}),
                         onChange: (option) => props.onChange(option.value),
                     }
                     : {})}
@@ -216,8 +216,8 @@ export const SingleSelect = withStyles(styles, { withTheme: true })(
     ),
 );
 
-export const MultiSelect = withStyles(styles, { withTheme: true })(
-    ({ classes, theme, label, simpleValue = true, ...props }) => (
+export const MultiSelect = withStyles(styles, {withTheme: true})(
+    ({classes, theme, label, simpleValue = true, ...props}) => (
         <div className={classes.root}>
             <Select
                 classes={classes}

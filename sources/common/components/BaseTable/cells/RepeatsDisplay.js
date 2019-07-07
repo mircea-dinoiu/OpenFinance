@@ -1,15 +1,15 @@
 // @flow
 import * as React from 'react';
-import { grey } from '@material-ui/core/colors';
+import {grey} from '@material-ui/core/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
-const RepeatsDisplay = ({ item, screenSize }) => {
+const RepeatsDisplay = ({item, screenSize}) => {
     const repeatsText = item.repeat
         ? RepeatOptions.filter((each) => each[0] === item.repeat)[0][1]
         : '';
     const repeatsDisplay = (
-        <span style={{ fontSize: 14, color: grey[500] }}>
+        <span style={{fontSize: 14, color: grey[500]}}>
             {screenSize.isLarge
                 ? repeatsText
                 : repeatsText
@@ -26,4 +26,4 @@ const RepeatsDisplay = ({ item, screenSize }) => {
     return repeatsDisplay;
 };
 
-export default connect(({ screenSize }) => ({ screenSize }))(RepeatsDisplay);
+export default connect(({screenSize}) => ({screenSize}))(RepeatsDisplay);

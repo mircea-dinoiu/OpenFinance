@@ -1,6 +1,6 @@
 // @flow
 import {parsePreferences} from 'common/utils/preferences';
-import { stringify, parse } from 'query-string';
+import {stringify, parse} from 'query-string';
 
 export const readState = () => {
     try {

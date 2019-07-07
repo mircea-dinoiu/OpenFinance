@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Chip } from '@material-ui/core';
+import {connect} from 'react-redux';
+import {Chip} from '@material-ui/core';
 
-const CategoriesDisplay = ({ item, categories, screen }) => (
+const CategoriesDisplay = ({item, categories, screen}) => (
     <div
         style={{
             display: 'flex',
@@ -29,6 +29,6 @@ const CategoriesDisplay = ({ item, categories, screen }) => (
         )}
     </div>
 );
-const mapStateToProps = ({ categories, screen }) => ({ categories, screen });
+const mapStateToProps = ({categories, screen}) => ({categories, screen});
 
 export default connect(mapStateToProps)(CategoriesDisplay);

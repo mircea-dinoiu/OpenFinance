@@ -1,6 +1,6 @@
-const { isPlainObject } = require('lodash');
+const {isPlainObject} = require('lodash');
 const Messages = require('../Messages');
-const { Validator } = require('../validators');
+const {Validator} = require('../validators');
 const chalk = require('chalk');
 const logger = require('../helpers/logger');
 
@@ -10,7 +10,7 @@ module.exports = {
     },
 
     async postUpdate(req, res) {
-        const { data } = req.body;
+        const {data} = req.body;
         const rules = this.updateValidationRules;
 
         if (Array.isArray(data)) {
@@ -39,7 +39,7 @@ module.exports = {
 
                 for (const record of validRecords) {
                     let model = await this.Model.findOne({
-                        where: { id: record.id },
+                        where: {id: record.id},
                     });
                     let values = this.sanitizeUpdateValues(record, model);
 
@@ -59,7 +59,7 @@ module.exports = {
                     await model.update(values);
 
                     if (this.updateRelations) {
-                        model = await this.updateRelations({ record, model });
+                        model = await this.updateRelations({record, model});
                     }
 
                     output.push(model.toJSON());
@@ -73,7 +73,7 @@ module.exports = {
     },
 
     async postCreate(req, res) {
-        const { data } = req.body;
+        const {data} = req.body;
         const rules = this.createValidationRules;
 
         if (Array.isArray(data)) {
@@ -133,7 +133,7 @@ module.exports = {
     },
 
     async postDelete(req, res) {
-        const { data } = req.body;
+        const {data} = req.body;
 
         if (Array.isArray(data)) {
             const output = [];
@@ -141,7 +141,7 @@ module.exports = {
             for (const record of data) {
                 if (isPlainObject(record)) {
                     const model = await this.Model.findOne({
-                        where: { id: record.id },
+                        where: {id: record.id},
                     });
 
                     if (model) {
@@ -166,7 +166,7 @@ module.exports = {
 
     async getList(req, res) {
         if (this.Service) {
-            const { error, json } = await this.Service.list(req.query);
+            const {error, json} = await this.Service.list(req.query);
 
             if (error) {
                 res.status(400);

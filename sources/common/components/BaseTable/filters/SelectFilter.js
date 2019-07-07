@@ -8,7 +8,7 @@ import {
     FormControlLabel,
     withStyles,
 } from '@material-ui/core';
-import { MultiSelect, SingleSelect } from 'common/components/Select';
+import {MultiSelect, SingleSelect} from 'common/components/Select';
 
 const styles = {
     paper: {
@@ -17,9 +17,9 @@ const styles = {
 };
 
 type TypeProps = {
-    items: Array<{ id: number }>,
+    items: Array<{id: number}>,
     nameKey: string,
-    filter: ?{ value: any },
+    filter: ?{value: any},
     onChange: (value: any) => void,
     classes: any,
     multi?: boolean,
@@ -39,7 +39,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
     };
 
     handleClick = (event) => {
-        this.setState({ anchorEl: event.currentTarget });
+        this.setState({anchorEl: event.currentTarget});
     };
 
     handleClose = () => {
@@ -99,11 +99,11 @@ class SelectFilter extends React.PureComponent<TypeProps> {
         } else {
             this.triggerChange(radioValue);
         }
-        this.setState({ radioValue });
+        this.setState({radioValue});
     };
 
     handleChangeSelect = (mode) => (value) => {
-        this.setState({ [mode]: value });
+        this.setState({[mode]: value});
 
         if (this.state.radioValue === mode) {
             if (
@@ -111,7 +111,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                 ((Array.isArray(value) && value.length) ||
                     !Array.isArray(value))
             ) {
-                this.triggerChange({ mode, value });
+                this.triggerChange({mode, value});
             } else {
                 this.triggerChange('any');
             }
@@ -119,7 +119,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
     };
 
     getFilterValue() {
-        const { filter } = this.props;
+        const {filter} = this.props;
 
         return (filter && filter.value) || 'any';
     }
@@ -148,12 +148,12 @@ class SelectFilter extends React.PureComponent<TypeProps> {
         return filterValue;
     }
 
-    renderRadio({ value, label }) {
+    renderRadio({value, label}) {
         return (
             <FormControlLabel
-                style={{ margin: 0 }}
+                style={{margin: 0}}
                 value={value}
-                control={<Radio style={{ padding: 0 }} />}
+                control={<Radio style={{padding: 0}} />}
                 label={label}
             />
         );
@@ -166,7 +166,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
             <Select
                 value={this.getSelectValue(name)}
                 onOpen={() => {
-                    this.setState({ radioValue: name });
+                    this.setState({radioValue: name});
                 }}
                 options={this.props.items.map((item) => ({
                     value: item.id,
@@ -178,7 +178,7 @@ class SelectFilter extends React.PureComponent<TypeProps> {
     }
 
     render() {
-        const { anchorEl } = this.state;
+        const {anchorEl} = this.state;
 
         return (
             <>
@@ -203,12 +203,12 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                     onClose={this.handleClose}
                     classes={this.props.classes}
                 >
-                    <div style={{ padding: '5px 10px', width: 200 }}>
+                    <div style={{padding: '5px 10px', width: 200}}>
                         <RadioGroup
                             value={this.state.radioValue}
                             onChange={this.handleChangeRadio}
                         >
-                            {this.renderRadio({ value: 'any', label: 'Any' })}
+                            {this.renderRadio({value: 'any', label: 'Any'})}
 
                             {this.props.allowNone &&
                                 this.renderRadio({
@@ -221,10 +221,11 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                             })}
                             {this.renderSelect('one-of')}
 
-                            {this.props.multi && this.renderRadio({
-                                value: 'all',
-                                label: 'All',
-                            })}
+                            {this.props.multi &&
+                                this.renderRadio({
+                                    value: 'all',
+                                    label: 'All',
+                                })}
                             {this.props.multi && this.renderSelect('all')}
 
                             {this.renderRadio({

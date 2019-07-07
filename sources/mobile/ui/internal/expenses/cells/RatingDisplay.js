@@ -1,9 +1,9 @@
 // @flow
-import { blue } from '@material-ui/core/colors';
+import {blue} from '@material-ui/core/colors';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import * as React from 'react';
-import { range } from 'lodash';
+import {range} from 'lodash';
 import Tooltip from 'common/components/Tooltip';
 
 class RatingDisplay extends React.PureComponent<{
@@ -18,9 +18,9 @@ class RatingDisplay extends React.PureComponent<{
         const item = this.props.item;
 
         if (event.metaKey || event.ctrlKey) {
-            this.props.updateRecords([item.id], { favorite: 0 });
+            this.props.updateRecords([item.id], {favorite: 0});
         } else {
-            this.props.updateRecords([item.id], { favorite: rating });
+            this.props.updateRecords([item.id], {favorite: rating});
         }
     };
 

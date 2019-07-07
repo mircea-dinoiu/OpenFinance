@@ -1,4 +1,4 @@
-const { MLType: Model } = require('../models');
+const {MLType: Model} = require('../models');
 const BaseController = require('./BaseController');
 
 module.exports = BaseController.extend({

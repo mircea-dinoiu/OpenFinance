@@ -1,6 +1,6 @@
 const SummaryReportHelper = require('../helpers/SummaryReportHelper');
-const { extractIdsFromModel, extractUsersFromModel } = require('../helpers');
-const { sortBy } = require('lodash');
+const {extractIdsFromModel, extractUsersFromModel} = require('../helpers');
+const {sortBy} = require('lodash');
 
 module.exports = {
     getBalances({
@@ -10,7 +10,7 @@ module.exports = {
         currencyIdToISOCode,
         html,
     }) {
-        const data = { byUser: [], byML: [] };
+        const data = {byUser: [], byML: []};
         const totalRemainingByUser = {};
         const totalRemainingByML = {};
         const users = SummaryReportHelper.getUniques(expenses.byUser);
@@ -45,10 +45,8 @@ module.exports = {
                     sum,
                     reference,
                     description: SummaryReportHelper.description(
-                        `${userIdToFullName[id]} (${
-                            currencyIdToISOCode[currencyId]
-                        })`,
-                        { html },
+                        `${userIdToFullName[id]} (${currencyIdToISOCode[currencyId]})`,
+                        {html},
                     ),
                     currencyId,
                 });
@@ -107,7 +105,7 @@ module.exports = {
             Object.entries(recordUsers).forEach(([userId, perc]) => {
                 users[userId] = users[userId] || {};
                 users[userId][currencyId] = SummaryReportHelper.safeNum(
-                    (users[userId][currencyId] || 0) + (sum * perc / 100),
+                    (users[userId][currencyId] || 0) + (sum * perc) / 100,
                 );
             });
         }
@@ -125,9 +123,7 @@ module.exports = {
                     data.byUser.push({
                         sum,
                         description: SummaryReportHelper.description(
-                            `${user.full_name} (${
-                                currencyIdToISOCode[currencyId]
-                            })`,
+                            `${user.full_name} (${currencyIdToISOCode[currencyId]})`,
                             {
                                 html,
                             },
@@ -182,7 +178,8 @@ module.exports = {
                         categories[categoryId].users[id] || {};
                     categories[categoryId].users[id][currencyId] =
                         categories[categoryId].users[id][currencyId] || 0;
-                    categories[categoryId].users[id][currencyId] += rawCatSum * perc / 100;
+                    categories[categoryId].users[id][currencyId] +=
+                        (rawCatSum * perc) / 100;
                 });
             };
 
@@ -226,10 +223,8 @@ module.exports = {
                         data.push({
                             sum,
                             description: SummaryReportHelper.description(
-                                `${userIdToFullName[userId]} (${
-                                    currencyIdToISOCode[currencyId]
-                                })`,
-                                { html },
+                                `${userIdToFullName[userId]} (${currencyIdToISOCode[currencyId]})`,
+                                {html},
                             ),
                             reference: `${categoryId}:${userId}:${currencyId}`,
                             group: categoryId,

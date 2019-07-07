@@ -1,7 +1,7 @@
 // @flow
-import { formatNumericValue } from 'mobile/ui/formatters';
+import {formatNumericValue} from 'mobile/ui/formatters';
 
-const WeightDisplay = ({ item }) => {
+const WeightDisplay = ({item}) => {
     if (item.weight == null) {
         return '';
     }

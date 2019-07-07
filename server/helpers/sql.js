@@ -74,7 +74,7 @@ const mapInputToLimitOpts = (input) => {
     if (input.page != null && input.limit != null) {
         const offset = (input.page - 1) * input.limit;
 
-        return { offset, limit: input.limit };
+        return {offset, limit: input.limit};
     }
 
     return null;

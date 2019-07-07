@@ -1,4 +1,4 @@
-const { Category: Model, Expense } = require('../models');
+const {Category: Model, Expense} = require('../models');
 const BaseController = require('./BaseController');
 
 module.exports = BaseController.extend({
@@ -34,7 +34,7 @@ module.exports = BaseController.extend({
             attributes: Object.keys(Model.rawAttributes).concat([
                 ['COUNT(expenses.id)', 'expenseCount'],
             ]),
-            include: [{ model: Expense, attributes: [] }],
+            include: [{model: Expense, attributes: []}],
             group: ['id'],
         });
 

@@ -1,9 +1,9 @@
 const CurrencyHelper = require('..//helpers/CurrencyHelper');
 const config = require('config');
-const { basePath } = require('../helpers');
+const {basePath} = require('../helpers');
 const logger = require('../helpers/logger');
 const fs = require('fs');
-const { Currency } = require('../models');
+const {Currency} = require('../models');
 const http = require('http');
 
 module.exports = {
@@ -51,10 +51,13 @@ module.exports = {
                 }).on('end', () => {
                     chunks = Buffer.concat(chunks).toString();
 
-                    const rates = CurrencyHelper.jsonToRates(JSON.parse(chunks), {
-                        allowedISOCodes,
-                        defaultCurrencyISOCode,
-                    });
+                    const rates = CurrencyHelper.jsonToRates(
+                        JSON.parse(chunks),
+                        {
+                            allowedISOCodes,
+                            defaultCurrencyISOCode,
+                        },
+                    );
 
                     resolve(rates);
                 });
@@ -86,7 +89,7 @@ module.exports = {
             return;
         }
 
-        CurrencyHelper.appendRatesToCurrencies(map, { rates });
+        CurrencyHelper.appendRatesToCurrencies(map, {rates});
 
         this.data = {
             map,
@@ -104,7 +107,7 @@ module.exports = {
         });
     },
 
-    async setupData({ update = false } = {}) {
+    async setupData({update = false} = {}) {
         let fromCache = false;
 
         if (update !== true) {
@@ -133,7 +136,7 @@ module.exports = {
     async getList(req, res) {
         const update = req.query.update === 'true';
 
-        await this.setupData({ update });
+        await this.setupData({update});
 
         res.json(this.data);
     },

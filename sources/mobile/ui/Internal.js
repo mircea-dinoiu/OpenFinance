@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     BottomNavigation,
     BottomNavigationAction,
@@ -16,10 +16,10 @@ import AccountBalance from '@material-ui/icons/AccountBalance';
 import TrendingUp from '@material-ui/icons/TrendingUp';
 import TrendingDown from '@material-ui/icons/TrendingDown';
 
-import { connect } from 'react-redux';
-import { Col, Row } from 'react-grid-system';
-import { flexColumn } from 'common/defs/styles';
-import { grey } from '@material-ui/core/colors';
+import {connect} from 'react-redux';
+import {Col, Row} from 'react-grid-system';
+import {flexColumn} from 'common/defs/styles';
+import {grey} from '@material-ui/core/colors';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -38,7 +38,7 @@ class Internal extends PureComponent<TypeProps, TypeState> {
     handleChangeTab = this.handleChangeTab.bind(this);
 
     handleChangeTab(index) {
-        this.setState({ selectedIndex: index });
+        this.setState({selectedIndex: index});
     }
 
     renderMobileTab(index) {
@@ -87,10 +87,10 @@ class Internal extends PureComponent<TypeProps, TypeState> {
     renderLarge() {
         return (
             <Row nogutter>
-                <Col xs={2} style={{ paddingRight: 0 }}>
+                <Col xs={2} style={{paddingRight: 0}}>
                     <Summary />
                 </Col>
-                <Col xs={10} style={{ paddingLeft: 0 }}>
+                <Col xs={10} style={{paddingLeft: 0}}>
                     <AppBar position="static">
                         <Tabs
                             value={this.state.selectedIndex}
@@ -161,4 +161,4 @@ class Internal extends PureComponent<TypeProps, TypeState> {
     }
 }
 
-export default connect(({ screen }) => ({ screen }))(Internal);
+export default connect(({screen}) => ({screen}))(Internal);

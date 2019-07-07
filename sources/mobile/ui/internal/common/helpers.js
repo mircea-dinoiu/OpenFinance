@@ -1,9 +1,9 @@
 // @flow
-import { map, flatten, uniqBy, uniq, mapValues } from 'lodash';
-import { sumArray } from 'shared/utils/numbers';
+import {map, flatten, uniqBy, uniq, mapValues} from 'lodash';
+import {sumArray} from 'shared/utils/numbers';
 
 export const getDetachedItemUpdates = (item) => {
-    const itemUpdates = { id: item.id, repeat: null };
+    const itemUpdates = {id: item.id, repeat: null};
 
     return itemUpdates;
 };

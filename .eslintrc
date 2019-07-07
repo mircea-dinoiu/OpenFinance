@@ -116,7 +116,7 @@
     "no-var": "error",
     "no-warning-comments": "warn",
     "no-whitespace-before-property": "error",
-    "object-curly-spacing": ["error", "always"],
+    "object-curly-spacing": ["error", "never"],
     "object-property-newline": [2, {"allowMultiplePropertiesPerLine": true}],
     "object-shorthand": "error",
     "one-var-declaration-per-line": "error",

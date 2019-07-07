@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
-import { Snackbar } from 'material-ui';
-import { red, green } from '@material-ui/core/colors';
+import {Snackbar} from 'material-ui';
+import {red, green} from '@material-ui/core/colors';
 import transitions from 'material-ui/styles/transitions';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import omit from 'lodash/omit';
 
 const style = {
@@ -13,7 +13,7 @@ const style = {
     transform: 'translate(-50%, 0)',
     transition: transitions.easeOut('0ms', 'visibility'),
 };
-const getBodyStyle = ({ screen }) =>
+const getBodyStyle = ({screen}) =>
     screen.isLarge
         ? {}
         : {
@@ -21,17 +21,17 @@ const getBodyStyle = ({ screen }) =>
             boxShadow:
                   'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
         };
-const getDefaultProps = ({ screen }) => ({
+const getDefaultProps = ({screen}) => ({
     autoHideDuration: 1500,
     open: true,
     style: screen.isLarge ? undefined : style,
 });
-const CustomSnackbar = connect(({ screen }) => ({ screen }))((props) => (
+const CustomSnackbar = connect(({screen}) => ({screen}))((props) => (
     <Snackbar
-        {...getDefaultProps({ screen: props.screen })}
+        {...getDefaultProps({screen: props.screen})}
         {...omit(props, 'dispatch')}
         bodyStyle={{
-            ...getBodyStyle({ screen: props.screen }),
+            ...getBodyStyle({screen: props.screen}),
             ...props.bodyStyle,
         }}
     />
@@ -40,13 +40,13 @@ const CustomSnackbar = connect(({ screen }) => ({ screen }))((props) => (
 export const ErrorSnackbar = (props) => (
     <CustomSnackbar
         {...props}
-        bodyStyle={{ ...props.bodyStyle, backgroundColor: red[500] }}
+        bodyStyle={{...props.bodyStyle, backgroundColor: red[500]}}
     />
 );
 
 export const SuccessSnackbar = (props) => (
     <CustomSnackbar
         {...props}
-        bodyStyle={{ ...props.bodyStyle, backgroundColor: green[500] }}
+        bodyStyle={{...props.bodyStyle, backgroundColor: green[500]}}
     />
 );

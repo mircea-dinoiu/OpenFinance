@@ -1,15 +1,15 @@
 // @flow
-import { uniqueId } from 'lodash';
+import {uniqueId} from 'lodash';
 
-import React, { PureComponent } from 'react';
-import { parseCRUDError } from 'common/parsers';
+import React, {PureComponent} from 'react';
+import {parseCRUDError} from 'common/parsers';
 
-import { ErrorSnackbar, SuccessSnackbar } from '../../components/snackbars';
-import { ButtonProgress } from '../../components/loaders';
+import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
+import {ButtonProgress} from '../../components/loaders';
 
-import { Col, Row } from 'react-grid-system';
+import {Col, Row} from 'react-grid-system';
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
     Button,
     Dialog,
@@ -17,8 +17,8 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { dialog } from 'common/defs/styles';
+import {withStyles} from '@material-ui/core/styles';
+import {dialog} from 'common/defs/styles';
 
 type TypeProps = {
     getFormDefaults: Function,
@@ -52,9 +52,7 @@ class MainScreenCreatorDialog extends PureComponent<TypeProps> {
             const json = response.data;
 
             this.setState({
-                success: `The ${
-                    this.props.entityName
-                } was successfully created`,
+                success: `The ${this.props.entityName} was successfully created`,
                 saving: false,
             });
 
@@ -84,7 +82,7 @@ class MainScreenCreatorDialog extends PureComponent<TypeProps> {
                 fullWidth={true}
             >
                 <DialogTitle>{`Create ${this.props.entityName}`}</DialogTitle>
-                <DialogContent style={{ overflow: 'visible' }}>
+                <DialogContent style={{overflow: 'visible'}}>
                     <Row>
                         <Form
                             onFormChange={(formData) =>
@@ -114,7 +112,7 @@ class MainScreenCreatorDialog extends PureComponent<TypeProps> {
                         disabled={this.state.saving}
                         onClick={this.props.onCancel}
                         onTouchTap={this.props.onCancel}
-                        style={{ marginRight: 5 }}
+                        style={{marginRight: 5}}
                     >
                         Cancel
                     </Button>
@@ -124,7 +122,7 @@ class MainScreenCreatorDialog extends PureComponent<TypeProps> {
                         color="primary"
                         onClick={this.save}
                         onTouchTap={this.save}
-                        style={{ float: 'right' }}
+                        style={{float: 'right'}}
                     >
                         {this.state.saving ? <ButtonProgress /> : 'Create'}
                     </Button>
@@ -134,6 +132,6 @@ class MainScreenCreatorDialog extends PureComponent<TypeProps> {
     }
 }
 
-export default connect(({ currencies, user }) => ({ currencies, user }))(
+export default connect(({currencies, user}) => ({currencies, user}))(
     withStyles(dialog)(MainScreenCreatorDialog),
 );

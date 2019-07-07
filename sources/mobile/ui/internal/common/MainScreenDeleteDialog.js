@@ -7,8 +7,8 @@ import {
     DialogContent,
     DialogTitle,
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { dialog } from 'common/defs/styles';
+import {withStyles} from '@material-ui/core/styles';
+import {dialog} from 'common/defs/styles';
 
 const MainScreenDeleteDialog = ({
     open,
@@ -33,7 +33,7 @@ const MainScreenDeleteDialog = ({
                 variant="contained"
                 onClick={onYes}
                 onTouchTap={onYes}
-                style={{ marginRight: 5 }}
+                style={{marginRight: 5}}
             >
                 Yes
             </Button>

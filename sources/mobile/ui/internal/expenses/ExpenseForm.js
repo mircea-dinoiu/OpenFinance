@@ -1,8 +1,8 @@
 // @flow
-import { findCurrencyById } from 'common/helpers/currency';
+import {findCurrencyById} from 'common/helpers/currency';
 
-import React, { PureComponent } from 'react';
-import { Row, Col } from 'react-grid-system';
+import React, {PureComponent} from 'react';
+import {Row, Col} from 'react-grid-system';
 import {
     Badge,
     TextField,
@@ -20,18 +20,18 @@ import {
     ListSubheader,
     withStyles,
 } from '@material-ui/core';
-import { Slider } from '@material-ui/lab';
+import {Slider} from '@material-ui/lab';
 import RepeatOptions from 'common/defs/repeatOptions';
-import { createXHR } from 'common/utils/fetch';
+import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
-import { stringify } from 'query-string';
-import { connect } from 'react-redux';
-import { MultiSelect, SingleSelect } from 'common/components/Select';
-import { overflowVisible } from 'common/defs/styles';
-import { DateTimePicker } from '@material-ui/pickers';
-import { CancelToken } from 'axios';
+import {stringify} from 'query-string';
+import {connect} from 'react-redux';
+import {MultiSelect, SingleSelect} from 'common/components/Select';
+import {overflowVisible} from 'common/defs/styles';
+import {DateTimePicker} from '@material-ui/pickers';
+import {CancelToken} from 'axios';
 import * as defs from 'shared/defs';
-import { sumArray } from 'shared/utils/numbers';
+import {sumArray} from 'shared/utils/numbers';
 
 const boxStyle = {
     padding: '10px 0',
@@ -62,7 +62,7 @@ type TypeProps = {
 export const setChargedPersonValueFactory = (
     id,
     value,
-    { userIdsStringified, adjust = true },
+    {userIdsStringified, adjust = true},
 ) => (prevState) => {
     const step = defs.PERC_STEP;
     const nextChargedPersons = {
@@ -107,12 +107,12 @@ class ExpenseForm extends PureComponent<TypeProps> {
     };
 
     setState(state) {
-        this.props.onFormChange({ ...this.state, ...state });
+        this.props.onFormChange({...this.state, ...state});
 
         return super.setState(state);
     }
 
-    bindSelect({ valueKey, onChange = () => {} }) {
+    bindSelect({valueKey, onChange = () => {}}) {
         return {
             onChange: (value) => {
                 this.setState({
@@ -193,7 +193,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                             marginTop: '2px',
                         }}
                         onChange={(event) =>
-                            this.setState({ sum: event.target.value })
+                            this.setState({sum: event.target.value})
                         }
                     />
                 </Col>
@@ -211,7 +211,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                             marginTop: '2px',
                         }}
                         onChange={(event) =>
-                            this.setState({ weight: event.target.value })
+                            this.setState({weight: event.target.value})
                         }
                     />
                 </Col>
@@ -249,7 +249,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
     }
 
     handleNotesChange = (event) => {
-        this.setState({ notes: event.target.value });
+        this.setState({notes: event.target.value});
     };
 
     renderNotes() {
@@ -293,7 +293,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
         });
     };
 
-    handleDescriptionInputChange = (value, { action }) => {
+    handleDescriptionInputChange = (value, {action}) => {
         if (action === 'input-change') {
             this.setState({
                 descriptionNewOptionText: value,
@@ -332,9 +332,9 @@ class ExpenseForm extends PureComponent<TypeProps> {
             <DateTimePicker
                 label="Date & Time"
                 value={this.state.date}
-                onChange={(value) => this.setState({ date: value })}
+                onChange={(value) => this.setState({date: value})}
                 showTodayButton
-                style={{ width: '100%' }}
+                style={{width: '100%'}}
                 ampm={false}
             />
         );
@@ -362,7 +362,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
         const sortedUsers = this.props.user
             .get('list')
             .sortBy((each) => each.get('full_name'));
-        const { chargedPersons } = this.state;
+        const {chargedPersons} = this.state;
         const step = defs.PERC_STEP;
         const userIdsStringified = sortedUsers.map((user) =>
             String(user.get('id')),
@@ -385,7 +385,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         <ListItem key={id} disableGutters={true}>
                             <ListItemAvatar>
                                 <Avatar
-                                    style={{ margin: 0 }}
+                                    style={{margin: 0}}
                                     alt={user.get('full_name')}
                                     src={user.get('avatar')}
                                 />
@@ -458,7 +458,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
     renderRepeat() {
         return (
             <Row>
-                <Col xs={6} style={{ overflow: 'initial' }}>
+                <Col xs={6} style={{overflow: 'initial'}}>
                     <SingleSelect
                         label="Repeat"
                         {...this.bindSelect({
@@ -546,7 +546,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
     }
 
     handleChangeType = (event) => {
-        this.setState({ type: event.target.value });
+        this.setState({type: event.target.value});
     };
 
     renderFlags() {
@@ -601,12 +601,12 @@ class ExpenseForm extends PureComponent<TypeProps> {
     }
 
     handleChangeStatus = (event) => {
-        this.setState({ status: event.target.value });
+        this.setState({status: event.target.value});
     };
 }
 
 export default connect(
-    ({ currencies, preferences, categories, moneyLocations, user }) => ({
+    ({currencies, preferences, categories, moneyLocations, user}) => ({
         currencies,
         categories,
         preferences,

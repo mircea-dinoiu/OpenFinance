@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-    blue,
-    red,
-    yellow,
-    grey,
-    green,
-    purple,
-} from '@material-ui/core/colors';
+import {blue, red, yellow, grey, green, purple} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';
 import TrendingUp from '@material-ui/icons/TrendingUp';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
@@ -16,21 +9,21 @@ import SpeakerNotes from '@material-ui/icons/SpeakerNotes';
 import Tooltip from 'common/components/Tooltip';
 import startCase from 'lodash/startCase';
 
-const ICON_STYLE = { height: 20, width: 20 };
+const ICON_STYLE = {height: 20, width: 20};
 
-export const PendingReviewFlag = ({ entity = 'Item' }) => (
+export const PendingReviewFlag = ({entity = 'Item'}) => (
     <Tooltip tooltip={`${startCase(entity)} is pending`}>
         <Warning style={ICON_STYLE} htmlColor={yellow.A700} />
     </Tooltip>
 );
 
-export const RecurrentFlag = ({ entity = 'Item' }) => (
+export const RecurrentFlag = ({entity = 'Item'}) => (
     <Tooltip tooltip={`Recurrent ${entity}`}>
         <Cached style={ICON_STYLE} htmlColor={blue[500]} />
     </Tooltip>
 );
 
-export const GeneratedFlag = ({ entity = 'Item' }) => (
+export const GeneratedFlag = ({entity = 'Item'}) => (
     <Tooltip tooltip={`Generated ${entity}`}>
         <TrendingUp style={ICON_STYLE} htmlColor={purple[500]} />
     </Tooltip>
@@ -48,13 +41,13 @@ export const WithdrawalFlag = () => (
     </Tooltip>
 );
 
-export const NotesFlag = ({ children }) => (
+export const NotesFlag = ({children}) => (
     <Tooltip tooltip={<pre>{children}</pre>}>
         <SpeakerNotes style={ICON_STYLE} htmlColor={grey[500]} />
     </Tooltip>
 );
 
-export const Flags = ({ item, entity }) => (
+export const Flags = ({item, entity}) => (
     <>
         {item.type === 'deposit' ? <DepositFlag /> : <WithdrawalFlag />}
         {item.status === 'pending' && <PendingReviewFlag entity={entity} />}

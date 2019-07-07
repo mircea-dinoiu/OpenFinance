@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 
 type TypeProps = {
     creatorComponent: any,

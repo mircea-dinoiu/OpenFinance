@@ -1,7 +1,7 @@
 // @flow
 import moment from 'moment';
 
-import { endOfDayToISOString } from 'shared/utils/dates';
+import {endOfDayToISOString} from 'shared/utils/dates';
 
 export const getStartDate = ({
     endDate,

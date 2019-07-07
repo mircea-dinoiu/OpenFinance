@@ -3,7 +3,7 @@ import * as React from 'react';
 import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
 import AccountFilter from 'common/components/BaseTable/filters/AccountFilter';
 
-const style = { textAlign: 'center' };
+const style = {textAlign: 'center'};
 
 export default {
     Header: 'Account',

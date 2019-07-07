@@ -1,6 +1,6 @@
 const ExpenseService = require('../services/ExpenseService');
 const SummaryReportService = require('../services/SummaryReportService');
-const { User, Category, MoneyLocation, Currency } = require('../models');
+const {User, Category, MoneyLocation, Currency} = require('../models');
 const logger = require('../helpers/logger');
 
 module.exports = {

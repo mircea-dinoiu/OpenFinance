@@ -1,8 +1,8 @@
-import { getDetachedItemUpdates, mergeItems } from './helpers';
+import {getDetachedItemUpdates, mergeItems} from './helpers';
 
 describe('#getDetachedItemUpdates()', () => {
     it('should return item id + repeat null by default', () => {
-        expect(getDetachedItemUpdates({ id: 300 })).toEqual({
+        expect(getDetachedItemUpdates({id: 300})).toEqual({
             id: 300,
             repeat: null,
         });
@@ -16,7 +16,7 @@ describe('#getDetachedItemUpdates()', () => {
                         id: 300,
                         repeat_occurrences: 1,
                     }),
-                ).toEqual({ id: 300, repeat: null, repeat_occurrences: null });
+                ).toEqual({id: 300, repeat: null, repeat_occurrences: null});
             });
         });
 
@@ -27,7 +27,7 @@ describe('#getDetachedItemUpdates()', () => {
                         id: 300,
                         repeat_occurrences: 2,
                     }),
-                ).toEqual({ id: 300, repeat: null, repeat_occurrences: 1 });
+                ).toEqual({id: 300, repeat: null, repeat_occurrences: 1});
             });
         });
     });
@@ -45,8 +45,8 @@ describe('#mergeItems()', () => {
             it('Should return null', () => {
                 expect(
                     mergeItems([
-                        { money_location_id: 1 },
-                        { money_location_id: 2 },
+                        {money_location_id: 1},
+                        {money_location_id: 2},
                     ]),
                 ).toEqual(null);
             });
@@ -63,7 +63,7 @@ describe('#mergeItems()', () => {
                             item: 'Foo',
                             sum: 1,
                             weight: 0,
-                            users: { 1: 100 },
+                            users: {1: 100},
                         },
                         {
                             money_location_id: 1,
@@ -72,7 +72,7 @@ describe('#mergeItems()', () => {
                             item: 'Foo',
                             sum: 10,
                             weight: 20,
-                            users: { 1: 100 },
+                            users: {1: 100},
                         },
                         {
                             money_location_id: 1,
@@ -81,7 +81,7 @@ describe('#mergeItems()', () => {
                             item: 'Bar',
                             sum: 15,
                             weight: 30,
-                            users: { 1: 30, 2: 70 },
+                            users: {1: 30, 2: 70},
                         },
                     ]),
                 ).toEqual({
@@ -92,7 +92,7 @@ describe('#mergeItems()', () => {
                     notes: '',
                     sum: 26,
                     weight: 50,
-                    users: { '1': 77, '2': 23 },
+                    users: {'1': 77, '2': 23},
                 });
             });
         });

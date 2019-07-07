@@ -1,5 +1,5 @@
 // @flow
-import { getInitialEndDate } from 'common/utils/dates';
+import {getInitialEndDate} from 'common/utils/dates';
 
 export const parsePreferences = (
     state = {},
@@ -14,7 +14,7 @@ export const parsePreferences = (
     const endDate = state.endDate || getInitialEndDate();
     const includePending = state.includePending === 'true';
 
-    return { includePending, endDateIncrement, include, endDate };
+    return {includePending, endDateIncrement, include, endDate};
 };
 
 export const validatePreferences = (state = {}) => {

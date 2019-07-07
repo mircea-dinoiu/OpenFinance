@@ -3,34 +3,34 @@ import {
     getDetachedItemUpdates,
     mergeItems,
 } from 'mobile/ui/internal/common/helpers';
-import React, { PureComponent } from 'react';
-import { Col } from 'react-grid-system';
-import { stringify } from 'query-string';
+import React, {PureComponent} from 'react';
+import {Col} from 'react-grid-system';
+import {stringify} from 'query-string';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 
-import { BigLoader, ButtonProgress } from '../../components/loaders';
+import {BigLoader, ButtonProgress} from '../../components/loaders';
 
-import { createXHR } from 'common/utils/fetch';
+import {createXHR} from 'common/utils/fetch';
 
-import { Button, FormControlLabel, Checkbox, Fab } from '@material-ui/core';
-import { connect } from 'react-redux';
-import { greyedOut } from 'common/defs/styles';
+import {Button, FormControlLabel, Checkbox, Fab} from '@material-ui/core';
+import {connect} from 'react-redux';
+import {greyedOut} from 'common/defs/styles';
 import BaseTable from 'common/components/BaseTable';
 import cssTable from 'common/components/BaseTable/index.pcss';
-import { getTrProps } from 'common/components/MainScreen/Table/helpers';
+import {getTrProps} from 'common/components/MainScreen/Table/helpers';
 import MainScreenListGroup from 'mobile/ui/internal/common/MainScreenListGroup';
 import MainScreenCreatorDialog from './MainScreenCreatorDialog';
-import { convertCurrencyToDefault } from '../../../../common/helpers/currency';
-import { numericValue } from '../../formatters';
-import { Sizes } from 'common/defs';
+import {convertCurrencyToDefault} from '../../../../common/helpers/currency';
+import {numericValue} from '../../formatters';
+import {Sizes} from 'common/defs';
 import AnchoredContextMenu from 'common/components/MainScreen/ContextMenu/AnchoredContextMenu';
 import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
 import AddIcon from '@material-ui/icons/Add';
-import { refreshWidgets as onRefreshWidgets } from 'common/state/actions';
-import { advanceRepeatDate } from 'shared/helpers/repeatedModels';
-import { uniqueId, range } from 'lodash';
+import {refreshWidgets as onRefreshWidgets} from 'common/state/actions';
+import {advanceRepeatDate} from 'shared/helpers/repeatedModels';
+import {uniqueId, range} from 'lodash';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
@@ -68,7 +68,7 @@ type TypeProps = {
     refreshWidgets: string,
     onRefreshWidgets: typeof onRefreshWidgets,
     features: TypeMainScreenFeatures,
-    defaultSorters: Array<{ id: string, desc: boolean }>,
+    defaultSorters: Array<{id: string, desc: boolean}>,
 };
 
 type TypeState = {
@@ -123,7 +123,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             status: true,
             repeat: true,
         },
-        defaultSorters: [{ id: 'created_at', desc: true }],
+        defaultSorters: [{id: 'created_at', desc: true}],
     };
 
     componentDidMount() {
@@ -147,20 +147,20 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({ preferences, refreshWidgets }) {
+    UNSAFE_componentWillReceiveProps({preferences, refreshWidgets}) {
         if (refreshWidgets !== this.props.refreshWidgets) {
             this.refresh();
         }
 
-        const { endDate } = preferences;
+        const {endDate} = preferences;
 
         if (endDate !== this.props.preferences.endDate) {
-            this.refresh({ endDate });
+            this.refresh({endDate});
         }
     }
 
     handleToggleDeleteDialog = () =>
-        this.setState((state) => ({ deleteDialogOpen: !state.deleteDialogOpen }));
+        this.setState((state) => ({deleteDialogOpen: !state.deleteDialogOpen}));
     handleToggleEditDialog = () =>
         this.setState((state) => ({
             editDialogOpen: !state.editDialogOpen,
@@ -175,7 +175,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.handleToggleDeleteDialog();
 
         await this.handleRequestDelete(
-            this.selectedItems.map((each) => ({ id: each.id })),
+            this.selectedItems.map((each) => ({id: each.id})),
         );
 
         this.props.onRefreshWidgets();
@@ -201,11 +201,11 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             return;
         }
 
-        this.setState((state) => ({ loading: state.loading + 1 }));
+        this.setState((state) => ({loading: state.loading + 1}));
         const sorters = [];
 
         if (this.state.pendingFirst) {
-            sorters.push({ id: 'status', desc: true });
+            sorters.push({id: 'status', desc: true});
         }
 
         this.sorters.forEach((sorter) => {
@@ -253,7 +253,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         );
     }
 
-    refresh = async ({ endDate = this.props.preferences.endDate } = {}) => {
+    refresh = async ({endDate = this.props.preferences.endDate} = {}) => {
         this.setState({
             refreshing: true,
         });
@@ -282,7 +282,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         return this.props.screen.isLarge;
     }
 
-    handleReceivedSelectedIds = (selectedIds) => this.setState({ selectedIds });
+    handleReceivedSelectedIds = (selectedIds) => this.setState({selectedIds});
     handleChangeContextMenu = ({
         display,
         top = 0,
@@ -450,7 +450,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 
     handleChangeSplitAmount = (event) => {
-        this.setState({ splitAmount: event.target.value });
+        this.setState({splitAmount: event.target.value});
     };
 
     handleClickSplit = async () => {
@@ -491,7 +491,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
     renderStats(head, items) {
         return (
-            <div style={{ display: 'inline-block', marginRight: 5 }}>
+            <div style={{display: 'inline-block', marginRight: 5}}>
                 <Tooltip
                     tooltip={
                         <table className="centerBlock">
@@ -546,7 +546,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         <React.Fragment>
                             {rating === 0 ? (
                                 <IconStarBorder
-                                    style={{ height: 20, width: 20 }}
+                                    style={{height: 20, width: 20}}
                                 />
                             ) : (
                                 range(0, rating).map((i) => (
@@ -572,11 +572,11 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 
     handleCloseContextMenu = () =>
-        this.handleChangeContextMenu({ display: false });
+        this.handleChangeContextMenu({display: false});
 
     updateRecords = async (ids, data) => {
         try {
-            await this.handleRequestUpdate(ids.map((id) => ({ id, ...data })));
+            await this.handleRequestUpdate(ids.map((id) => ({id, ...data})));
 
             this.props.onRefreshWidgets();
         } catch (e) {
@@ -589,11 +589,11 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.updateRecords(this.selectedItems.map((each) => each.id), data);
 
     withLoading = (fn) => async (...args: any[]) => {
-        this.setState((state) => ({ loading: state.loading + 1 }));
+        this.setState((state) => ({loading: state.loading + 1}));
 
         const res = await fn(...args);
 
-        this.setState((state) => ({ loading: state.loading - 1 }));
+        this.setState((state) => ({loading: state.loading - 1}));
 
         return res;
     };
@@ -602,7 +602,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         createXHR({
             url: api,
             method: 'POST',
-            data: { data },
+            data: {data},
         }),
     );
     handleRequestDelete = (data) =>
@@ -644,23 +644,23 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     };
 
     handleClickReviewed = () =>
-        this.updateSelectedRecords({ status: 'finished' });
+        this.updateSelectedRecords({status: 'finished'});
     handleClickNeedsReview = () =>
-        this.updateSelectedRecords({ status: 'pending' });
+        this.updateSelectedRecords({status: 'pending'});
     handleClickHide = () =>
-        this.updateSelectedRecords({ hidden: true, status: 'finished' });
-    handleClickUnhide = () => this.updateSelectedRecords({ hidden: false });
-    handleClickDeposit = () => this.updateSelectedRecords({ type: 'deposit' });
+        this.updateSelectedRecords({hidden: true, status: 'finished'});
+    handleClickUnhide = () => this.updateSelectedRecords({hidden: false});
+    handleClickDeposit = () => this.updateSelectedRecords({type: 'deposit'});
     handleClickWithdrawal = () =>
-        this.updateSelectedRecords({ type: 'withdrawal' });
+        this.updateSelectedRecords({type: 'withdrawal'});
     handleMerge = async () => {
         const items = this.selectedItems;
         const [first, ...rest] = items;
         const merged = mergeItems(items);
 
         if (merged) {
-            await this.handleRequestUpdate([{ id: first.id, ...merged }]);
-            await this.handleRequestDelete(rest.map((each) => ({ id: each.id })));
+            await this.handleRequestUpdate([{id: first.id, ...merged}]);
+            await this.handleRequestDelete(rest.map((each) => ({id: each.id})));
 
             this.props.onRefreshWidgets();
         }
@@ -683,7 +683,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 }
 
                 added.push(
-                    this.copyItem(advanceRepeatDate({ ...item, ...extra })),
+                    this.copyItem(advanceRepeatDate({...item, ...extra})),
                 );
                 updated.push(getDetachedItemUpdates(item));
             }
@@ -737,9 +737,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     {this.renderTableHeader()}
                     <div
                         style={{
-                            height: `calc(100vh - (150px + ${
-                                Sizes.HEADER_SIZE
-                            }))`,
+                            height: `calc(100vh - (150px + ${Sizes.HEADER_SIZE}))`,
                             background: 'white',
                         }}
                     >
@@ -856,7 +854,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             return <BigLoader />;
         }
 
-        const { loading } = this.state;
+        const {loading} = this.state;
         const isDesktop = this.isDesktop();
 
         return (
@@ -876,7 +874,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                                 variant="contained"
                                 fullWidth={true}
                                 onTouchTap={this.loadMore}
-                                style={{ margin: '20px 0 60px' }}
+                                style={{margin: '20px 0 60px'}}
                                 disabled={loading}
                             >
                                 {loading ? <ButtonProgress /> : 'Load More'}
@@ -904,7 +902,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 }
 
-const mapDispatchToProps = { onRefreshWidgets };
+const mapDispatchToProps = {onRefreshWidgets};
 
 export default connect(
     ({

@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { isPlainObject } = require('lodash');
+const {isPlainObject} = require('lodash');
 const validator = require('validator');
 const debug = require('config').get('debug');
 const chalk = require('chalk');
@@ -7,7 +7,7 @@ const stringIsInt = validator.isInt;
 const stringIsFloat = validator.isFloat;
 const logger = require('../helpers/logger');
 const defs = require('../../shared/defs');
-const { sumArray } = require('../../shared/utils/numbers');
+const {sumArray} = require('../../shared/utils/numbers');
 
 Object.assign(validator, {
     isInt: (value) => {
@@ -32,7 +32,7 @@ Object.assign(validator, {
             return false;
         }
 
-        return Boolean(await Model.find({ where: { id } }));
+        return Boolean(await Model.find({where: {id}}));
     },
     isIdArray: async (array, Model) => {
         if (!validator.isArray(array)) {
@@ -207,7 +207,9 @@ class Validator {
 
                     if (debug) {
                         logger.log(
-                            result ? 'Validation rule passed' : 'Validation rule failed',
+                            result
+                                ? 'Validation rule passed'
+                                : 'Validation rule failed',
                             chalk[result ? 'green' : 'red'](
                                 `${dataKey}: validator.${ruleName}(${[value]
                                     .concat(params)

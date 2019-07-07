@@ -1,10 +1,10 @@
 // @flow
 import * as React from 'react';
-import { ListItem } from 'material-ui';
-import { connect } from 'react-redux';
+import {ListItem} from 'material-ui';
+import {connect} from 'react-redux';
 import omit from 'lodash/omit';
 
-const ResponsiveListItem = ({ screen, ...props }) => (
+const ResponsiveListItem = ({screen, ...props}) => (
     <ListItem
         {...omit(props, 'dispatch')}
         innerDivStyle={{
@@ -19,4 +19,4 @@ const ResponsiveListItem = ({ screen, ...props }) => (
     />
 );
 
-export default connect(({ screen }) => ({ screen }))(ResponsiveListItem);
+export default connect(({screen}) => ({screen}))(ResponsiveListItem);

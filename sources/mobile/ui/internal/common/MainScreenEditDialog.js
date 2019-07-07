@@ -1,7 +1,7 @@
-import { isEqual } from 'lodash';
+import {isEqual} from 'lodash';
 
 // @flow
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 
 import {
     Button,
@@ -10,15 +10,15 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 
-import { Row, Col } from 'react-grid-system';
+import {Row, Col} from 'react-grid-system';
 
-import { ErrorSnackbar, SuccessSnackbar } from '../../components/snackbars';
-import { ButtonProgress } from '../../components/loaders';
+import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
+import {ButtonProgress} from '../../components/loaders';
 
-import { parseCRUDError } from 'common/parsers';
-import { dialog } from 'common/defs/styles';
+import {parseCRUDError} from 'common/parsers';
+import {dialog} from 'common/defs/styles';
 
 type TypeProps = {
     onRequestUpdate: Function,
@@ -59,15 +59,13 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
 
             const response = await this.props.onRequestUpdate(
                 data.map((each) =>
-                    this.props.formToModel({ ...each, ...updates }, this.props),
+                    this.props.formToModel({...each, ...updates}, this.props),
                 ),
             );
             const json = response.data;
 
             this.setState({
-                success: `The ${
-                    this.props.entityName
-                } was successfully updated`,
+                success: `The ${this.props.entityName} was successfully updated`,
                 saving: false,
             });
 
@@ -105,7 +103,7 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
                 <DialogTitle>{`Edit ${this.props.entityName}${
                     this.props.items.length === 1 ? '' : 's'
                 }`}</DialogTitle>
-                <DialogContent style={{ overflow: 'visible' }}>
+                <DialogContent style={{overflow: 'visible'}}>
                     <Row>
                         <Form
                             onFormChange={(formData) =>
@@ -135,7 +133,7 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
                         disabled={this.state.saving}
                         onClick={this.props.onCancel}
                         onTouchTap={this.props.onCancel}
-                        style={{ marginRight: 5 }}
+                        style={{marginRight: 5}}
                     >
                         Cancel
                     </Button>
@@ -145,7 +143,7 @@ class MainScreenEditDialog extends PureComponent<TypeProps> {
                         color="primary"
                         onClick={this.save}
                         onTouchTap={this.save}
-                        style={{ float: 'right' }}
+                        style={{float: 'right'}}
                     >
                         {this.state.saving ? (
                             <ButtonProgress />

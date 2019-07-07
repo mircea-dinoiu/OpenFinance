@@ -1,8 +1,8 @@
-const { pick } = require('lodash');
-const { Validator } = require('../validators');
-const { Expense: Model, sql } = require('../models');
+const {pick} = require('lodash');
+const {Validator} = require('../validators');
+const {Expense: Model, sql} = require('../models');
 const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
-const { sanitizeFilters, sanitizeSorters } = require('../helpers');
+const {sanitizeFilters, sanitizeSorters} = require('../helpers');
 const defs = require('../../shared/defs');
 const {
     mapStartDateToSQL,
@@ -44,7 +44,10 @@ module.exports = {
             ],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
-            sorters: ['sometimes', ['isTableSorters', Model, ['money_location.currency_id']]],
+            sorters: [
+                'sometimes',
+                ['isTableSorters', Model, ['money_location.currency_id']],
+            ],
         };
         const validator = new Validator(input, rules);
 
@@ -57,7 +60,7 @@ module.exports = {
 
             let displayGenerated = 'yes';
 
-            sanitizeFilters(input.filters).forEach(({ id, value }) => {
+            sanitizeFilters(input.filters).forEach(({id, value}) => {
                 switch (id) {
                     case 'item':
                         where.push(mapTextFilterToSQL(id, value.text));

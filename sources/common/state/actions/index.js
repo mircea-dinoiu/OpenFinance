@@ -1,6 +1,6 @@
 // @flow
-import { Actions } from 'common/state';
-import { createXHR } from 'common/utils/fetch';
+import {Actions} from 'common/state';
+import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 import url from 'common/utils/url';
 
@@ -26,7 +26,7 @@ export const updatePreferences = (value: {}) => ({
     type: Actions.UPDATE_PREFERENCES,
     value,
 });
-export const refreshWidgets = () => ({ type: Actions.REFRESH_WIDGETS });
+export const refreshWidgets = () => ({type: Actions.REFRESH_WIDGETS});
 
 export const setBaseCurrencyId = (value) => ({
     type: Actions.SET_BASE_CURRENCY_ID,

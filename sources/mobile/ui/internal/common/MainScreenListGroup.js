@@ -1,14 +1,14 @@
 // @flow
 import * as React from 'react';
 import moment from 'moment';
-import { CalendarWithoutTime } from 'common/defs/formats';
-import { Divider, List, Subheader } from 'material-ui';
+import {CalendarWithoutTime} from 'common/defs/formats';
+import {Divider, List, Subheader} from 'material-ui';
 import MainScreenListItem from 'mobile/ui/internal/common/MainScreenListItem';
 
-const MainScreenListGroup = ({ date, items, itemProps }) => (
+const MainScreenListGroup = ({date, items, itemProps}) => (
     <div>
         <List>
-            <Subheader style={{ textAlign: 'center' }}>
+            <Subheader style={{textAlign: 'center'}}>
                 {moment(date).calendar(null, CalendarWithoutTime)}
             </Subheader>
             {items.map((item) => (

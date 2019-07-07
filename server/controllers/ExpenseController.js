@@ -1,8 +1,8 @@
-const { Expense: Model, User, MoneyLocation, Category } = require('../models');
+const {Expense: Model, User, MoneyLocation, Category} = require('../models');
 const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
-const { pickOwnProperties } = require('../helpers');
-const { sql } = require('../models');
+const {pickOwnProperties} = require('../helpers');
+const {sql} = require('../models');
 const defs = require('../../shared/defs');
 
 module.exports = BaseController.extend({
@@ -58,7 +58,7 @@ module.exports = BaseController.extend({
         weight: ['sometimes', 'isNotNegative', 'isInt'],
     },
 
-    async updateRelations({ record, model }) {
+    async updateRelations({record, model}) {
         if (record.hasOwnProperty('categories')) {
             await sql.query(
                 'DELETE FROM category_expense WHERE expense_id = ?',
@@ -94,10 +94,10 @@ module.exports = BaseController.extend({
             }
         }
 
-        return this.Model.scope('default').findOne({ where: { id: model.id } });
+        return this.Model.scope('default').findOne({where: {id: model.id}});
     },
 
-    async createRelations({ record, model, req }) {
+    async createRelations({record, model, req}) {
         if (record.hasOwnProperty('categories')) {
             for (const id of record.categories) {
                 await sql.query(
@@ -125,7 +125,7 @@ module.exports = BaseController.extend({
             );
         }
 
-        return this.Model.scope('default').findOne({ where: { id: model.id } });
+        return this.Model.scope('default').findOne({where: {id: model.id}});
     },
 
     sanitizeValues(record) {

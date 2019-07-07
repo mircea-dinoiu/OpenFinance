@@ -1,15 +1,15 @@
 // @flow
 import * as React from 'react';
 import SelectFilter from './SelectFilter';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
-const mapStateToProps = ({ user }) => ({
+const mapStateToProps = ({user}) => ({
     items: user.toJS().list,
 });
 
 const ConnectedFilter = connect(mapStateToProps)(SelectFilter);
 
-const UserFilter = ({ onChange, filter }) => (
+const UserFilter = ({onChange, filter}) => (
     <ConnectedFilter
         onChange={onChange}
         filter={filter}

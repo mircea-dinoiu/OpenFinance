@@ -10,7 +10,7 @@ export default function (data) {
         notes: '',
         sum: '',
         paymentMethod: null,
-        chargedPersons: { [data.user.getIn(['current', 'id'])]: 100 },
+        chargedPersons: {[data.user.getIn(['current', 'id'])]: 100},
         categories: '',
         repeat: null,
         date: moment(),

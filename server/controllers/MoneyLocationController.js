@@ -1,4 +1,4 @@
-const { MoneyLocation: Model, MLType } = require('../models');
+const {MoneyLocation: Model, MLType} = require('../models');
 const BaseController = require('./BaseController');
 
 module.exports = BaseController.extend({

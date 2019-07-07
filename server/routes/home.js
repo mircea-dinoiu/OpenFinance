@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getScriptSrc } = require('../helpers');
+const {getScriptSrc} = require('../helpers');
 // config
 const config = require('config');
 const debug = config.get('debug');

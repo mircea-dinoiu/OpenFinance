@@ -1,7 +1,7 @@
 const BaseController = require('./BaseController');
-const { Expense, sql } = require('../models');
-const { Validator } = require('../validators');
-const { extractIdsFromModel } = require('../helpers');
+const {Expense, sql} = require('../models');
+const {Validator} = require('../validators');
+const {extractIdsFromModel} = require('../helpers');
 const defs = require('../../shared/defs');
 
 module.exports = BaseController.extend({
@@ -32,7 +32,7 @@ module.exports = BaseController.extend({
     },
 
     async getExpenseDescriptions(req, res) {
-        const { query } = req;
+        const {query} = req;
         const validator = new Validator(query, {
             search: ['isString'],
             end_date: [

@@ -3,7 +3,7 @@ const floorToDigits = (value, digits) => {
 
     return Math.floor(value * multiplier) / multiplier;
 };
-const appendRatesToCurrencies = (map, { rates, defaultCurrencyISOCode }) => {
+const appendRatesToCurrencies = (map, {rates, defaultCurrencyISOCode}) => {
     Object.entries(map).forEach(([id, currencyInfo]) => {
         map[id].rates = {};
 
@@ -28,7 +28,7 @@ const appendRatesToCurrencies = (map, { rates, defaultCurrencyISOCode }) => {
     });
 };
 
-const jsonToRates = (json, { allowedISOCodes, defaultCurrencyISOCode }) => {
+const jsonToRates = (json, {allowedISOCodes, defaultCurrencyISOCode}) => {
     const origCurrencyISOCode = json.base;
     const rates = {};
 

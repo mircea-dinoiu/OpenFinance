@@ -1,10 +1,10 @@
 // @flow
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Avatar } from '@material-ui/core';
-import { smallAvatar } from 'common/defs/styles';
+import {connect} from 'react-redux';
+import {Avatar} from '@material-ui/core';
+import {smallAvatar} from 'common/defs/styles';
 
-const PersonsDisplay = ({ item, user }) => {
+const PersonsDisplay = ({item, user}) => {
     const userList = user.get('list');
 
     return userList.map((each) =>
@@ -17,6 +17,6 @@ const PersonsDisplay = ({ item, user }) => {
         ) : null,
     );
 };
-const mapStateToProps = ({ user }) => ({ user });
+const mapStateToProps = ({user}) => ({user});
 
 export default connect(mapStateToProps)(PersonsDisplay);

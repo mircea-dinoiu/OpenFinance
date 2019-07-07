@@ -2,7 +2,7 @@
 import * as React from 'react';
 import DateDisplay from 'common/components/BaseTable/cells/DateDisplay';
 
-const style = { textAlign: 'center' };
+const style = {textAlign: 'center'};
 
 export default {
     Header: 'Date & Time',

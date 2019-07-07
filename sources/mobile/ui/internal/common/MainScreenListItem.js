@@ -1,10 +1,10 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 
-import { cyan } from '@material-ui/core/colors';
+import {cyan} from '@material-ui/core/colors';
 
 import ResponsiveListItem from 'common/components/ResponsiveListItem';
-import { IconButton, IconMenu } from 'material-ui';
+import {IconButton, IconMenu} from 'material-ui';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
 
@@ -45,7 +45,7 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
     }
 
     getInnerDivStyle() {
-        return { paddingLeft: 40 };
+        return {paddingLeft: 40};
     }
 
     handleBurgerClick = (event) => {
@@ -71,7 +71,7 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
                     persist ? (
                         <IconMenu
                             iconButtonElement={
-                                <IconButton style={{ padding: 0, width: 40 }}>
+                                <IconButton style={{padding: 0, width: 40}}>
                                     <MoreVertIcon />
                                 </IconButton>
                             }
@@ -83,7 +83,7 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
                                 horizontal: 'left',
                                 vertical: 'top',
                             }}
-                            style={{ marginLeft: 0, left: 0 }}
+                            style={{marginLeft: 0, left: 0}}
                             onClick={this.handleBurgerClick}
                             onTouchTap={this.handleBurgerClick}
                         >

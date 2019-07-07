@@ -44,5 +44,5 @@ export const IncludeOptions = [
     {
         id: 'previous-year',
         name: `Through ${new Date().getFullYear() - 1}`,
-    }
+    },
 ];

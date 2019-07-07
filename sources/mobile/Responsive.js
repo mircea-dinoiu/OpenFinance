@@ -2,12 +2,12 @@ import 'normalize.css';
 import 'react-table/react-table.css';
 import './Responsive.pcss';
 import './Responsive.css';
-import { blue } from '@material-ui/core/colors';
+import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
 // import injectTapEventPlugin from 'react-tap-event-plugin';
-import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, {PureComponent} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {
     updateUser,
     toggleLoading,
@@ -16,25 +16,25 @@ import {
     fetchCurrencies,
 } from 'common/state/actions';
 
-import { Drawer, MuiThemeProvider as V0MuiThemeProvider } from 'material-ui';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {Drawer, MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 
-import { createXHR } from 'common/utils/fetch';
+import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 
 import Login from './ui/Login';
 import Internal from './ui/Internal';
 import Currencies from './ui/Currencies';
-import { BigLoader } from './ui/components/loaders';
+import {BigLoader} from './ui/components/loaders';
 import TopBar from 'common/components/TopBar';
 
-import { fromJS } from 'immutable';
+import {fromJS} from 'immutable';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import EventListener from 'react-event-listener';
-import { flexColumn } from 'common/defs/styles';
-import { hot } from 'react-hot-loader/root';
-import { Sizes } from 'common/defs';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {flexColumn} from 'common/defs/styles';
+import {hot} from 'react-hot-loader/root';
+import {Sizes} from 'common/defs';
+import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -73,7 +73,7 @@ class Responsive extends PureComponent<{
 
         if (props.user == null) {
             try {
-                const response = await createXHR({ url: routes.user.list });
+                const response = await createXHR({url: routes.user.list});
 
                 props.actions.updateUser(fromJS(response.data));
             } catch (e) {
@@ -87,9 +87,9 @@ class Responsive extends PureComponent<{
                 mlResponse,
                 mlTypesResponse,
             ] = await Promise.all([
-                createXHR({ url: routes.category.list }),
-                createXHR({ url: routes.ml.list }),
-                createXHR({ url: routes.mlType.list }),
+                createXHR({url: routes.category.list}),
+                createXHR({url: routes.ml.list}),
+                createXHR({url: routes.mlType.list}),
             ]);
 
             props.actions.updateState({
@@ -116,7 +116,7 @@ class Responsive extends PureComponent<{
         this.props.actions.toggleLoading(true);
 
         try {
-            await createXHR({ url: routes.user.logout, method: 'POST' });
+            await createXHR({url: routes.user.logout, method: 'POST'});
 
             this.showLogin();
         } catch (e) {

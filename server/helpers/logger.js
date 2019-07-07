@@ -1,7 +1,7 @@
 const moment = require('moment');
 const chalk = require('chalk');
 const fs = require('fs');
-const { basePath } = require('./index');
+const {basePath} = require('./index');
 
 module.exports = {
     log(label, ...args) {

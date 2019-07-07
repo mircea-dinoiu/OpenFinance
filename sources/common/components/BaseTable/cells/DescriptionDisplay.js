@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Flags } from 'mobile/ui/internal/common/MainScreenFlags';
+import {Flags} from 'mobile/ui/internal/common/MainScreenFlags';
 
 export default function DescriptionDisplay({
     item,
@@ -11,8 +11,8 @@ export default function DescriptionDisplay({
 
     return (
         <span className="noWrap">
-            <span style={{ float: 'left', marginRight: 5 }}>{flags}</span>
-            <span style={{ float: 'left' }}>{item[accessor]}</span>
+            <span style={{float: 'left', marginRight: 5}}>{flags}</span>
+            <span style={{float: 'left'}}>{item[accessor]}</span>
         </span>
     );
 }

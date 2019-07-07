@@ -1,6 +1,6 @@
-const { advanceRepeatDate } = require('../../shared/helpers/repeatedModels');
+const {advanceRepeatDate} = require('../../shared/helpers/repeatedModels');
 const logger = require('../helpers/logger');
-const { orderBy } = require('lodash');
+const {orderBy} = require('lodash');
 const moment = require('moment');
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
         }
     },
 
-    generateClones({ records, endDate, startDate, sorters = [] }) {
+    generateClones({records, endDate, startDate, sorters = []}) {
         let ret = [];
         const start = Date.now();
         let clones = 0;
@@ -53,7 +53,7 @@ module.exports = {
         return ret;
     },
 
-    getClonesFor({ record, endDate, startDate }) {
+    getClonesFor({record, endDate, startDate}) {
         const out = [];
         const recordAsJSON = record.toJSON();
 

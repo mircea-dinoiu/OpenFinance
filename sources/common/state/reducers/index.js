@@ -1,12 +1,9 @@
-import { fromJS } from 'immutable';
-import { Actions } from 'common/state';
+import {fromJS} from 'immutable';
+import {Actions} from 'common/state';
 import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'common/utils/getScreenQueries';
-import { combineReducers } from 'redux';
-import {
-    validatePreferences,
-    parsePreferences,
-} from 'common/utils/preferences';
+import {combineReducers} from 'redux';
+import {validatePreferences, parsePreferences} from 'common/utils/preferences';
 
 const stateKeysWithoutReducers = [];
 const screen = (state = getScreenQueries(), action) =>
@@ -54,7 +51,7 @@ const loading = (state = true, action) => {
 const preferences = (state = parsePreferences(), action) => {
     switch (action.type) {
         case Actions.UPDATE_PREFERENCES:
-            return { ...state, ...action.value };
+            return {...state, ...action.value};
     }
 
     return validatePreferences(state);
