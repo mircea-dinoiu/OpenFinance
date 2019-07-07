@@ -2,7 +2,7 @@
   "name": "financial",
   "version": "1.0.0",
   "engines": {
-    "node": "10.9.0"
+    "node": "12.6.0"
   },
   "description": "This application is made to track down your monthly expenses and incomes in the family and help you understand better where your money are going and how can you be more careful what you're spending money on.",
   "repository": {
