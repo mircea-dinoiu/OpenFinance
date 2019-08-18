@@ -25,6 +25,9 @@ export const getStartDate = ({
         case 'previous-year':
             date = new Date(date.getFullYear() - 1, 0, 1);
             break;
+        case 'next-year':
+            date = new Date(date.getFullYear() + 1, 0, 1);
+            break;
         case 'lm':
             date.setMonth(date.getMonth() - 1);
             break;

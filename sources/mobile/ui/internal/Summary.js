@@ -25,7 +25,7 @@ type TypeProps = {
 const getEndDateBasedOnIncludePreference = (endDate, include) => {
     if (include === 'previous-year') {
         return endOfDayToISOString(
-            moment()
+            moment(endDate)
                 .month(0)
                 .date(1)
                 .subtract(1, 'day')
@@ -33,9 +33,20 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
         );
     }
 
+    if (include === 'next-year') {
+        return endOfDayToISOString(
+            moment(endDate)
+                .month(0)
+                .date(1)
+                .add(2, 'year')
+                .subtract(1, 'day')
+                .toDate(),
+        );
+    }
+
     if (include === 'current-year') {
         return endOfDayToISOString(
-            moment()
+            moment(endDate)
                 .month(0)
                 .date(1)
                 .add(1, 'year')

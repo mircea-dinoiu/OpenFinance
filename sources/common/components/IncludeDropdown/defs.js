@@ -39,10 +39,14 @@ export const IncludeOptions = [
     },
     {
         id: 'current-year',
-        name: `Through ${new Date().getFullYear()}`,
+        name: 'Throughout the year',
     },
     {
         id: 'previous-year',
-        name: `Through ${new Date().getFullYear() - 1}`,
+        name: 'Throughout the previous year',
+    },
+    {
+        id: 'next-year',
+        name: 'Throughout the next year',
     },
 ];
