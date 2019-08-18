@@ -1,7 +1,3 @@
-import 'normalize.css';
-import 'react-table/react-table.css';
-import './Responsive.pcss';
-import './Responsive.css';
 import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
 import {CustomSnackbar} from 'mobile/ui/components/snackbars';
@@ -36,6 +32,8 @@ import {flexColumn} from 'common/defs/styles';
 import {hot} from 'react-hot-loader/root';
 import {Sizes} from 'common/defs';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import {createGlobalStyle} from 'styled-components';
+import cssNormalize from 'normalize.css';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -54,6 +52,62 @@ const theme = createMuiTheme({
         primary: blue,
     },
 });
+
+const ResponsiveGlobalStyle = createGlobalStyle`
+    ${cssNormalize} 
+    
+    body {
+        font-family: Roboto, sans-serif;
+        font-weight: 300;
+        background: #eeeeee;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    * {
+        outline: none !important;
+    }
+
+    .inlineBlock {
+        display: inline-block;
+    }
+
+    .uppercase {
+        text-transform: uppercase;
+    }
+
+    .hPadded:not(:last-child) {
+        margin-right: 10px;
+    }
+
+    .noWrap {
+        white-space: nowrap;
+    }
+
+    .textRight {
+        text-align: right;
+    }
+
+    .textCenter {
+        text-align: center;
+    }
+
+    .fullWidth {
+        width: 100%;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .centerBlock {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cursorPointer {
+        cursor: pointer;
+    }
+`;
 
 class Responsive extends PureComponent<{
     actions: typeof actions,
@@ -138,6 +192,7 @@ class Responsive extends PureComponent<{
             <MuiPickersUtilsProvider utils={MomentUtils}>
                 <MuiThemeProvider theme={theme}>
                     <V0MuiThemeProvider>
+                        <ResponsiveGlobalStyle />
                         <div
                             style={{
                                 paddingTop: Sizes.HEADER_SIZE,

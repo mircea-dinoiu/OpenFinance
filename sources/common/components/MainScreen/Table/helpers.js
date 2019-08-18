@@ -1,7 +1,7 @@
 // @flow
 import type {TypeTransactionModel} from 'common/types';
 import {formatYMD} from 'common/utils/dates';
-import cssTable from 'common/components/BaseTable/index.pcss';
+import {Classes} from 'common/components/BaseTable';
 
 const today = formatYMD(new Date());
 
@@ -9,22 +9,22 @@ export const getTrClassName = (
     item: TypeTransactionModel,
     {selectedIds},
 ): string => {
-    const classes = [cssTable.notSelectable];
+    const classes = [Classes.notSelectable];
 
     if (formatYMD(item.created_at) === today) {
-        classes.push(cssTable.todayRow);
+        classes.push(Classes.todayRow);
     }
 
     if (item.status === 'pending') {
-        classes.push(cssTable.pendingRow);
+        classes.push(Classes.pendingRow);
     }
 
     if (item.hidden) {
-        classes.push(cssTable.hiddenRow);
+        classes.push(Classes.hiddenRow);
     }
 
     if (selectedIds[item.id]) {
-        classes.push(cssTable.selectedRow);
+        classes.push(Classes.selectedRow);
     }
 
     return classes.join(' ');

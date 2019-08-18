@@ -44,28 +44,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {loader: 'style-loader'},
-                    {
-                        loader: 'css-loader',
-                        options: {sourceMap: enableSourceMaps, url: false},
-                    },
-                ],
-            },
-            {
-                test: /\.pcss$/,
-                use: [
-                    {loader: 'style-loader'},
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            localIdentName: '[name]__[local]--[hash:base64:5]',
-                            sourceMap: false,
-                            url: false,
-                            modules: true,
-                            importLoaders: 1,
-                        },
-                    },
-                    {loader: 'postcss-loader'},
+                    {loader: 'raw-loader'},
                 ],
             },
         ],

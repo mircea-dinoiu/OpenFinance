@@ -27,8 +27,7 @@ import {createXHR} from 'common/utils/fetch';
 import {Button, FormControlLabel, Checkbox, Fab} from '@material-ui/core';
 import {connect} from 'react-redux';
 import {greyedOut} from 'common/defs/styles';
-import BaseTable from 'common/components/BaseTable';
-import cssTable from 'common/components/BaseTable/index.pcss';
+import BaseTable, {TableFooter, TableHeader} from 'common/components/BaseTable';
 import {getTrProps} from 'common/components/MainScreen/Table/helpers';
 import MainScreenListGroup from 'mobile/ui/internal/common/MainScreenListGroup';
 import MainScreenCreatorDialog from './MainScreenCreatorDialog';
@@ -364,7 +363,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
     renderTableHeader() {
         return (
-            <div className={cssTable.header}>
+            <TableHeader>
                 <div className="inlineBlock hPadded">
                     <FormControlLabel
                         control={
@@ -427,7 +426,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         }}
                     />
                 </div>
-            </div>
+            </TableHeader>
         );
     }
 
@@ -549,7 +548,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         const selected = this.selectedItems;
 
         return (
-            <div className={cssTable.footer}>
+            <TableFooter>
                 {this.renderStats('Current Page', page)}
                 {this.renderStats('Selected', selected)}
                 {range(0, 6).map((rating) =>
@@ -578,7 +577,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         ),
                     ),
                 )}
-            </div>
+            </TableFooter>
         );
     }
 

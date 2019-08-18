@@ -89,7 +89,7 @@ class SummarySubCategory extends PureComponent {
                 {(shouldGroup === false || this.state.expanded) && (
                     <BaseTable
                         data={items}
-                        modifiers={{hideHeader: true}}
+                        hideHeader={true}
                         columns={[
                             {
                                 id: 'description',

@@ -14,4 +14,3 @@ module.name_mapper='^common/\(.*\)$' -> '<PROJECT_ROOT>/sources/common/\1'
 module.name_mapper='^mobile/\(.*\)$' -> '<PROJECT_ROOT>/sources/mobile/\1'
 
 module.file_ext=.js
-module.file_ext=.pcss
