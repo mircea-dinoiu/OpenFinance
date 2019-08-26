@@ -15,6 +15,14 @@ export const getTrClassName = (
         classes.push(Classes.todayRow);
     }
 
+    if (item.type === 'withdrawal') {
+        classes.push(Classes.withdrawRow);
+    }
+
+    if (item.type === 'deposit') {
+        classes.push(Classes.depositRow);
+    }
+
     if (item.status === 'pending') {
         classes.push(Classes.pendingRow);
     }

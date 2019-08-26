@@ -3,6 +3,7 @@ import * as React from 'react';
 import ReactTable from 'react-table';
 import styled, {css, createGlobalStyle} from 'styled-components';
 import cssReactTable from 'react-table/react-table.css';
+import {green, red} from '@material-ui/core/colors';
 
 export const Classes = {
     todayRow: 'todayRow',
@@ -10,6 +11,8 @@ export const Classes = {
     selectedRow: 'selectedRow',
     hiddenRow: 'hiddenRow',
     notSelectable: 'notSelectable',
+    depositRow: 'depositRow',
+    withdrawRow: 'withdrawRow',
 };
 
 const reactTableHideHead = css`
@@ -32,6 +35,17 @@ const ReactTableStyled = styled(ReactTable)`
     .rt-td {
         line-height: 20px;
         padding-bottom: 2px;
+    }
+    
+    .${Classes.withdrawRow} .rt-td:nth-child(1),
+    .${Classes.withdrawRow} .rt-td:nth-child(2) {
+      color: ${red[900]};
+    }
+    
+    .${Classes.depositRow} .rt-td:nth-child(1),
+    .${Classes.depositRow} .rt-td:nth-child(2) {
+      background: ${green[50]};
+      color: ${green[900]};
     }
 
     .${Classes.pendingRow} {

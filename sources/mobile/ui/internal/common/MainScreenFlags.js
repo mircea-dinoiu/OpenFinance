@@ -1,9 +1,8 @@
 import * as React from 'react';
-import {blue, red, yellow, grey, green, purple} from '@material-ui/core/colors';
+import {blue, yellow, grey, green, purple} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';
 import TrendingUp from '@material-ui/icons/TrendingUp';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
-import ArrowUp from '@material-ui/icons/ArrowUpward';
 import Warning from '@material-ui/icons/Warning';
 import SpeakerNotes from '@material-ui/icons/SpeakerNotes';
 import Tooltip from 'common/components/Tooltip';
@@ -35,12 +34,6 @@ export const DepositFlag = () => (
     </Tooltip>
 );
 
-export const WithdrawalFlag = () => (
-    <Tooltip tooltip="Withdrawal">
-        <ArrowUp style={ICON_STYLE} htmlColor={red[500]} />
-    </Tooltip>
-);
-
 export const NotesFlag = ({children}) => (
     <Tooltip tooltip={<pre>{children}</pre>}>
         <SpeakerNotes style={ICON_STYLE} htmlColor={grey[500]} />
@@ -49,7 +42,6 @@ export const NotesFlag = ({children}) => (
 
 export const Flags = ({item, entity}) => (
     <>
-        {item.type === 'deposit' ? <DepositFlag /> : <WithdrawalFlag />}
         {item.status === 'pending' && <PendingReviewFlag entity={entity} />}
         {item.repeat != null && <RecurrentFlag entity={entity} />}
         {item.notes && <NotesFlag>{item.notes}</NotesFlag>}
