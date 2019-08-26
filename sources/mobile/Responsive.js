@@ -51,10 +51,17 @@ const theme = createMuiTheme({
     palette: {
         primary: blue,
     },
+    typography: {
+        htmlFontSize: 16,
+    },
 });
 
 const ResponsiveGlobalStyle = createGlobalStyle`
     ${cssNormalize} 
+    
+    html, body {
+      font-size: 14px;
+    }
     
     body {
         font-family: Roboto, sans-serif;

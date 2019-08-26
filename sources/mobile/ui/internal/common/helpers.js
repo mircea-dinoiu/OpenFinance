@@ -1,6 +1,6 @@
 // @flow
 import type {TypeTransactionModel} from 'common/types';
-import {map, flatten, uniqBy, uniq, mapValues} from 'lodash';
+import {map, flatten, uniqBy, uniq, mapValues, sortBy} from 'lodash';
 import {sumArray} from 'shared/utils/numbers';
 
 export const mapItemToRepeatedUpdates = (item: TypeTransactionModel) => {
@@ -48,3 +48,10 @@ export const mergeItems = (items: TypeTransactionModel[]) => {
         ),
     };
 };
+
+export const sortMoneyLocations = (items) =>
+    sortBy(
+        items,
+        (item) =>
+            `${['open', 'locked', 'closed'].indexOf(item.status)}#${item.name}`,
+    );

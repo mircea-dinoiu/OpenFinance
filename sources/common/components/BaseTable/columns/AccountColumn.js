@@ -11,7 +11,7 @@ export default {
     filterable: true,
     Filter: AccountFilter,
     accessor: (item: TypeTransactionModel) => (
-        <MoneyLocationDisplay item={item} />
+        <MoneyLocationDisplay id={item.money_location_id} />
     ),
     id: 'money_location_id',
     sortable: true,

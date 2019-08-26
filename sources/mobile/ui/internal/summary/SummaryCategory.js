@@ -32,6 +32,7 @@ class SummarySubCategory extends PureComponent {
             entityIdField,
             entityNameField,
             items,
+            renderDescription,
         } = this.props;
 
         return (
@@ -115,7 +116,7 @@ class SummarySubCategory extends PureComponent {
                                         }
                                         label={
                                             <span style={{fontWeight: 300}}>
-                                                {each.description}
+                                                {renderDescription ? renderDescription(each) : each.description}
                                             </span>
                                         }
                                     />
@@ -260,6 +261,7 @@ class SummaryCategory extends PureComponent {
                                 expandedByDefault={expandedByDefault}
                                 currencies={this.props.currencies}
                                 onToggleExcluded={this.handleToggleExcluded}
+                                renderDescription={this.props.renderDescription}
                             />
                         );
                     })}

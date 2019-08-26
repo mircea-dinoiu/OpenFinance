@@ -10,6 +10,7 @@ module.exports = (sequelize, types) =>
             name: types.STRING,
             type_id: types.INTEGER,
             currency_id: types.INTEGER,
+            status: types.STRING,
         },
         {
             timestamps: false,

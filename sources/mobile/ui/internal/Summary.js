@@ -17,6 +17,7 @@ import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
 import {updatePreferences} from 'common/state/actions';
 import moment from 'moment';
 import {endOfDayToISOString} from 'shared/utils/dates';
+import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -160,6 +161,9 @@ class Summary extends React.PureComponent<TypeProps> {
                     summaryObject: results.remainingData.byML,
                     entities: this.props.moneyLocationTypes,
                     expandedByDefault: true,
+                    renderDescription({reference}) {
+                        return <MoneyLocationDisplay id={reference} />;
+                    }
                 })}
 
                 {this.renderCategory({

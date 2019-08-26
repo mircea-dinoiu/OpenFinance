@@ -9,7 +9,7 @@ const RepeatsDisplay = ({item, screenSize}) => {
         ? RepeatOptions.filter((each) => each[0] === item.repeat)[0][1]
         : '';
     const repeatsDisplay = (
-        <span style={{fontSize: 14, color: grey[500]}}>
+        <span style={{fontSize: '1rem', color: grey[500]}}>
             {screenSize.isLarge
                 ? repeatsText
                 : repeatsText

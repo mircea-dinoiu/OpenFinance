@@ -8,7 +8,7 @@ import Tooltip from 'common/components/Tooltip';
 const DateDisplay = ({item, screen}) => (
     <span
         style={{
-            fontSize: 14,
+            fontSize: '1rem',
             color: screen.isLarge ? 'inherit' : grey[500],
         }}
     >

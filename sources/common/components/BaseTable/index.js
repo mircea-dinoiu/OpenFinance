@@ -25,7 +25,7 @@ const GlobalStyle = createGlobalStyle`${cssReactTable}`;
 
 const ReactTableStyled = styled(ReactTable)`
     background: #fff;
-    font-size: 14px;
+    font-size: 1rem;;
     border: 0 !important;
 
     .rt-tr:hover {
@@ -74,7 +74,7 @@ const ReactTableStyled = styled(ReactTable)`
 export const TableHeader = styled.div`
     background: white;
     padding: 5px 20px;
-    font-size: 14px;
+    font-size: 1rem;;
     border-bottom: 1px solid rgb(244, 244, 244);
     width: 100%;
 `;
@@ -82,7 +82,7 @@ export const TableHeader = styled.div`
 export const TableFooter = styled.div`
     background: white;
     padding: 5px 20px;
-    font-size: 14px;
+    font-size: 1rem;;
     border-top: 1px solid rgb(244, 244, 244);
     box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.15);
     position: absolute;
