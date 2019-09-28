@@ -2,12 +2,10 @@ import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
 import {CustomSnackbar} from 'mobile/ui/components/snackbars';
 // import injectTapEventPlugin from 'react-tap-event-plugin';
-import React, {PureComponent} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React from 'react';
+import {connect, useDispatch} from 'react-redux';
 import {
     updateUser,
-    toggleLoading,
     setScreen,
     updateState,
     fetchCurrencies,
@@ -34,19 +32,21 @@ import {Sizes} from 'common/defs';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {createGlobalStyle} from 'styled-components';
 import cssNormalize from 'normalize.css';
+import {
+    useUser,
+    useCurrencies,
+    useSnackbars,
+    useCurrenciesDrawerOpen,
+    useLoading,
+    usePage,
+    useTitle,
+} from 'common/state';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 // FIXME Temporarily disabled due to incompatibility with the infrastructure
 // injectTapEventPlugin();
 
-const actions = {
-    updateUser,
-    toggleLoading,
-    setScreen,
-    updateState,
-    fetchCurrencies,
-};
 const theme = createMuiTheme({
     palette: {
         primary: blue,
@@ -116,33 +116,39 @@ const ResponsiveGlobalStyle = createGlobalStyle`
     }
 `;
 
-class Responsive extends PureComponent<{
-    actions: typeof actions,
-}> {
-    componentDidMount() {
-        this.loadData();
-    }
+const Responsive = () => {
+    const dispatch = useDispatch();
+    const user = useUser();
+    const currencies = useCurrencies();
+    const [snackbar] = useSnackbars();
+    const [
+        currenciesDrawerOpen,
+        setCurrenciesDrawerOpen,
+    ] = useCurrenciesDrawerOpen();
+    const [loading, setLoading] = useLoading();
+    const [page, setPage] = usePage();
+    const [, setTitle] = useTitle();
 
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        if (this.props.user != nextProps.user && nextProps.user != null) {
-            this.loadData(nextProps);
-        }
-    }
+    const showLogin = () => {
+        setPage(<Login />);
+        setTitle('Please Login');
+        dispatch(updateUser(null));
+        setLoading(false);
+    };
 
-    async loadData(props = this.props) {
-        props.actions.toggleLoading(true);
+    const loadData = async () => {
+        setLoading(true);
 
-        if (props.user == null) {
+        if (user == null) {
             try {
                 const response = await createXHR({url: routes.user.list});
 
-                props.actions.updateUser(fromJS(response.data));
+                dispatch(updateUser(response.data));
             } catch (e) {
-                this.showLogin();
+                showLogin();
             }
         } else {
-            props.actions.fetchCurrencies();
+            dispatch(fetchCurrencies());
 
             const [
                 categoriesResponse,
@@ -154,101 +160,81 @@ class Responsive extends PureComponent<{
                 createXHR({url: routes.mlType.list}),
             ]);
 
-            props.actions.updateState({
-                categories: fromJS(categoriesResponse.data),
-                moneyLocations: fromJS(mlResponse.data),
-                moneyLocationTypes: fromJS(mlTypesResponse.data),
-                title: 'Financial',
-                ui: <Internal />,
-            });
-            props.actions.toggleLoading(false);
+            dispatch(
+                updateState({
+                    categories: fromJS(categoriesResponse.data),
+                    moneyLocations: fromJS(mlResponse.data),
+                    moneyLocationTypes: fromJS(mlTypesResponse.data),
+                    title: 'Financial',
+                    ui: <Internal />,
+                }),
+            );
+            setLoading(false);
         }
-    }
+    };
 
-    showLogin() {
-        this.props.actions.updateState({
-            ui: <Login />,
-            title: 'Please Login',
-        });
-        this.props.actions.updateUser(null);
-        this.props.actions.toggleLoading(false);
-    }
+    React.useEffect(() => {
+        loadData();
+    }, [user]);
 
-    onLogout = async () => {
-        this.props.actions.toggleLoading(true);
+    const onLogout = async () => {
+        setLoading(true);
 
         try {
             await createXHR({url: routes.user.logout, method: 'POST'});
 
-            this.showLogin();
+            showLogin();
         } catch (e) {
             location.reload();
         }
     };
 
-    isCurrenciesDrawerReady() {
-        return this.props.user != null && this.props.currencies != null;
-    }
+    const isCurrenciesDrawerReady = () => user != null && currencies != null;
 
-    onWindowResize = () => {
-        this.props.actions.setScreen(getScreenQueries());
+    const onWindowResize = () => {
+        dispatch(setScreen(getScreenQueries()));
     };
 
-    render() {
-        return (
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-                <MuiThemeProvider theme={theme}>
-                    <V0MuiThemeProvider>
-                        <ResponsiveGlobalStyle />
-                        <div
-                            style={{
-                                paddingTop: Sizes.HEADER_SIZE,
-                                ...flexColumn,
-                            }}
-                        >
-                            <EventListener
-                                target="window"
-                                onResize={this.onWindowResize}
-                            />
-                            <TopBar
-                                showCurrenciesDrawer={this.isCurrenciesDrawerReady()}
-                                onLogout={this.onLogout}
-                            />
-                            {this.isCurrenciesDrawerReady() && (
-                                <Drawer
-                                    docked={false}
-                                    open={this.props.currenciesDrawerOpen}
-                                    openSecondary={true}
-                                    onRequestChange={(currenciesDrawerOpen) =>
-                                        this.props.actions.updateState({
-                                            currenciesDrawerOpen,
-                                        })
-                                    }
-                                >
-                                    <Currencies />
-                                </Drawer>
-                            )}
-                            {this.props.loading ? <BigLoader /> : this.props.ui}
-                            {this.renderSnackbar()}
-                        </div>
-                    </V0MuiThemeProvider>
-                </MuiThemeProvider>
-            </MuiPickersUtilsProvider>
-        );
-    }
+    return (
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+            <MuiThemeProvider theme={theme}>
+                <V0MuiThemeProvider>
+                    <ResponsiveGlobalStyle />
+                    <div
+                        style={{
+                            paddingTop: Sizes.HEADER_SIZE,
+                            ...flexColumn,
+                        }}
+                    >
+                        <EventListener
+                            target="window"
+                            onResize={onWindowResize}
+                        />
+                        <TopBar
+                            showCurrenciesDrawer={isCurrenciesDrawerReady()}
+                            onLogout={onLogout}
+                        />
+                        {isCurrenciesDrawerReady() && (
+                            <Drawer
+                                docked={false}
+                                open={currenciesDrawerOpen}
+                                openSecondary={true}
+                                onRequestChange={(value) =>
+                                    setCurrenciesDrawerOpen(value)
+                                }
+                            >
+                                <Currencies />
+                            </Drawer>
+                        )}
+                        {loading ? <BigLoader /> : page}
+                        <CustomSnackbar {...snackbar} open={snackbar != null} />
+                    </div>
+                </V0MuiThemeProvider>
+            </MuiThemeProvider>
+        </MuiPickersUtilsProvider>
+    );
+};
 
-    renderSnackbar() {
-        const [snackbar] = this.props.snackbars;
-
-        return <CustomSnackbar {...snackbar} open={snackbar != null} />;
-    }
-}
-
-const AppContainer = connect(
-    (state) => state,
-    (dispatch) => ({
-        actions: bindActionCreators(actions, dispatch),
-    }),
-)(Responsive);
+const AppContainer = connect((state) => state)(Responsive);
 
 export default hot(AppContainer);

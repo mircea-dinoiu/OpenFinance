@@ -1,6 +1,12 @@
 // @flow
-import {useSelector} from 'react-redux';
-import type {TypeScreenQueries, TypeCurrencies, TypeUsers} from 'common/types';
+import {useSelector, useDispatch} from 'react-redux';
+import type {
+    TypeScreenQueries,
+    TypeCurrencies,
+    TypeUsers,
+    TypeSnackbar,
+} from 'common/types';
+import {updateState, toggleLoading} from 'common/state/actions';
 
 export const Actions = {
     UPDATE_STATE: 'UPDATE_STATE',
@@ -20,8 +26,57 @@ export const useScreenSize = (): TypeScreenQueries =>
     useSelector((s) => s.screenSize);
 export const useCurrencies = (): TypeCurrencies =>
     useSelector((s) => s.currencies);
-export const useUser = (): TypeUsers => useSelector((s) => s.user.toJS());
+export const useUser = (): TypeUsers =>
+    useSelector((s) => s.user);
 export const useMoneyLocations = () =>
-    useSelector((s) => s.moneyLocations.toJS());
+    useSelector((s) => s.moneyLocations && s.moneyLocations.toJS());
 export const usePreferences = () => useSelector((s) => s.preferences);
-export const useCategories = () => useSelector((s) => s.categories.toJS());
+export const useCategories = () =>
+    useSelector((s) => s.categories && s.categories.toJS());
+export const useSnackbars = (): TypeSnackbar[] =>
+    useSelector((s) => s.snackbars);
+export const useCurrenciesDrawerOpen = () => {
+    const dispatch = useDispatch();
+
+    return [
+        useSelector((s) => s.currenciesDrawerOpen),
+        (value: boolean) => {
+            dispatch(
+                updateState({
+                    currenciesDrawerOpen: value,
+                }),
+            );
+        },
+    ];
+};
+export const useLoading = () => {
+    const dispatch = useDispatch();
+
+    return [
+        useSelector((s) => s.loading),
+        (loading) => {
+            dispatch(toggleLoading(loading));
+        },
+    ];
+};
+export const usePage = () => {
+    const dispatch = useDispatch();
+
+    return [
+        useSelector((s) => s.ui),
+        (ui) => {
+            dispatch(updateState({ui}));
+        },
+    ];
+};
+
+export const useTitle = () => {
+    const dispatch = useDispatch();
+
+    return [
+        useSelector((s) => s.title),
+        (title) => {
+            dispatch(updateState({title}));
+        },
+    ];
+};

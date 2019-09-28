@@ -33,6 +33,7 @@ import {DateTimePicker} from '@material-ui/pickers';
 import {CancelToken} from 'axios';
 import * as defs from 'shared/defs';
 import {sumArray} from 'shared/utils/numbers';
+import {fromJS} from 'immutable';
 
 const boxStyle = {
     padding: '10px 0',
@@ -162,15 +163,15 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         value={
                             this.state.paymentMethod
                                 ? findCurrencyById(
-                                    this.props.moneyLocations
-                                        .toJSON()
-                                        .find(
-                                            (each) =>
-                                                each.id ==
+                                      this.props.moneyLocations
+                                          .toJSON()
+                                          .find(
+                                              (each) =>
+                                                  each.id ==
                                                   this.state.paymentMethod,
-                                        ).currency_id,
-                                    this.props.currencies,
-                                ).iso_code
+                                          ).currency_id,
+                                      this.props.currencies,
+                                  ).iso_code
                                 : null
                         }
                         fullWidth={true}
@@ -361,9 +362,9 @@ class ExpenseForm extends PureComponent<TypeProps> {
     }
 
     renderChargedPersons() {
-        const sortedUsers = this.props.user
-            .get('list')
-            .sortBy((each) => each.get('full_name'));
+        const sortedUsers = fromJS(this.props.user.list).sortBy((each) =>
+            each.get('full_name'),
+        );
         const {chargedPersons} = this.state;
         const step = defs.PERC_STEP;
         const userIdsStringified = sortedUsers.map((user) =>

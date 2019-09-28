@@ -4,7 +4,7 @@ export default (form, props) => {
     const users =
         Object.keys(form.chargedPersons).length > 0
             ? form.chargedPersons
-            : {[props.user.getIn(['current', 'id'])]: 100};
+            : {[props.user.current.id]: 100};
 
     return {
         id: form.id,

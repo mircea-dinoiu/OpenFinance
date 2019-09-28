@@ -170,7 +170,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     backgroundColor: green[500],
                     title: 'Balance by Person',
                     summaryObject: results.remainingData.byUser,
-                    entities: this.props.user.get('list'),
+                    entities: this.props.user.list,
                     entityNameField: 'full_name',
                 })}
 
@@ -195,7 +195,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     backgroundColor: red[500],
                     title: 'Expenses by Person',
                     summaryObject: results.expensesData.byUser,
-                    entities: this.props.user.get('list'),
+                    entities: this.props.user.list,
                     entityNameField: 'full_name',
                 })}
             </div>
