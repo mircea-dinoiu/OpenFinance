@@ -1,81 +1,69 @@
 // @flow
 import {SingleSelect} from 'common/components/Select';
-import type {TypeCurrencies, TypeUsers} from 'common/types';
 import {objectValuesOfSameType} from 'common/utils/collection';
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {MenuItem, Subheader} from 'material-ui';
 import {fetchCurrencies, setBaseCurrencyId} from 'common/state/actions';
-import {connect} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import {useUser, useCurrencies} from 'common/state';
+import type {TypeCurrency} from 'common/types';
 
-type TypeProps = {
-    user: TypeUsers,
-    currencies: TypeCurrencies,
-    fetchCurrencies: typeof fetchCurrencies,
-    setBaseCurrencyId: typeof setBaseCurrencyId,
-};
+const Currencies = () => {
+    const user = useUser();
+    const currencies = useCurrencies();
+    const map = currencies.map;
+    const defaultCurrencyId = currencies.default;
+    const defaultCurrency = map[String(defaultCurrencyId)];
+    const dispatch = useDispatch();
 
-class Currencies extends PureComponent<TypeProps> {
-    interval = null;
-
-    componentDidMount() {
-        this.interval = setInterval(() => {
-            if (this.props.user) {
-                this.props.fetchCurrencies({update: true});
-            }
-        }, 60 * 60 * 1000);
-    }
-
-    componentWillUnmount() {
-        if (this.interval != null) {
-            clearInterval(this.interval);
-        }
-    }
-
-    handleChangeBaseCurrency = (id: number) => {
-        this.props.setBaseCurrencyId(id);
+    const handleChangeBaseCurrency = (id: number) => {
+        dispatch(setBaseCurrencyId(id));
     };
 
-    render() {
-        const map = this.props.currencies.map;
-        const defaultCurrencyId = this.props.currencies.default;
-        const defaultCurrency = map[defaultCurrencyId];
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            if (user) {
+                dispatch(fetchCurrencies({update: true}));
+            }
+        }, 60 * 60 * 1000);
 
-        return (
-            <>
-                <Subheader>Base Currency</Subheader>
-                <div
-                    style={{
-                        padding: '0 15px',
-                    }}
-                >
-                    <SingleSelect
-                        options={objectValuesOfSameType(map).map(
-                            (each: TypeCurrency) => ({
-                                value: each.id,
-                                label: each.iso_code,
-                            }),
-                        )}
-                        value={defaultCurrencyId}
-                        onChange={this.handleChangeBaseCurrency}
-                    />
-                </div>
+        return () => {
+            clearInterval(interval);
+        };
+    }, []);
 
-                <Subheader>Exchange Rates</Subheader>
-                {objectValuesOfSameType(map).map(
-                    (each: TypeCurrency) =>
-                        each.id !== defaultCurrencyId && (
-                            <MenuItem key={each.id}>
-                                <strong>{each.iso_code}</strong>:{' '}
-                                {each.rates[defaultCurrency.iso_code]}
-                            </MenuItem>
-                        ),
-                )}
-            </>
-        );
-    }
-}
+    return (
+        <>
+            <Subheader>Base Currency</Subheader>
+            <div
+                style={{
+                    padding: '0 15px',
+                }}
+            >
+                <SingleSelect
+                    options={objectValuesOfSameType(map).map(
+                        (each: TypeCurrency) => ({
+                            value: each.id,
+                            label: each.iso_code,
+                        }),
+                    )}
+                    value={defaultCurrencyId}
+                    onChange={handleChangeBaseCurrency}
+                />
+            </div>
 
-export default connect(
-    ({user, currencies}) => ({user, currencies}),
-    {fetchCurrencies, setBaseCurrencyId},
-)(Currencies);
+            <Subheader>Exchange Rates</Subheader>
+            {objectValuesOfSameType(map).map(
+                (each: TypeCurrency) =>
+                    each.id !== defaultCurrencyId && (
+                        <MenuItem key={each.id}>
+                            <strong>{each.iso_code}</strong>:{' '}
+                            {each.rates[defaultCurrency.iso_code]}
+                        </MenuItem>
+                    ),
+            )}
+        </>
+    );
+};
+
+export default Currencies;
