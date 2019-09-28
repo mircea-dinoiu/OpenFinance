@@ -45,9 +45,7 @@
     "dot-notation": "error",
     "eqeqeq": [1, "smart"],
     "func-style": "error",
-    "indent": [2, 4, {
-      "SwitchCase": 1
-    }],
+    "indent": "off",
     "key-spacing": [2, {"beforeColon": false, "afterColon": true}],
     "keyword-spacing": "error",
     "linebreak-style": [2, "unix"],
