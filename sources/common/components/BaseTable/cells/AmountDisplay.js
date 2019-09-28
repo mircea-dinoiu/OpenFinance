@@ -1,9 +1,10 @@
 // @flow
 import {numericValue} from 'mobile/ui/formatters';
 import {getItemCurrencyISOCode} from 'common/helpers';
-import {connect} from 'react-redux';
+import {useCurrencies} from 'common/state';
 
-const AmountDisplay = ({item, currencies, showCurrency = true}) => {
+const AmountDisplay = ({item, showCurrency = true}) => {
+    const currencies = useCurrencies();
     const currencyISOCode = getItemCurrencyISOCode({
         item,
         currencies,
@@ -14,8 +15,5 @@ const AmountDisplay = ({item, currencies, showCurrency = true}) => {
         currency: currencyISOCode,
     });
 };
-const mapStateToProps = ({currencies}) => ({
-    currencies,
-});
 
-export default connect(mapStateToProps)(AmountDisplay);
+export default AmountDisplay;

@@ -1,22 +1,17 @@
 // @flow
 import * as React from 'react';
-import {connect} from 'react-redux';
 import {Avatar} from '@material-ui/core';
 import {smallAvatar} from 'common/defs/styles';
+import {useUser} from 'common/state';
 
-const PersonsDisplay = ({item, user}) => {
-    const userList = user.get('list');
+const PersonsDisplay = ({item}) => {
+    const userList = useUser().list;
 
     return userList.map((each) =>
-        item.users[each.get('id')] ? (
-            <Avatar
-                key={each.get('id')}
-                src={each.get('avatar')}
-                style={smallAvatar}
-            />
+        item.users[each.id] ? (
+            <Avatar key={each.id} src={each.avatar} style={smallAvatar} />
         ) : null,
     );
 };
-const mapStateToProps = ({user}) => ({user});
 
-export default connect(mapStateToProps)(PersonsDisplay);
+export default PersonsDisplay;

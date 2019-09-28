@@ -1,3 +1,7 @@
+// @flow
+import {useSelector} from 'react-redux';
+import type {TypeScreenQueries, TypeCurrencies, TypeUsers} from 'common/types';
+
 export const Actions = {
     UPDATE_STATE: 'UPDATE_STATE',
     LOADING_ENABLE: 'LOADING_ENABLE',
@@ -11,3 +15,13 @@ export const Actions = {
     SHOW_SNACKBAR: 'SHOW_SNACKBAR',
     HIDE_SNACKBAR: 'HIDE_SNACKBAR',
 };
+
+export const useScreenSize = (): TypeScreenQueries =>
+    useSelector((s) => s.screenSize);
+export const useCurrencies = (): TypeCurrencies =>
+    useSelector((s) => s.currencies);
+export const useUser = (): TypeUsers => useSelector((s) => s.user.toJS());
+export const useMoneyLocations = () =>
+    useSelector((s) => s.moneyLocations.toJS());
+export const usePreferences = () => useSelector((s) => s.preferences);
+export const useCategories = () => useSelector((s) => s.categories.toJS());

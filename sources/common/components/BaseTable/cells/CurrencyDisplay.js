@@ -1,8 +1,9 @@
 // @flow
 import {getItemCurrencyISOCode} from 'common/helpers';
-import {connect} from 'react-redux';
+import {useCurrencies} from 'common/state';
 
-const CurrencyDisplay = ({item, currencies}) => {
+const CurrencyDisplay = ({item}) => {
+    const currencies = useCurrencies();
     const currencyISOCode = getItemCurrencyISOCode({
         item,
         currencies,
@@ -10,8 +11,5 @@ const CurrencyDisplay = ({item, currencies}) => {
 
     return currencyISOCode;
 };
-const mapStateToProps = ({currencies}) => ({
-    currencies,
-});
 
-export default connect(mapStateToProps)(CurrencyDisplay);
+export default CurrencyDisplay;

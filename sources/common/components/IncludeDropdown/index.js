@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {MenuItem, SelectField} from 'material-ui';
-import {connect} from 'react-redux';
+import {usePreferences} from 'common/state';
 
 const getIncludeOptions = ({endDate}) => {
     const currentYear = new Date(endDate).getFullYear();
@@ -58,25 +58,27 @@ const getIncludeOptions = ({endDate}) => {
     ];
 };
 
-const IncludeDropdown = ({onChange, value, endDate}) => (
-    <SelectField
-        floatingLabelText="Include results"
-        floatingLabelFixed={true}
-        value={value}
-        onChange={(e, i, newValue) => onChange(newValue)}
-        fullWidth={true}
-        style={{margin: '-10px 0 0'}}
-    >
-        {getIncludeOptions({endDate}).map((option) => (
-            <MenuItem
-                key={option.id}
-                value={option.id}
-                primaryText={option.name}
-            />
-        ))}
-    </SelectField>
-);
+const IncludeDropdown = ({onChange, value}) => {
+    const {endDate} = usePreferences();
 
-export default connect((state) => ({endDate: state.preferences.endDate}))(
-    IncludeDropdown,
-);
+    return (
+        <SelectField
+            floatingLabelText="Include results"
+            floatingLabelFixed={true}
+            value={value}
+            onChange={(e, i, newValue) => onChange(newValue)}
+            fullWidth={true}
+            style={{margin: '-10px 0 0'}}
+        >
+            {getIncludeOptions({endDate}).map((option) => (
+                <MenuItem
+                    key={option.id}
+                    value={option.id}
+                    primaryText={option.name}
+                />
+            ))}
+        </SelectField>
+    );
+};
+
+export default IncludeDropdown;

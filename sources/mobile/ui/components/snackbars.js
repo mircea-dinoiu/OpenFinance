@@ -1,11 +1,11 @@
 // @flow
 import {hideSnackbar, showSnackbar} from 'common/state/actions';
-import type {TypeSnackbarOwnProps} from 'common/types';
 import {uniqueId} from 'lodash';
 import * as React from 'react';
 import {Snackbar} from 'material-ui';
 import {red, green} from '@material-ui/core/colors';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
+import type {TypeSnackbarProps} from 'common/types';
 
 export const CustomSnackbar = connect(({screen}) => ({screen}))((props) => (
     <Snackbar
@@ -22,63 +22,52 @@ export const CustomSnackbar = connect(({screen}) => ({screen}))((props) => (
     />
 ));
 
-const withSnackbarActionCreators = connect(
-    null,
-    {showSnackbar, hideSnackbar},
-);
+export const ErrorSnackbar = (props: TypeSnackbarProps) => {
+    const dispatch = useDispatch();
 
-type TypeSnackbarProps = {|
-    ...TypeSnackbarOwnProps,
-    showSnackbar: typeof showSnackbar,
-    hideSnackbar: typeof hideSnackbar,
-|};
+    React.useEffect(() => {
+        const id = uniqueId();
 
-export const ErrorSnackbar = withSnackbarActionCreators(
-    class extends React.PureComponent<TypeSnackbarProps> {
-        id = uniqueId();
-
-        componentDidMount(): void {
-            this.props.showSnackbar({
-                id: this.id,
-                message: this.props.message,
+        dispatch(
+            showSnackbar({
+                id,
+                message: props.message,
                 bodyStyle: {
-                    ...this.props.bodyStyle,
+                    ...props.bodyStyle,
                     backgroundColor: red[500],
                 },
-            });
-        }
+            }),
+        );
 
-        componentWillUnmount(): void {
-            this.props.hideSnackbar(this.id);
-        }
+        return () => {
+            dispatch(hideSnackbar(id));
+        };
+    }, []);
 
-        render() {
-            return null;
-        }
-    },
-);
+    return null;
+};
 
-export const SuccessSnackbar = withSnackbarActionCreators(
-    class extends React.PureComponent<TypeSnackbarProps> {
-        id = uniqueId();
+export const SuccessSnackbar = (props: TypeSnackbarProps) => {
+    const dispatch = useDispatch();
 
-        componentDidMount(): void {
-            this.props.showSnackbar({
-                id: this.id,
-                message: this.props.message,
+    React.useEffect(() => {
+        const id = uniqueId();
+
+        dispatch(
+            showSnackbar({
+                id,
+                message: props.message,
                 bodyStyle: {
-                    ...this.props.bodyStyle,
+                    ...props.bodyStyle,
                     backgroundColor: green[500],
                 },
-            });
+            }),
+        );
 
-            setTimeout(() => {
-                this.props.hideSnackbar(this.id);
-            }, 1500);
-        }
+        setTimeout(() => {
+            dispatch(hideSnackbar(id));
+        }, 1500);
+    }, []);
 
-        render() {
-            return null;
-        }
-    },
-);
+    return null;
+};

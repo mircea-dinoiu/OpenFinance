@@ -1,14 +1,15 @@
 // @flow
 import * as React from 'react';
 import SelectFilter from './SelectFilter';
-import {connect} from 'react-redux';
-
-const mapStateToProps = ({categories}) => ({items: categories.toJS()});
-
-const ConnectedFilter = connect(mapStateToProps)(SelectFilter);
+import {useCategories} from 'common/state';
 
 const CategoriesFilter = ({onChange, filter}) => (
-    <ConnectedFilter onChange={onChange} filter={filter} multi={true} />
-);
+        <SelectFilter
+            onChange={onChange}
+            filter={filter}
+            multi={true}
+            items={useCategories()}
+        />
+    );
 
 export default CategoriesFilter;

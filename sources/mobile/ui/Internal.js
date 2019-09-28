@@ -35,11 +35,9 @@ class Internal extends PureComponent<TypeProps, TypeState> {
         selectedIndex: 0,
         tab: null,
     };
-    handleChangeTab = this.handleChangeTab.bind(this);
-
-    handleChangeTab(index) {
+    handleChangeTab = (index) => {
         this.setState({selectedIndex: index});
-    }
+    };
 
     renderMobileTab(index) {
         switch (index) {

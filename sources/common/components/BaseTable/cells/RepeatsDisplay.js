@@ -2,9 +2,10 @@
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
-import {connect} from 'react-redux';
+import {useScreenSize} from 'common/state';
 
-const RepeatsDisplay = ({item, screenSize}) => {
+const RepeatsDisplay = ({item}) => {
+    const screenSize = useScreenSize();
     const repeatsText = item.repeat
         ? RepeatOptions.filter((each) => each[0] === item.repeat)[0][1]
         : '';
@@ -13,8 +14,8 @@ const RepeatsDisplay = ({item, screenSize}) => {
             {screenSize.isLarge
                 ? repeatsText
                 : repeatsText
-                    ? `Repeats ${repeatsText}`
-                    : 'Does not repeat'}
+                ? `Repeats ${repeatsText}`
+                : 'Does not repeat'}
             {item.repeat_occurrences && (
                 <>
                     <br />({item.repeat_occurrences} occurrences)
@@ -26,4 +27,4 @@ const RepeatsDisplay = ({item, screenSize}) => {
     return repeatsDisplay;
 };
 
-export default connect(({screenSize}) => ({screenSize}))(RepeatsDisplay);
+export default RepeatsDisplay;

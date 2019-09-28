@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import {ShiftDateOptions} from 'common/defs';
-import type {Map} from 'immutable';
 import {RepeatOption} from 'shared/defs';
 
 export type TypeScreenQueries = {
@@ -54,10 +53,10 @@ export type TypeUser = {
     id: number,
 };
 
-export type TypeUsers = Map<{
+export type TypeUsers = {|
     currency: TypeUser,
     list: TypeUser[],
-}>;
+|};
 
 export type TypeMainScreenFeatures = {
     repeat?: boolean,
@@ -85,7 +84,7 @@ export type TypeTransactionModel = {|
 
 export type TypeShiftDateOption = $Keys<typeof ShiftDateOptions>;
 
-export type TypeSnackbarOwnProps = {|
+export type TypeSnackbarProps = {|
     message: React.Node,
     bodyStyle?: {
         backgroundColor: string,
@@ -94,5 +93,5 @@ export type TypeSnackbarOwnProps = {|
 
 export type TypeSnackbar = {|
     id: string,
-    ...TypeSnackbarOwnProps,
+    ...TypeSnackbarProps,
 |};

@@ -4,8 +4,8 @@ import grey from '@material-ui/core/colors/grey';
 import IconBlock from '@material-ui/icons/Block';
 import IconLock from '@material-ui/icons/Lock';
 
-import {connect} from 'react-redux';
 import Tooltip from 'common/components/Tooltip';
+import {useMoneyLocations} from 'common/state';
 
 const StatusToIconComponent = {
     closed: IconBlock,
@@ -13,14 +13,13 @@ const StatusToIconComponent = {
     open: 'i',
 };
 
-const MoneyLocationDisplay = ({id, moneyLocations}) => {
+const MoneyLocationDisplay = ({id}) => {
     if (!id) {
         return null;
     }
 
-    const moneyLocation = moneyLocations
-        .find((each) => each.get('id') === Number(id))
-        .toJS();
+    const moneyLocations = useMoneyLocations();
+    const moneyLocation = moneyLocations.find((each) => each.id === Number(id));
     const IconComponent = StatusToIconComponent[moneyLocation.status];
 
     return (
@@ -41,6 +40,5 @@ const MoneyLocationDisplay = ({id, moneyLocations}) => {
         )
     );
 };
-const mapStateToProps = ({moneyLocations}) => ({moneyLocations});
 
-export default connect(mapStateToProps)(MoneyLocationDisplay);
+export default MoneyLocationDisplay;
