@@ -7,22 +7,20 @@ import {red, green} from '@material-ui/core/colors';
 import {useDispatch} from 'react-redux';
 import type {TypeSnackbarProps} from 'common/types';
 
-export const CustomSnackbar = (props) => {
-    return (
-        <Snackbar
-            open={props.open}
-            message={props.message}
-            bodyStyle={{
-                height: 'auto',
-                lineHeight: 1.2,
-                padding: '10px 20px',
-                boxShadow:
-                    'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
-                ...props.bodyStyle,
-            }}
-        />
-    );
-};
+export const CustomSnackbar = (props) => (
+    <Snackbar
+        open={props.open}
+        message={props.message}
+        bodyStyle={{
+            height: 'auto',
+            lineHeight: 1.2,
+            padding: '10px 20px',
+            boxShadow:
+                'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px',
+            ...props.bodyStyle,
+        }}
+    />
+);
 
 export const ErrorSnackbar = (props: TypeSnackbarProps) => {
     const dispatch = useDispatch();

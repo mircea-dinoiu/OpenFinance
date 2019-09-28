@@ -18,6 +18,10 @@
   "rules": {
     // off
     "no-confusing-arrow": "off",
+    "semi": "off",
+    "indent": "off",
+    "no-nested-ternary": "off",
+    "no-console": "off",
     // warn
     // error
     "jsx-quotes": "error",
@@ -45,7 +49,6 @@
     "dot-notation": "error",
     "eqeqeq": [1, "smart"],
     "func-style": "error",
-    "indent": "off",
     "key-spacing": [2, {"beforeColon": false, "afterColon": true}],
     "keyword-spacing": "error",
     "linebreak-style": [2, "unix"],
@@ -84,7 +87,6 @@
     "no-multi-str": "error",
     "no-multiple-empty-lines": [2, {"max": 1, "maxBOF": 0, "maxEOF": 0}],
     "no-native-reassign": "error",
-    "no-nested-ternary": "off",
     "no-new-func": "error",
     "no-new-object": "error",
     "no-new-wrappers": "error",
@@ -126,7 +128,6 @@
     "prefer-spread": "error",
     "prefer-template": "error",
     "quotes": [2, "single"],
-    "semi": "error",
     "semi-spacing": "error",
     "space-before-blocks": [2, "always"],
     "space-before-function-paren": [2, {"anonymous": "always", "named": "never"}],
@@ -138,7 +139,6 @@
     "valid-jsdoc": "error",
     "wrap-iife": "error",
     "react/prop-types": "warn",
-    "no-console": "off",
     "one-var": ["error", "never"],
     "react/display-name": "warn"
   },

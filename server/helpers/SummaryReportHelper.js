@@ -25,7 +25,9 @@ module.exports = {
     getRemainingSum(transactions, id) {
         let filteredTransactions;
 
-        filteredTransactions = transactions.filter((t) => t.reference === id)[0];
+        filteredTransactions = transactions.filter(
+            (t) => t.reference === id,
+        )[0];
 
         filteredTransactions = filteredTransactions
             ? filteredTransactions.sum

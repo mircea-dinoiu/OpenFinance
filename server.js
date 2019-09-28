@@ -69,8 +69,8 @@ app.use(
         store: config.get('memoryStore')
             ? new session.MemoryStore()
             : new SequelizeStore({
-                db: require('./server/models').sql,
-            }),
+                  db: require('./server/models').sql,
+              }),
     }),
 );
 

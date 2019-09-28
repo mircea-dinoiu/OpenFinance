@@ -288,18 +288,18 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                                 height: INPUT_HEIGHT,
                                 ...(isSmall
                                     ? {
-                                        position: 'fixed',
-                                        display: this.state.showDateRange
-                                            ? 'block'
-                                            : 'none',
-                                        top: Sizes.HEADER_SIZE,
-                                    }
+                                          position: 'fixed',
+                                          display: this.state.showDateRange
+                                              ? 'block'
+                                              : 'none',
+                                          top: Sizes.HEADER_SIZE,
+                                      }
                                     : {
-                                        position: 'absolute',
-                                        left: '50%',
-                                        top: '1px',
-                                        transform: 'translateX(-50%)',
-                                    }),
+                                          position: 'absolute',
+                                          left: '50%',
+                                          top: '1px',
+                                          transform: 'translateX(-50%)',
+                                      }),
                             }}
                         >
                             {this.renderShiftBack()}
@@ -315,8 +315,8 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                                 value={
                                     this.props.preferences.endDate
                                         ? moment(
-                                            this.props.preferences.endDate,
-                                        ).toDate()
+                                              this.props.preferences.endDate,
+                                          ).toDate()
                                         : null
                                 }
                                 onChange={this.onChangeEndDate}

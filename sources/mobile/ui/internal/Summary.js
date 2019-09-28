@@ -163,7 +163,7 @@ class Summary extends React.PureComponent<TypeProps> {
                     expandedByDefault: true,
                     renderDescription({reference}) {
                         return <MoneyLocationDisplay id={reference} />;
-                    }
+                    },
                 })}
 
                 {this.renderCategory({
@@ -225,10 +225,10 @@ class Summary extends React.PureComponent<TypeProps> {
                     padding: '0 5px',
                     ...(this.props.screen.isLarge
                         ? {
-                            overflowY: 'auto',
-                            overflowX: 'hidden',
-                            height: `calc(100vh - ${Sizes.HEADER_SIZE})`,
-                        }
+                              overflowY: 'auto',
+                              overflowX: 'hidden',
+                              height: `calc(100vh - ${Sizes.HEADER_SIZE})`,
+                          }
                         : {}),
                 }}
             >

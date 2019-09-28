@@ -26,8 +26,7 @@ export const useScreenSize = (): TypeScreenQueries =>
     useSelector((s) => s.screenSize);
 export const useCurrencies = (): TypeCurrencies =>
     useSelector((s) => s.currencies);
-export const useUser = (): TypeUsers =>
-    useSelector((s) => s.user);
+export const useUser = (): TypeUsers => useSelector((s) => s.user);
 export const useMoneyLocations = () =>
     useSelector((s) => s.moneyLocations && s.moneyLocations.toJS());
 export const usePreferences = () => useSelector((s) => s.preferences);

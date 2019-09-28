@@ -18,11 +18,11 @@ module.exports = {
     },
     devServer: isHot
         ? {
-            contentBase: path.resolve('./public'),
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
-        }
+              contentBase: path.resolve('./public'),
+              headers: {
+                  'Access-Control-Allow-Origin': '*',
+              },
+          }
         : undefined,
     output: {
         path: path.resolve('./public/dist'),
@@ -43,9 +43,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [
-                    {loader: 'raw-loader'},
-                ],
+                use: [{loader: 'raw-loader'}],
             },
         ],
     },

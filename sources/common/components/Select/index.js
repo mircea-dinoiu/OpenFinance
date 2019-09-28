@@ -191,9 +191,9 @@ export const SingleSelect = withStyles(styles, {withTheme: true})(
                 {...props}
                 {...(simpleValue
                     ? {
-                        value: find(props.options, {value: props.value}),
-                        onChange: (option) => props.onChange(option.value),
-                    }
+                          value: find(props.options, {value: props.value}),
+                          onChange: (option) => props.onChange(option.value),
+                      }
                     : {})}
             />
         </div>
@@ -217,12 +217,12 @@ export const MultiSelect = withStyles(styles, {withTheme: true})(
                 {...props}
                 {...(simpleValue
                     ? {
-                        value: props.options.filter((o) =>
-                            props.value.includes(o.value),
-                        ),
-                        onChange: (options) =>
-                            props.onChange(options.map((o) => o.value)),
-                    }
+                          value: props.options.filter((o) =>
+                              props.value.includes(o.value),
+                          ),
+                          onChange: (options) =>
+                              props.onChange(options.map((o) => o.value)),
+                      }
                     : {})}
             />
         </div>

@@ -68,7 +68,9 @@ const mapFlagsToSQL = (flags) => {
 };
 
 const mapSortersToSQL = (sorters) =>
-    sorters.map((each) => `${each.id} ${each.desc ? 'DESC' : 'ASC'}`).join(', ');
+    sorters
+        .map((each) => `${each.id} ${each.desc ? 'DESC' : 'ASC'}`)
+        .join(', ');
 
 const mapInputToLimitOpts = (input) => {
     if (input.page != null && input.limit != null) {

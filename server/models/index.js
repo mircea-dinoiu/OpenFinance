@@ -14,8 +14,8 @@ if (process.env.NODE_ENV !== 'test') {
         },
         logging: config.get('debug')
             ? (...args) => {
-                logger.log('SQL', ...args.map((arg) => chalk.cyan(arg)));
-            }
+                  logger.log('SQL', ...args.map((arg) => chalk.cyan(arg)));
+              }
             : false,
     });
 

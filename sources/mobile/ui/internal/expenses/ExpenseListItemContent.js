@@ -14,7 +14,9 @@ const ExpenseListItemContent = ({item, expanded}) => {
     const personsDisplay = <PersonsDisplay item={item} />;
     const descriptionDisplay = item.item;
     const flags = <Flags entity="transaction" item={item} />;
-    const moneyLocationDisplay = <MoneyLocationDisplay id={item.money_location_id} />;
+    const moneyLocationDisplay = (
+        <MoneyLocationDisplay id={item.money_location_id} />
+    );
     const categoriesDisplay = <CategoriesDisplay item={item} />;
     const dateDisplay = <DateDisplay item={item} />;
     const repeatsDisplay = <RepeatsDisplay item={item} />;

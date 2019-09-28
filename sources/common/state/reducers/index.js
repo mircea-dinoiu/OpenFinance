@@ -36,7 +36,7 @@ const bindToUpdateState = (prop, defaultValue) => {
     };
 };
 const user = (state = null, action) =>
-    action.type === Actions.UPDATE_USER ? (action.user) : state;
+    action.type === Actions.UPDATE_USER ? action.user : state;
 const loading = (state = true, action) => {
     if (action.type === Actions.LOADING_ENABLE) {
         return true;

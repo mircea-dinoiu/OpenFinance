@@ -91,14 +91,10 @@ class MainScreenCreatorDialog extends PureComponent<TypeProps> {
                     </Row>
                     <Col>
                         {this.state.error && (
-                            <ErrorSnackbar
-                                message={this.state.error}
-                            />
+                            <ErrorSnackbar message={this.state.error} />
                         )}
                         {this.state.success && (
-                            <SuccessSnackbar
-                                message={this.state.success}
-                            />
+                            <SuccessSnackbar message={this.state.success} />
                         )}
                     </Col>
                 </DialogContent>
