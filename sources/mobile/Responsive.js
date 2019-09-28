@@ -1,7 +1,6 @@
 import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
 import {CustomSnackbar} from 'mobile/ui/components/snackbars';
-// import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {
@@ -40,11 +39,6 @@ import {
     usePage,
     useTitle,
 } from 'common/state';
-
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
-// FIXME Temporarily disabled due to incompatibility with the infrastructure
-// injectTapEventPlugin();
 
 const theme = createMuiTheme({
     palette: {
