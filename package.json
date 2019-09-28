@@ -109,6 +109,7 @@
     "heroku-postbuild": "npm run build:prod",
     "flow": "flow",
     "test": "jest --bail",
+    "test:related": "jest --findRelatedTests",
     "test:cov": "open build/coverage/index.html",
     "lint:js": "eslint server sources --quiet",
     "format:js": "prettier-eslint --write",
@@ -120,6 +121,7 @@
     "*.js": [
       "yarn run format:js",
       "eslint --quiet",
+      "jest --findRelatedTests",
       "git add"
     ]
   },
