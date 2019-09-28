@@ -13,13 +13,6 @@ export const overflowVisible = {
     overflow: 'visible',
 };
 
-export const smallAvatar = {
-    marginLeft: 5,
-    height: 20,
-    width: 20,
-    display: 'inline-block',
-};
-
 export const dialog = {
     root: {
         padding: 10,

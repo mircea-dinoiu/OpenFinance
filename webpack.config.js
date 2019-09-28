@@ -8,7 +8,6 @@ console.log('Webpack building for', env);
 
 const isProduction = env === 'production';
 const isHot = env === 'hot';
-const enableSourceMaps = isProduction === false;
 
 module.exports = {
     devtool: isProduction ? false : process.env.DEVTOOL || 'eval-source-map',

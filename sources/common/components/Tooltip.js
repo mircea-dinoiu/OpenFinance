@@ -4,17 +4,19 @@ import {Tooltip as MaterialUITooltip} from '@material-ui/core';
 
 const Tooltip = ({
     children,
+    className,
     tooltip: title,
 }: {
-    children: React$Element<any>,
-    tooltip: React$Element<any>,
+    children: React.Node,
+    className?: string,
+    tooltip: React.Node,
 }) => (
     <MaterialUITooltip
         title={<div style={{fontSize: '1.5em'}}>{title}</div>}
         disableFocusListener={true}
         placement="bottom"
     >
-        <span>{children}</span>
+        <span className={className}>{children}</span>
     </MaterialUITooltip>
 );
 
