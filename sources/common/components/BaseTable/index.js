@@ -77,6 +77,9 @@ export const TableHeader = styled.div`
     font-size: 1rem;
     border-bottom: 1px solid rgb(244, 244, 244);
     width: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(4, max-content);
 `;
 
 export const TableFooter = styled.div`

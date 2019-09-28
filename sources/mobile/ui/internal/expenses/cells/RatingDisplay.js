@@ -5,6 +5,7 @@ import IconStarBorder from '@material-ui/icons/StarBorder';
 import * as React from 'react';
 import {range} from 'lodash';
 import Tooltip from 'common/components/Tooltip';
+import {css} from 'styled-components'
 
 class RatingDisplay extends React.PureComponent<{
     item: {
@@ -33,7 +34,7 @@ class RatingDisplay extends React.PureComponent<{
                     <span
                         key={rating}
                         onClick={this.handleClick(rating)}
-                        className="cursorPointer"
+                        css={css`cursor: pointer`}
                     >
                         {React.createElement(
                             rating <= value ? IconStar : IconStarBorder,

@@ -50,6 +50,7 @@ import Chip from '@material-ui/core/Chip';
 import WeightDisplay from 'mobile/ui/internal/expenses/cells/WeightDisplay';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
+import {css} from 'styled-components';
 
 type TypeProps = {
     api: {
@@ -326,12 +327,14 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 
     computeAmount(items) {
-        const mlIdToCurrencyId = this.props.moneyLocations
-            .reduce((acc, each) => {
+        const mlIdToCurrencyId = this.props.moneyLocations.reduce(
+            (acc, each) => {
                 acc[each.id] = each.currency_id;
 
                 return acc;
-            }, {});
+            },
+            {},
+        );
 
         return items.reduce((acc, each) => {
             const sum = convertCurrencyToDefault(
@@ -363,7 +366,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     renderTableHeader() {
         return (
             <TableHeader>
-                <div className="inlineBlock hPadded">
+                <>
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -374,8 +377,8 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         }
                         label="Pending First"
                     />
-                </div>
-                <div className="inlineBlock hPadded">
+                </>
+                <>
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -386,17 +389,21 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         }
                         label="Display Archived"
                     />
-                </div>
-                <div className="inlineBlock hPadded">
+                </>
+                <>
                     <Button
                         variant="outlined"
                         size="small"
                         onClick={this.handleSelectAll}
+                        style={{
+                            height: '32px',
+                            marginTop: '16px',
+                        }}
                     >
                         Select All
                     </Button>
-                </div>
-                <div className="inlineBlock hPadded">
+                </>
+                <>
                     <TextField
                         error={isNaN(
                             this.parseSplitAmount(this.state.splitAmount),
@@ -406,12 +413,10 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         onChange={this.handleChangeSplitAmount}
                         margin="normal"
                         variant="outlined"
-                        style={{
-                            width: '150px',
-                            height: '32px',
-                            margin: '-7px 0 0',
-                        }}
                         InputProps={{
+                            style: {
+                                height: '32px',
+                            },
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <IconButton
@@ -424,7 +429,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                             ),
                         }}
                     />
-                </div>
+                </>
             </TableHeader>
         );
     }
@@ -503,7 +508,12 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             <div style={{display: 'inline-block', marginRight: 5}}>
                 <Tooltip
                     tooltip={
-                        <table className="centerBlock">
+                        <table
+                            css={css`
+                                margin-left: auto;
+                                margin-right: auto;
+                            `}
+                        >
                             <tbody>
                                 <tr>
                                     <th>Balance:</th>

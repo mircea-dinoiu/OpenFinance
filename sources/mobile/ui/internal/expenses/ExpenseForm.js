@@ -34,6 +34,7 @@ import {CancelToken} from 'axios';
 import * as defs from 'shared/defs';
 import {sumArray} from 'shared/utils/numbers';
 import {sortBy} from 'lodash';
+import {css} from 'styled-components';
 
 const boxStyle = {
     padding: '10px 0',
@@ -163,12 +164,11 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         value={
                             this.state.paymentMethod
                                 ? findCurrencyById(
-                                      this.props.moneyLocations
-                                          .find(
-                                              (each) =>
-                                                  each.id ==
-                                                  this.state.paymentMethod,
-                                          ).currency_id,
+                                      this.props.moneyLocations.find(
+                                          (each) =>
+                                              each.id ==
+                                              this.state.paymentMethod,
+                                      ).currency_id,
                                       this.props.currencies,
                                   ).iso_code
                                 : null
@@ -436,19 +436,18 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         .toLowerCase()
                         .includes(search.toLowerCase())
                 }
-                options={sortBy(this.props.categories, 'name')
-                    .map((each) => ({
-                        value: each.id,
-                        label: (
-                            <StyledBadge
-                                color="primary"
-                                badgeContent={each.expenses}
-                            >
-                                {each.name}
-                            </StyledBadge>
-                        ),
-                        filterText: each.name,
-                    }))}
+                options={sortBy(this.props.categories, 'name').map((each) => ({
+                    value: each.id,
+                    label: (
+                        <StyledBadge
+                            color="primary"
+                            badgeContent={each.expenses}
+                        >
+                            {each.name}
+                        </StyledBadge>
+                    ),
+                    filterText: each.name,
+                }))}
             />
         );
     }
@@ -530,13 +529,17 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         value="withdrawal"
                         control={<Radio color="primary" />}
                         label="Withdrawal"
-                        className="inlineBlock"
+                        css={css`
+                            display: inline-block;
+                        `}
                     />
                     <FormControlLabel
                         value="deposit"
                         control={<Radio color="primary" />}
                         label="Deposit"
-                        className="inlineBlock"
+                        css={css`
+                            display: inline-block;
+                        `}
                     />
                 </RadioGroup>
             </>
@@ -585,13 +588,17 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         value="pending"
                         control={<Radio color="primary" />}
                         label="Pending"
-                        className="inlineBlock"
+                        css={css`
+                            display: inline-block;
+                        `}
                     />
                     <FormControlLabel
                         value="finished"
                         control={<Radio color="primary" />}
                         label="Posted"
-                        className="inlineBlock"
+                        css={css`
+                            display: inline-block;
+                        `}
                     />
                 </RadioGroup>
             </>
