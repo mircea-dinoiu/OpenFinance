@@ -390,7 +390,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         onClick={this.handleSelectAll}
                         style={{
                             height: '32px',
-                            marginTop: '16px',
+                            marginTop: '10px',
                         }}
                     >
                         Select All
@@ -406,6 +406,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         onChange={this.handleChangeSplitAmount}
                         margin="normal"
                         variant="outlined"
+                        css={css`
+                            margin-top: 10px !important;
+                        `}
                         InputProps={{
                             style: {
                                 height: '32px',
@@ -646,7 +649,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             selectedItems.map((each) => {
                 const res = this.copyItem(each);
 
-                    res.status = 'pending';
+                res.status = 'pending';
 
                 return res;
             }),

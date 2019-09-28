@@ -73,7 +73,7 @@ const ReactTableStyled = styled(ReactTable)`
 
 export const TableHeader = styled.div`
     background: white;
-    padding: 5px 20px;
+    padding: 0 20px;
     font-size: 1rem;
     border-bottom: 1px solid rgb(244, 244, 244);
     width: 100%;
