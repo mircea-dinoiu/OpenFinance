@@ -1,5 +1,4 @@
 // @flow
-import type {TypeMainScreenFeatures} from 'common/types';
 import {objectValuesOfSameType} from 'common/utils/collection';
 import * as React from 'react';
 import {MenuItem, Divider} from 'material-ui';
@@ -37,7 +36,6 @@ export default function ContextMenuItems({
 
     selectedIds,
     desktop = false,
-    features,
 }: {
     onClickEdit: TypeOnClick,
     onClickDelete: TypeOnClick,
@@ -52,7 +50,6 @@ export default function ContextMenuItems({
     onClickHide: TypeOnClick,
     onClickUnhide: TypeOnClick,
     selectedIds: {},
-    features: TypeMainScreenFeatures,
     desktop: boolean,
 }) {
     const selectedIdsLength = objectValuesOfSameType(selectedIds).filter(
@@ -77,7 +74,7 @@ export default function ContextMenuItems({
                 disabled={disabledForZero}
                 desktop={desktop}
             />
-            {features.duplicate && (
+            {(
                 <MenuItem
                     primaryText="Duplicate"
                     leftIcon={<DuplicateIcon />}
@@ -108,7 +105,7 @@ export default function ContextMenuItems({
                 desktop={desktop}
             />
             <Divider />
-            {features.repeat && (
+            {(
                 <MenuItem
                     primaryText="Detach"
                     leftIcon={<DetachIcon />}
@@ -139,7 +136,7 @@ export default function ContextMenuItems({
                 desktop={desktop}
             />
             <Divider />
-            {features.status && (
+            {(
                 <>
                     <MenuItem
                         primaryText="Change to Posted"

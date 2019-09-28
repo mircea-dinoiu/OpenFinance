@@ -1,7 +1,6 @@
 // @flow
 import type {
     TypeCurrencies,
-    TypeMainScreenFeatures,
     TypePreferences,
     TypeScreenQueries,
 } from 'common/types';
@@ -78,7 +77,6 @@ type TypeProps = {
     },
     refreshWidgets: string,
     onRefreshWidgets: typeof onRefreshWidgets,
-    features: TypeMainScreenFeatures,
     defaultSorters: Array<{id: string, desc: boolean}>,
 };
 
@@ -129,11 +127,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 
     static defaultProps = {
-        features: {
-            duplicate: true,
-            status: true,
-            repeat: true,
-        },
         defaultSorters: [{id: 'created_at', desc: true}],
     };
 
@@ -653,9 +646,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             selectedItems.map((each) => {
                 const res = this.copyItem(each);
 
-                if (this.props.features.status) {
                     res.status = 'pending';
-                }
 
                 return res;
             }),
@@ -733,8 +724,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
             onClickHide: this.handleClickHide,
             onClickUnhide: this.handleClickUnhide,
-
-            features: this.props.features,
         };
     }
 

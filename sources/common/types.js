@@ -58,12 +58,6 @@ export type TypeUsers = {|
     list: TypeUser[],
 |};
 
-export type TypeMainScreenFeatures = {
-    repeat?: boolean,
-    status?: boolean,
-    duplicate?: boolean,
-};
-
 export type TypeTransactionForm = {||};
 
 export type TypeTransactionModel = {|
