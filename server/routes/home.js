@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
     res.render('responsive', {
         ...data,
-        scriptSrc: getScriptSrc('bundles/Responsive.js'),
+        scriptSrc: getScriptSrc('app.js'),
     });
 });
 

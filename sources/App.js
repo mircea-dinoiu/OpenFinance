@@ -1,7 +1,7 @@
 // @flow
 import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
-import {CustomSnackbar} from 'mobile/ui/components/snackbars';
+import {CustomSnackbar} from 'common/components/snackbars';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {
@@ -17,10 +17,10 @@ import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 
-import Login from './ui/Login';
-import Internal from './ui/Internal';
-import Currencies from './ui/Currencies';
-import {BigLoader} from './ui/components/loaders';
+import Login from './mobile/ui/Login';
+import Internal from './mobile/ui/Internal';
+import Currencies from './mobile/ui/Currencies';
+import {BigLoader} from './common/components/loaders';
 import TopBar from 'common/components/TopBar';
 
 import getScreenQueries from 'common/utils/getScreenQueries';
@@ -69,7 +69,7 @@ const ResponsiveGlobalStyle = createGlobalStyle`
     }
 `;
 
-const Responsive = () => {
+const App = () => {
     const dispatch = useDispatch();
     const user = useUser();
     const currencies = useCurrencies();
@@ -188,4 +188,4 @@ const Responsive = () => {
     );
 };
 
-export default hot(Responsive);
+export default hot(App);

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {createXHR} from 'common/utils/fetch';
-import {BigLoader} from '../components/loaders';
+import {BigLoader} from 'common/components/loaders';
 import {Paper, Checkbox, FormControlLabel} from '@material-ui/core';
 import {green, purple, red} from '@material-ui/core/colors';
 import routes from '../../../common/defs/routes';

@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import {render} from 'react-dom';
 import {createStore, applyMiddleware, compose} from 'redux';
 import {reducer} from 'common/state/reducers';
-import Responsive from './Responsive';
+import App from './App';
 import thunk from 'redux-thunk';
 import {readState, saveState} from 'common/state/persistency';
 import throttle from 'lodash/throttle';
@@ -30,7 +30,7 @@ store.subscribe(
 
 render(
     <Provider store={store}>
-        <Responsive />
+        <App />
     </Provider>,
     document.getElementById('root'),
 );

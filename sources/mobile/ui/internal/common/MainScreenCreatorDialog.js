@@ -2,8 +2,8 @@
 import React, {PureComponent} from 'react';
 import {parseCRUDError} from 'common/parsers';
 
-import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
-import {ButtonProgress} from '../../components/loaders';
+import {ErrorSnackbar, SuccessSnackbar} from 'common/components/snackbars';
+import {ButtonProgress} from 'common/components/loaders';
 
 import {Col, Row} from 'react-grid-system';
 

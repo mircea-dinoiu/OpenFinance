@@ -2,11 +2,11 @@
 import React from 'react';
 import {TextField, Toggle} from 'material-ui';
 import {Button} from '@material-ui/core';
-import {ButtonProgress} from './components/loaders';
+import {ButtonProgress} from 'common/components/loaders';
 import routes from 'common/defs/routes';
 import {createXHR} from 'common/utils/fetch';
 import {stringify} from 'query-string';
-import {ErrorSnackbar} from './components/snackbars';
+import {ErrorSnackbar} from 'common/components/snackbars';
 import {useDispatch} from 'react-redux';
 import {updateUser} from 'common/state/actions';
 import {Row, Col} from 'react-grid-system';

@@ -13,8 +13,8 @@ import {withStyles} from '@material-ui/core/styles';
 
 import {Row, Col} from 'react-grid-system';
 
-import {ErrorSnackbar, SuccessSnackbar} from '../../components/snackbars';
-import {ButtonProgress} from '../../components/loaders';
+import {ErrorSnackbar, SuccessSnackbar} from 'common/components/snackbars';
+import {ButtonProgress} from 'common/components/loaders';
 
 import {parseCRUDError} from 'common/parsers';
 import {dialog} from 'common/defs/styles';

@@ -13,7 +13,7 @@ module.exports = {
     devtool: isProduction ? false : process.env.DEVTOOL || 'eval-source-map',
     mode: isProduction ? 'production' : 'development',
     entry: {
-        'bundles/Responsive': path.resolve('sources/mobile/index.js'),
+        'app': path.resolve('sources/index.js'),
     },
     devServer: isHot
         ? {

@@ -19,7 +19,7 @@ import {stringify} from 'query-string';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 
-import {BigLoader, ButtonProgress} from '../../components/loaders';
+import {BigLoader, ButtonProgress} from 'common/components/loaders';
 
 import {createXHR} from 'common/utils/fetch';
 
