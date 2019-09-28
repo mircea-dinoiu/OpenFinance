@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {IconMenu, IconButton, MenuItem} from 'material-ui';

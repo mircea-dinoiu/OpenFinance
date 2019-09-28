@@ -1,7 +1,6 @@
+// @flow
 import * as React from 'react';
-
 import {Row, Col} from 'react-grid-system';
-
 import {Flags} from 'mobile/ui/internal/common/MainScreenFlags';
 import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
 import RepeatsDisplay from 'common/components/BaseTable/cells/RepeatsDisplay';

@@ -1,3 +1,4 @@
+// @flow
 import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
 import {CustomSnackbar} from 'mobile/ui/components/snackbars';

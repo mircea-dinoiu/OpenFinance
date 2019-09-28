@@ -3431,9 +3431,9 @@ flatted@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.1.tgz#69e57caa8f0eacbc281d2e2cb458d46fdb449e08"
 
-flow-bin@^0.102.0:
-  version "0.102.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.102.0.tgz#3d5de44bcc26d26585e932b3201988b766f9b380"
+flow-bin@^0.108.0:
+  version "0.108.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.108.0.tgz#6a42c85fd664d23dd937d925851e8e6ab5d71393"
 
 flush-write-stream@^1.0.0:
   version "1.1.1"
@@ -5510,7 +5510,7 @@ minimalistic-crypto-utils@^1.0.0, minimalistic-crypto-utils@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
 
-minimatch@^3.0.2, minimatch@^3.0.3, minimatch@^3.0.4:
+minimatch@3.0.4, minimatch@^3.0.2, minimatch@^3.0.3, minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   dependencies:
@@ -6810,6 +6810,12 @@ recompose@^0.26.0:
     fbjs "^0.8.1"
     hoist-non-react-statics "^2.3.1"
     symbol-observable "^1.0.4"
+
+recursive-readdir@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/recursive-readdir/-/recursive-readdir-2.2.2.tgz#9946fb3274e1628de6e36b2f6714953b4845094f"
+  dependencies:
+    minimatch "3.0.4"
 
 redux-logger@^3.0.6:
   version "3.0.6"

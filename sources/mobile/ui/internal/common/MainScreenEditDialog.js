@@ -1,6 +1,5 @@
-import {isEqual} from 'lodash';
-
 // @flow
+import {isEqual} from 'lodash';
 import React, {PureComponent} from 'react';
 
 import {

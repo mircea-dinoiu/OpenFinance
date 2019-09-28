@@ -1,3 +1,4 @@
+// @flow
 const metaPrefix = 'financial_';
 let globalMetas = null;
 const getMetas = () => {

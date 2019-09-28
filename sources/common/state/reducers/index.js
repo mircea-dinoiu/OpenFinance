@@ -1,3 +1,4 @@
+// @flow
 import {Actions} from 'common/state';
 import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'common/utils/getScreenQueries';

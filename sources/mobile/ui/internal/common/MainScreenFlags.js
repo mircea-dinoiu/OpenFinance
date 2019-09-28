@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react';
 import {blue, yellow, grey, green, purple} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';

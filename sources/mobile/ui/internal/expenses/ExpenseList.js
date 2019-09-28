@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react';
 
 import routes from 'common/defs/routes';
@@ -10,7 +11,7 @@ import formToModel from 'mobile/ui/internal/expenses/helpers/formToModel';
 import modelToForm from 'mobile/ui/internal/expenses/helpers/modelToForm';
 import getFormDefaults from './helpers/getFormDefaults';
 
-const ExpenseList = (props) => (
+const ExpenseList = (props: *) => (
     <MainScreenList
         api={routes.expense}
         tableColumns={ExpenseTableColumns}
