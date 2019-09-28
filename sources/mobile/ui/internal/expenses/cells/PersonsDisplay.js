@@ -15,12 +15,16 @@ const PersonAvatar = styled(Avatar)`
 
     img {
         width: auto !important;
+        
     }
     
     &:after {
+      display: block;
       content: "${(props) => props.text}";
       font-size: 12px;
-      padding: 0 2px;
+      padding: ${(props) => (props.text ? '0 5px' : 0)};
+      flex: 1;
+      text-align: center;
     }
 `;
 
@@ -31,10 +35,13 @@ const PersonsDisplay = ({item}) => {
         <div
             css={css`
                 display: flex;
+                border-radius: 5px;
+                overflow: hidden;
             `}
         >
-            {userList.map(({id, full_name: name, avatar}) =>
-                item.users[id] ? (
+            {userList
+                .filter((user) => item.users[user.id])
+                .map(({id, full_name: name, avatar}, index) => (
                     <Tooltip
                         tooltip={`${name} ${item.users[id]}%`}
                         css={css`
@@ -44,11 +51,10 @@ const PersonsDisplay = ({item}) => {
                         <PersonAvatar
                             key={id}
                             src={avatar}
-                            text={item.users[id] + '%'}
+                            text={index === 0 ? `${item.users[id]}%` : ''}
                         />
                     </Tooltip>
-                ) : null,
-            )}
+                ))}
         </div>
     );
 };
