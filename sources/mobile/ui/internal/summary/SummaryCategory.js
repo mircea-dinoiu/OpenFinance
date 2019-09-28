@@ -41,19 +41,15 @@ const SummaryCategory = (props) => {
         showSumInHeader,
     } = props;
     const headerColor = 'rgba(255, 255, 255, 0.9)';
-    const [state, setState] = React.useState({
-        expanded: Boolean(props.expandedByDefault),
-        excluded: {},
-    });
+    const [expanded, setExpanded] = React.useState(Boolean(props.expandedByDefault))
+    const [excluded, setExcluded] = React.useState({})
 
     const handleToggleExcluded = (id) => {
-        setState((prevState) => ({
-            excluded: {...prevState.excluded, [id]: !prevState.excluded[id]},
-        }));
+        setExcluded({...excluded, [id]: !excluded[id]})
     };
 
-    const handleExpandChange = (expanded) => {
-        setState({expanded});
+    const handleExpandChange = (value) => {
+        setExpanded(value)
     };
 
     const numericValueProxy = (
@@ -68,7 +64,7 @@ const SummaryCategory = (props) => {
     return (
         <Card
             style={{marginBottom: 10}}
-            expanded={state.expanded}
+            expanded={expanded}
             onExpandChange={handleExpandChange}
         >
             <CardHeader
@@ -85,7 +81,7 @@ const SummaryCategory = (props) => {
                                     summaryObject.reduce(
                                         (acc, each) =>
                                             acc +
-                                            (state.excluded[each.reference]
+                                            (excluded[each.reference]
                                                 ? 0
                                                 : convertCurrencyToDefault(
                                                       each.sum,
@@ -114,7 +110,7 @@ const SummaryCategory = (props) => {
                     return (
                         <SummarySubCategory
                             key={id}
-                            excluded={state.excluded}
+                            excluded={excluded}
                             shouldGroup={shouldGroup}
                             id={id}
                             items={items}
