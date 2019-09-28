@@ -25,7 +25,7 @@ import {BigLoader, ButtonProgress} from '../../components/loaders';
 import {createXHR} from 'common/utils/fetch';
 
 import {Button, FormControlLabel, Checkbox, Fab} from '@material-ui/core';
-import {connect} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {greyedOut} from 'common/defs/styles';
 import BaseTable, {TableFooter, TableHeader} from 'common/components/BaseTable';
 import {getTrProps} from 'common/components/MainScreen/Table/helpers';
@@ -152,7 +152,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 results: this.state.results.concat(newRecord),
             });
 
-            this.props.onRefreshWidgets();
+            this.props.dispatch(onRefreshWidgets());
         }
     }
 
@@ -233,9 +233,9 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         this.state.displayHidden || this.hasFiltersSet
                             ? null
                             : {
-                                id: 'hidden',
-                                value: false,
-                            },
+                                  id: 'hidden',
+                                  value: false,
+                              },
                         ...this.filters,
                     ].filter(Boolean),
                 ),
@@ -311,12 +311,12 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     getTrProps = (state, item) =>
         item
             ? getTrProps({
-                selectedIds: this.state.selectedIds,
-                onEdit: this.handleToggleEditDialog,
-                onReceiveSelectedIds: this.handleReceivedSelectedIds,
-                onChangeContextMenu: this.handleChangeContextMenu,
-                item: item.original,
-            })
+                  selectedIds: this.state.selectedIds,
+                  onEdit: this.handleToggleEditDialog,
+                  onReceiveSelectedIds: this.handleReceivedSelectedIds,
+                  onChangeContextMenu: this.handleChangeContextMenu,
+                  item: item.original,
+              })
             : {};
 
     get selectedItems() {
@@ -909,26 +909,28 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 }
 
-const mapDispatchToProps = {onRefreshWidgets};
+export default (ownProps) => {
+    const stateProps = useSelector(
+        ({
+            preferences,
+            screen,
+            refreshWidgets,
+            currencies,
+            moneyLocations,
+        }): {
+            preferences: TypePreferences,
+            screen: TypeScreenQueries,
+            refreshWidgets: string,
+            currencies: TypeCurrencies,
+        } => ({
+            preferences,
+            screen,
+            refreshWidgets,
+            currencies,
+            moneyLocations,
+        }),
+    );
+    const dispatch = useDispatch();
 
-export default connect(
-    ({
-        preferences,
-        screen,
-        refreshWidgets,
-        currencies,
-        moneyLocations,
-    }): {
-        preferences: TypePreferences,
-        screen: TypeScreenQueries,
-        refreshWidgets: string,
-        currencies: TypeCurrencies,
-    } => ({
-        preferences,
-        screen,
-        refreshWidgets,
-        currencies,
-        moneyLocations,
-    }),
-    mapDispatchToProps,
-)(MainScreenList);
+    return <MainScreenList {...ownProps} {...stateProps} dispatch={dispatch} />;
+};

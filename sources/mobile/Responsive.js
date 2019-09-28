@@ -235,6 +235,4 @@ const Responsive = () => {
     );
 };
 
-const AppContainer = connect((state) => state)(Responsive);
-
-export default hot(AppContainer);
+export default hot(Responsive);

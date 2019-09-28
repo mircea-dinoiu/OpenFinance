@@ -26,7 +26,7 @@ import RepeatOptions from 'common/defs/repeatOptions';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 import {stringify} from 'query-string';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {MultiSelect, SingleSelect} from 'common/components/Select';
 import {overflowVisible} from 'common/defs/styles';
 import {DateTimePicker} from '@material-ui/pickers';
@@ -608,12 +608,16 @@ class ExpenseForm extends PureComponent<TypeProps> {
     };
 }
 
-export default connect(
-    ({currencies, preferences, categories, moneyLocations, user}) => ({
-        currencies,
-        categories,
-        preferences,
-        moneyLocations,
-        user,
-    }),
-)(ExpenseForm);
+export default (ownProps) => {
+    const stateProps = useSelector(
+        ({currencies, preferences, categories, moneyLocations, user}) => ({
+            currencies,
+            categories,
+            preferences,
+            moneyLocations,
+            user,
+        }),
+    );
+
+    return <ExpenseForm {...ownProps} {...stateProps} />;
+};
