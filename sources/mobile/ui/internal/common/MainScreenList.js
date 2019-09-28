@@ -327,7 +327,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
     computeAmount(items) {
         const mlIdToCurrencyId = this.props.moneyLocations
-            .toJSON()
             .reduce((acc, each) => {
                 acc[each.id] = each.currency_id;
 

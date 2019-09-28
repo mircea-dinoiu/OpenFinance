@@ -45,12 +45,9 @@ export class SummarySubCategory extends PureComponent {
                                 {id == 0 ? (
                                     <em>Unclassified</em>
                                 ) : (
-                                    entities
-                                        .find(
-                                            (each) =>
-                                                each.get(entityIdField) == id,
-                                        )
-                                        .get(entityNameField)
+                                    entities.find(
+                                        (each) => each[entityIdField] == id,
+                                    )[entityNameField]
                                 )}
                                 <div style={{fontSize: '12px'}}>
                                     {this.numericValue(

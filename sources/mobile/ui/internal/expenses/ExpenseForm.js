@@ -33,7 +33,7 @@ import {DateTimePicker} from '@material-ui/pickers';
 import {CancelToken} from 'axios';
 import * as defs from 'shared/defs';
 import {sumArray} from 'shared/utils/numbers';
-import {fromJS} from 'immutable';
+import {sortBy} from 'lodash';
 
 const boxStyle = {
     padding: '10px 0',
@@ -164,7 +164,6 @@ class ExpenseForm extends PureComponent<TypeProps> {
                             this.state.paymentMethod
                                 ? findCurrencyById(
                                       this.props.moneyLocations
-                                          .toJSON()
                                           .find(
                                               (each) =>
                                                   each.id ==
@@ -350,26 +349,24 @@ class ExpenseForm extends PureComponent<TypeProps> {
                 {...this.bindSelect({
                     valueKey: 'paymentMethod',
                 })}
-                options={this.props.moneyLocations
-                    .sortBy((each) => each.get('name'))
-                    .map((map) => ({
-                        value: map.get('id'),
-                        label: map.get('name'),
-                    }))
-                    .toJS()}
+                options={sortBy(this.props.moneyLocations, 'name').map(
+                    (map) => ({
+                        value: map.id,
+                        label: map.name,
+                    }),
+                )}
             />
         );
     }
 
     renderChargedPersons() {
-        const sortedUsers = fromJS(this.props.user.list).sortBy((each) =>
-            each.get('full_name'),
+        const sortedUsers = sortBy(
+            this.props.user.list,
+            (each) => each['full_name'],
         );
         const {chargedPersons} = this.state;
         const step = defs.PERC_STEP;
-        const userIdsStringified = sortedUsers.map((user) =>
-            String(user.get('id')),
-        );
+        const userIdsStringified = sortedUsers.map((user) => String(user.id));
 
         return (
             <List
@@ -382,15 +379,15 @@ class ExpenseForm extends PureComponent<TypeProps> {
                 dense={true}
             >
                 {sortedUsers.map((user) => {
-                    const id = String(user.get('id'));
+                    const id = String(user.id);
 
                     return (
                         <ListItem key={id} disableGutters={true}>
                             <ListItemAvatar>
                                 <Avatar
                                     style={{margin: 0}}
-                                    alt={user.get('full_name')}
-                                    src={user.get('avatar')}
+                                    alt={user.full_name}
+                                    src={user.avatar}
                                 />
                             </ListItemAvatar>
 
@@ -418,7 +415,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                                     textAlign: 'right',
                                 }}
                             >
-                                {user.get('full_name')}
+                                {user.full_name}
                             </ListItemText>
                         </ListItem>
                     );
@@ -439,21 +436,19 @@ class ExpenseForm extends PureComponent<TypeProps> {
                         .toLowerCase()
                         .includes(search.toLowerCase())
                 }
-                options={this.props.categories
-                    .sortBy((each) => each.get('name'))
+                options={sortBy(this.props.categories, 'name')
                     .map((each) => ({
-                        value: each.get('id'),
+                        value: each.id,
                         label: (
                             <StyledBadge
                                 color="primary"
-                                badgeContent={each.get('expenses')}
+                                badgeContent={each.expenses}
                             >
-                                {each.get('name')}
+                                {each.name}
                             </StyledBadge>
                         ),
-                        filterText: each.get('name'),
-                    }))
-                    .toJS()}
+                        filterText: each.name,
+                    }))}
             />
         );
     }

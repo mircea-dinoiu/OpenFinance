@@ -3,7 +3,7 @@ import MomentUtils from '@date-io/moment';
 import {CustomSnackbar} from 'mobile/ui/components/snackbars';
 // import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
-import {connect, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {
     updateUser,
     setScreen,
@@ -23,7 +23,6 @@ import Currencies from './ui/Currencies';
 import {BigLoader} from './ui/components/loaders';
 import TopBar from 'common/components/TopBar';
 
-import {fromJS} from 'immutable';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import EventListener from 'react-event-listener';
 import {flexColumn} from 'common/defs/styles';
@@ -162,9 +161,9 @@ const Responsive = () => {
 
             dispatch(
                 updateState({
-                    categories: fromJS(categoriesResponse.data),
-                    moneyLocations: fromJS(mlResponse.data),
-                    moneyLocationTypes: fromJS(mlTypesResponse.data),
+                    categories: categoriesResponse.data,
+                    moneyLocations: mlResponse.data,
+                    moneyLocationTypes: mlTypesResponse.data,
                     title: 'Financial',
                     ui: <Internal />,
                 }),

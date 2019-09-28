@@ -27,11 +27,10 @@ export const useScreenSize = (): TypeScreenQueries =>
 export const useCurrencies = (): TypeCurrencies =>
     useSelector((s) => s.currencies);
 export const useUser = (): TypeUsers => useSelector((s) => s.user);
-export const useMoneyLocations = () =>
-    useSelector((s) => s.moneyLocations && s.moneyLocations.toJS());
+export const useMoneyLocations = () => useSelector((s) => s.moneyLocations);
 export const usePreferences = () => useSelector((s) => s.preferences);
 export const useCategories = () =>
-    useSelector((s) => s.categories && s.categories.toJS());
+    useSelector((s) => s.categories);
 export const useSnackbars = (): TypeSnackbar[] =>
     useSelector((s) => s.snackbars);
 export const useCurrenciesDrawerOpen = () => {
