@@ -45,7 +45,7 @@ const PersonsDisplay = ({item}) => {
                     <Tooltip
                         tooltip={`${name} ${item.users[id]}%`}
                         css={css`
-                            flex: ${item.users[id]};
+                            flex-grow: ${index === 0 ? 1 : 'initial'};
                         `}
                     >
                         <PersonAvatar
