@@ -43,6 +43,7 @@ const PersonsDisplay = ({item}) => {
                 .filter((user) => item.users[user.id])
                 .map(({id, full_name: name, avatar}, index) => (
                     <Tooltip
+                        key={index}
                         tooltip={`${name} ${item.users[id]}%`}
                         css={css`
                             flex-grow: ${index === 0 ? 1 : 'initial'};

@@ -3,7 +3,7 @@ import {SingleSelect} from 'common/components/Select';
 import {objectValuesOfSameType} from 'common/utils/collection';
 import React from 'react';
 import {MenuItem, Subheader} from 'material-ui';
-import {fetchCurrencies, setBaseCurrencyId} from 'common/state/actions';
+import {fetchCurrencies, setBaseCurrencyId} from 'common/state/actionCreators';
 import {useDispatch} from 'react-redux';
 import type {TypeCurrency} from 'common/types';
 import {useUser, useCurrencies} from 'common/state/hooks';

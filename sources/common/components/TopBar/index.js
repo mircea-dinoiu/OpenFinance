@@ -31,7 +31,7 @@ import {
     updateState,
     refreshWidgets,
     updatePreferences,
-} from 'common/state/actions';
+} from 'common/state/actionCreators';
 import {bindActionCreators} from 'redux';
 import {shiftDateBack, shiftDateForward} from 'common/utils/dates';
 import moment from 'moment';

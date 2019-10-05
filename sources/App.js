@@ -9,7 +9,7 @@ import {
     setScreen,
     updateState,
     fetchCurrencies,
-} from 'common/state/actions';
+} from 'common/state/actionCreators';
 
 import {Drawer, MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';

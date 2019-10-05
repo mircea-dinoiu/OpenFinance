@@ -8,7 +8,7 @@ import {createXHR} from 'common/utils/fetch';
 import {stringify} from 'query-string';
 import {ErrorSnackbar} from 'common/components/snackbars';
 import {useDispatch} from 'react-redux';
-import {updateUser} from 'common/state/actions';
+import {updateUser} from 'common/state/actionCreators';
 import {Row, Col} from 'react-grid-system';
 
 const Login = () => {

@@ -14,7 +14,7 @@ import {getStartDate} from 'common/utils/dates';
 import {greyedOut} from 'common/defs/styles';
 import {Sizes} from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
-import {updatePreferences} from 'common/state/actions';
+import {updatePreferences} from 'common/state/actionCreators';
 import moment from 'moment';
 import {endOfDayToISOString} from 'shared/utils/dates';
 import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';

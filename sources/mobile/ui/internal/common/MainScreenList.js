@@ -37,7 +37,7 @@ import AnchoredContextMenu from 'common/components/MainScreen/ContextMenu/Anchor
 import MainScreenDeleteDialog from './MainScreenDeleteDialog';
 import MainScreenEditDialog from './MainScreenEditDialog';
 import AddIcon from '@material-ui/icons/Add';
-import {refreshWidgets as onRefreshWidgets} from 'common/state/actions';
+import {refreshWidgets as onRefreshWidgets} from 'common/state/actionCreators';
 import {advanceRepeatDate} from 'shared/helpers/repeatedModels';
 import {uniqueId, range} from 'lodash';
 import TextField from '@material-ui/core/TextField';

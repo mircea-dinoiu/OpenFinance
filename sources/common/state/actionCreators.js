@@ -1,6 +1,6 @@
 // @flow
-import {Actions} from 'common/state';
-import type {TypeSnackbar} from 'common/types';
+import {Actions} from 'common/state/actions';
+import type {TypeSnackbar, TypeScreenQueries} from 'common/types';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 import url from 'common/utils/url';

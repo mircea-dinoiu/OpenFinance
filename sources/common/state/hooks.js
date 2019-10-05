@@ -3,7 +3,7 @@
 import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
 import {bindActionCreators} from 'redux';
-import {toggleLoading, updatePreferences, updateState} from 'common/state/actions';
+import {toggleLoading, updatePreferences, updateState} from 'common/state/actionCreators';
 import type {TypeUsers, TypeCurrencies, TypeScreenQueries, TypeSnackbar} from 'common/types';
 
 export const useActions = <T>(actions: T): T => {

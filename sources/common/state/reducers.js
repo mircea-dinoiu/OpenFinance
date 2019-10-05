@@ -1,5 +1,5 @@
 // @flow
-import {Actions} from 'common/state';
+import {Actions} from 'common/state/actions';
 import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import {combineReducers} from 'redux';
@@ -90,7 +90,7 @@ const categories = bindToUpdateState('categories', null);
 const moneyLocations = bindToUpdateState('moneyLocations', null);
 const moneyLocationTypes = bindToUpdateState('moneyLocationTypes', null);
 
-export const reducer = combineReducers({
+export const combinedReducers = combineReducers({
     // @deprecated screen is a global in Window, use screenSize instead
     screen,
     screenSize,
