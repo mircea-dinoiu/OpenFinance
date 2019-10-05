@@ -5,7 +5,7 @@ import IconBlock from '@material-ui/icons/Block';
 import IconLock from '@material-ui/icons/Lock';
 
 import Tooltip from 'common/components/Tooltip';
-import {useMoneyLocations} from 'common/state';
+import {useMoneyLocations} from 'common/state/hooks';
 
 const StatusToIconComponent = {
     closed: IconBlock,

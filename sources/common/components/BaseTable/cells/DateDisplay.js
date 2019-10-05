@@ -3,7 +3,7 @@ import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import moment from 'moment';
 import Tooltip from 'common/components/Tooltip';
-import {useScreenSize} from 'common/state';
+import {useScreenSize} from 'common/state/hooks';
 
 const DateDisplay = ({item}) => {
     const screen = useScreenSize();

@@ -2,7 +2,7 @@
 import * as React from 'react';
 import SelectFilter from './SelectFilter';
 import {sortMoneyLocations} from 'mobile/ui/internal/common/helpers';
-import {useMoneyLocations} from 'common/state';
+import {useMoneyLocations} from 'common/state/hooks';
 
 const AccountFilter = ({onChange, filter}) => (
     <SelectFilter

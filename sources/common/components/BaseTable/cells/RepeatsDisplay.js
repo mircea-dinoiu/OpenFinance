@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import RepeatOptions from 'common/defs/repeatOptions';
-import {useScreenSize} from 'common/state';
+import {useScreenSize} from 'common/state/hooks';
 
 const RepeatsDisplay = ({item}) => {
     const screenSize = useScreenSize();

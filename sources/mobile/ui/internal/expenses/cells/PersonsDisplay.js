@@ -1,10 +1,10 @@
 // @flow
 import * as React from 'react';
 import {Avatar} from '@material-ui/core';
-import {useUser} from 'common/state';
 import styled, {css} from 'styled-components';
 import Tooltip from 'common/components/Tooltip';
 import {grey} from '@material-ui/core/colors';
+import {useUser} from 'common/state/hooks';
 
 const PersonAvatar = styled(Avatar)`
     height: 20px !important;

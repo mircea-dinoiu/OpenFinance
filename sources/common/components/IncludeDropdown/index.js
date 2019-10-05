@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {MenuItem, SelectField} from 'material-ui';
-import {usePreferences} from 'common/state';
+import {usePreferences} from 'common/state/hooks';
 
 const getIncludeOptions = ({endDate}) => {
     const currentYear = new Date(endDate).getFullYear();

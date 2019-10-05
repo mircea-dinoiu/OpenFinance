@@ -1,12 +1,4 @@
 // @flow
-import {useSelector, useDispatch} from 'react-redux';
-import type {
-    TypeScreenQueries,
-    TypeCurrencies,
-    TypeUsers,
-    TypeSnackbar,
-} from 'common/types';
-import {updateState, toggleLoading} from 'common/state/actions';
 
 export const Actions = {
     UPDATE_STATE: 'UPDATE_STATE',
@@ -22,59 +14,3 @@ export const Actions = {
     HIDE_SNACKBAR: 'HIDE_SNACKBAR',
 };
 
-export const useScreenSize = (): TypeScreenQueries =>
-    useSelector((s) => s.screenSize);
-export const useCurrencies = (): TypeCurrencies =>
-    useSelector((s) => s.currencies);
-export const useUser = (): TypeUsers => useSelector((s) => s.user);
-export const useMoneyLocations = () => useSelector((s) => s.moneyLocations);
-export const usePreferences = () => useSelector((s) => s.preferences);
-export const useCategories = () =>
-    useSelector((s) => s.categories);
-export const useSnackbars = (): TypeSnackbar[] =>
-    useSelector((s) => s.snackbars);
-export const useCurrenciesDrawerOpenWithSetter = () => {
-    const dispatch = useDispatch();
-
-    return [
-        useSelector((s) => s.currenciesDrawerOpen),
-        (value: boolean) => {
-            dispatch(
-                updateState({
-                    currenciesDrawerOpen: value,
-                }),
-            );
-        },
-    ];
-};
-export const useLoadingWithSetter = () => {
-    const dispatch = useDispatch();
-
-    return [
-        useSelector((s) => s.loading),
-        (loading) => {
-            dispatch(toggleLoading(loading));
-        },
-    ];
-};
-export const usePageWithSetter = () => {
-    const dispatch = useDispatch();
-
-    return [
-        useSelector((s) => s.ui),
-        (ui) => {
-            dispatch(updateState({ui}));
-        },
-    ];
-};
-
-export const useTitleWithSetter = () => {
-    const dispatch = useDispatch();
-
-    return [
-        useSelector((s) => s.title),
-        (title) => {
-            dispatch(updateState({title}));
-        },
-    ];
-};

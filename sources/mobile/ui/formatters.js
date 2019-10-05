@@ -8,7 +8,7 @@ import {grey} from '@material-ui/core/colors';
 import Tooltip from 'common/components/Tooltip';
 import {financialNum} from 'shared/utils/numbers';
 import {getBaseCurrency} from '../../common/helpers/currency';
-import {useCurrencies} from 'common/state';
+import {useCurrencies} from 'common/state/hooks';
 
 export const formatNumericValue = (value) =>
     new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(

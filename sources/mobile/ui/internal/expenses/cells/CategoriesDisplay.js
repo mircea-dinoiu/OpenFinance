@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {Chip} from '@material-ui/core';
-import {useCategories, useScreenSize} from 'common/state';
+import {useCategories, useScreenSize} from 'common/state/hooks';
 
 const CategoriesDisplay = ({item}) => {
     const categories = useCategories();

@@ -18,6 +18,7 @@ import {updatePreferences} from 'common/state/actions';
 import moment from 'moment';
 import {endOfDayToISOString} from 'shared/utils/dates';
 import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
+import {usePreferences} from 'common/state/hooks';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -83,13 +84,18 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
     return endDate;
 };
 
-class Summary extends React.PureComponent<TypeProps> {
-    state = {
-        firstLoad: true,
-        results: null,
-        refreshing: false,
-    };
+const Summary = () => {
+    const [firstLoad, setFirstLoad] = React.useState(true)
+    const [results, setResults] = React.useState(null)
+    const [refreshing, setRefreshing] = React.useState(false)
+    const preferences = usePreferences()
 
+    React.useEffect(() => {
+
+    }, [])
+}
+
+class SummaryX extends React.PureComponent<TypeProps> {
     componentDidMount() {
         this.load();
     }

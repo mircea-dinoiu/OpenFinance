@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import SelectFilter from './SelectFilter';
-import {useUser} from 'common/state';
+import {useUser} from 'common/state/hooks';
 
 const UsersFilter = ({onChange, filter}) => (
     <SelectFilter

@@ -5,8 +5,8 @@ import React from 'react';
 import {MenuItem, Subheader} from 'material-ui';
 import {fetchCurrencies, setBaseCurrencyId} from 'common/state/actions';
 import {useDispatch} from 'react-redux';
-import {useUser, useCurrencies} from 'common/state';
 import type {TypeCurrency} from 'common/types';
+import {useUser, useCurrencies} from 'common/state/hooks';
 
 const Currencies = () => {
     const user = useUser();

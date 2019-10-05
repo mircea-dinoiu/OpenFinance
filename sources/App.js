@@ -32,14 +32,11 @@ import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {createGlobalStyle} from 'styled-components';
 import cssNormalize from 'normalize.css';
 import {
-    useUser,
-    useCurrencies,
-    useSnackbars,
-    useCurrenciesDrawerOpenWithSetter,
-    useLoadingWithSetter,
-    usePageWithSetter,
     useTitleWithSetter,
-} from 'common/state';
+    usePageWithSetter,
+    useLoadingWithSetter,
+    useCurrenciesDrawerOpenWithSetter, useSnackbars, useUser, useCurrencies,
+} from 'common/state/hooks';
 
 const theme = createMuiTheme({
     palette: {

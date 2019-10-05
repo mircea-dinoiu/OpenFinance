@@ -1,6 +1,6 @@
 // @flow
 import {getItemCurrencyISOCode} from 'common/helpers';
-import {useCurrencies} from 'common/state';
+import {useCurrencies} from 'common/state/hooks';
 
 const CurrencyDisplay = ({item}) => {
     const currencies = useCurrencies();

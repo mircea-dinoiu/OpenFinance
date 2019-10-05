@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {ListItem} from 'material-ui';
 import omit from 'lodash/omit';
-import {useScreenSize} from 'common/state';
+import {useScreenSize} from 'common/state/hooks';
 
 const ResponsiveListItem = (props) => {
     const screen = useScreenSize();

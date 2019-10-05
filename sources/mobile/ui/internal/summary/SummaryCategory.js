@@ -8,8 +8,8 @@ import sortBy from 'lodash/sortBy';
 import {Card, CardHeader, CardText} from 'material-ui';
 import {financialNum} from 'shared/utils/numbers';
 import {SummarySubCategory} from 'mobile/ui/internal/summary/SummarySubCategory';
-import {useCurrencies} from 'common/state';
 import {numericValue} from 'mobile/ui/formatters';
+import {useCurrencies} from 'common/state/hooks';
 
 const groupSorter = ([, items]) => {
     if (items.length > 0) {
