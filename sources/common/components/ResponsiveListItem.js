@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import * as React from 'react';
 import {ListItem} from 'material-ui';
 import omit from 'lodash/omit';

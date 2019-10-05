@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {formatNumericValue} from 'mobile/ui/formatters';
 
 const WeightDisplay = ({item}) => {

@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {parsePreferences} from 'common/utils/preferences';
 import {stringify, parse} from 'query-string';
 

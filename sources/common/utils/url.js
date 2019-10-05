@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import queryString from 'query-string';
 
 export default function url(rawUrl: string, params: {}): string {

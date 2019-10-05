@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 export default {
     expense: {
         list: '/expense/list',

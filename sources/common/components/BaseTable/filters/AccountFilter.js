@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import * as React from 'react';
 import SelectFilter from './SelectFilter';
 import {sortMoneyLocations} from 'mobile/ui/internal/common/helpers';

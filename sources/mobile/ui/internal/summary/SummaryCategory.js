@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {convertCurrencyToDefault} from 'common/helpers/currency';
 import {objectEntriesOfSameType} from 'common/utils/collection';
 

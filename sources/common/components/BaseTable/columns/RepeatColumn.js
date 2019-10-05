@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import type {TypeTransactionModel} from 'common/types';
 import * as React from 'react';
 import RepeatsDisplay from 'common/components/BaseTable/cells/RepeatsDisplay';

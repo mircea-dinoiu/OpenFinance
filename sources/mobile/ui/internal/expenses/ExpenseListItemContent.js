@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import * as React from 'react';
 import {Row, Col} from 'react-grid-system';
 import {Flags} from 'mobile/ui/internal/common/MainScreenFlags';

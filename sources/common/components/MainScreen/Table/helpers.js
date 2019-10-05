@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import type {TypeTransactionModel} from 'common/types';
 import {formatYMD} from 'common/utils/dates';
 import {Classes} from 'common/components/BaseTable';

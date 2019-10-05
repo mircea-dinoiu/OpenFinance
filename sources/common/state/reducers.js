@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {Actions} from 'common/state/actions';
 import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'common/utils/getScreenQueries';

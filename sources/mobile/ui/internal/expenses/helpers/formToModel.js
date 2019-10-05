@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 
 export default (form, props) => {
     const users =

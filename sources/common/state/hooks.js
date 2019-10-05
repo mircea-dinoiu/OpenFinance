@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 
 import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';

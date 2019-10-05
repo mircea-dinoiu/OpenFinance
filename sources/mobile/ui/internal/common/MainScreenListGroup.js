@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import * as React from 'react';
 import moment from 'moment';
 import {CalendarWithoutTime} from 'common/defs/formats';

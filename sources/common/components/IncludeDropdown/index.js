@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import * as React from 'react';
 import {MenuItem, SelectField} from 'material-ui';
 import {usePreferences} from 'common/state/hooks';

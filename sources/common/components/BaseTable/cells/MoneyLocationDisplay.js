@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import * as React from 'react';
 import grey from '@material-ui/core/colors/grey';
 import IconBlock from '@material-ui/icons/Block';

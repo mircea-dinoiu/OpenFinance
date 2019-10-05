@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {getInitialEndDate} from 'common/utils/dates';
 
 export const parsePreferences = (

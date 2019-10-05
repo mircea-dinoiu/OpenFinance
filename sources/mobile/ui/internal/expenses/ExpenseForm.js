@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {findCurrencyById} from 'common/helpers/currency';
 import {objectValuesOfSameType} from 'common/utils/collection';
 

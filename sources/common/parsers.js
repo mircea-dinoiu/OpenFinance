@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {objectEntriesOfSameType} from 'common/utils/collection';
 import {startCase} from 'lodash';
 import * as React from 'react';

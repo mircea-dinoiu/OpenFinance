@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {Actions} from 'common/state/actions';
 import type {TypeSnackbar, TypeScreenQueries} from 'common/types';
 import {createXHR} from 'common/utils/fetch';

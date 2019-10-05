@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {SingleSelect} from 'common/components/Select';
 import type {
     TypePreferences,

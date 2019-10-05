@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 
 export const getScrollPct = (element) =>
     Math.round(

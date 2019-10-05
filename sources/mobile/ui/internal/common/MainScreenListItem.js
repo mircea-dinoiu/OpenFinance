@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import React, {PureComponent} from 'react';
 
 import {cyan} from '@material-ui/core/colors';

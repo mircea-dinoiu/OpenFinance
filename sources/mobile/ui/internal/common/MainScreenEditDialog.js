@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import {isEqual} from 'lodash';
 import React, {PureComponent} from 'react';
 

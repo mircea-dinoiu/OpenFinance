@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import * as React from 'react';
 import {createXHR} from 'common/utils/fetch';
 import {BigLoader} from 'common/components/loaders';
@@ -84,18 +84,7 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
     return endDate;
 };
 
-const Summary = () => {
-    const [firstLoad, setFirstLoad] = React.useState(true)
-    const [results, setResults] = React.useState(null)
-    const [refreshing, setRefreshing] = React.useState(false)
-    const preferences = usePreferences()
-
-    React.useEffect(() => {
-
-    }, [])
-}
-
-class SummaryX extends React.PureComponent<TypeProps> {
+class Summary extends React.PureComponent<TypeProps> {
     componentDidMount() {
         this.load();
     }

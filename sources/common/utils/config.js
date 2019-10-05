@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 const metaPrefix = 'financial_';
 let globalMetas = null;
 const getMetas = () => {

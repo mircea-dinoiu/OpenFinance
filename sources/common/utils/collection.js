@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 
 export const objectEntriesOfSameType = <A, B>(obj: {
     [key: A]: B,

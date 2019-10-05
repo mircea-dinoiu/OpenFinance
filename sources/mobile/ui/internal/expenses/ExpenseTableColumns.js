@@ -1,4 +1,4 @@
-// @flow
+// @flow weak
 import CurrencyDisplay from 'common/components/BaseTable/cells/CurrencyDisplay';
 import PricePerGDisplay from 'common/components/BaseTable/cells/PricePerGDisplay';
 import CategoriesFilter from 'common/components/BaseTable/filters/CategoriesFilter';
