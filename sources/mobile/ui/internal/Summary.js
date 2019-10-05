@@ -109,7 +109,7 @@ class Summary extends React.PureComponent<
         results: null,
         refreshing: false,
     };
-    
+
     componentDidMount() {
         this.load();
     }

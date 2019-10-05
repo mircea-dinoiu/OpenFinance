@@ -8,14 +8,13 @@ import App from './App';
 import thunk from 'redux-thunk';
 import {readState, saveState} from 'common/state/persistency';
 import throttle from 'lodash/throttle';
-import {createLogger} from 'redux-logger';
 
 const store = createStore(
     combinedReducers,
     readState(),
     /* eslint no-underscore-dangle: 0 */
     compose(
-        applyMiddleware(thunk, createLogger({collapsed: true})),
+        applyMiddleware(thunk),
         window.__REDUX_DEVTOOLS_EXTENSION__
             ? window.__REDUX_DEVTOOLS_EXTENSION__()
             : (noop) => noop,
