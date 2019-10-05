@@ -104,6 +104,12 @@ class Summary extends React.PureComponent<
         firstLoad: boolean,
     },
 > {
+    state = {
+        firstLoad: true,
+        results: null,
+        refreshing: false,
+    };
+    
     componentDidMount() {
         this.load();
     }
