@@ -33,7 +33,7 @@ export const useCategories = () =>
     useSelector((s) => s.categories);
 export const useSnackbars = (): TypeSnackbar[] =>
     useSelector((s) => s.snackbars);
-export const useCurrenciesDrawerOpen = () => {
+export const useCurrenciesDrawerOpenWithSetter = () => {
     const dispatch = useDispatch();
 
     return [
@@ -47,7 +47,7 @@ export const useCurrenciesDrawerOpen = () => {
         },
     ];
 };
-export const useLoading = () => {
+export const useLoadingWithSetter = () => {
     const dispatch = useDispatch();
 
     return [
@@ -57,7 +57,7 @@ export const useLoading = () => {
         },
     ];
 };
-export const usePage = () => {
+export const usePageWithSetter = () => {
     const dispatch = useDispatch();
 
     return [
@@ -68,7 +68,7 @@ export const usePage = () => {
     ];
 };
 
-export const useTitle = () => {
+export const useTitleWithSetter = () => {
     const dispatch = useDispatch();
 
     return [

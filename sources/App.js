@@ -35,10 +35,10 @@ import {
     useUser,
     useCurrencies,
     useSnackbars,
-    useCurrenciesDrawerOpen,
-    useLoading,
-    usePage,
-    useTitle,
+    useCurrenciesDrawerOpenWithSetter,
+    useLoadingWithSetter,
+    usePageWithSetter,
+    useTitleWithSetter,
 } from 'common/state';
 
 const theme = createMuiTheme({
@@ -77,10 +77,10 @@ const App = () => {
     const [
         currenciesDrawerOpen,
         setCurrenciesDrawerOpen,
-    ] = useCurrenciesDrawerOpen();
-    const [loading, setLoading] = useLoading();
-    const [page, setPage] = usePage();
-    const [, setTitle] = useTitle();
+    ] = useCurrenciesDrawerOpenWithSetter();
+    const [loading, setLoading] = useLoadingWithSetter();
+    const [page, setPage] = usePageWithSetter();
+    const [, setTitle] = useTitleWithSetter();
 
     const showLogin = () => {
         setPage(<Login />);
