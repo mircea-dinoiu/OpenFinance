@@ -18,10 +18,22 @@ import {updatePreferences} from 'common/state/actionCreators';
 import moment from 'moment';
 import {endOfDayToISOString} from 'shared/utils/dates';
 import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
-import {usePreferences} from 'common/state/hooks';
+import type {
+    TypePreferences,
+    TypeScreenQueries,
+    TypeUsers,
+    TypeMoneyLocationTypes,
+    TypeCategories,
+} from 'common/types';
 
 type TypeProps = {
     screen: TypeScreenQueries,
+    preferences: TypePreferences,
+    updatePreferences: typeof updatePreferences,
+    user: TypeUsers,
+    moneyLocationTypes: TypeMoneyLocationTypes,
+    categories: TypeCategories,
+    refreshWidgets: () => void,
 };
 
 const getEndDateBasedOnIncludePreference = (endDate, include) => {
@@ -84,7 +96,14 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
     return endDate;
 };
 
-class Summary extends React.PureComponent<TypeProps> {
+class Summary extends React.PureComponent<
+    TypeProps,
+    {
+        results: {},
+        refreshing: boolean,
+        firstLoad: boolean,
+    },
+> {
     componentDidMount() {
         this.load();
     }

@@ -32,6 +32,7 @@ const NumericValue = ({
             <strong>{formatNumericValue(value)}</strong>
         </span>
     );
+
     const tooltip = [
         <div
             key={currency}
@@ -44,17 +45,15 @@ const NumericValue = ({
         >
             {currency} {formatNumericValue(value)}
         </div>,
-        ...objectValuesOfSameType(
-            objectEntriesOfSameType(
-                objectValuesOfSameType(currencies.map).find(
-                    (each) => each.iso_code === currency,
-                ).rates,
-            ).map(([rateISO, rateMulti]) => (
-                <div key={rateISO}>
-                    {rateISO} {formatNumericValue(value * rateMulti)}
-                </div>
-            )),
-        ),
+        ...objectEntriesOfSameType(
+            objectValuesOfSameType(currencies.map).find(
+                (each) => each.iso_code === currency,
+            )?.rates || {},
+        ).map(([rateISO, rateMulti]) => (
+            <div key={rateISO}>
+                {rateISO} {formatNumericValue(value * rateMulti)}
+            </div>
+        )),
     ];
 
     return <Tooltip tooltip={tooltip}>{inner}</Tooltip>;

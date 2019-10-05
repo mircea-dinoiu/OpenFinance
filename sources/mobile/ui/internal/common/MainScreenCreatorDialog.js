@@ -25,11 +25,23 @@ type TypeProps = {
     onReceiveNewRecord: Function,
     formComponent: any,
     onRequestCreate: Function,
+    onCancel: () => void,
+    classes: {},
+    open: boolean,
 };
 
-class MainScreenCreatorDialog extends PureComponent<TypeProps> {
+class MainScreenCreatorDialog extends PureComponent<
+    TypeProps,
+    {
+        error: null | string,
+        success: null | string,
+        saving: boolean,
+    },
+> {
     state = {
         saving: false,
+        error: null,
+        success: null,
     };
     formDefaults = this.props.getFormDefaults(this.props);
     formData = this.props.getFormDefaults(this.props);

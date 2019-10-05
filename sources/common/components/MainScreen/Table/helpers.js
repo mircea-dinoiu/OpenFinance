@@ -2,6 +2,7 @@
 import type {TypeTransactionModel} from 'common/types';
 import {formatYMD} from 'common/utils/dates';
 import {Classes} from 'common/components/BaseTable';
+import type {TypeAnchoredContextMenuDisplayProps} from 'common/components/MainScreen/ContextMenu/AnchoredContextMenu';
 
 const today = formatYMD(new Date());
 
@@ -46,6 +47,14 @@ export const getTrProps = ({
     item,
 }: {
     item: TypeTransactionModel,
+    onChangeContextMenu: ($Shape<TypeAnchoredContextMenuDisplayProps>) => void,
+    onReceiveSelectedIds: ({
+        [number]: boolean,
+    }) => void,
+    onEdit: () => void,
+    selectedIds: {
+        [number]: boolean,
+    },
 }) => ({
     className: getTrClassName(item, {selectedIds}),
     onDoubleClick: () => {

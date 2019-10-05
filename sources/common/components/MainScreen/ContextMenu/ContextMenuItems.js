@@ -19,6 +19,23 @@ import compose from 'common/utils/compose';
 
 type TypeOnClick = () => any;
 
+export type TypeContextMenuItemsProps = {
+    onClickEdit: TypeOnClick,
+    onClickDelete: TypeOnClick,
+    onClickDuplicate: TypeOnClick,
+    onClickDetach: TypeOnClick,
+    onClickMerge: TypeOnClick,
+    onClickReviewed: TypeOnClick,
+    onClickNeedsReview: TypeOnClick,
+    onCloseContextMenu: TypeOnClick,
+    onClickDeposit: TypeOnClick,
+    onClickWithdrawal: TypeOnClick,
+    onClickHide: TypeOnClick,
+    onClickUnhide: TypeOnClick,
+    selectedIds: {},
+    desktop: boolean,
+};
+
 export default function ContextMenuItems({
     onClickEdit,
     onClickDelete,
@@ -36,22 +53,7 @@ export default function ContextMenuItems({
 
     selectedIds,
     desktop = false,
-}: {
-    onClickEdit: TypeOnClick,
-    onClickDelete: TypeOnClick,
-    onClickDuplicate: TypeOnClick,
-    onClickDetach: TypeOnClick,
-    onClickMerge: TypeOnClick,
-    onClickReviewed: TypeOnClick,
-    onClickNeedsReview: TypeOnClick,
-    onCloseContextMenu: TypeOnClick,
-    onClickDeposit: TypeOnClick,
-    onClickWithdrawal: TypeOnClick,
-    onClickHide: TypeOnClick,
-    onClickUnhide: TypeOnClick,
-    selectedIds: {},
-    desktop: boolean,
-}) {
+}: TypeContextMenuItemsProps) {
     const selectedIdsLength = objectValuesOfSameType(selectedIds).filter(
         Boolean,
     ).length;
@@ -74,7 +76,7 @@ export default function ContextMenuItems({
                 disabled={disabledForZero}
                 desktop={desktop}
             />
-            {(
+            {
                 <MenuItem
                     primaryText="Duplicate"
                     leftIcon={<DuplicateIcon />}
@@ -89,7 +91,7 @@ export default function ContextMenuItems({
                     disabled={disabledForZero}
                     desktop={desktop}
                 />
-            )}
+            }
             <MenuItem
                 primaryText="Delete"
                 leftIcon={<DeleteIcon />}
@@ -105,7 +107,7 @@ export default function ContextMenuItems({
                 desktop={desktop}
             />
             <Divider />
-            {(
+            {
                 <MenuItem
                     primaryText="Detach"
                     leftIcon={<DetachIcon />}
@@ -120,7 +122,7 @@ export default function ContextMenuItems({
                     disabled={disabledForZero}
                     desktop={desktop}
                 />
-            )}
+            }
             <MenuItem
                 primaryText="Merge"
                 leftIcon={<MergeIcon />}
@@ -136,7 +138,7 @@ export default function ContextMenuItems({
                 desktop={desktop}
             />
             <Divider />
-            {(
+            {
                 <>
                     <MenuItem
                         primaryText="Change to Posted"
@@ -167,7 +169,7 @@ export default function ContextMenuItems({
                         desktop={desktop}
                     />
                 </>
-            )}
+            }
             <Divider />
             <MenuItem
                 primaryText="Change to Deposit"

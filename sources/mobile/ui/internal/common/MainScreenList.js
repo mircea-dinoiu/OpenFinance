@@ -3,6 +3,8 @@ import type {
     TypeCurrencies,
     TypePreferences,
     TypeScreenQueries,
+    TypeDispatch,
+    TypeMoneyLocations,
 } from 'common/types';
 import {
     objectEntriesOfSameType,
@@ -50,6 +52,7 @@ import WeightDisplay from 'mobile/ui/internal/expenses/cells/WeightDisplay';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {css} from 'styled-components';
+import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
 
 type TypeProps = {
     api: {
@@ -68,7 +71,9 @@ type TypeProps = {
         formToModel: Function,
         formComponent: React$PureComponent<any>,
     },
-    tableColumns: Array<{}>,
+    tableColumns: ({
+        updateRecords: () => void,
+    }) => {}[],
     contentComponent: React$PureComponent<any>,
     currencies: TypeCurrencies,
     newRecord: {
@@ -78,6 +83,8 @@ type TypeProps = {
     refreshWidgets: string,
     onRefreshWidgets: typeof onRefreshWidgets,
     defaultSorters: Array<{id: string, desc: boolean}>,
+    dispatch: TypeDispatch,
+    moneyLocations: TypeMoneyLocations,
 };
 
 type TypeState = {
@@ -96,6 +103,7 @@ type TypeState = {
     editDialogOpen: boolean,
     editDialogKey: string,
     deleteDialogOpen: boolean,
+    splitAmount: string,
 };
 
 class MainScreenList extends PureComponent<TypeProps, TypeState> {
@@ -786,13 +794,16 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         />
                     </div>
                     {this.renderTableFooter()}
-                    {this.state.contextMenuDisplay && (
-                        <AnchoredContextMenu
-                            left={this.state.contextMenuLeft}
-                            top={this.state.contextMenuTop}
-                            itemsProps={this.getContextMenuItemsProps()}
+                    <AnchoredContextMenu
+                        display={this.state.contextMenuDisplay}
+                        left={this.state.contextMenuLeft}
+                        top={this.state.contextMenuTop}
+                    >
+                        <ContextMenuItems
+                            desktop={true}
+                            {...this.getContextMenuItemsProps()}
                         />
-                    )}
+                    </AnchoredContextMenu>
                 </>
             );
         }

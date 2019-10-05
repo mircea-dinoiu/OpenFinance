@@ -41,22 +41,24 @@ const SummaryCategory = (props) => {
         showSumInHeader,
     } = props;
     const headerColor = 'rgba(255, 255, 255, 0.9)';
-    const [expanded, setExpanded] = React.useState(Boolean(props.expandedByDefault))
-    const [excluded, setExcluded] = React.useState({})
+    const [expanded, setExpanded] = React.useState(
+        Boolean(props.expandedByDefault),
+    );
+    const [excluded, setExcluded] = React.useState({});
 
     const handleToggleExcluded = (id) => {
-        setExcluded({...excluded, [id]: !excluded[id]})
+        setExcluded({...excluded, [id]: !excluded[id]});
     };
 
     const handleExpandChange = (value) => {
-        setExpanded(value)
+        setExpanded(value);
     };
 
     const numericValueProxy = (
         value,
         {currencyId = currencies.default, ...opts} = {},
     ) => {
-        const currency = currencies.map[currencyId].iso_code;
+        const currency = currencies.map[String(currencyId)].iso_code;
 
         return numericValue(value, {...opts, currency});
     };

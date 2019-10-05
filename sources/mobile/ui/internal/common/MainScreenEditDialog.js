@@ -1,6 +1,6 @@
 // @flow weak
 import {isEqual} from 'lodash';
-import React, {PureComponent} from 'react';
+import * as React from 'react';
 
 import {
     Button,
@@ -18,14 +18,41 @@ import {ButtonProgress} from 'common/components/loaders';
 
 import {parseCRUDError} from 'common/parsers';
 import {dialog} from 'common/defs/styles';
+import type {
+    TypeTransactionModel,
+    TypeTransactionForm,
+    TypeUsers,
+} from 'common/types';
 
 type TypeProps = {
+    user: TypeUsers,
     onRequestUpdate: Function,
+    items: TypeTransactionModel[],
+    modelToForm: (TypeTransactionModel) => TypeTransactionForm,
+    formToModel: (
+        TypeTransactionForm,
+        {user: TypeUsers},
+    ) => TypeTransactionModel,
+    entityName: string,
+    formComponent: React.ComponentType<{}>,
+    open: boolean,
+    classes: {},
+    onCancel: () => void,
+    onSave: ({}) => void,
 };
 
-class MainScreenEditDialog extends PureComponent<TypeProps> {
+class MainScreenEditDialog extends React.PureComponent<
+    TypeProps,
+    {
+        saving: boolean,
+        success: null | string,
+        error: null | string,
+    },
+> {
     state = {
         saving: false,
+        success: null,
+        error: null,
     };
     formData = this.props.items.map(this.props.modelToForm);
     initialData = this.props.items.map(this.props.modelToForm);

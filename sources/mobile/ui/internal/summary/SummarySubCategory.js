@@ -8,8 +8,20 @@ import Collapse from '@material-ui/icons/ExpandLess';
 import Expand from '@material-ui/icons/ExpandMore';
 import BaseTable from 'common/components/BaseTable';
 import {FormControlLabel, Checkbox} from '@material-ui/core';
+import type {TypeCurrencies} from 'common/types';
 
-export class SummarySubCategory extends PureComponent {
+export class SummarySubCategory extends PureComponent<
+    {
+        expandedByDefault: boolean,
+        numericValueFn: (string) => string,
+        excluded: {},
+        currencies: TypeCurrencies,
+        onToggleExcluded: (boolean) => void,
+    },
+    {
+        expanded: boolean,
+    },
+> {
     state = {
         expanded: Boolean(this.props.expandedByDefault),
     };

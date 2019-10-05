@@ -32,5 +32,6 @@ render(
     <Provider store={store}>
         <App />
     </Provider>,
+    // $FlowFixMe
     document.getElementById('root'),
 );

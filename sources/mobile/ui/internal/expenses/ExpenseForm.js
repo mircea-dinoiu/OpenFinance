@@ -35,6 +35,14 @@ import * as defs from 'shared/defs';
 import {sumArray} from 'shared/utils/numbers';
 import {sortBy} from 'lodash';
 import {css} from 'styled-components';
+import type {
+    TypeTransactionForm,
+    TypeMoneyLocations,
+    TypeCurrencies,
+    TypePreferences,
+    TypeUsers,
+    TypeCategories,
+} from 'common/types';
 
 const boxStyle = {
     padding: '10px 0',
@@ -58,8 +66,13 @@ const badgeStyle = {
 const StyledBadge = withStyles(badgeStyle)(Badge);
 
 type TypeProps = {
-    initialValues: {},
+    initialValues: TypeTransactionForm,
     onFormChange: Function,
+    moneyLocations: TypeMoneyLocations,
+    currencies: TypeCurrencies,
+    preferences: TypePreferences,
+    user: TypeUsers,
+    categories: TypeCategories,
 };
 
 export const setChargedPersonValueFactory = (
@@ -116,7 +129,8 @@ class ExpenseForm extends PureComponent<TypeProps> {
         return super.setState(state);
     }
 
-    bindSelect({valueKey, onChange = () => {}}) {
+    // eslint-disable-next-line no-unused-vars
+    bindSelect({valueKey, onChange = (string) => {}}) {
         return {
             onChange: (value) => {
                 this.setState({
@@ -168,6 +182,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
                                           (each) =>
                                               each.id ==
                                               this.state.paymentMethod,
+                                          // $FlowFixMe
                                       ).currency_id,
                                       this.props.currencies,
                                   ).iso_code
@@ -362,7 +377,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
     renderChargedPersons() {
         const sortedUsers = sortBy(
             this.props.user.list,
-            (each) => each['full_name'],
+            (each) => each.full_name,
         );
         const {chargedPersons} = this.state;
         const step = defs.PERC_STEP;

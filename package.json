@@ -19,7 +19,7 @@
     "@babel/core": "^7.1.0",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-flow": "^7.0.0",
@@ -99,7 +99,7 @@
     "validator": "^10.7.1"
   },
   "scripts": {
-    "ci": "run-p --aggregate-output test lint:js",
+    "ci": "run-p --aggregate-output test lint:js flow:check",
     "build": "webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:hot": "cross-env NODE_ENV=hot webpack-dev-server --hot --inline",
@@ -108,6 +108,7 @@
     "heroku-prebuild": "npm install --only=dev",
     "heroku-postbuild": "npm run build:prod",
     "flow": "flow",
+    "flow:check": "flow check",
     "test": "jest --bail",
     "test:related": "jest --findRelatedTests",
     "test:cov": "open build/coverage/index.html",
@@ -119,6 +120,7 @@
   },
   "lint-staged": {
     "*.js": [
+      "flow focus-check",
       "yarn run format:js",
       "eslint --quiet",
       "jest --findRelatedTests",

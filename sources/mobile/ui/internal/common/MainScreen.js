@@ -1,12 +1,11 @@
 // @flow weak
-import React, {PureComponent} from 'react';
+import * as React from 'react';
 
 type TypeProps = {
-    creatorComponent: any,
-    listComponent: any,
+    listComponent: React.ComponentType<{}>,
 };
 
-class MainScreen extends PureComponent<TypeProps> {
+class MainScreen extends React.PureComponent<TypeProps> {
     renderList() {
         const List = this.props.listComponent;
 

@@ -26,7 +26,14 @@ type TypeProps = {
     allowNone?: boolean,
 };
 
-class SelectFilter extends React.PureComponent<TypeProps> {
+class SelectFilter extends React.PureComponent<
+    TypeProps,
+    {
+        radioValue: string,
+        anchorEl: HTMLElement | null,
+        radioValue: string,
+    },
+> {
     state = {
         anchorEl: null,
         radioValue: this.getRadioDefaultValue(),
@@ -63,13 +70,13 @@ class SelectFilter extends React.PureComponent<TypeProps> {
                 if (!this.props.multi) {
                     return selectOptions.find(
                         (option) => option.id === filter.value,
-                    )[this.props.nameKey];
+                    )?.[this.props.nameKey];
                 }
 
                 return filter.value
                     .map(
                         (id) =>
-                            selectOptions.find((option) => option.id === id)[
+                            selectOptions.find((option) => option.id === id)?.[
                                 this.props.nameKey
                             ],
                     )

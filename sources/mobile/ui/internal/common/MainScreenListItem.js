@@ -7,12 +7,13 @@ import ResponsiveListItem from 'common/components/ResponsiveListItem';
 import {IconButton, IconMenu} from 'material-ui';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
+import type {TypeContextMenuItemsProps} from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
 
 type TypeProps = {
     entityName: string,
     contentComponent: any,
     onReceiveSelectedIds: (ids: number[]) => void,
-    contextMenuItemsProps: {},
+    contextMenuItemsProps: TypeContextMenuItemsProps,
     item: {
         id: number,
         persist: boolean,

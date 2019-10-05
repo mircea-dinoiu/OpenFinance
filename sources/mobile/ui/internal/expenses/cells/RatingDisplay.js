@@ -5,12 +5,12 @@ import IconStarBorder from '@material-ui/icons/StarBorder';
 import * as React from 'react';
 import {range} from 'lodash';
 import Tooltip from 'common/components/Tooltip';
-import {css} from 'styled-components'
+import {css} from 'styled-components';
+import type {TypeTransactionModel} from 'common/types';
 
 class RatingDisplay extends React.PureComponent<{
-    item: {
-        favorite: number,
-    },
+    item: TypeTransactionModel,
+    updateRecords: (number[], $Shape<TypeTransactionModel>) => void,
 }> {
     handleClick = (rating) => (event) => {
         event.preventDefault();
@@ -34,7 +34,9 @@ class RatingDisplay extends React.PureComponent<{
                     <span
                         key={rating}
                         onClick={this.handleClick(rating)}
-                        css={css`cursor: pointer`}
+                        css={css`
+                            cursor: pointer;
+                        `}
                     >
                         {React.createElement(
                             rating <= value ? IconStar : IconStarBorder,

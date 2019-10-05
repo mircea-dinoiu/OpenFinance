@@ -45,6 +45,30 @@ export type TypeCurrencies = {
 
 export type TypeCurrencyIdentifier = string | number | TypeCurrency;
 
+export type TypeCategory = {|
+    id: number,
+    name: string,
+|};
+
+export type TypeCategories = TypeCategory[];
+
+export type TypeMoneyLocation = {|
+    currency_id: number,
+    id: number,
+    name: string,
+    status: 'open' | 'closed' | 'locked',
+    type_id: number,
+|};
+
+export type TypeMoneyLocations = TypeMoneyLocation[];
+
+export type TypeMoneyLocationType = {|
+    id: number,
+    name: string,
+|};
+
+export type TypeMoneyLocationTypes = TypeMoneyLocationType[];
+
 export type TypeUser = {
     avatar: string,
     first_name: string,
@@ -58,7 +82,14 @@ export type TypeUsers = {|
     list: TypeUser[],
 |};
 
-export type TypeTransactionForm = {||};
+export type TypeTransactionForm = {|
+    id: number,
+    sum: number,
+    description: string,
+    notes: string,
+    favorite: number,
+    hidden: boolean,
+|};
 
 export type TypeTransactionModel = {|
     id: number,
@@ -74,6 +105,11 @@ export type TypeTransactionModel = {|
     repeat_occurrences: number,
     repeat: null | $Values<typeof RepeatOption>,
     persist: boolean,
+    type: 'deposit' | 'withdrawal',
+    created_at: Date,
+    hidden: boolean,
+    status: 'pending' | 'finished',
+    money_location_id: number,
 |};
 
 export type TypeShiftDateOption = $Keys<typeof ShiftDateOptions>;
@@ -89,3 +125,5 @@ export type TypeSnackbar = {|
     id: string,
     ...TypeSnackbarProps,
 |};
+
+export type TypeDispatch = ({type: string}) => void;

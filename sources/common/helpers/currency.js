@@ -37,21 +37,25 @@ export const convertCurrency = ({
     let to = rawTo;
 
     if (isFinite(from)) {
+        // $FlowFixMe
         from = findCurrencyById(from, currencies);
     } else if ('string' === typeof from) {
         from = getCurrencyByISOCode(from, currencies);
     }
 
     if (isFinite(to)) {
+        // $FlowFixMe
         to = findCurrencyById(to, currencies);
     } else if ('string' === typeof to) {
         to = getCurrencyByISOCode(to, currencies);
     }
 
+    // $FlowFixMe
     if (from.iso_code === to.iso_code) {
         return value;
     }
 
+    // $FlowFixMe
     return value * from.rates[to.iso_code];
 };
 

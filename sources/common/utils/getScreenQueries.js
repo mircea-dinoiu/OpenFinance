@@ -1,5 +1,7 @@
 // @flow weak
 
+import type {TypeScreenQueries} from 'common/types';
+
 export default function getScreenQueries(): TypeScreenQueries {
     const isSmall = window.matchMedia('(min-width: 0px) and (max-width: 480px)')
         .matches;
