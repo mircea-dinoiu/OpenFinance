@@ -14,7 +14,7 @@ describe('All files in sources', () => {
                 if (parsed.ext === '.js' && !parsed.name.endsWith('.test')) {
                     const passes = fs
                         .readFileSync(file, 'utf-8')
-                        .startsWith('// @flow\n');
+                        .startsWith('// @flow');
 
                     if (!passes) {
                         failed.push(file);

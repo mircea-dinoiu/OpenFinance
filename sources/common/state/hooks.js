@@ -9,9 +9,7 @@ import type {TypeUsers, TypeCurrencies, TypeScreenQueries, TypeSnackbar} from 'c
 export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();
 
-    return React.useMemo(() => {
-        return bindActionCreators(actions, dispatch);
-    }, [dispatch]);
+    return React.useMemo(() => bindActionCreators(actions, dispatch), [dispatch]);
 };
 export const useScreenSize = (): TypeScreenQueries =>
     useSelector((s) => s.screenSize);
