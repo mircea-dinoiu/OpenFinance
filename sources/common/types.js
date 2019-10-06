@@ -136,6 +136,9 @@ export type TypeGlobalState = {
     categories: TypeCategories,
     moneyLocationTypes: TypeMoneyLocationTypes,
     moneyLocations: TypeMoneyLocations,
+    screen: TypeScreenQueries,
+    currencies: TypeCurrencies,
+    refreshWidgets: string,
 };
 
 export type TypeDispatch = ({type: string, ...}) => void;

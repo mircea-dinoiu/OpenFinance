@@ -5,6 +5,7 @@ import type {
     TypeScreenQueries,
     TypeDispatch,
     TypeMoneyLocations,
+    TypeGlobalState,
 } from 'common/types';
 import {
     objectEntriesOfSameType,
@@ -928,13 +929,7 @@ export default (ownProps) => {
             refreshWidgets,
             currencies,
             moneyLocations,
-        }): {
-            preferences: TypePreferences,
-            screen: TypeScreenQueries,
-            refreshWidgets: string,
-            currencies: TypeCurrencies,
-            moneyLocations: TypeMoneyLocations,
-        } => ({
+        }: TypeGlobalState) => ({
             preferences,
             screen,
             refreshWidgets,
