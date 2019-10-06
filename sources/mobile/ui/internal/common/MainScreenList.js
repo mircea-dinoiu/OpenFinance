@@ -81,7 +81,6 @@ type TypeProps = {
         repeat: string,
     },
     refreshWidgets: string,
-    onRefreshWidgets: typeof onRefreshWidgets,
     defaultSorters: Array<{id: string, desc: boolean}>,
     dispatch: TypeDispatch,
     moneyLocations: TypeMoneyLocations,
@@ -190,12 +189,12 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             this.selectedItems.map((each) => ({id: each.id})),
         );
 
-        this.props.onRefreshWidgets();
+        this.props.dispatch(onRefreshWidgets());
     };
 
     handleUpdate = () => {
         this.handleToggleEditDialog();
-        this.props.onRefreshWidgets();
+        this.props.dispatch(onRefreshWidgets());
     };
 
     get hasFiltersSet() {
@@ -492,7 +491,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             })),
         );
 
-        this.props.onRefreshWidgets();
+        this.props.dispatch(onRefreshWidgets());
     };
 
     handleToggleStateKey = (key) => () => {
@@ -601,7 +600,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         try {
             await this.handleRequestUpdate(ids.map((id) => ({id, ...data})));
 
-            this.props.onRefreshWidgets();
+            this.props.dispatch(onRefreshWidgets());
         } catch (e) {
             console.error(e);
             // todo
@@ -663,7 +662,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             }),
         );
 
-        this.props.onRefreshWidgets();
+        this.props.dispatch(onRefreshWidgets());
     };
 
     handleClickReviewed = () =>
@@ -685,7 +684,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             await this.handleRequestUpdate([{id: first.id, ...merged}]);
             await this.handleRequestDelete(rest.map((each) => ({id: each.id})));
 
-            this.props.onRefreshWidgets();
+            this.props.dispatch(onRefreshWidgets());
         }
     };
     handleDetach = async () => {
@@ -715,7 +714,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         if (promises.length) {
             await Promise.all(promises);
 
-            this.props.onRefreshWidgets();
+            this.props.dispatch(onRefreshWidgets());
         }
     };
 
