@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 
 import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
@@ -46,7 +46,7 @@ export const useLoadingWithSetter = () => {
 
     return [
         useSelector((s) => s.loading),
-        (loading) => {
+        (loading: boolean) => {
             dispatch(toggleLoading(loading));
         },
     ];
@@ -56,7 +56,7 @@ export const usePageWithSetter = () => {
 
     return [
         useSelector((s) => s.ui),
-        (ui) => {
+        (ui: React.Node) => {
             dispatch(updateState({ui}));
         },
     ];

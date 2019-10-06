@@ -25,12 +25,19 @@
     // warn
     // error
     "jsx-quotes": "error",
+
+    // FLOW TYPE
     "flowtype/type-id-match": [
       2,
       "^Type([A-Z][a-z0-9]*)+$"
     ],
 //    "flowtype/require-parameter-type": "error",
 //    "flowtype/no-weak-types": "error",
+    "flowtype/space-after-type-colon": "off",
+
+    // REACT
+
+
     "react/no-find-dom-node": "error",
     "array-bracket-spacing": "error",
     "array-callback-return": "error",

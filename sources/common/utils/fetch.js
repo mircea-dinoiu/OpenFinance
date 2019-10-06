@@ -24,12 +24,14 @@ const log = (data) => {
     }
 };
 
-export const createXHR = (opts: {
+export const createXHR = <T>(opts: {
     url: string,
     method?: string,
     data?: string | {...},
     cancelToken?: {},
-}) => {
+}): Promise<{
+    data: T,
+}> => {
     const parsedOpts = parseOpts(opts);
 
     if (

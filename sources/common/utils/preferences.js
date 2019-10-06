@@ -4,12 +4,7 @@ import type {TypePreferences} from 'common/types';
 
 export const parsePreferences = (
     state: $Shape<TypePreferences> = {},
-): {
-    endDateIncrement: string,
-    include: string,
-    endDate: string,
-    includePending: ?boolean,
-} => {
+): TypePreferences => {
     const endDateIncrement = state.endDateIncrement || '2w';
     const include = state.include || 'all';
     const endDate = state.endDate || getInitialEndDate();

@@ -128,6 +128,16 @@ export type TypeSnackbar = {|
     ...TypeSnackbarProps,
 |};
 
-export type TypeDispatch = ({type: string}) => void;
+export type TypeGlobalState = {
+    preferences: TypePreferences,
+    title: string,
+    ui: React.Node,
+    currenciesDrawerOpen: boolean,
+    categories: TypeCategories,
+    moneyLocationTypes: TypeMoneyLocationTypes,
+    moneyLocations: TypeMoneyLocations,
+};
+
+export type TypeDispatch = ({type: string, ...}) => void;
 
 export type TypeCss = string[];

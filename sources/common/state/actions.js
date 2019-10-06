@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 
 export const Actions = {
     UPDATE_STATE: 'UPDATE_STATE',

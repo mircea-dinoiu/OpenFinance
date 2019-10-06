@@ -1,9 +1,10 @@
-// @flow weak
+// @flow
 import {Actions} from 'common/state/actions';
 import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'common/utils/getScreenQueries';
 import {combineReducers} from 'redux';
 import {validatePreferences, parsePreferences} from 'common/utils/preferences';
+import type {TypePreferences} from 'common/types';
 
 const stateKeysWithoutReducers = [];
 const screen = (state = getScreenQueries(), action) =>
@@ -48,7 +49,7 @@ const loading = (state = true, action) => {
 
     return state;
 };
-const preferences = (state = parsePreferences(), action) => {
+const preferences = (state: TypePreferences = parsePreferences(), action) => {
     switch (action.type) {
         case Actions.UPDATE_PREFERENCES:
             return {...state, ...action.value};

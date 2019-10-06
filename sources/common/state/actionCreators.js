@@ -1,21 +1,27 @@
-// @flow weak
+// @flow
 import {Actions} from 'common/state/actions';
-import type {TypeSnackbar, TypeScreenQueries, TypePreferences} from 'common/types';
+import type {
+    TypeSnackbar,
+    TypeScreenQueries,
+    TypePreferences,
+    TypeDispatch,
+    TypeCurrencies, TypeUsers, TypeGlobalState,
+} from 'common/types';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 import {makeUrl} from 'common/utils/url';
 
-export const updateState = (state) => ({
+export const updateState = (state: $Shape<TypeGlobalState>) => ({
     type: Actions.UPDATE_STATE,
     state,
 });
 
-export const updateUser = (user) => ({
+export const updateUser = (user: null | TypeUsers) => ({
     type: Actions.UPDATE_USER,
     user,
 });
 
-export const toggleLoading = (value) => ({
+export const toggleLoading = (value: boolean) => ({
     type: value ? Actions.LOADING_ENABLE : Actions.LOADING_DISABLE,
 });
 
@@ -29,18 +35,20 @@ export const updatePreferences = (value: $Shape<TypePreferences>) => ({
 });
 export const refreshWidgets = () => ({type: Actions.REFRESH_WIDGETS});
 
-export const setBaseCurrencyId = (value) => ({
+export const setBaseCurrencyId = (value: number) => ({
     type: Actions.SET_BASE_CURRENCY_ID,
     value,
 });
 
-export const updateCurrencies = (value) => ({
+export const updateCurrencies = (value: TypeCurrencies) => ({
     type: Actions.UPDATE_CURRENCIES,
     value,
 });
 
-export const fetchCurrencies = (params = {}) => async (dispatch) => {
-    const currenciesResponse = await createXHR({
+export const fetchCurrencies = (
+    params: {update?: boolean} = Object.freeze({}),
+) => async (dispatch: TypeDispatch) => {
+    const currenciesResponse = await createXHR<TypeCurrencies>({
         url: makeUrl(routes.getCurrencies, params),
     });
 
