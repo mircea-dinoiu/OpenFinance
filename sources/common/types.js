@@ -12,7 +12,8 @@ export type TypeScreenQueries = {
 export type TypePreferences = {
     endDate: string,
     endDateIncrement: 'd' | 'w' | '2w' | 'm',
-    include: | 'ut'
+    include:
+        | 'ut'
         | 'until-yd'
         | 'until-tmrw'
         | 'until-now'
@@ -110,6 +111,7 @@ export type TypeTransactionModel = {|
     hidden: boolean,
     status: 'pending' | 'finished',
     money_location_id: number,
+    money_location: {currency_id: number},
 |};
 
 export type TypeShiftDateOption = $Keys<typeof ShiftDateOptions>;
