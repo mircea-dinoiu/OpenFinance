@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 
 export const makeUrl = (path: string, params: {...} = {}): string => {
     const urlObj = new URL(path, location.origin);

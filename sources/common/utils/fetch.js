@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 import 'whatwg-fetch';
 import merge from 'lodash/merge';
 import config from './config';

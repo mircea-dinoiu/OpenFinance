@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 import type {TypeShiftDateOption} from 'common/types';
 import moment from 'moment';
 

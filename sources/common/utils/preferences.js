@@ -1,8 +1,9 @@
-// @flow weak
+// @flow
 import {getInitialEndDate} from 'common/utils/dates';
+import type {TypePreferences} from 'common/types';
 
 export const parsePreferences = (
-    state = {},
+    state: $Shape<TypePreferences> = {},
 ): {
     endDateIncrement: string,
     include: string,
@@ -17,7 +18,7 @@ export const parsePreferences = (
     return {includePending, endDateIncrement, include, endDate};
 };
 
-export const validatePreferences = (state = {}) => {
+export const validatePreferences = (state: $Shape<TypePreferences> = {}) => {
     if (state.endDateIncrement && state.include && state.endDate) {
         return state;
     }

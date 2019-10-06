@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 import {objectEntriesOfSameType} from 'common/utils/collection';
 import extend from 'lodash/extend';
 
