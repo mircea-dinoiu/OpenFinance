@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 import {RepeatOption} from 'shared/defs';
 
 const RepeatOptions = [

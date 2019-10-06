@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 export const flexColumn = {
     display: 'flex',
     flexDirection: 'column',
