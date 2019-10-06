@@ -50,6 +50,7 @@ export const getTrProps = ({
     onChangeContextMenu: ($Shape<TypeAnchoredContextMenuDisplayProps>) => void,
     onReceiveSelectedIds: ({
         [number]: boolean,
+        ...
     }) => void,
     onEdit: () => void,
     selectedIds: {

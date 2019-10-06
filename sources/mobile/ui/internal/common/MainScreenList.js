@@ -934,6 +934,7 @@ export default (ownProps) => {
             screen: TypeScreenQueries,
             refreshWidgets: string,
             currencies: TypeCurrencies,
+            moneyLocations: TypeMoneyLocations,
         } => ({
             preferences,
             screen,

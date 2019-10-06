@@ -1,6 +1,7 @@
 // @flow weak
 import * as React from 'react';
 import {Tooltip as MaterialUITooltip} from '@material-ui/core';
+import type {TypeCss} from 'common/types';
 
 const Tooltip = ({
     children,
@@ -10,6 +11,7 @@ const Tooltip = ({
     children: React.Node,
     className?: string,
     tooltip: React.Node,
+    css?: TypeCss,
 }) => (
     <MaterialUITooltip
         title={<div style={{fontSize: '1.5em'}}>{title}</div>}

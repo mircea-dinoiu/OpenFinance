@@ -17,6 +17,13 @@ export class SummarySubCategory extends PureComponent<
         excluded: {},
         currencies: TypeCurrencies,
         onToggleExcluded: (boolean) => void,
+        entities: [],
+        entityIdField: string,
+        entityNameField: string,
+        id: string,
+        items: [],
+        renderDescription: () => void,
+        shouldGroup: boolean,
     },
     {
         expanded: boolean,

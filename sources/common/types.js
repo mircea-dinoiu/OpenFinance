@@ -127,3 +127,5 @@ export type TypeSnackbar = {|
 |};
 
 export type TypeDispatch = ({type: string}) => void;
+
+export type TypeCss = string[];

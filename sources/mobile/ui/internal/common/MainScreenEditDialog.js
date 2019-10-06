@@ -34,7 +34,10 @@ type TypeProps = {
         {user: TypeUsers},
     ) => TypeTransactionModel,
     entityName: string,
-    formComponent: React.ComponentType<{}>,
+    formComponent: React.ComponentType<{
+        initialValues: TypeTransactionForm,
+        onFormChange: (TypeTransactionForm) => void,
+    }>,
     open: boolean,
     classes: {},
     onCancel: () => void,
@@ -85,7 +88,9 @@ class MainScreenEditDialog extends React.PureComponent<
 
             const response = await this.props.onRequestUpdate(
                 data.map((each) =>
-                    this.props.formToModel({...each, ...updates}, this.props),
+                    this.props.formToModel({...each, ...updates}, {
+                        user: this.props.user,
+                    }),
                 ),
             );
             const json = response.data;

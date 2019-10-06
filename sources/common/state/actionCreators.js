@@ -1,6 +1,6 @@
 // @flow weak
 import {Actions} from 'common/state/actions';
-import type {TypeSnackbar, TypeScreenQueries} from 'common/types';
+import type {TypeSnackbar, TypeScreenQueries, TypePreferences} from 'common/types';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
 import {makeUrl} from 'common/utils/url';
@@ -23,7 +23,7 @@ export const setScreen = (value: TypeScreenQueries) => ({
     type: Actions.SET_SCREEN,
     value,
 });
-export const updatePreferences = (value: {}) => ({
+export const updatePreferences = (value: $Shape<TypePreferences>) => ({
     type: Actions.UPDATE_PREFERENCES,
     value,
 });

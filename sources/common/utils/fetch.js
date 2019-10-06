@@ -24,7 +24,12 @@ const log = (data) => {
     }
 };
 
-export const createXHR = (opts: {url: string}) => {
+export const createXHR = (opts: {
+    url: string,
+    method?: string,
+    data?: string | {...},
+    cancelToken?: {},
+}) => {
     const parsedOpts = parseOpts(opts);
 
     if (
