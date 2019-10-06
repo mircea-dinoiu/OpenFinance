@@ -64,10 +64,10 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.3.2",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9",
-    "webpack-manifest-plugin": "^2.0.4"
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2",
+    "webpack-manifest-plugin": "^2.2.0"
   },
   "optionalDependencies": {
     "husky": "^1.1.1"
@@ -101,7 +101,6 @@
     "build": "webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:hot": "cross-env NODE_ENV=hot webpack-dev-server --hot --inline",
-    "build:watch": "webpack --watch",
     "start": "node ./bin/www",
     "heroku-prebuild": "npm install --only=dev",
     "heroku-postbuild": "npm run build:prod",
