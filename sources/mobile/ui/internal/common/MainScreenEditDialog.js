@@ -48,8 +48,8 @@ class MainScreenEditDialog extends React.PureComponent<
     TypeProps,
     {
         saving: boolean,
-        success: null | string,
-        error: null | string,
+        success: React.Node,
+        error: React.Node,
     },
 > {
     state = {

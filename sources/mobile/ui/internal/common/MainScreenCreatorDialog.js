@@ -1,5 +1,5 @@
 // @flow weak
-import React, {PureComponent} from 'react';
+import * as React from 'react';
 import {parseCRUDError} from 'common/parsers';
 
 import {ErrorSnackbar, SuccessSnackbar} from 'common/components/snackbars';
@@ -30,11 +30,11 @@ type TypeProps = {
     open: boolean,
 };
 
-class MainScreenCreatorDialog extends PureComponent<
+class MainScreenCreatorDialog extends React.PureComponent<
     TypeProps,
     {
-        error: null | string,
-        success: null | string,
+        error: React.Node,
+        success: React.Node,
         saving: boolean,
     },
 > {

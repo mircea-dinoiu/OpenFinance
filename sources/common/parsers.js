@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 import {objectEntriesOfSameType} from 'common/utils/collection';
 import {startCase} from 'lodash';
 import * as React from 'react';
@@ -7,7 +7,7 @@ export const parseCRUDError = (
     json: {
         [key: string]: string[],
     }[],
-) => {
+): React.Node => {
     let error = json;
 
     if (Array.isArray(json)) {
@@ -27,5 +27,5 @@ export const parseCRUDError = (
         );
     }
 
-    return error;
+    return String(error);
 };

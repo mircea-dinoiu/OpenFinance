@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 import * as React from 'react';
 import {ShiftDateOptions} from 'common/defs';
 import {RepeatOption} from 'shared/defs';
