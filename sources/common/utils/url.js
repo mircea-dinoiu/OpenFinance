@@ -1,10 +1,9 @@
 // @flow weak
-import queryString from 'query-string';
 
-export default function url(rawUrl: string, params: {}): string {
-    if (Object.keys(params).length) {
-        return `${rawUrl}?${queryString.stringify(params)}`;
-    }
+export const makeUrl = (path: string, params: {} = {}): string => {
+    const urlObj = new URL(path, location.origin);
 
-    return rawUrl;
-}
+    urlObj.search = new URLSearchParams(params).toString();
+
+    return urlObj.toString();
+};

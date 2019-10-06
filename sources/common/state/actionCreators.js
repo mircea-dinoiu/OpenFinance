@@ -3,7 +3,7 @@ import {Actions} from 'common/state/actions';
 import type {TypeSnackbar, TypeScreenQueries} from 'common/types';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
-import url from 'common/utils/url';
+import {makeUrl} from 'common/utils/url';
 
 export const updateState = (state) => ({
     type: Actions.UPDATE_STATE,
@@ -41,7 +41,7 @@ export const updateCurrencies = (value) => ({
 
 export const fetchCurrencies = (params = {}) => async (dispatch) => {
     const currenciesResponse = await createXHR({
-        url: url(routes.getCurrencies, params),
+        url: makeUrl(routes.getCurrencies, params),
     });
 
     dispatch(updateCurrencies(currenciesResponse.data));

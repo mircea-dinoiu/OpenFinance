@@ -5,7 +5,6 @@ import {Button} from '@material-ui/core';
 import {ButtonProgress} from 'common/components/loaders';
 import routes from 'common/defs/routes';
 import {createXHR} from 'common/utils/fetch';
-import {stringify} from 'query-string';
 import {ErrorSnackbar} from 'common/components/snackbars';
 import {useDispatch} from 'react-redux';
 import {updateUser} from 'common/state/actionCreators';
@@ -26,11 +25,11 @@ const Login = () => {
             const response = await createXHR({
                 url: routes.user.login,
                 method: 'POST',
-                data: stringify({
-                    remember_me: rememberMe ? 'true' : null,
+                data: new URLSearchParams({
+                    remember_me: rememberMe ? 'true' : 'false',
                     email,
                     password,
-                }),
+                }).toString(),
             });
             const json = response.data;
 

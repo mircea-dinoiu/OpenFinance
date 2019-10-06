@@ -1,11 +1,15 @@
 // @flow weak
 import {parsePreferences} from 'common/utils/preferences';
-import {stringify, parse} from 'query-string';
+import {mapUrlSearchParamsToObject} from 'common/utils';
 
 export const readState = () => {
     try {
         return {
-            preferences: parsePreferences(parse(location.search)),
+            preferences: parsePreferences(
+                mapUrlSearchParamsToObject(
+                    new URLSearchParams(location.search),
+                ),
+            ),
         };
     } catch (e) {
         return undefined;
@@ -14,7 +18,11 @@ export const readState = () => {
 
 export const saveState = (state) => {
     try {
-        history.replaceState({}, '', `/?${stringify(state.preferences)}`);
+        history.replaceState(
+            {},
+            '',
+            `/?${new URLSearchParams(state.preferences).toString()}`,
+        );
     } catch (e) {
         // noop
     }

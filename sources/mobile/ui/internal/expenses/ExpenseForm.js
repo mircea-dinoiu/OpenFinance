@@ -25,7 +25,6 @@ import {
 import RepeatOptions from 'common/defs/repeatOptions';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';
-import {stringify} from 'query-string';
 import {useSelector} from 'react-redux';
 import {MultiSelect, SingleSelect} from 'common/components/Select';
 import {overflowVisible} from 'common/defs/styles';
@@ -43,6 +42,7 @@ import type {
     TypeUsers,
     TypeCategories,
 } from 'common/types';
+import {makeUrl} from 'common/utils/url';
 
 const boxStyle = {
     padding: '10px 0',
@@ -297,10 +297,10 @@ class ExpenseForm extends PureComponent<TypeProps> {
         this.descriptionSuggestionsCancelSource = CancelToken.source();
 
         const response = await createXHR({
-            url: `${routes.suggestion.expense.descriptions}?${stringify({
+            url: makeUrl(routes.suggestion.expense.descriptions, {
                 search,
                 end_date: this.props.preferences.endDate,
-            })}`,
+            }),
             cancelToken: this.descriptionSuggestionsCancelSource.token,
         });
         const descriptionSuggestions = response.data;
@@ -329,9 +329,9 @@ class ExpenseForm extends PureComponent<TypeProps> {
             this.categoriesCancelSource = CancelToken.source();
 
             const response = await createXHR({
-                url: `${routes.suggestion.expense.categories}?${stringify({
+                url: makeUrl(routes.suggestion.expense.categories, {
                     search,
-                })}`,
+                }),
                 cancelToken: this.categoriesCancelSource.token,
             });
             const categories = response.data;

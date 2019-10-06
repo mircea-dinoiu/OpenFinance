@@ -17,7 +17,6 @@ import {
 } from 'mobile/ui/internal/common/helpers';
 import React, {PureComponent} from 'react';
 import {Col} from 'react-grid-system';
-import {stringify} from 'query-string';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 
@@ -53,6 +52,7 @@ import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {css} from 'styled-components';
 import ContextMenuItems from 'common/components/MainScreen/ContextMenu/ContextMenuItems';
+import {makeUrl} from 'common/utils/url';
 
 type TypeProps = {
     api: {
@@ -225,7 +225,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         });
 
         const response = await createXHR({
-            url: `${this.props.api.list}?${stringify({
+            url: makeUrl(this.props.api.list, {
                 end_date: endDate,
                 page,
                 limit: this.pageSize,
@@ -241,7 +241,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                         ...this.filters,
                     ].filter(Boolean),
                 ),
-            })}`,
+            }),
         });
         const json = response.data;
 

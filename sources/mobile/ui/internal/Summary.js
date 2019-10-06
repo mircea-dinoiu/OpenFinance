@@ -5,7 +5,6 @@ import {BigLoader} from 'common/components/loaders';
 import {Paper, Checkbox, FormControlLabel} from '@material-ui/core';
 import {green, purple, red} from '@material-ui/core/colors';
 import routes from '../../../common/defs/routes';
-import {stringify} from 'query-string';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import {connect} from 'react-redux';
@@ -25,6 +24,7 @@ import type {
     TypeMoneyLocationTypes,
     TypeCategories,
 } from 'common/types';
+import {makeUrl} from 'common/utils/url';
 
 type TypeProps = {
     screen: TypeScreenQueries,
@@ -137,7 +137,7 @@ class Summary extends React.PureComponent<
         });
 
         const response = await createXHR({
-            url: `${routes.report.summary}?${stringify({
+            url: makeUrl(routes.report.summary, {
                 ...pickBy(
                     {
                         end_date: getEndDateBasedOnIncludePreference(
@@ -155,7 +155,7 @@ class Summary extends React.PureComponent<
                 filters: JSON.stringify(
                     includePending ? [] : [{id: 'status', value: 'finished'}],
                 ),
-            })}`,
+            }),
         });
         const json = response.data;
 
