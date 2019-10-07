@@ -7,34 +7,23 @@ import {green, purple, red} from '@material-ui/core/colors';
 import routes from '../../../common/defs/routes';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
-import {connect} from 'react-redux';
 import IncludeDropdown from 'common/components/IncludeDropdown';
 import {getStartDate} from 'common/utils/dates';
 import {greyedOut} from 'common/defs/styles';
 import {Sizes} from 'common/defs';
 import SummaryCategory from 'mobile/ui/internal/summary/SummaryCategory';
-import {updatePreferences} from 'common/state/actionCreators';
 import moment from 'moment';
 import {endOfDayToISOString} from 'shared/utils/dates';
 import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';
-import type {
-    TypePreferences,
-    TypeScreenQueries,
-    TypeUsers,
-    TypeMoneyLocationTypes,
-    TypeCategories,
-} from 'common/types';
 import {makeUrl} from 'common/utils/url';
-
-type TypeProps = {
-    screen: TypeScreenQueries,
-    preferences: TypePreferences,
-    updatePreferences: typeof updatePreferences,
-    user: TypeUsers,
-    moneyLocationTypes: TypeMoneyLocationTypes,
-    categories: TypeCategories,
-    refreshWidgets: () => void,
-};
+import {
+    usePreferencesWithActions,
+    useRefreshWidgets,
+    useMoneyLocationTypes,
+    useUser,
+    useCategories,
+    useScreenSize,
+} from 'common/state/hooks';
 
 const getEndDateBasedOnIncludePreference = (endDate, include) => {
     if (include === 'previous-year') {
@@ -96,45 +85,23 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
     return endDate;
 };
 
-class Summary extends React.PureComponent<
-    TypeProps,
-    {
-        results: {},
-        refreshing: boolean,
-        firstLoad: boolean,
-    },
-> {
-    state = {
-        firstLoad: true,
-        results: null,
-        refreshing: false,
-    };
+const Summary = () => {
+    const [firstLoad, setFirstLoad] = React.useState(true);
+    const [results, setResults] = React.useState(null);
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [preferences, {updatePreferences}] = usePreferencesWithActions();
+    const refreshWidgets = useRefreshWidgets();
+    const moneyLocationTypes = useMoneyLocationTypes();
+    const user = useUser();
+    const categories = useCategories();
+    const screenSize = useScreenSize();
 
-    componentDidMount() {
-        this.load();
-    }
-
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({preferences, refreshWidgets}) {
-        const {endDate} = preferences;
-
-        if (endDate !== this.props.preferences.endDate) {
-            this.load({endDate});
-        }
-
-        if (refreshWidgets !== this.props.refreshWidgets) {
-            this.load();
-        }
-    }
-
-    load = async ({
-        includePending = this.props.preferences.includePending,
-        endDate = this.props.preferences.endDate,
-        include = this.props.preferences.include,
+    const load = async ({
+        includePending = preferences.includePending,
+        endDate = preferences.endDate,
+        include = preferences.include,
     } = {}) => {
-        this.setState({
-            refreshing: true,
-        });
+        setRefreshing(true);
 
         const response = await createXHR({
             url: makeUrl(routes.report.summary, {
@@ -159,133 +126,121 @@ class Summary extends React.PureComponent<
         });
         const json = response.data;
 
-        this.setState({
-            results: json,
-            firstLoad: false,
-            refreshing: false,
-        });
+        setResults(json);
+        setFirstLoad(false);
+        setRefreshing(false);
     };
 
-    renderCategory(props) {
-        return React.createElement(SummaryCategory, props);
+    React.useEffect(() => {
+        load();
+    }, [preferences.endDate, refreshWidgets]);
+
+    const renderCategory = (categoryProps) =>
+        React.createElement(SummaryCategory, categoryProps);
+
+    const renderResults = () => (
+        <div style={{margin: '0 0 20px'}}>
+            {renderCategory({
+                backgroundColor: green[500],
+                title: 'Balance by Account',
+                summaryObject: results.remainingData.byML,
+                entities: moneyLocationTypes,
+                expandedByDefault: true,
+                renderDescription({reference}) {
+                    return <MoneyLocationDisplay id={reference} />;
+                },
+            })}
+
+            {renderCategory({
+                backgroundColor: green[500],
+                title: 'Balance by Person',
+                summaryObject: results.remainingData.byUser,
+                entities: user.list,
+                entityNameField: 'full_name',
+            })}
+
+            {renderCategory({
+                backgroundColor: purple[500],
+                title: 'Transactions by Category',
+                summaryObject: results.expensesByCategory,
+                entities: categories,
+                entityNameField: 'name',
+                showSumInHeader: false,
+            })}
+
+            {renderCategory({
+                backgroundColor: red[500],
+                title: 'Expenses by Account',
+                summaryObject: results.expensesData.byML,
+                entities: moneyLocationTypes,
+                entityNameField: 'name',
+            })}
+
+            {renderCategory({
+                backgroundColor: red[500],
+                title: 'Expenses by Person',
+                summaryObject: results.expensesData.byUser,
+                entities: user.list,
+                entityNameField: 'full_name',
+            })}
+        </div>
+    );
+
+    const onIncludeChange = (include) => {
+        updatePreferences({include});
+        load({include});
+    };
+
+    const handleToggleIncludePending = () => {
+        const includePending = !preferences.includePending;
+
+        updatePreferences({includePending});
+        load({includePending});
+    };
+
+    if (firstLoad) {
+        return <BigLoader />;
     }
 
-    renderResults() {
-        const {results} = this.state;
-
-        return (
-            <div style={{margin: '0 0 20px'}}>
-                {this.renderCategory({
-                    backgroundColor: green[500],
-                    title: 'Balance by Account',
-                    summaryObject: results.remainingData.byML,
-                    entities: this.props.moneyLocationTypes,
-                    expandedByDefault: true,
-                    renderDescription({reference}) {
-                        return <MoneyLocationDisplay id={reference} />;
-                    },
-                })}
-
-                {this.renderCategory({
-                    backgroundColor: green[500],
-                    title: 'Balance by Person',
-                    summaryObject: results.remainingData.byUser,
-                    entities: this.props.user.list,
-                    entityNameField: 'full_name',
-                })}
-
-                {this.renderCategory({
-                    backgroundColor: purple[500],
-                    title: 'Transactions by Category',
-                    summaryObject: results.expensesByCategory,
-                    entities: this.props.categories,
-                    entityNameField: 'name',
-                    showSumInHeader: false,
-                })}
-
-                {this.renderCategory({
-                    backgroundColor: red[500],
-                    title: 'Expenses by Account',
-                    summaryObject: results.expensesData.byML,
-                    entities: this.props.moneyLocationTypes,
-                    entityNameField: 'name',
-                })}
-
-                {this.renderCategory({
-                    backgroundColor: red[500],
-                    title: 'Expenses by Person',
-                    summaryObject: results.expensesData.byUser,
-                    entities: this.props.user.list,
-                    entityNameField: 'full_name',
-                })}
+    return (
+        <div
+            style={{
+                padding: '0 5px',
+                ...(screenSize.isLarge
+                    ? {
+                          overflowY: 'auto',
+                          overflowX: 'hidden',
+                          height: `calc(100vh - ${Sizes.HEADER_SIZE})`,
+                      }
+                    : {}),
+            }}
+        >
+            <div style={refreshing ? greyedOut : {}}>
+                <Paper
+                    style={{
+                        margin: '5px 0',
+                        padding: '0 10px',
+                    }}
+                >
+                    <IncludeDropdown
+                        value={preferences.include}
+                        onChange={onIncludeChange}
+                    />
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={preferences.includePending}
+                                onChange={handleToggleIncludePending}
+                                color="default"
+                            />
+                        }
+                        label="Include pending transactions"
+                    />
+                </Paper>
+                {results && renderResults()}
             </div>
-        );
-    }
+        </div>
+    );
+};
 
-    onIncludeChange = (include) => {
-        this.props.updatePreferences({include});
-        this.load({include});
-    };
-
-    handleToggleIncludePending = () => {
-        const includePending = !this.props.preferences.includePending;
-
-        this.props.updatePreferences({includePending});
-        this.load({includePending});
-    };
-
-    render() {
-        if (this.state.firstLoad) {
-            return <BigLoader />;
-        }
-
-        return (
-            <div
-                style={{
-                    padding: '0 5px',
-                    ...(this.props.screen.isLarge
-                        ? {
-                              overflowY: 'auto',
-                              overflowX: 'hidden',
-                              height: `calc(100vh - ${Sizes.HEADER_SIZE})`,
-                          }
-                        : {}),
-                }}
-            >
-                <div style={this.state.refreshing ? greyedOut : {}}>
-                    <Paper
-                        style={{
-                            margin: '5px 0',
-                            padding: '0 10px',
-                        }}
-                    >
-                        <IncludeDropdown
-                            value={this.props.preferences.include}
-                            onChange={this.onIncludeChange}
-                        />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={
-                                        this.props.preferences.includePending
-                                    }
-                                    onChange={this.handleToggleIncludePending}
-                                    color="default"
-                                />
-                            }
-                            label="Include pending transactions"
-                        />
-                    </Paper>
-                    {this.state.results && this.renderResults()}
-                </div>
-            </div>
-        );
-    }
-}
-
-const mapDispatchToProps = {updatePreferences};
-
-export default connect(
-    (state) => state,
-    mapDispatchToProps,
-)(Summary);
+export default Summary;

@@ -3,13 +3,24 @@
 import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
 import {bindActionCreators} from 'redux';
-import {toggleLoading, updatePreferences, updateState} from 'common/state/actionCreators';
-import type {TypeUsers, TypeCurrencies, TypeScreenQueries, TypeSnackbar} from 'common/types';
+import {
+    toggleLoading,
+    updatePreferences,
+    updateState,
+} from 'common/state/actionCreators';
+import type {
+    TypeUsers,
+    TypeCurrencies,
+    TypeScreenQueries,
+    TypeSnackbar,
+} from 'common/types';
 
 export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();
 
-    return React.useMemo(() => bindActionCreators(actions, dispatch), [dispatch]);
+    return React.useMemo(() => bindActionCreators(actions, dispatch), [
+        dispatch,
+    ]);
 };
 export const useScreenSize = (): TypeScreenQueries =>
     useSelector((s) => s.screenSize);
@@ -71,3 +82,8 @@ export const useTitleWithSetter = () => {
         },
     ];
 };
+
+export const useMoneyLocationTypes = () =>
+    useSelector((s) => s.moneyLocationTypes);
+
+export const useRefreshWidgets = () => useSelector((s) => s.refreshWidgets);
