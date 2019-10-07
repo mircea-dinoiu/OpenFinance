@@ -1,9 +1,11 @@
 // @flow weak
 import moment from 'moment';
+import type {TypeUsers} from 'common/types';
 
-export default function (data) {
+export default function (data: {
+    user: TypeUsers,
+}) {
     return {
-        currency: data.currencies.default,
         description: '',
         type: 'withdrawal',
         status: 'pending',

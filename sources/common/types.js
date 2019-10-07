@@ -79,7 +79,7 @@ export type TypeUser = {
 };
 
 export type TypeUsers = {|
-    currency: TypeUser,
+    current: TypeUser,
     list: TypeUser[],
 |};
 
