@@ -108,7 +108,6 @@ const MainScreenCreatorDialog = (props: TypeProps) => {
                     variant="contained"
                     disabled={saving}
                     onClick={props.onCancel}
-                    onTouchTap={props.onCancel}
                     style={{marginRight: 5}}
                 >
                     Cancel
@@ -118,7 +117,6 @@ const MainScreenCreatorDialog = (props: TypeProps) => {
                     disabled={saving}
                     color="primary"
                     onClick={save}
-                    onTouchTap={save}
                     style={{float: 'right'}}
                 >
                     {saving ? <ButtonProgress /> : 'Create'}

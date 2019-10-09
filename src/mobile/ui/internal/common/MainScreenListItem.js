@@ -65,7 +65,6 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
         return (
             <ResponsiveListItem
                 onClick={this.toggleDetails}
-                onTouchTap={this.toggleDetails}
                 style={this.getStyle()}
                 innerDivStyle={this.getInnerDivStyle()}
                 leftIcon={
@@ -86,7 +85,6 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
                             }}
                             style={{marginLeft: 0, left: 0}}
                             onClick={this.handleBurgerClick}
-                            onTouchTap={this.handleBurgerClick}
                         >
                             <ContextMenuItems
                                 {...this.props.contextMenuItemsProps}

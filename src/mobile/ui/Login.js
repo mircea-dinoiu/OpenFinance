@@ -94,7 +94,6 @@ const Login = () => {
                     color="primary"
                     style={{margin: '20px 0 0'}}
                     onClick={submit}
-                    onTouchTap={submit}
                     disabled={loading}
                 >
                     {loading ? <ButtonProgress /> : 'Login'}

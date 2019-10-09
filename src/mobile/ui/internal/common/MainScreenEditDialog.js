@@ -157,7 +157,6 @@ class MainScreenEditDialog extends React.PureComponent<
                         variant="contained"
                         disabled={this.state.saving}
                         onClick={this.props.onCancel}
-                        onTouchTap={this.props.onCancel}
                         style={{marginRight: 5}}
                     >
                         Cancel
@@ -167,7 +166,6 @@ class MainScreenEditDialog extends React.PureComponent<
                         disabled={this.state.saving}
                         color="primary"
                         onClick={this.save}
-                        onTouchTap={this.save}
                         style={{float: 'right'}}
                     >
                         {this.state.saving ? (

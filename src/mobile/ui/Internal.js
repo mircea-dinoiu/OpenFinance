@@ -106,13 +106,11 @@ const Internal = () => {
                         label="Summary"
                         icon={<AccountBalance />}
                         onClick={() => setSelectedIndex(0)}
-                        onTouchTap={() => setSelectedIndex(0)}
                     />
                     <BottomNavigationAction
                         label="Transactions"
                         icon={<TrendingDown />}
                         onClick={() => setSelectedIndex(1)}
-                        onTouchTap={() => setSelectedIndex(1)}
                     />
                 </BottomNavigation>
             </Paper>

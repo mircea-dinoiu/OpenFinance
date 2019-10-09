@@ -69,10 +69,6 @@ export default function ContextMenuItems({
                     onCloseContextMenu,
                     onClickEdit,
                 )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickEdit,
-                )}
                 disabled={disabledForZero}
                 desktop={desktop}
             />
@@ -96,10 +92,6 @@ export default function ContextMenuItems({
                 primaryText="Delete"
                 leftIcon={<DeleteIcon />}
                 onClick={compose(
-                    onCloseContextMenu,
-                    onClickDelete,
-                )}
-                onTouchTap={compose(
                     onCloseContextMenu,
                     onClickDelete,
                 )}
@@ -130,10 +122,6 @@ export default function ContextMenuItems({
                     onCloseContextMenu,
                     onClickMerge,
                 )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickMerge,
-                )}
                 disabled={disabledForLessThanTwo}
                 desktop={desktop}
             />
@@ -158,10 +146,6 @@ export default function ContextMenuItems({
                         primaryText="Change to Pending"
                         leftIcon={<UnlockIcon />}
                         onClick={compose(
-                            onCloseContextMenu,
-                            onClickNeedsReview,
-                        )}
-                        onTouchTap={compose(
                             onCloseContextMenu,
                             onClickNeedsReview,
                         )}
@@ -192,10 +176,6 @@ export default function ContextMenuItems({
                     onCloseContextMenu,
                     onClickWithdrawal,
                 )}
-                onTouchTap={compose(
-                    onCloseContextMenu,
-                    onClickWithdrawal,
-                )}
                 disabled={disabledForZero}
                 desktop={desktop}
             />
@@ -218,10 +198,6 @@ export default function ContextMenuItems({
                 primaryText="Unarchive"
                 leftIcon={<IconUnarchive />}
                 onClick={compose(
-                    onCloseContextMenu,
-                    onClickUnhide,
-                )}
-                onTouchTap={compose(
                     onCloseContextMenu,
                     onClickUnhide,
                 )}

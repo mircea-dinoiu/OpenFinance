@@ -892,7 +892,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                             <Button
                                 variant="contained"
                                 fullWidth={true}
-                                onTouchTap={this.loadMore}
                                 style={{margin: '20px 0 60px'}}
                                 disabled={loading}
                             >

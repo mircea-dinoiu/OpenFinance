@@ -32,7 +32,6 @@ const MainScreenDeleteDialog = ({
             <Button
                 variant="contained"
                 onClick={onYes}
-                onTouchTap={onYes}
                 style={{marginRight: 5}}
             >
                 Yes
@@ -41,7 +40,6 @@ const MainScreenDeleteDialog = ({
                 variant="contained"
                 color="primary"
                 onClick={onNo}
-                onTouchTap={onNo}
             >
                 No
             </Button>

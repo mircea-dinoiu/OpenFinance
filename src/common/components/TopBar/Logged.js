@@ -20,7 +20,6 @@ const Logged = (rawProps) => {
             <MenuItem
                 primaryText="Logout"
                 onClick={onLogout}
-                onTouchTap={onLogout}
             />
         </IconMenu>
     );
