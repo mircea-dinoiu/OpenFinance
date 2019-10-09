@@ -13,7 +13,7 @@ module.exports = {
     devtool: isProduction ? false : process.env.DEVTOOL || 'eval-source-map',
     mode: isProduction ? 'production' : 'development',
     entry: {
-        'app': path.resolve('sources/index.js'),
+        'app': path.resolve('src/index.js'),
     },
     devServer: isHot
         ? {
@@ -60,8 +60,8 @@ module.exports = {
     ].filter(Boolean),
     resolve: {
         alias: {
-            common: path.resolve(__dirname, 'sources/common'),
-            mobile: path.resolve(__dirname, 'sources/mobile'),
+            common: path.resolve(__dirname, 'src/common'),
+            mobile: path.resolve(__dirname, 'src/mobile'),
             shared: path.resolve(__dirname, 'shared'),
             'react-dom': !isHot ? 'react-dom' : '@hot-loader/react-dom',
         },

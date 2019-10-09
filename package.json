@@ -109,11 +109,11 @@
     "test": "jest --bail",
     "test:related": "jest --findRelatedTests",
     "test:cov": "open build/coverage/index.html",
-    "lint:js": "eslint server sources --quiet",
+    "lint:js": "eslint server src --quiet",
     "format:js": "prettier-eslint --write",
-    "format": "yarn run format:js \"server/**/*.js\" \"sources/**/*.js\" \"*.js\"",
+    "format": "yarn run format:js \"server/**/*.js\" \"src/**/*.js\" \"*.js\"",
     "sql": "sequelize",
-    "nodemon": "nodemon --ignore sources/ --ignore '*.test.js*' --ignore storage/"
+    "nodemon": "nodemon --ignore src/ --ignore '*.test.js*' --ignore storage/"
   },
   "lint-staged": {
     "*.js": [

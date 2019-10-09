@@ -2,9 +2,9 @@ import recursiveReaddir from 'recursive-readdir';
 import path from 'path';
 import fs from 'fs';
 
-describe('All files in sources', () => {
+describe('All files in src', () => {
     it('should have flow annotation', (done) => {
-        recursiveReaddir('./sources', (err, files) => {
+        recursiveReaddir('./src', (err, files) => {
             expect(err).toBe(null);
             const failed = [];
 

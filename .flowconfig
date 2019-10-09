@@ -13,7 +13,7 @@ esproposal.optional_chaining=enable
 exact_by_default=true
 
 module.name_mapper='^shared/\(.*\)$' -> '<PROJECT_ROOT>/shared/\1'
-module.name_mapper='^common/\(.*\)$' -> '<PROJECT_ROOT>/sources/common/\1'
-module.name_mapper='^mobile/\(.*\)$' -> '<PROJECT_ROOT>/sources/mobile/\1'
+module.name_mapper='^common/\(.*\)$' -> '<PROJECT_ROOT>/src/common/\1'
+module.name_mapper='^mobile/\(.*\)$' -> '<PROJECT_ROOT>/src/mobile/\1'
 
 module.file_ext=.js
