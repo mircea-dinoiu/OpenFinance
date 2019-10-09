@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import * as React from 'react';
 import ReactTable from 'react-table';
 import styled, {css, createGlobalStyle} from 'styled-components';

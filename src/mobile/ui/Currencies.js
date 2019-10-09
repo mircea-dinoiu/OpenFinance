@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import {SingleSelect} from 'common/components/Select';
 import {objectValuesOfSameType} from 'common/utils/collection';
 import React from 'react';

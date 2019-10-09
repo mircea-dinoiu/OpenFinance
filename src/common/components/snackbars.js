@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import {hideSnackbar, showSnackbar} from 'common/state/actionCreators';
 import {uniqueId} from 'lodash';
 import * as React from 'react';

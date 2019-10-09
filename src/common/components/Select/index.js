@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import * as React from 'react';
 import classNames from 'classnames';
 import Select from 'react-select/dist/react-select';

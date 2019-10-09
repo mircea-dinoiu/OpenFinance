@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import * as React from 'react';
 import {IconMenu, IconButton, RadioButtonGroup, RadioButton} from 'material-ui';
 import {

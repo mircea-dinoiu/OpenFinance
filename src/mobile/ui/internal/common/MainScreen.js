@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import * as React from 'react';
 
 type TypeProps = {

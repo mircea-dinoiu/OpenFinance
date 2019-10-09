@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import {isEqual} from 'lodash';
 import * as React from 'react';
 

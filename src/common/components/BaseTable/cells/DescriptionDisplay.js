@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import * as React from 'react';
 import {Flags} from 'mobile/ui/internal/common/MainScreenFlags';
 import {css} from 'styled-components';

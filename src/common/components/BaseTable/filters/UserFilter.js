@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import * as React from 'react';
 import SelectFilter from './SelectFilter';
 import {useUser} from 'common/state/hooks';

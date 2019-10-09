@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import type {TypeTransactionModel} from 'common/types';
 import {map, flatten, uniqBy, uniq, mapValues, sortBy} from 'lodash';
 import {sumArray} from 'shared/utils/numbers';

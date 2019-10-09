@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import * as React from 'react';
 
 import MainScreen from './common/MainScreen';

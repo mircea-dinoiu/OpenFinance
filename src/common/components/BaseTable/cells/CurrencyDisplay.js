@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import {getItemCurrencyISOCode} from 'common/helpers';
 import {useCurrencies} from 'common/state/hooks';
 

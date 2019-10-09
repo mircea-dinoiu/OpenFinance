@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import {blue} from '@material-ui/core/colors';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';

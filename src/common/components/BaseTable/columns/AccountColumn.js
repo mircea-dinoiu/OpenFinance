@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import type {TypeTransactionModel} from 'common/types';
 import * as React from 'react';
 import MoneyLocationDisplay from 'common/components/BaseTable/cells/MoneyLocationDisplay';

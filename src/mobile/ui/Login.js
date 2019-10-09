@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import React from 'react';
 import {TextField, Toggle} from 'material-ui';
 import {Button} from '@material-ui/core';

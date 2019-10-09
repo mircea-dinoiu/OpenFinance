@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import * as React from 'react';
 import {Tooltip as MaterialUITooltip} from '@material-ui/core';
 import type {TypeCss} from 'common/types';

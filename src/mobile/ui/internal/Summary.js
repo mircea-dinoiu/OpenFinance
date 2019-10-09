@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import * as React from 'react';
 import {createXHR} from 'common/utils/fetch';
 import {BigLoader} from 'common/components/loaders';

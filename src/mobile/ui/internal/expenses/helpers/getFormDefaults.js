@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import moment from 'moment';
 import type {TypeUsers} from 'common/types';
 

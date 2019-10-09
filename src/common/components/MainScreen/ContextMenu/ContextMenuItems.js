@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import {objectValuesOfSameType} from 'common/utils/collection';
 import * as React from 'react';
 import {MenuItem, Divider} from 'material-ui';

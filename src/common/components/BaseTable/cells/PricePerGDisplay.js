@@ -1,4 +1,4 @@
-// @flow weak
+// @ flow
 import AmountDisplay from 'common/components/BaseTable/cells/AmountDisplay';
 import * as React from 'react';
 
