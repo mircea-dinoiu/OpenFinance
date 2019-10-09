@@ -7,7 +7,7 @@ export const readState = () => {
         return {
             preferences: parsePreferences(
                 Object.fromEntries(
-                    new URLSearchParams(location.search).entries(),
+                    new URLSearchParams(window.location.search).entries(),
                 ),
             ),
         };
@@ -18,7 +18,7 @@ export const readState = () => {
 
 export const saveState = (state: TypeGlobalState) => {
     try {
-        history.replaceState(
+        window.history.replaceState(
             {},
             '',
             // $FlowFixMe

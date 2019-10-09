@@ -1,22 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const {getScriptSrc} = require('../helpers');
-// config
-const config = require('config');
-const debug = config.get('debug');
+const fs = require('fs');
 
 router.get('/', (req, res) => {
-    const data = {
-        csrfToken: req.csrfToken ? req.csrfToken() : '',
-        debug,
-        assetHost: config.get('devServer.enable')
-            ? config.get('devServer.hostname')
-            : '',
-    };
+    const csrfToken = req.csrfToken ? req.csrfToken() : '';
 
-    res.render('responsive', {
-        ...data,
-        scriptSrc: getScriptSrc('app.js'),
+    fs.readFile('build/app.html', (err, contents) => {
+        if (err) {
+            res.send('Fatal error');
+            console.error(err);
+        } else {
+            res.send(contents.toString().replace('%CSRF_TOKEN%', csrfToken));
+        }
     });
 });
 

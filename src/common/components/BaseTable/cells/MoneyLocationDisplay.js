@@ -14,11 +14,10 @@ const StatusToIconComponent = {
 };
 
 const MoneyLocationDisplay = ({id}) => {
+    const moneyLocations = useMoneyLocations();
     if (!id) {
         return null;
     }
-
-    const moneyLocations = useMoneyLocations();
     const moneyLocation = moneyLocations.find((each) => each.id === Number(id));
     const IconComponent = StatusToIconComponent[moneyLocation.status];
 

@@ -1,6 +1,5 @@
 const path = require('path');
 const basePath = (string = '') => path.join(__dirname, '../../', string);
-const config = require('config');
 const Messages = require('../Messages');
 const defs = require('../../src/shared/defs');
 
@@ -74,15 +73,6 @@ module.exports = {
         });
 
         return dest;
-    },
-
-    getScriptSrc(script) {
-        const assetHost = config.get('devServer.enable')
-            ? config.get('devServer.hostname')
-            : '';
-        const manifest = require('../../public/dist/manifest.json');
-
-        return assetHost + manifest[script];
     },
 
     wrapPromise(promise) {

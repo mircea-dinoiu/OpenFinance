@@ -68,18 +68,19 @@ class SelectFilter extends React.PureComponent<
                 const selectOptions = this.props.items;
 
                 if (!this.props.multi) {
-                    return selectOptions.find(
+                    const found = selectOptions.find(
                         (option) => option.id === filter.value,
-                    )?.[this.props.nameKey];
+                    );
+                    return found && found[this.props.nameKey];
                 }
 
                 return filter.value
-                    .map(
-                        (id) =>
-                            selectOptions.find((option) => option.id === id)?.[
-                                this.props.nameKey
-                            ],
-                    )
+                    .map((id) => {
+                        let found = selectOptions.find(
+                            (option) => option.id === id,
+                        );
+                        return found && found[this.props.nameKey];
+                    })
                     .join(', ');
             }
         }

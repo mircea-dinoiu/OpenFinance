@@ -4,10 +4,6 @@
     "secret": "keyboard cat"
   },
   "enableCSRF": true,
-  "devServer": {
-    "hostname": "http://localhost:8080",
-    "enable": false
-  },
   "memoryStore": false,
   "timezone": "+00:00"
 }

@@ -135,7 +135,7 @@ const App = () => {
 
             showLogin();
         } catch (e) {
-            location.reload();
+            window.location.reload();
         }
     };
 

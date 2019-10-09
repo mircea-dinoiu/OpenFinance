@@ -11,7 +11,7 @@ const config = require('config');
 const debug = config.get('debug');
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
+app.use(favicon(path.join(__dirname, 'build', 'favicon.png')));
 
 // HTTP request logger middleware for node.js
 app.use(logger('dev'));
@@ -19,7 +19,7 @@ app.use(logger('dev'));
 /*
  * Serve static assets (before anything else!). We don't need session or filters when serving these.
  */
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 /*
  * Cookie parser
