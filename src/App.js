@@ -35,7 +35,10 @@ import {
     useTitleWithSetter,
     usePageWithSetter,
     useLoadingWithSetter,
-    useCurrenciesDrawerOpenWithSetter, useSnackbars, useUser, useCurrencies,
+    useCurrenciesDrawerOpenWithSetter,
+    useSnackbars,
+    useUser,
+    useCurrencies,
 } from 'common/state/hooks';
 
 const theme = createMuiTheme({

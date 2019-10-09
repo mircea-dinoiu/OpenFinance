@@ -88,9 +88,12 @@ class MainScreenEditDialog extends React.PureComponent<
 
             const response = await this.props.onRequestUpdate(
                 data.map((each) =>
-                    this.props.formToModel({...each, ...updates}, {
-                        user: this.props.user,
-                    }),
+                    this.props.formToModel(
+                        {...each, ...updates},
+                        {
+                            user: this.props.user,
+                        },
+                    ),
                 ),
             );
             const json = response.data;

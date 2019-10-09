@@ -5,7 +5,9 @@ import type {
     TypeScreenQueries,
     TypePreferences,
     TypeDispatch,
-    TypeCurrencies, TypeUsers, TypeGlobalState,
+    TypeCurrencies,
+    TypeUsers,
+    TypeGlobalState,
 } from 'common/types';
 import {createXHR} from 'common/utils/fetch';
 import routes from 'common/defs/routes';

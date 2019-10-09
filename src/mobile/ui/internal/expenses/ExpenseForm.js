@@ -96,8 +96,7 @@ export const setChargedPersonValueFactory = (
 
         while (
             (diffToMax =
-                PERC_MAX -
-                sumArray(objectValuesOfSameType(nextChargedPersons)))
+                PERC_MAX - sumArray(objectValuesOfSameType(nextChargedPersons)))
         ) {
             for (const key in nextChargedPersons) {
                 if (key !== id) {

@@ -36,11 +36,7 @@ const MainScreenDeleteDialog = ({
             >
                 Yes
             </Button>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={onNo}
-            >
+            <Button variant="contained" color="primary" onClick={onNo}>
                 No
             </Button>
         </DialogActions>

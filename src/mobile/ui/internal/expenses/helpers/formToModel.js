@@ -2,9 +2,12 @@
 
 import type {TypeUsers} from 'common/types';
 
-export default (form, props: {
-    user: TypeUsers,
-}) => {
+export default (
+    form,
+    props: {
+        user: TypeUsers,
+    },
+) => {
     const users =
         Object.keys(form.chargedPersons).length > 0
             ? form.chargedPersons

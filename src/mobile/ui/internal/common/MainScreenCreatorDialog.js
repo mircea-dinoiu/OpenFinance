@@ -17,10 +17,7 @@ import {
 import {withStyles} from '@material-ui/core/styles';
 import {dialog} from 'common/defs/styles';
 import {useUser} from 'common/state/hooks';
-import type {
-    TypeTransactionForm,
-    TypeUsers,
-} from 'common/types';
+import type {TypeTransactionForm, TypeUsers} from 'common/types';
 
 type TypeProps = {
     getFormDefaults: ({

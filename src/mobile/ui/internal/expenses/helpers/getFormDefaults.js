@@ -2,9 +2,7 @@
 import moment from 'moment';
 import type {TypeUsers} from 'common/types';
 
-export default function (data: {
-    user: TypeUsers,
-}) {
+export default function(data: {user: TypeUsers}) {
     return {
         description: '',
         type: 'withdrawal',
