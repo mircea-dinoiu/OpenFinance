@@ -12,7 +12,7 @@ module.ignore_non_literal_requires=true
 esproposal.optional_chaining=enable
 exact_by_default=true
 
-module.name_mapper='^shared/\(.*\)$' -> '<PROJECT_ROOT>/shared/\1'
+module.name_mapper='^shared/\(.*\)$' -> '<PROJECT_ROOT>/src/shared/\1'
 module.name_mapper='^common/\(.*\)$' -> '<PROJECT_ROOT>/src/common/\1'
 module.name_mapper='^mobile/\(.*\)$' -> '<PROJECT_ROOT>/src/mobile/\1'
 

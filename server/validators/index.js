@@ -6,8 +6,8 @@ const chalk = require('chalk');
 const stringIsInt = validator.isInt;
 const stringIsFloat = validator.isFloat;
 const logger = require('../helpers/logger');
-const defs = require('../../shared/defs');
-const {sumArray} = require('../../shared/utils/numbers');
+const defs = require('../../src/shared/defs');
+const {sumArray} = require('../../src/shared/utils/numbers');
 
 Object.assign(validator, {
     isInt: (value) => {

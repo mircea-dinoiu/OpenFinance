@@ -3,7 +3,7 @@ const {Validator} = require('../validators');
 const {Expense: Model, sql} = require('../models');
 const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
 const {sanitizeFilters, sanitizeSorters} = require('../helpers');
-const defs = require('../../shared/defs');
+const defs = require('../../src/shared/defs');
 const {
     mapStartDateToSQL,
     mapEndDateToSQL,

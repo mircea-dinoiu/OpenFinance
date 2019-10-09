@@ -2,7 +2,7 @@ const path = require('path');
 const basePath = (string = '') => path.join(__dirname, '../../', string);
 const config = require('config');
 const Messages = require('../Messages');
-const defs = require('../../shared/defs');
+const defs = require('../../src/shared/defs');
 
 const extractIdsFromModel = (model, key) => {
     const ids = model.dataValues[key];

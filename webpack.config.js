@@ -62,7 +62,7 @@ module.exports = {
         alias: {
             common: path.resolve(__dirname, 'src/common'),
             mobile: path.resolve(__dirname, 'src/mobile'),
-            shared: path.resolve(__dirname, 'shared'),
+            shared: path.resolve(__dirname, 'src/shared'),
             'react-dom': !isHot ? 'react-dom' : '@hot-loader/react-dom',
         },
     },

@@ -3,7 +3,7 @@ const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
 const {pickOwnProperties} = require('../helpers');
 const {sql} = require('../models');
-const defs = require('../../shared/defs');
+const defs = require('../../src/shared/defs');
 
 module.exports = BaseController.extend({
     Model,

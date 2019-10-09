@@ -30,7 +30,6 @@ import {MultiSelect, SingleSelect} from 'common/components/Select';
 import {overflowVisible} from 'common/defs/styles';
 import {DateTimePicker} from '@material-ui/pickers';
 import {CancelToken} from 'axios';
-import * as defs from 'shared/defs';
 import {sumArray} from 'shared/utils/numbers';
 import {sortBy} from 'lodash';
 import {css} from 'styled-components';
@@ -43,6 +42,7 @@ import type {
     TypeCategories,
 } from 'common/types';
 import {makeUrl} from 'common/utils/url';
+import {PERC_STEP, PERC_MAX} from 'shared/defs';
 
 const boxStyle = {
     padding: '10px 0',
@@ -80,7 +80,7 @@ export const setChargedPersonValueFactory = (
     value,
     {userIdsStringified, adjust = true},
 ) => (prevState) => {
-    const step = defs.PERC_STEP;
+    const step = PERC_STEP;
     const nextChargedPersons = {
         ...userIdsStringified.reduce((acc, idString) => {
             acc[idString] = 0;
@@ -96,7 +96,7 @@ export const setChargedPersonValueFactory = (
 
         while (
             (diffToMax =
-                defs.PERC_MAX -
+                PERC_MAX -
                 sumArray(objectValuesOfSameType(nextChargedPersons)))
         ) {
             for (const key in nextChargedPersons) {
@@ -380,7 +380,7 @@ class ExpenseForm extends PureComponent<TypeProps> {
             (each) => each.full_name,
         );
         const {chargedPersons} = this.state;
-        const step = defs.PERC_STEP;
+        const step = PERC_STEP;
         const userIdsStringified = sortedUsers.map((user) => String(user.id));
 
         return (
