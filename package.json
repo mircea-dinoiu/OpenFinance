@@ -21,11 +21,16 @@
     "@material-ui/icons": "^4.2.1",
     "@material-ui/lab": "^4.0.0-alpha.18",
     "@material-ui/pickers": "^3.1.2",
+    "@types/jest": "24.0.18",
+    "@types/node": "12.7.12",
+    "@types/react": "16.9.5",
+    "@types/react-dom": "16.9.1",
+    "@types/react-event-listener": "^0.4.9",
+    "@types/react-redux": "^7.1.4",
+    "@types/styled-components": "^4.1.19",
     "axios": "^0.18.0",
-    "compression-webpack-plugin": "^2.0.0",
     "core-js": "3",
     "cross-env": "^5.2.0",
-    "flow-bin": "^0.109.0",
     "lint-staged": "^7.3.0",
     "material-ui": "^0.20.2",
     "normalize.css": "^8.0.1",
@@ -45,7 +50,9 @@
     "recursive-readdir": "^2.2.2",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "typescript": "3.6.3",
+    "utility-types": "^3.8.0"
   },
   "optionalDependencies": {
     "husky": "^1.1.1"
@@ -75,28 +82,33 @@
     "validator": "^10.7.1"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "eslint:recommended",
+      "react-app"
+    ],
+    "rules": {
+      "no-prototype-builtins": "off",
+      "no-unused-vars": "error"
+    }
   },
   "scripts": {
-    "ci": "run-p --aggregate-output test lint:js flow:check",
+    "ci": "run-p --aggregate-output test lint:js",
     "build": "react-scripts build && mv build/index.html build/app.html",
     "dev": "react-scripts start",
     "start": "node ./bin/www",
     "heroku-prebuild": "npm install --only=dev",
     "heroku-postbuild": "npm run build",
-    "flow": "flow",
-    "flow:check": "flow check",
     "test": "react-scripts test",
     "test:cov": "open build/coverage/index.html",
     "lint:js": "eslint server src --quiet",
     "format:js": "prettier-eslint --write",
     "format": "yarn run format:js \"server/**/*.js\" \"src/**/*.js\" \"*.js\"",
     "sql": "sequelize",
-    "nodemon": "nodemon --ignore src/ --ignore '*.test.js*' --ignore storage/"
+    "nodemon": "nodemon --ignore src/ --ignore '*.test.js*' --ignore storage/",
+    "tsc": "tsc"
   },
   "lint-staged": {
     "*.js": [
-      "flow focus-check",
       "yarn run format:js",
       "eslint --quiet",
       "react-scripts test",
