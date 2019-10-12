@@ -2,7 +2,6 @@
 import 'whatwg-fetch';
 import merge from 'lodash/merge';
 import config from './config';
-import flattenObject from 'utils/flattenObject';
 import axios from 'axios';
 
 const parseOpts = (opts) =>
@@ -16,13 +15,6 @@ const parseOpts = (opts) =>
         },
         opts,
     );
-const log = (data) => {
-    if ('function' === typeof console.table) {
-        console.table(flattenObject(data));
-    } else {
-        console.info('[fetch]', data);
-    }
-};
 
 export const createXHR = <T,>(opts: {
     url: string,
@@ -46,8 +38,6 @@ export const createXHR = <T,>(opts: {
                 'application/x-www-form-urlencoded; charset=UTF-8';
         }
     }
-
-    log(parsedOpts);
 
     return axios(parsedOpts);
 };
