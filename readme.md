@@ -24,11 +24,15 @@ Working with:
 git clone -b master git@github.com:mircea-dinoiu/financial.git
 
 pushd financial
-yarn run build
+yarn build
 yarn start
 ```
 
 # Env variables
 ## Webpack
-- __BABEL_DEBUG=true__ displays babel debug information
-- __DEVTOOL=?__ sets source mapping (https://webpack.js.org/configuration/devtool/)
+- `DEBUG=true` enters debug mode
+- `USE_CSRF=true` uses csrf for requests
+- `TIMEZONE=+00:00` sets timezone
+- `SESSION_STORE=memory` uses memory session instead of DB
+- `SESSION_SECRET=keyboardcat` sets the secret key for session 
+- `FIXER_API_KEY=keyboardcat` sets the [fixer](https://fixer.io/) key 

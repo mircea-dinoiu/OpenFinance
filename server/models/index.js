@@ -3,16 +3,15 @@ const chalk = require('chalk');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
-const config = require('config');
 const db = {};
 const logger = require('../helpers/logger');
 
 if (process.env.NODE_ENV !== 'test') {
     const sql = new Sequelize(process.env.DATABASE_URL, {
         dialectOptions: {
-            timezone: config.get('timezone'),
+            timezone: process.env.TIMEZONE,
         },
-        logging: config.get('debug')
+        logging: process.env.DEBUG === 'true'
             ? (...args) => {
                   logger.log('SQL', ...args.map((arg) => chalk.cyan(arg)));
               }

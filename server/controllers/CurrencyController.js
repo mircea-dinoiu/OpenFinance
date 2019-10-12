@@ -1,5 +1,4 @@
 const CurrencyHelper = require('..//helpers/CurrencyHelper');
-const config = require('config');
 const {basePath} = require('../helpers');
 const logger = require('../helpers/logger');
 const fs = require('fs');
@@ -128,7 +127,7 @@ module.exports = {
             }
         }
 
-        if (config.get('debug')) {
+        if (process.env.DEBUG === 'true') {
             this.data.from_cache = fromCache;
         }
     },

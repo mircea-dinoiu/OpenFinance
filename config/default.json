@@ -1,9 +1,0 @@
-{
-  "debug": false,
-  "session": {
-    "secret": "keyboard cat"
-  },
-  "enableCSRF": true,
-  "memoryStore": false,
-  "timezone": "+00:00"
-}

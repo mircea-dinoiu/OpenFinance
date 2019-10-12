@@ -4,11 +4,6 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const app = express();
 const {wrapPromise} = require('./server/helpers');
-/**
- * Config
- */
-const config = require('config');
-const debug = config.get('debug');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'build', 'favicon.png')));
@@ -63,10 +58,10 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 app.use(
     session({
-        secret: config.get('session.secret'),
+        secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
-        store: config.get('memoryStore')
+        store: process.env.SESSION_STORE === 'mode'
             ? new session.MemoryStore()
             : new SequelizeStore({
                   db: require('./server/models').sql,
@@ -135,7 +130,7 @@ app.use(passport.session());
 /**
  * CSRF
  */
-if (config.get('enableCSRF')) {
+if (process.env.USE_CSRF === 'true') {
     const csrf = require('csurf');
 
     app.use(csrf({cookie: true}));
@@ -146,7 +141,7 @@ if (config.get('enableCSRF')) {
 
         // handle CSRF token errors here
         res.status(403);
-        res.send(debug ? 'Missing CSRF Token' : null);
+        res.send(process.env.DEBUG === 'true' ? 'Missing CSRF Token' : null);
     });
 }
 
