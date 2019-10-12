@@ -94,11 +94,9 @@
   },
   "scripts": {
     "ci": "run-p --aggregate-output test lint:js",
-    "build": "react-scripts build && mv build/index.html build/app.html",
+    "build": "rm -rf build && react-scripts build && mv build/index.html build/app.html",
     "dev": "react-scripts start",
     "start": "node ./bin/www",
-    "heroku-prebuild": "npm install --only=dev",
-    "heroku-postbuild": "npm run build",
     "test": "react-scripts test",
     "test:cov": "open build/coverage/index.html",
     "lint:js": "eslint server src --quiet",
