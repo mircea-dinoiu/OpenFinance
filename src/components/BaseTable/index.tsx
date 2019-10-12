@@ -3,6 +3,7 @@ import ReactTable from 'react-table';
 import styled, {css} from 'styled-components';
 import 'react-table/react-table.css';
 import {green, red} from '@material-ui/core/colors';
+import {spacingLarge, spacingSmall} from '../../defs/styles';
 
 export const Classes = {
     todayRow: 'todayRow',
@@ -73,7 +74,6 @@ export const TableHeader = styled.div`
     padding: 0 20px;
     font-size: 1rem;
     border-bottom: 1px solid rgb(244, 244, 244);
-    width: 100%;
     display: grid;
     grid-gap: 10px;
     grid-template-columns: repeat(4, max-content);
@@ -81,12 +81,10 @@ export const TableHeader = styled.div`
 
 export const TableFooter = styled.div`
     background: white;
-    padding: 5px 20px;
+    padding: ${spacingSmall} ${spacingLarge};
     font-size: 1rem;
     border-top: 1px solid rgb(244, 244, 244);
     box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.15);
-    position: absolute;
-    width: 100%;
 `;
 
 export default function BaseTable(props) {

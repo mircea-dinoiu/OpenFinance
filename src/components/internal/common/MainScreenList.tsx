@@ -749,7 +749,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     {this.renderTableHeader()}
                     <div
                         style={{
-                            height: `calc(100vh - (150px + ${Sizes.HEADER_SIZE}))`,
+                            height: `calc(100vh - (142px + ${Sizes.HEADER_SIZE}))`,
                             background: 'white',
                         }}
                     >

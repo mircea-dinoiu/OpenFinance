@@ -8,7 +8,7 @@ import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import IncludeDropdown from 'components/IncludeDropdown';
 import {getStartDate} from 'utils/dates';
-import {greyedOut} from 'defs/styles';
+import {greyedOut, spacingMedium, spacingSmall} from 'defs/styles';
 import {Sizes} from 'defs';
 import SummaryCategory from 'components/internal/summary/SummaryCategory';
 import moment from 'moment';
@@ -217,8 +217,8 @@ const Summary = () => {
             <div style={refreshing ? greyedOut : {}}>
                 <Paper
                     style={{
-                        margin: '5px 0',
-                        padding: '0 10px',
+                        margin: `${spacingSmall} 0`,
+                        padding: `0 ${spacingMedium}`,
                     }}
                 >
                     <IncludeDropdown

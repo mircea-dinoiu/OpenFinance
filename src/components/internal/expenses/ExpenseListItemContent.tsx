@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Col, Row} from 'react-grid-system';
 import {Flags} from 'components/internal/common/MainScreenFlags';
 import MoneyLocationDisplay from 'components/BaseTable/cells/MoneyLocationDisplay';
 import RepeatsDisplay from 'components/BaseTable/cells/RepeatsDisplay';
@@ -7,6 +6,52 @@ import DateDisplay from 'components/BaseTable/cells/DateDisplay';
 import CategoriesDisplay from 'components/internal/expenses/cells/CategoriesDisplay';
 import AmountDisplay from 'components/BaseTable/cells/AmountDisplay';
 import PersonsDisplay from 'components/internal/expenses/cells/PersonsDisplay';
+import styled from 'styled-components';
+
+const ExpenseListItemContentStyled = styled.div`
+    display: grid;
+    grid-template-areas:
+        'description description persons'
+        'amount flags ml'
+        'date date repeats'
+        'categories categories categories';
+`;
+
+const DescriptionContainer = styled.div`
+    grid-area: description;
+`;
+
+const PersonsContainer = styled.div`
+    grid-area: persons;
+    text-align: right;
+`;
+
+const AmountContainer = styled.div`
+    grid-area: amount;
+    font-size: 1rem;
+    line-height: 20px;
+`;
+
+const FlagsContainer = styled.div`
+    grid-area: flags;
+`;
+
+const MlContainer = styled.div`
+    text-align: right;
+    grid-area: ml;
+`;
+
+const DateContainer = styled.div`
+    grid-area: date;
+`;
+const RepeatsContainer = styled.div`
+    text-align: right;
+    grid-area: repeats;
+`;
+
+const CategoriesContainer = styled.div`
+    grid-area: categories;
+`;
 
 const ExpenseListItemContent = ({item, expanded}) => {
     const personsDisplay = <PersonsDisplay item={item} />;
@@ -20,43 +65,25 @@ const ExpenseListItemContent = ({item, expanded}) => {
     const repeatsDisplay = <RepeatsDisplay item={item} />;
 
     return (
-        <div>
-            <Row>
-                <Col xs={6}>{descriptionDisplay}</Col>
-                <Col xs={6} style={{textAlign: 'right'}}>
-                    {personsDisplay}
-                </Col>
-            </Row>
-            <Row>
-                <Col xs={6}>
-                    <span
-                        style={{
-                            fontSize: '1rem',
-                            float: 'left',
-                            lineHeight: '20px',
-                        }}
-                    >
-                        <AmountDisplay showCurrency={true} item={item} />
-                    </span>
-                    &nbsp;
-                    {flags}
-                </Col>
-                <Col xs={6} style={{textAlign: 'right'}}>
-                    {moneyLocationDisplay}
-                </Col>
-            </Row>
+        <ExpenseListItemContentStyled>
+            <DescriptionContainer>{descriptionDisplay}</DescriptionContainer>
+            <PersonsContainer>{personsDisplay}</PersonsContainer>
+            <AmountContainer>
+                <AmountDisplay showCurrency={true} item={item} />
+            </AmountContainer>
+            <FlagsContainer>{flags}</FlagsContainer>
+            <MlContainer>{moneyLocationDisplay}</MlContainer>
+
             {expanded && (
-                <div>
-                    <Row>
-                        <Col xs={6}>{dateDisplay}</Col>
-                        <Col xs={6} style={{textAlign: 'right'}}>
-                            {repeatsDisplay}
-                        </Col>
-                    </Row>
-                    {categoriesDisplay}
-                </div>
+                <>
+                    <DateContainer>{dateDisplay}</DateContainer>
+                    <RepeatsContainer>{repeatsDisplay}</RepeatsContainer>
+                    <CategoriesContainer>
+                        {categoriesDisplay}
+                    </CategoriesContainer>
+                </>
             )}
-        </div>
+        </ExpenseListItemContentStyled>
     );
 };
 

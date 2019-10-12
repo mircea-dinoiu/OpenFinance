@@ -133,7 +133,7 @@ const App = () => {
                     <ResponsiveGlobalStyle />
                     <div
                         style={{
-                            paddingTop: Sizes.HEADER_SIZE,
+                            marginTop: Sizes.HEADER_SIZE,
                             ...flexColumn,
                         }}
                     >

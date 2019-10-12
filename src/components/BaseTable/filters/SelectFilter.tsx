@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles} from '@material-ui/core';
 import {MultiSelect, SingleSelect} from 'components/Select';
+import {spacingMedium, spacingSmall} from '../../../defs/styles';
 
 const styles = {
     paper: {
@@ -203,7 +204,7 @@ class SelectFilter extends React.PureComponent<
                     onClose={this.handleClose}
                     classes={this.props.classes}
                 >
-                    <div style={{padding: '5px 10px', width: 200}}>
+                    <div style={{padding: `${spacingSmall} ${spacingMedium}`, width: 200}}>
                         <RadioGroup
                             value={this.state.radioValue}
                             onChange={this.handleChangeRadio}

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Chip} from '@material-ui/core';
 import {useCategories, useScreenSize} from 'state/hooks';
+import {spacingSmall} from '../../../../defs/styles';
 
 const CategoriesDisplay = ({item}) => {
     const categories = useCategories();
@@ -19,7 +20,7 @@ const CategoriesDisplay = ({item}) => {
                         key={each.id}
                         style={{
                             background: each.color,
-                            margin: `${screen.isLarge ? 0 : '5px'} 5px 0 0`,
+                            margin: `${screen.isLarge ? 0 : spacingSmall} ${spacingSmall} 0 0`,
                             ...(screen.isLarge
                                 ? {
                                       height: 'auto',

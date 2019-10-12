@@ -25,3 +25,7 @@ export const dialog = {
         maxHeight: '100%',
     },
 };
+
+export const spacingSmall = '5px';
+export const spacingMedium = '10px';
+export const spacingLarge = '20px';

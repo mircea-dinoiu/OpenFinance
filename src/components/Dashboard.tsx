@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {AppBar, BottomNavigation, BottomNavigationAction, Paper, Tab, Tabs} from '@material-ui/core';
+import {
+    AppBar,
+    BottomNavigation,
+    BottomNavigationAction,
+    Paper,
+    Tab,
+    Tabs,
+} from '@material-ui/core';
 
 import Expenses from './internal/Expenses';
 import Summary from './internal/Summary';
@@ -7,10 +14,14 @@ import Summary from './internal/Summary';
 import AccountBalance from '@material-ui/icons/AccountBalance';
 import TrendingDown from '@material-ui/icons/TrendingDown';
 
-import {Col, Row} from 'react-grid-system';
-import {flexColumn} from 'defs/styles';
 import {grey} from '@material-ui/core/colors';
 import {useScreenSize} from 'state/hooks';
+import styled from 'styled-components';
+
+const DashboardStyled = styled.div`
+    display: grid;
+    grid-template-columns: 2fr 10fr;
+`;
 
 const Dashboard = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -49,32 +60,28 @@ const Dashboard = () => {
         return renderComingSoon();
     };
 
-    const shouldRenderExtraScreens = () => false;
+    const shouldRenderExtraScreens = () => true;
 
     const renderLarge = () => (
-        <Row nogutter>
-            <Col xs={2} style={{paddingRight: 0}}>
-                <Summary />
-            </Col>
-            <Col xs={10} style={{paddingLeft: 0}}>
+        <DashboardStyled>
+            <Summary />
+            <div>
                 <AppBar position="static">
                     <Tabs
                         value={selectedIndex}
                         onChange={(event, index) => setSelectedIndex(index)}
                     >
                         <Tab label="Transactions" />
-                        {shouldRenderExtraScreens() && (
-                            <>
-                                <Tab label="Categories" />
-                                <Tab label="Accounts" />
-                                <Tab label="Account Types" />
-                            </>
-                        )}
+                        {shouldRenderExtraScreens() && [
+                            <Tab label="Categories" />,
+                            <Tab label="Accounts" />,
+                            <Tab label="Account Types" />,
+                        ]}
                     </Tabs>
                 </AppBar>
                 {renderDesktopTab(selectedIndex)}
-            </Col>
-        </Row>
+            </div>
+        </DashboardStyled>
     );
 
     const renderMediumDown = () => (
@@ -109,11 +116,7 @@ const Dashboard = () => {
         </div>
     );
 
-    return (
-        <div style={flexColumn}>
-            {screenSize.isLarge ? renderLarge() : renderMediumDown()}
-        </div>
-    );
+    return screenSize.isLarge ? renderLarge() : renderMediumDown();
 };
 
 export default Dashboard;

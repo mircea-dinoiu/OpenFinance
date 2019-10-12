@@ -7,6 +7,7 @@ import Expand from '@material-ui/icons/ExpandMore';
 import BaseTable from 'components/BaseTable';
 import {Checkbox, FormControlLabel} from '@material-ui/core';
 import {TypeCurrencies} from 'types';
+import {spacingMedium, spacingSmall} from '../../../defs/styles';
 
 export class SummarySubCategory extends PureComponent<
     {
@@ -120,7 +121,7 @@ export class SummarySubCategory extends PureComponent<
                                         control={
                                             <Checkbox
                                                 style={{
-                                                    padding: '0 5px 0 10px',
+                                                    padding: `0 ${spacingSmall} 0 ${spacingMedium}`,
                                                 }}
                                                 checked={
                                                     !this.props.excluded[

@@ -5,6 +5,7 @@ import Tooltip from 'components/Tooltip';
 import {financialNum} from 'js/utils/numbers';
 import {getBaseCurrency} from '../helpers/currency';
 import {useCurrencies} from 'state/hooks';
+import {spacingSmall} from '../defs/styles';
 
 export const formatNumericValue = (value) =>
     new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(
@@ -38,8 +39,8 @@ const NumericValue = ({
             style={{
                 backgroundColor: grey[700],
                 borderRadius: '3px',
-                padding: '3px 5px',
-                margin: '0 -5px 5px',
+                padding: `3px ${spacingSmall}`,
+                margin: `0 -${spacingSmall} ${spacingSmall}`,
             }}
         >
             {currency} {formatNumericValue(value)}

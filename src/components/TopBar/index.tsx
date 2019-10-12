@@ -1,11 +1,24 @@
 import {SingleSelect} from 'components/Select';
-import {TypeGlobalState, TypePreferences, TypeScreenQueries, TypeShiftDateOption, TypeUsers} from 'types';
+import {
+    TypeGlobalState,
+    TypePreferences,
+    TypeScreenQueries,
+    TypeShiftDateOption,
+    TypeUsers,
+} from 'types';
 import {objectEntriesOfSameType} from 'utils/collection';
 import React, {PureComponent} from 'react';
-import {Col, Row} from 'react-grid-system';
 import {connect} from 'react-redux';
 import {IconButton} from 'material-ui';
-import {AppBar, FormLabel, Menu, MenuItem as MenuItem2, Paper, Toolbar, Typography} from '@material-ui/core';
+import {
+    AppBar,
+    FormLabel,
+    Menu,
+    MenuItem as MenuItem2,
+    Paper,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
 
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';
@@ -13,32 +26,37 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import Logged from './Logged';
 import DateIcon from '@material-ui/icons/DateRange';
-import {refreshWidgets, updatePreferences, updateState} from 'state/actionCreators';
+import {
+    refreshWidgets,
+    updatePreferences,
+    updateState,
+} from 'state/actionCreators';
 import {bindActionCreators} from 'redux';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import moment from 'moment';
 import {ShiftDateOptions, Sizes} from 'defs';
 import {DatePicker} from '@material-ui/pickers';
 import {endOfDayToISOString} from 'js/utils/dates';
+import {ShiftMenu} from './ShiftMenu';
 
 type TypeProps = {
-    onLogout: () => void,
-    title: string,
-    showCurrenciesDrawer: boolean,
+    onLogout: () => void;
+    title: string;
+    showCurrenciesDrawer: boolean;
     actions: {
-        updateState: typeof updateState,
-        refreshWidgets: typeof refreshWidgets,
-        updatePreferences: typeof updatePreferences,
-    },
-    screenSize: TypeScreenQueries,
-    preferences: TypePreferences,
-    user: TypeUsers,
+        updateState: typeof updateState;
+        refreshWidgets: typeof refreshWidgets;
+        updatePreferences: typeof updatePreferences;
+    };
+    screenSize: TypeScreenQueries;
+    preferences: TypePreferences;
+    user: TypeUsers;
 };
 
 type TypeState = {
-    showShiftMenu: boolean,
-    showDateRange: boolean,
-    shiftMenuAnchor: null | HTMLElement,
+    showShiftMenu: boolean;
+    showDateRange: boolean;
+    shiftMenuAnchor: null | HTMLElement;
 };
 
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
@@ -186,14 +204,9 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                 style={{marginTop: 29, marginLeft: -49}}
                 onClose={this.handleCloseShiftMenu}
             >
-                <Row nogutter={true}>
-                    <Col xs={6}>
-                        <FormLabel
-                            component="legend"
-                            style={{textAlign: 'center'}}
-                        >
-                            Previous
-                        </FormLabel>
+                <ShiftMenu>
+                    <div>
+                        <FormLabel component="legend">Previous</FormLabel>
                         {getShiftBackOptions(
                             this.props.preferences.endDate,
                             this.props.preferences.endDateIncrement,
@@ -212,14 +225,9 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                                 </MenuItem2>
                             );
                         })}
-                    </Col>
-                    <Col xs={6}>
-                        <FormLabel
-                            component="legend"
-                            style={{textAlign: 'center'}}
-                        >
-                            Next
-                        </FormLabel>
+                    </div>
+                    <div>
+                        <FormLabel component="legend">Next</FormLabel>
                         {getShiftForwardOptions(
                             this.props.preferences.endDate,
                             this.props.preferences.endDateIncrement,
@@ -238,8 +246,8 @@ class TopBar extends PureComponent<TypeProps, TypeState> {
                                 </MenuItem2>
                             );
                         })}
-                    </Col>
-                </Row>
+                    </div>
+                </ShiftMenu>
             </Menu>
         );
     }
