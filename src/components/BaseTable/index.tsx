@@ -22,51 +22,53 @@ const reactTableHideHead = css`
 `;
 
 const ReactTableStyled = styled(ReactTable)`
-    background: #fff;
-    font-size: 1rem;
-    border: 0 !important;
+    &.ReactTable {
+        background: #fff;
+        font-size: 1rem;
+        border: 0 !important;
 
-    .rt-tr:hover {
-        background: rgb(234, 239, 244);
+        .rt-tr:hover {
+            background: rgb(234, 239, 244);
+        }
+
+        .rt-td {
+            line-height: 20px;
+            padding-bottom: 2px;
+        }
+
+        .${Classes.withdrawRow} .rt-td:nth-child(1),
+        .${Classes.withdrawRow} .rt-td:nth-child(2) {
+            color: ${red[900]};
+        }
+
+        .${Classes.depositRow} .rt-td:nth-child(1),
+        .${Classes.depositRow} .rt-td:nth-child(2) {
+            background: ${green[50]};
+            color: ${green[900]};
+        }
+
+        .${Classes.pendingRow} {
+            background: rgba(0, 0, 0, 0.075);
+        }
+
+        .${Classes.todayRow} {
+            font-weight: 500;
+        }
+
+        .${Classes.selectedRow}, .${Classes.selectedRow}:hover {
+            background: rgb(244, 228, 179);
+        }
+
+        .${Classes.hiddenRow} {
+            opacity: 0.5;
+        }
+
+        .${Classes.notSelectable} {
+            user-select: none;
+        }
+
+        ${(props) => props.hideHeader && reactTableHideHead}
     }
-
-    .rt-td {
-        line-height: 20px;
-        padding-bottom: 2px;
-    }
-
-    .${Classes.withdrawRow} .rt-td:nth-child(1),
-    .${Classes.withdrawRow} .rt-td:nth-child(2) {
-        color: ${red[900]};
-    }
-
-    .${Classes.depositRow} .rt-td:nth-child(1),
-    .${Classes.depositRow} .rt-td:nth-child(2) {
-        background: ${green[50]};
-        color: ${green[900]};
-    }
-
-    .${Classes.pendingRow} {
-        background: rgba(0, 0, 0, 0.075);
-    }
-
-    .${Classes.todayRow} {
-        font-weight: 500;
-    }
-
-    .${Classes.selectedRow}, .${Classes.selectedRow}:hover {
-        background: rgb(244, 228, 179);
-    }
-
-    .${Classes.hiddenRow} {
-        opacity: 0.5;
-    }
-
-    .${Classes.notSelectable} {
-        user-select: none;
-    }
-
-    ${(props) => props.hideHeader && reactTableHideHead}
 `;
 
 export const TableHeader = styled.div`
