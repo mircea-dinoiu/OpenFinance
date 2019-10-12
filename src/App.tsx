@@ -1,6 +1,6 @@
 import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
-import {CustomSnackbar} from 'common/components/snackbars';
+import {CustomSnackbar} from 'components/snackbars';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {
@@ -8,26 +8,26 @@ import {
     setScreen,
     updateState,
     fetchCurrencies,
-} from 'common/state/actionCreators';
+} from 'state/actionCreators';
 
 // @ts-ignore
 import {Drawer, MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 
-import {createXHR} from 'common/utils/fetch';
-import routes from 'common/defs/routes';
+import {createXHR} from 'utils/fetch';
+import routes from 'defs/routes';
 
-import Login from './mobile/ui/Login';
-import Internal from './mobile/ui/Internal';
-import Currencies from './mobile/ui/Currencies';
-import {BigLoader} from './common/components/loaders';
-import TopBar from 'common/components/TopBar';
+import Login from './components/Login';
+import Internal from './components/Internal';
+import Currencies from './components/Currencies';
+import {BigLoader} from './components/loaders';
+import TopBar from 'components/TopBar';
 
-import getScreenQueries from 'common/utils/getScreenQueries';
+import getScreenQueries from 'utils/getScreenQueries';
 import EventListener from 'react-event-listener';
-import {flexColumn} from 'common/defs/styles';
+import {flexColumn} from 'defs/styles';
 import {hot} from 'react-hot-loader/root';
-import {Sizes} from 'common/defs';
+import {Sizes} from 'defs';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {createGlobalStyle} from 'styled-components';
 import 'normalize.css';
@@ -36,7 +36,7 @@ import {
     usePageWithSetter,
     useLoadingWithSetter,
     useCurrenciesDrawerOpenWithSetter, useSnackbars, useUser, useCurrencies,
-} from 'common/state/hooks';
+} from 'state/hooks';
 
 const theme = createMuiTheme({
     palette: {

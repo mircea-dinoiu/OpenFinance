@@ -1,4 +1,4 @@
-const {advanceRepeatDate} = require('../../src/shared/helpers/repeatedModels');
+const {advanceRepeatDate} = require('../../src/js/helpers/repeatedModels');
 const logger = require('../helpers/logger');
 const {orderBy} = require('lodash');
 const moment = require('moment');

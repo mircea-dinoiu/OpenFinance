@@ -2,7 +2,7 @@ const BaseController = require('./BaseController');
 const {Expense, sql} = require('../models');
 const {Validator} = require('../validators');
 const {extractIdsFromModel} = require('../helpers');
-const defs = require('../../src/shared/defs');
+const defs = require('../../src/js/defs');
 
 module.exports = BaseController.extend({
     async getCategories(req, res) {

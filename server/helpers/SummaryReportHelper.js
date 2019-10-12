@@ -1,5 +1,5 @@
 const {uniq, sortBy} = require('lodash');
-const {financialNum} = require('../../src/shared/utils/numbers');
+const {financialNum} = require('../../src/js/utils/numbers');
 
 const safeNum = financialNum;
 
