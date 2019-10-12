@@ -1,7 +1,7 @@
 const moment = require('moment');
 const {isPlainObject} = require('lodash');
 const validator = require('validator');
-const debug = require('config').get('debug');
+const debug = process.env.DEBUG === 'true';
 const chalk = require('chalk');
 const stringIsInt = validator.isInt;
 const stringIsFloat = validator.isFloat;
