@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {IconMenu, IconButton, RadioButtonGroup, RadioButton} from 'material-ui';
+import {SyntheticEvent} from 'react';
+import {IconButton, IconMenu, RadioButton, RadioButtonGroup} from 'material-ui';
 import {
+    DepositFlag,
+    GeneratedFlag,
     PendingReviewFlag,
     RecurrentFlag,
-    GeneratedFlag,
-    DepositFlag,
 } from 'components/internal/common/MainScreenFlags';
 import {DebounceInput} from 'react-debounce-input';
-import {SyntheticEvent} from 'react';
 
 const PENDING = 'Pending';
 const RECURRENT = 'Recurrent';

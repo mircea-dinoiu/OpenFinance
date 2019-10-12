@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Row, Col} from 'react-grid-system';
+import {Col, Row} from 'react-grid-system';
 import {Flags} from 'components/internal/common/MainScreenFlags';
 import MoneyLocationDisplay from 'components/BaseTable/cells/MoneyLocationDisplay';
 import RepeatsDisplay from 'components/BaseTable/cells/RepeatsDisplay';

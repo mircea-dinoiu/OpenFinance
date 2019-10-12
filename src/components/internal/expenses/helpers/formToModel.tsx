@@ -1,4 +1,3 @@
-
 import {TypeUsers} from 'types';
 
 export default (

@@ -1,5 +1,5 @@
 import {TypeTransactionModel} from 'types';
-import {map, flatten, uniqBy, uniq, mapValues, sortBy} from 'lodash';
+import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import {sumArray} from 'js/utils/numbers';
 
 export const mapItemToRepeatedUpdates = (item: TypeTransactionModel) => {

@@ -1,25 +1,11 @@
 import {SingleSelect} from 'components/Select';
-import {
-    TypeGlobalState,
-    TypePreferences,
-    TypeScreenQueries,
-    TypeShiftDateOption,
-    TypeUsers,
-} from 'types';
+import {TypeGlobalState, TypePreferences, TypeScreenQueries, TypeShiftDateOption, TypeUsers} from 'types';
 import {objectEntriesOfSameType} from 'utils/collection';
 import React, {PureComponent} from 'react';
 import {Col, Row} from 'react-grid-system';
 import {connect} from 'react-redux';
 import {IconButton} from 'material-ui';
-import {
-    AppBar,
-    Toolbar,
-    Typography,
-    Paper,
-    Menu,
-    MenuItem as MenuItem2,
-    FormLabel,
-} from '@material-ui/core';
+import {AppBar, FormLabel, Menu, MenuItem as MenuItem2, Paper, Toolbar, Typography} from '@material-ui/core';
 
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';
@@ -27,11 +13,7 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import Logged from './Logged';
 import DateIcon from '@material-ui/icons/DateRange';
-import {
-    updateState,
-    refreshWidgets,
-    updatePreferences,
-} from 'state/actionCreators';
+import {refreshWidgets, updatePreferences, updateState} from 'state/actionCreators';
 import {bindActionCreators} from 'redux';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import moment from 'moment';

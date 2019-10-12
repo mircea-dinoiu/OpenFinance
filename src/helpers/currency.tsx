@@ -1,9 +1,5 @@
 // @flow
-import {
-    TypeCurrencies,
-    TypeCurrency,
-    TypeCurrencyIdentifier,
-} from 'types';
+import {TypeCurrencies, TypeCurrency, TypeCurrencyIdentifier} from 'types';
 import {objectValuesOfSameType} from 'utils/collection';
 
 export const findCurrencyById = (

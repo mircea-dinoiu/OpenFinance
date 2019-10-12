@@ -7,7 +7,7 @@ import {createXHR} from 'utils/fetch';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useDispatch} from 'react-redux';
 import {setUsers} from 'state/actionCreators';
-import {Row, Col} from 'react-grid-system';
+import {Col, Row} from 'react-grid-system';
 import {useTitleWithSetter, useUsers} from '../state/hooks';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';

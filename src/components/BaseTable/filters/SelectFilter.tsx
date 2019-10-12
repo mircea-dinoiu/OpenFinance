@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-    Button,
-    Menu,
-    Radio,
-    RadioGroup,
-    FormControlLabel,
-    withStyles,
-} from '@material-ui/core';
+import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles} from '@material-ui/core';
 import {MultiSelect, SingleSelect} from 'components/Select';
 
 const styles = {

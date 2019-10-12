@@ -1,6 +1,6 @@
 // @flow
 
-import {TypeTransactionModel, TypeCurrencies} from 'types';
+import {TypeCurrencies, TypeTransactionModel} from 'types';
 
 export const getItemCurrencyISOCode = ({
     item,

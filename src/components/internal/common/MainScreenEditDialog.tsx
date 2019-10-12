@@ -1,27 +1,17 @@
 import {isEqual} from 'lodash';
 import * as React from 'react';
 
-import {
-    Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-} from '@material-ui/core';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 
-import {Row, Col} from 'react-grid-system';
+import {Col, Row} from 'react-grid-system';
 
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
 import {ButtonProgress} from 'components/loaders';
 
 import {parseCRUDError} from 'parsers';
 import {dialog} from 'defs/styles';
-import {
-    TypeTransactionModel,
-    TypeTransactionForm,
-    TypeUsers,
-} from 'types';
+import {TypeTransactionForm, TypeTransactionModel, TypeUsers} from 'types';
 
 type TypeProps = {
     user: TypeUsers;

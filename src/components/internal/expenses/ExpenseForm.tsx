@@ -2,23 +2,23 @@ import {findCurrencyById} from 'helpers/currency';
 import {objectValuesOfSameType} from 'utils/collection';
 
 import React, {PureComponent} from 'react';
-import {Row, Col} from 'react-grid-system';
+import {Col, Row} from 'react-grid-system';
 import {
+    Avatar,
     Badge,
-    TextField,
+    Checkbox,
     FormControlLabel,
     FormGroup,
     FormLabel,
-    Checkbox,
-    Radio,
-    RadioGroup,
     List,
-    ListItemAvatar,
     ListItem,
-    Avatar,
+    ListItemAvatar,
     ListItemText,
     ListSubheader,
+    Radio,
+    RadioGroup,
     Slider,
+    TextField,
     withStyles,
 } from '@material-ui/core';
 import RepeatOptions from 'defs/repeatOptions';
@@ -33,15 +33,15 @@ import {sumArray} from 'js/utils/numbers';
 import {sortBy} from 'lodash';
 import styled from 'styled-components';
 import {
-    TypeTransactionForm,
-    TypeMoneyLocations,
-    TypeCurrencies,
-    TypePreferences,
-    TypeUsers,
     TypeCategories,
+    TypeCurrencies,
+    TypeMoneyLocations,
+    TypePreferences,
+    TypeTransactionForm,
+    TypeUsers,
 } from 'types';
 import {makeUrl} from 'utils/url';
-import {PERC_STEP, PERC_MAX} from 'js/defs';
+import {PERC_MAX, PERC_STEP} from 'js/defs';
 
 const boxStyle = {
     padding: '10px 0',

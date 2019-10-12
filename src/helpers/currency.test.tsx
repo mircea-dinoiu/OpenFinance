@@ -1,9 +1,9 @@
 import {
+    convertCurrency,
+    convertCurrencyToDefault,
     findCurrencyById,
     getBaseCurrency,
     getCurrencyByISOCode,
-    convertCurrency,
-    convertCurrencyToDefault,
 } from './currency';
 
 const RON = {

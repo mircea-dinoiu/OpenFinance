@@ -1,6 +1,6 @@
 import {objectValuesOfSameType} from 'utils/collection';
 import * as React from 'react';
-import {MenuItem, Divider} from 'material-ui';
+import {Divider, MenuItem} from 'material-ui';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 import DuplicateIcon from '@material-ui/icons/FileCopy';

@@ -2,7 +2,6 @@ import {TypeTransactionModel} from 'types';
 import {formatYMD} from 'utils/dates';
 import {Classes} from 'components/BaseTable';
 import {TypeAnchoredContextMenuDisplayProps} from 'components/MainScreen/ContextMenu/AnchoredContextMenu';
-import {SyntheticEvent} from 'react';
 
 const today = formatYMD(new Date());
 

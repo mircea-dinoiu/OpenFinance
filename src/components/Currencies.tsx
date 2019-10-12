@@ -5,7 +5,7 @@ import {MenuItem, Subheader} from 'material-ui';
 import {fetchCurrencies, setBaseCurrencyId} from 'state/actionCreators';
 import {useDispatch} from 'react-redux';
 import {TypeCurrency} from 'types';
-import {useUsers, useCurrencies} from 'state/hooks';
+import {useCurrencies, useUsers} from 'state/hooks';
 
 const Currencies = () => {
     const user = useUsers();

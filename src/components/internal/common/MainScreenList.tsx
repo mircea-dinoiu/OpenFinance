@@ -1,23 +1,16 @@
 import {
     TypeCurrencies,
+    TypeDispatch,
+    TypeGlobalState,
+    TypeMoneyLocations,
     TypePreferences,
     TypeScreenQueries,
-    TypeDispatch,
-    TypeMoneyLocations,
-    TypeGlobalState,
-    TypeTransactionModel,
     TypeTransactionForm,
+    TypeTransactionModel,
     TypeUsers,
 } from 'types';
-import {
-    objectEntriesOfSameType,
-    objectValuesOfSameType,
-} from 'utils/collection';
-import {
-    mapItemToRepeatedUpdates,
-    mapItemToDetachedUpdates,
-    mergeItems,
-} from 'components/internal/common/helpers';
+import {objectEntriesOfSameType, objectValuesOfSameType} from 'utils/collection';
+import {mapItemToDetachedUpdates, mapItemToRepeatedUpdates, mergeItems} from 'components/internal/common/helpers';
 import React, {PureComponent} from 'react';
 import {Col} from 'react-grid-system';
 import moment from 'moment';
@@ -27,8 +20,8 @@ import {BigLoader, ButtonProgress} from 'components/loaders';
 
 import {createXHR} from 'utils/fetch';
 
-import {Button, FormControlLabel, Checkbox, Fab} from '@material-ui/core';
-import {useSelector, useDispatch} from 'react-redux';
+import {Button, Checkbox, Fab, FormControlLabel} from '@material-ui/core';
+import {useDispatch, useSelector} from 'react-redux';
 import {greyedOut} from 'defs/styles';
 import BaseTable, {TableFooter, TableHeader} from 'components/BaseTable';
 import {getTrProps} from 'components/MainScreen/Table/helpers';
@@ -43,7 +36,7 @@ import MainScreenEditDialog from './MainScreenEditDialog';
 import AddIcon from '@material-ui/icons/Add';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
-import {uniqueId, range} from 'lodash';
+import {range, uniqueId} from 'lodash';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import IconSplit from '@material-ui/icons/CallSplitRounded';

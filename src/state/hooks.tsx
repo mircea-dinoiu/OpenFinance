@@ -3,18 +3,8 @@
 import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
 import {bindActionCreators} from 'redux';
-import {
-    setUsers,
-    updatePreferences,
-    updateState,
-} from 'state/actionCreators';
-import {
-    TypeUsers,
-    TypeCurrencies,
-    TypeScreenQueries,
-    TypeSnackbar,
-    TypeGlobalState,
-} from 'types';
+import {setUsers, updatePreferences, updateState} from 'state/actionCreators';
+import {TypeCurrencies, TypeGlobalState, TypeScreenQueries, TypeSnackbar, TypeUsers} from 'types';
 
 export const useActions = (actions) => {
     const dispatch = useDispatch();

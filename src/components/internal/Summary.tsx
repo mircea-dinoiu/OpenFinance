@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {createXHR} from 'utils/fetch';
 import {BigLoader} from 'components/loaders';
-import {Paper, Checkbox, FormControlLabel} from '@material-ui/core';
+import {Checkbox, FormControlLabel, Paper} from '@material-ui/core';
 import {green, purple, red} from '@material-ui/core/colors';
 import routes from '../../defs/routes';
 import pickBy from 'lodash/pickBy';
@@ -16,12 +16,12 @@ import {endOfDayToISOString} from 'js/utils/dates';
 import MoneyLocationDisplay from 'components/BaseTable/cells/MoneyLocationDisplay';
 import {makeUrl} from 'utils/url';
 import {
+    useCategories,
+    useMoneyLocationTypes,
     usePreferencesWithActions,
     useRefreshWidgets,
-    useMoneyLocationTypes,
-    useUsers,
-    useCategories,
     useScreenSize,
+    useUsers,
 } from 'state/hooks';
 
 const getEndDateBasedOnIncludePreference = (endDate, include) => {

@@ -6,19 +6,11 @@ import {ButtonProgress} from 'components/loaders';
 
 import {Col, Row} from 'react-grid-system';
 
-import {
-    Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-} from '@material-ui/core';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {dialog} from 'defs/styles';
 import {useUsers} from 'state/hooks';
-import {
-    TypeTransactionForm,
-} from 'types';
+import {TypeTransactionForm} from 'types';
 
 type TypeProps = {
     getFormDefaults: ({

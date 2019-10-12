@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-    BottomNavigation,
-    BottomNavigationAction,
-    Tab,
-    Tabs,
-    AppBar,
-    Paper,
-} from '@material-ui/core';
+import {AppBar, BottomNavigation, BottomNavigationAction, Paper, Tab, Tabs} from '@material-ui/core';
 
 import Expenses from './internal/Expenses';
 import Summary from './internal/Summary';

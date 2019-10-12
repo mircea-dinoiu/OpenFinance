@@ -1,13 +1,13 @@
 // @flow
 import {Actions} from 'state/actions';
 import {
-    TypeSnackbar,
-    TypeScreenQueries,
-    TypePreferences,
-    TypeDispatch,
     TypeCurrencies,
-    TypeUsers,
+    TypeDispatch,
     TypeGlobalState,
+    TypePreferences,
+    TypeScreenQueries,
+    TypeSnackbar,
+    TypeUsers,
 } from 'types';
 import {createXHR} from 'utils/fetch';
 import routes from 'defs/routes';

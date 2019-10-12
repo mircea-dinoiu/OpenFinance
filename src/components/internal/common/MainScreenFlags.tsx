@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {blue, yellow, grey, green, purple} from '@material-ui/core/colors';
+import {blue, green, grey, purple, yellow} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';
 import TrendingUp from '@material-ui/icons/TrendingUp';
 import ArrowDown from '@material-ui/icons/ArrowDownward';

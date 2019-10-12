@@ -5,8 +5,7 @@ import {cyan} from '@material-ui/core/colors';
 import ResponsiveListItem from 'components/ResponsiveListItem';
 import {IconButton, IconMenu} from 'material-ui';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ContextMenuItems from 'components/MainScreen/ContextMenu/ContextMenuItems';
-import {TypeContextMenuItemsProps} from 'components/MainScreen/ContextMenu/ContextMenuItems';
+import ContextMenuItems, {TypeContextMenuItemsProps} from 'components/MainScreen/ContextMenu/ContextMenuItems';
 
 type TypeProps = {
     entityName: string,

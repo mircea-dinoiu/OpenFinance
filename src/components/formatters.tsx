@@ -1,7 +1,4 @@
-import {
-    objectEntriesOfSameType,
-    objectValuesOfSameType,
-} from 'utils/collection';
+import {objectEntriesOfSameType, objectValuesOfSameType} from 'utils/collection';
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import Tooltip from 'components/Tooltip';

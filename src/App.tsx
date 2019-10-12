@@ -23,20 +23,11 @@ import {Sizes} from 'defs';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {createGlobalStyle} from 'styled-components';
 import 'normalize.css';
-import {
-    useCurrencies,
-    useCurrenciesDrawerOpenWithSetter,
-    useSnackbars,
-    useUsersWithActions,
-} from 'state/hooks';
+import {useCurrencies, useCurrenciesDrawerOpenWithSetter, useSnackbars, useUsersWithActions} from 'state/hooks';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
 import {Home} from './components/Home';
-import {
-    TypeCategories,
-    TypeMoneyLocations,
-    TypeMoneyLocationTypes,
-} from './types';
+import {TypeCategories, TypeMoneyLocations, TypeMoneyLocationTypes} from './types';
 
 const theme = createMuiTheme({
     palette: {

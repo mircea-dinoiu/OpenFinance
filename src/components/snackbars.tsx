@@ -2,7 +2,7 @@ import {hideSnackbar, showSnackbar} from 'state/actionCreators';
 import {uniqueId} from 'lodash';
 import * as React from 'react';
 import {Snackbar} from 'material-ui';
-import {red, green} from '@material-ui/core/colors';
+import {green, red} from '@material-ui/core/colors';
 import {useDispatch} from 'react-redux';
 import {TypeSnackbarProps} from 'types';
 

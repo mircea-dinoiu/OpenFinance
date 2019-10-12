@@ -3,7 +3,7 @@ import {Actions} from 'state/actions';
 import uniqueId from 'lodash/uniqueId';
 import getScreenQueries from 'utils/getScreenQueries';
 import {combineReducers} from 'redux';
-import {validatePreferences, parsePreferences} from 'utils/preferences';
+import {parsePreferences, validatePreferences} from 'utils/preferences';
 import {TypePreferences} from 'types';
 
 const stateKeysWithoutReducers = [];

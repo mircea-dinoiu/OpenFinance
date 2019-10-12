@@ -1,12 +1,11 @@
-
 import React, {PureComponent} from 'react';
 import {CardHeader} from 'material-ui';
-import {Row, Col} from 'react-grid-system';
+import {Col, Row} from 'react-grid-system';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import Collapse from '@material-ui/icons/ExpandLess';
 import Expand from '@material-ui/icons/ExpandMore';
 import BaseTable from 'components/BaseTable';
-import {FormControlLabel, Checkbox} from '@material-ui/core';
+import {Checkbox, FormControlLabel} from '@material-ui/core';
 import {TypeCurrencies} from 'types';
 
 export class SummarySubCategory extends PureComponent<
