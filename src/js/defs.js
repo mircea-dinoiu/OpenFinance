@@ -15,4 +15,11 @@ module.exports = {
     PERC_MIN: 0,
     PERC_MAX: 100,
     RepeatOption,
+    paths: {
+        home: '/',
+        login: '/login',
+    },
+    apis: {
+
+    }
 };

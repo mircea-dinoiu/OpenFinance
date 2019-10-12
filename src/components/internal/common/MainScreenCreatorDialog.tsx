@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {dialog} from 'defs/styles';
-import {useUser} from 'state/hooks';
+import {useUsers} from 'state/hooks';
 import {
     TypeTransactionForm,
 } from 'types';
@@ -41,7 +41,7 @@ const MainScreenCreatorDialog = (props: TypeProps) => {
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState<React.ReactNode>(null);
     const [success, setSuccess] = React.useState<React.ReactNode>(null);
-    const user = useUser();
+    const user = useUsers();
     const formDefaults = React.useMemo(
         () =>
             props.getFormDefaults({

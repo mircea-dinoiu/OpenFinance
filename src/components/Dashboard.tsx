@@ -19,7 +19,7 @@ import {flexColumn} from 'defs/styles';
 import {grey} from '@material-ui/core/colors';
 import {useScreenSize} from 'state/hooks';
 
-const Internal = () => {
+const Dashboard = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const screenSize = useScreenSize();
 
@@ -123,4 +123,4 @@ const Internal = () => {
     );
 };
 
-export default Internal;
+export default Dashboard;

@@ -1,6 +1,7 @@
 // @flow
 import {parsePreferences} from 'utils/preferences';
 import {TypeGlobalState} from 'types';
+import {paths} from 'js/defs';
 
 export const readState = () => {
     try {
@@ -17,6 +18,9 @@ export const readState = () => {
 };
 
 export const saveState = (state: TypeGlobalState) => {
+    if (window.location.pathname !== paths.home) {
+        return;
+    }
     try {
         window.history.replaceState(
             {},

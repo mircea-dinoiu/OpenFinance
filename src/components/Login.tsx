@@ -6,8 +6,11 @@ import routes from 'defs/routes';
 import {createXHR} from 'utils/fetch';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useDispatch} from 'react-redux';
-import {updateUser} from 'state/actionCreators';
+import {setUsers} from 'state/actionCreators';
 import {Row, Col} from 'react-grid-system';
+import {useTitleWithSetter, useUsers} from '../state/hooks';
+import {Redirect} from 'react-router-dom';
+import {paths} from 'js/defs';
 
 const Login = () => {
     const [email, setEmail] = React.useState('');
@@ -16,6 +19,16 @@ const Login = () => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
     const dispatch = useDispatch();
+    const [, setTitle] = useTitleWithSetter();
+    const user = useUsers();
+
+    React.useEffect(() => {
+        setTitle('Please Login');
+    }, []);
+
+    if (user) {
+        return <Redirect to={paths.home} />;
+    }
 
     const submit = async () => {
         setLoading(true);
@@ -33,7 +46,7 @@ const Login = () => {
             const json = response.data;
 
             // @ts-ignore
-            dispatch(updateUser(json));
+            dispatch(setUsers(json));
         } catch (e) {
             setError(e.response.data);
             setLoading(false);

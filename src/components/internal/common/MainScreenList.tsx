@@ -645,7 +645,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     sanitizeItem = (item) =>
         this.props.crudProps.formToModel(
             this.props.crudProps.modelToForm(item),
-            {user: this.props.user}
+            {user: this.props.user},
         );
 
     copyItem = (item) => {

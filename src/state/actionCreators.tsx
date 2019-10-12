@@ -18,13 +18,9 @@ export const updateState = (state: Partial<TypeGlobalState>) => ({
     state,
 });
 
-export const updateUser = (user: null | TypeUsers) => ({
-    type: Actions.UPDATE_USER,
-    user,
-});
-
-export const toggleLoading = (value: boolean) => ({
-    type: value ? Actions.LOADING_ENABLE : Actions.LOADING_DISABLE,
+export const setUsers = (users: null | TypeUsers) => ({
+    type: Actions.SET_USERS,
+    value: users,
 });
 
 export const setScreen = (value: TypeScreenQueries) => ({

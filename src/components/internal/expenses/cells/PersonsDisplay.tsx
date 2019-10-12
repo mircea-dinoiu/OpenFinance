@@ -3,7 +3,7 @@ import {Avatar} from '@material-ui/core';
 import styled from 'styled-components';
 import Tooltip from 'components/Tooltip';
 import {grey} from '@material-ui/core/colors';
-import {useUser} from 'state/hooks';
+import {useUsers} from 'state/hooks';
 
 const PersonAvatar = styled(Avatar)`
     height: 20px !important;
@@ -39,7 +39,7 @@ const TooltipStyled = styled(Tooltip)`
 `;
 
 const PersonsDisplay = ({item}) => {
-    const userList = useUser().list;
+    const userList = useUsers().list;
 
     return (
         <PersonsDisplayStyled>

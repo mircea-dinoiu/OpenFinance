@@ -146,7 +146,6 @@ export type TypeSnackbar = {
 export type TypeGlobalState = {
     preferences: TypePreferences;
     title: string;
-    ui: React.ReactNode;
     currenciesDrawerOpen: boolean;
     categories: TypeCategories;
     moneyLocationTypes: TypeMoneyLocationTypes;
@@ -157,7 +156,6 @@ export type TypeGlobalState = {
     refreshWidgets: string;
     user: TypeUsers;
     snackbars: TypeSnackbar[];
-    loading: boolean;
 };
 
 export type TypeDispatch = (action: {type: string}) => void;

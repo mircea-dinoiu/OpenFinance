@@ -1,26 +1,18 @@
 import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
 import {CustomSnackbar} from 'components/snackbars';
-import React from 'react';
+import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {
-    updateUser,
-    setScreen,
-    updateState,
-    fetchCurrencies,
-} from 'state/actionCreators';
-
+import {fetchCurrencies, setScreen, updateState} from 'state/actionCreators';
 // @ts-ignore
 import {Drawer, MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
-import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 
 import {createXHR} from 'utils/fetch';
 import routes from 'defs/routes';
 
 import Login from './components/Login';
-import Internal from './components/Internal';
 import Currencies from './components/Currencies';
-import {BigLoader} from './components/loaders';
 import TopBar from 'components/TopBar';
 
 import getScreenQueries from 'utils/getScreenQueries';
@@ -32,11 +24,19 @@ import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {createGlobalStyle} from 'styled-components';
 import 'normalize.css';
 import {
-    useTitleWithSetter,
-    usePageWithSetter,
-    useLoadingWithSetter,
-    useCurrenciesDrawerOpenWithSetter, useSnackbars, useUser, useCurrencies,
+    useCurrencies,
+    useCurrenciesDrawerOpenWithSetter,
+    useSnackbars,
+    useUsersWithActions,
 } from 'state/hooks';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {paths} from 'js/defs';
+import {Home} from './components/Home';
+import {
+    TypeCategories,
+    TypeMoneyLocations,
+    TypeMoneyLocationTypes,
+} from './types';
 
 const theme = createMuiTheme({
     palette: {
@@ -66,82 +66,70 @@ const ResponsiveGlobalStyle = createGlobalStyle`
 
 const App = () => {
     const dispatch = useDispatch();
-    const user = useUser();
+    const [users, {setUsers}] = useUsersWithActions();
     const currencies = useCurrencies();
     const [snackbar] = useSnackbars();
     const [
         currenciesDrawerOpen,
         setCurrenciesDrawerOpen,
     ] = useCurrenciesDrawerOpenWithSetter();
-    const [loading, setLoading] = useLoadingWithSetter();
-    const [page, setPage] = usePageWithSetter();
-    const [, setTitle] = useTitleWithSetter();
+    const [ready, setReady] = useState(false);
 
-    const showLogin = () => {
-        setPage(<Login />);
-        setTitle('Please Login');
-        dispatch(updateUser(null));
-        setLoading(false);
-    };
+    const fetchUser = async () => {
+        try {
+            const response = await createXHR({url: routes.user.list});
 
-    const loadData = async () => {
-        setLoading(true);
-
-        if (user == null) {
-            try {
-                const response = await createXHR({url: routes.user.list});
-
-                // @ts-ignore
-                dispatch(updateUser(response.data));
-            } catch (e) {
-                showLogin();
-            }
-        } else {
-            dispatch(fetchCurrencies());
-
-            const [
-                categoriesResponse,
-                mlResponse,
-                mlTypesResponse,
-            ] = await Promise.all([
-                createXHR({url: routes.category.list}),
-                createXHR({url: routes.ml.list}),
-                createXHR({url: routes.mlType.list}),
-            ]);
-
-            dispatch(
-                updateState({
-                    // @ts-ignore
-                    categories: categoriesResponse.data,
-                    // @ts-ignore
-                    moneyLocations: mlResponse.data,
-                    // @ts-ignore
-                    moneyLocationTypes: mlTypesResponse.data,
-                    title: 'Financial',
-                    ui: <Internal />,
-                }),
-            );
-            setLoading(false);
+            // @ts-ignore
+            dispatch(setUsers(response.data));
+            setReady(true);
+        } catch (e) {
+            setReady(true);
         }
     };
 
+    const fetchRequirements = async () => {
+        dispatch(fetchCurrencies());
+
+        const [
+            categoriesResponse,
+            mlResponse,
+            mlTypesResponse,
+        ] = await Promise.all([
+            createXHR<TypeCategories>({url: routes.category.list}),
+            createXHR<TypeMoneyLocations>({url: routes.ml.list}),
+            createXHR<TypeMoneyLocationTypes>({url: routes.mlType.list}),
+        ]);
+
+        dispatch(
+            updateState({
+                categories: categoriesResponse.data,
+                moneyLocations: mlResponse.data,
+                moneyLocationTypes: mlTypesResponse.data,
+            }),
+        );
+    };
+
     React.useEffect(() => {
-        loadData();
-    }, [user]);
+        fetchUser();
+    }, []);
+
+    React.useEffect(() => {
+        if (users) {
+            fetchRequirements();
+        }
+    }, [users]);
 
     const onLogout = async () => {
-        setLoading(true);
-
         try {
             await createXHR({url: routes.user.logout, method: 'POST'});
 
-            showLogin();
+            setUsers(null);
         } catch (e) {
             window.location.reload();
         }
     };
 
-    const isCurrenciesDrawerReady = () => user != null && currencies != null;
+    const isCurrenciesDrawerReady = () => users != null && currencies != null;
 
     const onWindowResize = () => {
         dispatch(setScreen(getScreenQueries()));
@@ -178,7 +166,22 @@ const App = () => {
                                 <Currencies />
                             </Drawer>
                         )}
-                        {loading ? <BigLoader /> : page}
+                        {ready && (
+                            <BrowserRouter>
+                                <Switch>
+                                    <Route
+                                        path={paths.home}
+                                        exact={true}
+                                        component={Home}
+                                    />
+                                    <Route
+                                        path={paths.login}
+                                        exact={true}
+                                        component={Login}
+                                    />
+                                </Switch>
+                            </BrowserRouter>
+                        )}
                         <CustomSnackbar {...snackbar} open={snackbar != null} />
                     </div>
                 </V0MuiThemeProvider>

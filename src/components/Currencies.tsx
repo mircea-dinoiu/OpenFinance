@@ -5,10 +5,10 @@ import {MenuItem, Subheader} from 'material-ui';
 import {fetchCurrencies, setBaseCurrencyId} from 'state/actionCreators';
 import {useDispatch} from 'react-redux';
 import {TypeCurrency} from 'types';
-import {useUser, useCurrencies} from 'state/hooks';
+import {useUsers, useCurrencies} from 'state/hooks';
 
 const Currencies = () => {
-    const user = useUser();
+    const user = useUsers();
     const currencies = useCurrencies();
     const map = currencies.map;
     const defaultCurrencyId = currencies.default;

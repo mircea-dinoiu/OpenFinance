@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
 import {bindActionCreators} from 'redux';
 import {
-    toggleLoading,
+    setUsers,
     updatePreferences,
     updateState,
 } from 'state/actionCreators';
@@ -27,8 +27,15 @@ export const useScreenSize = (): TypeScreenQueries =>
     useSelector((s: TypeGlobalState) => s.screenSize);
 export const useCurrencies = (): TypeCurrencies =>
     useSelector((s: TypeGlobalState) => s.currencies);
-export const useUser = (): TypeUsers =>
+export const useUsers = (): TypeUsers =>
     useSelector((s: TypeGlobalState) => s.user);
+export const useUsersWithActions = (): [TypeUsers, {
+    setUsers: typeof setUsers
+}] =>
+    [useUsers(), useActions({
+        setUsers,
+    })];
+
 export const useMoneyLocations = () =>
     useSelector((s: TypeGlobalState) => s.moneyLocations);
 export const usePreferences = () =>
@@ -57,32 +64,6 @@ export const useCurrenciesDrawerOpenWithSetter = (): [
                     currenciesDrawerOpen: value,
                 }),
             );
-        },
-    ];
-};
-export const useLoadingWithSetter = (): [
-    boolean,
-    (loading: boolean) => void,
-] => {
-    const dispatch = useDispatch();
-
-    return [
-        useSelector((s: TypeGlobalState) => s.loading),
-        (loading: boolean) => {
-            dispatch(toggleLoading(loading));
-        },
-    ];
-};
-export const usePageWithSetter = (): [
-    React.ReactNode,
-    (page: React.ReactNode) => void,
-] => {
-    const dispatch = useDispatch();
-
-    return [
-        useSelector((s: TypeGlobalState) => s.ui),
-        (ui: React.ReactNode) => {
-            dispatch(updateState({ui}));
         },
     ];
 };

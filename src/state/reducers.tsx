@@ -39,18 +39,7 @@ const bindToUpdateState = (prop, defaultValue) => {
     };
 };
 const user = (state = null, action) =>
-    action.type === Actions.UPDATE_USER ? action.user : state;
-const loading = (state = true, action) => {
-    if (action.type === Actions.LOADING_ENABLE) {
-        return true;
-    }
-
-    if (action.type === Actions.LOADING_DISABLE) {
-        return false;
-    }
-
-    return state;
-};
+    action.type === Actions.SET_USERS ? action.value : state;
 const preferences = (state: TypePreferences = parsePreferences(), action) => {
     switch (action.type) {
         case Actions.UPDATE_PREFERENCES:
@@ -70,7 +59,6 @@ const snackbars = (state = [], action) => {
     return state;
 };
 const title = bindToUpdateState('title', 'Loading...');
-const ui = bindToUpdateState('ui', null);
 const currenciesDrawerOpen = bindToUpdateState('currenciesDrawerOpen', false);
 const currencies = (state = null, action) => {
     if (action.type === Actions.SET_BASE_CURRENCY_ID) {
@@ -89,17 +77,15 @@ const currencies = (state = null, action) => {
 
     return state;
 };
-const categories = bindToUpdateState('categories', null);
-const moneyLocations = bindToUpdateState('moneyLocations', null);
-const moneyLocationTypes = bindToUpdateState('moneyLocationTypes', null);
+const categories = bindToUpdateState('categories', []);
+const moneyLocations = bindToUpdateState('moneyLocations', []);
+const moneyLocationTypes = bindToUpdateState('moneyLocationTypes', []);
 
 export const combinedReducers = combineReducers({
     // @deprecated screen is a global in Window, use screenSize instead
     screen,
     screenSize,
     title,
-    loading,
-    ui,
     currenciesDrawerOpen,
     refreshWidgets,
     user,

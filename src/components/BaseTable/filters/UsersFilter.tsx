@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SelectFilter from './SelectFilter';
-import {useUser} from 'state/hooks';
+import {useUsers} from 'state/hooks';
 
 const UsersFilter = ({onChange, filter}) => (
     <SelectFilter
@@ -9,7 +9,7 @@ const UsersFilter = ({onChange, filter}) => (
         multi={true}
         nameKey="full_name"
         allowNone={false}
-        items={useUser().list}
+        items={useUsers().list}
     />
 );
 

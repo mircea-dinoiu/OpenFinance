@@ -19,7 +19,7 @@ import {
     usePreferencesWithActions,
     useRefreshWidgets,
     useMoneyLocationTypes,
-    useUser,
+    useUsers,
     useCategories,
     useScreenSize,
 } from 'state/hooks';
@@ -91,7 +91,7 @@ const Summary = () => {
     const [preferences, {updatePreferences}] = usePreferencesWithActions();
     const refreshWidgets = useRefreshWidgets();
     const moneyLocationTypes = useMoneyLocationTypes();
-    const user = useUser();
+    const user = useUsers();
     const categories = useCategories();
     const screenSize = useScreenSize();
 
