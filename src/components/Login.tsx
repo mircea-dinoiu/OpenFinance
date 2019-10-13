@@ -7,10 +7,15 @@ import {createXHR} from 'utils/fetch';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useDispatch} from 'react-redux';
 import {setUsers} from 'state/actionCreators';
-import {Col, Row} from 'react-grid-system';
 import {useTitleWithSetter, useUsers} from '../state/hooks';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';
+import styled from 'styled-components';
+import {
+    screenQueryLarge,
+    screenQueryMedium,
+    screenQuerySmall,
+} from '../defs/styles';
 
 const Login = () => {
     const [email, setEmail] = React.useState('');
@@ -32,6 +37,7 @@ const Login = () => {
 
     const submit = async () => {
         setLoading(true);
+        setError(null);
 
         try {
             const response = await createXHR({
@@ -65,19 +71,8 @@ const Login = () => {
     };
 
     return (
-        <Row nogutter>
-            {/*
-            // @ts-ignore */}
-            <Col
-                xs={10}
-                md={6}
-                lg={4}
-                push={{
-                    xs: 1,
-                    md: 3,
-                    lg: 4,
-                }}
-            >
+        <LoginStyled>
+            <div>
                 <TextField
                     hintText="Type in your e-mail"
                     floatingLabelText="E-mail"
@@ -114,9 +109,31 @@ const Login = () => {
                     {loading ? <ButtonProgress /> : 'Login'}
                 </Button>
                 {error != null && <ErrorSnackbar message={error} />}
-            </Col>
-        </Row>
+            </div>
+        </LoginStyled>
     );
 };
+
+const LoginStyled = styled.div`
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+
+    > div {
+        @media ${screenQuerySmall} {
+            grid-column-start: 2;
+            grid-column-end: 12;
+        }
+
+        @media ${screenQueryMedium} {
+            grid-column-start: 4;
+            grid-column-end: 10;
+        }
+
+        @media ${screenQueryLarge} {
+            grid-column-start: 5;
+            grid-column-end: 9;
+        }
+    }
+`;
 
 export default Login;

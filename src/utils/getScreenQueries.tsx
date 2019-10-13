@@ -1,14 +1,15 @@
 // @flow
 
 import {TypeScreenQueries} from 'types';
+import {screenQueryLarge, screenQueryMedium, screenQuerySmall} from '../defs/styles';
 
 export default function getScreenQueries(): TypeScreenQueries {
-    const isSmall = window.matchMedia('(min-width: 0px) and (max-width: 480px)')
+    const isSmall = window.matchMedia(screenQuerySmall)
         .matches;
     const isMedium = window.matchMedia(
-        '(min-width : 768px) and (max-width: 1024px)',
+        screenQueryMedium,
     ).matches;
-    const isLarge = window.matchMedia('(min-width: 1025px)').matches;
+    const isLarge = window.matchMedia(screenQueryLarge).matches;
 
     return {
         isSmall,
