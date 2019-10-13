@@ -1,10 +1,14 @@
 import {isEqual} from 'lodash';
 import * as React from 'react';
 
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
-
-import {Col, Row} from 'react-grid-system';
 
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
 import {ButtonProgress} from 'components/loaders';
@@ -131,22 +135,18 @@ class MainScreenEditDialog extends React.PureComponent<
                     this.props.items.length === 1 ? '' : 's'
                 }`}</DialogTitle>
                 <DialogContent style={{overflow: 'visible'}}>
-                    <Row>
-                        <Form
-                            onFormChange={(formData) =>
-                                (this.formData[0] = formData)
-                            }
-                            initialValues={this.formData[0]}
-                        />
-                    </Row>
-                    <Col>
-                        {this.state.error && (
-                            <ErrorSnackbar message={this.state.error} />
-                        )}
-                        {this.state.success && (
-                            <SuccessSnackbar message={this.state.success} />
-                        )}
-                    </Col>
+                    <Form
+                        onFormChange={(formData) =>
+                            (this.formData[0] = formData)
+                        }
+                        initialValues={this.formData[0]}
+                    />
+                    {this.state.error && (
+                        <ErrorSnackbar message={this.state.error} />
+                    )}
+                    {this.state.success && (
+                        <SuccessSnackbar message={this.state.success} />
+                    )}
                 </DialogContent>
                 <DialogActions>
                     <Button

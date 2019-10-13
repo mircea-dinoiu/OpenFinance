@@ -4,8 +4,6 @@ import {parseCRUDError} from 'parsers';
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
 import {ButtonProgress} from 'components/loaders';
 
-import {Col, Row} from 'react-grid-system';
-
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {dialog} from 'defs/styles';
@@ -80,21 +78,17 @@ const MainScreenCreatorDialog = (props: TypeProps) => {
     const Form = props.formComponent;
 
     return (
-        <Dialog open={props.open} classes={props.classes} fullWidth={true}>
+        <Dialog open={props.open} classes={props.classes}>
             <DialogTitle>{`Create ${props.entityName}`}</DialogTitle>
             <DialogContent style={{overflow: 'visible'}}>
-                <Row>
                     <Form
                         onFormChange={(nextFormData) =>
                             setFormData(nextFormData)
                         }
                         initialValues={formDefaults}
                     />
-                </Row>
-                <Col>
                     {error && <ErrorSnackbar message={error} />}
                     {success && <SuccessSnackbar message={success} />}
-                </Col>
             </DialogContent>
             <DialogActions>
                 <Button

@@ -9805,14 +9805,6 @@ react-event-listener@^0.6.2, react-event-listener@^0.6.4:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
-react-grid-system@^3.1.2:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/react-grid-system/-/react-grid-system-3.2.3.tgz#5a67256c63ab3f17801fe903791428f3de174975"
-  integrity sha512-z8Ip7ppE2EdwkBTGF7cyu1FF0P1BRbJaeOVW9tULikkLjiTCgjpfXI8FB3u+l3D3siEniLb39+NA4wMoitDTOg==
-  dependencies:
-    lodash "^4.17.5"
-    prop-types "^15.6.1"
-
 react-hot-loader@^4.12.3:
   version "4.12.15"
   resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.12.15.tgz#6bf3984e52edbdf02ea8952777f53da1b3c68c95"

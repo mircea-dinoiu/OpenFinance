@@ -2,7 +2,6 @@ import {findCurrencyById} from 'helpers/currency';
 import {objectValuesOfSameType} from 'utils/collection';
 
 import React, {PureComponent} from 'react';
-import {Col, Row} from 'react-grid-system';
 import {
     Avatar,
     Badge,
@@ -26,7 +25,7 @@ import {createXHR} from 'utils/fetch';
 import routes from 'defs/routes';
 import {useSelector} from 'react-redux';
 import {MultiSelect, SingleSelect} from 'components/Select';
-import {overflowVisible} from 'defs/styles';
+import {gridGap, screenQuerySmall} from 'defs/styles';
 import {DateTimePicker} from '@material-ui/pickers';
 import {CancelToken} from 'axios';
 import {sumArray} from 'js/utils/numbers';
@@ -66,13 +65,13 @@ const badgeStyle = {
 const StyledBadge = withStyles(badgeStyle)(Badge);
 
 type TypeProps = {
-    initialValues: TypeTransactionForm,
-    onFormChange: Function,
-    moneyLocations: TypeMoneyLocations,
-    currencies: TypeCurrencies,
-    preferences: TypePreferences,
-    user: TypeUsers,
-    categories: TypeCategories,
+    initialValues: TypeTransactionForm;
+    onFormChange: Function;
+    moneyLocations: TypeMoneyLocations;
+    currencies: TypeCurrencies;
+    preferences: TypePreferences;
+    user: TypeUsers;
+    categories: TypeCategories;
 };
 
 export const setChargedPersonValueFactory = (
@@ -113,8 +112,8 @@ export const setChargedPersonValueFactory = (
 };
 
 const FormControlLabelInline = styled(FormControlLabel)`
- display: inline-block;
-`
+    display: inline-block;
+`;
 
 class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
     // @ts-ignore
@@ -172,8 +171,8 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
 
     renderSum() {
         return (
-            <Row>
-                <Col xs={4} style={overflowVisible}>
+            <SumContainer>
+                <div>
                     <TextField
                         label="Currency"
                         InputLabelProps={{
@@ -199,8 +198,8 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
                         }}
                         disabled={true}
                     />
-                </Col>
-                <Col xs={4}>
+                </div>
+                <div>
                     <TextField
                         label="Sum"
                         InputLabelProps={{
@@ -217,8 +216,8 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
                             this.setState({sum: event.target.value})
                         }
                     />
-                </Col>
-                <Col xs={4}>
+                </div>
+                <div>
                     <TextField
                         label="Weight (grams)"
                         InputLabelProps={{
@@ -235,8 +234,8 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
                             this.setState({weight: event.target.value})
                         }
                     />
-                </Col>
-            </Row>
+                </div>
+            </SumContainer>
         );
     }
 
@@ -252,20 +251,19 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
                 })}
                 onInputChange={this.handleDescriptionInputChange}
                 options={this.descriptionNewOptions.concat(
-                    this.state.descriptionSuggestions.map((each: {
-                        usages: number,
-                        item: string,
-                    }) => ({
-                        value: each.item,
-                        label: (
-                            <StyledBadge
-                                color="primary"
-                                badgeContent={each.usages}
-                            >
-                                {each.item}
-                            </StyledBadge>
-                        ),
-                    })),
+                    this.state.descriptionSuggestions.map(
+                        (each: {usages: number; item: string}) => ({
+                            value: each.item,
+                            label: (
+                                <StyledBadge
+                                    color="primary"
+                                    badgeContent={each.usages}
+                                >
+                                    {each.item}
+                                </StyledBadge>
+                            ),
+                        }),
+                    ),
                 )}
                 inputValue={this.state.descriptionNewOptionText}
             />
@@ -478,8 +476,8 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
 
     renderRepeat() {
         return (
-            <Row>
-                <Col xs={6} style={{overflow: 'initial'}}>
+            <RepeatContainer>
+                <div>
                     <SingleSelect
                         label="Repeat"
                         {...this.bindSelect({
@@ -490,8 +488,8 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
                             label: arr[1],
                         }))}
                     />
-                </Col>
-                <Col xs={6}>
+                </div>
+                <div>
                     <TextField
                         label="Occurrences"
                         InputLabelProps={{
@@ -511,14 +509,14 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
                         }
                         disabled={this.state.repeat == null}
                     />
-                </Col>
-            </Row>
+                </div>
+            </RepeatContainer>
         );
     }
 
     render() {
         return (
-            <Col style={overflowVisible}>
+            <div>
                 <div style={boxStyle}>{this.renderDescription()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
@@ -527,16 +525,12 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
                 <div style={boxStyle}>{this.renderRepeat()}</div>
                 <div style={boxStyle}>{this.renderNotes()}</div>
-                <Row>
-                    <Col xs={12} md={6}>
-                        <div>{this.renderType()}</div>
-                    </Col>
-                    <Col xs={12} md={6}>
-                        <div>{this.renderStatus()}</div>
-                    </Col>
-                </Row>
-                <div style={boxStyle}>{this.renderFlags()}</div>
-            </Col>
+                <TypeStatusFlagsContainer>
+                    <div>{this.renderType()}</div>
+                    <div>{this.renderStatus()}</div>
+                    <div>{this.renderFlags()}</div>
+                </TypeStatusFlagsContainer>
+            </div>
         );
     }
 
@@ -635,3 +629,25 @@ export default (ownProps) => {
 
     return <ExpenseForm {...ownProps} {...stateProps} />;
 };
+
+const TypeStatusFlagsContainer = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    @media ${screenQuerySmall} {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+    }
+`;
+
+const SumContainer = styled.div`
+  display: grid;
+  grid-gap: ${gridGap};
+  grid-template-columns: 1fr 1fr 1fr;
+`
+
+const RepeatContainer = styled.div`
+  display: grid;
+  grid-gap: ${gridGap};
+  grid-template-columns: 1fr 1fr;
+`

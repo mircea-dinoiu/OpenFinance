@@ -30,6 +30,8 @@ export const spacingSmall = '5px';
 export const spacingMedium = '10px';
 export const spacingLarge = '20px';
 
+export const gridGap = spacingMedium;
+
 export const screenQuerySmall = '(min-width: 0px) and (max-width: 480px)';
 export const screenQueryMedium = '(min-width: 481px) and (max-width: 1024px)';
 export const screenQueryLarge = '(min-width: 1025px)';
