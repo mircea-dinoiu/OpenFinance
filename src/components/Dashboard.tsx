@@ -18,11 +18,6 @@ import {grey} from '@material-ui/core/colors';
 import {useScreenSize} from 'state/hooks';
 import styled from 'styled-components';
 
-const DashboardStyled = styled.div`
-    display: grid;
-    grid-template-columns: 2fr 10fr;
-`;
-
 const Dashboard = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const screenSize = useScreenSize();
@@ -65,7 +60,7 @@ const Dashboard = () => {
     const renderLarge = () => (
         <DashboardStyled>
             <Summary />
-            <div>
+            <TabsContainer>
                 <AppBar position="static">
                     <Tabs
                         value={selectedIndex}
@@ -80,7 +75,7 @@ const Dashboard = () => {
                     </Tabs>
                 </AppBar>
                 {renderDesktopTab(selectedIndex)}
-            </div>
+            </TabsContainer>
         </DashboardStyled>
     );
 
@@ -118,5 +113,14 @@ const Dashboard = () => {
 
     return screenSize.isLarge ? renderLarge() : renderMediumDown();
 };
+
+const DashboardStyled = styled.div`
+    display: grid;
+    grid-template-columns: 2fr 10fr;
+`;
+
+const TabsContainer = styled.div`
+    width: calc(100vw / 12 * 10);
+`;
 
 export default Dashboard;
