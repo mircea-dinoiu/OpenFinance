@@ -1,24 +1,9 @@
 import {SingleSelect} from 'components/Select';
-import {
-    TypeGlobalState,
-    TypePreferences,
-    TypeScreenQueries,
-    TypeShiftDateOption,
-    TypeUsers,
-} from 'types';
+import {TypeShiftDateOption} from 'types';
 import {objectEntriesOfSameType} from 'utils/collection';
-import React, {PureComponent} from 'react';
-import {connect} from 'react-redux';
+import React from 'react';
 import {IconButton} from 'material-ui';
-import {
-    AppBar,
-    FormLabel,
-    Menu,
-    MenuItem as MenuItem2,
-    Paper,
-    Toolbar,
-    Typography,
-} from '@material-ui/core';
+import {AppBar, FormLabel, Menu, MenuItem as MenuItem2, Paper, Toolbar, Typography} from '@material-ui/core';
 
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';
@@ -26,38 +11,20 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import Logged from './Logged';
 import DateIcon from '@material-ui/icons/DateRange';
-import {
-    refreshWidgets,
-    updatePreferences,
-    updateState,
-} from 'state/actionCreators';
-import {bindActionCreators} from 'redux';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import moment from 'moment';
 import {ShiftDateOptions, Sizes} from 'defs';
 import {DatePicker} from '@material-ui/pickers';
 import {endOfDayToISOString} from 'js/utils/dates';
 import {ShiftMenu} from './ShiftMenu';
-
-type TypeProps = {
-    onLogout: () => void;
-    title: string;
-    showCurrenciesDrawer: boolean;
-    actions: {
-        updateState: typeof updateState;
-        refreshWidgets: typeof refreshWidgets;
-        updatePreferences: typeof updatePreferences;
-    };
-    screenSize: TypeScreenQueries;
-    preferences: TypePreferences;
-    user: TypeUsers;
-};
-
-type TypeState = {
-    showShiftMenu: boolean;
-    showDateRange: boolean;
-    shiftMenuAnchor: null | HTMLElement;
-};
+import {
+    useCurrenciesDrawerOpenWithSetter,
+    usePreferencesWithActions,
+    useRefreshWidgetsDispatcher,
+    useScreenSize,
+    useTitle,
+    useUsers,
+} from '../../state/hooks';
 
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 const MAX_TIMES = 10;
@@ -78,299 +45,263 @@ export const getShiftForwardOptions = (
         .fill(null)
         .map((each, index) => shiftDateForward(date, by, index + 1));
 
-class TopBar extends PureComponent<TypeProps, TypeState> {
-    state = {
-        showDateRange: false,
-        showShiftMenu: false,
-        shiftMenuAnchor: null,
-    };
+const TopBar = (props: {
+    onLogout: () => void;
+    showCurrenciesDrawer: boolean;
+}) => {
+    const [showDateRange, setShowDateRange] = React.useState(false);
+    const [showShiftMenu, setShowShiftMenu] = React.useState(false);
+    const [shiftMenuAnchor, setShiftMenuAnchor] = React.useState(null);
+    const [preferences, {updatePreferences}] = usePreferencesWithActions();
+    const refreshWidgets = useRefreshWidgetsDispatcher();
+    const [, setCurrenciesDrawerOpen] = useCurrenciesDrawerOpenWithSetter();
+    const screenSize = useScreenSize();
+    const user = useUsers();
+    const title = useTitle();
 
-    shiftBack(date) {
-        this.props.actions.updatePreferences({
-            endDate: endOfDayToISOString(date),
-        });
-    }
-
-    shiftForward(date) {
-        this.props.actions.updatePreferences({
-            endDate: endOfDayToISOString(date),
-        });
-    }
-
-    handleShiftBack = () => {
-        this.shiftBack(
-            shiftDateBack(
-                this.props.preferences.endDate,
-                this.props.preferences.endDateIncrement,
-            ),
-        );
-    };
-    handleShiftForward = () => {
-        this.shiftForward(
-            shiftDateForward(
-                this.props.preferences.endDate,
-                this.props.preferences.endDateIncrement,
-            ),
-        );
-    };
-    onChangeEndDate = (date) => {
-        this.props.actions.updatePreferences({
+    const shiftBack = (date) => {
+        updatePreferences({
             endDate: endOfDayToISOString(date),
         });
     };
-    onClickRefresh = () => {
-        this.props.actions.refreshWidgets();
-    };
-    onClickCurrenciesDrawerTrigger = () => {
-        this.props.actions.updateState({currenciesDrawerOpen: true});
-    };
 
-    handleEndDateIntervalDropdownChange = (newValue) => {
-        this.props.actions.updatePreferences({endDateIncrement: newValue});
+    const shiftForward = (date) => {
+        updatePreferences({
+            endDate: endOfDayToISOString(date),
+        });
     };
 
-    handleToggleDateRange = () =>
-        this.setState((state) => ({showDateRange: !state.showDateRange}));
-
-    renderEndDateIntervalSelect() {
-        return (
-            <div
-                style={{
-                    float: 'left',
-                    width: '120px',
-                    marginRight: 12,
-                    marginTop: 2,
-                }}
-            >
-                <SingleSelect
-                    value={this.props.preferences.endDateIncrement}
-                    onChange={this.handleEndDateIntervalDropdownChange}
-                    clearable={false}
-                    options={objectEntriesOfSameType(ShiftDateOptions).map(
-                        ([id, name]) => ({value: id, label: name}),
-                    )}
-                />
-            </div>
+    const handleShiftBack = () => {
+        shiftBack(
+            shiftDateBack(preferences.endDate, preferences.endDateIncrement),
         );
-    }
+    };
+    const handleShiftForward = () => {
+        shiftForward(
+            shiftDateForward(preferences.endDate, preferences.endDateIncrement),
+        );
+    };
+    const onChangeEndDate = (date) => {
+        updatePreferences({
+            endDate: endOfDayToISOString(date),
+        });
+    };
 
-    handleOpenShiftMenu = (event) => {
+    const onClickRefresh = () => {
+        refreshWidgets();
+    };
+
+    const onClickCurrenciesDrawerTrigger = () => {
+        setCurrenciesDrawerOpen(true);
+    };
+
+    const handleEndDateIntervalDropdownChange = (newValue) => {
+        updatePreferences({endDateIncrement: newValue});
+    };
+
+    const handleToggleDateRange = () => {
+        setShowDateRange(!showDateRange);
+    };
+
+    const renderEndDateIntervalSelect = () => (
+        <div
+            style={{
+                float: 'left',
+                width: '120px',
+                marginRight: 12,
+                marginTop: 2,
+            }}
+        >
+            <SingleSelect
+                value={preferences.endDateIncrement}
+                onChange={handleEndDateIntervalDropdownChange}
+                clearable={false}
+                options={objectEntriesOfSameType(ShiftDateOptions).map(
+                    ([id, name]) => ({value: id, label: name}),
+                )}
+            />
+        </div>
+    );
+
+    const handleOpenShiftMenu = (event) => {
         event.preventDefault();
         event.stopPropagation();
 
-        this.setState({
-            showShiftMenu: true,
-            shiftMenuAnchor: event.currentTarget,
-        });
+        setShowShiftMenu(true);
+        setShiftMenuAnchor(event.currentTarget);
     };
 
-    handleCloseShiftMenu = () => {
-        this.setState({showShiftMenu: false});
+    const handleCloseShiftMenu = () => {
+        setShowShiftMenu(false);
     };
 
-    renderShiftBack() {
-        return (
-            <IconButton
-                style={{float: 'left', height: INPUT_HEIGHT}}
-                tooltip={`Shift back ${
-                    ShiftDateOptions[this.props.preferences.endDateIncrement]
-                }`}
-                onClick={this.handleShiftBack}
-            >
-                <ArrowBack />
-            </IconButton>
-        );
-    }
+    const renderShiftBack = () => (
+        <IconButton
+            style={{float: 'left', height: INPUT_HEIGHT}}
+            tooltip={`Shift back ${
+                ShiftDateOptions[preferences.endDateIncrement]
+            }`}
+            onClick={handleShiftBack}
+        >
+            <ArrowBack />
+        </IconButton>
+    );
 
-    renderShiftForward() {
-        return (
-            <IconButton
-                style={{float: 'left', height: INPUT_HEIGHT}}
-                tooltip={`Shift forward ${
-                    ShiftDateOptions[this.props.preferences.endDateIncrement]
-                }`}
-                onClick={this.handleShiftForward}
-            >
-                <ArrowForward />
-            </IconButton>
-        );
-    }
+    const renderShiftForward = () => (
+        <IconButton
+            style={{float: 'left', height: INPUT_HEIGHT}}
+            tooltip={`Shift forward ${
+                ShiftDateOptions[preferences.endDateIncrement]
+            }`}
+            onClick={handleShiftForward}
+        >
+            <ArrowForward />
+        </IconButton>
+    );
 
-    renderShiftMenu() {
-        return (
-            <Menu
-                open={this.state.showShiftMenu}
-                anchorEl={this.state.shiftMenuAnchor}
-                style={{marginTop: 29, marginLeft: -49}}
-                onClose={this.handleCloseShiftMenu}
-            >
-                <ShiftMenu>
-                    <div>
-                        <FormLabel component="legend">Previous</FormLabel>
-                        {getShiftBackOptions(
-                            this.props.preferences.endDate,
-                            this.props.preferences.endDateIncrement,
-                        ).map((date) => {
-                            const formattedDate = moment(date).format('ll');
+    const renderShiftMenu = () => (
+        <Menu
+            open={showShiftMenu}
+            anchorEl={shiftMenuAnchor}
+            style={{marginTop: 29, marginLeft: -49}}
+            onClose={handleCloseShiftMenu}
+        >
+            <ShiftMenu>
+                <div>
+                    <FormLabel component="legend">Previous</FormLabel>
+                    {getShiftBackOptions(
+                        preferences.endDate,
+                        preferences.endDateIncrement,
+                    ).map((date) => {
+                        const formattedDate = moment(date).format('ll');
 
-                            return (
-                                <MenuItem2
-                                    key={formattedDate}
-                                    onClick={() => {
-                                        this.handleCloseShiftMenu();
-                                        this.shiftBack(date);
-                                    }}
-                                >
-                                    {formattedDate}
-                                </MenuItem2>
-                            );
-                        })}
-                    </div>
-                    <div>
-                        <FormLabel component="legend">Next</FormLabel>
-                        {getShiftForwardOptions(
-                            this.props.preferences.endDate,
-                            this.props.preferences.endDateIncrement,
-                        ).map((date) => {
-                            const formattedDate = moment(date).format('ll');
+                        return (
+                            <MenuItem2
+                                key={formattedDate}
+                                onClick={() => {
+                                    handleCloseShiftMenu();
+                                    shiftBack(date);
+                                }}
+                            >
+                                {formattedDate}
+                            </MenuItem2>
+                        );
+                    })}
+                </div>
+                <div>
+                    <FormLabel component="legend">Next</FormLabel>
+                    {getShiftForwardOptions(
+                        preferences.endDate,
+                        preferences.endDateIncrement,
+                    ).map((date) => {
+                        const formattedDate = moment(date).format('ll');
 
-                            return (
-                                <MenuItem2
-                                    key={formattedDate}
-                                    onClick={() => {
-                                        this.handleCloseShiftMenu();
-                                        this.shiftForward(date);
-                                    }}
-                                >
-                                    {formattedDate}
-                                </MenuItem2>
-                            );
-                        })}
-                    </div>
-                </ShiftMenu>
-            </Menu>
-        );
-    }
+                        return (
+                            <MenuItem2
+                                key={formattedDate}
+                                onClick={() => {
+                                    handleCloseShiftMenu();
+                                    shiftForward(date);
+                                }}
+                            >
+                                {formattedDate}
+                            </MenuItem2>
+                        );
+                    })}
+                </div>
+            </ShiftMenu>
+        </Menu>
+    );
 
-    render() {
-        const isSmall = this.props.screenSize.isSmall;
+    const isSmall = screenSize.isSmall;
 
-        return (
-            <AppBar
-                position="fixed"
+    return (
+        <AppBar
+            position="fixed"
+            style={{
+                height: Sizes.HEADER_SIZE,
+            }}
+        >
+            <Toolbar
                 style={{
                     height: Sizes.HEADER_SIZE,
+                    minHeight: 'auto',
+                    paddingRight: 10,
                 }}
             >
-                <Toolbar
-                    style={{
-                        height: Sizes.HEADER_SIZE,
-                        minHeight: 'auto',
-                        paddingRight: 10,
-                    }}
-                >
-                    <Typography variant="h6" color="inherit">
-                        {this.props.title}
-                    </Typography>
-                    {this.props.user && (
-                        <Paper
-                            style={{
-                                height: INPUT_HEIGHT,
-                                ...(isSmall
-                                    ? {
-                                          position: 'fixed',
-                                          display: this.state.showDateRange
-                                              ? 'block'
-                                              : 'none',
-                                          top: Sizes.HEADER_SIZE,
-                                      }
-                                    : {
-                                          position: 'absolute',
-                                          left: '50%',
-                                          top: '1px',
-                                          transform: 'translateX(-50%)',
-                                      }),
-                            }}
-                        >
-                            {this.renderShiftBack()}
-                            <DatePicker
-                                variant="inline"
-                                style={{
-                                    float: 'left',
-                                    textAlign: 'center',
-                                    width: '85px',
-                                    marginTop: 5,
-                                }}
-                                format={'YYYY-MM-DD'}
-                                value={
-                                    this.props.preferences.endDate
-                                        ? moment(
-                                              this.props.preferences.endDate,
-                                          ).toDate()
-                                        : null
-                                }
-                                onChange={this.onChangeEndDate}
-                                onContextMenu={this.handleOpenShiftMenu}
-                            />
-                            {this.renderShiftMenu()}
-                            {this.renderShiftForward()}
-                            {this.renderEndDateIntervalSelect()}
-                        </Paper>
-                    )}
-                    <div
+                <Typography variant="h6" color="inherit">
+                    {title}
+                </Typography>
+                {user && (
+                    <Paper
                         style={{
-                            flex: 1,
+                            height: INPUT_HEIGHT,
+                            ...(isSmall
+                                ? {
+                                      position: 'fixed',
+                                      display: showDateRange ? 'block' : 'none',
+                                      top: Sizes.HEADER_SIZE,
+                                  }
+                                : {
+                                      position: 'absolute',
+                                      left: '50%',
+                                      top: '1px',
+                                      transform: 'translateX(-50%)',
+                                  }),
                         }}
                     >
-                        <div style={{float: 'right'}}>
-                            {this.props.user && isSmall && (
-                                <IconButton
-                                    onClick={this.handleToggleDateRange}
-                                >
-                                    <DateIcon htmlColor="white" />
-                                </IconButton>
-                            )}
-                            {this.props.showCurrenciesDrawer && (
-                                <IconButton
-                                    onClick={
-                                        this.onClickCurrenciesDrawerTrigger
-                                    }
-                                >
-                                    <MonetizationOn htmlColor="white" />
-                                </IconButton>
-                            )}
-                            {this.props.user && (
-                                <IconButton onClick={this.onClickRefresh}>
-                                    <Refresh htmlColor="white" />
-                                </IconButton>
-                            )}
-                            {this.props.user && (
-                                <Logged onLogout={this.props.onLogout} />
-                            )}
-                        </div>
+                        {renderShiftBack()}
+                        <DatePicker
+                            variant="inline"
+                            style={{
+                                float: 'left',
+                                textAlign: 'center',
+                                width: '85px',
+                                marginTop: 5,
+                            }}
+                            format={'YYYY-MM-DD'}
+                            value={
+                                preferences.endDate
+                                    ? moment(preferences.endDate).toDate()
+                                    : null
+                            }
+                            onChange={onChangeEndDate}
+                            onContextMenu={handleOpenShiftMenu}
+                        />
+                        {renderShiftMenu()}
+                        {renderShiftForward()}
+                        {renderEndDateIntervalSelect()}
+                    </Paper>
+                )}
+                <div
+                    style={{
+                        flex: 1,
+                    }}
+                >
+                    <div style={{float: 'right'}}>
+                        {user && isSmall && (
+                            <IconButton onClick={handleToggleDateRange}>
+                                <DateIcon htmlColor="white" />
+                            </IconButton>
+                        )}
+                        {props.showCurrenciesDrawer && (
+                            <IconButton
+                                onClick={onClickCurrenciesDrawerTrigger}
+                            >
+                                <MonetizationOn htmlColor="white" />
+                            </IconButton>
+                        )}
+                        {user && (
+                            <IconButton onClick={onClickRefresh}>
+                                <Refresh htmlColor="white" />
+                            </IconButton>
+                        )}
+                        {user && <Logged onLogout={props.onLogout} />}
                     </div>
-                </Toolbar>
-            </AppBar>
-        );
-    }
-}
+                </div>
+            </Toolbar>
+        </AppBar>
+    );
+};
 
-export default connect(
-    ({screen, screenSize, user, title, preferences}: TypeGlobalState) => ({
-        screen,
-        screenSize,
-        user,
-        title,
-        preferences,
-    }),
-    (dispatch) => ({
-        actions: bindActionCreators(
-            {
-                updateState,
-                refreshWidgets,
-                updatePreferences,
-            },
-            dispatch,
-        ),
-    }),
-)(TopBar);
+export default TopBar;

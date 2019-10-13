@@ -3,8 +3,19 @@
 import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
 import {bindActionCreators} from 'redux';
-import {setUsers, updatePreferences, updateState} from 'state/actionCreators';
-import {TypeCurrencies, TypeGlobalState, TypeScreenQueries, TypeSnackbar, TypeUsers} from 'types';
+import {
+    refreshWidgets,
+    setUsers,
+    updatePreferences,
+    updateState,
+} from 'state/actionCreators';
+import {
+    TypeCurrencies,
+    TypeGlobalState,
+    TypeScreenQueries,
+    TypeSnackbar,
+    TypeUsers,
+} from 'types';
 
 export const useActions = (actions) => {
     const dispatch = useDispatch();
@@ -19,12 +30,17 @@ export const useCurrencies = (): TypeCurrencies =>
     useSelector((s: TypeGlobalState) => s.currencies);
 export const useUsers = (): TypeUsers =>
     useSelector((s: TypeGlobalState) => s.user);
-export const useUsersWithActions = (): [TypeUsers, {
-    setUsers: typeof setUsers
-}] =>
-    [useUsers(), useActions({
+export const useUsersWithActions = (): [
+    TypeUsers,
+    {
+        setUsers: typeof setUsers;
+    },
+] => [
+    useUsers(),
+    useActions({
         setUsers,
-    })];
+    }),
+];
 
 export const useMoneyLocations = () =>
     useSelector((s: TypeGlobalState) => s.moneyLocations);
@@ -57,11 +73,13 @@ export const useCurrenciesDrawerOpenWithSetter = (): [
         },
     ];
 };
+
+export const useTitle = () => useSelector((s: TypeGlobalState) => s.title);
 export const useTitleWithSetter = (): [string, (title: string) => void] => {
     const dispatch = useDispatch();
 
     return [
-        useSelector((s: TypeGlobalState) => s.title),
+        useTitle(),
         (title: string) => {
             dispatch(updateState({title}));
         },
@@ -73,3 +91,4 @@ export const useMoneyLocationTypes = () =>
 
 export const useRefreshWidgets = () =>
     useSelector((s: TypeGlobalState) => s.refreshWidgets);
+export const useRefreshWidgetsDispatcher = () => useActions(refreshWidgets);
