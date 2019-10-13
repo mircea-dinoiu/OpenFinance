@@ -14,13 +14,11 @@ const screenSize = (state = getScreenQueries(), action) =>
 const refreshWidgets = (state = uniqueId(), action) =>
     action.type === Actions.REFRESH_WIDGETS ? uniqueId() : state;
 const bindToUpdateState = (prop, defaultValue) => {
-    // @ts-ignore
     stateKeysWithoutReducers.push(prop);
 
     return (state = defaultValue, action) => {
         if (action.type === Actions.UPDATE_STATE) {
             Object.keys(action.state).forEach((key) => {
-                // @ts-ignore
                 if (!stateKeysWithoutReducers.includes(key)) {
                     throw new Error(
                         `${key} has its own reducer. Please use action ${

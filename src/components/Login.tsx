@@ -16,6 +16,7 @@ import {
     screenQueryMedium,
     screenQuerySmall,
 } from '../defs/styles';
+import {TypeUsers} from '../types';
 
 const Login = () => {
     const [email, setEmail] = React.useState('');
@@ -40,7 +41,7 @@ const Login = () => {
         setError(null);
 
         try {
-            const response = await createXHR({
+            const response = await createXHR<TypeUsers>({
                 url: routes.user.login,
                 method: 'POST',
                 data: new URLSearchParams({
@@ -51,7 +52,6 @@ const Login = () => {
             });
             const json = response.data;
 
-            // @ts-ignore
             dispatch(setUsers(json));
         } catch (e) {
             setError(e.response.data);

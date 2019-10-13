@@ -27,7 +27,7 @@ import {useCurrencies, useCurrenciesDrawerOpenWithSetter, useSnackbars, useUsers
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
 import {Home} from './components/Home';
-import {TypeCategories, TypeMoneyLocations, TypeMoneyLocationTypes} from './types';
+import {TypeCategories, TypeMoneyLocations, TypeMoneyLocationTypes, TypeUsers} from './types';
 
 const theme = createMuiTheme({
     palette: {
@@ -68,9 +68,8 @@ const App = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await createXHR({url: routes.user.list});
+            const response = await createXHR<TypeUsers>({url: routes.user.list});
 
-            // @ts-ignore
             dispatch(setUsers(response.data));
             setReady(true);
         } catch (e) {
