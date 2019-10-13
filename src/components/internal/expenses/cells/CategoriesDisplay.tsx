@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Chip} from '@material-ui/core';
 import {useCategories, useScreenSize} from 'state/hooks';
-import {spacingSmall} from '../../../../defs/styles';
+import {spacingSmall} from 'defs/styles';
 
 const CategoriesDisplay = ({item}) => {
     const categories = useCategories();

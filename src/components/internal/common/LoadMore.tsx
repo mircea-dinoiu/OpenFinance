@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {spacingMedium} from 'defs/styles';
-import {ButtonProgress} from '../../loaders';
+import {ButtonProgress} from 'components/loaders';
 import {Button} from '@material-ui/core';
 import React from 'react';
 

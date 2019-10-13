@@ -1,13 +1,13 @@
 import React, {PureComponent} from 'react';
 import {CardHeader} from 'material-ui';
-import {Col, Row} from 'react-grid-system';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import Collapse from '@material-ui/icons/ExpandLess';
 import Expand from '@material-ui/icons/ExpandMore';
 import BaseTable from 'components/BaseTable';
 import {Checkbox, FormControlLabel} from '@material-ui/core';
 import {TypeCurrencies} from 'types';
-import {spacingMedium, spacingSmall} from '../../../defs/styles';
+import {spacingMedium, spacingSmall} from 'defs/styles';
+import styled from 'styled-components';
 
 export class SummarySubCategory extends PureComponent<
     {
@@ -64,8 +64,8 @@ export class SummarySubCategory extends PureComponent<
                         }}
                         onClick={this.toggleExpanded}
                     >
-                        <Row>
-                            <Col xs={10}>
+                        <CategoryContainer>
+                            <div>
                                 {Number(id) === 0 ? (
                                     <em>Unclassified</em>
                                 ) : (
@@ -98,15 +98,15 @@ export class SummarySubCategory extends PureComponent<
                                         ),
                                     )}
                                 </div>
-                            </Col>
-                            <Col xs={2} style={{textAlign: 'right'}}>
+                            </div>
+                            <CategoryToggle>
                                 {this.state.expanded ? (
                                     <Collapse />
                                 ) : (
                                     <Expand />
                                 )}
-                            </Col>
-                        </Row>
+                            </CategoryToggle>
+                        </CategoryContainer>
                     </CardHeader>
                 )}
                 {(shouldGroup === false || this.state.expanded) && (
@@ -161,3 +161,12 @@ export class SummarySubCategory extends PureComponent<
         );
     }
 }
+
+const CategoryContainer = styled.div`
+    display: grid;
+    grid-template-columns: 10fr 2fr;
+`;
+
+const CategoryToggle = styled.div`
+    text-align: right;
+`;

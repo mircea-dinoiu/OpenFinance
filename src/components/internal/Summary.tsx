@@ -3,7 +3,7 @@ import {createXHR} from 'utils/fetch';
 import {BigLoader} from 'components/loaders';
 import {Checkbox, FormControlLabel, Paper} from '@material-ui/core';
 import {green, purple, red} from '@material-ui/core/colors';
-import routes from '../../defs/routes';
+import routes from 'defs/routes';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import IncludeDropdown from 'components/IncludeDropdown';
