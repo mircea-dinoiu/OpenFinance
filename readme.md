@@ -29,7 +29,6 @@ yarn start
 ```
 
 # Env variables
-## Webpack
 - `DEBUG=true` enters debug mode
 - `USE_CSRF=true` uses csrf for requests
 - `TIMEZONE=+00:00` sets timezone
