@@ -1,4 +1,4 @@
-import {mapItemToRepeatedUpdates} from 'src/components/internal/common/helpers';
+import {mapItemToRepeatedUpdates} from './helpers';
 import {mapItemToDetachedUpdates, mergeItems} from './helpers';
 
 describe('#mapItemToRepeatedUpdates()', () => {
