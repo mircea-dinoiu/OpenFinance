@@ -12,11 +12,10 @@ import {
 import {objectEntriesOfSameType, objectValuesOfSameType} from 'utils/collection';
 import {mapItemToDetachedUpdates, mapItemToRepeatedUpdates, mergeItems} from 'components/internal/common/helpers';
 import React, {PureComponent} from 'react';
-import {Col} from 'react-grid-system';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 
-import {BigLoader, ButtonProgress} from 'components/loaders';
+import {BigLoader} from 'components/loaders';
 
 import {createXHR} from 'utils/fetch';
 
@@ -49,6 +48,7 @@ import ContextMenuItems from 'components/MainScreen/ContextMenu/ContextMenuItems
 import {makeUrl} from 'utils/url';
 import {StatsTable} from './StatsTable';
 import {SplitAmountField} from './SplitAmountField';
+import {LoadMore} from './LoadMore';
 
 type TypeProps = {
     api: {
@@ -220,7 +220,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         this.setState((state) => ({loading: state.loading + 1}));
         const sorters: {id: string; desc: boolean}[] = [];
 
-        if (this.state.pendingFirst) {
+        if (this.state.pendingFirst && this.isDesktop()) {
             sorters.push({id: 'status', desc: true});
         }
 
@@ -251,7 +251,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         const nextResults = infiniteScroll ? results.concat(json) : json;
 
         this.setState((state) => ({
-            page: infiniteScroll ? page + 1 : page,
+            page,
             results: nextResults,
             firstLoad: false,
             loading: state.loading - 1,
@@ -888,16 +888,12 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 >
                     {this.renderContent()}
                     {isDesktop ? null : (
-                        <Col>
-                            <Button
-                                variant="contained"
-                                fullWidth={true}
-                                style={{margin: '20px 0 60px'}}
-                                disabled={!!loading}
-                            >
-                                {loading ? <ButtonProgress /> : 'Load More'}
-                            </Button>
-                        </Col>
+                        <LoadMore
+                            loading={loading}
+                            onClick={() => {
+                                this.loadMore({page: this.state.page + 1});
+                            }}
+                        />
                     )}
                     {this.renderDialogs()}
                     <Fab
