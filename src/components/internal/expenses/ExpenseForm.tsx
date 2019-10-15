@@ -244,7 +244,7 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
 
         return (
             <SingleSelect
-                label="Description"
+                label="Name"
                 {...this.bindSelect({
                     valueKey,
                     onChange: this.handleDescriptionChange,
@@ -274,11 +274,11 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
         this.setState({notes: event.target.value});
     };
 
-    renderNotes() {
+    renderDetails() {
         return (
             <TextField
                 value={this.state.notes}
-                label="Notes"
+                label="Details"
                 multiline
                 margin="none"
                 fullWidth={true}
@@ -518,13 +518,13 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
         return (
             <div>
                 <div style={boxStyle}>{this.renderDescription()}</div>
+                <div style={boxStyle}>{this.renderDetails()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderDateTime()}</div>
                 <div style={boxStyle}>{this.renderCategories()}</div>
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
                 <div style={boxStyle}>{this.renderRepeat()}</div>
-                <div style={boxStyle}>{this.renderNotes()}</div>
                 <TypeStatusFlagsContainer>
                     <div>{this.renderType()}</div>
                     <div>{this.renderStatus()}</div>
