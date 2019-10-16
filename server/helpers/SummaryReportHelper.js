@@ -5,11 +5,7 @@ const safeNum = financialNum;
 
 module.exports = {
     description(text, {html} = {}) {
-        if (html === 'false') {
-            return text;
-        }
-
-        return `<span data-qtip="${text}">${text}</span>`;
+        return text;
     },
 
     safeNum,

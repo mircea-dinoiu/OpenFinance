@@ -40,24 +40,24 @@ const SummaryCategory = (props) => {
         showSumInHeader,
     } = props;
     const headerColor = 'rgba(255, 255, 255, 0.9)';
-    const [expanded, setExpanded] = React.useState(
-        Boolean(props.expandedByDefault),
-    );
+    const expandedState = React.useState(Boolean(props.expandedByDefault));
+    const [expanded, setExpanded] = props.setExpanded
+        ? [props.expanded, props.setExpanded]
+        : expandedState;
     const [excluded, setExcluded] = React.useState({});
 
     const handleToggleExcluded = (id) => {
         setExcluded({...excluded, [id]: !excluded[id]});
     };
 
-    const handleExpandChange = (value) => {
-        setExpanded(value);
-    };
-
     const numericValueProxy = (
         value: number,
-        {currencyId = currencies.default, ...opts}: {
-            currencyId?: number,
-            currencyStyle?: {}
+        {
+            currencyId = currencies.default,
+            ...opts
+        }: {
+            currencyId?: number;
+            currencyStyle?: {};
         } = {},
     ) => {
         const currency = currencies.map[String(currencyId)].iso_code;
@@ -69,7 +69,7 @@ const SummaryCategory = (props) => {
         <Card
             style={{marginBottom: 10}}
             expanded={expanded}
-            onExpandChange={handleExpandChange}
+            onExpandChange={setExpanded}
         >
             <CardHeader
                 style={{backgroundColor, paddingTop: 0}}

@@ -10,3 +10,5 @@ export const BigLoader = (props) => (
 export const ButtonProgress = (props) => (
     <CircularProgress size={20} {...props} />
 );
+
+export const LoadingTopBar = () => null;

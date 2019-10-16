@@ -55,7 +55,7 @@ module.exports = {
 
     getClonesFor({record, endDate, startDate}) {
         const out = [];
-        const recordAsJSON = record.toJSON();
+        const recordAsJSON = record.toJSON ? record.toJSON() : record;
 
         if (record.repeat != null) {
             let repeats = 1;

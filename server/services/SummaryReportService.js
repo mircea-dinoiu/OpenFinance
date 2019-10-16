@@ -6,11 +6,9 @@ module.exports = {
     getBalances({
         expenses,
         userIdToFullName,
-        mlRecords,
         currencyIdToISOCode,
-        html,
     }) {
-        const data = {byUser: [], byML: []};
+        const data = {byUser: []};
         const totalRemainingByUser = {};
         const totalRemainingByML = {};
         const users = SummaryReportHelper.getUniques(expenses.byUser);
@@ -44,41 +42,13 @@ module.exports = {
                 data.byUser.push({
                     sum,
                     reference,
-                    description: SummaryReportHelper.description(
-                        `${userIdToFullName[id]} (${currencyIdToISOCode[currencyId]})`,
-                        {html},
-                    ),
+                    description: `${userIdToFullName[id]} (${currencyIdToISOCode[currencyId]})`,
                     currencyId,
                 });
             }
         });
 
-        Object.keys(totalRemainingByML).forEach((id) => {
-            const sum = totalRemainingByML[id];
-
-            if (sum !== 0) {
-                const ml = mlRecords.find((each) => each.id == id);
-
-                data.byML.push({
-                    sum,
-                    description: SummaryReportHelper.description(
-                        SummaryReportHelper.formatMLName(id, {
-                            mlRecords,
-                            html,
-                        }),
-                        {
-                            html,
-                        },
-                    ),
-                    reference: id,
-                    currencyId: ml.currency_id,
-                    group: (ml ? ml.type_id : 0) || 0,
-                });
-            }
-        });
-
         return {
-            byML: sortBy(data.byML, 'description'),
             byUser: sortBy(data.byUser, 'description'),
         };
     },
@@ -122,12 +92,7 @@ module.exports = {
                 Object.entries(users[id]).forEach(([currencyId, sum]) => {
                     data.byUser.push({
                         sum,
-                        description: SummaryReportHelper.description(
-                            `${user.full_name} (${currencyIdToISOCode[currencyId]})`,
-                            {
-                                html,
-                            },
-                        ),
+                        description: `${user.full_name} (${currencyIdToISOCode[currencyId]})`,
                         reference: `${id}:${currencyId}`,
                         currencyId,
                     });
@@ -151,7 +116,6 @@ module.exports = {
         categoryRecords,
         currencyIdToISOCode,
         userIdToFullName,
-        html,
     }) {
         const categories = {};
         const data = [];
@@ -222,10 +186,7 @@ module.exports = {
                     Object.entries(currencies).forEach(([currencyId, sum]) => {
                         data.push({
                             sum,
-                            description: SummaryReportHelper.description(
-                                `${userIdToFullName[userId]} (${currencyIdToISOCode[currencyId]})`,
-                                {html},
-                            ),
+                            description: `${userIdToFullName[userId]} (${currencyIdToISOCode[currencyId]})`,
                             reference: `${categoryId}:${userId}:${currencyId}`,
                             group: categoryId,
                             currencyId: Number(currencyId),

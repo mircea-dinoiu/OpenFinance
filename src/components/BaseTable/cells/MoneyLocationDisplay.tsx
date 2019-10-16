@@ -14,9 +14,11 @@ const StatusToIconComponent = {
 
 const MoneyLocationDisplay = ({id}) => {
     const moneyLocations = useMoneyLocations();
+
     if (!id) {
         return null;
     }
+
     const moneyLocation = moneyLocations.find((each) => each.id === Number(id));
 
     if (!moneyLocation) {

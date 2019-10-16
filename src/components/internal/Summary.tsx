@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {createXHR} from 'utils/fetch';
-import {BigLoader} from 'components/loaders';
 import {Checkbox, FormControlLabel, Paper} from '@material-ui/core';
 import {green, purple, red} from '@material-ui/core/colors';
 import routes from 'defs/routes';
@@ -17,12 +16,16 @@ import MoneyLocationDisplay from 'components/BaseTable/cells/MoneyLocationDispla
 import {makeUrl} from 'utils/url';
 import {
     useCategories,
+    useMoneyLocations,
     useMoneyLocationTypes,
     usePreferencesWithActions,
     useRefreshWidgets,
     useScreenSize,
     useUsers,
 } from 'state/hooks';
+import {SummaryLazyCategory} from './summary/SummaryLazyCategory';
+import {objectEntriesOfSameType} from '../../utils/collection';
+import {LoadingTopBar} from '../loaders';
 
 const getEndDateBasedOnIncludePreference = (endDate, include) => {
     if (include === 'previous-year') {
@@ -85,7 +88,6 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
 };
 
 const Summary = () => {
-    const [firstLoad, setFirstLoad] = React.useState(true);
     const [results, setResults] = React.useState(null);
     const [refreshing, setRefreshing] = React.useState(false);
     const [preferences, {updatePreferences}] = usePreferencesWithActions();
@@ -94,62 +96,45 @@ const Summary = () => {
     const user = useUsers();
     const categories = useCategories();
     const screenSize = useScreenSize();
+    const moneyLocations = useMoneyLocations();
+    const includePending = preferences.includePending;
+    const endDate = preferences.endDate;
+    const include = preferences.include;
+    const reportQueryParams = new URLSearchParams({
+        ...pickBy(
+            {
+                end_date: getEndDateBasedOnIncludePreference(endDate, include),
+                start_date: getStartDate({
+                    include,
+                    endDate,
+                }),
+            },
+            identity,
+        ),
+        include_pending: includePending,
+    }).toString();
 
-    const load = async ({
-        includePending = preferences.includePending,
-        endDate = preferences.endDate,
-        include = preferences.include,
-    } = {}) => {
+    const load = async () => {
         setRefreshing(true);
 
         const response = await createXHR({
-            url: makeUrl(routes.report.summary, {
-                ...pickBy(
-                    {
-                        end_date: getEndDateBasedOnIncludePreference(
-                            endDate,
-                            include,
-                        ),
-                        start_date: getStartDate({
-                            include,
-                            endDate,
-                        }),
-                    },
-                    identity,
-                ),
-                html: false,
-                filters: JSON.stringify(
-                    includePending ? [] : [{id: 'status', value: 'finished'}],
-                ),
-            }),
+            url: makeUrl(routes.report.summary, reportQueryParams),
         });
         const json = response.data;
 
         setResults(json);
-        setFirstLoad(false);
         setRefreshing(false);
     };
 
     React.useEffect(() => {
         load();
-    }, [preferences.endDate, refreshWidgets]);
+    }, [reportQueryParams, refreshWidgets]);
 
     const renderCategory = (categoryProps) =>
         React.createElement(SummaryCategory, categoryProps);
 
     const renderResults = () => (
-        <div style={{margin: '0 0 20px'}}>
-            {renderCategory({
-                backgroundColor: green[500],
-                title: 'Balance by Account',
-                summaryObject: results.remainingData.byML,
-                entities: moneyLocationTypes,
-                expandedByDefault: true,
-                renderDescription({reference}) {
-                    return <MoneyLocationDisplay id={reference} />;
-                },
-            })}
-
+        <>
             {renderCategory({
                 backgroundColor: green[500],
                 title: 'Balance by Person',
@@ -182,24 +167,18 @@ const Summary = () => {
                 entities: user.list,
                 entityNameField: 'full_name',
             })}
-        </div>
+        </>
     );
 
     const onIncludeChange = (include) => {
         updatePreferences({include});
-        load({include});
     };
 
     const handleToggleIncludePending = () => {
         const includePending = !preferences.includePending;
 
         updatePreferences({includePending});
-        load({includePending});
     };
-
-    if (firstLoad) {
-        return <BigLoader />;
-    }
 
     return (
         <div
@@ -214,7 +193,8 @@ const Summary = () => {
                     : {}),
             }}
         >
-            <div style={refreshing ? greyedOut : {}}>
+            {refreshing && <LoadingTopBar />}
+            <>
                 <Paper
                     style={{
                         margin: `${spacingSmall} 0`,
@@ -236,8 +216,47 @@ const Summary = () => {
                         label="Include pending transactions"
                     />
                 </Paper>
-                {results && renderResults()}
-            </div>
+                <div style={{margin: '0 0 20px'}}>
+                    <SummaryLazyCategory
+                        {...{
+                            backgroundColor: green[500],
+                            title: 'Balance by Account',
+                            entities: moneyLocationTypes,
+                            expandedByDefault: true,
+                            deps: [reportQueryParams, refreshWidgets],
+                            url: makeUrl(
+                                routes.report.balanceByLocation,
+                                reportQueryParams,
+                            ),
+                            parser: (data) => {
+                                return objectEntriesOfSameType(data)
+                                    .map(([key, sum]) => {
+                                        const ml = moneyLocations.find(
+                                            (ml) => ml.id === Number(key),
+                                        );
+
+                                        if (!ml || sum === 0) {
+                                            return null;
+                                        }
+
+                                        return {
+                                            currencyId: ml.currency_id,
+                                            description: ml.name,
+                                            group: ml.type_id,
+                                            reference: key,
+                                            sum,
+                                        };
+                                    })
+                                    .filter(Boolean);
+                            },
+                            renderDescription({reference}) {
+                                return <MoneyLocationDisplay id={reference} />;
+                            },
+                        }}
+                    />
+                    {results && renderResults()}
+                </div>
+            </>
         </div>
     );
 };

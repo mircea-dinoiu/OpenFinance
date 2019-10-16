@@ -1,3 +1,5 @@
+const {uniqueId} = require('lodash');
+
 const sql = require('sequelize');
 
 const mapTextFilterToSQL = (id, value) => {
@@ -143,8 +145,15 @@ const exported = {
     mapInputToLimitSQL,
     mapGroupConcatToHavingSQL,
     mapEntityFilterToWhereSQL,
-    mapStartDateToSQL(startDate, Model) {
+    mapStartDateToSQL(startDate, Model, raw = false) {
         if (startDate) {
+            if (raw) {
+                return {
+                    query: `${Model.tableName}.created_at >= ?`,
+                    replacements: [startDate]
+                };
+            }
+
             return sql.or(
                 sql.where(sql.col(`${Model.tableName}.created_at`), {
                     $gte: startDate,
@@ -157,10 +166,20 @@ const exported = {
 
         return null;
     },
-    mapEndDateToSQL(endDate, Model) {
-        return sql.where(sql.col(`${Model.tableName}.created_at`), {
-            $lte: endDate,
-        });
+    mapEndDateToSQL(endDate, Model, raw = false) {
+        if (endDate) {
+            if (raw) {
+                return {
+                    query: `${Model.tableName}.created_at <= ?`,
+                    replacements: [endDate]
+                };
+            }
+
+            return sql.where(sql.col(`${Model.tableName}.created_at`), {
+                $lte: endDate,
+            });
+        }
+        return null;
     },
     mapTextFilterToSQL,
     mapFlagsToSQL,

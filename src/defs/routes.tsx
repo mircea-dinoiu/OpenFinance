@@ -7,7 +7,8 @@ export default {
         destroy: '/expense/delete',
     },
     report: {
-        summary: '/report/summary',
+        summary: '/api/report/summary',
+        balanceByLocation: '/api/report/balance-by-location',
     },
     getCurrencies: '/get-currencies',
     user: {

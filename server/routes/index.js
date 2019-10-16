@@ -6,6 +6,6 @@ module.exports = {
     '/user': require('./user'),
     '/money-location': require('./money-location'),
     '/money-location-type': require('./money-location-type'),
-    '/report': require('./report'),
+    '/api/report': require('./report'),
     '/suggestion': require('./suggestion'),
 };
