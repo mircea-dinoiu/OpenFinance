@@ -11,6 +11,7 @@ const {
 const logger = require('../helpers/logger');
 const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
 const {mapStartDateToSQL, mapEndDateToSQL} = require('../helpers/sql');
+const {flatten} = require('lodash');
 
 const makeWhere = (queryParams, extra = []) => {
     const where = [
@@ -28,10 +29,9 @@ const makeWhere = (queryParams, extra = []) => {
               query: `WHERE ${where
                   .map((each) => each.query || each)
                   .join(' AND ')}`,
-              replacements: where
-                  .map((each) => each.replacements || null)
-                  .flat()
-                  .filter(Boolean),
+              replacements: flatten(
+                  where.map((each) => each.replacements || null),
+              ).filter(Boolean),
           }
         : {
               query: '',
