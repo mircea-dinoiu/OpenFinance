@@ -8,8 +8,6 @@ import DetachIcon from '@material-ui/icons/ViewAgenda';
 import MergeIcon from '@material-ui/icons/MergeType';
 import LockIcon from '@material-ui/icons/Lock';
 import UnlockIcon from '@material-ui/icons/LockOpen';
-import IconArrowDown from '@material-ui/icons/ArrowDownward';
-import IconArrowUp from '@material-ui/icons/ArrowUpward';
 
 import IconArchive from '@material-ui/icons/Archive';
 import IconUnarchive from '@material-ui/icons/Unarchive';
@@ -27,8 +25,6 @@ export type TypeContextMenuItemsProps = {
     onClickReviewed: TypeOnClick,
     onClickNeedsReview: TypeOnClick,
     onCloseContextMenu: TypeOnClick,
-    onClickDeposit: TypeOnClick,
-    onClickWithdrawal: TypeOnClick,
     onClickHide: TypeOnClick,
     onClickUnhide: TypeOnClick,
     selectedIds: {},
@@ -43,8 +39,6 @@ export default function ContextMenuItems({
     onClickReviewed,
     onClickNeedsReview,
     onCloseContextMenu,
-    onClickDeposit,
-    onClickWithdrawal,
     onClickMerge,
 
     onClickHide,
@@ -141,27 +135,6 @@ export default function ContextMenuItems({
                     />
                 </>
             }
-            <Divider />
-            <MenuItem
-                primaryText="Change to Deposit"
-                leftIcon={<IconArrowDown />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickDeposit,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
-            <MenuItem
-                primaryText="Change to Withdrawal"
-                leftIcon={<IconArrowUp />}
-                onClick={compose(
-                    onCloseContextMenu,
-                    onClickWithdrawal,
-                )}
-                disabled={disabledForZero}
-                desktop={desktop}
-            />
             <Divider />
             <MenuItem
                 primaryText="Archive"

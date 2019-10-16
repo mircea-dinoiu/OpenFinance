@@ -23,7 +23,6 @@ module.exports = BaseController.extend({
         ],
         money_location_id: ['sometimes', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
-        type: ['sometimes', 'isRequired', 'isTypeValue'],
         users: ['sometimes', 'isRequired', ['isPercentageObject', User]],
         categories: ['sometimes', ['isIdArray', Category]],
 
@@ -48,7 +47,6 @@ module.exports = BaseController.extend({
         ],
         money_location_id: ['isRequired', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
-        type: ['sometimes', 'isRequired', 'isTypeValue'],
         categories: ['sometimes', ['isIdArray', Category]],
 
         repeat: ['sometimes', 'isRepeatValue'],
@@ -150,10 +148,6 @@ module.exports = BaseController.extend({
 
         if (record.hasOwnProperty('hidden')) {
             values.hidden = record.hidden;
-        }
-
-        if (record.hasOwnProperty('type')) {
-            values.type = record.type;
         }
 
         if (record.hasOwnProperty('created_at')) {

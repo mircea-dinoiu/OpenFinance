@@ -349,7 +349,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 this.props.currencies,
             );
 
-            return acc + (each.type === 'deposit' ? sum : -sum);
+            return acc + sum;
         }, 0);
     }
 
@@ -672,9 +672,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     handleClickHide = () =>
         this.updateSelectedRecords({hidden: true, status: 'finished'});
     handleClickUnhide = () => this.updateSelectedRecords({hidden: false});
-    handleClickDeposit = () => this.updateSelectedRecords({type: 'deposit'});
-    handleClickWithdrawal = () =>
-        this.updateSelectedRecords({type: 'withdrawal'});
     handleMerge = async () => {
         const items = this.selectedItems;
         const [first, ...rest] = items;
@@ -727,8 +724,6 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
             onClickDetach: this.handleDetach,
             onClickMerge: this.handleMerge,
             onCloseContextMenu: this.handleCloseContextMenu,
-            onClickDeposit: this.handleClickDeposit,
-            onClickWithdrawal: this.handleClickWithdrawal,
             onClickReviewed: this.handleClickReviewed,
             onClickNeedsReview: this.handleClickNeedsReview,
 

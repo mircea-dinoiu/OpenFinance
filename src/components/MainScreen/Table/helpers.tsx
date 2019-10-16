@@ -15,11 +15,11 @@ export const getTrClassName = (
         classes.push(Classes.todayRow);
     }
 
-    if (item.type === 'withdrawal') {
+    if (item.sum <= 0) {
         classes.push(Classes.withdrawRow);
     }
 
-    if (item.type === 'deposit') {
+    if (item.sum > 0) {
         classes.push(Classes.depositRow);
     }
 

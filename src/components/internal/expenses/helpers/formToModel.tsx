@@ -26,6 +26,5 @@ export default (
         weight: form.weight === '' ? null : form.weight,
         users,
         status: form.status || 'pending',
-        type: form.type || 'withdrawal',
     };
 };

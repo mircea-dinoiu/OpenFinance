@@ -4,7 +4,6 @@ import {TypeUsers} from 'types';
 export default function(data: {user: TypeUsers}) {
     return {
         description: '',
-        type: 'withdrawal',
         status: 'pending',
         notes: '',
         sum: '',

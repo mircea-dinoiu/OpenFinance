@@ -15,5 +15,4 @@ export default (model) => ({
     weight: model.weight,
     chargedPersons: model.users,
     status: model.status || 'pending',
-    type: model.type || 'withdrawal',
 });

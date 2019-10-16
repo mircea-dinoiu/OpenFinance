@@ -525,42 +525,13 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
                 <div style={boxStyle}>{this.renderCategories()}</div>
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
                 <div style={boxStyle}>{this.renderRepeat()}</div>
-                <TypeStatusFlagsContainer>
-                    <div>{this.renderType()}</div>
+                <StatusFlagsContainer>
                     <div>{this.renderStatus()}</div>
                     <div>{this.renderFlags()}</div>
-                </TypeStatusFlagsContainer>
+                </StatusFlagsContainer>
             </div>
         );
     }
-
-    renderType() {
-        return (
-            <>
-                <FormLabel>Type</FormLabel>
-                <RadioGroup
-                    value={this.state.type}
-                    onChange={this.handleChangeType}
-                    row
-                >
-                    <FormControlLabelInline
-                        value="withdrawal"
-                        control={<Radio color="primary" />}
-                        label="Withdrawal"
-                    />
-                    <FormControlLabelInline
-                        value="deposit"
-                        control={<Radio color="primary" />}
-                        label="Deposit"
-                    />
-                </RadioGroup>
-            </>
-        );
-    }
-
-    handleChangeType = (event) => {
-        this.setState({type: event.target.value});
-    };
 
     renderFlags() {
         return (
@@ -630,24 +601,24 @@ export default (ownProps) => {
     return <ExpenseForm {...ownProps} {...stateProps} />;
 };
 
-const TypeStatusFlagsContainer = styled.div`
+const StatusFlagsContainer = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 11fr;
 
     @media ${screenQuerySmall} {
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
     }
 `;
 
 const SumContainer = styled.div`
-  display: grid;
-  grid-gap: ${gridGap};
-  grid-template-columns: 1fr 1fr 1fr;
-`
+    display: grid;
+    grid-gap: ${gridGap};
+    grid-template-columns: 1fr 1fr 1fr;
+`;
 
 const RepeatContainer = styled.div`
-  display: grid;
-  grid-gap: ${gridGap};
-  grid-template-columns: 1fr 1fr;
-`
+    display: grid;
+    grid-gap: ${gridGap};
+    grid-template-columns: 1fr 1fr;
+`;
