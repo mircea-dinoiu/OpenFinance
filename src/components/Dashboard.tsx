@@ -49,7 +49,14 @@ const Dashboard = () => {
     const renderDesktopTab = (index) => {
         switch (index) {
             case 0:
-                return <Expenses />;
+                return (
+                    <TransactionsContainer>
+                        <Summary />
+                        <TransactionsContentContainer>
+                            <Expenses />
+                        </TransactionsContentContainer>
+                    </TransactionsContainer>
+                );
         }
 
         return renderComingSoon();
@@ -58,25 +65,22 @@ const Dashboard = () => {
     const shouldRenderExtraScreens = () => true;
 
     const renderLarge = () => (
-        <DashboardStyled>
-            <Summary />
-            <TabsContainer>
-                <AppBar position="static">
-                    <Tabs
-                        value={selectedIndex}
-                        onChange={(event, index) => setSelectedIndex(index)}
-                    >
-                        <Tab label="Transactions" />
-                        {shouldRenderExtraScreens() && [
-                            <Tab label="Categories" />,
-                            <Tab label="Accounts" />,
-                            <Tab label="Account Types" />,
-                        ]}
-                    </Tabs>
-                </AppBar>
-                {renderDesktopTab(selectedIndex)}
-            </TabsContainer>
-        </DashboardStyled>
+        <>
+            <AppBar position="static">
+                <Tabs
+                    value={selectedIndex}
+                    onChange={(event, index) => setSelectedIndex(index)}
+                >
+                    <Tab label="Transactions" />
+                    {shouldRenderExtraScreens() && [
+                        <Tab label="Categories" />,
+                        <Tab label="Accounts" />,
+                        <Tab label="Account Types" />,
+                    ]}
+                </Tabs>
+            </AppBar>
+            {renderDesktopTab(selectedIndex)}
+        </>
     );
 
     const renderMediumDown = () => (
@@ -114,12 +118,12 @@ const Dashboard = () => {
     return screenSize.isLarge ? renderLarge() : renderMediumDown();
 };
 
-const DashboardStyled = styled.div`
+const TransactionsContainer = styled.div`
     display: grid;
     grid-template-columns: 2fr 10fr;
 `;
 
-const TabsContainer = styled.div`
+const TransactionsContentContainer = styled.div`
     width: calc(100vw / 12 * 10);
 `;
 

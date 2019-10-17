@@ -7,7 +7,7 @@ import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import IncludeDropdown from 'components/IncludeDropdown';
 import {getStartDate} from 'utils/dates';
-import {greyedOut, spacingMedium, spacingSmall} from 'defs/styles';
+import {spacingMedium, spacingSmall} from 'defs/styles';
 import {Sizes} from 'defs';
 import SummaryCategory from 'components/internal/summary/SummaryCategory';
 import moment from 'moment';
@@ -188,7 +188,7 @@ const Summary = () => {
                     ? {
                           overflowY: 'auto',
                           overflowX: 'hidden',
-                          height: `calc(100vh - ${Sizes.HEADER_SIZE})`,
+                          height: `calc(100vh - 2 * ${Sizes.HEADER_SIZE})`,
                       }
                     : {}),
             }}
