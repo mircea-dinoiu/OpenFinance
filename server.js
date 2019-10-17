@@ -36,12 +36,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 /*
- * View engine (handlebars)
- */
-app.set('views', path.join(__dirname, 'server', 'views'));
-app.set('view engine', 'hbs');
-
-/*
  * Add promise rejection wrapper
  */
 app.use((req, res, next) => {
@@ -61,11 +55,12 @@ app.use(
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
-        store: process.env.SESSION_STORE === 'mode'
-            ? new session.MemoryStore()
-            : new SequelizeStore({
-                  db: require('./server/models').sql,
-              }),
+        store:
+            process.env.SESSION_STORE === 'mode'
+                ? new session.MemoryStore()
+                : new SequelizeStore({
+                      db: require('./server/models').sql,
+                  }),
     }),
 );
 
@@ -167,11 +162,21 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.locals.error = process.env.DEBUG === 'true' ? err : {};
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    res.send(`
+<html>
+<body>
+    <h1>${res.locals.message}</h1>
+    <h2>${res.locals.status}</h2>
+    <pre>
+        ${res.locals.error.stack}}
+    </pre>
+</body>
+</html>
+`);
 });
 
 /**
