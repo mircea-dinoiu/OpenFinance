@@ -603,7 +603,7 @@ export default (ownProps) => {
 
 const StatusFlagsContainer = styled.div`
     display: grid;
-    grid-template-columns: 1fr 11fr;
+    grid-template-columns: 1fr 1fr;
 
     @media ${screenQuerySmall} {
         grid-template-columns: 1fr;
