@@ -57,6 +57,38 @@ const getRepeated = async ({start_date: startDate, ...queryParams}, cols) => {
     });
 };
 
+const sumByLocationFactory = () => (req, res) => {
+    const pullStart = Date.now();
+    const queryParams = req.query;
+    const groupedWhere = makeWhere(req.query);
+
+    Promise.all([
+        getRepeated(queryParams, ['money_location_id', 'sum']),
+        sql.query(
+            `SELECT money_location_id as \`key\`, SUM(sum) as \`value\` FROM expenses ${groupedWhere.query} GROUP by money_location_id`,
+            {replacements: groupedWhere.replacements},
+        ),
+    ]).then(([repeated, grouped]) => {
+        const result = grouped[0].reduce(
+            (acc, {key, value}) => ({...acc, [key]: value}),
+            {},
+        );
+
+        repeated.forEach((record) => {
+            result[record.money_location_id] =
+                (grouped[record.money_location_id] || 0) + record.sum;
+        });
+
+        logger.log(
+            req.path,
+            'Pulling took',
+            Date.now() - pullStart,
+            'millis',
+        );
+        res.json(result);
+    });
+};
+
 module.exports = {
     async getSummary(req, res) {
         const pullStart = Date.now();
@@ -156,34 +188,6 @@ module.exports = {
         });
     },
     async getBalanceByLocation(req, res) {
-        const pullStart = Date.now();
-        const queryParams = req.query;
-        const groupedWhere = makeWhere(req.query);
-
-        Promise.all([
-            getRepeated(queryParams, ['money_location_id', 'sum']),
-            sql.query(
-                `SELECT money_location_id as \`key\`, SUM(sum) as \`value\` FROM expenses ${groupedWhere.query} GROUP by money_location_id`,
-                {replacements: groupedWhere.replacements},
-            ),
-        ]).then(([repeated, grouped]) => {
-            const result = grouped[0].reduce(
-                (acc, {key, value}) => ({...acc, [key]: value}),
-                {},
-            );
-
-            repeated.forEach((record) => {
-                result[record.money_location_id] =
-                    (grouped[record.money_location_id] || 0) + record.sum;
-            });
-
-            logger.log(
-                'ReportController.getSummary',
-                'Pulling took',
-                Date.now() - pullStart,
-                'millis',
-            );
-            res.json(result);
-        });
+        sumByLocationFactory()(req, res);
     },
 };
