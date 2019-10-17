@@ -1,5 +1,3 @@
-const {uniqueId} = require('lodash');
-
 const sql = require('sequelize');
 
 const mapTextFilterToSQL = (id, value) => {
@@ -150,7 +148,7 @@ const exported = {
             if (raw) {
                 return {
                     query: `${Model.tableName}.created_at >= ?`,
-                    replacements: [startDate]
+                    replacements: [startDate],
                 };
             }
 
@@ -171,7 +169,7 @@ const exported = {
             if (raw) {
                 return {
                     query: `${Model.tableName}.created_at <= ?`,
-                    replacements: [endDate]
+                    replacements: [endDate],
                 };
             }
 
@@ -179,6 +177,7 @@ const exported = {
                 $lte: endDate,
             });
         }
+
         return null;
     },
     mapTextFilterToSQL,
