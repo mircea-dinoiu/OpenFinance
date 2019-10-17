@@ -112,6 +112,9 @@ const Summary = () => {
             identity,
         ),
         include_pending: includePending,
+        filters: JSON.stringify(
+            includePending ? [] : [{id: 'status', value: 'finished'}],
+        ),
     }).toString();
 
     const load = async () => {
@@ -133,43 +136,6 @@ const Summary = () => {
     const renderCategory = (categoryProps) =>
         React.createElement(SummaryCategory, categoryProps);
 
-    const renderResults = () => (
-        <>
-            {renderCategory({
-                backgroundColor: green[500],
-                title: 'Balance by Person',
-                summaryObject: results.remainingData.byUser,
-                entities: user.list,
-                entityNameField: 'full_name',
-            })}
-
-            {renderCategory({
-                backgroundColor: purple[500],
-                title: 'Transactions by Category',
-                summaryObject: results.expensesByCategory,
-                entities: categories,
-                entityNameField: 'name',
-                showSumInHeader: false,
-            })}
-
-            {renderCategory({
-                backgroundColor: red[500],
-                title: 'Expenses by Account',
-                summaryObject: results.expensesData.byML,
-                entities: moneyLocationTypes,
-                entityNameField: 'name',
-            })}
-
-            {renderCategory({
-                backgroundColor: red[500],
-                title: 'Expenses by Person',
-                summaryObject: results.expensesData.byUser,
-                entities: user.list,
-                entityNameField: 'full_name',
-            })}
-        </>
-    );
-
     const onIncludeChange = (include) => {
         updatePreferences({include});
     };
@@ -178,6 +144,26 @@ const Summary = () => {
         const includePending = !preferences.includePending;
 
         updatePreferences({includePending});
+    };
+
+    const parseTransactionsByLocation = (data) => {
+        return objectEntriesOfSameType(data)
+            .map(([key, sum]) => {
+                const ml = moneyLocations.find((ml) => ml.id === Number(key));
+
+                if (!ml || sum === 0) {
+                    return null;
+                }
+
+                return {
+                    currencyId: ml.currency_id,
+                    description: ml.name,
+                    group: ml.type_id,
+                    reference: key,
+                    sum,
+                };
+            })
+            .filter(Boolean);
     };
 
     return (
@@ -227,33 +213,53 @@ const Summary = () => {
                                 routes.reports.balanceByLocation,
                                 reportQueryParams,
                             ),
-                            parser: (data) => {
-                                return objectEntriesOfSameType(data)
-                                    .map(([key, sum]) => {
-                                        const ml = moneyLocations.find(
-                                            (ml) => ml.id === Number(key),
-                                        );
-
-                                        if (!ml || sum === 0) {
-                                            return null;
-                                        }
-
-                                        return {
-                                            currencyId: ml.currency_id,
-                                            description: ml.name,
-                                            group: ml.type_id,
-                                            reference: key,
-                                            sum,
-                                        };
-                                    })
-                                    .filter(Boolean);
-                            },
+                            parser: parseTransactionsByLocation,
                             renderDescription({reference}) {
                                 return <MoneyLocationDisplay id={reference} />;
                             },
                         }}
                     />
-                    {results && renderResults()}
+                    {results &&
+                        renderCategory({
+                            backgroundColor: green[500],
+                            title: 'Balance by Person',
+                            summaryObject: results.remainingData.byUser,
+                            entities: user.list,
+                            entityNameField: 'full_name',
+                        })}
+
+                    {results &&
+                        renderCategory({
+                            backgroundColor: purple[500],
+                            title: 'Transactions by Category',
+                            summaryObject: results.expensesByCategory,
+                            entities: categories,
+                            entityNameField: 'name',
+                            showSumInHeader: false,
+                        })}
+
+                    <SummaryLazyCategory
+                        {...{
+                            backgroundColor: red[500],
+                            title: 'Expenses by Account',
+                            entities: moneyLocationTypes,
+                            entityNameField: 'name',
+                            url: makeUrl(
+                                routes.reports.expensesByLocation,
+                                reportQueryParams,
+                            ),
+                            parser: parseTransactionsByLocation,
+                        }}
+                    />
+
+                    {results &&
+                        renderCategory({
+                            backgroundColor: red[500],
+                            title: 'Expenses by Person',
+                            summaryObject: results.expensesData.byUser,
+                            entities: user.list,
+                            entityNameField: 'full_name',
+                        })}
                 </div>
             </>
         </div>

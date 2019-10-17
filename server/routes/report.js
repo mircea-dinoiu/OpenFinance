@@ -11,4 +11,8 @@ router.get('/balance-by-location', filters.auth, (req, res) => {
     res.wrapPromise(Controller.getBalanceByLocation(req, res))
 });
 
+router.get('/expenses-by-location', filters.auth, (req, res) => {
+    res.wrapPromise(Controller.getExpensesByLocation(req, res))
+});
+
 module.exports = router;

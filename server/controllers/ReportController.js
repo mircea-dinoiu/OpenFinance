@@ -39,9 +39,13 @@ const makeWhere = (queryParams, extra = []) => {
           };
 };
 
-const getRepeated = async ({start_date: startDate, ...queryParams}, cols) => {
+const getClones = async (
+    {start_date: startDate, ...queryParams},
+    {cols, where: whereExtra},
+) => {
     const {query: where, replacements} = makeWhere(queryParams, [
         '`repeat` IS NOT null',
+        ...whereExtra,
     ]);
     const select = `SELECT ${[
         ...cols,
@@ -50,41 +54,39 @@ const getRepeated = async ({start_date: startDate, ...queryParams}, cols) => {
         '`repeat_occurrences`',
     ].join(', ')} FROM expenses ${where}`;
 
-    return RepeatedModelsHelper.generateClones({
+    return RepeatedModelsHelper.getClonesForRecords({
         records: (await sql.query(select, {replacements}))[0],
         endDate: queryParams.end_date,
         startDate: startDate,
     });
 };
 
-const sumByLocationFactory = () => (req, res) => {
+const sumByLocationFactory = ({where = []} = {}) => (req, res) => {
     const pullStart = Date.now();
     const queryParams = req.query;
-    const groupedWhere = makeWhere(req.query);
+    const groupedWhere = makeWhere(req.query, where);
 
     Promise.all([
-        getRepeated(queryParams, ['money_location_id', 'sum']),
+        getClones(queryParams, {
+            cols: ['money_location_id', 'sum'],
+            where,
+        }),
         sql.query(
             `SELECT money_location_id as \`key\`, SUM(sum) as \`value\` FROM expenses ${groupedWhere.query} GROUP by money_location_id`,
             {replacements: groupedWhere.replacements},
         ),
-    ]).then(([repeated, grouped]) => {
+    ]).then(([clones, grouped]) => {
         const result = grouped[0].reduce(
             (acc, {key, value}) => ({...acc, [key]: value}),
             {},
         );
 
-        repeated.forEach((record) => {
+        clones.forEach((record) => {
             result[record.money_location_id] =
-                (grouped[record.money_location_id] || 0) + record.sum;
+                (result[record.money_location_id] || 0) + record.sum;
         });
 
-        logger.log(
-            req.path,
-            'Pulling took',
-            Date.now() - pullStart,
-            'millis',
-        );
+        logger.log(req.path, 'Pulling took', Date.now() - pullStart, 'millis');
         res.json(result);
     });
 };
@@ -154,7 +156,7 @@ module.exports = {
         });
         const expenses = SummaryReportService.getTransactions({
             expenseRecords: expenseRecordsAsJSON.filter(
-                (transaction) => transaction.type !== 'deposit',
+                (transaction) => transaction.sum < 0,
             ),
             userRecords,
             mlRecords,
@@ -188,5 +190,10 @@ module.exports = {
     },
     async getBalanceByLocation(req, res) {
         sumByLocationFactory()(req, res);
+    },
+    async getExpensesByLocation(req, res) {
+        sumByLocationFactory({
+            where: ['`sum` < 0'],
+        })(req, res);
     },
 };

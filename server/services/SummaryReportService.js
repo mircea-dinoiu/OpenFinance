@@ -3,11 +3,7 @@ const {extractIdsFromModel, extractUsersFromModel} = require('../helpers');
 const {sortBy} = require('lodash');
 
 module.exports = {
-    getBalances({
-        expenses,
-        userIdToFullName,
-        currencyIdToISOCode,
-    }) {
+    getBalances({expenses, userIdToFullName, currencyIdToISOCode}) {
         const data = {byUser: []};
         const totalRemainingByUser = {};
         const totalRemainingByML = {};
@@ -112,8 +108,8 @@ module.exports = {
 
     getExpensesByCategory({
         expenseRecords,
-        mlIdToCurrencyId,
         categoryRecords,
+        mlIdToCurrencyId,
         currencyIdToISOCode,
         userIdToFullName,
     }) {
@@ -130,7 +126,7 @@ module.exports = {
             const recordCategories = extractIdsFromModel(record, 'categoryIds');
             const sum = record.sum;
             const currencyId = mlIdToCurrencyId[record.money_location_id];
-            const addData = function (categoryId, rawCatSum) {
+            const addData = function(categoryId, rawCatSum) {
                 if (!categories[categoryId]) {
                     categories[categoryId] = {
                         users: {},

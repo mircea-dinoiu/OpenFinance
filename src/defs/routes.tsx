@@ -11,6 +11,7 @@ export default {
     reports: {
         summary: '/api/reports/summary',
         balanceByLocation: '/api/reports/balance-by-location',
+        expensesByLocation: '/api/reports/expenses-by-location',
     },
     currencies: '/api/currencies',
     user: {

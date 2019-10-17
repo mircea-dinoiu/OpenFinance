@@ -124,7 +124,7 @@ module.exports = {
             return {
                 error: false,
                 json: RepeatedModelsHelper.filterClones(
-                    RepeatedModelsHelper.generateClones({
+                    RepeatedModelsHelper.addClonesToRecords({
                         records: await Model.scope('default').findAll(
                             queryOpts,
                         ),

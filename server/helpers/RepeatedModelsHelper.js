@@ -15,7 +15,23 @@ module.exports = {
         }
     },
 
-    generateClones({records, endDate, startDate, sorters = []}) {
+    getClonesForRecords({records, endDate, startDate}) {
+        const ret = [];
+
+        for (const record of records) {
+            ret.push(
+                ...this.getClonesFor({
+                    record,
+                    endDate,
+                    startDate,
+                }),
+            );
+        }
+
+        return ret;
+    },
+
+    addClonesToRecords({records, endDate, startDate, sorters = []}) {
         let ret = [];
         const start = Date.now();
         let clones = 0;
