@@ -4,7 +4,7 @@ const Controller = require('../controllers/UserController');
 const passport = require('passport');
 const filters = require('../filters');
 
-router.get('/list', filters.auth, async (req, res) => {
+router.get('/', filters.auth, async (req, res) => {
     res.wrapPromise(Controller.list(req, res));
 });
 

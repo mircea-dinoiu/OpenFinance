@@ -118,7 +118,7 @@ const Summary = () => {
         setRefreshing(true);
 
         const response = await createXHR({
-            url: makeUrl(routes.report.summary, reportQueryParams),
+            url: makeUrl(routes.reports.summary, reportQueryParams),
         });
         const json = response.data;
 
@@ -225,7 +225,7 @@ const Summary = () => {
                             expandedByDefault: true,
                             deps: [reportQueryParams, refreshWidgets],
                             url: makeUrl(
-                                routes.report.balanceByLocation,
+                                routes.reports.balanceByLocation,
                                 reportQueryParams,
                             ),
                             parser: (data) => {

@@ -85,9 +85,9 @@ const App = () => {
             mlResponse,
             mlTypesResponse,
         ] = await Promise.all([
-            createXHR<TypeCategories>({url: routes.category.list}),
-            createXHR<TypeMoneyLocations>({url: routes.ml.list}),
-            createXHR<TypeMoneyLocationTypes>({url: routes.mlType.list}),
+            createXHR<TypeCategories>({url: routes.categories}),
+            createXHR<TypeMoneyLocations>({url: routes.moneyLocations}),
+            createXHR<TypeMoneyLocationTypes>({url: routes.moneyLocationTypes}),
         ]);
 
         dispatch(

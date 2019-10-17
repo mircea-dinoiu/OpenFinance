@@ -47,7 +47,7 @@ export const fetchCurrencies = (
     params: {update?: boolean} = Object.freeze({}),
 ) => async (dispatch: TypeDispatch) => {
     const currenciesResponse = await createXHR<TypeCurrencies>({
-        url: makeUrl(routes.getCurrencies, params),
+        url: makeUrl(routes.currencies, params),
     });
 
     dispatch(updateCurrencies(currenciesResponse.data));

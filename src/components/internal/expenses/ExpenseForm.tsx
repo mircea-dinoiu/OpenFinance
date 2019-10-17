@@ -303,7 +303,7 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
         this.descriptionSuggestionsCancelSource = CancelToken.source();
 
         const response = await createXHR({
-            url: makeUrl(routes.suggestion.expense.descriptions, {
+            url: makeUrl(routes.transactionsSuggestions.descriptions, {
                 search,
                 end_date: this.props.preferences.endDate,
             }),
@@ -336,7 +336,7 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
             this.categoriesCancelSource = CancelToken.source();
 
             const response = await createXHR({
-                url: makeUrl(routes.suggestion.expense.categories, {
+                url: makeUrl(routes.transactionsSuggestions.categories, {
                     search,
                 }),
                 cancelToken: this.categoriesCancelSource.token,
