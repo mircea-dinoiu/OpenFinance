@@ -8,8 +8,8 @@ export default {
         destroy: '/expense/delete',
     },
     report: {
-        summary: '/api/report/summary',
-        balanceByLocation: '/api/report/balance-by-location',
+        summary: '/api/reports/summary',
+        balanceByLocation: '/api/reports/balance-by-location',
     },
     getCurrencies: '/get-currencies',
     user: {
