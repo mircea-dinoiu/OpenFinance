@@ -223,7 +223,6 @@ const Summary = () => {
                             title: 'Balance by Account',
                             entities: moneyLocationTypes,
                             expandedByDefault: true,
-                            deps: [reportQueryParams, refreshWidgets],
                             url: makeUrl(
                                 routes.reports.balanceByLocation,
                                 reportQueryParams,
