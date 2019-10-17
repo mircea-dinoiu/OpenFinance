@@ -27,6 +27,8 @@ const groupSorter = ([, items]) => {
     return 0;
 };
 
+export const headerColor = 'rgba(255, 255, 255, 0.9)'
+
 const SummaryCategory = (props) => {
     const currencies = useCurrencies();
     const {
@@ -39,7 +41,6 @@ const SummaryCategory = (props) => {
         entityNameField = 'name',
         showSumInHeader,
     } = props;
-    const headerColor = 'rgba(255, 255, 255, 0.9)';
     const expandedState = React.useState(Boolean(props.expandedByDefault));
     const [expanded, setExpanded] = props.setExpanded
         ? [props.expanded, props.setExpanded]

@@ -1,7 +1,8 @@
 import React from 'react';
-import SummaryCategory from './SummaryCategory';
-import {BigLoader} from '../../loaders';
+import SummaryCategory, {headerColor} from './SummaryCategory';
 import {createXHR} from '../../../utils/fetch';
+import {Card, CardHeader, CardText} from 'material-ui';
+import {BigLoader} from '../../loaders';
 
 export const SummaryLazyCategory = ({
     deps,
@@ -12,6 +13,7 @@ export const SummaryLazyCategory = ({
 }) => {
     const [expanded, setExpanded] = React.useState(expandedByDefault);
     const [data, setData] = React.useState(null);
+    const {backgroundColor, title} = props;
 
     React.useEffect(() => {
         if (expanded) {
@@ -35,5 +37,23 @@ export const SummaryLazyCategory = ({
         );
     }
 
-    return <BigLoader />;
+    return (
+        <Card
+            style={{marginBottom: 10}}
+            expanded={expanded}
+            onExpandChange={setExpanded}
+        >
+            <CardHeader
+                style={{backgroundColor, paddingTop: 0}}
+                actAsExpander={true}
+                showExpandableButton={true}
+            >
+                <div style={{color: headerColor}}>{title}</div>
+            </CardHeader>
+
+            <CardText expandable={true}>
+                <BigLoader />
+            </CardText>
+        </Card>
+    );
 };
