@@ -1,5 +1,6 @@
 // @flow
 export default {
+    transactions: '/api/transactions',
     expense: {
         list: '/expense/list',
         create: '/expense/create',

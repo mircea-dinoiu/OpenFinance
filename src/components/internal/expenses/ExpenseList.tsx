@@ -12,7 +12,7 @@ import getFormDefaults from './helpers/getFormDefaults';
 
 const ExpenseList = (props: {}) => (
     <MainScreenList
-        api={routes.expense}
+        api={routes.transactions}
         tableColumns={ExpenseTableColumns}
         entityName="transaction"
         nameProperty="item"

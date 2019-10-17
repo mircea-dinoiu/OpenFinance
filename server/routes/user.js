@@ -5,7 +5,7 @@ const passport = require('passport');
 const filters = require('../filters');
 
 router.get('/list', filters.auth, async (req, res) => {
-    res.wrapPromise(Controller.getList(req, res));
+    res.wrapPromise(Controller.list(req, res));
 });
 
 router.post('/login', filters.guest, async (req, res, next) => {
@@ -34,7 +34,7 @@ router.post('/login', filters.guest, async (req, res, next) => {
                 req.session.cookie.expires = false;
             }
 
-            await Controller.getList(req, res);
+            await Controller.list(req, res);
         });
     })(req, res, next);
 });

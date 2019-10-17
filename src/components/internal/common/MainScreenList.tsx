@@ -51,12 +51,7 @@ import {SplitAmountField} from './SplitAmountField';
 import {LoadMore} from './LoadMore';
 
 type TypeProps = {
-    api: {
-        destroy: string;
-        list: string;
-        update: string;
-        create: string;
-    };
+    api: string;
     preferences: TypePreferences;
     entityName: string;
     nameProperty: string;
@@ -229,7 +224,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         });
 
         const response = await createXHR<TypeTransactionModel[]>({
-            url: makeUrl(this.props.api.list, {
+            url: makeUrl(this.props.api, {
                 end_date: endDate,
                 page,
                 limit: this.pageSize,
@@ -621,19 +616,19 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         return await promise;
     };
 
-    handleRequest = this.withLoading((data, api: string) =>
+    handleRequest = this.withLoading((data, api: string, method) =>
         createXHR({
             url: api,
-            method: 'POST',
+            method,
             data: {data},
         }),
     );
     handleRequestDelete = (data) =>
-        this.handleRequest(data, this.props.api.destroy);
+        this.handleRequest(data, this.props.api, 'DELETE');
     handleRequestUpdate = (data) =>
-        this.handleRequest(data, this.props.api.update);
+        this.handleRequest(data, this.props.api, 'PUT');
     handleRequestCreate = (data) =>
-        this.handleRequest(data, this.props.api.create);
+        this.handleRequest(data, this.props.api, 'POST');
 
     sanitizeItem = (item) =>
         this.props.crudProps.formToModel(

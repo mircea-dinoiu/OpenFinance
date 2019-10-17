@@ -169,7 +169,6 @@ module.exports = {
 
         const remainingData = SummaryReportService.getBalances({
             expenses: transactions,
-            mlRecords,
             ...common,
         });
 

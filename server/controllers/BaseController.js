@@ -9,7 +9,7 @@ module.exports = {
         return record;
     },
 
-    async postUpdate(req, res) {
+    async update(req, res) {
         const {data} = req.body;
         const rules = this.updateValidationRules;
 
@@ -72,7 +72,7 @@ module.exports = {
         }
     },
 
-    async postCreate(req, res) {
+    async create(req, res) {
         const {data} = req.body;
         const rules = this.createValidationRules;
 
@@ -132,7 +132,7 @@ module.exports = {
         }
     },
 
-    async postDelete(req, res) {
+    async destroy(req, res) {
         const {data} = req.body;
 
         if (Array.isArray(data)) {
@@ -164,7 +164,7 @@ module.exports = {
         }
     },
 
-    async getList(req, res) {
+    async list(req, res) {
         if (this.Service) {
             const {error, json} = await this.Service.list(req.query);
 

@@ -29,7 +29,7 @@ module.exports = BaseController.extend({
         };
     },
 
-    async getList(req, res) {
+    async list(req, res) {
         const categories = await Model.findAll({
             attributes: Object.keys(Model.rawAttributes).concat([
                 ['COUNT(expenses.id)', 'expenseCount'],

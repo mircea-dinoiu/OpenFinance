@@ -3,20 +3,20 @@ const router = express.Router();
 const Controller = require('../controllers/ExpenseController');
 const filters = require('../filters');
 
-router.get('/list', filters.auth, (req, res) => {
-    res.wrapPromise(Controller.getList(req, res));
+router.get('/', filters.auth, (req, res) => {
+    res.wrapPromise(Controller.list(req, res));
 });
 
-router.post('/delete', filters.auth, async (req, res) => {
-    res.wrapPromise(Controller.postDelete(req, res));
+router.delete('/', filters.auth, async (req, res) => {
+    res.wrapPromise(Controller.destroy(req, res));
 });
 
-router.post('/update', filters.auth, async (req, res) => {
-    res.wrapPromise(Controller.postUpdate(req, res));
+router.put('/', filters.auth, async (req, res) => {
+    res.wrapPromise(Controller.update(req, res));
 });
 
-router.post('/create', filters.auth, async (req, res) => {
-    res.wrapPromise(Controller.postCreate(req, res));
+router.post('/', filters.auth, async (req, res) => {
+    res.wrapPromise(Controller.create(req, res));
 });
 
 module.exports = router;

@@ -4,19 +4,19 @@ const Controller = require('../controllers/CategoryController');
 const filters = require('../filters');
 
 router.get('/list', filters.auth, async (req, res) => {
-    res.wrapPromise(Controller.getList(req, res));
+    res.wrapPromise(Controller.list(req, res));
 });
 
 router.post('/delete', filters.auth, (req, res) => {
-    res.wrapPromise(Controller.postDelete(req, res));
+    res.wrapPromise(Controller.destroy(req, res));
 });
 
 router.post('/update', filters.auth, (req, res) => {
-    res.wrapPromise(Controller.postUpdate(req, res));
+    res.wrapPromise(Controller.update(req, res));
 });
 
 router.post('/create', filters.auth, (req, res) => {
-    res.wrapPromise(Controller.postCreate(req, res));
+    res.wrapPromise(Controller.create(req, res));
 });
 
 module.exports = router;

@@ -132,7 +132,7 @@ module.exports = {
         }
     },
 
-    async getList(req, res) {
+    async list(req, res) {
         const update = req.query.update === 'true';
 
         await this.setupData({update});
