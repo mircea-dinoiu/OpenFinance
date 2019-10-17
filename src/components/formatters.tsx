@@ -30,7 +30,7 @@ const NumericValue = ({
         </span>
     );
 
-    let found = objectValuesOfSameType(currencies.map).find(
+    const found = objectValuesOfSameType(currencies.map).find(
         (each) => each.iso_code === currency,
     );
     const tooltip = [

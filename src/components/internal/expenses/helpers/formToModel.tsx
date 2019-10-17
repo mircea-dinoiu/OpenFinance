@@ -13,7 +13,7 @@ export default (
 
     return {
         id: form.id,
-        sum: form.sum,
+        sum: (form.type === 'deposit' ? 1 : -1) * form.sum,
         item: form.description,
         notes: form.notes,
         favorite: form.favorite,

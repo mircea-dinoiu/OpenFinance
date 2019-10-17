@@ -2,7 +2,7 @@ import moment from 'moment';
 
 export default (model) => ({
     id: model.id,
-    sum: model.sum,
+    sum: Math.abs(model.sum),
     description: model.item,
     notes: model.notes,
     favorite: model.favorite,
@@ -15,4 +15,5 @@ export default (model) => ({
     weight: model.weight,
     chargedPersons: model.users,
     status: model.status || 'pending',
+    type: model.sum < 0 ? 'withdrawal' : 'deposit',
 });
