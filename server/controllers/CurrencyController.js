@@ -10,7 +10,7 @@ module.exports = {
     cacheFilePath: basePath('storage/currencies.json'),
     currencies: null,
 
-    async currencies(fetch = false) {
+    async getCurrencies(fetch = false) {
         if (this.currencies == null || fetch === true) {
             this.currencies = await Currency.findAll();
         }
