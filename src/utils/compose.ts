@@ -1,4 +1,3 @@
-// @flow
 
 const compose = (...fns: Function[]) => (...args: any[]) => {
     fns.forEach((fn) => {

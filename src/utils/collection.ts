@@ -1,4 +1,3 @@
-// @flow
 
 export const objectEntriesOfSameType = <T,>(obj: {
     [key: string]: T;

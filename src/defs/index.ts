@@ -1,4 +1,3 @@
-// @flow
 export const Sizes = {
     HEADER_SIZE: '48px',
 };

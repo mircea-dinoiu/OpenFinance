@@ -1,4 +1,3 @@
-// @flow
 export default {
     transactions: '/api/transactions',
     transactionsSuggestions: {

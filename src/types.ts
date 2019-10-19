@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {ShiftDateOptions} from 'defs';
 import {RepeatOption} from 'js/defs';

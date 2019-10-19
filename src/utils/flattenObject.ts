@@ -1,4 +1,3 @@
-// @flow
 import {objectEntriesOfSameType} from 'utils/collection';
 import extend from 'lodash/extend';
 

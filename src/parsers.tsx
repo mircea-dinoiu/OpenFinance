@@ -1,4 +1,3 @@
-// @flow
 import {objectEntriesOfSameType} from 'utils/collection';
 import {startCase} from 'lodash';
 import React from 'react';

@@ -1,4 +1,3 @@
-// @flow
 const metaPrefix = 'financial_';
 let globalMetas: null | {
     'csrf-token'?: string;

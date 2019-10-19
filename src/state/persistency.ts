@@ -1,4 +1,3 @@
-// @flow
 import {parsePreferences} from 'utils/preferences';
 import {TypeGlobalState} from 'types';
 import {paths} from 'js/defs';

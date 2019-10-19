@@ -1,4 +1,3 @@
-// @flow
 import {TypeCurrencies, TypeCurrency, TypeCurrencyIdentifier} from 'types';
 import {objectValuesOfSameType} from 'utils/collection';
 

@@ -1,4 +1,3 @@
-// @flow
 export const CalendarWithoutTime = {
     lastDay: '[Yesterday]',
     sameDay: '[Today]',

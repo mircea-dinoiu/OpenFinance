@@ -1,4 +1,3 @@
-// @flow
 import {TypeShiftDateOption} from 'types';
 import moment from 'moment';
 

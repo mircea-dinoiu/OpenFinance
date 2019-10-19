@@ -1,4 +1,3 @@
-// @flow
 import {RepeatOption} from 'js/defs';
 
 const RepeatOptions = [

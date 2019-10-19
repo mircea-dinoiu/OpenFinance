@@ -1,4 +1,3 @@
-// @flow
 import {getInitialEndDate} from 'utils/dates';
 import {TypePreferences} from 'types';
 

@@ -1,4 +1,3 @@
-// @flow
 
 import {TypeScreenQueries} from 'types';
 import {screenQueryLarge, screenQueryMedium, screenQuerySmall} from '../defs/styles';

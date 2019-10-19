@@ -1,4 +1,3 @@
-// @flow
 
 import {TypeCurrencies, TypeTransactionModel} from 'types';
 

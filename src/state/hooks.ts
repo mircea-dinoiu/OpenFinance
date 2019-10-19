@@ -1,4 +1,3 @@
-// @flow
 
 import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
