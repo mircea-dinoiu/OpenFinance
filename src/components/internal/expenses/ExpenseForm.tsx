@@ -19,6 +19,7 @@ import {
     Slider,
     TextField,
     withStyles,
+    InputAdornment,
 } from '@material-ui/core';
 import RepeatOptions from 'defs/repeatOptions';
 import {createXHR} from 'utils/fetch';
@@ -174,36 +175,26 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
             <SumContainer>
                 <div>
                     <TextField
-                        label="Currency"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        value={
-                            this.state.paymentMethod
-                                ? findCurrencyById(
-                                      this.props.moneyLocations.find(
-                                          (each) =>
-                                              each.id ==
-                                              this.state.paymentMethod,
-                                          // @ts-ignore
-                                      ).currency_id,
-                                      this.props.currencies,
-                                  ).iso_code
-                                : null
-                        }
-                        fullWidth={true}
-                        margin="none"
-                        style={{
-                            marginTop: '2px',
-                        }}
-                        disabled={true}
-                    />
-                </div>
-                <div>
-                    <TextField
                         label="Sum"
                         InputLabelProps={{
                             shrink: true,
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    {this.state.paymentMethod
+                                        ? findCurrencyById(
+                                              this.props.moneyLocations.find(
+                                                  (each) =>
+                                                      each.id ==
+                                                      this.state.paymentMethod,
+                                                  // @ts-ignore
+                                              ).currency_id,
+                                              this.props.currencies,
+                                          ).iso_code
+                                        : ''}
+                                </InputAdornment>
+                            ),
                         }}
                         value={this.state.sum}
                         fullWidth={true}
@@ -498,8 +489,8 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
         return (
             <div>
                 <div style={boxStyle}>{this.renderDescription()}</div>
-                <div style={boxStyle}>{this.renderSum()}</div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
+                <div style={boxStyle}>{this.renderSum()}</div>
                 <div style={boxStyle}>{this.renderDateTime()}</div>
                 <div style={boxStyle}>{this.renderCategories()}</div>
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
@@ -620,13 +611,13 @@ const TypeStatusFlagsContainer = styled.div`
 `;
 
 const SumContainer = styled.div`
-  display: grid;
-  grid-gap: ${gridGap};
-  grid-template-columns: 1fr 1fr 1fr;
-`
+    display: grid;
+    grid-gap: ${gridGap};
+    grid-template-columns: 1fr 1fr;
+`;
 
 const RepeatContainer = styled.div`
-  display: grid;
-  grid-gap: ${gridGap};
-  grid-template-columns: 1fr 1fr;
-`
+    display: grid;
+    grid-gap: ${gridGap};
+    grid-template-columns: 1fr 1fr;
+`;
