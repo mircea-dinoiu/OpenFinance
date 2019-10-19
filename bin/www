@@ -6,7 +6,6 @@
 const app = require('../server');
 const debug = require('debug')('financial:server');
 const http = require('http');
-const spdy = require('spdy');
 const {sql} = require('../server/models');
 
 /**
@@ -21,7 +20,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-const server = process.env.HTTPS === 'true' ? spdy.createServer({}, app) : http.createServer(app);
+const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
