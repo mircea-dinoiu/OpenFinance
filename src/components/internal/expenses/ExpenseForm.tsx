@@ -175,7 +175,7 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
             <SumContainer>
                 <div>
                     <TextField
-                        label="Sum"
+                        label="Amount"
                         InputLabelProps={{
                             shrink: true,
                         }}
