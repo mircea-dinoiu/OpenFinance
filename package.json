@@ -94,7 +94,7 @@
     "tsc": "tsc"
   },
   "lint-staged": {
-    "*.js": [
+    "*.js,*.ts,*.tsx": [
       "yarn run format:js",
       "eslint --quiet",
       "react-scripts test",
