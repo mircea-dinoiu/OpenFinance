@@ -34,7 +34,6 @@ export const mergeItems = (items: TypeTransactionModel[]) => {
         categories: uniq(flatten(map(items, 'categories'))),
         favorite: Math.max(...map(items, 'favorite')),
         item: uniq(map(items, 'item')).join(', '),
-        notes: uniq(map(items, 'notes')).join(', '),
         sum: sumArray(map(items, 'sum')),
         weight: sumArray(map(items, 'weight')),
         users: mapValues(

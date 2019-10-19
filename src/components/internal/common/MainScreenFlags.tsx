@@ -34,17 +34,10 @@ export const DepositFlag = () => (
     </Tooltip>
 );
 
-export const NotesFlag = ({children}) => (
-    <Tooltip tooltip={<pre>{children}</pre>}>
-        <SpeakerNotes style={ICON_STYLE} htmlColor={grey[500]} />
-    </Tooltip>
-);
-
 export const Flags = ({item, entity}) => (
     <>
         {item.status === 'pending' && <PendingReviewFlag entity={entity} />}
         {item.repeat != null && <RecurrentFlag entity={entity} />}
-        {item.notes && <NotesFlag>{item.notes}</NotesFlag>}
         {item.persist === false && <GeneratedFlag entity={entity} />}
     </>
 );

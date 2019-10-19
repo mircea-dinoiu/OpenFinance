@@ -89,7 +89,6 @@ describe('#mergeItems()', () => {
                     categories: [1, 2, 3],
                     favorite: 5,
                     item: 'Foo, Bar',
-                    notes: '',
                     sum: 26,
                     weight: 50,
                     users: {'1': 77, '2': 23},

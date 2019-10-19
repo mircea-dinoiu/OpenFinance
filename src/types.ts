@@ -93,7 +93,6 @@ export type TypeTransactionForm = {
     id: number;
     sum: number;
     description: string;
-    notes: string;
     favorite: number;
     hidden: boolean;
     paymentMethod: number;
@@ -113,7 +112,6 @@ export type TypeTransactionModel = {
     categories: number[];
     favorite: number;
     item: string;
-    notes: string;
     sum: number;
     weight: number;
     users: {

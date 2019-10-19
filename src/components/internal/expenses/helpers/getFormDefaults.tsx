@@ -6,7 +6,6 @@ export default function(data: {user: TypeUsers}) {
         description: '',
         type: 'withdrawal',
         status: 'pending',
-        notes: '',
         sum: '',
         paymentMethod: null,
         chargedPersons: {[data.user.current.id]: 100},

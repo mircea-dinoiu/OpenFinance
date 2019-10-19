@@ -13,7 +13,6 @@ module.exports = BaseController.extend({
         id: ['isRequired', ['isId', Model]],
         sum: ['sometimes', 'isRequired', 'isFloat'],
         item: ['sometimes', 'isRequired', 'isString'],
-        notes: ['sometimes', 'isString'],
         favorite: ['sometimes', 'isInt'],
         hidden: ['sometimes', 'isBool'],
         created_at: [
@@ -36,7 +35,6 @@ module.exports = BaseController.extend({
     createValidationRules: {
         sum: ['isRequired', 'isFloat'],
         item: ['isRequired', 'isString'],
-        notes: ['sometimes', 'isString'],
         favorite: ['sometimes', 'isInt'],
         hidden: ['sometimes', 'isBool'],
         users: ['isRequired', ['isPercentageObject', User]],
@@ -136,10 +134,6 @@ module.exports = BaseController.extend({
 
         if (record.hasOwnProperty('item')) {
             values.item = record.item.trim();
-        }
-
-        if (record.hasOwnProperty('notes')) {
-            values.notes = record.notes && record.notes.trim();
         }
 
         if (record.hasOwnProperty('favorite')) {

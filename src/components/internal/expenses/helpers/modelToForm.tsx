@@ -4,7 +4,6 @@ export default (model) => ({
     id: model.id,
     sum: Math.abs(model.sum),
     description: model.item,
-    notes: model.notes,
     favorite: model.favorite,
     hidden: model.hidden,
     date: moment(model.created_at),

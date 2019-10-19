@@ -270,26 +270,6 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
         );
     }
 
-    handleNotesChange = (event) => {
-        this.setState({notes: event.target.value});
-    };
-
-    renderDetails() {
-        return (
-            <TextField
-                value={this.state.notes}
-                label="Details"
-                multiline
-                margin="none"
-                fullWidth={true}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                onChange={this.handleNotesChange}
-            />
-        );
-    }
-
     fetchDescriptionSuggestions = async (search) => {
         if (!search) {
             return;
@@ -518,7 +498,6 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
         return (
             <div>
                 <div style={boxStyle}>{this.renderDescription()}</div>
-                <div style={boxStyle}>{this.renderDetails()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderDateTime()}</div>
