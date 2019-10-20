@@ -75,7 +75,7 @@ export default ({updateRecords}) => [
         ),
         id: 'favorite',
         //
-        width: 110,
+        width: 120,
         headerStyle: {textAlign: 'center'},
         style: {textAlign: 'center'},
     },
