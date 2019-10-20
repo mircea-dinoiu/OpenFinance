@@ -9,7 +9,7 @@ const AmountDisplay = ({item, showCurrency = true}) => {
         item,
         currencies,
     });
-    const sign = item.sum >= 0 ? '+' : '';
+    const sign = item.sum > 0 ? '+' : '';
 
     return (
         <>

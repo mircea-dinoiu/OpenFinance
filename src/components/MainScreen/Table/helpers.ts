@@ -15,7 +15,7 @@ export const getTrClassName = (
         classes.push(Classes.todayRow);
     }
 
-    if (item.sum <= 0) {
+    if (item.sum < 0) {
         classes.push(Classes.withdrawRow);
     }
 
