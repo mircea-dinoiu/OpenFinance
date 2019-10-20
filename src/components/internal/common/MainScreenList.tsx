@@ -450,7 +450,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         return (
             selectedItems.length >= 1 &&
-            selectedItems.every((each) => each.sum > amount)
+            selectedItems.every((each) => Math.abs(each.sum) > Math.abs(amount))
         );
     }
 
@@ -475,18 +475,24 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         await this.handleRequestCreate(
             selectedItems.map((each) => {
                 const res = this.copyItem(each);
+                const sign = (res.sum < 0 ? -1 : 1);
 
-                res.sum = splitBy;
+                res.sum = sign * splitBy;
 
                 return res;
             }),
         );
 
         await this.handleRequestUpdate(
-            selectedItems.map((each) => ({
-                ...each,
-                sum: Math.round((each.sum - splitBy) * 100) / 100,
-            })),
+            selectedItems.map((each) => {
+                const sign = (each.sum < 0 ? -1 : 1);
+                const splittedAmount = sign * (Math.abs(each.sum) - splitBy);
+
+                return ({
+                    ...each,
+                    sum: Math.round(splittedAmount * 100) / 100,
+                });
+            }),
         );
 
         this.props.dispatch(onRefreshWidgets());
