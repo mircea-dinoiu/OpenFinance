@@ -231,7 +231,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                 sorters: JSON.stringify(sorters),
                 filters: JSON.stringify(
                     [
-                        this.state.displayHidden || this.hasFiltersSet
+                        this.state.displayHidden
                             ? null
                             : {
                                   id: 'hidden',
