@@ -39,7 +39,6 @@ export default ({updateRecords}) => [
             />
         ),
         id: 'item',
-        width: 400,
     },
     DateTimeColumn,
     {
@@ -51,7 +50,6 @@ export default ({updateRecords}) => [
         ),
         id: 'categories',
         sortable: false,
-        width: 300,
     },
     AccountColumn,
     {
