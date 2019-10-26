@@ -1,6 +1,6 @@
 import {TypeTransactionModel} from 'types';
 import * as React from 'react';
-import AmountDisplay from 'components/BaseTable/cells/AmountDisplay';
+import {AmountDisplay} from 'components/BaseTable/cells/AmountDisplay';
 
 const style = {textAlign: 'right'};
 

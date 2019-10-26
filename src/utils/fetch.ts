@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 import merge from 'lodash/merge';
-import config from './config';
+import {config} from './config';
 import axios from 'axios';
 
 const parseOpts = (opts) =>

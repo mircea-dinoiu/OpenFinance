@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Avatar} from '@material-ui/core';
 import styled from 'styled-components';
-import Tooltip from 'components/Tooltip';
+import {Tooltip} from 'components/Tooltip';
 import {grey} from '@material-ui/core/colors';
 import {useUsers} from 'state/hooks';
 

@@ -4,7 +4,7 @@ import {
 } from 'utils/collection';
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
-import Tooltip from 'components/Tooltip';
+import {Tooltip} from 'components/Tooltip';
 import {financialNum} from 'js/utils/numbers';
 import {getBaseCurrency} from '../helpers/currency';
 import {useCurrencies} from 'state/hooks';

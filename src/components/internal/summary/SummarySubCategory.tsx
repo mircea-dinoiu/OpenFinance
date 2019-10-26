@@ -3,7 +3,7 @@ import {CardHeader} from 'material-ui';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import Collapse from '@material-ui/icons/ExpandLess';
 import Expand from '@material-ui/icons/ExpandMore';
-import BaseTable from 'components/BaseTable';
+import {BaseTable} from 'components/BaseTable';
 import {Checkbox, FormControlLabel} from '@material-ui/core';
 import {TypeCurrencies} from 'types';
 import {spacingMedium, spacingSmall} from 'defs/styles';

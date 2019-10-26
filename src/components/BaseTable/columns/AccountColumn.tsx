@@ -1,7 +1,7 @@
 import {TypeTransactionModel} from 'types';
 import * as React from 'react';
-import MoneyLocationDisplay from 'components/BaseTable/cells/MoneyLocationDisplay';
-import AccountFilter from 'components/BaseTable/filters/AccountFilter';
+import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';
+import {AccountFilter} from 'components/BaseTable/filters/AccountFilter';
 
 const style = {textAlign: 'center'};
 

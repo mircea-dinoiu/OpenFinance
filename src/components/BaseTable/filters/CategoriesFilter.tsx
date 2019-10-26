@@ -1,9 +1,9 @@
 import * as React from 'react';
-import SelectFilterWrapped from './SelectFilter';
+import {SelectFilter} from './SelectFilter';
 import {useCategories} from 'state/hooks';
 
 export const CategoriesFilter = ({onChange, filter}) => (
-    <SelectFilterWrapped
+    <SelectFilter
         onChange={onChange}
         filter={filter}
         multi={true}

@@ -12,7 +12,7 @@ import UnlockIcon from '@material-ui/icons/LockOpen';
 import IconArchive from '@material-ui/icons/Archive';
 import IconUnarchive from '@material-ui/icons/Unarchive';
 
-import compose from 'utils/compose';
+import {compose} from 'utils/compose';
 
 type TypeOnClick = () => any;
 

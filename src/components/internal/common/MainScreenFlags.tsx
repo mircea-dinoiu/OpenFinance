@@ -4,7 +4,7 @@ import Cached from '@material-ui/icons/Cached';
 import TrendingUp from '@material-ui/icons/TrendingUp';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import Warning from '@material-ui/icons/Warning';
-import Tooltip from 'components/Tooltip';
+import {Tooltip} from 'components/Tooltip';
 import startCase from 'lodash/startCase';
 
 const ICON_STYLE = {height: 20, width: 20};

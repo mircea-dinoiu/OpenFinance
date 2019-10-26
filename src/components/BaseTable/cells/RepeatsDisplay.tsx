@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
-import RepeatOptions from 'defs/repeatOptions';
+import {RepeatOptions} from 'defs/repeatOptions';
 import {useScreenSize} from 'state/hooks';
 
 export const RepeatsDisplay = ({item}) => {

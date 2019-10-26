@@ -2,7 +2,7 @@ import {useTitleWithSetter, useUsers} from '../state/hooks';
 import * as React from 'react';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';
-import Dashboard from './Dashboard';
+import {Dashboard} from './Dashboard';
 
 export const Home = () => {
     const user = useUsers();

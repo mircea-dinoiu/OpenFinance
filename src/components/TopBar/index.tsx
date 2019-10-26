@@ -17,7 +17,7 @@ import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import ArrowForward from '@material-ui/icons/ArrowForward';
-import Logged from './Logged';
+import {Logged} from './Logged';
 import DateIcon from '@material-ui/icons/DateRange';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import moment from 'moment';

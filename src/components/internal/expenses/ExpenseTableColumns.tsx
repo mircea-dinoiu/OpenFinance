@@ -1,19 +1,19 @@
-import CurrencyDisplay from 'components/BaseTable/cells/CurrencyDisplay';
-import PricePerGDisplay from 'components/BaseTable/cells/PricePerGDisplay';
-import CategoriesFilter from 'components/BaseTable/filters/CategoriesFilter';
+import {CurrencyDisplay} from 'components/BaseTable/cells/CurrencyDisplay';
+import {PricePerGDisplay} from 'components/BaseTable/cells/PricePerGDisplay';
+import {CategoriesFilter} from 'components/BaseTable/filters/CategoriesFilter';
 import {TypeTransactionModel} from 'types';
 import * as React from 'react';
-import DescriptionDisplay from 'components/BaseTable/cells/DescriptionDisplay';
-import AmountColumn from 'components/BaseTable/columns/AmountColumn';
-import DateTimeColumn from 'components/BaseTable/columns/DateTimeColumn';
-import WeightDisplay from 'components/internal/expenses/cells/WeightDisplay';
-import CategoriesDisplay from 'components/internal/expenses/cells/CategoriesDisplay';
-import AccountColumn from 'components/BaseTable/columns/AccountColumn';
-import PersonsDisplay from 'components/internal/expenses/cells/PersonsDisplay';
-import RepeatColumn from 'components/BaseTable/columns/RepeatColumn';
-import DescriptionFilter from 'components/BaseTable/filters/DescriptionFilter';
-import UsersFilter from 'components/BaseTable/filters/UsersFilter';
-import RatingDisplay from 'components/internal/expenses/cells/RatingDisplay';
+import {DescriptionDisplay} from 'components/BaseTable/cells/DescriptionDisplay';
+import {AmountColumn} from 'components/BaseTable/columns/AmountColumn';
+import {DateTimeColumn} from 'components/BaseTable/columns/DateTimeColumn';
+import {WeightDisplay} from 'components/internal/expenses/cells/WeightDisplay';
+import {CategoriesDisplay} from 'components/internal/expenses/cells/CategoriesDisplay';
+import {AccountColumn} from 'components/BaseTable/columns/AccountColumn';
+import {PersonsDisplay} from 'components/internal/expenses/cells/PersonsDisplay';
+import {RepeatColumn} from 'components/BaseTable/columns/RepeatColumn';
+import {DescriptionFilter} from 'components/BaseTable/filters/DescriptionFilter';
+import {UsersFilter} from 'components/BaseTable/filters/UsersFilter';
+import {RatingDisplay} from 'components/internal/expenses/cells/RatingDisplay';
 
 export const ExpenseTableColumns = ({updateRecords}) => [
     AmountColumn,

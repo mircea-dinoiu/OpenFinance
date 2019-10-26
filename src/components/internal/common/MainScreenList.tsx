@@ -29,16 +29,16 @@ import {createXHR} from 'utils/fetch';
 import {Button, Checkbox, Fab, FormControlLabel} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {greyedOut} from 'defs/styles';
-import BaseTable, {TableFooter, TableHeader} from 'components/BaseTable';
+import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
 import {getTrProps} from 'components/MainScreen/Table/helpers';
-import MainScreenListGroup from 'components/internal/common/MainScreenListGroup';
-import MainScreenCreatorDialogWrapped from './MainScreenCreatorDialog';
+import {MainScreenListGroup} from 'components/internal/common/MainScreenListGroup';
+import {MainScreenCreatorDialog} from './MainScreenCreatorDialog';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {numericValue} from 'components/formatters';
 import {Sizes} from 'defs';
-import AnchoredContextMenu from 'components/MainScreen/ContextMenu/AnchoredContextMenu';
-import MainScreenDeleteDialogWrapped from './MainScreenDeleteDialog';
-import MainScreenEditDialogWrapped from './MainScreenEditDialog';
+import {AnchoredContextMenu} from 'components/MainScreen/ContextMenu/AnchoredContextMenu';
+import {MainScreenDeleteDialog} from './MainScreenDeleteDialog';
+import {MainScreenEditDialog} from './MainScreenEditDialog';
 import AddIcon from '@material-ui/icons/Add';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
@@ -46,12 +46,12 @@ import {range, uniqueId} from 'lodash';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import IconSplit from '@material-ui/icons/CallSplitRounded';
-import Tooltip from 'components/Tooltip';
+import {Tooltip} from 'components/Tooltip';
 import Chip from '@material-ui/core/Chip';
-import WeightDisplay from 'components/internal/expenses/cells/WeightDisplay';
+import {WeightDisplay} from 'components/internal/expenses/cells/WeightDisplay';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
-import ContextMenuItems from 'components/MainScreen/ContextMenu/ContextMenuItems';
+import {ContextMenuItems} from 'components/MainScreen/ContextMenu/ContextMenuItems';
 import {makeUrl} from 'utils/url';
 import {StatsTable} from './StatsTable';
 import {SplitAmountField} from './SplitAmountField';
@@ -832,7 +832,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         return (
             <>
-                <MainScreenCreatorDialogWrapped
+                <MainScreenCreatorDialog
                     onReceiveNewRecord={(newRecord) => {
                         this.handleReceiveNewRecord(newRecord);
                         this.handleToggleAddModal();
@@ -843,7 +843,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     entityName={this.props.entityName}
                     {...this.props.crudProps}
                 />
-                <MainScreenDeleteDialogWrapped
+                <MainScreenDeleteDialog
                     open={this.state.deleteDialogOpen}
                     onYes={this.handleDelete}
                     onNo={this.handleToggleDeleteDialog}
@@ -855,7 +855,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     }
                 />
                 {this.selectedItems.length > 0 && (
-                    <MainScreenEditDialogWrapped
+                    <MainScreenEditDialog
                         key={this.state.editDialogKey}
                         open={this.state.editDialogOpen}
                         items={selectedItems}

@@ -1,6 +1,6 @@
 import {TypeTransactionModel} from 'types';
 import * as React from 'react';
-import DateDisplay from 'components/BaseTable/cells/DateDisplay';
+import {DateDisplay} from 'components/BaseTable/cells/DateDisplay';
 
 const style = {textAlign: 'center'};
 

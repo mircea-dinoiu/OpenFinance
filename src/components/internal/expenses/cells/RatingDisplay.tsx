@@ -3,7 +3,7 @@ import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import * as React from 'react';
 import {range} from 'lodash';
-import Tooltip from 'components/Tooltip';
+import {Tooltip} from 'components/Tooltip';
 import styled from 'styled-components';
 import {TypeTransactionModel} from 'types';
 

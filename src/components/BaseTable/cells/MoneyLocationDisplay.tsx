@@ -3,7 +3,7 @@ import grey from '@material-ui/core/colors/grey';
 import IconBlock from '@material-ui/icons/Block';
 import IconLock from '@material-ui/icons/Lock';
 
-import Tooltip from 'components/Tooltip';
+import {Tooltip} from 'components/Tooltip';
 import {useMoneyLocations} from 'state/hooks';
 
 const StatusToIconComponent = {

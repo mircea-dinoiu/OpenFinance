@@ -1,6 +1,6 @@
 import {TypeTransactionModel} from 'types';
 import * as React from 'react';
-import RepeatsDisplay from 'components/BaseTable/cells/RepeatsDisplay';
+import {RepeatsDisplay} from 'components/BaseTable/cells/RepeatsDisplay';
 
 const style = {textAlign: 'center'};
 

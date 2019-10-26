@@ -9,13 +9,13 @@ import {Drawer, MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 
 import {createXHR} from 'utils/fetch';
-import routes from 'defs/routes';
+import {routes} from 'defs/routes';
 
-import Login from './components/Login';
-import Currencies from './components/Currencies';
-import TopBar from 'components/TopBar';
+import {Login} from './components/Login';
+import {Currencies} from './components/Currencies';
+import {TopBar} from 'components/TopBar';
 
-import getScreenQueries from 'utils/getScreenQueries';
+import {getScreenQueries} from 'utils/getScreenQueries';
 import EventListener from 'react-event-listener';
 import {flexColumn} from 'defs/styles';
 import {hot} from 'react-hot-loader/root';
@@ -65,7 +65,7 @@ const ResponsiveGlobalStyle = createGlobalStyle`
     }
 `;
 
-const App = () => {
+const AppWrapped = () => {
     const dispatch = useDispatch();
     const [users, {setUsers}] = useUsersWithActions();
     const currencies = useCurrencies();
@@ -192,5 +192,4 @@ const App = () => {
     );
 };
 
-// eslint-disable-next-line import/no-default-export
-export default hot(App);
+export const App = hot(AppWrapped);

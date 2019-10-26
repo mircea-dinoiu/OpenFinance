@@ -1,5 +1,5 @@
 import React from 'react';
-import SummaryCategory, {headerColor} from './SummaryCategory';
+import {SummaryCategory, headerColor} from './SummaryCategory';
 import {createXHR} from '../../../utils/fetch';
 import {Card, CardHeader, CardText} from 'material-ui';
 import {BigLoader} from '../../loaders';

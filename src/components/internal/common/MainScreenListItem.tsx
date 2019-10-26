@@ -2,10 +2,11 @@ import React, {PureComponent} from 'react';
 
 import {cyan} from '@material-ui/core/colors';
 
-import ResponsiveListItem from 'components/ResponsiveListItem';
+import {ResponsiveListItem} from 'components/ResponsiveListItem';
 import {IconButton, IconMenu} from 'material-ui';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ContextMenuItems, {
+import {
+    ContextMenuItems,
     TypeContextMenuItemsProps,
 } from 'components/MainScreen/ContextMenu/ContextMenuItems';
 

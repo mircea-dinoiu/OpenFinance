@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import MainScreen from './common/MainScreen';
+import {MainScreen} from './common/MainScreen';
 
-import List from './expenses/ExpenseList';
+import {ExpenseList} from './expenses/ExpenseList';
 
-export const Expenses = () => <MainScreen listComponent={List} />;
+export const Expenses = () => <MainScreen listComponent={ExpenseList} />;

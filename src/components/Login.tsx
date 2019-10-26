@@ -2,7 +2,7 @@ import React from 'react';
 import {TextField, Toggle} from 'material-ui';
 import {Button} from '@material-ui/core';
 import {ButtonProgress} from 'components/loaders';
-import routes from 'defs/routes';
+import {routes} from 'defs/routes';
 import {createXHR} from 'utils/fetch';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useDispatch} from 'react-redux';

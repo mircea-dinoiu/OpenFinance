@@ -21,9 +21,9 @@ import {
     withStyles,
     InputAdornment,
 } from '@material-ui/core';
-import RepeatOptions from 'defs/repeatOptions';
+import {RepeatOptions} from 'defs/repeatOptions';
 import {createXHR} from 'utils/fetch';
-import routes from 'defs/routes';
+import {routes} from 'defs/routes';
 import {useSelector} from 'react-redux';
 import {MultiSelect, SingleSelect} from 'components/Select';
 import {gridGap, screenQuerySmall} from 'defs/styles';

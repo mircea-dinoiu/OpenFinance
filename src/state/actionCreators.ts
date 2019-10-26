@@ -9,7 +9,7 @@ import {
     TypeUsers,
 } from 'types';
 import {createXHR} from 'utils/fetch';
-import routes from 'defs/routes';
+import {routes} from 'defs/routes';
 import {makeUrl} from 'utils/url';
 
 export const updateState = (state: Partial<TypeGlobalState>) => ({

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import moment from 'moment';
-import Tooltip from 'components/Tooltip';
+import {Tooltip} from 'components/Tooltip';
 import {useScreenSize} from 'state/hooks';
 
 export const DateDisplay = ({item}) => {

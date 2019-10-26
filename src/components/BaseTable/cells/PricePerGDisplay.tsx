@@ -1,4 +1,4 @@
-import AmountDisplay from 'components/BaseTable/cells/AmountDisplay';
+import {AmountDisplay} from 'components/BaseTable/cells/AmountDisplay';
 import * as React from 'react';
 
 export const PricePerGDisplay = ({item}) =>
