@@ -1,4 +1,3 @@
-
 export const getScrollPct = (element: HTMLElement) =>
     Math.round(
         (element.scrollTop / (element.scrollHeight - element.clientHeight)) *

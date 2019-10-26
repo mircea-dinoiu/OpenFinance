@@ -20,7 +20,9 @@ const CategoriesDisplay = ({item}) => {
                         key={each.id}
                         style={{
                             background: each.color,
-                            margin: `${screen.isLarge ? 0 : spacingSmall} ${spacingSmall} 0 0`,
+                            margin: `${
+                                screen.isLarge ? 0 : spacingSmall
+                            } ${spacingSmall} 0 0`,
                             ...(screen.isLarge
                                 ? {
                                       height: 'auto',

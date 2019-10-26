@@ -29,7 +29,7 @@ const Currencies = () => {
         return () => {
             clearInterval(interval);
         };
-    }, []);
+    }, [dispatch, user]);
 
     return (
         <>

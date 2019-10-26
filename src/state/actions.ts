@@ -1,4 +1,3 @@
-
 export const Actions = {
     UPDATE_STATE: 'UPDATE_STATE',
     SET_USERS: 'SET_USERS',

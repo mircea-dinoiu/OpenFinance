@@ -131,7 +131,7 @@ const Summary = () => {
 
     React.useEffect(() => {
         load();
-    }, [reportQueryParams, refreshWidgets]);
+    }, [reportQueryParams, refreshWidgets, load]);
 
     const renderCategory = (categoryProps) =>
         React.createElement(SummaryCategory, categoryProps);

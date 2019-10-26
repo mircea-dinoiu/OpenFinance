@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 type TypeProps = {
-    listComponent: React.ComponentType<{}>,
+    listComponent: React.ComponentType<{}>;
 };
 
 class MainScreen extends React.PureComponent<TypeProps> {

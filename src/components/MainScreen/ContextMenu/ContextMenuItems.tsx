@@ -17,18 +17,18 @@ import compose from 'utils/compose';
 type TypeOnClick = () => any;
 
 export type TypeContextMenuItemsProps = {
-    onClickEdit: TypeOnClick,
-    onClickDelete: TypeOnClick,
-    onClickDuplicate: TypeOnClick,
-    onClickDetach: TypeOnClick,
-    onClickMerge: TypeOnClick,
-    onClickReviewed: TypeOnClick,
-    onClickNeedsReview: TypeOnClick,
-    onCloseContextMenu: TypeOnClick,
-    onClickHide: TypeOnClick,
-    onClickUnhide: TypeOnClick,
-    selectedIds: {},
-    desktop: boolean,
+    onClickEdit: TypeOnClick;
+    onClickDelete: TypeOnClick;
+    onClickDuplicate: TypeOnClick;
+    onClickDetach: TypeOnClick;
+    onClickMerge: TypeOnClick;
+    onClickReviewed: TypeOnClick;
+    onClickNeedsReview: TypeOnClick;
+    onCloseContextMenu: TypeOnClick;
+    onClickHide: TypeOnClick;
+    onClickUnhide: TypeOnClick;
+    selectedIds: {};
+    desktop: boolean;
 };
 
 export default function ContextMenuItems({

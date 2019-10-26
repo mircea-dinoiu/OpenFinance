@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {dialog} from 'defs/styles';
 
@@ -25,15 +31,11 @@ const MainScreenDeleteDialog = ({
             <Button
                 variant="contained"
                 onClick={onYes}
-                                 style={{marginRight: 5}}
+                style={{marginRight: 5}}
             >
                 Yes
             </Button>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={onNo}
-                             >
+            <Button variant="contained" color="primary" onClick={onNo}>
                 No
             </Button>
         </DialogActions>

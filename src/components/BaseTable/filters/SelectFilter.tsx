@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles} from '@material-ui/core';
+import {
+    Button,
+    FormControlLabel,
+    Menu,
+    Radio,
+    RadioGroup,
+    withStyles,
+} from '@material-ui/core';
 import {MultiSelect, SingleSelect} from 'components/Select';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 
@@ -10,20 +17,20 @@ const styles = {
 };
 
 type TypeProps = {
-    items: Array<{id: number}>,
-    nameKey: string,
-    filter: {value: any} | null | void,
-    onChange: (value: any) => void,
-    classes: any,
-    multi?: boolean,
-    allowNone?: boolean,
+    items: Array<{id: number}>;
+    nameKey: string;
+    filter: {value: any} | null | void;
+    onChange: (value: any) => void;
+    classes: any;
+    multi?: boolean;
+    allowNone?: boolean;
 };
 
 class SelectFilter extends React.PureComponent<
     TypeProps,
     {
-        anchorEl: HTMLElement | null,
-        radioValue: string,
+        anchorEl: HTMLElement | null;
+        radioValue: string;
     }
 > {
     state = {
@@ -63,14 +70,16 @@ class SelectFilter extends React.PureComponent<
                     const found = selectOptions.find(
                         (option) => option.id === filter.value,
                     );
+
                     return found && found[this.props.nameKey];
                 }
 
                 return filter.value
                     .map((id) => {
-                        let found = selectOptions.find(
+                        const found = selectOptions.find(
                             (option) => option.id === id,
                         );
+
                         return found && found[this.props.nameKey];
                     })
                     .join(', ');
@@ -204,7 +213,12 @@ class SelectFilter extends React.PureComponent<
                     onClose={this.handleClose}
                     classes={this.props.classes}
                 >
-                    <div style={{padding: `${spacingSmall} ${spacingMedium}`, width: 200}}>
+                    <div
+                        style={{
+                            padding: `${spacingSmall} ${spacingMedium}`,
+                            width: 200,
+                        }}
+                    >
                         <RadioGroup
                             value={this.state.radioValue}
                             onChange={this.handleChangeRadio}

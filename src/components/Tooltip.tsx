@@ -6,9 +6,9 @@ const Tooltip = ({
     className,
     tooltip: title,
 }: {
-    children: React.ReactNode,
-    className?: string,
-    tooltip: React.ReactNode,
+    children: React.ReactNode;
+    className?: string;
+    tooltip: React.ReactNode;
 }) => (
     <MaterialUITooltip
         title={<div style={{fontSize: '1.5em'}}>{title}</div>}

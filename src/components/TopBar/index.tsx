@@ -3,7 +3,15 @@ import {TypeShiftDateOption} from 'types';
 import {objectEntriesOfSameType} from 'utils/collection';
 import React from 'react';
 import {IconButton} from 'material-ui';
-import {AppBar, FormLabel, Menu, MenuItem as MenuItem2, Paper, Toolbar, Typography} from '@material-ui/core';
+import {
+    AppBar,
+    FormLabel,
+    Menu,
+    MenuItem as MenuItem2,
+    Paper,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
 
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';

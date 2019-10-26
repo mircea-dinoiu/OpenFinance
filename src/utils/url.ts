@@ -1,4 +1,3 @@
-
 export const makeUrl = (path: string, params: {} = {}): string => {
     const urlObj = new URL(path, window.location.origin);
 

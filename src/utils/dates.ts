@@ -7,8 +7,8 @@ export const getStartDate = ({
     endDate,
     include,
 }: {
-    endDate: string,
-    include: string,
+    endDate: string;
+    include: string;
 }): string => {
     let date: Date | null = moment(endDate).toDate();
 

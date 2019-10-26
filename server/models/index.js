@@ -11,11 +11,12 @@ if (process.env.NODE_ENV !== 'test') {
         dialectOptions: {
             timezone: process.env.TIMEZONE,
         },
-        logging: process.env.DEBUG === 'true'
-            ? (...args) => {
-                  logger.log('SQL', ...args.map((arg) => chalk.cyan(arg)));
-              }
-            : false,
+        logging:
+            process.env.DEBUG === 'true'
+                ? (...args) => {
+                      logger.log('SQL', ...args.map((arg) => chalk.cyan(arg)));
+                  }
+                : false,
     });
 
     fs.readdirSync(__dirname)

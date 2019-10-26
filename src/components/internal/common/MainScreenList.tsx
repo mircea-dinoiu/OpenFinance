@@ -9,8 +9,15 @@ import {
     TypeTransactionModel,
     TypeUsers,
 } from 'types';
-import {objectEntriesOfSameType, objectValuesOfSameType} from 'utils/collection';
-import {mapItemToDetachedUpdates, mapItemToRepeatedUpdates, mergeItems} from 'components/internal/common/helpers';
+import {
+    objectEntriesOfSameType,
+    objectValuesOfSameType,
+} from 'utils/collection';
+import {
+    mapItemToDetachedUpdates,
+    mapItemToRepeatedUpdates,
+    mergeItems,
+} from 'components/internal/common/helpers';
 import React, {PureComponent} from 'react';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -475,7 +482,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
         await this.handleRequestCreate(
             selectedItems.map((each) => {
                 const res = this.copyItem(each);
-                const sign = (res.sum < 0 ? -1 : 1);
+                const sign = res.sum < 0 ? -1 : 1;
 
                 res.sum = sign * splitBy;
 
@@ -485,13 +492,13 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         await this.handleRequestUpdate(
             selectedItems.map((each) => {
-                const sign = (each.sum < 0 ? -1 : 1);
+                const sign = each.sum < 0 ? -1 : 1;
                 const splittedAmount = sign * (Math.abs(each.sum) - splitBy);
 
-                return ({
+                return {
                     ...each,
                     sum: Math.round(splittedAmount * 100) / 100,
-                });
+                };
             }),
         );
 

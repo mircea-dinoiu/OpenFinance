@@ -10,7 +10,7 @@ export const Home = () => {
 
     React.useEffect(() => {
         setTitle('Financial');
-    }, []);
+    }, [setTitle]);
 
     if (user) {
         return <Dashboard />;

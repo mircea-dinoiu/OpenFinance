@@ -30,7 +30,7 @@ const Login = () => {
 
     React.useEffect(() => {
         setTitle('Please Login');
-    }, []);
+    }, [setTitle]);
 
     if (user) {
         return <Redirect to={paths.home} />;

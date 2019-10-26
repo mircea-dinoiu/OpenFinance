@@ -45,15 +45,15 @@ export const getTrProps = ({
     onChangeContextMenu,
     item,
 }: {
-    item: TypeTransactionModel,
-    onChangeContextMenu: (props: Partial<TypeAnchoredContextMenuDisplayProps>) => void,
-    onReceiveSelectedIds: (ids: {
-        [key: number]: boolean,
-    }) => void,
-    onEdit: () => void,
+    item: TypeTransactionModel;
+    onChangeContextMenu: (
+        props: Partial<TypeAnchoredContextMenuDisplayProps>,
+    ) => void;
+    onReceiveSelectedIds: (ids: {[key: number]: boolean}) => void;
+    onEdit: () => void;
     selectedIds: {
-        [key: number]: boolean,
-    },
+        [key: number]: boolean;
+    };
 }) => ({
     className: getTrClassName(item, {selectedIds}),
     onDoubleClick: () => {

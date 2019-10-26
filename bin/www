@@ -3,6 +3,8 @@
 /**
  * Module dependencies.
  */
+require('dotenv').config();
+
 const app = require('../server');
 const debug = require('debug')('financial:server');
 const http = require('http');
@@ -11,7 +13,6 @@ const {sql} = require('../server/models');
 /**
  * Get port from environment and store in Express.
  */
-
 const port = normalizePort(process.env.PORT || '3000');
 
 app.set('port', port);

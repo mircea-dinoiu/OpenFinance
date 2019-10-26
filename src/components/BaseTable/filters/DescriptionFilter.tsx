@@ -35,7 +35,9 @@ const FlagIconMenu = ({icon, filter, name, onChange}) => (
                     (filter && filter.value && filter.value[name]) || YES
                 }
                 style={{margin: '10px 0 0'}}
-                onChange={(event: SyntheticEvent<HTMLInputElement>) => onChange(name, event.currentTarget.value)}
+                onChange={(event: SyntheticEvent<HTMLInputElement>) =>
+                    onChange(name, event.currentTarget.value)
+                }
             >
                 <RadioButton value={YES} label="Yes" />
                 <RadioButton value={NO} label="No" />

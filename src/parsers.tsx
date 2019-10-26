@@ -4,7 +4,7 @@ import React from 'react';
 
 export const parseCRUDError = (
     json: {
-        [key: string]: string[],
+        [key: string]: string[];
     }[],
 ): React.ReactNode => {
     if (Array.isArray(json)) {

@@ -23,10 +23,10 @@ export const convertCurrency = ({
     to: rawTo,
     currencies,
 }: {
-    value: number,
-    from: TypeCurrencyIdentifier,
-    to: TypeCurrencyIdentifier,
-    currencies: TypeCurrencies,
+    value: number;
+    from: TypeCurrencyIdentifier;
+    to: TypeCurrencyIdentifier;
+    currencies: TypeCurrencies;
 }) => {
     let from = rawFrom;
     let to = rawTo;

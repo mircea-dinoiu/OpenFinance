@@ -3,8 +3,8 @@ import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import {sumArray} from 'js/utils/numbers';
 
 export const mapItemToRepeatedUpdates = (item: TypeTransactionModel) => {
-    let extra: {
-        repeat_occurrences?: number | null,
+    const extra: {
+        repeat_occurrences?: number | null;
     } = {};
 
     if (item.repeat_occurrences) {

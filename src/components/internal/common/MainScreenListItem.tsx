@@ -5,21 +5,23 @@ import {cyan} from '@material-ui/core/colors';
 import ResponsiveListItem from 'components/ResponsiveListItem';
 import {IconButton, IconMenu} from 'material-ui';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ContextMenuItems, {TypeContextMenuItemsProps} from 'components/MainScreen/ContextMenu/ContextMenuItems';
+import ContextMenuItems, {
+    TypeContextMenuItemsProps,
+} from 'components/MainScreen/ContextMenu/ContextMenuItems';
 
 type TypeProps = {
-    entityName: string,
-    contentComponent: any,
-    onReceiveSelectedIds: (ids: number[]) => void,
-    contextMenuItemsProps: TypeContextMenuItemsProps,
+    entityName: string;
+    contentComponent: any;
+    onReceiveSelectedIds: (ids: number[]) => void;
+    contextMenuItemsProps: TypeContextMenuItemsProps;
     item: {
-        id: number,
-        persist: boolean,
-    },
+        id: number;
+        persist: boolean;
+    };
 };
 
 type TypeState = {
-    expanded: boolean,
+    expanded: boolean;
 };
 
 class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
@@ -63,7 +65,7 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
         return (
             <ResponsiveListItem
                 onClick={this.toggleDetails}
-                                 style={this.getStyle()}
+                style={this.getStyle()}
                 innerDivStyle={this.getInnerDivStyle()}
                 leftIcon={
                     persist ? (
@@ -83,7 +85,7 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
                             }}
                             style={{marginLeft: 0, left: 0}}
                             onClick={this.handleBurgerClick}
-                                                     >
+                        >
                             <ContextMenuItems
                                 {...this.props.contextMenuItemsProps}
                             />

@@ -15,13 +15,13 @@ const parseOpts = (opts) =>
         opts,
     );
 
-export const createXHR = <T,>(opts: {
-    url: string,
-    method?: string,
-    data?: string | {},
-    cancelToken?: {},
+export const createXHR = <T>(opts: {
+    url: string;
+    method?: string;
+    data?: string | {};
+    cancelToken?: {};
 }): Promise<{
-    data: T,
+    data: T;
 }> => {
     const parsedOpts = parseOpts(opts);
 

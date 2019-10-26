@@ -23,11 +23,21 @@ import {Sizes} from 'defs';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {createGlobalStyle} from 'styled-components';
 import 'normalize.css';
-import {useCurrencies, useCurrenciesDrawerOpenWithSetter, useSnackbars, useUsersWithActions} from 'state/hooks';
+import {
+    useCurrencies,
+    useCurrenciesDrawerOpenWithSetter,
+    useSnackbars,
+    useUsersWithActions,
+} from 'state/hooks';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
 import {Home} from './components/Home';
-import {TypeCategories, TypeMoneyLocations, TypeMoneyLocationTypes, TypeUsers} from './types';
+import {
+    TypeCategories,
+    TypeMoneyLocations,
+    TypeMoneyLocationTypes,
+    TypeUsers,
+} from './types';
 
 const theme = createMuiTheme({
     palette: {
@@ -68,7 +78,9 @@ const App = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await createXHR<TypeUsers>({url: routes.user.list});
+            const response = await createXHR<TypeUsers>({
+                url: routes.user.list,
+            });
 
             dispatch(setUsers(response.data));
             setReady(true);
@@ -101,13 +113,13 @@ const App = () => {
 
     React.useEffect(() => {
         fetchUser();
-    }, []);
+    }, [fetchUser]);
 
     React.useEffect(() => {
         if (users) {
             fetchRequirements();
         }
-    }, [users]);
+    }, [fetchRequirements, users]);
 
     const onLogout = async () => {
         try {

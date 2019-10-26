@@ -27,7 +27,7 @@ const groupSorter = ([, items]) => {
     return 0;
 };
 
-export const headerColor = 'rgba(255, 255, 255, 0.9)'
+export const headerColor = 'rgba(255, 255, 255, 0.9)';
 
 const SummaryCategory = (props) => {
     const currencies = useCurrencies();

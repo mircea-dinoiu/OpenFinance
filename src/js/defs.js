@@ -19,7 +19,5 @@ module.exports = {
         home: '/',
         login: '/login',
     },
-    apis: {
-
-    }
+    apis: {},
 };

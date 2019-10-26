@@ -3,7 +3,7 @@ import {TypeUsers} from 'types';
 export default (
     form,
     props: {
-        user: TypeUsers,
+        user: TypeUsers;
     },
 ) => {
     const users =

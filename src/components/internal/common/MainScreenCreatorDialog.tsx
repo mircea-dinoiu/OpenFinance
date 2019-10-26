@@ -4,27 +4,31 @@ import {parseCRUDError} from 'parsers';
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
 import {ButtonProgress} from 'components/loaders';
 
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {dialog} from 'defs/styles';
 import {useUsers} from 'state/hooks';
 import {TypeTransactionForm} from 'types';
 
 type TypeProps = {
-    getFormDefaults: ({
-        user: TypeUsers,
-    }) => TypeTransactionForm,
-    formToModel: Function,
-    entityName: string,
-    onReceiveNewRecord: Function,
+    getFormDefaults: ({user: TypeUsers}) => TypeTransactionForm;
+    formToModel: Function;
+    entityName: string;
+    onReceiveNewRecord: Function;
     formComponent: React.ComponentType<{
         initialValues: TypeTransactionForm;
         onFormChange: (TypeTransactionForm) => void;
-    }>,
-    onRequestCreate: Function,
-    onCancel: () => void,
-    classes: {},
-    open: boolean,
+    }>;
+    onRequestCreate: Function;
+    onCancel: () => void;
+    classes: {};
+    open: boolean;
 };
 
 const MainScreenCreatorDialog = (props: TypeProps) => {
@@ -37,7 +41,7 @@ const MainScreenCreatorDialog = (props: TypeProps) => {
             props.getFormDefaults({
                 user,
             }),
-        [],
+        [props, user],
     );
     const [formData, setFormData] = React.useState(
         props.getFormDefaults({
@@ -81,21 +85,19 @@ const MainScreenCreatorDialog = (props: TypeProps) => {
         <Dialog open={props.open} classes={props.classes}>
             <DialogTitle>{`Create ${props.entityName}`}</DialogTitle>
             <DialogContent style={{overflow: 'visible'}}>
-                    <Form
-                        onFormChange={(nextFormData) =>
-                            setFormData(nextFormData)
-                        }
-                        initialValues={formDefaults}
-                    />
-                    {error && <ErrorSnackbar message={error} />}
-                    {success && <SuccessSnackbar message={success} />}
+                <Form
+                    onFormChange={(nextFormData) => setFormData(nextFormData)}
+                    initialValues={formDefaults}
+                />
+                {error && <ErrorSnackbar message={error} />}
+                {success && <SuccessSnackbar message={success} />}
             </DialogContent>
             <DialogActions>
                 <Button
                     variant="contained"
                     disabled={saving}
                     onClick={props.onCancel}
-                                        style={{marginRight: 5}}
+                    style={{marginRight: 5}}
                 >
                     Cancel
                 </Button>
@@ -104,7 +106,7 @@ const MainScreenCreatorDialog = (props: TypeProps) => {
                     disabled={saving}
                     color="primary"
                     onClick={save}
-                                        style={{float: 'right'}}
+                    style={{float: 'right'}}
                 >
                     {saving ? <ButtonProgress /> : 'Create'}
                 </Button>

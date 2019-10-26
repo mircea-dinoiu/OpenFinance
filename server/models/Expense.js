@@ -47,7 +47,7 @@ module.exports = (sequelize, types) => {
                     Expense.addScope('default', {
                         attributes: Object.keys(Expense.rawAttributes).concat([
                             [
-                                'GROUP_CONCAT(DISTINCT CONCAT(`users`.`id`, \':\', `users.expense_user`.`blame`))',
+                                "GROUP_CONCAT(DISTINCT CONCAT(`users`.`id`, ':', `users.expense_user`.`blame`))",
                                 'userBlameMap',
                             ],
                             ['GROUP_CONCAT(DISTINCT `users`.`id`)', 'userIds'],

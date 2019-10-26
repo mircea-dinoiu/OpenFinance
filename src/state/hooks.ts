@@ -1,4 +1,3 @@
-
 import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
 import {bindActionCreators} from 'redux';
@@ -19,9 +18,7 @@ import {
 export const useActions = (actions) => {
     const dispatch = useDispatch();
 
-    return React.useMemo(() => bindActionCreators(actions, dispatch), [
-        dispatch,
-    ]);
+    return React.useMemo(() => bindActionCreators(actions, dispatch), [actions, dispatch]);
 };
 export const useScreenSize = (): TypeScreenQueries =>
     useSelector((s: TypeGlobalState) => s.screenSize);

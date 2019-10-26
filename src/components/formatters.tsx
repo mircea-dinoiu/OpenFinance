@@ -1,4 +1,7 @@
-import {objectEntriesOfSameType, objectValuesOfSameType} from 'utils/collection';
+import {
+    objectEntriesOfSameType,
+    objectValuesOfSameType,
+} from 'utils/collection';
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import Tooltip from 'components/Tooltip';
@@ -59,10 +62,14 @@ const NumericValue = ({
 
 export const numericValue = (
     value: number,
-    {currency, showCurrency = true, currencyStyle = {}}: {
-        currency?: string,
-        showCurrency?: boolean,
-        currencyStyle?: {},
+    {
+        currency,
+        showCurrency = true,
+        currencyStyle = {},
+    }: {
+        currency?: string;
+        showCurrency?: boolean;
+        currencyStyle?: {};
     } = {},
 ) => (
     <NumericValue

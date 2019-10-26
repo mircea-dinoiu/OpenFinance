@@ -41,7 +41,7 @@ export const ErrorSnackbar = (props: TypeSnackbarProps) => {
         return () => {
             dispatch(hideSnackbar(id));
         };
-    }, []);
+    }, [dispatch, props.bodyStyle, props.message]);
 
     return null;
 };
@@ -66,7 +66,7 @@ export const SuccessSnackbar = (props: TypeSnackbarProps) => {
         setTimeout(() => {
             dispatch(hideSnackbar(id));
         }, 1500);
-    }, []);
+    }, [dispatch, props.bodyStyle, props.message]);
 
     return null;
 };
