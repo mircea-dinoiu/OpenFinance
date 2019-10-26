@@ -1,5 +1,5 @@
 {
-    "extends": ["eslint:recommended", "react-app"],
+    "extends": ["eslint:recommended", "react-app", "prettier"],
     "rules": {
         "no-prototype-builtins": "off",
         "no-unused-vars": "error",
