@@ -57,7 +57,7 @@ const getIncludeOptions = ({endDate}) => {
     ];
 };
 
-const IncludeDropdown = ({onChange, value}) => {
+export const IncludeDropdown = ({onChange, value}) => {
     const {endDate} = usePreferences();
 
     return (
@@ -79,5 +79,3 @@ const IncludeDropdown = ({onChange, value}) => {
         </SelectField>
     );
 };
-
-export default IncludeDropdown;

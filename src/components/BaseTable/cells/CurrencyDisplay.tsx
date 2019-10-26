@@ -2,7 +2,7 @@ import React from 'react';
 import {getItemCurrencyISOCode} from 'helpers';
 import {useCurrencies} from 'state/hooks';
 
-const CurrencyDisplay = ({item}) => {
+export const CurrencyDisplay = ({item}) => {
     const currencies = useCurrencies();
     const currencyISOCode = getItemCurrencyISOCode({
         item,
@@ -11,5 +11,3 @@ const CurrencyDisplay = ({item}) => {
 
     return <>{currencyISOCode}</>;
 };
-
-export default CurrencyDisplay;

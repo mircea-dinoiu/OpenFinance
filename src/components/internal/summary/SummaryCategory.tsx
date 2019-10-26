@@ -29,7 +29,7 @@ const groupSorter = ([, items]) => {
 
 export const headerColor = 'rgba(255, 255, 255, 0.9)';
 
-const SummaryCategory = (props) => {
+export const SummaryCategory = (props) => {
     const currencies = useCurrencies();
     const {
         backgroundColor,
@@ -139,5 +139,3 @@ const SummaryCategory = (props) => {
 SummaryCategory.defaultProps = {
     showSumInHeader: true,
 };
-
-export default SummaryCategory;

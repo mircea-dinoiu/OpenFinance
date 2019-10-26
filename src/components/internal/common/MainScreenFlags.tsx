@@ -1,10 +1,9 @@
 import * as React from 'react';
-import {blue, green, grey, purple, yellow} from '@material-ui/core/colors';
+import {blue, green, purple, yellow} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';
 import TrendingUp from '@material-ui/icons/TrendingUp';
 import ArrowDown from '@material-ui/icons/ArrowDownward';
 import Warning from '@material-ui/icons/Warning';
-import SpeakerNotes from '@material-ui/icons/SpeakerNotes';
 import Tooltip from 'components/Tooltip';
 import startCase from 'lodash/startCase';
 

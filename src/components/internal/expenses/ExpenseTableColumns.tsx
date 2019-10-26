@@ -15,7 +15,7 @@ import DescriptionFilter from 'components/BaseTable/filters/DescriptionFilter';
 import UsersFilter from 'components/BaseTable/filters/UsersFilter';
 import RatingDisplay from 'components/internal/expenses/cells/RatingDisplay';
 
-export default ({updateRecords}) => [
+export const ExpenseTableColumns = ({updateRecords}) => [
     AmountColumn,
     {
         Header: '$',

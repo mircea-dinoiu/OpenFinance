@@ -46,7 +46,8 @@ const FlagIconMenu = ({icon, filter, name, onChange}) => (
         </div>
     </IconMenu>
 );
-const DescriptionFilter = ({onChange, filter}) => {
+
+export const DescriptionFilter = ({onChange, filter}) => {
     const handleChange = (name, value) => {
         const newFilter = {...(filter && filter.value)};
 
@@ -95,5 +96,3 @@ const DescriptionFilter = ({onChange, filter}) => {
         </div>
     );
 };
-
-export default DescriptionFilter;

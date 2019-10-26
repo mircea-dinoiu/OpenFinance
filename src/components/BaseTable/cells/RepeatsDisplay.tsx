@@ -3,7 +3,7 @@ import {grey} from '@material-ui/core/colors';
 import RepeatOptions from 'defs/repeatOptions';
 import {useScreenSize} from 'state/hooks';
 
-const RepeatsDisplay = ({item}) => {
+export const RepeatsDisplay = ({item}) => {
     const screenSize = useScreenSize();
     const repeatsText = item.repeat
         ? RepeatOptions.filter((each) => each[0] === item.repeat)[0][1]
@@ -25,5 +25,3 @@ const RepeatsDisplay = ({item}) => {
 
     return repeatsDisplay;
 };
-
-export default RepeatsDisplay;

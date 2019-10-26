@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Tooltip as MaterialUITooltip} from '@material-ui/core';
 
-const Tooltip = ({
+export const Tooltip = ({
     children,
     className,
     tooltip: title,
@@ -18,5 +18,3 @@ const Tooltip = ({
         <span className={className}>{children}</span>
     </MaterialUITooltip>
 );
-
-export default Tooltip;

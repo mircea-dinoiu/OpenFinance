@@ -41,7 +41,7 @@ type TypeProps = {
     onSave: ({}) => void;
 };
 
-class MainScreenEditDialog extends React.PureComponent<
+class MainScreenEditDialogWrapped extends React.PureComponent<
     TypeProps,
     {
         saving: boolean;
@@ -178,4 +178,6 @@ class MainScreenEditDialog extends React.PureComponent<
     }
 }
 
-export default withStyles(dialog)(MainScreenEditDialog);
+export const MainScreenEditDialog = withStyles(dialog)(
+    MainScreenEditDialogWrapped,
+);

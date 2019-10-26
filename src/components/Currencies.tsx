@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 import {TypeCurrency} from 'types';
 import {useCurrencies, useUsers} from 'state/hooks';
 
-const Currencies = () => {
+export const Currencies = () => {
     const user = useUsers();
     const currencies = useCurrencies();
     const map = currencies.map;
@@ -64,5 +64,3 @@ const Currencies = () => {
         </>
     );
 };
-
-export default Currencies;

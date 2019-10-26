@@ -31,7 +31,7 @@ export type TypeContextMenuItemsProps = {
     desktop: boolean;
 };
 
-export default function ContextMenuItems({
+export function ContextMenuItems({
     onClickEdit,
     onClickDelete,
     onClickDuplicate,

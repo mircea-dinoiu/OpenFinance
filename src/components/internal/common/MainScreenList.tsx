@@ -32,13 +32,13 @@ import {greyedOut} from 'defs/styles';
 import BaseTable, {TableFooter, TableHeader} from 'components/BaseTable';
 import {getTrProps} from 'components/MainScreen/Table/helpers';
 import MainScreenListGroup from 'components/internal/common/MainScreenListGroup';
-import MainScreenCreatorDialog from './MainScreenCreatorDialog';
+import MainScreenCreatorDialogWrapped from './MainScreenCreatorDialog';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {numericValue} from 'components/formatters';
 import {Sizes} from 'defs';
 import AnchoredContextMenu from 'components/MainScreen/ContextMenu/AnchoredContextMenu';
-import MainScreenDeleteDialog from './MainScreenDeleteDialog';
-import MainScreenEditDialog from './MainScreenEditDialog';
+import MainScreenDeleteDialogWrapped from './MainScreenDeleteDialog';
+import MainScreenEditDialogWrapped from './MainScreenEditDialog';
 import AddIcon from '@material-ui/icons/Add';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
@@ -111,7 +111,7 @@ type TypeState = {
     contextMenuTop: number;
 };
 
-class MainScreenList extends PureComponent<TypeProps, TypeState> {
+class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     state = {
         firstLoad: true,
         page: 1,
@@ -832,7 +832,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
 
         return (
             <>
-                <MainScreenCreatorDialog
+                <MainScreenCreatorDialogWrapped
                     onReceiveNewRecord={(newRecord) => {
                         this.handleReceiveNewRecord(newRecord);
                         this.handleToggleAddModal();
@@ -843,7 +843,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     entityName={this.props.entityName}
                     {...this.props.crudProps}
                 />
-                <MainScreenDeleteDialog
+                <MainScreenDeleteDialogWrapped
                     open={this.state.deleteDialogOpen}
                     onYes={this.handleDelete}
                     onNo={this.handleToggleDeleteDialog}
@@ -855,7 +855,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
                     }
                 />
                 {this.selectedItems.length > 0 && (
-                    <MainScreenEditDialog
+                    <MainScreenEditDialogWrapped
                         key={this.state.editDialogKey}
                         open={this.state.editDialogOpen}
                         items={selectedItems}
@@ -919,7 +919,7 @@ class MainScreenList extends PureComponent<TypeProps, TypeState> {
     }
 }
 
-export default (ownProps) => {
+export const MainScreenList = (ownProps) => {
     const stateProps = useSelector(
         ({
             preferences,
@@ -939,5 +939,11 @@ export default (ownProps) => {
     );
     const dispatch = useDispatch();
 
-    return <MainScreenList {...ownProps} {...stateProps} dispatch={dispatch} />;
+    return (
+        <MainScreenListWrapped
+            {...ownProps}
+            {...stateProps}
+            dispatch={dispatch}
+        />
+    );
 };

@@ -4,7 +4,7 @@ import AmountDisplay from 'components/BaseTable/cells/AmountDisplay';
 
 const style = {textAlign: 'right'};
 
-export default {
+export const AmountColumn = {
     Header: 'Amount',
     filterable: true,
     accessor: (item: TypeTransactionModel) => (

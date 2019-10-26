@@ -12,7 +12,7 @@ const StatusToIconComponent = {
     open: 'i',
 };
 
-const MoneyLocationDisplay = ({id}) => {
+export const MoneyLocationDisplay = ({id}) => {
     const moneyLocations = useMoneyLocations();
 
     if (!id) {
@@ -44,5 +44,3 @@ const MoneyLocationDisplay = ({id}) => {
         )
     );
 };
-
-export default MoneyLocationDisplay;

@@ -8,7 +8,7 @@ export type TypeAnchoredContextMenuDisplayProps = {
     top: number;
 };
 
-export default function AnchoredContextMenu({
+export function AnchoredContextMenu({
     top,
     left,
     display,

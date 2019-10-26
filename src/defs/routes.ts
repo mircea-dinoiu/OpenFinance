@@ -1,4 +1,4 @@
-export default {
+export const routes = {
     transactions: '/api/transactions',
     transactionsSuggestions: {
         categories: '/api/transactions/suggestions/categories',

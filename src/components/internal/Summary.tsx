@@ -87,7 +87,7 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
     return endDate;
 };
 
-const Summary = () => {
+export const Summary = () => {
     const [results, setResults] = React.useState(null);
     const [refreshing, setRefreshing] = React.useState(false);
     const [preferences, {updatePreferences}] = usePreferencesWithActions();
@@ -265,5 +265,3 @@ const Summary = () => {
         </div>
     );
 };
-
-export default Summary;

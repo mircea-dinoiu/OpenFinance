@@ -31,7 +31,7 @@ type TypeProps = {
     open: boolean;
 };
 
-const MainScreenCreatorDialog = (props: TypeProps) => {
+const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState<React.ReactNode>(null);
     const [success, setSuccess] = React.useState<React.ReactNode>(null);
@@ -115,4 +115,6 @@ const MainScreenCreatorDialog = (props: TypeProps) => {
     );
 };
 
-export default withStyles(dialog)(MainScreenCreatorDialog);
+export const MainScreenCreatorDialog = withStyles(dialog)(
+    MainScreenCreatorDialogWrapped,
+);

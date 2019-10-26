@@ -116,7 +116,7 @@ const FormControlLabelInline = styled(FormControlLabel)`
     display: inline-block;
 `;
 
-class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
+class ExpenseFormWrapped extends PureComponent<TypeProps, TypeTransactionForm> {
     // @ts-ignore
     descriptionSuggestionsCancelSource = CancelToken.source();
     categoriesCancelSource;
@@ -586,7 +586,7 @@ class ExpenseForm extends PureComponent<TypeProps, TypeTransactionForm> {
     };
 }
 
-export default (ownProps) => {
+export const ExpenseForm = (ownProps) => {
     const stateProps = useSelector(
         ({currencies, preferences, categories, moneyLocations, user}) => ({
             currencies,
@@ -597,7 +597,7 @@ export default (ownProps) => {
         }),
     );
 
-    return <ExpenseForm {...ownProps} {...stateProps} />;
+    return <ExpenseFormWrapped {...ownProps} {...stateProps} />;
 };
 
 const TypeStatusFlagsContainer = styled.div`

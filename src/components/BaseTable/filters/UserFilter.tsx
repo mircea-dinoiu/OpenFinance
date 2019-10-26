@@ -1,9 +1,9 @@
 import * as React from 'react';
-import SelectFilter from './SelectFilter';
+import SelectFilterWrapped from './SelectFilter';
 import {useUsers} from 'state/hooks';
 
-const UserFilter = ({onChange, filter}) => (
-    <SelectFilter
+export const UserFilter = ({onChange, filter}) => (
+    <SelectFilterWrapped
         onChange={onChange}
         filter={filter}
         allowNone={false}
@@ -11,5 +11,3 @@ const UserFilter = ({onChange, filter}) => (
         items={useUsers().list}
     />
 );
-
-export default UserFilter;

@@ -11,7 +11,7 @@ const Star = styled.span`
     cursor: pointer;
 `;
 
-class RatingDisplay extends React.PureComponent<{
+export class RatingDisplay extends React.PureComponent<{
     item: TypeTransactionModel;
     updateRecords: (
         ids: number[],
@@ -54,5 +54,3 @@ class RatingDisplay extends React.PureComponent<{
         );
     }
 }
-
-export default RatingDisplay;

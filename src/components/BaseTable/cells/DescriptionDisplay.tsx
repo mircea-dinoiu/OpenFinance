@@ -6,11 +6,7 @@ const DescriptionDisplayStyled = styled.span`
     white-space: nowrap;
 `;
 
-export default function DescriptionDisplay({
-    item,
-    accessor = 'description',
-    entity,
-}) {
+export function DescriptionDisplay({item, accessor = 'description', entity}) {
     const flags = <Flags entity={entity} item={item} />;
 
     return (

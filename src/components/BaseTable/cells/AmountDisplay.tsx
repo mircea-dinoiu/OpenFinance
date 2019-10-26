@@ -3,7 +3,7 @@ import {getItemCurrencyISOCode} from 'helpers';
 import {useCurrencies} from 'state/hooks';
 import React from 'react';
 
-const AmountDisplay = ({item, showCurrency = true}) => {
+export const AmountDisplay = ({item, showCurrency = true}) => {
     const currencies = useCurrencies();
     const currencyISOCode = getItemCurrencyISOCode({
         item,
@@ -21,5 +21,3 @@ const AmountDisplay = ({item, showCurrency = true}) => {
         </>
     );
 };
-
-export default AmountDisplay;

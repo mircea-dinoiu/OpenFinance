@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export default (model) => ({
+export const modelToForm = (model) => ({
     id: model.id,
     sum: Math.abs(model.sum),
     description: model.item,

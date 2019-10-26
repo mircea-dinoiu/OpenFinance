@@ -3,7 +3,7 @@ import {Chip} from '@material-ui/core';
 import {useCategories, useScreenSize} from 'state/hooks';
 import {spacingSmall} from 'defs/styles';
 
-const CategoriesDisplay = ({item}) => {
+export const CategoriesDisplay = ({item}) => {
     const categories = useCategories();
     const screen = useScreenSize();
 
@@ -36,5 +36,3 @@ const CategoriesDisplay = ({item}) => {
         </div>
     );
 };
-
-export default CategoriesDisplay;

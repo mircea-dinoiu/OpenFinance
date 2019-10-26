@@ -26,7 +26,7 @@ type TypeProps = {
     allowNone?: boolean;
 };
 
-class SelectFilter extends React.PureComponent<
+class SelectFilterWrapped extends React.PureComponent<
     TypeProps,
     {
         anchorEl: HTMLElement | null;
@@ -256,4 +256,4 @@ class SelectFilter extends React.PureComponent<
     }
 }
 
-export default withStyles(styles)(SelectFilter);
+export const SelectFilter = withStyles(styles)(SelectFilterWrapped);

@@ -2,7 +2,7 @@ import * as React from 'react';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {IconButton, IconMenu, MenuItem} from 'material-ui';
 
-const Logged = (rawProps) => {
+export const Logged = (rawProps) => {
     const {onLogout, ...props} = rawProps;
 
     return (
@@ -20,5 +20,3 @@ const Logged = (rawProps) => {
         </IconMenu>
     );
 };
-
-export default Logged;

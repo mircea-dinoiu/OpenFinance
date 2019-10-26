@@ -53,7 +53,7 @@ export const getShiftForwardOptions = (
         .fill(null)
         .map((each, index) => shiftDateForward(date, by, index + 1));
 
-const TopBar = (props: {
+export const TopBar = (props: {
     onLogout: () => void;
     showCurrenciesDrawer: boolean;
 }) => {
@@ -311,5 +311,3 @@ const TopBar = (props: {
         </AppBar>
     );
 };
-
-export default TopBar;

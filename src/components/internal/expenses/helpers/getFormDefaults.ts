@@ -1,7 +1,7 @@
 import moment from 'moment';
 import {TypeUsers} from 'types';
 
-export default function(data: {user: TypeUsers}) {
+export const getFormDefaults = function(data: {user: TypeUsers}) {
     return {
         description: '',
         type: 'withdrawal',
@@ -14,4 +14,4 @@ export default function(data: {user: TypeUsers}) {
         date: moment(),
         time: moment(),
     };
-}
+};

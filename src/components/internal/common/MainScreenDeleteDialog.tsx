@@ -9,7 +9,7 @@ import {
 import {withStyles} from '@material-ui/core/styles';
 import {dialog} from 'defs/styles';
 
-const MainScreenDeleteDialog = ({
+const MainScreenDeleteDialogWrapped = ({
     open,
     entityName,
     onYes,
@@ -42,4 +42,6 @@ const MainScreenDeleteDialog = ({
     </Dialog>
 );
 
-export default withStyles(dialog)(MainScreenDeleteDialog);
+export const MainScreenDeleteDialog = withStyles(dialog)(
+    MainScreenDeleteDialogWrapped,
+);

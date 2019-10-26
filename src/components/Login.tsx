@@ -18,7 +18,7 @@ import {
 } from '../defs/styles';
 import {TypeUsers} from '../types';
 
-const Login = () => {
+export const Login = () => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [rememberMe, setRememberMe] = React.useState(true);
@@ -135,5 +135,3 @@ const LoginStyled = styled.div`
         }
     }
 `;
-
-export default Login;

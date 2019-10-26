@@ -10,7 +10,7 @@ import formToModel from 'components/internal/expenses/helpers/formToModel';
 import modelToForm from 'components/internal/expenses/helpers/modelToForm';
 import getFormDefaults from './helpers/getFormDefaults';
 
-const ExpenseList = (props: {}) => (
+export const ExpenseList = (props: {}) => (
     <MainScreenList
         api={routes.transactions}
         tableColumns={ExpenseTableColumns}
@@ -26,5 +26,3 @@ const ExpenseList = (props: {}) => (
         {...props}
     />
 );
-
-export default ExpenseList;

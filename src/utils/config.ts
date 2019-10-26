@@ -25,7 +25,7 @@ const getMeta = (name) => {
     return globalMetas[name];
 };
 
-export default {
+export const config = {
     get csrfToken() {
         return getMeta('csrf-token');
     },

@@ -18,7 +18,10 @@ import {
 export const useActions = (actions) => {
     const dispatch = useDispatch();
 
-    return React.useMemo(() => bindActionCreators(actions, dispatch), [actions, dispatch]);
+    return React.useMemo(() => bindActionCreators(actions, dispatch), [
+        actions,
+        dispatch,
+    ]);
 };
 export const useScreenSize = (): TypeScreenQueries =>
     useSelector((s: TypeGlobalState) => s.screenSize);

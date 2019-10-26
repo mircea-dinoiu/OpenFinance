@@ -1,5 +1,3 @@
-
-
 module.exports = {
     up: (queryInterface) => {
         // todo write script to pull all sql files and run them

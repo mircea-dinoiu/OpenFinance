@@ -4,7 +4,7 @@ import {CalendarWithoutTime} from 'defs/formats';
 import {Divider, List, Subheader} from 'material-ui';
 import MainScreenListItem from 'components/internal/common/MainScreenListItem';
 
-const MainScreenListGroup = ({date, items, itemProps}) => (
+export const MainScreenListGroup = ({date, items, itemProps}) => (
     <div>
         <List>
             <Subheader style={{textAlign: 'center'}}>
@@ -17,5 +17,3 @@ const MainScreenListGroup = ({date, items, itemProps}) => (
         <Divider />
     </div>
 );
-
-export default MainScreenListGroup;

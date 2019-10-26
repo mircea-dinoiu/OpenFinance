@@ -24,7 +24,7 @@ type TypeState = {
     expanded: boolean;
 };
 
-class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
+export class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
     state = {
         expanded: false,
     };
@@ -98,5 +98,3 @@ class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
         );
     }
 }
-
-export default MainScreenListItem;

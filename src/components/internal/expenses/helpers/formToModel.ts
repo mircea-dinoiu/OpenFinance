@@ -1,6 +1,6 @@
 import {TypeUsers} from 'types';
 
-export default (
+export const formToModel = (
     form,
     props: {
         user: TypeUsers;

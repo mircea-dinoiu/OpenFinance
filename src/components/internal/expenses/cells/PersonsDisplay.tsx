@@ -5,7 +5,7 @@ import Tooltip from 'components/Tooltip';
 import {grey} from '@material-ui/core/colors';
 import {useUsers} from 'state/hooks';
 
-const PersonAvatar = styled(Avatar)`
+export const PersonAvatar = styled(Avatar)`
     height: 20px !important;
     border-radius: 0 !important;
     width: 100% !important;
@@ -38,7 +38,7 @@ const TooltipStyled = styled(Tooltip)`
         props.index === 0 ? 1 : 'initial'};
 `;
 
-const PersonsDisplay = ({item}) => {
+export const PersonsDisplay = ({item}) => {
     const userList = useUsers().list;
 
     return (
@@ -61,5 +61,3 @@ const PersonsDisplay = ({item}) => {
         </PersonsDisplayStyled>
     );
 };
-
-export default PersonsDisplay;

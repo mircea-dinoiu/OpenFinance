@@ -1,7 +1,7 @@
 import React from 'react';
 import {formatNumericValue} from 'components/formatters';
 
-const WeightDisplay = ({item}) => {
+export const WeightDisplay = ({item}) => {
     if (item.weight == null) {
         return null;
     }
@@ -12,5 +12,3 @@ const WeightDisplay = ({item}) => {
 
     return <>{formatNumericValue(item.weight)} g</>;
 };
-
-export default WeightDisplay;

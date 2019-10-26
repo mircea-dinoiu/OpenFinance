@@ -53,7 +53,7 @@ const CategoriesContainer = styled.div`
     grid-area: categories;
 `;
 
-const ExpenseListItemContent = ({item, expanded}) => {
+export const ExpenseListItemContent = ({item, expanded}) => {
     const personsDisplay = <PersonsDisplay item={item} />;
     const descriptionDisplay = item.item;
     const flags = <Flags entity="transaction" item={item} />;
@@ -86,5 +86,3 @@ const ExpenseListItemContent = ({item, expanded}) => {
         </ExpenseListItemContentStyled>
     );
 };
-
-export default ExpenseListItemContent;

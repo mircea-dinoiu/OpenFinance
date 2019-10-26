@@ -4,7 +4,7 @@ import RepeatsDisplay from 'components/BaseTable/cells/RepeatsDisplay';
 
 const style = {textAlign: 'center'};
 
-export default {
+export const RepeatColumn = {
     Header: 'Repeat',
     accessor: (item: TypeTransactionModel) => <RepeatsDisplay item={item} />,
     id: 'repeat',

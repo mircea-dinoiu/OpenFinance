@@ -4,7 +4,7 @@ type TypeProps = {
     listComponent: React.ComponentType<{}>;
 };
 
-class MainScreen extends React.PureComponent<TypeProps> {
+export class MainScreen extends React.PureComponent<TypeProps> {
     renderList() {
         const List = this.props.listComponent;
 
@@ -15,5 +15,3 @@ class MainScreen extends React.PureComponent<TypeProps> {
         return this.renderList();
     }
 }
-
-export default MainScreen;

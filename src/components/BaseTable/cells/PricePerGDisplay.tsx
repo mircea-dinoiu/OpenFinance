@@ -1,7 +1,7 @@
 import AmountDisplay from 'components/BaseTable/cells/AmountDisplay';
 import * as React from 'react';
 
-const PricePerGDisplay = ({item}) =>
+export const PricePerGDisplay = ({item}) =>
     item.sum_per_weight != null && (
         <React.Fragment>
             <AmountDisplay
@@ -13,5 +13,3 @@ const PricePerGDisplay = ({item}) =>
             /g
         </React.Fragment>
     );
-
-export default PricePerGDisplay;

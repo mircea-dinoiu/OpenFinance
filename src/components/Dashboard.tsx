@@ -18,7 +18,7 @@ import {grey} from '@material-ui/core/colors';
 import {useScreenSize} from 'state/hooks';
 import styled from 'styled-components';
 
-const Dashboard = () => {
+export const Dashboard = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const screenSize = useScreenSize();
 
@@ -126,5 +126,3 @@ const TransactionsContainer = styled.div`
 const TransactionsContentContainer = styled.div`
     width: calc(100vw / 12 * 10);
 `;
-
-export default Dashboard;

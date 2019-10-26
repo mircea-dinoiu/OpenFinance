@@ -5,7 +5,7 @@ import AccountFilter from 'components/BaseTable/filters/AccountFilter';
 
 const style = {textAlign: 'center'};
 
-export default {
+export const AccountColumn = {
     Header: 'Account',
     filterable: true,
     Filter: AccountFilter,

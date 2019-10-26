@@ -4,7 +4,7 @@ import DateDisplay from 'components/BaseTable/cells/DateDisplay';
 
 const style = {textAlign: 'center'};
 
-export default {
+export const DateTimeColumn = {
     Header: 'Date & Time',
     accessor: (item: TypeTransactionModel) => <DateDisplay item={item} />,
     id: 'created_at',

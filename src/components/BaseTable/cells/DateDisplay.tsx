@@ -4,7 +4,7 @@ import moment from 'moment';
 import Tooltip from 'components/Tooltip';
 import {useScreenSize} from 'state/hooks';
 
-const DateDisplay = ({item}) => {
+export const DateDisplay = ({item}) => {
     const screen = useScreenSize();
 
     return (
@@ -24,5 +24,3 @@ const DateDisplay = ({item}) => {
         </span>
     );
 };
-
-export default DateDisplay;

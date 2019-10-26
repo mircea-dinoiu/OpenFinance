@@ -1,7 +1,7 @@
 import {objectEntriesOfSameType} from 'utils/collection';
 import extend from 'lodash/extend';
 
-export default function flattenObject(object: {}, prefix: string = '') {
+export function flattenObject(object: {}, prefix: string = '') {
     const propName = prefix ? `${prefix}.` : '';
     const ret = {};
 
