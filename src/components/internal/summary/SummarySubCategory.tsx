@@ -8,6 +8,7 @@ import {Checkbox, FormControlLabel} from '@material-ui/core';
 import {TypeCurrencies} from 'types';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 import styled from 'styled-components';
+import {sortBy} from 'lodash';
 
 export class SummarySubCategory extends PureComponent<
     {
@@ -49,9 +50,13 @@ export class SummarySubCategory extends PureComponent<
             id,
             entityIdField,
             entityNameField,
-            items,
+            items: itemsFromProps,
             renderDescription,
         } = this.props;
+
+        const items = sortBy(itemsFromProps, (item) => item.description);
+
+        console.log(items);
 
         return (
             <div style={{padding: '0 5px'}}>
