@@ -14,6 +14,7 @@ import {
     TypeSnackbar,
     TypeUsers,
 } from 'types';
+import { useCallback } from 'react';
 
 export const useActions = (actions) => {
     const dispatch = useDispatch();
@@ -76,12 +77,13 @@ export const useCurrenciesDrawerOpenWithSetter = (): [
 export const useTitle = () => useSelector((s: TypeGlobalState) => s.title);
 export const useTitleWithSetter = (): [string, (title: string) => void] => {
     const dispatch = useDispatch();
+    const setTitle = useCallback((title: string) => {
+        dispatch(updateState({title}));
+    }, [dispatch]);
 
     return [
         useTitle(),
-        (title: string) => {
-            dispatch(updateState({title}));
-        },
+        setTitle
     ];
 };
 

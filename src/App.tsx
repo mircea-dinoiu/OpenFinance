@@ -115,13 +115,13 @@ const AppWrapped = () => {
 
     React.useEffect(() => {
         fetchUser();
-    }, [fetchUser]);
+    }, []);
 
     React.useEffect(() => {
         if (users) {
             fetchRequirements();
         }
-    }, [fetchRequirements, users]);
+    }, [users]);
 
     const onLogout = async () => {
         try {

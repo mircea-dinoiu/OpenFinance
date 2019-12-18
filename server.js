@@ -6,7 +6,7 @@ const app = express();
 const {wrapPromise} = require('./server/helpers');
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'build', 'favicon.png')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 
 // HTTP request logger middleware for node.js
 app.use(logger('dev'));
