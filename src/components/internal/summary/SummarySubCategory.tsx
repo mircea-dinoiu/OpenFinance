@@ -56,8 +56,6 @@ export class SummarySubCategory extends PureComponent<
 
         const items = sortBy(itemsFromProps, (item) => item.description);
 
-        console.log(items);
-
         return (
             <div style={{padding: '0 5px'}}>
                 {shouldGroup && (
