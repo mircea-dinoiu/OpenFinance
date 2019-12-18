@@ -50,6 +50,7 @@ export type TypeCategory = {
     id: number;
     name: string;
     color: string;
+    expenses: number;
 };
 
 export type TypeCategories = TypeCategory[];

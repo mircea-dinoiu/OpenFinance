@@ -27,7 +27,7 @@ export class SummarySubCategory extends PureComponent<
         entityIdField: string;
         entityNameField: string;
         id: string;
-        items: [];
+        items: {description: string}[];
         renderDescription: (cat: {description: string}) => void;
         shouldGroup: boolean;
     },
@@ -79,6 +79,7 @@ export class SummarySubCategory extends PureComponent<
                                 <div style={{fontSize: '12px'}}>
                                     {this.numericValue(
                                         items.reduce(
+                                            // @ts-ignore
                                             (
                                                 acc,
                                                 each: {

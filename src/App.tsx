@@ -104,7 +104,9 @@ const AppWrapped = () => {
 
         dispatch(
             updateState({
+                // @ts-ignore
                 categories: categoriesResponse.data,
+                // @ts-ignore
                 moneyLocations: mlResponse.data,
                 moneyLocationTypes: mlTypesResponse.data,
             }),
