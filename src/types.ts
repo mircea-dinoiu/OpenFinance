@@ -78,6 +78,7 @@ export type TypeUser = {
     last_name: string;
     full_name: string;
     id: number;
+    preferred_money_location_id: number;
 };
 
 export type TypeUsers = {

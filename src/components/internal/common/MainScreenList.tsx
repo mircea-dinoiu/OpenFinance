@@ -65,10 +65,10 @@ type TypeProps = {
     screen: TypeScreenQueries;
     crudProps: {
         // todo consider having stronger types here
-        modelToForm: (TypeTransactionModel) => TypeTransactionForm;
+        modelToForm: (model: TypeTransactionModel) => TypeTransactionForm;
         formToModel: (
-            TypeTransactionForm,
-            {user: TypeUsers},
+            model: TypeTransactionForm,
+            detail: {user: TypeUsers},
         ) => TypeTransactionModel;
         formComponent: React.ComponentType<{
             initialValues: TypeTransactionForm;
@@ -615,7 +615,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     };
 
     updateSelectedRecords = (data) =>
-        this.updateRecords(this.selectedItems.map((each) => each.id), data);
+        this.updateRecords(
+            this.selectedItems.map((each) => each.id),
+            data,
+        );
 
     withLoading = (fn) => async (...args: any[]) => {
         this.setState((state) => ({loading: state.loading + 1}));

@@ -1,5 +1,5 @@
 const md5 = require('md5');
-const {pick} = require('lodash');
+const {omit} = require('lodash');
 
 module.exports = (sequelize, types) =>
     sequelize.define(
@@ -13,6 +13,7 @@ module.exports = (sequelize, types) =>
             password: types.STRING,
             first_name: types.STRING,
             last_name: types.STRING,
+            preferred_money_location_id: types.INTEGER,
         },
         {
             underscored: true,
@@ -34,7 +35,7 @@ module.exports = (sequelize, types) =>
                 toJSON() {
                     return Object.assign(
                         {},
-                        pick(this.dataValues, 'id', 'first_name', 'last_name'),
+                        omit(this.dataValues, 'email', 'password'),
                         {
                             full_name: this.full_name,
                             avatar: this.avatar,

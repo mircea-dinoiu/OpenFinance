@@ -25,10 +25,12 @@ type TypeProps = {
         data: TypeTransactionModel[];
     }>;
     items: TypeTransactionModel[];
-    modelToForm: (TypeTransactionModel) => TypeTransactionForm;
+    modelToForm: (
+        model: TypeTransactionModel,
+    ) => TypeTransactionForm;
     formToModel: (
-        TypeTransactionForm,
-        {user: TypeUsers},
+        form: TypeTransactionForm,
+        detail: {user: TypeUsers},
     ) => TypeTransactionModel;
     entityName: string;
     formComponent: React.ComponentType<{
