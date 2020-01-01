@@ -39,6 +39,7 @@ export const ExpenseTableColumns = ({updateRecords}) => [
             />
         ),
         id: 'item',
+        minWidth: 300,
     },
     DateTimeColumn,
     {
@@ -50,6 +51,7 @@ export const ExpenseTableColumns = ({updateRecords}) => [
         ),
         id: 'categories',
         sortable: false,
+        minWidth: 300,
     },
     AccountColumn,
     {
