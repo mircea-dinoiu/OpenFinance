@@ -12,7 +12,6 @@ module.exports = (sequelize, types) => {
             item: types.STRING,
             money_location_id: types.INTEGER,
             status: types.STRING,
-            type: types.STRING,
             sum: types.FLOAT,
             favorite: types.INTEGER,
             hidden: types.INTEGER,
