@@ -33,15 +33,15 @@ const mapFlagsToSQL = (flags) => {
     switch (flags.Deposit) {
         case 'no':
             where.push({
-                type: {
-                    $ne: 'deposit',
+                sum: {
+                    $lt: 0,
                 },
             });
             break;
         case 'only':
             where.push({
-                type: {
-                    $eq: 'deposit',
+                sum: {
+                    $gt: 0,
                 },
             });
             break;
