@@ -10,10 +10,6 @@ import {
     TypeUsers,
 } from 'types';
 import {
-    objectEntriesOfSameType,
-    objectValuesOfSameType,
-} from 'utils/collection';
-import {
     mapItemToDetachedUpdates,
     mapItemToRepeatedUpdates,
     mergeItems,
@@ -818,7 +814,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             );
         }
 
-        return objectEntriesOfSameType(this.getGroupedResults()).map(
+        return Object.entries(this.getGroupedResults()).map(
             ([date, items]) => (
                 <MainScreenListGroup
                     key={date}
@@ -857,7 +853,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     onNo={this.handleToggleDeleteDialog}
                     entityName={this.props.entityName}
                     count={
-                        objectValuesOfSameType(this.state.selectedIds).filter(
+                        Object.values(this.state.selectedIds).filter(
                             Boolean,
                         ).length
                     }

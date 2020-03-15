@@ -1,9 +1,4 @@
-import {
-    TypeCurrencies,
-    TypeDispatch,
-    TypeGlobalState,
-    TypeCurrenciesApi,
-} from 'types';
+import {TypeCurrencies, TypeDispatch, TypeGlobalState, TypeCurrenciesApi} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 import {routes} from 'defs/routes';

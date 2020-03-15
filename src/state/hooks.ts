@@ -2,19 +2,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
 import {useCallback} from 'react';
 import {bindActionCreators} from 'redux';
-import {
-    refreshWidgets,
-    setUsers,
-    updatePreferences,
-    updateState,
-} from 'state/actionCreators';
-import {
-    TypeGlobalState,
-    TypeScreenQueries,
-    TypeSnackbar,
-    TypeUsers,
-    TypePreferences,
-} from 'types';
+import {refreshWidgets, setUsers, updatePreferences, updateState} from 'state/actionCreators';
+import {TypeGlobalState, TypeScreenQueries, TypeSnackbar, TypeUsers, TypePreferences} from 'types';
 
 export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();

@@ -1,4 +1,3 @@
-import {objectValuesOfSameType} from 'utils/collection';
 import * as React from 'react';
 import {Divider, MenuItem} from 'material-ui';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -47,7 +46,7 @@ export function ContextMenuItems({
     selectedIds,
     desktop = false,
 }: TypeContextMenuItemsProps) {
-    const selectedIdsLength = objectValuesOfSameType(selectedIds).filter(
+    const selectedIdsLength = Object.values(selectedIds).filter(
         Boolean,
     ).length;
     const disabledForZero = selectedIdsLength === 0;

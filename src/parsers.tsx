@@ -1,4 +1,3 @@
-import {objectEntriesOfSameType} from 'utils/collection';
 import {startCase} from 'lodash';
 import React from 'react';
 
@@ -13,7 +12,7 @@ export const parseCRUDError = (
                 <strong>The following errors occurred:</strong>
                 <ul style={{margin: 0}}>
                     {json.map((each) =>
-                        objectEntriesOfSameType(each).map(([key, messages]) => (
+                        Object.entries(each).map(([key, messages]) => (
                             <li key={key}>
                                 {startCase(key)}: {messages.join(', ')}
                             </li>

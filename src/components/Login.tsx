@@ -11,11 +11,7 @@ import {useTitleWithSetter, useUsers} from '../state/hooks';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';
 import styled from 'styled-components';
-import {
-    screenQueryLarge,
-    screenQueryMedium,
-    screenQuerySmall,
-} from '../defs/styles';
+import {screenQueryLarge, screenQueryMedium, screenQuerySmall} from '../defs/styles';
 import {TypeUsers} from '../types';
 
 export const Login = () => {

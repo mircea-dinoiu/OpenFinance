@@ -1,6 +1,5 @@
 import {SingleSelect} from 'components/Select';
 import {TypeShiftDateOption} from 'types';
-import {objectEntriesOfSameType} from 'utils/collection';
 import React from 'react';
 import {IconButton} from 'material-ui';
 import {
@@ -124,7 +123,7 @@ export const TopBar = (props: {
                 value={preferences.endDateIncrement}
                 onChange={handleEndDateIntervalDropdownChange}
                 clearable={false}
-                options={objectEntriesOfSameType(ShiftDateOptions).map(
+                options={Object.entries(ShiftDateOptions).map(
                     ([id, name]) => ({value: id, label: name}),
                 )}
             />

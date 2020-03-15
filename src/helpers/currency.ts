@@ -1,5 +1,4 @@
 import {TypeCurrencies, TypeCurrency, TypeCurrencyIdentifier} from 'types';
-import {objectValuesOfSameType} from 'utils/collection';
 
 export const findCurrencyById = (
     id: number,
@@ -10,7 +9,7 @@ export const getCurrencyByISOCode = (
     ISOCode: string,
     currencies: TypeCurrencies,
 ) =>
-    objectValuesOfSameType(currencies).find(
+    Object.values(currencies).find(
         (each) => each.iso_code === ISOCode,
     );
 

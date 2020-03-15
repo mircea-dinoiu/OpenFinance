@@ -4,13 +4,7 @@ import {parseCRUDError} from 'parsers';
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
 import {ButtonProgress} from 'components/loaders';
 
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from '@material-ui/core';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {dialog} from 'defs/styles';
 import {useUsers} from 'state/hooks';

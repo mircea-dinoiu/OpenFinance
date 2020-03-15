@@ -1,5 +1,4 @@
 import {findCurrencyById} from 'helpers/currency';
-import {objectValuesOfSameType} from 'utils/collection';
 
 import React, {PureComponent} from 'react';
 import {
@@ -97,7 +96,7 @@ export const setChargedPersonValueFactory = (
 
         while (
             (diffToMax =
-                PERC_MAX - sumArray(objectValuesOfSameType(nextChargedPersons)))
+                PERC_MAX - sumArray(Object.values(nextChargedPersons)))
         ) {
             for (const key in nextChargedPersons) {
                 if (key !== id) {

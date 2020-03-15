@@ -24,7 +24,6 @@ import {
     useUsers,
 } from 'state/hooks';
 import {SummaryLazyCategory} from './summary/SummaryLazyCategory';
-import {objectEntriesOfSameType} from '../../utils/collection';
 import {LoadingTopBar} from '../loaders';
 
 const getEndDateBasedOnIncludePreference = (endDate, include) => {
@@ -147,7 +146,7 @@ export const Summary = () => {
     };
 
     const parseTransactionsByLocation = (data) => {
-        return objectEntriesOfSameType(data)
+        return Object.entries(data)
             .map(([key, sum]) => {
                 const ml = moneyLocations.find((ml) => ml.id === Number(key));
 

@@ -1,15 +1,10 @@
 import {SingleSelect} from 'components/Select';
-import {objectValuesOfSameType} from 'utils/collection';
 import React from 'react';
 import {MenuItem, Subheader} from 'material-ui';
 import {useDispatch} from 'react-redux';
 import {TypeCurrency} from 'types';
 import {useUsers} from 'state/hooks';
-import {
-    fetchCurrencies,
-    setCurrenciesSelectedId,
-    useCurrencies,
-} from 'state/currencies';
+import {fetchCurrencies, setCurrenciesSelectedId, useCurrencies} from 'state/currencies';
 
 export const Currencies = () => {
     const user = useUsers();
@@ -44,7 +39,7 @@ export const Currencies = () => {
                 }}
             >
                 <SingleSelect
-                    options={objectValuesOfSameType(map).map(
+                    options={Object.values(map).map(
                         (each: TypeCurrency) => ({
                             value: each.id,
                             label: each.iso_code,
@@ -56,7 +51,7 @@ export const Currencies = () => {
             </div>
 
             <Subheader>Exchange Rates</Subheader>
-            {objectValuesOfSameType(map).map(
+            {Object.values(map).map(
                 (each: TypeCurrency) =>
                     each.id !== defaultCurrencyId && (
                         <MenuItem key={each.id}>

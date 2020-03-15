@@ -1,4 +1,3 @@
-import {objectEntriesOfSameType} from 'utils/collection';
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import {Tooltip} from 'components/Tooltip';
@@ -44,7 +43,7 @@ const NumericValue = ({
         >
             {currency} {formatNumericValue(value)}
         </div>,
-        ...objectEntriesOfSameType(found ? found.rates : {}).map(
+        ...Object.entries(found ? found.rates : {}).map(
             ([rateISO, rateMulti]) => (
                 <div key={rateISO}>
                     {rateISO} {formatNumericValue(value * rateMulti)}

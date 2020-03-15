@@ -1,5 +1,4 @@
 import {convertCurrencyToDefault} from 'helpers/currency';
-import {objectEntriesOfSameType} from 'utils/collection';
 
 import React from 'react';
 import groupBy from 'lodash/groupBy';
@@ -105,7 +104,7 @@ export const SummaryCategory = (props) => {
 
             <CardText style={{padding: '0 5px'}} expandable={true}>
                 {sortBy(
-                    objectEntriesOfSameType(groupBy(summaryObject, 'group')),
+                    Object.entries(groupBy(summaryObject, 'group')),
                     groupSorter,
                 ).map(([id, items]) => {
                     const shouldGroup = items.every((each) =>

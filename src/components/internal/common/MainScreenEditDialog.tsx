@@ -1,13 +1,7 @@
 import {isEqual} from 'lodash';
 import * as React from 'react';
 
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from '@material-ui/core';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';

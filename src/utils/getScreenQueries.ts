@@ -1,9 +1,5 @@
 import {TypeScreenQueries} from 'types';
-import {
-    screenQueryLarge,
-    screenQueryMedium,
-    screenQuerySmall,
-} from '../defs/styles';
+import {screenQueryLarge, screenQueryMedium, screenQuerySmall} from '../defs/styles';
 
 export function getScreenQueries(): TypeScreenQueries {
     const isSmall = window.matchMedia(screenQuerySmall).matches;
