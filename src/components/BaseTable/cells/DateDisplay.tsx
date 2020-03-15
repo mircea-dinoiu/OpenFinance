@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import moment from 'moment';
-import {Tooltip} from 'components/Tooltip';
 import {useScreenSize} from 'state/hooks';
 
 export const DateDisplay = ({item}) => {
@@ -13,14 +12,9 @@ export const DateDisplay = ({item}) => {
                 fontSize: '1rem',
                 color: screen.isLarge ? 'inherit' : grey[500],
             }}
+            title={`Last updated: ${moment(item.updated_at).format('lll')}`}
         >
-            <Tooltip
-                tooltip={`Last updated: ${moment(item.updated_at).format(
-                    'lll',
-                )}`}
-            >
-                {moment(item.created_at).format('lll')}
-            </Tooltip>
+            {moment(item.created_at).format('lll')}
         </span>
     );
 };

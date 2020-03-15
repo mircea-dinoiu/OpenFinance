@@ -3,7 +3,6 @@ import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import * as React from 'react';
 import {range} from 'lodash';
-import {Tooltip} from 'components/Tooltip';
 import styled from 'styled-components';
 import {TypeTransactionModel} from 'types';
 
@@ -35,7 +34,7 @@ export class RatingDisplay extends React.PureComponent<{
         const value = this.props.item.favorite;
 
         return (
-            <Tooltip tooltip="Hold CTRL/CMD to remove rating">
+            <span title="Hold CTRL/CMD to remove rating">
                 {range(1, 6).map((rating) => (
                     <Star key={rating} onClick={this.handleClick(rating)}>
                         {React.createElement(
@@ -50,7 +49,7 @@ export class RatingDisplay extends React.PureComponent<{
                         )}
                     </Star>
                 ))}
-            </Tooltip>
+            </span>
         );
     }
 }

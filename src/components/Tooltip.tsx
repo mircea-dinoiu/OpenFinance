@@ -8,7 +8,7 @@ export const Tooltip = ({
 }: {
     children: React.ReactNode;
     className?: string;
-    tooltip: React.ReactNode;
+    tooltip: JSX.Element | JSX.Element[];
 }) => (
     <MaterialUITooltip
         title={<div style={{fontSize: '1.5em'}}>{title}</div>}

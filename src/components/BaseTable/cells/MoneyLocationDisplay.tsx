@@ -2,8 +2,6 @@ import * as React from 'react';
 import grey from '@material-ui/core/colors/grey';
 import IconBlock from '@material-ui/icons/Block';
 import IconLock from '@material-ui/icons/Lock';
-
-import {Tooltip} from 'components/Tooltip';
 import {useMoneyLocations} from 'state/hooks';
 
 const StatusToIconComponent = {
@@ -28,7 +26,10 @@ export const MoneyLocationDisplay = ({id}) => {
 
     return (
         id && (
-            <span style={{fontSize: '1rem', color: grey[700]}}>
+            <span
+                style={{fontSize: '1rem', color: grey[700]}}
+                title={moneyLocation.name}
+            >
                 <IconComponent
                     style={{
                         fontSize: '1rem',
@@ -37,9 +38,7 @@ export const MoneyLocationDisplay = ({id}) => {
                         left: -1,
                     }}
                 />
-                <Tooltip tooltip={moneyLocation.name}>
-                    {moneyLocation.name}
-                </Tooltip>
+                {moneyLocation.name}
             </span>
         )
     );

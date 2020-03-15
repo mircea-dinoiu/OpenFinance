@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Avatar} from '@material-ui/core';
 import styled from 'styled-components';
-import {Tooltip} from 'components/Tooltip';
 import {grey} from '@material-ui/core/colors';
 import {useUsers} from 'state/hooks';
 
@@ -33,7 +32,7 @@ const PersonsDisplayStyled = styled.div`
     overflow: hidden;
 `;
 
-const TooltipStyled = styled(Tooltip)`
+const TooltipStyled = styled.div`
     flex-grow: ${(props: {index: number}) =>
         props.index === 0 ? 1 : 'initial'};
 `;
@@ -48,7 +47,7 @@ export const PersonsDisplay = ({item}) => {
                 .map(({id, full_name: name, avatar}, index) => (
                     <TooltipStyled
                         key={index}
-                        tooltip={`${name} ${item.users[id]}%`}
+                        title={`${name} ${item.users[id]}%`}
                         index={index}
                     >
                         <PersonAvatar
