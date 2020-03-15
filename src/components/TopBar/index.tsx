@@ -26,13 +26,13 @@ import {DatePicker} from '@material-ui/pickers';
 import {endOfDayToISOString} from 'js/utils/dates';
 import {ShiftMenu} from './ShiftMenu';
 import {
-    useCurrenciesDrawerOpenWithSetter,
     usePreferencesWithActions,
     useRefreshWidgetsDispatcher,
     useScreenSize,
     useTitle,
     useUsers,
 } from '../../state/hooks';
+import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
 
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 const MAX_TIMES = 10;
@@ -62,7 +62,7 @@ export const TopBar = (props: {
     const [shiftMenuAnchor, setShiftMenuAnchor] = React.useState(null);
     const [preferences, {updatePreferences}] = usePreferencesWithActions();
     const refreshWidgets = useRefreshWidgetsDispatcher();
-    const [, setCurrenciesDrawerOpen] = useCurrenciesDrawerOpenWithSetter();
+    const [, {setCurrenciesDrawerOpen}] = useCurrenciesDrawerOpenWithActions();
     const screenSize = useScreenSize();
     const user = useUsers();
     const title = useTitle();

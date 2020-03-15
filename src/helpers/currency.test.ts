@@ -2,7 +2,6 @@ import {
     convertCurrency,
     convertCurrencyToDefault,
     findCurrencyById,
-    getBaseCurrency,
     getCurrencyByISOCode,
 } from './currency';
 
@@ -52,12 +51,6 @@ describe('#findCurrencyById()', () => {
         expect(findCurrencyById('2', currencies)).toEqual(
             findCurrencyById(2, currencies),
         );
-    });
-});
-
-describe('#getBaseCurrency()', () => {
-    it('should return the default currency', () => {
-        expect(getBaseCurrency(currencies)).toEqual(USD);
     });
 });
 

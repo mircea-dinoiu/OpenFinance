@@ -36,12 +36,16 @@ export type TypeCurrency = {
     };
 };
 
-export type TypeCurrencies = {
+export type TypeCurrenciesApi = {
     default: number;
     from_cache: boolean;
     map: {
         [key: string]: TypeCurrency;
     };
+};
+
+export type TypeCurrencies = {selected: TypeCurrency} & {
+    [key: number]: TypeCurrency;
 };
 
 export type TypeCurrencyIdentifier = string | number | TypeCurrency;
@@ -145,13 +149,15 @@ export type TypeSnackbar = {
 export type TypeGlobalState = {
     preferences: TypePreferences;
     title: string;
+
+    currencies: TypeCurrencies;
     currenciesDrawerOpen: boolean;
+
     categories: TypeCategories;
     moneyLocationTypes: TypeMoneyLocationTypes;
     moneyLocations: TypeMoneyLocations;
     screen: TypeScreenQueries;
     screenSize: TypeScreenQueries;
-    currencies: TypeCurrencies;
     refreshWidgets: string;
     user: TypeUsers;
     snackbars: TypeSnackbar[];

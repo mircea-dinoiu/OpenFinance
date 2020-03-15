@@ -2,7 +2,7 @@ import MomentUtils from '@date-io/moment';
 import {CustomSnackbar} from 'components/snackbars';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {fetchCurrencies, setScreen, updateState} from 'state/actionCreators';
+import {setScreen, updateState} from 'state/actionCreators';
 // @ts-ignore
 import {Drawer, MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
 import {MuiThemeProvider} from '@material-ui/core/styles';
@@ -22,16 +22,16 @@ import {Sizes} from 'defs';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {createGlobalStyle} from 'styled-components';
 import 'normalize.css';
-import {
-    useCurrencies,
-    useCurrenciesDrawerOpenWithSetter,
-    useSnackbars,
-    useUsersWithActions,
-} from 'state/hooks';
+import {useSnackbars, useUsersWithActions} from 'state/hooks';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
 import {Home} from './components/Home';
 import {TypeCategories, TypeMoneyLocations, TypeMoneyLocationTypes, TypeUsers} from './types';
+import {
+    fetchCurrencies,
+    useCurrencies,
+    useCurrenciesDrawerOpenWithActions,
+} from 'state/currencies';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
     html, body {
@@ -57,8 +57,8 @@ const AppWrapped = () => {
     const [snackbar] = useSnackbars();
     const [
         currenciesDrawerOpen,
-        setCurrenciesDrawerOpen,
-    ] = useCurrenciesDrawerOpenWithSetter();
+        {setCurrenciesDrawerOpen},
+    ] = useCurrenciesDrawerOpenWithActions();
     const [ready, setReady] = useState(false);
 
     const fetchUser = async () => {

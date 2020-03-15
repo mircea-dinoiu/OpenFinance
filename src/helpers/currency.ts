@@ -4,16 +4,13 @@ import {objectValuesOfSameType} from 'utils/collection';
 export const findCurrencyById = (
     id: number,
     currencies: TypeCurrencies,
-): TypeCurrency => currencies.map[String(id)];
-
-export const getBaseCurrency = (currencies: TypeCurrencies): TypeCurrency =>
-    findCurrencyById(currencies.default, currencies);
+): TypeCurrency => currencies[String(id)];
 
 export const getCurrencyByISOCode = (
     ISOCode: string,
     currencies: TypeCurrencies,
 ) =>
-    objectValuesOfSameType(currencies.map).find(
+    objectValuesOfSameType(currencies).find(
         (each) => each.iso_code === ISOCode,
     );
 
@@ -66,6 +63,6 @@ export const convertCurrencyToDefault = (
     convertCurrency({
         value,
         from,
-        to: getBaseCurrency(currencies),
+        to: currencies.selected,
         currencies,
     });

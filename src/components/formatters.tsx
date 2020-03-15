@@ -1,14 +1,10 @@
-import {
-    objectEntriesOfSameType,
-    objectValuesOfSameType,
-} from 'utils/collection';
+import {objectEntriesOfSameType} from 'utils/collection';
 import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import {Tooltip} from 'components/Tooltip';
 import {financialNum} from 'js/utils/numbers';
-import {getBaseCurrency} from '../helpers/currency';
-import {useCurrencies} from 'state/hooks';
 import {spacingSmall} from '../defs/styles';
+import {useCurrencies} from 'state/currencies';
 
 export const formatNumericValue = (value) =>
     new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(
@@ -21,7 +17,7 @@ const NumericValue = ({
     currencyStyle = {},
 }) => {
     const currencies = useCurrencies();
-    const currency = rawCurrency || getBaseCurrency(currencies).iso_code;
+    const currency = rawCurrency || currencies.selected.iso_code;
     const inner = (
         <span>
             {currency && showCurrency && (
@@ -33,7 +29,7 @@ const NumericValue = ({
         </span>
     );
 
-    const found = objectValuesOfSameType(currencies.map).find(
+    const found = Object.values(currencies).find(
         (each) => each.iso_code === currency,
     );
     const tooltip = [

@@ -6,4 +6,4 @@ export const getItemCurrencyISOCode = ({
 }: {
     item: TypeTransactionModel;
     currencies: TypeCurrencies;
-}) => currencies.map[String(item.money_location.currency_id)].iso_code;
+}) => currencies[item.money_location.currency_id].iso_code;

@@ -1,6 +1,6 @@
 import React from 'react';
 import {getItemCurrencyISOCode} from 'helpers';
-import {useCurrencies} from 'state/hooks';
+import {useCurrencies} from 'state/currencies';
 
 export const CurrencyDisplay = ({item}) => {
     const currencies = useCurrencies();

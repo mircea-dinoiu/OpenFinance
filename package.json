@@ -59,6 +59,7 @@
     "husky": "^3.0.9"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.2.5",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.18.3",
     "chalk": "^2.4.1",

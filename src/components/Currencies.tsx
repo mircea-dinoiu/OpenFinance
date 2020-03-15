@@ -2,21 +2,25 @@ import {SingleSelect} from 'components/Select';
 import {objectValuesOfSameType} from 'utils/collection';
 import React from 'react';
 import {MenuItem, Subheader} from 'material-ui';
-import {fetchCurrencies, setBaseCurrencyId} from 'state/actionCreators';
 import {useDispatch} from 'react-redux';
 import {TypeCurrency} from 'types';
-import {useCurrencies, useUsers} from 'state/hooks';
+import {useUsers} from 'state/hooks';
+import {
+    fetchCurrencies,
+    setCurrenciesSelectedId,
+    useCurrencies,
+} from 'state/currencies';
 
 export const Currencies = () => {
     const user = useUsers();
     const currencies = useCurrencies();
-    const map = currencies.map;
-    const defaultCurrencyId = currencies.default;
+    const map = currencies;
+    const defaultCurrencyId = currencies.selected.id;
     const defaultCurrency = map[String(defaultCurrencyId)];
     const dispatch = useDispatch();
 
     const handleChangeBaseCurrency = (id: number) => {
-        dispatch(setBaseCurrencyId(id));
+        dispatch(setCurrenciesSelectedId(id));
     };
 
     React.useEffect(() => {

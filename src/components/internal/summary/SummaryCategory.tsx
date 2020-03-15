@@ -8,7 +8,7 @@ import {Card, CardHeader, CardText} from 'material-ui';
 import {financialNum} from 'js/utils/numbers';
 import {SummarySubCategory} from 'components/internal/summary/SummarySubCategory';
 import {numericValue} from 'components/formatters';
-import {useCurrencies} from 'state/hooks';
+import {useCurrencies} from 'state/currencies';
 
 const groupSorter = ([, items]) => {
     if (items.length > 0) {
@@ -54,14 +54,14 @@ export const SummaryCategory = (props) => {
     const numericValueProxy = (
         value: number,
         {
-            currencyId = currencies.default,
+            currencyId = currencies.selected.id,
             ...opts
         }: {
             currencyId?: number;
             currencyStyle?: {};
         } = {},
     ) => {
-        const currency = currencies.map[String(currencyId)].iso_code;
+        const currency = currencies[String(currencyId)].iso_code;
 
         return numericValue(value, {...opts, currency});
     };

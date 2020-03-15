@@ -111,7 +111,7 @@ export const Summary = () => {
             },
             identity,
         ),
-        include_pending: includePending,
+        include_pending: String(includePending),
         filters: JSON.stringify(
             includePending ? [] : [{id: 'status', value: 'finished'}],
         ),
