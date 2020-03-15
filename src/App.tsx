@@ -1,4 +1,3 @@
-import {blue} from '@material-ui/core/colors';
 import MomentUtils from '@date-io/moment';
 import {CustomSnackbar} from 'components/snackbars';
 import React, {useState} from 'react';
@@ -6,7 +5,7 @@ import {useDispatch} from 'react-redux';
 import {fetchCurrencies, setScreen, updateState} from 'state/actionCreators';
 // @ts-ignore
 import {Drawer, MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import {MuiThemeProvider} from '@material-ui/core/styles';
 
 import {createXHR} from 'utils/fetch';
 import {routes} from 'defs/routes';
@@ -17,7 +16,7 @@ import {TopBar} from 'components/TopBar';
 
 import {getScreenQueries} from 'utils/getScreenQueries';
 import EventListener from 'react-event-listener';
-import {flexColumn} from 'defs/styles';
+import {flexColumn, theme} from 'defs/styles';
 import {hot} from 'react-hot-loader/root';
 import {Sizes} from 'defs';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
@@ -32,21 +31,7 @@ import {
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
 import {Home} from './components/Home';
-import {
-    TypeCategories,
-    TypeMoneyLocations,
-    TypeMoneyLocationTypes,
-    TypeUsers,
-} from './types';
-
-const theme = createMuiTheme({
-    palette: {
-        primary: blue,
-    },
-    typography: {
-        htmlFontSize: 16,
-    },
-});
+import {TypeCategories, TypeMoneyLocations, TypeMoneyLocationTypes, TypeUsers} from './types';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
     html, body {
@@ -56,7 +41,7 @@ const ResponsiveGlobalStyle = createGlobalStyle`
     body {
         font-family: Roboto, sans-serif;
         font-weight: 300;
-        background: #eeeeee;
+        background: ${theme.palette.background.default};
         -webkit-font-smoothing: antialiased;
     }
 

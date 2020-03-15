@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {createMuiTheme} from '@material-ui/core/styles';
+import {blue} from '@material-ui/core/colors';
 
 export const flexColumn: React.CSSProperties = {
     display: 'flex',
@@ -34,3 +36,13 @@ export const gridGap = spacingMedium;
 export const screenQuerySmall = '(min-width: 0px) and (max-width: 480px)';
 export const screenQueryMedium = '(min-width: 481px) and (max-width: 1024px)';
 export const screenQueryLarge = '(min-width: 1025px)';
+
+export const theme = createMuiTheme({
+    palette: {
+        primary: blue,
+        // type: 'dark',
+    },
+    typography: {
+        htmlFontSize: 16,
+    },
+});

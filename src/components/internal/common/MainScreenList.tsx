@@ -28,7 +28,7 @@ import {createXHR} from 'utils/fetch';
 
 import {Button, Checkbox, Fab, FormControlLabel} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
-import {greyedOut} from 'defs/styles';
+import {greyedOut, theme} from 'defs/styles';
 import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
 import {getTrProps} from 'components/MainScreen/Table/helpers';
 import {MainScreenListGroup} from 'components/internal/common/MainScreenListGroup';
@@ -761,7 +761,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     <div
                         style={{
                             height: `calc(100vh - (142px + ${Sizes.HEADER_SIZE}))`,
-                            background: 'white',
+                            background: theme.palette.background.paper,
                         }}
                     >
                         <BaseTable
@@ -894,7 +894,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         ...(this.state.refreshing && !isDesktop
                             ? greyedOut
                             : {}),
-                        backgroundColor: isDesktop ? undefined : 'white',
                     }}
                 >
                     {this.renderContent()}
