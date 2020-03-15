@@ -45,14 +45,14 @@
     "react-hot-loader": "^4.12.3",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.2.0",
+    "react-scripts": "^3.4.0",
     "react-select": "^2.1.2",
     "react-table": "6.10.0",
     "recursive-readdir": "^2.2.2",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.3.2",
-    "typescript": "^3.7.3",
+    "typescript": "^3.8.3",
     "utility-types": "^3.8.0"
   },
   "optionalDependencies": {
