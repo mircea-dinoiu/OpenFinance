@@ -28,6 +28,7 @@ import {useSelector} from 'react-redux';
 import {MultiSelect, SingleSelect} from 'components/Select';
 import {gridGap, screenQuerySmall} from 'defs/styles';
 import {DateTimePicker} from '@material-ui/pickers';
+// @ts-ignore
 import {CancelToken} from 'axios';
 import {sumArray} from 'js/utils/numbers';
 import {sortBy} from 'lodash';
