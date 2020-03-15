@@ -208,6 +208,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return this.filters.filter((each) => each.value.text !== '').length > 0;
     }
 
+    get displayArchived() {
+        return this.state.displayHidden || this.hasFiltersSet
+    }
+
     loadMore = async ({
         page = this.state.page,
         results = this.state.results,
@@ -238,7 +242,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 sorters: JSON.stringify(sorters),
                 filters: JSON.stringify(
                     [
-                        this.state.displayHidden
+                        this.displayArchived
                             ? null
                             : {
                                   id: 'hidden',
@@ -390,9 +394,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={this.state.displayHidden}
+                                checked={this.displayArchived}
                                 onChange={this.handleToggleDisplayHidden}
                                 color="default"
+                                disabled={this.hasFiltersSet}
                             />
                         }
                         label="Display Archived"
