@@ -15,17 +15,34 @@ Working with:
 - Backend with NodeJS & Express & Sequelize
 - Responsive UI with React & MaterialUI
 
-# How to deploy:
+# Run Financial on macOS
+1. `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"`
+2. `brew install nvm`
+3. `brew install yarn`
+4. Create `.env` file per example:
 ```
-# Install the following:
-# - Git
-# - NodeJS
+DEBUG=true
+PORT=3001
+TIMEZONE=+00:00
+DATABASE_URL=string
+USE_CSRF=false
+SESSION_SECRET=string
+FIXER_API_KEY=string
+```
 
-git clone -b master git@github.com:mircea-dinoiu/financial.git
+# Deploy:
+First time prerequisites:
+```
+brew install awsebcli
+eb init
+```
 
-pushd financial
+```
+git checkout master
+git pull origin master
+yarn
 yarn build
-yarn start
+eb deploy
 ```
 
 # Env variables
