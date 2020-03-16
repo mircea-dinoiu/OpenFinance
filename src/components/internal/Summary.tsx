@@ -7,8 +7,7 @@ import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import {IncludeDropdown} from 'components/IncludeDropdown';
 import {getStartDate} from 'utils/dates';
-import {spacingMedium, spacingSmall} from 'defs/styles';
-import {Sizes} from 'defs';
+import {spacingMedium} from 'defs/styles';
 import {SummaryCategory} from 'components/internal/summary/SummaryCategory';
 import moment from 'moment';
 import {endOfDayToISOString} from 'js/utils/dates';
@@ -94,7 +93,6 @@ export const Summary = () => {
     const moneyLocationTypes = useMoneyLocationTypes();
     const user = useUsers();
     const categories = useCategories();
-    const screenSize = useScreenSize();
     const moneyLocations = useMoneyLocations();
     const includePending = preferences.includePending;
     const endDate = preferences.endDate;
@@ -169,20 +167,12 @@ export const Summary = () => {
         <div
             style={{
                 padding: '0 5px',
-                ...(screenSize.isLarge
-                    ? {
-                          overflowY: 'auto',
-                          overflowX: 'hidden',
-                          height: `calc(100vh - 2 * ${Sizes.HEADER_SIZE})`,
-                      }
-                    : {}),
             }}
         >
             {refreshing && <LoadingTopBar />}
             <>
                 <Paper
                     style={{
-                        margin: `${spacingSmall} 0`,
                         padding: `0 ${spacingMedium}`,
                     }}
                 >

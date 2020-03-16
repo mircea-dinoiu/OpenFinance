@@ -22,16 +22,21 @@ import {BigLoader} from 'components/loaders';
 
 import {createXHR} from 'utils/fetch';
 
-import {Button, Checkbox, Fab, FormControlLabel} from '@material-ui/core';
+import {
+    Button,
+    Checkbox,
+    Fab,
+    FormControlLabel,
+    Paper,
+} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
-import {greyedOut, theme} from 'defs/styles';
+import {greyedOut} from 'defs/styles';
 import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
 import {getTrProps} from 'components/MainScreen/Table/helpers';
 import {MainScreenListGroup} from 'components/internal/common/MainScreenListGroup';
 import {MainScreenCreatorDialog} from './MainScreenCreatorDialog';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {numericValue} from 'components/formatters';
-import {Sizes} from 'defs';
 import {AnchoredContextMenu} from 'components/MainScreen/ContextMenu/AnchoredContextMenu';
 import {MainScreenDeleteDialog} from './MainScreenDeleteDialog';
 import {MainScreenEditDialog} from './MainScreenEditDialog';
@@ -91,6 +96,7 @@ type TypeProps = {
 type TypeState = {
     firstLoad: boolean;
     page: number;
+    pageSize: number;
     results: TypeTransactionModel[];
     loading: number;
     refreshing: boolean;
@@ -110,6 +116,7 @@ type TypeState = {
 class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     state = {
         firstLoad: true,
+        pageSize: 50,
         page: 1,
         results: [],
         loading: 0,
@@ -130,10 +137,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     };
     sorters = [];
     filters = [];
-
-    get pageSize() {
-        return this.isDesktop() ? 200 : 50;
-    }
 
     static defaultProps = {
         defaultSorters: [{id: 'created_at', desc: true}],
@@ -205,7 +208,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     get displayArchived() {
-        return this.state.displayHidden || this.hasFiltersSet
+        return this.state.displayHidden || this.hasFiltersSet;
     }
 
     loadMore = async ({
@@ -234,7 +237,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             url: makeUrl(this.props.api, {
                 end_date: endDate,
                 page,
-                limit: this.pageSize,
+                limit: this.state.pageSize,
                 sorters: JSON.stringify(sorters),
                 filters: JSON.stringify(
                     [
@@ -373,7 +376,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
     renderTableHeader() {
         return (
-            <TableHeader>
+            <TableHeader columnCount={5}>
                 <>
                     <FormControlLabel
                         control={
@@ -398,19 +401,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         }
                         label="Display Archived"
                     />
-                </>
-                <>
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={this.handleSelectAll}
-                        style={{
-                            height: '32px',
-                            marginTop: '10px',
-                        }}
-                    >
-                        Select All
-                    </Button>
                 </>
                 <>
                     <SplitAmountField
@@ -439,6 +429,29 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         }}
                     />
                 </>
+                <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={this.handleSelectAll}
+                    style={{
+                        height: '32px',
+                        marginTop: '10px',
+                    }}
+                >
+                    Select All
+                </Button>
+                <Button
+                    color="primary"
+                    variant="contained"
+                    size="small"
+                    onClick={this.handleToggleAddModal}
+                    style={{
+                        height: '32px',
+                        marginTop: '10px',
+                    }}
+                >
+                    Create transaction
+                </Button>
             </TableHeader>
         );
     }
@@ -616,10 +629,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     };
 
     updateSelectedRecords = (data) =>
-        this.updateRecords(
-            this.selectedItems.map((each) => each.id),
-            data,
-        );
+        this.updateRecords(this.selectedItems.map((each) => each.id), data);
 
     withLoading = (fn) => async (...args: any[]) => {
         this.setState((state) => ({loading: state.loading + 1}));
@@ -752,27 +762,19 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             const count = results.length;
 
             return (
-                <>
+                <Paper>
                     {this.renderTableHeader()}
-                    <div
-                        style={{
-                            height: `calc(100vh - (142px + ${Sizes.HEADER_SIZE}))`,
-                            background: theme.palette.background.paper,
-                        }}
-                    >
+                    <div>
                         <BaseTable
                             defaultSorted={this.props.defaultSorters}
                             defaultSortDesc={true}
                             pageSize={
                                 count
-                                    ? Math.min(count, this.pageSize)
-                                    : this.pageSize
+                                    ? Math.min(count, this.state.pageSize)
+                                    : this.state.pageSize
                             }
-                            style={{
-                                maxHeight: '100%',
-                            }}
                             pages={
-                                results.length >= this.pageSize
+                                results.length >= this.state.pageSize
                                     ? this.state.page + 1
                                     : this.state.page
                             }
@@ -810,25 +812,23 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             {...this.getContextMenuItemsProps()}
                         />
                     </AnchoredContextMenu>
-                </>
+                </Paper>
             );
         }
 
-        return Object.entries(this.getGroupedResults()).map(
-            ([date, items]) => (
-                <MainScreenListGroup
-                    key={date}
-                    date={date}
-                    items={items}
-                    itemProps={{
-                        ...commonProps,
-                        contentComponent: this.props.contentComponent,
-                        contextMenuItemsProps: this.getContextMenuItemsProps(),
-                        onReceiveSelectedIds: this.handleReceivedSelectedIds,
-                    }}
-                />
-            ),
-        );
+        return Object.entries(this.getGroupedResults()).map(([date, items]) => (
+            <MainScreenListGroup
+                key={date}
+                date={date}
+                items={items}
+                itemProps={{
+                    ...commonProps,
+                    contentComponent: this.props.contentComponent,
+                    contextMenuItemsProps: this.getContextMenuItemsProps(),
+                    onReceiveSelectedIds: this.handleReceivedSelectedIds,
+                }}
+            />
+        ));
     }
 
     renderDialogs() {
@@ -853,9 +853,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     onNo={this.handleToggleDeleteDialog}
                     entityName={this.props.entityName}
                     count={
-                        Object.values(this.state.selectedIds).filter(
-                            Boolean,
-                        ).length
+                        Object.values(this.state.selectedIds).filter(Boolean)
+                            .length
                     }
                 />
                 {this.selectedItems.length > 0 && (
@@ -902,20 +901,22 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         />
                     )}
                     {this.renderDialogs()}
-                    <Fab
-                        variant="extended"
-                        color="primary"
-                        onClick={this.handleToggleAddModal}
-                        size={isDesktop ? undefined : 'small'}
-                        style={{
-                            position: isDesktop ? 'absolute' : 'fixed',
-                            bottom: isDesktop ? '80px' : '70px',
-                            right: isDesktop ? '30px' : '10px',
-                            zIndex: 1,
-                        }}
-                    >
-                        <AddIcon />
-                    </Fab>
+                    {!isDesktop && (
+                        <Fab
+                            variant="extended"
+                            color="primary"
+                            onClick={this.handleToggleAddModal}
+                            size={'small'}
+                            style={{
+                                position: 'fixed',
+                                bottom: '70px',
+                                right: '10px',
+                                zIndex: 1,
+                            }}
+                        >
+                            <AddIcon />
+                        </Fab>
+                    )}
                 </div>
             </div>
         );

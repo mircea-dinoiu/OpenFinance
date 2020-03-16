@@ -13,10 +13,6 @@ export const greyedOut = {
     opacity: 0.5,
 };
 
-export const overflowVisible = {
-    overflow: 'visible',
-};
-
 export const dialog = {
     root: {
         padding: 10,

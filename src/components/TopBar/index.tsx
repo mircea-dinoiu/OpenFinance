@@ -1,8 +1,8 @@
 import {SingleSelect} from 'components/Select';
 import {TypeShiftDateOption} from 'types';
 import React from 'react';
-import {IconButton} from 'material-ui';
 import {
+    IconButton,
     AppBar,
     FormLabel,
     Menu,
@@ -123,9 +123,10 @@ export const TopBar = (props: {
                 value={preferences.endDateIncrement}
                 onChange={handleEndDateIntervalDropdownChange}
                 clearable={false}
-                options={Object.entries(ShiftDateOptions).map(
-                    ([id, name]) => ({value: id, label: name}),
-                )}
+                options={Object.entries(ShiftDateOptions).map(([id, name]) => ({
+                    value: id,
+                    label: name,
+                }))}
             />
         </div>
     );
@@ -145,7 +146,7 @@ export const TopBar = (props: {
     const renderShiftBack = () => (
         <IconButton
             style={{float: 'left', height: INPUT_HEIGHT}}
-            tooltip={`Shift back ${
+            title={`Shift back ${
                 ShiftDateOptions[preferences.endDateIncrement]
             }`}
             onClick={handleShiftBack}
@@ -157,7 +158,7 @@ export const TopBar = (props: {
     const renderShiftForward = () => (
         <IconButton
             style={{float: 'left', height: INPUT_HEIGHT}}
-            tooltip={`Shift forward ${
+            title={`Shift forward ${
                 ShiftDateOptions[preferences.endDateIncrement]
             }`}
             onClick={handleShiftForward}
@@ -223,16 +224,9 @@ export const TopBar = (props: {
     const isSmall = screenSize.isSmall;
 
     return (
-        <AppBar
-            position="fixed"
-            style={{
-                height: Sizes.HEADER_SIZE,
-            }}
-        >
+        <AppBar position="sticky">
             <Toolbar
                 style={{
-                    height: Sizes.HEADER_SIZE,
-                    minHeight: 'auto',
                     paddingRight: 10,
                 }}
             >
@@ -252,7 +246,6 @@ export const TopBar = (props: {
                                 : {
                                       position: 'absolute',
                                       left: '50%',
-                                      top: '1px',
                                       transform: 'translateX(-50%)',
                                   }),
                         }}
@@ -285,7 +278,7 @@ export const TopBar = (props: {
                         flex: 1,
                     }}
                 >
-                    <div style={{float: 'right'}}>
+                    <div style={{float: 'right', display: 'flex'}}>
                         {user && isSmall && (
                             <IconButton onClick={handleToggleDateRange}>
                                 <DateIcon htmlColor="white" />

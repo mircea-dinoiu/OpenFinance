@@ -1,6 +1,6 @@
 import {SingleSelect} from 'components/Select';
 import React from 'react';
-import {MenuItem, Subheader} from 'material-ui';
+import {MenuItem, ListSubheader as Subheader} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
 import {TypeCurrency} from 'types';
 import {useUsers} from 'state/hooks';

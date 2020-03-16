@@ -34,13 +34,13 @@ export const SummaryCategory = (props) => {
         backgroundColor,
         title,
         summaryObject,
-        expandedByDefault,
+        expandedByDefault = false,
         entities,
         entityIdField = 'id',
         entityNameField = 'name',
         showSumInHeader,
     } = props;
-    const expandedState = React.useState(Boolean(props.expandedByDefault));
+    const expandedState = React.useState(expandedByDefault);
     const [expanded, setExpanded] = props.setExpanded
         ? [props.expanded, props.setExpanded]
         : expandedState;

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-    AppBar,
     BottomNavigation,
     BottomNavigationAction,
     Paper,
@@ -17,6 +16,7 @@ import TrendingDown from '@material-ui/icons/TrendingDown';
 import {grey} from '@material-ui/core/colors';
 import {useScreenSize} from 'state/hooks';
 import styled from 'styled-components';
+import {spacingSmall} from 'defs/styles';
 
 export const Dashboard = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -66,7 +66,7 @@ export const Dashboard = () => {
 
     const renderLarge = () => (
         <>
-            <AppBar position="static">
+            <Paper style={{marginBottom: spacingSmall}}>
                 <Tabs
                     value={selectedIndex}
                     onChange={(event, index) => setSelectedIndex(index)}
@@ -78,7 +78,7 @@ export const Dashboard = () => {
                         <Tab label="Account Types" />,
                     ]}
                 </Tabs>
-            </AppBar>
+            </Paper>
             {renderDesktopTab(selectedIndex)}
         </>
     );
@@ -121,6 +121,7 @@ export const Dashboard = () => {
 const TransactionsContainer = styled.div`
     display: grid;
     grid-template-columns: 2fr 10fr;
+    flex-grow: 1;
 `;
 
 const TransactionsContentContainer = styled.div`

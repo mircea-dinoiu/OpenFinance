@@ -16,9 +16,8 @@ import {TopBar} from 'components/TopBar';
 
 import {getScreenQueries} from 'utils/getScreenQueries';
 import EventListener from 'react-event-listener';
-import {flexColumn, theme} from 'defs/styles';
+import {theme} from 'defs/styles';
 import {hot} from 'react-hot-loader/root';
-import {Sizes} from 'defs';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {createGlobalStyle} from 'styled-components';
 import 'normalize.css';
@@ -129,16 +128,8 @@ const AppWrapped = () => {
             <MuiThemeProvider theme={theme}>
                 <V0MuiThemeProvider>
                     <ResponsiveGlobalStyle />
-                    <div
-                        style={{
-                            marginTop: Sizes.HEADER_SIZE,
-                            ...flexColumn,
-                        }}
-                    >
-                        <EventListener
-                            target="window"
-                            onResize={onWindowResize}
-                        />
+                    <>
+                        <EventListener target="window" onResize={onWindowResize} />
                         <TopBar
                             showCurrenciesDrawer={isCurrenciesDrawerReady()}
                             onLogout={onLogout}
@@ -172,7 +163,7 @@ const AppWrapped = () => {
                             </BrowserRouter>
                         )}
                         <CustomSnackbar {...snackbar} open={snackbar != null} />
-                    </div>
+                        </>
                 </V0MuiThemeProvider>
             </MuiThemeProvider>
         </MuiPickersUtilsProvider>

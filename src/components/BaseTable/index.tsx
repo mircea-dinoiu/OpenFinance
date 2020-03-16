@@ -3,7 +3,7 @@ import ReactTable from 'react-table';
 import styled, {css} from 'styled-components';
 import 'react-table/react-table.css';
 import {green, red} from '@material-ui/core/colors';
-import {spacingLarge, spacingSmall, theme} from 'defs/styles';
+import {spacingLarge, spacingSmall, gridGap} from 'defs/styles';
 
 export const Classes = {
     todayRow: 'todayRow',
@@ -23,7 +23,6 @@ const reactTableHideHead = css`
 
 const ReactTableStyled = styled(ReactTable)`
     &.ReactTable {
-        background: ${theme.palette.background.paper};
         font-size: 1rem;
         border: 0 !important;
 
@@ -72,17 +71,15 @@ const ReactTableStyled = styled(ReactTable)`
 `;
 
 export const TableHeader = styled.div`
-    background: ${theme.palette.background.paper};
-    padding: 0 20px;
+    padding: 0 ${spacingLarge};
     font-size: 1rem;
     border-bottom: 1px solid rgb(244, 244, 244);
     display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(4, max-content);
+    grid-gap: ${gridGap};
+    grid-template-columns: repeat(${(props: {columnCount: number}) => props.columnCount}, max-content);
 `;
 
 export const TableFooter = styled.div`
-    background: ${theme.palette.background.paper};
     padding: ${spacingSmall} ${spacingLarge};
     font-size: 1rem;
     border-top: 1px solid rgb(244, 244, 244);
