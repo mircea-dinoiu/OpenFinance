@@ -39,6 +39,7 @@ import {
     TypePreferences,
     TypeTransactionForm,
     TypeUsers,
+    TypeGlobalState,
 } from 'types';
 import {makeUrl} from 'utils/url';
 import {PERC_MAX, PERC_STEP} from 'js/defs';
@@ -95,8 +96,7 @@ export const setChargedPersonValueFactory = (
         let diffToMax;
 
         while (
-            (diffToMax =
-                PERC_MAX - sumArray(Object.values(nextChargedPersons)))
+            (diffToMax = PERC_MAX - sumArray(Object.values(nextChargedPersons)))
         ) {
             for (const key in nextChargedPersons) {
                 if (key !== id) {
@@ -588,7 +588,13 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TypeTransactionForm> {
 
 export const ExpenseForm = (ownProps) => {
     const stateProps = useSelector(
-        ({currencies, preferences, categories, moneyLocations, user}) => ({
+        ({
+            currencies,
+            preferences,
+            categories,
+            moneyLocations,
+            user,
+        }: TypeGlobalState) => ({
             currencies,
             categories,
             preferences,
