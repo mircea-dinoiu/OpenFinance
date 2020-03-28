@@ -1,11 +1,11 @@
 import React from 'react';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {createXHR} from 'utils/fetch';
-import {Card, CardHeader, IconButton} from '@material-ui/core';
+import {Card, CardHeader} from '@material-ui/core';
 import {BigLoader} from 'components/loaders';
 import {useRefreshWidgets} from 'state/hooks';
-import {useCardHeaderStyles, headerColor} from 'components/transactions/styles';
-import {UnfoldLess, UnfoldMore} from '@material-ui/icons';
+import {useCardHeaderStyles} from 'components/transactions/styles';
+import {SummaryExpander} from 'components/transactions/SummaryExpander';
 
 export const SummaryLazyCategory = ({
     expandedByDefault = false,
@@ -47,9 +47,10 @@ export const SummaryLazyCategory = ({
                 classes={cardHeaderClasses}
                 style={{backgroundColor}}
                 action={
-                    <IconButton onClick={() => setExpanded(!expanded)}>
-                        {expanded ? <UnfoldLess /> : <UnfoldMore />}
-                    </IconButton>
+                    <SummaryExpander
+                        isExpanded={expanded}
+                        onChange={setExpanded}
+                    />
                 }
                 title={title}
             />

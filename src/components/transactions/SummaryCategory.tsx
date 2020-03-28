@@ -3,16 +3,15 @@ import {convertCurrencyToDefault} from 'helpers/currency';
 import React from 'react';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
-import {Card, CardHeader, IconButton} from '@material-ui/core';
+import {Card, CardHeader} from '@material-ui/core';
 import {financialNum} from 'js/utils/numbers';
 import {SummarySubCategory} from 'components/transactions/SummarySubCategory';
 import {numericValue} from 'components/formatters';
 import {useCurrencies} from 'state/currencies';
-import UnfoldMore from '@material-ui/icons/UnfoldMore';
-import UnfoldLess from '@material-ui/icons/UnfoldLess';
 import {makeStyles} from '@material-ui/core/styles';
 import {spacingSmall} from 'defs/styles';
 import {useCardHeaderStyles, headerColor} from 'components/transactions/styles';
+import {SummaryExpander} from 'components/transactions/SummaryExpander';
 
 const groupSorter = ([, items]) => {
     if (items.length > 0) {
@@ -83,9 +82,10 @@ export const SummaryCategory = (props) => {
                 title={title}
                 classes={cardHeaderClasses}
                 action={
-                    <IconButton onClick={() => setExpanded(!expanded)}>
-                        {expanded ? <UnfoldLess /> : <UnfoldMore />}
-                    </IconButton>
+                    <SummaryExpander
+                        isExpanded={expanded}
+                        onChange={setExpanded}
+                    />
                 }
                 subheader={
                     showSumInHeader && (

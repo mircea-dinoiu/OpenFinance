@@ -1,18 +1,12 @@
 import React, {useState} from 'react';
-import {
-    CardHeader,
-    Checkbox,
-    FormControlLabel,
-    IconButton,
-} from '@material-ui/core';
+import {CardHeader, Checkbox, FormControlLabel} from '@material-ui/core';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {BaseTable} from 'components/BaseTable';
 import {spacingMedium, spacingSmall, theme} from 'defs/styles';
 import {sortBy} from 'lodash';
-import {UnfoldLess, UnfoldMore} from '@material-ui/icons';
 import {TypeCurrencies} from 'types';
-import {makeStyles} from '@material-ui/core/styles';
 import {useCardHeaderStyles} from 'components/transactions/styles';
+import {SummaryExpander} from 'components/transactions/SummaryExpander';
 
 export const SummarySubCategory = (props: {
     expandedByDefault: boolean;
@@ -48,7 +42,6 @@ export const SummarySubCategory = (props: {
 
     const items = sortBy(itemsFromProps, (item) => item.description);
     const numericValue = (value, opts?) => props.numericValueFn(value, opts);
-    const toggleExpanded = () => setExpanded(!expanded);
 
     return (
         <div style={{padding: '0 5px', marginBottom: spacingMedium}}>
@@ -62,9 +55,10 @@ export const SummarySubCategory = (props: {
                         color: theme.palette.text.primary,
                     }}
                     action={
-                        <IconButton onClick={toggleExpanded}>
-                            {expanded ? <UnfoldLess /> : <UnfoldMore />}
-                        </IconButton>
+                        <SummaryExpander
+                            isExpanded={expanded}
+                            onChange={setExpanded}
+                        />
                     }
                     title={
                         Number(id) === 0 ? (
