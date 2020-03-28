@@ -7,7 +7,7 @@ import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import {IncludeDropdown} from 'components/IncludeDropdown';
 import {getStartDate} from 'utils/dates';
-import {spacingMedium} from 'defs/styles';
+import {spacingMedium, spacingSmall} from 'defs/styles';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import moment from 'moment';
 import {endOfDayToISOString} from 'js/utils/dates';
@@ -173,7 +173,7 @@ export const Summary = () => {
             <>
                 <Paper
                     style={{
-                        padding: `0 ${spacingMedium}`,
+                        padding: spacingMedium,
                     }}
                 >
                     <IncludeDropdown
