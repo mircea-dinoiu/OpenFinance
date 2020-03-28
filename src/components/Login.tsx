@@ -1,6 +1,5 @@
 import React from 'react';
-import {TextField, Toggle} from 'material-ui';
-import {Button} from '@material-ui/core';
+import {Button, TextField, Checkbox, FormControlLabel} from '@material-ui/core';
 import {ButtonProgress} from 'components/loaders';
 import {routes} from 'defs/routes';
 import {createXHR} from 'utils/fetch';
@@ -11,8 +10,20 @@ import {useTitleWithSetter, useUsers} from '../state/hooks';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';
 import styled from 'styled-components';
-import {screenQueryLarge, screenQueryMedium, screenQuerySmall} from '../defs/styles';
+import {
+    screenQueryLarge,
+    screenQueryMedium,
+    screenQuerySmall,
+    spacingLarge,
+} from '../defs/styles';
 import {TypeUsers} from '../types';
+import {makeStyles} from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    rememberMe: {
+        marginTop: spacingLarge,
+    },
+});
 
 export const Login = () => {
     const [email, setEmail] = React.useState('');
@@ -23,6 +34,7 @@ export const Login = () => {
     const dispatch = useDispatch();
     const [, setTitle] = useTitleWithSetter();
     const user = useUsers();
+    const cls = useStyles();
 
     React.useEffect(() => {
         setTitle('Please Login');
@@ -70,8 +82,8 @@ export const Login = () => {
         <LoginStyled>
             <div>
                 <TextField
-                    hintText="Type in your e-mail"
-                    floatingLabelText="E-mail"
+                    helperText="Type in your e-mail"
+                    label="E-mail"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     disabled={loading}
@@ -79,8 +91,8 @@ export const Login = () => {
                     onKeyDown={handleTextFieldKeyDown}
                 />
                 <TextField
-                    hintText="Type in your password"
-                    floatingLabelText="Password"
+                    helperText="Type in your password"
+                    label="Password"
                     type="password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
@@ -88,12 +100,19 @@ export const Login = () => {
                     fullWidth={true}
                     onKeyDown={handleTextFieldKeyDown}
                 />
-                <Toggle
-                    style={{margin: '20px 0 0'}}
+                <FormControlLabel
+                    className={cls.rememberMe}
+                    control={
+                        <Checkbox
+                            checked={rememberMe}
+                            onChange={(event, checked) =>
+                                setRememberMe(checked)
+                            }
+                            color="primary"
+                            disabled={loading}
+                        />
+                    }
                     label="Remember me"
-                    toggled={rememberMe}
-                    onToggle={(event, toggle) => setRememberMe(toggle)}
-                    disabled={loading}
                 />
                 <Button
                     variant="contained"
@@ -113,6 +132,7 @@ export const Login = () => {
 const LoginStyled = styled.div`
     display: grid;
     grid-template-columns: repeat(12, 1fr);
+    margin-top: ${spacingLarge};
 
     > div {
         @media ${screenQuerySmall} {
