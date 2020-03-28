@@ -22,13 +22,7 @@ import {BigLoader} from 'components/loaders';
 
 import {createXHR} from 'utils/fetch';
 
-import {
-    Button,
-    Checkbox,
-    Fab,
-    FormControlLabel,
-    Paper,
-} from '@material-ui/core';
+import {Button, Checkbox, Fab, FormControlLabel, Paper} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {greyedOut} from 'defs/styles';
 import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
@@ -100,7 +94,7 @@ type TypeState = {
     results: TypeTransactionModel[];
     loading: number;
     refreshing: boolean;
-    selectedIds: {};
+    selectedIds: number[];
 
     addModalOpen: boolean;
     editDialogOpen: boolean;
@@ -121,7 +115,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         results: [],
         loading: 0,
         refreshing: false,
-        selectedIds: {},
+        selectedIds: [],
         contextMenuDisplay: false,
         contextMenuTop: 0,
         contextMenuLeft: 0,
@@ -304,7 +298,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return this.props.screen.isLarge;
     }
 
-    handleReceivedSelectedIds = (selectedIds) => this.setState({selectedIds});
+    handleReceivedSelectedIds = (selectedIds: number[]) =>
+        this.setState({selectedIds});
     handleChangeContextMenu = ({
         display,
         top = 0,
@@ -332,8 +327,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             : {};
 
     get selectedItems() {
-        return this.state.results.filter((each) =>
-            Boolean(this.state.selectedIds[each.id]),
+        return this.state.results.filter((r) =>
+            this.state.selectedIds.includes(r.id),
         );
     }
 
@@ -365,13 +360,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     handleSelectAll = (event) => {
         event.preventDefault();
 
-        this.handleReceivedSelectedIds(
-            this.state.results.reduce((acc, each: {id: number}) => {
-                acc[each.id] = true;
-
-                return acc;
-            }, {}),
-        );
+        this.handleReceivedSelectedIds(this.state.results.map((r) => r.id));
     };
 
     renderTableHeader() {
@@ -629,7 +618,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     };
 
     updateSelectedRecords = (data) =>
-        this.updateRecords(this.selectedItems.map((each) => each.id), data);
+        this.updateRecords(
+            this.selectedItems.map((each) => each.id),
+            data,
+        );
 
     withLoading = (fn) => async (...args: any[]) => {
         this.setState((state) => ({loading: state.loading + 1}));
@@ -856,7 +848,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             .length
                     }
                 />
-                {this.selectedItems.length > 0 && (
+                {selectedItems.length > 0 && (
                     <MainScreenEditDialog
                         key={this.state.editDialogKey}
                         open={this.state.editDialogOpen}

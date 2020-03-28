@@ -49,7 +49,7 @@ export const getTrProps = ({
     onChangeContextMenu: (
         props: Partial<TypeAnchoredContextMenuDisplayProps>,
     ) => void;
-    onReceiveSelectedIds: (ids: {[key: number]: boolean}) => void;
+    onReceiveSelectedIds: (ids: number[]) => void;
     onEdit: () => void;
     selectedIds: {
         [key: number]: boolean;
@@ -58,10 +58,10 @@ export const getTrProps = ({
     className: getTrClassName(item, {selectedIds}),
     onDoubleClick: () => {
         if (item.persist !== false) {
-            onReceiveSelectedIds({[item.id]: true});
+            onReceiveSelectedIds([item.id]);
             onEdit();
         } else {
-            onReceiveSelectedIds({});
+            onReceiveSelectedIds([]);
         }
     },
     onClick(event: MouseEvent) {
@@ -94,7 +94,7 @@ export const getTrProps = ({
             });
 
             if (!selectedIds[item.id]) {
-                onReceiveSelectedIds({[item.id]: true});
+                onReceiveSelectedIds([item.id]);
             }
         }
     },

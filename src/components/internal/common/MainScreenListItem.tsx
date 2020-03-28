@@ -1,14 +1,11 @@
-import React, {PureComponent} from 'react';
-
-import {cyan} from '@material-ui/core/colors';
-
-import {ResponsiveListItem} from 'components/ResponsiveListItem';
-import {IconButton, IconMenu} from 'material-ui';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import React, {useState} from 'react';
 import {
     ContextMenuItems,
     TypeContextMenuItemsProps,
 } from 'components/MainScreen/ContextMenu/ContextMenuItems';
+import {makeStyles} from '@material-ui/core/styles';
+import {Container, Drawer, Divider} from '@material-ui/core';
+import {spacingMedium} from 'defs/styles';
 
 type TypeProps = {
     entityName: string;
@@ -21,81 +18,51 @@ type TypeProps = {
     };
 };
 
-type TypeState = {
-    expanded: boolean;
-};
+const useStyles = makeStyles({
+    container: {
+        paddingTop: spacingMedium,
+        paddingBottom: spacingMedium,
+    },
+    moreIcon: {
+        padding: 0,
+    },
+});
 
-export class MainScreenListItem extends PureComponent<TypeProps, TypeState> {
-    state = {
-        expanded: false,
+export const MainScreenListItem = (props: TypeProps) => {
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const item = props.item;
+    const ListItemContent = props.contentComponent;
+    const cls = useStyles();
+
+    const handleOpenDrawer = (event) => {
+        props.onReceiveSelectedIds([props.item.id]);
+        setIsDrawerOpen(true);
     };
 
-    toggleDetails = () => {
-        this.setState({
-            expanded: !this.state.expanded,
-        });
-    };
+    const handleCloseDrawer = () => setIsDrawerOpen(false);
 
-    getStyle() {
-        if (this.state.expanded) {
-            return {
-                backgroundColor: cyan[50],
-            };
-        }
-
-        return {};
-    }
-
-    getInnerDivStyle() {
-        return {paddingLeft: 40};
-    }
-
-    handleBurgerClick = (event) => {
-        this.props.onReceiveSelectedIds([this.props.item.id]);
-        event.stopPropagation();
-    };
-
-    render() {
-        const item = this.props.item;
-        const persist = item.persist !== false;
-        const ListItemContent = this.props.contentComponent;
-        const itemContent = (
-            <ListItemContent item={item} expanded={this.state.expanded} />
-        );
-
-        return (
-            <ResponsiveListItem
-                onClick={this.toggleDetails}
-                style={this.getStyle()}
-                innerDivStyle={this.getInnerDivStyle()}
-                leftIcon={
-                    persist ? (
-                        <IconMenu
-                            iconButtonElement={
-                                <IconButton style={{padding: 0, width: 40}}>
-                                    <MoreVertIcon />
-                                </IconButton>
-                            }
-                            anchorOrigin={{
-                                horizontal: 'left',
-                                vertical: 'top',
-                            }}
-                            targetOrigin={{
-                                horizontal: 'left',
-                                vertical: 'top',
-                            }}
-                            style={{marginLeft: 0, left: 0}}
-                            onClick={this.handleBurgerClick}
-                        >
-                            <ContextMenuItems
-                                {...this.props.contextMenuItemsProps}
-                            />
-                        </IconMenu>
-                    ) : null
-                }
+    return (
+        <>
+            <Container
+                className={cls.container}
+                onClick={item.persist === false ? undefined : handleOpenDrawer}
             >
-                {itemContent}
-            </ResponsiveListItem>
-        );
-    }
-}
+                <ListItemContent item={item} />
+            </Container>
+            <Drawer
+                onClose={handleCloseDrawer}
+                open={isDrawerOpen}
+                anchor="bottom"
+            >
+                <Container className={cls.container}>
+                    <ListItemContent item={item} expanded={true} />
+                </Container>
+                <Divider />
+                <ContextMenuItems
+                    {...props.contextMenuItemsProps}
+                    onCloseContextMenu={handleCloseDrawer}
+                />
+            </Drawer>
+        </>
+    );
+};
