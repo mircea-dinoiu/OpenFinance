@@ -7,12 +7,13 @@ import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay
 import {AmountDisplay} from 'components/BaseTable/cells/AmountDisplay';
 import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import styled from 'styled-components';
+import {spacingMedium} from 'defs/styles';
 
 const ExpenseListItemContentStyled = styled.div`
     display: grid;
     grid-template-areas:
         'description description persons'
-        'amount flags ml'
+        'amount amount ml'
         'date date repeats'
         'categories categories categories';
 `;
@@ -30,10 +31,12 @@ const AmountContainer = styled.div`
     grid-area: amount;
     font-size: 1rem;
     line-height: 20px;
+    display: flex;
+    flex-direction: row;
 `;
 
 const FlagsContainer = styled.div`
-    grid-area: flags;
+    margin-left: ${spacingMedium};
 `;
 
 const MlContainer = styled.div`
@@ -70,8 +73,8 @@ export const ExpenseListItemContent = ({item, expanded}) => {
             <PersonsContainer>{personsDisplay}</PersonsContainer>
             <AmountContainer>
                 <AmountDisplay showCurrency={true} item={item} />
+                <FlagsContainer>{flags}</FlagsContainer>
             </AmountContainer>
-            <FlagsContainer>{flags}</FlagsContainer>
             <MlContainer>{moneyLocationDisplay}</MlContainer>
 
             {expanded && (
