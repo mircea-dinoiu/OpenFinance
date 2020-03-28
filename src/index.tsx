@@ -5,8 +5,7 @@ import {applyMiddleware, compose, createStore} from 'redux';
 import {combinedReducers} from 'state/reducers';
 import {App} from './App';
 import thunk from 'redux-thunk';
-import {readState, saveState} from 'state/persistency';
-import throttle from 'lodash/throttle';
+import {readState} from 'state/persistency';
 import * as serviceWorker from './serviceWorker';
 
 // @ts-ignore
@@ -20,12 +19,6 @@ const store = createStore(
         applyMiddleware(thunk),
         reduxExtension ? reduxExtension() : (noop) => noop,
     ),
-);
-
-store.subscribe(
-    throttle(() => {
-        saveState(store.getState());
-    }, 1000),
 );
 
 const root = document.getElementById('root');
