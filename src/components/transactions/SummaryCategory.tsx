@@ -8,10 +8,11 @@ import {financialNum} from 'js/utils/numbers';
 import {SummarySubCategory} from 'components/transactions/SummarySubCategory';
 import {numericValue} from 'components/formatters';
 import {useCurrencies} from 'state/currencies';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import ExpandLess from '@material-ui/icons/ExpandLess';
+import UnfoldMore from '@material-ui/icons/UnfoldMore';
+import UnfoldLess from '@material-ui/icons/UnfoldLess';
 import {makeStyles} from '@material-ui/core/styles';
 import {spacingSmall} from 'defs/styles';
+import {useCardHeaderStyles, headerColor} from 'components/transactions/styles';
 
 const groupSorter = ([, items]) => {
     if (items.length > 0) {
@@ -30,22 +31,9 @@ const groupSorter = ([, items]) => {
     return 0;
 };
 
-export const headerColor = 'rgba(255, 255, 255, 0.9)';
-
 const useStyles = makeStyles({
     expandable: {
         padding: spacingSmall,
-    },
-});
-const useCardHeaderStyles = makeStyles({
-    title: {
-        fontSize: 'medium',
-    },
-    subheader: {
-        fontSize: 'small',
-    },
-    action: {
-        margin: 0,
     },
 });
 
@@ -91,12 +79,12 @@ export const SummaryCategory = (props) => {
     return (
         <Card style={{marginBottom: 10}}>
             <CardHeader
-                style={{backgroundColor, color: headerColor}}
+                style={{backgroundColor}}
                 title={title}
                 classes={cardHeaderClasses}
                 action={
                     <IconButton onClick={() => setExpanded(!expanded)}>
-                        {expanded ? <ExpandLess /> : <ExpandMore />}
+                        {expanded ? <UnfoldLess /> : <UnfoldMore />}
                     </IconButton>
                 }
                 subheader={

@@ -1,9 +1,11 @@
 import React from 'react';
-import {SummaryCategory, headerColor} from 'components/transactions/SummaryCategory';
+import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {createXHR} from 'utils/fetch';
-import {Card, CardHeader, CardText} from 'material-ui';
+import {Card, CardHeader, IconButton} from '@material-ui/core';
 import {BigLoader} from 'components/loaders';
 import {useRefreshWidgets} from 'state/hooks';
+import {useCardHeaderStyles, headerColor} from 'components/transactions/styles';
+import {UnfoldLess, UnfoldMore} from '@material-ui/icons';
 
 export const SummaryLazyCategory = ({
     expandedByDefault = false,
@@ -11,6 +13,7 @@ export const SummaryLazyCategory = ({
     parser,
     ...props
 }) => {
+    const cardHeaderClasses = useCardHeaderStyles();
     const [expanded, setExpanded] = React.useState(expandedByDefault);
     const [data, setData] = React.useState(null);
     const {backgroundColor, title} = props;
@@ -39,22 +42,19 @@ export const SummaryLazyCategory = ({
     }
 
     return (
-        <Card
-            style={{marginBottom: 10}}
-            expanded={expanded}
-            onExpandChange={setExpanded}
-        >
+        <Card style={{marginBottom: 10}}>
             <CardHeader
-                style={{backgroundColor, paddingTop: 0}}
-                actAsExpander={true}
-                showExpandableButton={true}
-            >
-                <div style={{color: headerColor}}>{title}</div>
-            </CardHeader>
+                classes={cardHeaderClasses}
+                style={{backgroundColor}}
+                action={
+                    <IconButton onClick={() => setExpanded(!expanded)}>
+                        {expanded ? <UnfoldLess /> : <UnfoldMore />}
+                    </IconButton>
+                }
+                title={title}
+            />
 
-            <CardText expandable={true}>
-                <BigLoader />
-            </CardText>
+            {expanded && <BigLoader />}
         </Card>
     );
 };

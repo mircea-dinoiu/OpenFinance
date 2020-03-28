@@ -1,176 +1,150 @@
-import React, {PureComponent} from 'react';
-import {CardHeader} from 'material-ui';
+import React, {useState} from 'react';
+import {
+    CardHeader,
+    Checkbox,
+    FormControlLabel,
+    IconButton,
+} from '@material-ui/core';
 import {convertCurrencyToDefault} from 'helpers/currency';
-import Collapse from '@material-ui/icons/ExpandLess';
-import Expand from '@material-ui/icons/ExpandMore';
 import {BaseTable} from 'components/BaseTable';
-import {Checkbox, FormControlLabel} from '@material-ui/core';
-import {TypeCurrencies} from 'types';
-import {spacingMedium, spacingSmall} from 'defs/styles';
-import styled from 'styled-components';
+import {spacingMedium, spacingSmall, theme} from 'defs/styles';
 import {sortBy} from 'lodash';
+import {UnfoldLess, UnfoldMore} from '@material-ui/icons';
+import {TypeCurrencies} from 'types';
+import {makeStyles} from '@material-ui/core/styles';
+import {useCardHeaderStyles} from 'components/transactions/styles';
 
-export class SummarySubCategory extends PureComponent<
-    {
-        expandedByDefault: boolean;
-        numericValueFn: (
-            value: number,
-            opts: {
-                currencyId?: number;
-                currencyStyle?: {};
-            },
-        ) => string;
-        excluded: {};
-        currencies: TypeCurrencies;
-        onToggleExcluded: (boolean) => void;
-        entities: [];
-        entityIdField: string;
-        entityNameField: string;
-        id: string;
-        items: {description: string}[];
-        renderDescription: (cat: {description: string}) => void;
-        shouldGroup: boolean;
-    },
-    {
-        expanded: boolean;
-    }
-> {
-    state = {
-        expanded: Boolean(this.props.expandedByDefault),
-    };
+export const SummarySubCategory = (props: {
+    expandedByDefault: boolean;
+    numericValueFn: (
+        value: number,
+        opts: {
+            currencyId?: number;
+            currencyStyle?: {};
+        },
+    ) => string;
+    excluded: {};
+    currencies: TypeCurrencies;
+    onToggleExcluded: (boolean) => void;
+    entities: [];
+    entityIdField: string;
+    entityNameField: string;
+    id: string;
+    items: {description: string}[];
+    renderDescription: (cat: {description: string}) => void;
+    shouldGroup: boolean;
+}) => {
+    const cardHeaderClasses = useCardHeaderStyles();
+    const [expanded, setExpanded] = useState(props.expandedByDefault);
+    const {
+        shouldGroup,
+        entities,
+        id,
+        entityIdField,
+        entityNameField,
+        items: itemsFromProps,
+        renderDescription,
+    } = props;
 
-    numericValue = (value, opts?) => this.props.numericValueFn(value, opts);
+    const items = sortBy(itemsFromProps, (item) => item.description);
+    const numericValue = (value, opts?) => props.numericValueFn(value, opts);
+    const toggleExpanded = () => setExpanded(!expanded);
 
-    toggleExpanded = () => this.setState({expanded: !this.state.expanded});
-
-    render() {
-        const {
-            shouldGroup,
-            entities,
-            id,
-            entityIdField,
-            entityNameField,
-            items: itemsFromProps,
-            renderDescription,
-        } = this.props;
-
-        const items = sortBy(itemsFromProps, (item) => item.description);
-
-        return (
-            <div style={{padding: '0 5px'}}>
-                {shouldGroup && (
-                    <CardHeader
-                        style={{
-                            padding: 0,
-                            marginTop: Number(id) === 0 ? 5 : 0,
-                            cursor: 'pointer',
-                        }}
-                        onClick={this.toggleExpanded}
-                    >
-                        <CategoryContainer>
-                            <div>
-                                {Number(id) === 0 ? (
-                                    <em>Unclassified</em>
-                                ) : (
-                                    entities.find(
-                                        (each) => each[entityIdField] == id,
-                                    )[entityNameField]
-                                )}
-                                <div style={{fontSize: '12px'}}>
-                                    {this.numericValue(
-                                        items.reduce(
-                                            // @ts-ignore
-                                            (
-                                                acc,
-                                                each: {
-                                                    reference: string;
-                                                    currencyId: number;
-                                                    sum: number;
-                                                },
-                                            ) =>
-                                                acc +
-                                                (this.props.excluded[
-                                                    each.reference
-                                                ]
-                                                    ? 0
-                                                    : convertCurrencyToDefault(
-                                                          each.sum,
-                                                          each.currencyId,
-                                                          this.props.currencies,
-                                                      )),
-                                            0,
-                                        ),
-                                    )}
-                                </div>
-                            </div>
-                            <CategoryToggle>
-                                {this.state.expanded ? (
-                                    <Collapse />
-                                ) : (
-                                    <Expand />
-                                )}
-                            </CategoryToggle>
-                        </CategoryContainer>
-                    </CardHeader>
-                )}
-                {(shouldGroup === false || this.state.expanded) && (
-                    <BaseTable
-                        data={items}
-                        hideHeader={true}
-                        columns={[
-                            {
-                                id: 'description',
-                                accessor: (each) => (
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                style={{
-                                                    padding: `0 ${spacingSmall} 0 ${spacingMedium}`,
-                                                }}
-                                                checked={
-                                                    !this.props.excluded[
-                                                        each.reference
-                                                    ]
-                                                }
-                                                onChange={() =>
-                                                    this.props.onToggleExcluded(
-                                                        each.reference,
-                                                    )
-                                                }
-                                                color="default"
-                                            />
-                                        }
-                                        label={
-                                            <span style={{fontWeight: 300}}>
-                                                {renderDescription
-                                                    ? renderDescription(each)
-                                                    : each.description}
-                                            </span>
-                                        }
-                                    />
-                                ),
-                            },
-                            {
-                                id: 'sum',
-                                accessor: (each) =>
-                                    this.numericValue(each.sum, {
-                                        currencyId: each.currencyId,
-                                    }),
-                                style: {textAlign: 'right'},
-                            },
-                        ]}
-                    />
-                )}
-            </div>
-        );
-    }
-}
-
-const CategoryContainer = styled.div`
-    display: grid;
-    grid-template-columns: 10fr 2fr;
-`;
-
-const CategoryToggle = styled.div`
-    text-align: right;
-`;
+    return (
+        <div style={{padding: '0 5px', marginBottom: spacingMedium}}>
+            {shouldGroup && (
+                <CardHeader
+                    classes={cardHeaderClasses}
+                    style={{
+                        padding: 0,
+                        marginTop: Number(id) === 0 ? 5 : 0,
+                        cursor: 'pointer',
+                        color: theme.palette.text.primary,
+                    }}
+                    action={
+                        <IconButton onClick={toggleExpanded}>
+                            {expanded ? <UnfoldLess /> : <UnfoldMore />}
+                        </IconButton>
+                    }
+                    title={
+                        Number(id) === 0 ? (
+                            <em>Unclassified</em>
+                        ) : (
+                            entities.find((each) => each[entityIdField] == id)[
+                                entityNameField
+                            ]
+                        )
+                    }
+                    subheader={numericValue(
+                        items.reduce(
+                            // @ts-ignore
+                            (
+                                acc,
+                                each: {
+                                    reference: string;
+                                    currencyId: number;
+                                    sum: number;
+                                },
+                            ) =>
+                                acc +
+                                (props.excluded[each.reference]
+                                    ? 0
+                                    : convertCurrencyToDefault(
+                                          each.sum,
+                                          each.currencyId,
+                                          props.currencies,
+                                      )),
+                            0,
+                        ),
+                    )}
+                />
+            )}
+            {(shouldGroup === false || expanded) && (
+                <BaseTable
+                    data={items}
+                    hideHeader={true}
+                    columns={[
+                        {
+                            id: 'description',
+                            accessor: (each) => (
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            style={{
+                                                padding: `0 ${spacingSmall} 0 ${spacingMedium}`,
+                                            }}
+                                            checked={
+                                                !props.excluded[each.reference]
+                                            }
+                                            onChange={() =>
+                                                props.onToggleExcluded(
+                                                    each.reference,
+                                                )
+                                            }
+                                            color="default"
+                                        />
+                                    }
+                                    label={
+                                        <span style={{fontWeight: 300}}>
+                                            {renderDescription
+                                                ? renderDescription(each)
+                                                : each.description}
+                                        </span>
+                                    }
+                                />
+                            ),
+                        },
+                        {
+                            id: 'sum',
+                            accessor: (each) =>
+                                numericValue(each.sum, {
+                                    currencyId: each.currencyId,
+                                }),
+                            style: {textAlign: 'right'},
+                        },
+                    ]}
+                />
+            )}
+        </div>
+    );
+};

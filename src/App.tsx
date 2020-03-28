@@ -3,8 +3,6 @@ import {CustomSnackbar} from 'components/snackbars';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {setScreen, updateState} from 'state/actionCreators';
-// @ts-ignore
-import {MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 
 import {createXHR} from 'utils/fetch';
@@ -24,7 +22,12 @@ import {useSnackbars, useUsersWithActions} from 'state/hooks';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
 import {Home} from 'routes/Home';
-import {TypeCategories, TypeMoneyLocations, TypeMoneyLocationTypes, TypeUsers} from './types';
+import {
+    TypeCategories,
+    TypeMoneyLocations,
+    TypeMoneyLocationTypes,
+    TypeUsers,
+} from './types';
 import {fetchCurrencies, useCurrencies} from 'state/currencies';
 import {CurrenciesDrawer} from 'components/currencies/CurrenciesDrawer';
 
@@ -118,7 +121,7 @@ const AppWrapped = () => {
     return (
         <MuiPickersUtilsProvider utils={MomentUtils}>
             <MuiThemeProvider theme={theme}>
-                <V0MuiThemeProvider>
+                <>
                     <ResponsiveGlobalStyle />
                     <>
                         <EventListener
@@ -148,7 +151,7 @@ const AppWrapped = () => {
                         )}
                         <CustomSnackbar {...snackbar} open={snackbar != null} />
                     </>
-                </V0MuiThemeProvider>
+                </>
             </MuiThemeProvider>
         </MuiPickersUtilsProvider>
     );
