@@ -1,7 +1,7 @@
 import {TypeTransactionModel} from 'types';
 import {formatYMD} from 'utils/dates';
 import {Classes} from 'components/BaseTable';
-import {TypeAnchoredContextMenuDisplayProps} from 'components/MainScreen/ContextMenu/AnchoredContextMenu';
+import {MenuProps} from '@material-ui/core';
 
 const today = formatYMD(new Date());
 
@@ -51,7 +51,7 @@ export const getTrProps = ({
 }: {
     item: TypeTransactionModel;
     onChangeContextMenu: (
-        props: Partial<TypeAnchoredContextMenuDisplayProps>,
+        props: Partial<MenuProps>,
     ) => void;
     onReceiveSelectedIds: (ids: number[]) => void;
     onEdit: () => void;
