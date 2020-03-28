@@ -29,6 +29,7 @@ import {
     FormControlLabel,
     Paper,
     Menu,
+    ButtonProps,
 } from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {greyedOut} from 'defs/styles';
@@ -372,8 +373,16 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     };
 
     renderTableHeader() {
+        const buttonProps: ButtonProps = {
+            size: 'small',
+            style: {
+                height: '32px',
+                marginTop: '10px',
+            },
+        };
+
         return (
-            <TableHeader columnCount={5}>
+            <TableHeader columnCount={6}>
                 <>
                     <FormControlLabel
                         control={
@@ -428,24 +437,16 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 </>
                 <Button
                     variant="outlined"
-                    size="small"
                     onClick={this.handleSelectAll}
-                    style={{
-                        height: '32px',
-                        marginTop: '10px',
-                    }}
+                    {...buttonProps}
                 >
                     Select All
                 </Button>
                 <Button
                     color="primary"
                     variant="contained"
-                    size="small"
                     onClick={this.handleToggleAddModal}
-                    style={{
-                        height: '32px',
-                        marginTop: '10px',
-                    }}
+                    {...buttonProps}
                 >
                     Create transaction
                 </Button>
