@@ -17,6 +17,7 @@ import {grey} from '@material-ui/core/colors';
 import {useScreenSize} from 'state/hooks';
 import styled from 'styled-components';
 import {spacingSmall} from 'defs/styles';
+import {Expenses} from 'components/transactions/expenses/Expenses';
 
 export const Dashboard = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);

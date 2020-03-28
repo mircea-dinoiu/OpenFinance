@@ -10,7 +10,7 @@ import {formToModel} from 'components/transactions/expenses/helpers/formToModel'
 import {modelToForm} from 'components/transactions/expenses/helpers/modelToForm';
 import {getFormDefaults} from './helpers/getFormDefaults';
 
-export const ExpenseList = (props: {}) => (
+export const Expenses = (props: {}) => (
     <MainScreenList
         api={routes.transactions}
         tableColumns={ExpenseTableColumns}
