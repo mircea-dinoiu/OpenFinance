@@ -905,7 +905,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             variant="extended"
                             color="primary"
                             onClick={this.handleToggleAddModal}
-                            size={'small'}
                             style={{
                                 position: 'fixed',
                                 bottom: '70px',
