@@ -4,14 +4,13 @@ import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {setScreen, updateState} from 'state/actionCreators';
 // @ts-ignore
-import {Drawer, MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
+import {MuiThemeProvider as V0MuiThemeProvider} from 'material-ui';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 
 import {createXHR} from 'utils/fetch';
 import {routes} from 'defs/routes';
 
 import {Login} from './components/Login';
-import {Currencies} from './components/Currencies';
 import {TopBar} from 'components/TopBar';
 
 import {getScreenQueries} from 'utils/getScreenQueries';
@@ -26,11 +25,8 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
 import {Home} from './components/Home';
 import {TypeCategories, TypeMoneyLocations, TypeMoneyLocationTypes, TypeUsers} from './types';
-import {
-    fetchCurrencies,
-    useCurrencies,
-    useCurrenciesDrawerOpenWithActions,
-} from 'state/currencies';
+import {fetchCurrencies, useCurrencies} from 'state/currencies';
+import {CurrenciesDrawer} from 'components/CurrenciesDrawer';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
     html, body {
@@ -54,10 +50,6 @@ const AppWrapped = () => {
     const [users, {setUsers}] = useUsersWithActions();
     const currencies = useCurrencies();
     const [snackbar] = useSnackbars();
-    const [
-        currenciesDrawerOpen,
-        {setCurrenciesDrawerOpen},
-    ] = useCurrenciesDrawerOpenWithActions();
     const [ready, setReady] = useState(false);
 
     const fetchUser = async () => {
@@ -129,23 +121,15 @@ const AppWrapped = () => {
                 <V0MuiThemeProvider>
                     <ResponsiveGlobalStyle />
                     <>
-                        <EventListener target="window" onResize={onWindowResize} />
+                        <EventListener
+                            target="window"
+                            onResize={onWindowResize}
+                        />
                         <TopBar
                             showCurrenciesDrawer={isCurrenciesDrawerReady()}
                             onLogout={onLogout}
                         />
-                        {isCurrenciesDrawerReady() && (
-                            <Drawer
-                                docked={false}
-                                open={currenciesDrawerOpen}
-                                openSecondary={true}
-                                onRequestChange={(value) =>
-                                    setCurrenciesDrawerOpen(value)
-                                }
-                            >
-                                <Currencies />
-                            </Drawer>
-                        )}
+                        {isCurrenciesDrawerReady() && <CurrenciesDrawer />}
                         {ready && (
                             <BrowserRouter>
                                 <Switch>
@@ -163,7 +147,7 @@ const AppWrapped = () => {
                             </BrowserRouter>
                         )}
                         <CustomSnackbar {...snackbar} open={snackbar != null} />
-                        </>
+                    </>
                 </V0MuiThemeProvider>
             </MuiThemeProvider>
         </MuiPickersUtilsProvider>

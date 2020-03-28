@@ -808,7 +808,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         top={this.state.contextMenuTop}
                     >
                         <ContextMenuItems
-                            desktop={true}
                             {...this.getContextMenuItemsProps()}
                         />
                     </AnchoredContextMenu>

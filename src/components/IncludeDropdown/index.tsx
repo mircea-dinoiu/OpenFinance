@@ -1,81 +1,73 @@
 import * as React from 'react';
-import {MenuItem, SelectField} from 'material-ui';
 import {usePreferences} from 'state/hooks';
+import {SingleSelect} from 'components/Select';
 
 const getIncludeOptions = ({endDate}) => {
     const currentYear = new Date(endDate).getFullYear();
 
     return [
         {
-            id: 'all',
-            name: 'Everything',
+            value: 'all',
+            label: 'Everything',
         },
         {
-            id: 'until-tmrw',
-            name: 'Until tomorrow',
+            value: 'until-tmrw',
+            label: 'Until tomorrow',
         },
         {
-            id: 'ut',
-            name: 'Until today',
+            value: 'ut',
+            label: 'Until today',
         },
         {
-            id: 'until-now',
-            name: 'Until now',
+            value: 'until-now',
+            label: 'Until now',
         },
         {
-            id: 'until-yd',
-            name: 'Until yesterday',
+            value: 'until-yd',
+            label: 'Until yesterday',
         },
         {
-            id: 'ld',
-            name: '1 day before',
+            value: 'ld',
+            label: '1 day before',
         },
         {
-            id: 'lw',
-            name: '1 week before',
+            value: 'lw',
+            label: '1 week before',
         },
         {
-            id: 'lm',
-            name: '1 month before',
+            value: 'lm',
+            label: '1 month before',
         },
         {
-            id: 'ly',
-            name: '1 year before',
+            value: 'ly',
+            label: '1 year before',
         },
         {
-            id: 'previous-year',
-            name: `Throughout ${currentYear - 1}`,
+            value: 'previous-year',
+            label: `Throughout ${currentYear - 1}`,
         },
         {
-            id: 'current-year',
-            name: `Throughout ${currentYear}`,
+            value: 'current-year',
+            label: `Throughout ${currentYear}`,
         },
         {
-            id: 'next-year',
-            name: `Throughout ${currentYear + 1}`,
+            value: 'next-year',
+            label: `Throughout ${currentYear + 1}`,
         },
     ];
 };
 
 export const IncludeDropdown = ({onChange, value}) => {
     const {endDate} = usePreferences();
+    const options = getIncludeOptions({endDate});
 
     return (
-        <SelectField
-            floatingLabelText="Include results"
-            floatingLabelFixed={true}
+        <SingleSelect
+            label="Include results"
             value={value}
-            onChange={(e, i, newValue) => onChange(newValue)}
+            onChange={onChange}
             fullWidth={true}
-            style={{margin: '-10px 0 0'}}
-        >
-            {getIncludeOptions({endDate}).map((option) => (
-                <MenuItem
-                    key={option.id}
-                    value={option.id}
-                    primaryText={option.name}
-                />
-            ))}
-        </SelectField>
+            options={options}
+        />
     );
 };

@@ -4,15 +4,27 @@ import {MenuItem, ListSubheader as Subheader} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
 import {TypeCurrency} from 'types';
 import {useUsers} from 'state/hooks';
-import {fetchCurrencies, setCurrenciesSelectedId, useCurrencies} from 'state/currencies';
+import {
+    fetchCurrencies,
+    setCurrenciesSelectedId,
+    useCurrencies,
+} from 'state/currencies';
+import {makeStyles} from '@material-ui/core/styles';
 
-export const Currencies = () => {
+const useStyles = makeStyles({
+    main: {
+        width: 250,
+    },
+});
+
+export const CurrenciesDrawerContent = () => {
     const user = useUsers();
     const currencies = useCurrencies();
     const map = currencies;
     const defaultCurrencyId = currencies.selected.id;
     const defaultCurrency = map[String(defaultCurrencyId)];
     const dispatch = useDispatch();
+    const cls = useStyles();
 
     const handleChangeBaseCurrency = (id: number) => {
         dispatch(setCurrenciesSelectedId(id));
@@ -31,7 +43,7 @@ export const Currencies = () => {
     }, [dispatch, user]);
 
     return (
-        <>
+        <div className={cls.main}>
             <Subheader>Base Currency</Subheader>
             <div
                 style={{
@@ -39,12 +51,10 @@ export const Currencies = () => {
                 }}
             >
                 <SingleSelect
-                    options={Object.values(map).map(
-                        (each: TypeCurrency) => ({
-                            value: each.id,
-                            label: each.iso_code,
-                        }),
-                    )}
+                    options={Object.values(map).map((each: TypeCurrency) => ({
+                        value: each.id,
+                        label: each.iso_code,
+                    }))}
                     value={defaultCurrencyId}
                     onChange={handleChangeBaseCurrency}
                 />
@@ -60,6 +70,6 @@ export const Currencies = () => {
                         </MenuItem>
                     ),
             )}
-        </>
+        </div>
     );
 };
