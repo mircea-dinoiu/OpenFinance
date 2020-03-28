@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {Divider, MenuItem, ListItemIcon, ListItemText, SvgIconTypeMap} from '@material-ui/core';
+import {
+    Divider,
+    MenuItem,
+    ListItemIcon,
+    ListItemText,
+    SvgIconTypeMap,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 import DuplicateIcon from '@material-ui/icons/FileCopy';
@@ -106,7 +112,7 @@ export function ContextMenuItems({
                     icon: IconUnarchive,
                     text: 'Unarchive',
                 },
-            ].map((opt) => {
+            ].map((opt, i) => {
                 if (React.isValidElement(opt)) {
                     return opt;
                 }
@@ -122,6 +128,7 @@ export function ContextMenuItems({
                     opt
                 ) : (
                     <MenuItem
+                        key={i}
                         onClick={() => {
                             onCloseContextMenu();
                             onClick();
