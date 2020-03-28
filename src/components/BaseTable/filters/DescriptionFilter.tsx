@@ -1,10 +1,16 @@
 import * as React from 'react';
 import {SyntheticEvent} from 'react';
-import {IconButton, IconMenu, RadioButton, RadioButtonGroup} from 'material-ui';
 import IconFilterList from '@material-ui/icons/FilterList';
 import {DebounceInput} from 'react-debounce-input';
 import {gridGap, spacingLarge} from 'defs/styles';
 import styled from 'styled-components';
+import {
+    Menu,
+    IconButton,
+    Radio,
+    RadioGroup,
+    FormControlLabel,
+} from '@material-ui/core';
 
 const PENDING = 'Pending';
 const RECURRENT = 'Recurrent';
@@ -16,20 +22,22 @@ const ONLY = 'only';
 const Subfilter = ({filter, name, onChange}) => (
     <div>
         Display {name} Transactions
-        <RadioButtonGroup
+        <RadioGroup
             name={name}
-            defaultSelected={
-                (filter && filter.value && filter.value[name]) || YES
-            }
+            value={(filter && filter.value && filter.value[name]) || YES}
             style={{margin: '10px 0 0'}}
             onChange={(event: SyntheticEvent<HTMLInputElement>) =>
                 onChange(name, event.currentTarget.value)
             }
         >
-            <RadioButton value={YES} label="Yes" />
-            <RadioButton value={NO} label="No" />
-            <RadioButton value={ONLY} label="Exclusive" />
-        </RadioButtonGroup>
+            <FormControlLabel value={YES} label="Yes" control={<Radio />} />
+            <FormControlLabel value={NO} label="No" control={<Radio />} />
+            <FormControlLabel
+                value={ONLY}
+                label="Exclusive"
+                control={<Radio />}
+            />
+        </RadioGroup>
     </div>
 );
 
@@ -49,20 +57,28 @@ export const DescriptionFilter = ({onChange, filter}) => {
 
         onChange(newFilter);
     };
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <div style={{textAlign: 'left', display: 'flex', flexDirection: 'row'}}>
-            <IconMenu
-                iconButtonElement={
-                    <IconButton
-                        style={{padding: 0, width: 'auto', height: 'auto'}}
-                    >
-                        <IconFilterList />
-                    </IconButton>
-                }
-                style={{position: 'relative', top: 5}}
-                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            <IconButton
+                style={{padding: 0, width: 'auto', height: 'auto'}}
+                onClick={handleClick}
+            >
+                <IconFilterList />
+            </IconButton>
+            <Menu
+                anchorEl={anchorEl}
+                open={!!anchorEl}
+                onClose={handleClose}
             >
                 <SubfilterGrid>
                     <Subfilter
@@ -86,7 +102,7 @@ export const DescriptionFilter = ({onChange, filter}) => {
                         filter={filter}
                     />
                 </SubfilterGrid>
-            </IconMenu>
+            </Menu>
 
             <DebounceInput
                 placeholder="Type to search..."
