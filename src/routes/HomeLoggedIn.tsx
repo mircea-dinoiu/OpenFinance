@@ -17,6 +17,9 @@ import {grey} from '@material-ui/core/colors';
 import {useScreenSize} from 'state/hooks';
 import styled from 'styled-components';
 import {spacingSmall} from 'defs/styles';
+import {Categories} from 'components/categories/Categories';
+import {Accounts} from 'components/accounts/Accounts';
+import {AccountTypes} from 'components/accountTypes/AccountTypes';
 
 export const HomeLoggedIn = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -57,6 +60,12 @@ export const HomeLoggedIn = () => {
                         </TransactionsContentContainer>
                     </TransactionsContainer>
                 );
+            case 1:
+                return <Categories />;
+            case 2:
+                return <Accounts />;
+            case 3:
+                return <AccountTypes />;
         }
 
         return renderComingSoon();

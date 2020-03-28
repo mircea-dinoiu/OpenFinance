@@ -1,7 +1,7 @@
 import * as React from 'react';
-import ReactTable from 'react-table';
+import ReactTable from 'react-table-6';
 import styled, {css} from 'styled-components';
-import 'react-table/react-table.css';
+import 'react-table-6/react-table.css';
 import {green, red} from '@material-ui/core/colors';
 import {spacingLarge, spacingSmall, gridGap} from 'defs/styles';
 
@@ -66,7 +66,8 @@ const ReactTableStyled = styled(ReactTable)`
             user-select: none;
         }
 
-        ${(props) => props.hideHeader && reactTableHideHead}
+        ${(props: {hideHeader?: boolean}) =>
+            props.hideHeader && reactTableHideHead}
     }
 `;
 
@@ -76,7 +77,10 @@ export const TableHeader = styled.div`
     border-bottom: 1px solid rgb(244, 244, 244);
     display: grid;
     grid-gap: ${gridGap};
-    grid-template-columns: repeat(${(props: {columnCount: number}) => props.columnCount}, max-content);
+    grid-template-columns: repeat(
+        ${(props: {columnCount: number}) => props.columnCount},
+        max-content
+    );
 `;
 
 export const TableFooter = styled.div`
