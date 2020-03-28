@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {Flags} from 'components/internal/common/MainScreenFlags';
+import {Flags} from 'components/transactions/common/MainScreenFlags';
 import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';
 import {RepeatsDisplay} from 'components/BaseTable/cells/RepeatsDisplay';
 import {DateDisplay} from 'components/BaseTable/cells/DateDisplay';
-import {CategoriesDisplay} from 'components/internal/expenses/cells/CategoriesDisplay';
+import {CategoriesDisplay} from 'components/transactions/expenses/cells/CategoriesDisplay';
 import {AmountDisplay} from 'components/BaseTable/cells/AmountDisplay';
-import {PersonsDisplay} from 'components/internal/expenses/cells/PersonsDisplay';
+import {PersonsDisplay} from 'components/transactions/expenses/cells/PersonsDisplay';
 import styled from 'styled-components';
 
 const ExpenseListItemContentStyled = styled.div`

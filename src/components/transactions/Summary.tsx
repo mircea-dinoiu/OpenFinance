@@ -8,7 +8,7 @@ import identity from 'lodash/identity';
 import {IncludeDropdown} from 'components/IncludeDropdown';
 import {getStartDate} from 'utils/dates';
 import {spacingMedium} from 'defs/styles';
-import {SummaryCategory} from 'components/internal/summary/SummaryCategory';
+import {SummaryCategory} from 'components/transactions/summary/SummaryCategory';
 import moment from 'moment';
 import {endOfDayToISOString} from 'js/utils/dates';
 import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';

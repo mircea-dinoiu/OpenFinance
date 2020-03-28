@@ -13,7 +13,7 @@ import {
     mapItemToDetachedUpdates,
     mapItemToRepeatedUpdates,
     mergeItems,
-} from 'components/internal/common/helpers';
+} from 'components/transactions/common/helpers';
 import React, {PureComponent} from 'react';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -33,7 +33,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {greyedOut} from 'defs/styles';
 import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
 import {getTrProps} from 'components/MainScreen/Table/helpers';
-import {MainScreenListGroup} from 'components/internal/common/MainScreenListGroup';
+import {MainScreenListGroup} from 'components/transactions/common/MainScreenListGroup';
 import {MainScreenCreatorDialog} from './MainScreenCreatorDialog';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {numericValue} from 'components/formatters';
@@ -49,7 +49,7 @@ import IconButton from '@material-ui/core/IconButton';
 import IconSplit from '@material-ui/icons/CallSplitRounded';
 import {Tooltip} from 'components/Tooltip';
 import Chip from '@material-ui/core/Chip';
-import {WeightDisplay} from 'components/internal/expenses/cells/WeightDisplay';
+import {WeightDisplay} from 'components/transactions/expenses/cells/WeightDisplay';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {ContextMenuItems} from 'components/MainScreen/ContextMenu/ContextMenuItems';

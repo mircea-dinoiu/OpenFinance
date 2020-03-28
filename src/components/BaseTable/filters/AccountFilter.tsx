@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {SelectFilter} from './SelectFilter';
-import {sortMoneyLocations} from 'components/internal/common/helpers';
+import {sortMoneyLocations} from 'components/transactions/common/helpers';
 import {useMoneyLocations} from 'state/hooks';
 
 export const AccountFilter = ({onChange, filter}) => (

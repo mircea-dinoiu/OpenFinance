@@ -6,14 +6,14 @@ import * as React from 'react';
 import {DescriptionDisplay} from 'components/BaseTable/cells/DescriptionDisplay';
 import {AmountColumn} from 'components/BaseTable/columns/AmountColumn';
 import {DateTimeColumn} from 'components/BaseTable/columns/DateTimeColumn';
-import {WeightDisplay} from 'components/internal/expenses/cells/WeightDisplay';
-import {CategoriesDisplay} from 'components/internal/expenses/cells/CategoriesDisplay';
+import {WeightDisplay} from 'components/transactions/expenses/cells/WeightDisplay';
+import {CategoriesDisplay} from 'components/transactions/expenses/cells/CategoriesDisplay';
 import {AccountColumn} from 'components/BaseTable/columns/AccountColumn';
-import {PersonsDisplay} from 'components/internal/expenses/cells/PersonsDisplay';
+import {PersonsDisplay} from 'components/transactions/expenses/cells/PersonsDisplay';
 import {RepeatColumn} from 'components/BaseTable/columns/RepeatColumn';
 import {DescriptionFilter} from 'components/BaseTable/filters/DescriptionFilter';
 import {UsersFilter} from 'components/BaseTable/filters/UsersFilter';
-import {RatingDisplay} from 'components/internal/expenses/cells/RatingDisplay';
+import {RatingDisplay} from 'components/transactions/expenses/cells/RatingDisplay';
 
 export const ExpenseTableColumns = ({updateRecords}) => [
     AmountColumn,
