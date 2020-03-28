@@ -1,15 +1,15 @@
 import * as React from 'react';
 import moment from 'moment';
 import {CalendarWithoutTime} from 'defs/formats';
-import {Divider, List, Subheader} from 'material-ui';
+import {Divider, List, ListSubheader} from '@material-ui/core';
 import {MainScreenListItem} from 'components/transactions/MainScreenListItem';
 
 export const MainScreenListGroup = ({date, items, itemProps}) => (
     <div>
         <List>
-            <Subheader style={{textAlign: 'center'}}>
+            <ListSubheader style={{textAlign: 'center'}}>
                 {moment(date).calendar(null, CalendarWithoutTime)}
-            </Subheader>
+            </ListSubheader>
             {items.map((item) => (
                 <MainScreenListItem key={item.id} item={item} {...itemProps} />
             ))}
