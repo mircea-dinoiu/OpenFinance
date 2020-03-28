@@ -22,7 +22,13 @@ import {BigLoader} from 'components/loaders';
 
 import {createXHR} from 'utils/fetch';
 
-import {Button, Checkbox, Fab, FormControlLabel, Paper} from '@material-ui/core';
+import {
+    Button,
+    Checkbox,
+    Fab,
+    FormControlLabel,
+    Paper,
+} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {greyedOut} from 'defs/styles';
 import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
@@ -100,6 +106,8 @@ type TypeState = {
     editDialogOpen: boolean;
     editDialogKey: string;
     deleteDialogOpen: boolean;
+    pendingFirst: boolean;
+    displayHidden: boolean;
     splitAmount: string;
 
     contextMenuDisplay: boolean;
@@ -108,7 +116,7 @@ type TypeState = {
 };
 
 class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
-    state = {
+    state: TypeState = {
         firstLoad: true,
         pageSize: 50,
         page: 1,

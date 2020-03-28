@@ -7,7 +7,11 @@ const today = formatYMD(new Date());
 
 export const getTrClassName = (
     item: TypeTransactionModel,
-    {selectedIds},
+    {
+        selectedIds,
+    }: {
+        selectedIds: number[];
+    },
 ): string => {
     const classes = [Classes.notSelectable];
 
@@ -31,7 +35,7 @@ export const getTrClassName = (
         classes.push(Classes.hiddenRow);
     }
 
-    if (selectedIds[item.id]) {
+    if (selectedIds.includes(item.id)) {
         classes.push(Classes.selectedRow);
     }
 
@@ -51,9 +55,7 @@ export const getTrProps = ({
     ) => void;
     onReceiveSelectedIds: (ids: number[]) => void;
     onEdit: () => void;
-    selectedIds: {
-        [key: number]: boolean;
-    };
+    selectedIds: number[];
 }) => ({
     className: getTrClassName(item, {selectedIds}),
     onDoubleClick: () => {
@@ -67,21 +69,23 @@ export const getTrProps = ({
     onClick(event: MouseEvent) {
         onChangeContextMenu({display: false});
 
-        let newSelected;
+        let nextSelected = selectedIds;
 
         if (event.metaKey || event.ctrlKey) {
             if (item.persist !== false) {
-                newSelected = {...selectedIds};
-
-                newSelected[item.id] = !selectedIds[item.id];
+                if (selectedIds.includes(item.id)) {
+                    nextSelected = nextSelected.filter((id) => id !== item.id);
+                } else {
+                    nextSelected = nextSelected.concat(item.id);
+                }
             } else {
                 return;
             }
         } else {
-            newSelected = item.persist !== false ? {[item.id]: true} : {};
+            nextSelected = item.persist !== false ? [item.id] : [];
         }
 
-        onReceiveSelectedIds(newSelected);
+        onReceiveSelectedIds(nextSelected);
     },
     onContextMenu: (event: MouseEvent) => {
         event.preventDefault();
