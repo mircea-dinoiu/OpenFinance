@@ -2,6 +2,7 @@ import * as React from 'react';
 import {ShiftDateOptions} from 'defs';
 import {RepeatOption} from 'js/defs';
 import {$Keys, $Values} from 'utility-types';
+import {AlertProps} from '@material-ui/lab';
 
 export type TypeScreenQueries = {
     isSmall: boolean;
@@ -137,13 +138,11 @@ export type TypeShiftDateOption = $Keys<typeof ShiftDateOptions>;
 
 export type TypeSnackbarProps = {
     message: React.ReactNode;
-    bodyStyle?: {
-        backgroundColor: string;
-    };
 };
 
 export type TypeSnackbar = {
     id: string;
+    severity: AlertProps['severity'];
 } & TypeSnackbarProps;
 
 export type TypeGlobalState = {
