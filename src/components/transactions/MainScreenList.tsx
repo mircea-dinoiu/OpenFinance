@@ -28,6 +28,7 @@ import {
     Fab,
     FormControlLabel,
     Paper,
+    Menu,
 } from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {greyedOut} from 'defs/styles';
@@ -37,7 +38,6 @@ import {MainScreenListGroup} from 'components/transactions/MainScreenListGroup';
 import {MainScreenCreatorDialog} from 'components/transactions/MainScreenCreatorDialog';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {numericValue} from 'components/formatters';
-import {AnchoredContextMenu} from 'components/MainScreen/ContextMenu/AnchoredContextMenu';
 import {MainScreenDeleteDialog} from 'components/transactions/MainScreenDeleteDialog';
 import {MainScreenEditDialog} from 'components/transactions/MainScreenEditDialog';
 import AddIcon from '@material-ui/icons/Add';
@@ -802,15 +802,19 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         />
                     </div>
                     {this.renderTableFooter()}
-                    <AnchoredContextMenu
-                        display={this.state.contextMenuDisplay}
-                        left={this.state.contextMenuLeft}
-                        top={this.state.contextMenuTop}
+                    <Menu
+                        open={this.state.contextMenuDisplay}
+                        anchorReference="anchorPosition"
+                        anchorPosition={{
+                            top: this.state.contextMenuTop,
+                            left: this.state.contextMenuLeft,
+                        }}
+                        onClose={this.handleCloseContextMenu}
                     >
                         <ContextMenuItems
                             {...this.getContextMenuItemsProps()}
                         />
-                    </AnchoredContextMenu>
+                    </Menu>
                 </Paper>
             );
         }
