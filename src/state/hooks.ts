@@ -48,19 +48,6 @@ export const useCategories = () =>
 export const useSnackbars = (): TypeSnackbar[] =>
     useSelector((s: TypeGlobalState) => s.snackbars);
 
-export const useTitle = () => useSelector((s: TypeGlobalState) => s.title);
-export const useTitleWithSetter = (): [string, (title: string) => void] => {
-    const dispatch = useDispatch();
-    const setTitle = useCallback(
-        (title: string) => {
-            dispatch(updateState({title}));
-        },
-        [dispatch],
-    );
-
-    return [useTitle(), setTitle];
-};
-
 export const useMoneyLocationTypes = () =>
     useSelector((s: TypeGlobalState) => s.moneyLocationTypes);
 

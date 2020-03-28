@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {createMuiTheme} from '@material-ui/core/styles';
-import {blue} from '@material-ui/core/colors';
+import {blue, grey} from '@material-ui/core/colors';
 
 export const flexColumn: React.CSSProperties = {
     display: 'flex',
@@ -37,6 +37,9 @@ export const theme = createMuiTheme({
     palette: {
         primary: blue,
         // type: 'dark',
+        background: {
+            default: grey[300]
+        }
     },
     typography: {
         htmlFontSize: 16,

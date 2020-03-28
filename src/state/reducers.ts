@@ -33,7 +33,6 @@ const snackbars = (state = [], action) => {
 
     return state;
 };
-const title = bindToUpdateState('title', 'Loading...');
 const categories = bindToUpdateState('categories', []);
 const moneyLocations = bindToUpdateState('moneyLocations', []);
 const moneyLocationTypes = bindToUpdateState('moneyLocationTypes', []);
@@ -42,7 +41,6 @@ export const combinedReducers = combineReducers({
     // @deprecated screen is a global in Window, use screenSize instead
     screen,
     screenSize,
-    title,
 
     currencies,
     currenciesDrawerOpen,

@@ -28,7 +28,6 @@ import {
     usePreferencesWithActions,
     useRefreshWidgetsDispatcher,
     useScreenSize,
-    useTitle,
     useUsers,
 } from '../../state/hooks';
 import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
@@ -64,7 +63,6 @@ export const TopBar = (props: {
     const [, {setCurrenciesDrawerOpen}] = useCurrenciesDrawerOpenWithActions();
     const screenSize = useScreenSize();
     const user = useUsers();
-    const title = useTitle();
 
     const shiftBack = (date) => {
         updatePreferences({
@@ -231,7 +229,7 @@ export const TopBar = (props: {
                 }}
             >
                 <Typography variant="h6" color="inherit">
-                    {title}
+                    {document.title}
                 </Typography>
                 {user && (
                     <Paper

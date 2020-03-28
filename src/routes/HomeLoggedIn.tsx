@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {BottomNavigation, BottomNavigationAction, Paper, Tab, Tabs} from '@material-ui/core';
+import {
+    BottomNavigation,
+    BottomNavigationAction,
+    Paper,
+    Tab,
+    Tabs,
+} from '@material-ui/core';
 
 import {Expenses} from 'components/transactions/Expenses';
 import {Summary} from 'components/transactions/Summary';
@@ -60,7 +66,7 @@ export const HomeLoggedIn = () => {
 
     const renderLarge = () => (
         <>
-            <Paper style={{marginBottom: spacingSmall}}>
+            <Paper style={{margin: spacingSmall}}>
                 <Tabs
                     value={selectedIndex}
                     onChange={(event, index) => setSelectedIndex(index)}
@@ -73,7 +79,13 @@ export const HomeLoggedIn = () => {
                     ]}
                 </Tabs>
             </Paper>
-            {renderDesktopTab(selectedIndex)}
+            <div
+                style={{
+                    padding: `0 ${spacingSmall} ${spacingSmall}`,
+                }}
+            >
+                {renderDesktopTab(selectedIndex)}
+            </div>
         </>
     );
 

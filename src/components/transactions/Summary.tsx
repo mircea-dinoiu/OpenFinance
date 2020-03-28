@@ -19,7 +19,6 @@ import {
     useMoneyLocationTypes,
     usePreferencesWithActions,
     useRefreshWidgets,
-    useScreenSize,
     useUsers,
 } from 'state/hooks';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
@@ -166,7 +165,7 @@ export const Summary = () => {
     return (
         <div
             style={{
-                padding: '0 5px',
+                marginRight: spacingSmall,
             }}
         >
             {refreshing && <LoadingTopBar />}

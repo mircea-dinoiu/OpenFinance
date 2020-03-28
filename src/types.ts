@@ -147,7 +147,6 @@ export type TypeSnackbar = {
 
 export type TypeGlobalState = {
     preferences: TypePreferences;
-    title: string;
 
     currencies: TypeCurrencies;
     currenciesDrawerOpen: boolean;
