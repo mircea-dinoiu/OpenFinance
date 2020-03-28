@@ -1,8 +1,8 @@
-import {useTitleWithSetter, useUsers} from '../state/hooks';
+import {useTitleWithSetter, useUsers} from 'state/hooks';
 import * as React from 'react';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';
-import {Dashboard} from './Dashboard';
+import {HomeLoggedIn} from 'routes/HomeLoggedIn';
 
 export const Home = () => {
     const user = useUsers();
@@ -13,7 +13,7 @@ export const Home = () => {
     }, [setTitle]);
 
     if (user) {
-        return <Dashboard />;
+        return <HomeLoggedIn />;
     }
 
     return <Redirect to={paths.login} />;

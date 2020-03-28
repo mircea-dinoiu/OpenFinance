@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Flags} from 'components/transactions/common/MainScreenFlags';
+import {Flags} from 'components/transactions/MainScreenFlags';
 import styled from 'styled-components';
 
 const DescriptionDisplayStyled = styled.span`

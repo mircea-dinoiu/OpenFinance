@@ -5,7 +5,7 @@ import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import {Card, CardHeader, CardText} from 'material-ui';
 import {financialNum} from 'js/utils/numbers';
-import {SummarySubCategory} from 'components/transactions/summary/SummarySubCategory';
+import {SummarySubCategory} from 'components/transactions/SummarySubCategory';
 import {numericValue} from 'components/formatters';
 import {useCurrencies} from 'state/currencies';
 

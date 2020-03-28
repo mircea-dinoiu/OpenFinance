@@ -10,7 +10,7 @@ import {MuiThemeProvider} from '@material-ui/core/styles';
 import {createXHR} from 'utils/fetch';
 import {routes} from 'defs/routes';
 
-import {Login} from './components/Login';
+import {Login} from 'routes/Login';
 import {TopBar} from 'components/TopBar';
 
 import {getScreenQueries} from 'utils/getScreenQueries';
@@ -23,10 +23,10 @@ import 'normalize.css';
 import {useSnackbars, useUsersWithActions} from 'state/hooks';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
-import {Home} from './components/Home';
+import {Home} from 'routes/Home';
 import {TypeCategories, TypeMoneyLocations, TypeMoneyLocationTypes, TypeUsers} from './types';
 import {fetchCurrencies, useCurrencies} from 'state/currencies';
-import {CurrenciesDrawer} from 'components/CurrenciesDrawer';
+import {CurrenciesDrawer} from 'components/currencies/CurrenciesDrawer';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
     html, body {

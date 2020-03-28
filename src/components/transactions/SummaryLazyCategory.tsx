@@ -1,9 +1,9 @@
 import React from 'react';
-import {SummaryCategory, headerColor} from './SummaryCategory';
-import {createXHR} from '../../../utils/fetch';
+import {SummaryCategory, headerColor} from 'components/transactions/SummaryCategory';
+import {createXHR} from 'utils/fetch';
 import {Card, CardHeader, CardText} from 'material-ui';
-import {BigLoader} from '../../loaders';
-import {useRefreshWidgets} from '../../../state/hooks';
+import {BigLoader} from 'components/loaders';
+import {useRefreshWidgets} from 'state/hooks';
 
 export const SummaryLazyCategory = ({
     expandedByDefault = false,

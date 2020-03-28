@@ -1,4 +1,4 @@
-import {setChargedPersonValueFactory} from './ExpenseForm';
+import {setChargedPersonValueFactory} from 'components/transactions/ExpenseForm';
 
 describe('#setChargedPersonValueFactory()', () => {
     describe('When adjust is true', () => {

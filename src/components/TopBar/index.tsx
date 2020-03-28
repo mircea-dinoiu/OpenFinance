@@ -1,4 +1,4 @@
-import {SingleSelect} from 'components/Select';
+import {SingleSelect} from 'components/dropdowns';
 import {TypeShiftDateOption} from 'types';
 import React from 'react';
 import {

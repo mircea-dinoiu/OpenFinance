@@ -1,14 +1,8 @@
 import * as React from 'react';
-import {
-    BottomNavigation,
-    BottomNavigationAction,
-    Paper,
-    Tab,
-    Tabs,
-} from '@material-ui/core';
+import {BottomNavigation, BottomNavigationAction, Paper, Tab, Tabs} from '@material-ui/core';
 
-import {Expenses} from './transactions/Expenses';
-import {Summary} from './transactions/Summary';
+import {Expenses} from 'components/transactions/Expenses';
+import {Summary} from 'components/transactions/Summary';
 
 import AccountBalance from '@material-ui/icons/AccountBalance';
 import TrendingDown from '@material-ui/icons/TrendingDown';
@@ -17,9 +11,8 @@ import {grey} from '@material-ui/core/colors';
 import {useScreenSize} from 'state/hooks';
 import styled from 'styled-components';
 import {spacingSmall} from 'defs/styles';
-import {Expenses} from 'components/transactions/expenses/Expenses';
 
-export const Dashboard = () => {
+export const HomeLoggedIn = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const screenSize = useScreenSize();
 

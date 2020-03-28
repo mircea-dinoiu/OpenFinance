@@ -13,7 +13,7 @@ import {
     mapItemToDetachedUpdates,
     mapItemToRepeatedUpdates,
     mergeItems,
-} from 'components/transactions/common/helpers';
+} from 'components/transactions/helpers';
 import React, {PureComponent} from 'react';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -33,13 +33,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {greyedOut} from 'defs/styles';
 import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
 import {getTrProps} from 'components/MainScreen/Table/helpers';
-import {MainScreenListGroup} from 'components/transactions/common/MainScreenListGroup';
-import {MainScreenCreatorDialog} from './MainScreenCreatorDialog';
+import {MainScreenListGroup} from 'components/transactions/MainScreenListGroup';
+import {MainScreenCreatorDialog} from 'components/transactions/MainScreenCreatorDialog';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {numericValue} from 'components/formatters';
 import {AnchoredContextMenu} from 'components/MainScreen/ContextMenu/AnchoredContextMenu';
-import {MainScreenDeleteDialog} from './MainScreenDeleteDialog';
-import {MainScreenEditDialog} from './MainScreenEditDialog';
+import {MainScreenDeleteDialog} from 'components/transactions/MainScreenDeleteDialog';
+import {MainScreenEditDialog} from 'components/transactions/MainScreenEditDialog';
 import AddIcon from '@material-ui/icons/Add';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
@@ -49,14 +49,14 @@ import IconButton from '@material-ui/core/IconButton';
 import IconSplit from '@material-ui/icons/CallSplitRounded';
 import {Tooltip} from 'components/Tooltip';
 import Chip from '@material-ui/core/Chip';
-import {WeightDisplay} from 'components/transactions/expenses/cells/WeightDisplay';
+import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {ContextMenuItems} from 'components/MainScreen/ContextMenu/ContextMenuItems';
 import {makeUrl} from 'utils/url';
-import {StatsTable} from './StatsTable';
-import {SplitAmountField} from './SplitAmountField';
-import {LoadMore} from './LoadMore';
+import {StatsTable} from 'components/transactions/StatsTable';
+import {SplitAmountField} from 'components/transactions/SplitAmountField';
+import {LoadMore} from 'components/transactions/LoadMore';
 
 type TypeProps = {
     api: string;

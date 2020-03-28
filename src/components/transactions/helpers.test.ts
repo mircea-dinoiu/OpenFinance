@@ -1,4 +1,4 @@
-import {mapItemToRepeatedUpdates, mapItemToDetachedUpdates, mergeItems} from './helpers';
+import {mapItemToRepeatedUpdates, mapItemToDetachedUpdates, mergeItems} from 'components/transactions/helpers';
 
 describe('#mapItemToRepeatedUpdates()', () => {
     describe('When repeat_occurrences is not null', () => {

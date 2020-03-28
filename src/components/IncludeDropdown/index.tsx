@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {usePreferences} from 'state/hooks';
-import {SingleSelect} from 'components/Select';
+import {SingleSelect} from 'components/dropdowns';
 
 const getIncludeOptions = ({endDate}) => {
     const currentYear = new Date(endDate).getFullYear();

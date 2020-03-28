@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles} from '@material-ui/core';
-import {MultiSelect, SingleSelect} from 'components/Select';
+import {MultiSelect, SingleSelect} from 'components/dropdowns';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 
 const styles = {

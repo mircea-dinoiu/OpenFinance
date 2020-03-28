@@ -6,7 +6,7 @@ import {createXHR} from 'utils/fetch';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useDispatch} from 'react-redux';
 import {setUsers} from 'state/actionCreators';
-import {useTitleWithSetter, useUsers} from '../state/hooks';
+import {useTitleWithSetter, useUsers} from 'state/hooks';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';
 import styled from 'styled-components';
@@ -15,8 +15,8 @@ import {
     screenQueryMedium,
     screenQuerySmall,
     spacingLarge,
-} from '../defs/styles';
-import {TypeUsers} from '../types';
+} from 'defs/styles';
+import {TypeUsers} from 'types';
 import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles({

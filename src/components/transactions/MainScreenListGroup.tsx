@@ -2,7 +2,7 @@ import * as React from 'react';
 import moment from 'moment';
 import {CalendarWithoutTime} from 'defs/formats';
 import {Divider, List, Subheader} from 'material-ui';
-import {MainScreenListItem} from 'components/transactions/common/MainScreenListItem';
+import {MainScreenListItem} from 'components/transactions/MainScreenListItem';
 
 export const MainScreenListGroup = ({date, items, itemProps}) => (
     <div>

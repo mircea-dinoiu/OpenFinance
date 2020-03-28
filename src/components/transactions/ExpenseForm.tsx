@@ -24,7 +24,7 @@ import {RepeatOptions} from 'defs/repeatOptions';
 import {createXHR} from 'utils/fetch';
 import {routes} from 'defs/routes';
 import {useSelector} from 'react-redux';
-import {MultiSelect, SingleSelect} from 'components/Select';
+import {MultiSelect, SingleSelect} from 'components/dropdowns';
 import {gridGap, screenQuerySmall} from 'defs/styles';
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
