@@ -1,9 +1,9 @@
-import {TypeUsers} from 'types';
+import {Users} from 'types';
 
 export const formToModel = (
     form,
     props: {
-        user: TypeUsers;
+        user: Users;
     },
 ) => {
     const users =

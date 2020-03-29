@@ -4,7 +4,7 @@ import {convertCurrencyToDefault} from 'helpers/currency';
 import {BaseTable} from 'components/BaseTable';
 import {spacingMedium, spacingSmall, theme} from 'defs/styles';
 import {sortBy} from 'lodash';
-import {TypeCurrencies} from 'types';
+import {Currencies} from 'types';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
 
@@ -18,7 +18,7 @@ export const SummarySubCategory = (props: {
         },
     ) => string;
     excluded: {};
-    currencies: TypeCurrencies;
+    currencies: Currencies;
     onToggleExcluded: (boolean) => void;
     entities: [];
     entityIdField: string;

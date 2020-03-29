@@ -9,26 +9,26 @@ import {ButtonProgress} from 'components/loaders';
 
 import {parseCRUDError} from 'parsers';
 import {dialog} from 'defs/styles';
-import {TypeTransactionForm, TypeTransactionModel, TypeUsers} from 'types';
+import {TransactionForm, TransactionModel, Users} from 'types';
 
 type TypeProps = {
-    user: TypeUsers;
+    user: Users;
     onRequestUpdate: (
-        data: TypeTransactionModel[],
+        data: TransactionModel[],
     ) => Promise<{
-        data: TypeTransactionModel[];
+        data: TransactionModel[];
     }>;
-    items: TypeTransactionModel[];
+    items: TransactionModel[];
     modelToForm: (
-        model: TypeTransactionModel,
-    ) => TypeTransactionForm;
+        model: TransactionModel,
+    ) => TransactionForm;
     formToModel: (
-        form: TypeTransactionForm,
-        detail: {user: TypeUsers},
-    ) => TypeTransactionModel;
+        form: TransactionForm,
+        detail: {user: Users},
+    ) => TransactionModel;
     entityName: string;
     formComponent: React.ComponentType<{
-        initialValues: TypeTransactionForm;
+        initialValues: TransactionForm;
         onFormChange: (TypeTransactionForm) => void;
     }>;
     open: boolean;

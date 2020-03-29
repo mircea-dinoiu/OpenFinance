@@ -1,5 +1,5 @@
 import {SingleSelect} from 'components/dropdowns';
-import {TypeShiftDateOption} from 'types';
+import {ShiftDateOption} from 'types';
 import React from 'react';
 import {
     IconButton,
@@ -37,7 +37,7 @@ const MAX_TIMES = 10;
 
 export const getShiftBackOptions = (
     date: string,
-    by: TypeShiftDateOption,
+    by: ShiftDateOption,
 ): Date[] =>
     new Array(MAX_TIMES)
         .fill(null)
@@ -45,7 +45,7 @@ export const getShiftBackOptions = (
 
 export const getShiftForwardOptions = (
     date: string,
-    by: TypeShiftDateOption,
+    by: ShiftDateOption,
 ): Date[] =>
     new Array(MAX_TIMES)
         .fill(null)

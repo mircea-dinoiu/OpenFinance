@@ -1,11 +1,11 @@
-import {TypeTransactionModel} from 'types';
+import {TransactionModel} from 'types';
 import {formatYMD} from 'utils/dates';
 import {Classes} from 'components/BaseTable';
 
 const today = formatYMD(new Date());
 
 export const getTrClassName = (
-    item: TypeTransactionModel,
+    item: TransactionModel,
     {
         selectedIds,
     }: {
@@ -48,7 +48,7 @@ export const getTrProps = ({
     onChangeContextMenu,
     item,
 }: {
-    item: TypeTransactionModel;
+    item: TransactionModel;
     onChangeContextMenu: (
         props: Partial<{
             display: boolean;

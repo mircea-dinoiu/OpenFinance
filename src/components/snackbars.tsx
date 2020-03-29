@@ -3,7 +3,7 @@ import {uniqueId} from 'lodash';
 import * as React from 'react';
 import {Snackbar} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
-import {TypeSnackbarProps, TypeSnackbar} from 'types';
+import {SnackbarProps, Snackbar as TypeSnackbar} from 'types';
 import {Alert} from '@material-ui/lab';
 
 export const CustomSnackbar = (props: TypeSnackbar & {open: boolean}) => {
@@ -16,7 +16,7 @@ export const CustomSnackbar = (props: TypeSnackbar & {open: boolean}) => {
     );
 };
 
-export const ErrorSnackbar = (props: TypeSnackbarProps) => {
+export const ErrorSnackbar = (props: SnackbarProps) => {
     const dispatch = useDispatch();
 
     React.useEffect(() => {
@@ -38,7 +38,7 @@ export const ErrorSnackbar = (props: TypeSnackbarProps) => {
     return null;
 };
 
-export const SuccessSnackbar = (props: TypeSnackbarProps) => {
+export const SuccessSnackbar = (props: SnackbarProps) => {
     const dispatch = useDispatch();
 
     React.useEffect(() => {

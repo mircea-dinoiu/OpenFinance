@@ -1,13 +1,12 @@
 import {
-    TypeCurrencies,
-    TypeDispatch,
-    TypeGlobalState,
-    TypeMoneyLocations,
-    TypePreferences,
-    TypeScreenQueries,
-    TypeTransactionForm,
-    TypeTransactionModel,
-    TypeUsers,
+    Currencies,
+    GlobalState,
+    Accounts,
+    Preferences,
+    ScreenQueries,
+    TransactionForm,
+    TransactionModel,
+    Users,
 } from 'types';
 import {
     mapItemToDetachedUpdates,
@@ -58,47 +57,48 @@ import {makeUrl} from 'utils/url';
 import {StatsTable} from 'components/transactions/StatsTable';
 import {SplitAmountField} from 'components/transactions/SplitAmountField';
 import {LoadMore} from 'components/transactions/LoadMore';
+import {Dispatch} from 'redux';
 
 type TypeProps = {
     api: string;
-    preferences: TypePreferences;
+    preferences: Preferences;
     entityName: string;
     nameProperty: string;
-    screen: TypeScreenQueries;
+    screen: ScreenQueries;
     crudProps: {
         // todo consider having stronger types here
-        modelToForm: (model: TypeTransactionModel) => TypeTransactionForm;
+        modelToForm: (model: TransactionModel) => TransactionForm;
         formToModel: (
-            model: TypeTransactionForm,
-            detail: {user: TypeUsers},
-        ) => TypeTransactionModel;
+            model: TransactionForm,
+            detail: {user: Users},
+        ) => TransactionModel;
         formComponent: React.ComponentType<{
-            initialValues: TypeTransactionForm;
+            initialValues: TransactionForm;
             onFormChange: (TypeTransactionForm) => void;
         }>;
-        getFormDefaults: () => TypeTransactionForm;
+        getFormDefaults: () => TransactionForm;
     };
     tableColumns: (props: {
-        updateRecords: (ids: number[], data: TypeTransactionModel) => unknown;
+        updateRecords: (ids: number[], data: TransactionModel) => unknown;
     }) => Array<{}>;
     contentComponent: React.PureComponent<any>;
-    currencies: TypeCurrencies;
+    currencies: Currencies;
     newRecord: {
         id: number;
         repeat: string;
     };
     refreshWidgets: string;
     defaultSorters: Array<{id: string; desc: boolean}>;
-    dispatch: TypeDispatch;
-    moneyLocations: TypeMoneyLocations;
-    user: TypeUsers;
+    dispatch: Dispatch;
+    moneyLocations: Accounts;
+    user: Users;
 };
 
 type TypeState = {
     firstLoad: boolean;
     page: number;
     pageSize: number;
-    results: TypeTransactionModel[];
+    results: TransactionModel[];
     loading: number;
     refreshing: boolean;
     selectedIds: number[];
@@ -236,7 +236,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             sorters.push(sorter);
         });
 
-        const response = await createXHR<TypeTransactionModel[]>({
+        const response = await createXHR<TransactionModel[]>({
             url: makeUrl(this.props.api, {
                 end_date: endDate,
                 page,
@@ -935,7 +935,7 @@ export const MainScreenList = (ownProps) => {
             currencies,
             moneyLocations,
             user,
-        }: TypeGlobalState) => ({
+        }: GlobalState) => ({
             preferences,
             screen,
             refreshWidgets,

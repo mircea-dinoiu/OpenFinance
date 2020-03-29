@@ -1,10 +1,11 @@
-import {TypeCurrencies, TypeDispatch, TypeGlobalState, TypeCurrenciesApi} from 'types';
+import {Currencies, GlobalState, CurrenciesApi} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 import {routes} from 'defs/routes';
 import {useSelector} from 'react-redux';
 import {createAction, createReducer} from '@reduxjs/toolkit';
 import {useActions} from 'state/hooks';
+import {Dispatch} from 'react';
 
 export enum CurrenciesAction {
     selectedIdSet = 'currencies/selectedId/set',
@@ -12,20 +13,20 @@ export enum CurrenciesAction {
     drawerOpenSet = 'currencies/drawerOpen/set',
 }
 
-export const currencies = createReducer<TypeCurrencies>(null, {
+export const currencies = createReducer<Currencies>(null, {
     [CurrenciesAction.received]: (
         state,
         {
             payload,
         }: {
-            payload: TypeCurrenciesApi;
+            payload: CurrenciesApi;
         },
     ) => ({
         ...payload.map,
         selected: payload.map[payload.default],
     }),
     [CurrenciesAction.selectedIdSet]: (
-        state: TypeCurrencies,
+        state: Currencies,
         {payload}: {payload: number},
     ) => ({
         ...state,
@@ -37,20 +38,20 @@ export const setCurrenciesSelectedId = createAction<number>(
     CurrenciesAction.selectedIdSet,
 );
 
-export const receiveCurrencies = createAction<TypeCurrencies>(
+export const receiveCurrencies = createAction<Currencies>(
     CurrenciesAction.received,
 );
 export const fetchCurrencies = (
     params: {update?: boolean} = Object.freeze({}),
-) => async (dispatch: TypeDispatch) => {
-    const currenciesResponse = await createXHR<TypeCurrencies>({
+) => async (dispatch: Dispatch<{type: string; payload: unknown}>) => {
+    const currenciesResponse = await createXHR<Currencies>({
         url: makeUrl(routes.currencies, params),
     });
 
     dispatch(receiveCurrencies(currenciesResponse.data));
 };
-export const useCurrencies = (): TypeCurrencies =>
-    useSelector((s: TypeGlobalState) => s.currencies);
+export const useCurrencies = (): Currencies =>
+    useSelector((s: GlobalState) => s.currencies);
 
 /**
  * currenciesDrawerOpen
@@ -71,7 +72,7 @@ export const useCurrenciesDrawerOpenWithActions = (): [
     {setCurrenciesDrawerOpen: typeof setCurrenciesDrawerOpen},
 ] => {
     return [
-        useSelector((s: TypeGlobalState) => s.currenciesDrawerOpen),
+        useSelector((s: GlobalState) => s.currenciesDrawerOpen),
         useActions({setCurrenciesDrawerOpen}),
     ];
 };

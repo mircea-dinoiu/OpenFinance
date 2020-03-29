@@ -1,8 +1,8 @@
-import {TypeTransactionModel} from 'types';
+import {TransactionModel} from 'types';
 import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import {sumArray} from 'js/utils/numbers';
 
-export const mapItemToRepeatedUpdates = (item: TypeTransactionModel) => {
+export const mapItemToRepeatedUpdates = (item: TransactionModel) => {
     const extra: {
         repeat_occurrences?: number | null;
     } = {};
@@ -18,12 +18,12 @@ export const mapItemToRepeatedUpdates = (item: TypeTransactionModel) => {
     return extra;
 };
 
-export const mapItemToDetachedUpdates = (item: TypeTransactionModel) => ({
+export const mapItemToDetachedUpdates = (item: TransactionModel) => ({
     id: item.id,
     repeat: null,
 });
 
-export const mergeItems = (items: TypeTransactionModel[]) => {
+export const mergeItems = (items: TransactionModel[]) => {
     const [, ...rest] = items;
 
     if (!rest.length || uniqBy(items, 'money_location_id').length > 1) {

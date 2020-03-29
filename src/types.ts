@@ -4,13 +4,13 @@ import {RepeatOption} from 'js/defs';
 import {$Keys, $Values} from 'utility-types';
 import {AlertProps} from '@material-ui/lab';
 
-export type TypeScreenQueries = {
+export type ScreenQueries = {
     isSmall: boolean;
     isMedium: boolean;
     isLarge: boolean;
 };
 
-export type TypePreferences = {
+export type Preferences = {
     endDate: string;
     endDateIncrement: 'd' | 'w' | '2w' | 'm';
     include:
@@ -27,7 +27,7 @@ export type TypePreferences = {
     includePending: boolean;
 };
 
-export type TypeCurrency = {
+export type Currency = {
     id: number;
     iso_code: string;
     currency: string;
@@ -37,30 +37,30 @@ export type TypeCurrency = {
     };
 };
 
-export type TypeCurrenciesApi = {
+export type CurrenciesApi = {
     default: number;
     from_cache: boolean;
     map: {
-        [key: string]: TypeCurrency;
+        [key: string]: Currency;
     };
 };
 
-export type TypeCurrencies = {selected: TypeCurrency} & {
-    [key: number]: TypeCurrency;
+export type Currencies = {selected: Currency} & {
+    [key: number]: Currency;
 };
 
-export type TypeCurrencyIdentifier = string | number | TypeCurrency;
+export type CurrencyIdentifier = string | number | Currency;
 
-export type TypeCategory = {
+export type Category = {
     id: number;
     name: string;
     color: string;
     expenses: number;
 };
 
-export type TypeCategories = TypeCategory[];
+export type Categories = Category[];
 
-export type TypeMoneyLocation = {
+export type Account = {
     currency_id: number;
     id: number;
     name: string;
@@ -68,16 +68,16 @@ export type TypeMoneyLocation = {
     type_id: number;
 };
 
-export type TypeMoneyLocations = TypeMoneyLocation[];
+export type Accounts = Account[];
 
-export type TypeMoneyLocationType = {
+export type AccountType = {
     id: number;
     name: string;
 };
 
-export type TypeMoneyLocationTypes = TypeMoneyLocationType[];
+export type AccountTypes = AccountType[];
 
-export type TypeUser = {
+export type User = {
     avatar: string;
     first_name: string;
     last_name: string;
@@ -86,16 +86,16 @@ export type TypeUser = {
     preferred_money_location_id: number;
 };
 
-export type TypeUsers = {
-    current: TypeUser;
-    list: TypeUser[];
+export type Users = {
+    current: User;
+    list: User[];
 };
 
-export type TypeTransactionAttrType = 'deposit' | 'withdrawal';
-export type TypeTransactionAttrStatus = 'pending' | 'finished';
-export type TypeTransactionAttrRepeat = $Values<typeof RepeatOption>;
+export type TransactionType = 'deposit' | 'withdrawal';
+export type TransactionStatus = 'pending' | 'finished';
+export type TransactionRepeat = $Values<typeof RepeatOption>;
 
-export type TypeTransactionForm = {
+export type TransactionForm = {
     id: number;
     sum: number;
     description: string;
@@ -108,12 +108,12 @@ export type TypeTransactionForm = {
         [key: string]: number;
     };
     repeatOccurrences: number;
-    repeat: TypeTransactionAttrRepeat;
-    type: TypeTransactionAttrType;
-    status: TypeTransactionAttrStatus;
+    repeat: TransactionRepeat;
+    type: TransactionType;
+    status: TransactionStatus;
 };
 
-export type TypeTransactionModel = {
+export type TransactionModel = {
     id: number;
     categories: number[];
     favorite: number;
@@ -124,41 +124,39 @@ export type TypeTransactionModel = {
         [key: string]: number;
     };
     repeat_occurrences: number;
-    repeat: null | TypeTransactionAttrRepeat;
+    repeat: null | TransactionRepeat;
     persist: boolean;
-    type: TypeTransactionAttrType;
+    type: TransactionType;
     created_at: Date;
     hidden: boolean;
-    status: TypeTransactionAttrStatus;
+    status: TransactionStatus;
     money_location_id: number;
     money_location: {currency_id: number};
 };
 
-export type TypeShiftDateOption = $Keys<typeof ShiftDateOptions>;
+export type ShiftDateOption = $Keys<typeof ShiftDateOptions>;
 
-export type TypeSnackbarProps = {
+export type SnackbarProps = {
     message: React.ReactNode;
 };
 
-export type TypeSnackbar = {
+export type Snackbar = {
     id: string;
     severity: AlertProps['severity'];
-} & TypeSnackbarProps;
+} & SnackbarProps;
 
-export type TypeGlobalState = {
-    preferences: TypePreferences;
+export type GlobalState = {
+    preferences: Preferences;
 
-    currencies: TypeCurrencies;
+    currencies: Currencies;
     currenciesDrawerOpen: boolean;
 
-    categories: TypeCategories;
-    moneyLocationTypes: TypeMoneyLocationTypes;
-    moneyLocations: TypeMoneyLocations;
-    screen: TypeScreenQueries;
-    screenSize: TypeScreenQueries;
+    categories: Categories;
+    moneyLocationTypes: AccountTypes;
+    moneyLocations: Accounts;
+    screen: ScreenQueries;
+    screenSize: ScreenQueries;
     refreshWidgets: string;
-    user: TypeUsers;
-    snackbars: TypeSnackbar[];
+    user: Users;
+    snackbars: Snackbar[];
 };
-
-export type TypeDispatch = (action: {type: string}) => void;

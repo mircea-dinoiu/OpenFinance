@@ -1,7 +1,7 @@
 import moment from 'moment';
-import {TypeUsers} from 'types';
+import {Users} from 'types';
 
-export const getFormDefaults = ({user}: {user: TypeUsers}) => {
+export const getFormDefaults = ({user}: {user: Users}) => {
     return {
         description: '',
         type: 'withdrawal',

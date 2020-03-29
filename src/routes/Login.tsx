@@ -24,7 +24,7 @@ import {
     screenQuerySmall,
     spacingLarge,
 } from 'defs/styles';
-import {TypeUsers} from 'types';
+import {Users} from 'types';
 import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -52,7 +52,7 @@ export const Login = () => {
         setError(null);
 
         try {
-            const response = await createXHR<TypeUsers>({
+            const response = await createXHR<Users>({
                 url: routes.user.login,
                 method: 'POST',
                 data: new URLSearchParams({

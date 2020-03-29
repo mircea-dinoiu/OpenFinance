@@ -1,4 +1,4 @@
-import {TypeShiftDateOption} from 'types';
+import {ShiftDateOption} from 'types';
 import moment from 'moment';
 
 import {endOfDayToISOString} from 'js/utils/dates';
@@ -44,7 +44,7 @@ export const getStartDate = ({
     return date ? moment(date).toISOString() : '';
 };
 
-const getMomentArgsForDateShift = (option: TypeShiftDateOption, times = 1) => {
+const getMomentArgsForDateShift = (option: ShiftDateOption, times = 1) => {
     const one = 1;
 
     switch (option) {
@@ -65,7 +65,7 @@ const getMomentArgsForDateShift = (option: TypeShiftDateOption, times = 1) => {
 
 export const shiftDateForward = (
     date: string | Date,
-    by: TypeShiftDateOption,
+    by: ShiftDateOption,
     times?: number,
 ) =>
     moment(date)
@@ -74,7 +74,7 @@ export const shiftDateForward = (
 
 export const shiftDateBack = (
     date: string | Date,
-    by: TypeShiftDateOption,
+    by: ShiftDateOption,
     times?: number,
 ) =>
     moment(date)

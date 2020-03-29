@@ -8,15 +8,15 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@materi
 import {withStyles} from '@material-ui/core/styles';
 import {dialog} from 'defs/styles';
 import {useUsers} from 'state/hooks';
-import {TypeTransactionForm} from 'types';
+import {TransactionForm} from 'types';
 
 type TypeProps = {
-    getFormDefaults: ({user: TypeUsers}) => TypeTransactionForm;
+    getFormDefaults: ({user: TypeUsers}) => TransactionForm;
     formToModel: Function;
     entityName: string;
     onReceiveNewRecord: Function;
     formComponent: React.ComponentType<{
-        initialValues: TypeTransactionForm;
+        initialValues: TransactionForm;
         onFormChange: (TypeTransactionForm) => void;
     }>;
     onRequestCreate: Function;

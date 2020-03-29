@@ -23,10 +23,10 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
 import {Home} from 'routes/Home';
 import {
-    TypeCategories,
-    TypeMoneyLocations,
-    TypeMoneyLocationTypes,
-    TypeUsers,
+    Categories,
+    Accounts,
+    AccountTypes,
+    Users,
 } from './types';
 import {fetchCurrencies, useCurrencies} from 'state/currencies';
 import {CurrenciesDrawer} from 'components/currencies/CurrenciesDrawer';
@@ -57,7 +57,7 @@ const AppWrapped = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await createXHR<TypeUsers>({
+            const response = await createXHR<Users>({
                 url: routes.user.list,
             });
 
@@ -76,9 +76,9 @@ const AppWrapped = () => {
             mlResponse,
             mlTypesResponse,
         ] = await Promise.all([
-            createXHR<TypeCategories>({url: routes.categories}),
-            createXHR<TypeMoneyLocations>({url: routes.moneyLocations}),
-            createXHR<TypeMoneyLocationTypes>({url: routes.moneyLocationTypes}),
+            createXHR<Categories>({url: routes.categories}),
+            createXHR<Accounts>({url: routes.moneyLocations}),
+            createXHR<AccountTypes>({url: routes.moneyLocationTypes}),
         ]);
 
         dispatch(

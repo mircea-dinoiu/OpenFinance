@@ -1,4 +1,4 @@
-import {TypeTransactionModel} from 'types';
+import {TransactionModel} from 'types';
 import * as React from 'react';
 import {RepeatsDisplay} from 'components/BaseTable/cells/RepeatsDisplay';
 
@@ -6,7 +6,7 @@ const style = {textAlign: 'center'};
 
 export const RepeatColumn = {
     Header: 'Repeat',
-    accessor: (item: TypeTransactionModel) => <RepeatsDisplay item={item} />,
+    accessor: (item: TransactionModel) => <RepeatsDisplay item={item} />,
     id: 'repeat',
     sortable: false,
     //

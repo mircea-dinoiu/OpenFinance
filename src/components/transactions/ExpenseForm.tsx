@@ -33,13 +33,13 @@ import {sumArray} from 'js/utils/numbers';
 import {sortBy} from 'lodash';
 import styled from 'styled-components';
 import {
-    TypeCategories,
-    TypeCurrencies,
-    TypeMoneyLocations,
-    TypePreferences,
-    TypeTransactionForm,
-    TypeUsers,
-    TypeGlobalState,
+    Categories,
+    Currencies,
+    Accounts,
+    Preferences,
+    TransactionForm,
+    Users,
+    GlobalState,
 } from 'types';
 import {makeUrl} from 'utils/url';
 import {PERC_MAX, PERC_STEP} from 'js/defs';
@@ -67,13 +67,13 @@ const badgeStyle = {
 const StyledBadge = withStyles(badgeStyle)(Badge);
 
 type TypeProps = {
-    initialValues: TypeTransactionForm;
+    initialValues: TransactionForm;
     onFormChange: Function;
-    moneyLocations: TypeMoneyLocations;
-    currencies: TypeCurrencies;
-    preferences: TypePreferences;
-    user: TypeUsers;
-    categories: TypeCategories;
+    moneyLocations: Accounts;
+    currencies: Currencies;
+    preferences: Preferences;
+    user: Users;
+    categories: Categories;
 };
 
 export const setChargedPersonValueFactory = (
@@ -116,7 +116,7 @@ const FormControlLabelInline = styled(FormControlLabel)`
     display: inline-block;
 `;
 
-class ExpenseFormWrapped extends PureComponent<TypeProps, TypeTransactionForm> {
+class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
     // @ts-ignore
     descriptionSuggestionsCancelSource = CancelToken.source();
     categoriesCancelSource;
@@ -594,7 +594,7 @@ export const ExpenseForm = (ownProps) => {
             categories,
             moneyLocations,
             user,
-        }: TypeGlobalState) => ({
+        }: GlobalState) => ({
             currencies,
             categories,
             preferences,

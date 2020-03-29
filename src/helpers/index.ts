@@ -1,9 +1,9 @@
-import {TypeCurrencies, TypeTransactionModel} from 'types';
+import {Currencies, TransactionModel} from 'types';
 
 export const getItemCurrencyISOCode = ({
     item,
     currencies,
 }: {
-    item: TypeTransactionModel;
-    currencies: TypeCurrencies;
+    item: TransactionModel;
+    currencies: Currencies;
 }) => currencies[item.money_location.currency_id].iso_code;

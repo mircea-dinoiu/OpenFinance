@@ -4,17 +4,17 @@ import IconStarBorder from '@material-ui/icons/StarBorder';
 import * as React from 'react';
 import {range} from 'lodash';
 import styled from 'styled-components';
-import {TypeTransactionModel} from 'types';
+import {TransactionModel} from 'types';
 
 const Star = styled.span`
     cursor: pointer;
 `;
 
 export class RatingDisplay extends React.PureComponent<{
-    item: TypeTransactionModel;
+    item: TransactionModel;
     updateRecords: (
         ids: number[],
-        model: Partial<TypeTransactionModel>,
+        model: Partial<TransactionModel>,
     ) => void;
 }> {
     handleClick = (rating) => (event) => {

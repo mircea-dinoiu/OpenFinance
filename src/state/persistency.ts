@@ -1,5 +1,5 @@
 import {parsePreferences} from 'utils/preferences';
-import {TypeGlobalState} from 'types';
+import {GlobalState} from 'types';
 import {paths} from 'js/defs';
 
 export const readState = () => {
@@ -16,7 +16,7 @@ export const readState = () => {
     }
 };
 
-export const saveState = (state: TypeGlobalState) => {
+export const saveState = (state: GlobalState) => {
     if (window.location.pathname !== paths.home) {
         return;
     }

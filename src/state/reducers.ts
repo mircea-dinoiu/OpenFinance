@@ -3,7 +3,7 @@ import uniqueId from 'lodash/uniqueId';
 import {getScreenQueries} from 'utils/getScreenQueries';
 import {combineReducers} from 'redux';
 import {parsePreferences, validatePreferences} from 'utils/preferences';
-import {TypePreferences} from 'types';
+import {Preferences} from 'types';
 import {bindToUpdateState} from 'state/utils';
 import {currencies, currenciesDrawerOpen} from 'state/currencies';
 
@@ -15,7 +15,7 @@ const refreshWidgets = (state = uniqueId(), action) =>
     action.type === Action.REFRESH_WIDGETS ? uniqueId() : state;
 const user = (state = null, action) =>
     action.type === Action.SET_USERS ? action.value : state;
-const preferences = (state: TypePreferences = parsePreferences(), action) => {
+const preferences = (state: Preferences = parsePreferences(), action) => {
     switch (action.type) {
         case Action.UPDATE_PREFERENCES:
             return {...state, ...action.value};

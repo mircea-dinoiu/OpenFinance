@@ -2,7 +2,7 @@ import {SingleSelect} from 'components/dropdowns';
 import React from 'react';
 import {MenuItem, ListSubheader as Subheader} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
-import {TypeCurrency} from 'types';
+import {Currency} from 'types';
 import {useUsers} from 'state/hooks';
 import {
     fetchCurrencies,
@@ -51,7 +51,7 @@ export const CurrenciesDrawerContent = () => {
                 }}
             >
                 <SingleSelect
-                    options={Object.values(map).map((each: TypeCurrency) => ({
+                    options={Object.values(map).map((each: Currency) => ({
                         value: each.id,
                         label: each.iso_code,
                     }))}
@@ -62,7 +62,7 @@ export const CurrenciesDrawerContent = () => {
 
             <Subheader>Exchange Rates</Subheader>
             {Object.values(map).map(
-                (each: TypeCurrency) =>
+                (each: Currency) =>
                     each.id !== defaultCurrencyId && (
                         <MenuItem key={each.id}>
                             <strong>{each.iso_code}</strong>:{' '}
