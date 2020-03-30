@@ -4,9 +4,9 @@ import {
     TextField,
     Checkbox,
     FormControlLabel,
-    Paper,
     Card,
-    CardHeader, Divider,
+    CardHeader,
+    Divider,
 } from '@material-ui/core';
 import {ButtonProgress} from 'components/loaders';
 import {routes} from 'defs/routes';
@@ -18,12 +18,7 @@ import {useUsers} from 'state/hooks';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';
 import styled from 'styled-components';
-import {
-    screenQueryLarge,
-    screenQueryMedium,
-    screenQuerySmall,
-    spacingLarge,
-} from 'defs/styles';
+import {screenQueryLarge, screenQueryMedium, screenQuerySmall, spacingLarge} from 'defs/styles';
 import {Users} from 'types';
 import {makeStyles} from '@material-ui/core/styles';
 

@@ -1,7 +1,0 @@
-language: node_js
-node_js:
-    - "13.11.0"
-cache:
-    yarn: true
-script:
-    - yarn run ci
