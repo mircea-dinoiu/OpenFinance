@@ -7,16 +7,29 @@ import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay
 import {AmountDisplay} from 'components/BaseTable/cells/AmountDisplay';
 import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import styled from 'styled-components';
-import {spacingMedium} from 'defs/styles';
+import {spacingMedium, spacingSmall} from 'defs/styles';
+import {makeStyles} from '@material-ui/core/styles';
+import clsx from 'clsx';
 
-const ExpenseListItemContentStyled = styled.div`
-    display: grid;
-    grid-template-areas:
+const useStyles = makeStyles({
+    expenseListItemContent: {
+        display: 'grid',
+        gridGap: spacingSmall,
+        alignItems: 'center',
+        gridTemplateAreas: `
+        'description description persons'
+        'amount amount ml'
+`,
+    },
+    expenseListItemContentExpanded: {
+        gridTemplateAreas: `
         'description description persons'
         'amount amount ml'
         'date date repeats'
-        'categories categories categories';
-`;
+        'categories categories categories'
+`,
+    },
+});
 
 const DescriptionContainer = styled.div`
     grid-area: description;
@@ -57,6 +70,7 @@ const CategoriesContainer = styled.div`
 `;
 
 export const ExpenseListItemContent = ({item, expanded}) => {
+    const cls = useStyles();
     const personsDisplay = <PersonsDisplay item={item} />;
     const descriptionDisplay = item.item;
     const flags = <Flags entity="transaction" item={item} />;
@@ -68,7 +82,12 @@ export const ExpenseListItemContent = ({item, expanded}) => {
     const repeatsDisplay = <RepeatsDisplay item={item} />;
 
     return (
-        <ExpenseListItemContentStyled>
+        <div
+            className={clsx(
+                cls.expenseListItemContent,
+                expanded && cls.expenseListItemContentExpanded,
+            )}
+        >
             <DescriptionContainer>{descriptionDisplay}</DescriptionContainer>
             <PersonsContainer>{personsDisplay}</PersonsContainer>
             <AmountContainer>
@@ -86,6 +105,6 @@ export const ExpenseListItemContent = ({item, expanded}) => {
                     </CategoriesContainer>
                 </>
             )}
-        </ExpenseListItemContentStyled>
+        </div>
     );
 };
