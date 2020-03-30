@@ -4,8 +4,8 @@ import {
     TypeContextMenuItemsProps,
 } from 'components/MainScreen/ContextMenu/ContextMenuItems';
 import {makeStyles} from '@material-ui/core/styles';
-import {Container, Drawer, Divider} from '@material-ui/core';
-import {spacingMedium} from 'defs/styles';
+import {Container, Drawer, Divider, Card} from '@material-ui/core';
+import {spacingMedium, spacingSmall} from 'defs/styles';
 
 type TypeProps = {
     entityName: string;
@@ -20,8 +20,8 @@ type TypeProps = {
 
 const useStyles = makeStyles({
     container: {
-        paddingTop: spacingMedium,
-        paddingBottom: spacingMedium,
+        padding: spacingMedium,
+        marginBottom: spacingSmall,
     },
     moreIcon: {
         padding: 0,
@@ -43,12 +43,14 @@ export const MainScreenListItem = (props: TypeProps) => {
 
     return (
         <>
-            <Container
+            <Card
+                square={true}
+                variant={'outlined'}
                 className={cls.container}
                 onClick={item.persist === false ? undefined : handleOpenDrawer}
             >
                 <ListItemContent item={item} />
-            </Container>
+            </Card>
             <Drawer
                 onClose={handleCloseDrawer}
                 open={isDrawerOpen}

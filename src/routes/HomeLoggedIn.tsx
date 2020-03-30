@@ -16,10 +16,10 @@ import TrendingDown from '@material-ui/icons/TrendingDown';
 import {grey} from '@material-ui/core/colors';
 import {useScreenSize} from 'state/hooks';
 import styled from 'styled-components';
-import {spacingSmall} from 'defs/styles';
 import {Categories} from 'components/categories/Categories';
 import {Accounts} from 'components/accounts/Accounts';
 import {AccountTypes} from 'components/accountTypes/AccountTypes';
+import {spacingSmall} from 'defs/styles';
 
 export const HomeLoggedIn = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -75,7 +75,7 @@ export const HomeLoggedIn = () => {
 
     const renderLarge = () => (
         <>
-            <Paper style={{margin: spacingSmall}}>
+            <Paper style={{margin: `${spacingSmall} ${spacingSmall} 0`}}>
                 <Tabs
                     value={selectedIndex}
                     onChange={(event, index) => setSelectedIndex(index)}
@@ -88,13 +88,7 @@ export const HomeLoggedIn = () => {
                     ]}
                 </Tabs>
             </Paper>
-            <div
-                style={{
-                    padding: `0 ${spacingSmall} ${spacingSmall}`,
-                }}
-            >
-                {renderDesktopTab(selectedIndex)}
-            </div>
+            {renderDesktopTab(selectedIndex)}
         </>
     );
 
@@ -141,4 +135,5 @@ const TransactionsContainer = styled.div`
 
 const TransactionsContentContainer = styled.div`
     width: calc(100vw / 12 * 10);
+    margin: ${spacingSmall} ${spacingSmall} ${spacingSmall} 0;
 `;

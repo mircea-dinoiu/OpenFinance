@@ -1,7 +1,7 @@
 import * as React from 'react';
 import moment from 'moment';
 import {CalendarWithoutTime} from 'defs/formats';
-import {Divider, List, ListSubheader} from '@material-ui/core';
+import {List, ListSubheader} from '@material-ui/core';
 import {MainScreenListItem} from 'components/transactions/MainScreenListItem';
 
 export const MainScreenListGroup = ({date, items, itemProps}) => (
@@ -14,6 +14,5 @@ export const MainScreenListGroup = ({date, items, itemProps}) => (
                 <MainScreenListItem key={item.id} item={item} {...itemProps} />
             ))}
         </List>
-        <Divider />
     </div>
 );

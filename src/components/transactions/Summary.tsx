@@ -165,7 +165,7 @@ export const Summary = () => {
     return (
         <div
             style={{
-                marginRight: spacingSmall,
+                margin: spacingSmall,
             }}
         >
             {refreshing && <LoadingTopBar />}
