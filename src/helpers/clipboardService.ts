@@ -1,7 +1,7 @@
-export const copyText = (value) => {
+export const copyText = (value: string | number) => {
     const textarea = document.createElement('textarea');
 
-    textarea.value = value;
+    textarea.value = String(value);
 
     document.body.appendChild(textarea);
 
