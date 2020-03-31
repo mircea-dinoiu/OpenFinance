@@ -15,7 +15,7 @@ export const formatNumericValue = (value) =>
 
 const useStyles = makeStyles({
     value: {
-        cursor: 'crosshair',
+        cursor: 'grabbing',
     },
 });
 
