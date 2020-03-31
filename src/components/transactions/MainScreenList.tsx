@@ -58,6 +58,7 @@ import {StatsTable} from 'components/transactions/StatsTable';
 import {SplitAmountField} from 'components/transactions/SplitAmountField';
 import {LoadMore} from 'components/transactions/LoadMore';
 import {Dispatch} from 'redux';
+import {TransactionStatus} from 'defs';
 
 type TypeProps = {
     api: string;
@@ -107,7 +108,6 @@ type TypeState = {
     editDialogOpen: boolean;
     editDialogKey: string;
     deleteDialogOpen: boolean;
-    pendingFirst: boolean;
     displayHidden: boolean;
     splitAmount: string;
 
@@ -134,7 +134,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         editDialogKey: uniqueId(),
         deleteDialogOpen: false,
 
-        pendingFirst: true,
         displayHidden: false,
         splitAmount: '',
     };
@@ -227,10 +226,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         this.setState((state) => ({loading: state.loading + 1}));
         const sorters: {id: string; desc: boolean}[] = [];
-
-        if (this.state.pendingFirst && this.isDesktop()) {
-            sorters.push({id: 'status', desc: true});
-        }
 
         this.sorters.forEach((sorter) => {
             sorters.push(sorter);
@@ -387,18 +382,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={this.state.pendingFirst}
-                                onChange={this.handleTogglePendingFirst}
-                                color="default"
-                            />
-                        }
-                        label="Pending First"
-                    />
-                </>
-                <>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
                                 checked={this.displayArchived}
                                 onChange={this.handleToggleDisplayHidden}
                                 color="default"
@@ -517,7 +500,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.props.dispatch(onRefreshWidgets());
     };
 
-    handleToggleStateKey = (key: 'pendingFirst' | 'displayHidden') => () => {
+    handleToggleStateKey = (key: 'displayHidden') => () => {
         this.setState(
             // @ts-ignore
             (state) => ({
@@ -527,7 +510,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         );
     };
 
-    handleTogglePendingFirst = this.handleToggleStateKey('pendingFirst');
     handleToggleDisplayHidden = this.handleToggleStateKey('displayHidden');
 
     renderStats(head, items) {
@@ -679,7 +661,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             selectedItems.map((each) => {
                 const res = this.copyItem(each);
 
-                res.status = 'pending';
+                res.status = TransactionStatus.pending;
 
                 return res;
             }),
@@ -688,12 +670,17 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.props.dispatch(onRefreshWidgets());
     };
 
+    handleClickDraft = () =>
+        this.updateSelectedRecords({status: TransactionStatus.draft});
     handleClickReviewed = () =>
-        this.updateSelectedRecords({status: 'finished'});
+        this.updateSelectedRecords({status: TransactionStatus.finished});
     handleClickNeedsReview = () =>
-        this.updateSelectedRecords({status: 'pending'});
+        this.updateSelectedRecords({status: TransactionStatus.pending});
     handleClickHide = () =>
-        this.updateSelectedRecords({hidden: true, status: 'finished'});
+        this.updateSelectedRecords({
+            hidden: true,
+            status: TransactionStatus.finished,
+        });
     handleClickUnhide = () => this.updateSelectedRecords({hidden: false});
     handleMerge = async () => {
         const items = this.selectedItems;
@@ -747,6 +734,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             onClickDetach: this.handleDetach,
             onClickMerge: this.handleMerge,
             onCloseContextMenu: this.handleCloseContextMenu,
+
+            onClickDraft: this.handleClickDraft,
             onClickReviewed: this.handleClickReviewed,
             onClickNeedsReview: this.handleClickNeedsReview,
 

@@ -12,6 +12,7 @@ import DuplicateIcon from '@material-ui/icons/FileCopy';
 import DetachIcon from '@material-ui/icons/ViewAgenda';
 import MergeIcon from '@material-ui/icons/MergeType';
 import LockIcon from '@material-ui/icons/Lock';
+import IconDrafts from '@material-ui/icons/Drafts';
 import UnlockIcon from '@material-ui/icons/LockOpen';
 
 import IconArchive from '@material-ui/icons/Archive';
@@ -25,6 +26,7 @@ export type TypeContextMenuItemsProps = {
     onClickDuplicate: TypeOnClick;
     onClickDetach: TypeOnClick;
     onClickMerge: TypeOnClick;
+    onClickDraft: TypeOnClick;
     onClickReviewed: TypeOnClick;
     onClickNeedsReview: TypeOnClick;
     onCloseContextMenu: TypeOnClick;
@@ -38,8 +40,11 @@ export function ContextMenuItems({
     onClickDelete,
     onClickDuplicate,
     onClickDetach,
+
+    onClickDraft,
     onClickReviewed,
     onClickNeedsReview,
+
     onCloseContextMenu,
     onClickMerge,
 
@@ -87,6 +92,12 @@ export function ContextMenuItems({
                     text: 'Merge',
                 },
                 <Divider />,
+                {
+                    onClick: onClickDraft,
+                    disabled: disabledForZero,
+                    icon: IconDrafts,
+                    text: 'Change to Draft',
+                },
                 {
                     onClick: onClickReviewed,
                     disabled: disabledForZero,

@@ -21,7 +21,9 @@ const makeWhere = (queryParams, extra = []) => {
     ].filter(Boolean);
 
     if (queryParams.include_pending === 'false') {
-        where.push(`\`status\` != 'pending'`);
+        where.push(`\`status\` = 'finished'`);
+    } else {
+        where.push(`\`status\` != 'draft'`);
     }
 
     return where.length

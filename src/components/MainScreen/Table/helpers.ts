@@ -1,6 +1,7 @@
 import {TransactionModel} from 'types';
 import {formatYMD} from 'utils/dates';
 import {Classes} from 'components/BaseTable';
+import {TransactionStatus} from 'defs';
 
 const today = formatYMD(new Date());
 
@@ -26,7 +27,7 @@ export const getTrClassName = (
         classes.push(Classes.depositRow);
     }
 
-    if (item.status === 'pending') {
+    if (item.status !== TransactionStatus.finished) {
         classes.push(Classes.pendingRow);
     }
 
@@ -100,8 +101,8 @@ export const getTrProps = ({
                 top: event.clientY,
             });
 
-            if (!selectedIds[item.id]) {
-                onReceiveSelectedIds([item.id]);
+            if (!selectedIds.includes(item.id)) {
+                onReceiveSelectedIds(selectedIds.concat(item.id));
             }
         }
     },

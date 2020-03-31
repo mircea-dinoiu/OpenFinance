@@ -152,7 +152,9 @@ module.exports = BaseController.extend({
             values.repeat = record.repeat;
 
             if (values.repeat != null) {
-                values.status = 'pending';
+                if (record.status === 'finished') {
+                    values.status = 'pending';
+                }
             } else {
                 values.repeat_occurrences = null;
                 values.repeat_end_date = null;

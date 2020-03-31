@@ -1,4 +1,5 @@
 import {Users} from 'types';
+import {TransactionStatus} from 'defs';
 
 export const formToModel = (
     form,
@@ -24,6 +25,6 @@ export const formToModel = (
         repeat_occurrences: form.repeatOccurrences,
         weight: form.weight === '' ? null : form.weight,
         users,
-        status: form.status || 'pending',
+        status: form.status || TransactionStatus.pending,
     };
 };

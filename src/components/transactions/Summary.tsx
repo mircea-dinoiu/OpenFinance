@@ -23,6 +23,7 @@ import {
 } from 'state/hooks';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
 import {LoadingTopBar} from '../loaders';
+import {TransactionStatus} from 'defs';
 
 const getEndDateBasedOnIncludePreference = (endDate, include) => {
     if (include === 'previous-year') {
@@ -109,7 +110,7 @@ export const Summary = () => {
         ),
         include_pending: String(includePending),
         filters: JSON.stringify(
-            includePending ? [] : [{id: 'status', value: 'finished'}],
+            includePending ? [] : [{id: 'status', value: TransactionStatus.finished}],
         ),
     }).toString();
 

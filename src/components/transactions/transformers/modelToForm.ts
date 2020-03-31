@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {TransactionStatus} from 'defs';
 
 export const modelToForm = (model) => ({
     id: model.id,
@@ -13,6 +14,6 @@ export const modelToForm = (model) => ({
     repeatOccurrences: model.repeat_occurrences,
     weight: model.weight,
     chargedPersons: model.users,
-    status: model.status || 'pending',
+    status: model.status || TransactionStatus.pending,
     type: model.sum < 0 ? 'withdrawal' : 'deposit',
 });

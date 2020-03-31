@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ShiftDateOptions} from 'defs';
+import {ShiftDateOptions, TransactionStatus} from 'defs';
 import {RepeatOption} from 'js/defs';
 import {$Keys, $Values} from 'utility-types';
 import {AlertProps} from '@material-ui/lab';
@@ -92,7 +92,6 @@ export type Users = {
 };
 
 export type TransactionType = 'deposit' | 'withdrawal';
-export type TransactionStatus = 'pending' | 'finished';
 export type TransactionRepeat = $Values<typeof RepeatOption>;
 
 export type TransactionForm = {

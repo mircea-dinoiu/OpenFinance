@@ -25,7 +25,12 @@ import {createXHR} from 'utils/fetch';
 import {routes} from 'defs/routes';
 import {useSelector} from 'react-redux';
 import {MultiSelect, SingleSelect} from 'components/dropdowns';
-import {gridGap, screenQuerySmall} from 'defs/styles';
+import {
+    gridGap,
+    screenQuerySmall,
+    spacingLarge,
+    spacingSmall,
+} from 'defs/styles';
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {CancelToken} from 'axios';
@@ -43,6 +48,7 @@ import {
 } from 'types';
 import {makeUrl} from 'utils/url';
 import {PERC_MAX, PERC_STEP} from 'js/defs';
+import {TransactionStatus} from 'defs';
 
 const boxStyle = {
     padding: '10px 0',
@@ -567,12 +573,17 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
                     row
                 >
                     <FormControlLabelInline
-                        value="pending"
+                        value={TransactionStatus.draft}
+                        control={<Radio color="primary" />}
+                        label="Draft"
+                    />
+                    <FormControlLabelInline
+                        value={TransactionStatus.pending}
                         control={<Radio color="primary" />}
                         label="Pending"
                     />
                     <FormControlLabelInline
-                        value="finished"
+                        value={TransactionStatus.finished}
                         control={<Radio color="primary" />}
                         label="Posted"
                     />
@@ -609,10 +620,12 @@ export const ExpenseForm = (ownProps) => {
 const TypeStatusFlagsContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: ${spacingLarge};
 
     @media ${screenQuerySmall} {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr 1fr;
+        grid-gap: ${spacingSmall};
     }
 `;
 

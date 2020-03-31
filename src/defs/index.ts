@@ -9,3 +9,9 @@ export const ShiftDateOptions = {
     m: '1 month',
     '1y': '1 year',
 };
+
+export enum TransactionStatus {
+    draft = 'draft',
+    pending = 'pending',
+    finished = 'finished',
+}
