@@ -5,12 +5,11 @@ import {Snackbar} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
 import {SnackbarProps, Snackbar as TypeSnackbar} from 'types';
 import {Alert} from '@material-ui/lab';
+import {useEffect} from 'react';
 
 export const CustomSnackbar = (props: TypeSnackbar & {open: boolean}) => {
     return (
-        <Snackbar
-            open={props.open}
-        >
+        <Snackbar open={props.open}>
             <Alert severity={props.severity}>{props.message}</Alert>
         </Snackbar>
     );
@@ -38,16 +37,16 @@ export const ErrorSnackbar = (props: SnackbarProps) => {
     return null;
 };
 
-export const SuccessSnackbar = (props: SnackbarProps) => {
+export const useSuccessSnackbar = () => {
     const dispatch = useDispatch();
 
-    React.useEffect(() => {
+    return ({message}: Pick<SnackbarProps, 'message'>) => {
         const id = uniqueId();
 
         dispatch(
             showSnackbar({
                 id,
-                message: props.message,
+                message,
                 severity: 'success',
             }),
         );
@@ -55,7 +54,15 @@ export const SuccessSnackbar = (props: SnackbarProps) => {
         setTimeout(() => {
             dispatch(hideSnackbar(id));
         }, 1500);
-    }, [dispatch, props.message]);
+    };
+};
+
+export const SuccessSnackbar = (props: SnackbarProps) => {
+    const showSuccessSnackbar = useSuccessSnackbar();
+
+    useEffect(() => {
+        showSuccessSnackbar(props);
+    }, [props.message]);
 
     return null;
 };
