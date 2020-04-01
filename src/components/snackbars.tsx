@@ -4,8 +4,8 @@ import * as React from 'react';
 import {Snackbar} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
 import {SnackbarProps, Snackbar as TypeSnackbar} from 'types';
-import {Alert} from '@material-ui/lab';
-import {useEffect} from 'react';
+import {Alert, AlertProps} from '@material-ui/lab';
+import {ReactNode, useEffect} from 'react';
 
 export const CustomSnackbar = (props: TypeSnackbar & {open: boolean}) => {
     return (
@@ -37,31 +37,31 @@ export const ErrorSnackbar = (props: SnackbarProps) => {
     return null;
 };
 
-export const useSuccessSnackbar = () => {
+export const useTemporarySnackbar = (severity: AlertProps['severity']) => {
     const dispatch = useDispatch();
 
-    return ({message}: Pick<SnackbarProps, 'message'>) => {
+    return (message: ReactNode) => {
         const id = uniqueId();
 
         dispatch(
             showSnackbar({
                 id,
                 message,
-                severity: 'success',
+                severity,
             }),
         );
 
         setTimeout(() => {
             dispatch(hideSnackbar(id));
-        }, 1500);
+        }, 3000);
     };
 };
 
 export const SuccessSnackbar = (props: SnackbarProps) => {
-    const showSuccessSnackbar = useSuccessSnackbar();
+    const showSuccessSnackbar = useTemporarySnackbar('success');
 
     useEffect(() => {
-        showSuccessSnackbar(props);
+        showSuccessSnackbar(props.message);
     }, [props.message]);
 
     return null;

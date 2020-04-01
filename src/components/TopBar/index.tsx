@@ -1,36 +1,35 @@
-import {SingleSelect} from 'components/dropdowns';
-import {ShiftDateOption} from 'types';
-import React from 'react';
 import {
-    IconButton,
     AppBar,
     FormLabel,
+    IconButton,
     Menu,
     MenuItem as MenuItem2,
     Paper,
     Toolbar,
     Typography,
 } from '@material-ui/core';
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import ArrowForward from '@material-ui/icons/ArrowForward';
+import DateIcon from '@material-ui/icons/DateRange';
 
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';
-import ArrowBack from '@material-ui/icons/ArrowBack';
-import ArrowForward from '@material-ui/icons/ArrowForward';
-import {Logged} from './Logged';
-import DateIcon from '@material-ui/icons/DateRange';
-import {shiftDateBack, shiftDateForward} from 'utils/dates';
-import moment from 'moment';
-import {ShiftDateOptions, Sizes} from 'defs';
 import {DatePicker} from '@material-ui/pickers';
+import {SingleSelect} from 'components/dropdowns';
+import {ShiftDateOption, ShiftDateOptions, Sizes} from 'defs';
 import {endOfDayToISOString} from 'js/utils/dates';
-import {ShiftMenu} from './ShiftMenu';
+import moment from 'moment';
+import React from 'react';
+import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
+import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import {
     usePreferencesWithActions,
     useRefreshWidgetsDispatcher,
     useScreenSize,
     useUsers,
 } from '../../state/hooks';
-import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
+import {Logged} from './Logged';
+import {ShiftMenu} from './ShiftMenu';
 
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 const MAX_TIMES = 10;
@@ -121,10 +120,7 @@ export const TopBar = (props: {
                 value={preferences.endDateIncrement}
                 onChange={handleEndDateIntervalDropdownChange}
                 clearable={false}
-                options={Object.entries(ShiftDateOptions).map(([id, name]) => ({
-                    value: id,
-                    label: name,
-                }))}
+                options={ShiftDateOptions}
             />
         </div>
     );
@@ -145,7 +141,7 @@ export const TopBar = (props: {
         <IconButton
             style={{float: 'left', height: INPUT_HEIGHT}}
             title={`Shift back ${
-                ShiftDateOptions[preferences.endDateIncrement]
+                ShiftDateOption[preferences.endDateIncrement]
             }`}
             onClick={handleShiftBack}
         >
@@ -157,7 +153,7 @@ export const TopBar = (props: {
         <IconButton
             style={{float: 'left', height: INPUT_HEIGHT}}
             title={`Shift forward ${
-                ShiftDateOptions[preferences.endDateIncrement]
+                ShiftDateOption[preferences.endDateIncrement]
             }`}
             onClick={handleShiftForward}
         >

@@ -1,11 +1,12 @@
-import {getInitialEndDate} from 'utils/dates';
+import {IncludeOption, ShiftDateOption} from 'defs';
 import {Preferences} from 'types';
+import {getInitialEndDate} from 'utils/dates';
 
 export const parsePreferences = (
     state: Partial<Preferences> = {},
 ): Preferences => {
-    const endDateIncrement = state.endDateIncrement || '2w';
-    const include = state.include || 'all';
+    const endDateIncrement = state.endDateIncrement || ShiftDateOption.oneWeek;
+    const include = state.include || IncludeOption.all;
     const endDate = state.endDate || getInitialEndDate();
     // @ts-ignore
     const includePending = state.includePending === 'true';

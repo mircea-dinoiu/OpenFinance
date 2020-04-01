@@ -1,39 +1,39 @@
-import {ShiftDateOption} from 'types';
-import moment from 'moment';
+import {IncludeOption, ShiftDateOption} from 'defs';
 
 import {endOfDayToISOString} from 'js/utils/dates';
+import moment from 'moment';
 
 export const getStartDate = ({
     endDate,
     include,
 }: {
     endDate: string;
-    include: string;
+    include: IncludeOption;
 }): string => {
     let date: Date | null = moment(endDate).toDate();
 
     date.setHours(0, 0, 0, 0);
 
     switch (include) {
-        case 'ly':
+        case IncludeOption.lastYear:
             date.setFullYear(date.getFullYear() - 1);
             break;
-        case 'current-year':
+        case IncludeOption.currentYear:
             date = new Date(date.getFullYear(), 0, 1);
             break;
-        case 'previous-year':
+        case IncludeOption.previousYear:
             date = new Date(date.getFullYear() - 1, 0, 1);
             break;
-        case 'next-year':
+        case IncludeOption.nextYear:
             date = new Date(date.getFullYear() + 1, 0, 1);
             break;
-        case 'lm':
+        case IncludeOption.lastMonth:
             date.setMonth(date.getMonth() - 1);
             break;
-        case 'lw':
+        case IncludeOption.lastWeek:
             date.setDate(date.getDate() - 7);
             break;
-        case 'ld':
+        case IncludeOption.lastDay:
             date.setDate(date.getDate() - 1);
             break;
         default:
@@ -48,15 +48,15 @@ const getMomentArgsForDateShift = (option: ShiftDateOption, times = 1) => {
     const one = 1;
 
     switch (option) {
-        case 'd':
+        case ShiftDateOption.oneDay:
             return [one * Number(times), 'day'];
-        case 'w':
+        case ShiftDateOption.oneWeek:
             return [one * Number(times), 'week'];
-        case '2w':
+        case ShiftDateOption.twoWeeks:
             return [2 * Number(times), 'week'];
-        case 'm':
+        case ShiftDateOption.oneMonth:
             return [one * Number(times), 'month'];
-        case '1y':
+        case ShiftDateOption.oneYear:
             return [one * Number(times), 'year'];
     }
 
@@ -84,8 +84,7 @@ export const shiftDateBack = (
 export const getInitialEndDate = (): string => {
     const date = new Date();
 
-    date.setDate(1);
-    date.setMonth(date.getMonth() + 1);
+    date.setDate(date.getDate() + 7);
 
     return endOfDayToISOString(date);
 };

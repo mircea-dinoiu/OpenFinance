@@ -1,12 +1,11 @@
-import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
-import {Tooltip} from 'components/Tooltip';
-import {financialNum} from 'js/utils/numbers';
-import {spacingSmall} from 'defs/styles';
-import {useCurrencies} from 'state/currencies';
-import {useSuccessSnackbar} from 'components/snackbars';
 import {makeStyles} from '@material-ui/core/styles';
-import {copyText} from 'helpers/clipboardService';
+import {Tooltip} from 'components/Tooltip';
+import {spacingSmall} from 'defs/styles';
+import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
+import {financialNum} from 'js/utils/numbers';
+import * as React from 'react';
+import {useCurrencies} from 'state/currencies';
 
 export const formatNumericValue = (value) =>
     new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(
@@ -28,7 +27,7 @@ const NumericValue = ({
     const cls = useStyles();
     const currencies = useCurrencies();
     const currency = rawCurrency || currencies.selected.iso_code;
-    const showSuccessSnackbar = useSuccessSnackbar();
+    const copyText = useCopyTextWithConfirmation();
     const inner = (
         <span>
             {currency && showCurrency && (
@@ -39,15 +38,7 @@ const NumericValue = ({
             <strong
                 className={cls.value}
                 onClick={() => {
-                    if (copyText(value)) {
-                        showSuccessSnackbar({
-                            message: (
-                                <span>
-                                    Copied <strong>{value}</strong> to clipboard
-                                </span>
-                            ),
-                        });
-                    }
+                    copyText(value);
                 }}
             >
                 {formatNumericValue(value)}

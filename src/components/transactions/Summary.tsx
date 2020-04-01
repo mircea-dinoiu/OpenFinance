@@ -23,10 +23,13 @@ import {
 } from 'state/hooks';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
 import {LoadingTopBar} from '../loaders';
-import {TransactionStatus} from 'defs';
+import {TransactionStatus, IncludeOption} from 'defs';
 
-const getEndDateBasedOnIncludePreference = (endDate, include) => {
-    if (include === 'previous-year') {
+const getEndDateBasedOnIncludePreference = (
+    endDate,
+    include: IncludeOption,
+) => {
+    if (include === IncludeOption.previousYear) {
         return endOfDayToISOString(
             moment(endDate)
                 .month(0)
@@ -36,7 +39,7 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
         );
     }
 
-    if (include === 'next-year') {
+    if (include === IncludeOption.nextYear) {
         return endOfDayToISOString(
             moment(endDate)
                 .month(0)
@@ -47,7 +50,7 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
         );
     }
 
-    if (include === 'current-year') {
+    if (include === IncludeOption.currentYear) {
         return endOfDayToISOString(
             moment(endDate)
                 .month(0)
@@ -58,11 +61,11 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
         );
     }
 
-    if (include === 'ut') {
+    if (include === IncludeOption.untilToday) {
         return endOfDayToISOString();
     }
 
-    if (include === 'until-tmrw') {
+    if (include === IncludeOption.untilTomorrow) {
         return endOfDayToISOString(
             moment()
                 .add(1, 'day')
@@ -70,7 +73,7 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
         );
     }
 
-    if (include === 'until-yd') {
+    if (include === IncludeOption.untilYesterday) {
         return endOfDayToISOString(
             moment()
                 .subtract(1, 'day')
@@ -78,7 +81,7 @@ const getEndDateBasedOnIncludePreference = (endDate, include) => {
         );
     }
 
-    if (include === 'until-now') {
+    if (include === IncludeOption.untilNow) {
         return moment().toISOString();
     }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {ShiftDateOptions, TransactionStatus} from 'defs';
+import {TransactionStatus, IncludeOption, ShiftDateOption} from 'defs';
 import {RepeatOption} from 'js/defs';
-import {$Keys, $Values} from 'utility-types';
+import {$Values} from 'utility-types';
 import {AlertProps} from '@material-ui/lab';
 
 export type ScreenQueries = {
@@ -12,18 +12,8 @@ export type ScreenQueries = {
 
 export type Preferences = {
     endDate: string;
-    endDateIncrement: 'd' | 'w' | '2w' | 'm';
-    include:
-        | 'ut'
-        | 'until-yd'
-        | 'until-tmrw'
-        | 'until-now'
-        | 'all'
-        | 'ld'
-        | 'ld'
-        | 'lw'
-        | 'lm'
-        | 'ly';
+    endDateIncrement: ShiftDateOption;
+    include: IncludeOption;
     includePending: boolean;
 };
 
@@ -132,8 +122,6 @@ export type TransactionModel = {
     money_location_id: number;
     money_location: {currency_id: number};
 };
-
-export type ShiftDateOption = $Keys<typeof ShiftDateOptions>;
 
 export type SnackbarProps = {
     message: React.ReactNode;

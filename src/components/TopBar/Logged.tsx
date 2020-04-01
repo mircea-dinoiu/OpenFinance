@@ -1,11 +1,13 @@
-import * as React from 'react';
+import {IconButton, Menu, MenuItem} from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {Menu, MenuItem, IconButton} from '@material-ui/core';
+import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
+import * as React from 'react';
 import {usePreferences} from 'state/hooks';
 
 export const Logged = ({onLogout}: {onLogout: () => unknown}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const preferences = usePreferences();
+    const copyText = useCopyTextWithConfirmation();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -28,10 +30,15 @@ export const Logged = ({onLogout}: {onLogout: () => unknown}) => {
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                 <MenuItem
                     onClick={() => {
-                        window.open(url.toString());
+                        handleClose();
+
+                        const text = url.toString();
+
+                        // using setTimeout because material ui is probably defocusing the textarea
+                        setTimeout(() => copyText(text), 0);
                     }}
                 >
-                    Share View
+                    Copy Deep-linkable URL
                 </MenuItem>
 
                 <MenuItem
