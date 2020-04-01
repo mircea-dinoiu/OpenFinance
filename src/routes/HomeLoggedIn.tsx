@@ -28,7 +28,11 @@ export const HomeLoggedIn = () => {
     const renderMobileTab = (index) => {
         switch (index) {
             case 0:
-                return <Summary />;
+                return (
+                    <div style={{margin: spacingSmall}}>
+                        <Summary />
+                    </div>
+                );
             case 1:
                 return <Expenses />;
         }
@@ -74,8 +78,8 @@ export const HomeLoggedIn = () => {
     const shouldRenderExtraScreens = () => true;
 
     const renderLarge = () => (
-        <>
-            <Paper style={{margin: `${spacingSmall} ${spacingSmall} 0`}}>
+        <div style={{margin: spacingSmall}}>
+            <Paper style={{marginBottom: spacingSmall}}>
                 <Tabs
                     value={selectedIndex}
                     onChange={(event, index) => setSelectedIndex(index)}
@@ -89,7 +93,7 @@ export const HomeLoggedIn = () => {
                 </Tabs>
             </Paper>
             {renderDesktopTab(selectedIndex)}
-        </>
+        </div>
     );
 
     const renderMediumDown = () => (
@@ -135,5 +139,5 @@ const TransactionsContainer = styled.div`
 
 const TransactionsContentContainer = styled.div`
     width: calc(100vw / 12 * 10);
-    margin: ${spacingSmall} ${spacingSmall} ${spacingSmall} 0;
+    margin-left: ${spacingSmall};
 `;

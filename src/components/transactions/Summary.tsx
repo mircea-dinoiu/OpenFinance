@@ -7,7 +7,7 @@ import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import {IncludeDropdown} from 'components/IncludeDropdown';
 import {getStartDate} from 'utils/dates';
-import {spacingMedium, spacingSmall} from 'defs/styles';
+import {spacingMedium} from 'defs/styles';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import moment from 'moment';
 import {endOfDayToISOString} from 'js/utils/dates';
@@ -110,7 +110,9 @@ export const Summary = () => {
         ),
         include_pending: String(includePending),
         filters: JSON.stringify(
-            includePending ? [] : [{id: 'status', value: TransactionStatus.finished}],
+            includePending
+                ? []
+                : [{id: 'status', value: TransactionStatus.finished}],
         ),
     }).toString();
 
@@ -164,11 +166,7 @@ export const Summary = () => {
     };
 
     return (
-        <div
-            style={{
-                margin: spacingSmall,
-            }}
-        >
+        <div>
             {refreshing && <LoadingTopBar />}
             <>
                 <Paper
