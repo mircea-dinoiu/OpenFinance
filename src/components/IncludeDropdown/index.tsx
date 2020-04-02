@@ -1,57 +1,58 @@
+import {SingleSelect} from 'components/dropdowns';
+import {IncludeOption} from 'defs';
 import * as React from 'react';
 import {usePreferences} from 'state/hooks';
-import {SingleSelect} from 'components/dropdowns';
 
-const getIncludeOptions = ({endDate}) => {
+const getIncludeOptions = ({endDate}: {endDate: string}) => {
     const currentYear = new Date(endDate).getFullYear();
 
     return [
         {
-            value: 'all',
+            value: IncludeOption.all,
             label: 'Everything',
         },
         {
-            value: 'until-tmrw',
+            value: IncludeOption.untilTomorrow,
             label: 'Until tomorrow',
         },
         {
-            value: 'ut',
+            value: IncludeOption.untilToday,
             label: 'Until today',
         },
         {
-            value: 'until-now',
+            value: IncludeOption.untilNow,
             label: 'Until now',
         },
         {
-            value: 'until-yd',
+            value: IncludeOption.untilYesterday,
             label: 'Until yesterday',
         },
         {
-            value: 'ld',
+            value: IncludeOption.lastDay,
             label: '1 day before',
         },
         {
-            value: 'lw',
+            value: IncludeOption.lastWeek,
             label: '1 week before',
         },
         {
-            value: 'lm',
+            value: IncludeOption.lastMonth,
             label: '1 month before',
         },
         {
-            value: 'ly',
+            value: IncludeOption.lastYear,
             label: '1 year before',
         },
         {
-            value: 'previous-year',
+            value: IncludeOption.previousYear,
             label: `Throughout ${currentYear - 1}`,
         },
         {
-            value: 'current-year',
+            value: IncludeOption.currentYear,
             label: `Throughout ${currentYear}`,
         },
         {
-            value: 'next-year',
+            value: IncludeOption.nextYear,
             label: `Throughout ${currentYear + 1}`,
         },
     ];
