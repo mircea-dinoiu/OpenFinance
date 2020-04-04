@@ -138,8 +138,8 @@ export const Summary = () => {
     const renderCategory = (categoryProps) =>
         React.createElement(SummaryCategory, categoryProps);
 
-    const onIncludeChange = (include) => {
-        updatePreferences({include});
+    const onIncludeChange = ({value}: {value: IncludeOption}) => {
+        updatePreferences({include: value});
     };
 
     const handleToggleIncludePending = () => {

@@ -47,7 +47,7 @@ import {
     GlobalState,
 } from 'types';
 import {makeUrl} from 'utils/url';
-import {PERC_MAX, PERC_STEP} from 'js/defs';
+import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {TransactionStatus} from 'defs';
 
 const boxStyle = {
@@ -122,12 +122,17 @@ const FormControlLabelInline = styled(FormControlLabel)`
     display: inline-block;
 `;
 
-class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
+type State = TransactionForm & {
+    descriptionSuggestions: Array<{usages: number; item: string}>;
+    descriptionNewOptionText: string;
+};
+
+class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
     // @ts-ignore
     descriptionSuggestionsCancelSource = CancelToken.source();
     categoriesCancelSource;
 
-    state = {
+    state: State = {
         descriptionSuggestions: [],
         descriptionNewOptionText: this.props.initialValues.description || '',
         ...this.props.initialValues,
@@ -137,20 +142,6 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
         this.props.onFormChange({...this.state, ...state});
 
         return super.setState(state);
-    }
-
-    // eslint-disable-next-line no-unused-vars
-    bindSelect({valueKey, onChange = (string) => {}}) {
-        return {
-            onChange: (value) => {
-                this.setState({
-                    [valueKey]: value,
-                });
-
-                onChange(value);
-            },
-            value: this.state[valueKey],
-        };
     }
 
     get descriptionNewOptions() {
@@ -237,31 +228,25 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
     }
 
     renderDescription() {
-        const valueKey = 'description';
+        const options = this.descriptionNewOptions.concat(
+            this.state.descriptionSuggestions.map((each) => ({
+                value: each.item,
+                label: (
+                    <StyledBadge color="primary" badgeContent={each.usages}>
+                        {each.item}
+                    </StyledBadge>
+                ),
+            })),
+        );
+        const value = options.find((o) => o.value === this.state.description);
 
         return (
             <SelectSingle
                 label="Name"
-                {...this.bindSelect({
-                    valueKey,
-                    onChange: this.handleDescriptionChange,
-                })}
+                onChange={this.handleDescriptionChange}
+                value={value}
                 onInputChange={this.handleDescriptionInputChange}
-                options={this.descriptionNewOptions.concat(
-                    this.state.descriptionSuggestions.map(
-                        (each: {usages: number; item: string}) => ({
-                            value: each.item,
-                            label: (
-                                <StyledBadge
-                                    color="primary"
-                                    badgeContent={each.usages}
-                                >
-                                    {each.item}
-                                </StyledBadge>
-                            ),
-                        }),
-                    ),
-                )}
+                options={options}
                 inputValue={this.state.descriptionNewOptionText}
             />
         );
@@ -303,7 +288,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
         }
     };
 
-    handleDescriptionChange = async (search) => {
+    handleDescriptionChange = async ({value: search}: {value: string}) => {
         if (search) {
             if (this.categoriesCancelSource) {
                 this.categoriesCancelSource.cancel();
@@ -342,18 +327,23 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
     }
 
     renderAccount() {
+        const options = sortBy(this.props.moneyLocations, 'name').map(
+            (map) => ({
+                value: map.id,
+                label: map.name,
+            }),
+        );
+
         return (
             <SelectSingle
                 label="Account"
-                {...this.bindSelect({
-                    valueKey: 'paymentMethod',
-                })}
-                options={sortBy(this.props.moneyLocations, 'name').map(
-                    (map) => ({
-                        value: map.id,
-                        label: map.name,
-                    }),
+                options={options}
+                value={options.find(
+                    (o) => o.value === this.state.paymentMethod,
                 )}
+                onChange={({value}: {value: number}) =>
+                    this.setState({paymentMethod: value})
+                }
             />
         );
     }
@@ -424,46 +414,50 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
     }
 
     renderCategories() {
+        const options = sortBy(this.props.categories, 'name').map((each) => ({
+            value: each.id,
+            label: (
+                <StyledBadge color="primary" badgeContent={each.expenses}>
+                    {each.name}
+                </StyledBadge>
+            ),
+            filterText: each.name,
+        }));
+
         return (
             <SelectMulti
                 label="Categories"
-                {...this.bindSelect({
-                    valueKey: 'categories',
-                })}
                 filterOption={(option, search) =>
                     option.data.filterText
                         .toLowerCase()
                         .includes(search.toLowerCase())
                 }
-                options={sortBy(this.props.categories, 'name').map((each) => ({
-                    value: each.id,
-                    label: (
-                        <StyledBadge
-                            color="primary"
-                            badgeContent={each.expenses}
-                        >
-                            {each.name}
-                        </StyledBadge>
-                    ),
-                    filterText: each.name,
-                }))}
+                options={options}
+                value={options.filter((o) =>
+                    this.state.categories.includes(o.value),
+                )}
             />
         );
     }
 
     renderRepeat() {
+        const options = RepeatOptions.map((arr) => ({
+            value: arr[0],
+            label: arr[1],
+        }));
+
         return (
             <RepeatContainer>
                 <div>
                     <SelectSingle
                         label="Repeat"
-                        {...this.bindSelect({
-                            valueKey: 'repeat',
-                        })}
-                        options={RepeatOptions.map((arr) => ({
-                            value: arr[0],
-                            label: arr[1],
-                        }))}
+                        onChange={({value}: {value: RepeatOption}) =>
+                            this.setState({repeat: value})
+                        }
+                        value={options.find(
+                            (o) => o.value === this.state.repeat,
+                        )}
+                        options={options}
                     />
                 </div>
                 <div>

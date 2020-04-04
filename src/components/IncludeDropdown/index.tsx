@@ -1,6 +1,7 @@
 import {SelectSingle} from 'components/dropdowns';
 import {IncludeOption} from 'defs';
 import * as React from 'react';
+import {ValueType} from 'react-select/src/types';
 import {usePreferences} from 'state/hooks';
 
 const getIncludeOptions = ({endDate}: {endDate: string}) => {
@@ -58,14 +59,20 @@ const getIncludeOptions = ({endDate}: {endDate: string}) => {
     ];
 };
 
-export const IncludeDropdown = ({onChange, value}) => {
+export const IncludeDropdown = ({
+    onChange,
+    value,
+}: {
+    value: IncludeOption;
+    onChange: (value: ValueType<{value: IncludeOption}>) => void;
+}) => {
     const {endDate} = usePreferences();
     const options = getIncludeOptions({endDate});
 
     return (
         <SelectSingle
             label="Include results"
-            value={value}
+            value={options.find((o) => o.value === value)}
             onChange={onChange}
             fullWidth={true}
             options={options}

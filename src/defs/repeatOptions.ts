@@ -1,6 +1,6 @@
 import {RepeatOption} from 'js/defs';
 
-export const RepeatOptions = [
+export const RepeatOptions: Array<[RepeatOption, string]> = [
     [RepeatOption.DAILY, 'Every Day'],
     [RepeatOption.WEEKLY, 'Every Week'],
     [RepeatOption.WEEK_2, 'Every 2 Weeks'],

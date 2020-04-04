@@ -99,10 +99,6 @@ export const TopBar = (props: {
         setCurrenciesDrawerOpen(true);
     };
 
-    const handleEndDateIntervalDropdownChange = (newValue) => {
-        updatePreferences({endDateIncrement: newValue});
-    };
-
     const handleToggleDateRange = () => {
         setShowDateRange(!showDateRange);
     };
@@ -117,8 +113,12 @@ export const TopBar = (props: {
             }}
         >
             <SelectSingle
-                value={preferences.endDateIncrement}
-                onChange={handleEndDateIntervalDropdownChange}
+                value={ShiftDateOptions.find(
+                    (o) => o.value === preferences.endDateIncrement,
+                )}
+                onChange={({value}: {value: ShiftDateOption}) => {
+                    updatePreferences({endDateIncrement: value});
+                }}
                 clearable={false}
                 options={ShiftDateOptions}
             />

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import Select from 'react-select/dist/react-select';
+import Select from 'react-select';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -9,7 +9,6 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {emphasize} from '@material-ui/core/styles/colorManipulator';
-import {find} from 'lodash';
 
 const styles = (theme) => ({
     root: {
@@ -175,36 +174,30 @@ const selectStyles = (theme) => ({
 });
 
 // @ts-ignore
-export const SelectSingle = withStyles(styles, {withTheme: true})(
-    ({theme, classes, label = '', simpleValue = true, ...props}) => (
-        <div className={classes.root}>
-            <Select
-                classes={classes}
-                styles={selectStyles(theme)}
-                components={components}
-                TextFieldProps={{
-                    label,
-                    InputLabelProps: {
-                        shrink: true,
-                    },
-                }}
-                {...props}
-                {...(simpleValue
-                    ? {
-                          value: find(props.options, {value: props.value}),
-                          onChange: (option) => props.onChange(option.value),
-                      }
-                    : {})}
-            />
-        </div>
-    ),
-);
+export const SelectSingle: typeof Select = withStyles(styles, {
+    withTheme: true,
+})(<O,>({theme, classes, label = '', ...props}) => (
+    <div className={classes.root}>
+        <Select<O>
+            classes={classes}
+            styles={selectStyles(theme)}
+            components={components}
+            TextFieldProps={{
+                label,
+                InputLabelProps: {
+                    shrink: true,
+                },
+            }}
+            {...props}
+        />
+    </div>
+));
 
 // @ts-ignore
-export const SelectMulti = withStyles(styles, {withTheme: true})(
-    ({classes, theme, label, simpleValue = true, ...props}) => (
+export const SelectMulti: typeof Select = withStyles(styles, {withTheme: true})(
+    <O,>({classes, theme, label, ...props}) => (
         <div className={classes.root}>
-            <Select
+            <Select<O>
                 classes={classes}
                 styles={selectStyles(theme)}
                 TextFieldProps={{
@@ -214,17 +207,8 @@ export const SelectMulti = withStyles(styles, {withTheme: true})(
                     },
                 }}
                 components={components}
-                isMulti
+                isMulti={true}
                 {...props}
-                {...(simpleValue
-                    ? {
-                          value: props.options.filter((o) =>
-                              props.value.includes(o.value),
-                          ),
-                          onChange: (options) =>
-                              props.onChange(options.map((o) => o.value)),
-                      }
-                    : {})}
             />
         </div>
     ),

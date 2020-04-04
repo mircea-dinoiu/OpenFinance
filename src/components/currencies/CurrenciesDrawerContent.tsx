@@ -26,10 +26,6 @@ export const CurrenciesDrawerContent = () => {
     const dispatch = useDispatch();
     const cls = useStyles();
 
-    const handleChangeBaseCurrency = (id: number) => {
-        dispatch(setCurrenciesSelectedId(id));
-    };
-
     React.useEffect(() => {
         const interval = setInterval(() => {
             if (user) {
@@ -42,6 +38,11 @@ export const CurrenciesDrawerContent = () => {
         };
     }, [dispatch, user]);
 
+    const options = Object.values(map).map((each: Currency) => ({
+        value: each.id,
+        label: each.iso_code,
+    }));
+
     return (
         <div className={cls.main}>
             <Subheader>Base Currency</Subheader>
@@ -51,12 +52,11 @@ export const CurrenciesDrawerContent = () => {
                 }}
             >
                 <SelectSingle
-                    options={Object.values(map).map((each: Currency) => ({
-                        value: each.id,
-                        label: each.iso_code,
-                    }))}
-                    value={defaultCurrencyId}
-                    onChange={handleChangeBaseCurrency}
+                    options={options}
+                    value={options.find((o) => o.value === defaultCurrencyId)}
+                    onChange={({value}: {value: number}) => {
+                        dispatch(setCurrenciesSelectedId(value));
+                    }}
                 />
             </div>
 

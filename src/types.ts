@@ -96,6 +96,7 @@ export type TransactionForm = {
     chargedPersons: {
         [key: string]: number;
     };
+    categories: number[];
     repeatOccurrences: number;
     repeat: TransactionRepeat;
     type: TransactionType;
