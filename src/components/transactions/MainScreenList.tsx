@@ -1,64 +1,63 @@
 import {
+    Button,
+    ButtonProps,
+    Checkbox,
+    Fab,
+    FormControlLabel,
+    Menu,
+    Paper,
+} from '@material-ui/core';
+import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import AddIcon from '@material-ui/icons/Add';
+import IconSplit from '@material-ui/icons/CallSplitRounded';
+import IconStar from '@material-ui/icons/Star';
+import IconStarBorder from '@material-ui/icons/StarBorder';
+import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
+import {numericValue} from 'components/formatters';
+
+import {BigLoader} from 'components/loaders';
+import {ContextMenuItems} from 'components/MainScreen/ContextMenu/ContextMenuItems';
+import {getTrProps} from 'components/MainScreen/Table/helpers';
+import {Tooltip} from 'components/Tooltip';
+import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
+import {
+    mapItemToDetachedUpdates,
+    mapItemToRepeatedUpdates,
+    mergeItems,
+} from 'components/transactions/helpers';
+import {LoadMore} from 'components/transactions/LoadMore';
+import {MainScreenCreatorDialog} from 'components/transactions/MainScreenCreatorDialog';
+import {MainScreenDeleteDialog} from 'components/transactions/MainScreenDeleteDialog';
+import {MainScreenEditDialog} from 'components/transactions/MainScreenEditDialog';
+import {MainScreenListGroup} from 'components/transactions/MainScreenListGroup';
+import {SplitAmountField} from 'components/transactions/SplitAmountField';
+import {StatsTable} from 'components/transactions/StatsTable';
+import {TransactionStatus} from 'defs';
+import {greyedOut} from 'defs/styles';
+import {convertCurrencyToDefault} from 'helpers/currency';
+import {advanceRepeatDate} from 'js/helpers/repeatedModels';
+import {range, uniqueId} from 'lodash';
+import groupBy from 'lodash/groupBy';
+import moment from 'moment';
+import React, {PureComponent} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Dispatch} from 'redux';
+import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
+import {
+    Accounts,
     Currencies,
     GlobalState,
-    Accounts,
     Preferences,
     ScreenQueries,
     TransactionForm,
     TransactionModel,
     Users,
 } from 'types';
-import {
-    mapItemToDetachedUpdates,
-    mapItemToRepeatedUpdates,
-    mergeItems,
-} from 'components/transactions/helpers';
-import React, {PureComponent} from 'react';
-import moment from 'moment';
-import groupBy from 'lodash/groupBy';
-
-import {BigLoader} from 'components/loaders';
 
 import {createXHR} from 'utils/fetch';
-
-import {
-    Button,
-    Checkbox,
-    Fab,
-    FormControlLabel,
-    Paper,
-    Menu,
-    ButtonProps,
-} from '@material-ui/core';
-import {useDispatch, useSelector} from 'react-redux';
-import {greyedOut} from 'defs/styles';
-import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
-import {getTrProps} from 'components/MainScreen/Table/helpers';
-import {MainScreenListGroup} from 'components/transactions/MainScreenListGroup';
-import {MainScreenCreatorDialog} from 'components/transactions/MainScreenCreatorDialog';
-import {convertCurrencyToDefault} from 'helpers/currency';
-import {numericValue} from 'components/formatters';
-import {MainScreenDeleteDialog} from 'components/transactions/MainScreenDeleteDialog';
-import {MainScreenEditDialog} from 'components/transactions/MainScreenEditDialog';
-import AddIcon from '@material-ui/icons/Add';
-import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
-import {advanceRepeatDate} from 'js/helpers/repeatedModels';
-import {range, uniqueId} from 'lodash';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import IconSplit from '@material-ui/icons/CallSplitRounded';
-import {Tooltip} from 'components/Tooltip';
-import Chip from '@material-ui/core/Chip';
-import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
-import IconStar from '@material-ui/icons/Star';
-import IconStarBorder from '@material-ui/icons/StarBorder';
-import {ContextMenuItems} from 'components/MainScreen/ContextMenu/ContextMenuItems';
 import {makeUrl} from 'utils/url';
-import {StatsTable} from 'components/transactions/StatsTable';
-import {SplitAmountField} from 'components/transactions/SplitAmountField';
-import {LoadMore} from 'components/transactions/LoadMore';
-import {Dispatch} from 'redux';
-import {TransactionStatus} from 'defs';
 
 type TypeProps = {
     api: string;
@@ -214,6 +213,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     loadMore = async ({
+        pageSize = this.state.pageSize,
         page = this.state.page,
         results = this.state.results,
         endDate = this.props.preferences.endDate,
@@ -224,7 +224,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             return;
         }
 
-        this.setState((state) => ({loading: state.loading + 1}));
+        this.setState((state) => ({pageSize, loading: state.loading + 1}));
         const sorters: {id: string; desc: boolean}[] = [];
 
         this.sorters.forEach((sorter) => {
@@ -235,7 +235,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             url: makeUrl(this.props.api, {
                 end_date: endDate,
                 page,
-                limit: this.state.pageSize,
+                limit: pageSize,
                 sorters: JSON.stringify(sorters),
                 filters: JSON.stringify(
                     [
@@ -755,21 +755,17 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 <Paper>
                     {this.renderTableHeader()}
                     <div>
-                        <BaseTable
+                        <BaseTable<TransactionModel>
                             defaultSorted={this.props.defaultSorters}
                             defaultSortDesc={true}
-                            pageSize={
-                                count
-                                    ? Math.min(count, this.state.pageSize)
-                                    : this.state.pageSize
-                            }
+                            pageSize={this.state.pageSize}
                             pages={
-                                results.length >= this.state.pageSize
+                                count >= this.state.pageSize
                                     ? this.state.page + 1
                                     : this.state.page
                             }
                             showPagination={true}
-                            showPageSizeOptions={false}
+                            showPageSizeOptions={true}
                             manual={true}
                             loading={this.state.loading > 0}
                             data={results}
@@ -786,6 +782,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                 );
 
                                 this.loadMore({
+                                    pageSize: state.pageSize,
                                     page: state.page + 1,
                                 });
                             }}

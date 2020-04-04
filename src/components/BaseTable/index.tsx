@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ReactTable from 'react-table-6';
+import ReactTable, {TableProps} from 'react-table-6';
 import styled, {css} from 'styled-components';
 import 'react-table-6/react-table.css';
 import {green, red} from '@material-ui/core/colors';
@@ -90,12 +90,19 @@ export const TableFooter = styled.div`
     box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.15);
 `;
 
-export function BaseTable(props) {
+export function BaseTable<D>(
+    props: Partial<
+        TableProps<D> & {
+            hideHeader: boolean;
+        }
+    >,
+) {
     return (
         <>
             <ReactTableStyled
                 showPagination={false}
                 pageSize={props.data.length}
+                pageSizeOptions={[50, 100, 200, 400, 800]}
                 {...props}
             />
         </>

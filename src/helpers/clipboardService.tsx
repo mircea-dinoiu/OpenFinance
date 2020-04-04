@@ -1,4 +1,5 @@
 import {useTemporarySnackbar} from 'components/snackbars';
+import {useCallback} from 'react';
 import * as React from 'react';
 
 export const copyText = (value: string | number) => {
@@ -21,15 +22,20 @@ export const useCopyTextWithConfirmation = () => {
     const showSuccessSnackbar = useTemporarySnackbar('success');
     const showErrorSnackbar = useTemporarySnackbar('error');
 
-    return (...args: Parameters<typeof copyText>) => {
-        if (copyText(...args)) {
-            showSuccessSnackbar(
-                <span>
-                    Copied <strong>{args[0]}</strong> to clipboard
-                </span>,
-            );
-        } else {
-            showErrorSnackbar('Unable to copy to clipboard');
-        }
-    };
+    const callback = useCallback(
+        (...args: Parameters<typeof copyText>) => {
+            if (copyText(...args)) {
+                showSuccessSnackbar(
+                    <span>
+                        Copied <strong>{args[0]}</strong> to clipboard
+                    </span>,
+                );
+            } else {
+                showErrorSnackbar('Unable to copy to clipboard');
+            }
+        },
+        [showSuccessSnackbar, showErrorSnackbar],
+    );
+
+    return callback;
 };

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 import {CardHeader, Checkbox, FormControlLabel} from '@material-ui/core';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {BaseTable} from 'components/BaseTable';
@@ -7,6 +7,13 @@ import {sortBy} from 'lodash';
 import {Currencies} from 'types';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
+
+type SummarySubCategoryModel = {
+    description: string;
+    reference: string;
+    currencyId: number;
+    sum: number;
+};
 
 export const SummarySubCategory = (props: {
     expandedByDefault: boolean;
@@ -24,8 +31,8 @@ export const SummarySubCategory = (props: {
     entityIdField: string;
     entityNameField: string;
     id: string;
-    items: {description: string}[];
-    renderDescription: (cat: {description: string}) => void;
+    items: SummarySubCategoryModel[];
+    renderDescription: (cat: SummarySubCategoryModel) => ReactNode;
     shouldGroup: boolean;
 }) => {
     const cardHeaderClasses = useCardHeaderStyles();
@@ -72,14 +79,7 @@ export const SummarySubCategory = (props: {
                     subheader={numericValue(
                         items.reduce(
                             // @ts-ignore
-                            (
-                                acc,
-                                each: {
-                                    reference: string;
-                                    currencyId: number;
-                                    sum: number;
-                                },
-                            ) =>
+                            (acc, each) =>
                                 acc +
                                 (props.excluded[each.reference]
                                     ? 0
@@ -94,7 +94,7 @@ export const SummarySubCategory = (props: {
                 />
             )}
             {(shouldGroup === false || expanded) && (
-                <BaseTable
+                <BaseTable<SummarySubCategoryModel>
                     data={items}
                     hideHeader={true}
                     columns={[

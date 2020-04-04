@@ -29,6 +29,7 @@
     "@types/react-event-listener": "^0.4.9",
     "@types/react-redux": "^7.1.4",
     "@types/react-router-dom": "^5.1.0",
+    "@types/react-table-6": "npm:@types/react-table@6.10.0",
     "@types/styled-components": "^4.1.19",
     "axios": "^0.18.0",
     "clsx": "^1.1.0",
