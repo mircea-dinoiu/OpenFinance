@@ -18,11 +18,20 @@ import {
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {CancelToken} from 'axios';
-import {MuiReactSelect, MuiReactSelectAsyncCreatable, MuiSelectNative} from 'components/dropdowns';
+import {
+    MuiReactSelect,
+    MuiReactSelectAsyncCreatable,
+    MuiSelectNative,
+} from 'components/dropdowns';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
 import {routes} from 'defs/routes';
-import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles';
+import {
+    gridGap,
+    screenQuerySmall,
+    spacingLarge,
+    spacingSmall,
+} from 'defs/styles';
 import {findCurrencyById} from 'helpers/currency';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {sumArray} from 'js/utils/numbers';
@@ -214,7 +223,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
             cancelToken: this.descriptionSuggestionsCancelSource.token,
         });
 
-        return response.data.map((ds) => ({
+        return sortBy(response.data, (ds) => -ds.usages).map((ds) => ({
             value: ds.item,
             label: ds.item,
         }));
