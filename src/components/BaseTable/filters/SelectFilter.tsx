@@ -1,7 +1,14 @@
-import * as React from 'react';
-import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles} from '@material-ui/core';
+import {
+    Button,
+    FormControlLabel,
+    Menu,
+    Radio,
+    RadioGroup,
+    withStyles,
+} from '@material-ui/core';
 import {SelectMulti, SelectSingle} from 'components/dropdowns';
 import {spacingMedium, spacingSmall} from 'defs/styles';
+import * as React from 'react';
 
 const styles = {
     paper: {
@@ -163,19 +170,36 @@ class SelectFilterWrapped extends React.PureComponent<
     }
 
     renderSelect(name) {
-        const Select = this.props.multi ? SelectMulti : SelectSingle;
+        const options = this.props.items.map((item) => ({
+            value: item.id,
+            label: item[this.props.nameKey],
+        }));
+        const value = this.getSelectValue(name);
+
+        const onOpen = () => {
+            this.setState({radioValue: name});
+        };
+        const handleChange = this.handleChangeSelect(name);
+
+        if (this.props.multi) {
+            return (
+                <SelectMulti
+                    value={options.filter((o) => value.includes(o.value))}
+                    onOpen={onOpen}
+                    options={options}
+                    onChange={(values: Array<{value: unknown}>) =>
+                        handleChange(values.map((v) => v.value))
+                    }
+                />
+            );
+        }
 
         return (
-            <Select
-                value={this.getSelectValue(name)}
-                onOpen={() => {
-                    this.setState({radioValue: name});
-                }}
-                options={this.props.items.map((item) => ({
-                    value: item.id,
-                    label: item[this.props.nameKey],
-                }))}
-                onChange={this.handleChangeSelect(name)}
+            <SelectSingle
+                value={options.find((o) => value === o.value)}
+                onOpen={onOpen}
+                options={options}
+                onChange={({value}: {value: unknown}) => handleChange(value)}
             />
         );
     }
