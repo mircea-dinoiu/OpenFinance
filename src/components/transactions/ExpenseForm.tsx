@@ -46,6 +46,7 @@ import {makeUrl} from 'utils/url';
 const boxStyle = {
     padding: '10px 0',
 };
+
 type TypeProps = {
     initialValues: TransactionForm;
     onFormChange: Function;
