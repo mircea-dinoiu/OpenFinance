@@ -1,6 +1,3 @@
-import {findCurrencyById} from 'helpers/currency';
-
-import React, {PureComponent} from 'react';
 import {
     Avatar,
     Badge,
@@ -8,6 +5,7 @@ import {
     FormControlLabel,
     FormGroup,
     FormLabel,
+    InputAdornment,
     List,
     ListItem,
     ListItemAvatar,
@@ -18,37 +16,40 @@ import {
     Slider,
     TextField,
     withStyles,
-    InputAdornment,
 } from '@material-ui/core';
+import {DateTimePicker} from '@material-ui/pickers';
+// @ts-ignore
+import {CancelToken} from 'axios';
+import {SelectSingle} from 'components/dropdowns';
+import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
-import {createXHR} from 'utils/fetch';
 import {routes} from 'defs/routes';
-import {useSelector} from 'react-redux';
-import {SelectMulti, SelectSingle} from 'components/dropdowns';
 import {
     gridGap,
     screenQuerySmall,
     spacingLarge,
     spacingSmall,
 } from 'defs/styles';
-import {DateTimePicker} from '@material-ui/pickers';
-// @ts-ignore
-import {CancelToken} from 'axios';
+import {findCurrencyById} from 'helpers/currency';
+import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {sumArray} from 'js/utils/numbers';
 import {sortBy} from 'lodash';
+
+import React, {PureComponent} from 'react';
+import {useSelector} from 'react-redux';
+import Select from 'react-select';
 import styled from 'styled-components';
 import {
+    Accounts,
     Categories,
     Currencies,
-    Accounts,
+    GlobalState,
     Preferences,
     TransactionForm,
     Users,
-    GlobalState,
 } from 'types';
+import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
-import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
-import {TransactionStatus} from 'defs';
 
 const boxStyle = {
     padding: '10px 0',
@@ -360,7 +361,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         return (
             <List
                 subheader={
-                    <ListSubheader disableGutters={true}>
+                    <ListSubheader disableGutters={true} disableSticky={true}>
                         Distribution per Person
                     </ListSubheader>
                 }
@@ -416,26 +417,29 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
     renderCategories() {
         const options = sortBy(this.props.categories, 'name').map((each) => ({
             value: each.id,
-            label: (
-                <StyledBadge color="primary" badgeContent={each.expenses}>
-                    {each.name}
-                </StyledBadge>
-            ),
-            filterText: each.name,
+            label: each.name,
         }));
 
         return (
-            <SelectMulti
-                label="Categories"
-                filterOption={(option, search) =>
-                    option.data.filterText
-                        .toLowerCase()
-                        .includes(search.toLowerCase())
-                }
+            <Select
+                placeholder="Categories"
+                isMulti={true}
                 options={options}
                 value={options.filter((o) =>
                     this.state.categories.includes(o.value),
                 )}
+                onChange={(
+                    nextOptions: Array<{
+                        value: number;
+                        label: string;
+                    }>,
+                ) =>
+                    this.setState({
+                        categories: nextOptions
+                            ? nextOptions.map((o) => o.value)
+                            : [],
+                    })
+                }
             />
         );
     }
