@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles} from '@material-ui/core';
-import {MultiSelect, SingleSelect} from 'components/dropdowns';
+import {SelectMulti, SelectSingle} from 'components/dropdowns';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 
 const styles = {
@@ -163,7 +163,7 @@ class SelectFilterWrapped extends React.PureComponent<
     }
 
     renderSelect(name) {
-        const Select = this.props.multi ? MultiSelect : SingleSelect;
+        const Select = this.props.multi ? SelectMulti : SelectSingle;
 
         return (
             <Select

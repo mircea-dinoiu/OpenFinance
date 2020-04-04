@@ -175,7 +175,7 @@ const selectStyles = (theme) => ({
 });
 
 // @ts-ignore
-export const SingleSelect = withStyles(styles, {withTheme: true})(
+export const SelectSingle = withStyles(styles, {withTheme: true})(
     ({theme, classes, label = '', simpleValue = true, ...props}) => (
         <div className={classes.root}>
             <Select
@@ -201,7 +201,7 @@ export const SingleSelect = withStyles(styles, {withTheme: true})(
 );
 
 // @ts-ignore
-export const MultiSelect = withStyles(styles, {withTheme: true})(
+export const SelectMulti = withStyles(styles, {withTheme: true})(
     ({classes, theme, label, simpleValue = true, ...props}) => (
         <div className={classes.root}>
             <Select

@@ -24,7 +24,7 @@ import {RepeatOptions} from 'defs/repeatOptions';
 import {createXHR} from 'utils/fetch';
 import {routes} from 'defs/routes';
 import {useSelector} from 'react-redux';
-import {MultiSelect, SingleSelect} from 'components/dropdowns';
+import {SelectMulti, SelectSingle} from 'components/dropdowns';
 import {
     gridGap,
     screenQuerySmall,
@@ -240,7 +240,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
         const valueKey = 'description';
 
         return (
-            <SingleSelect
+            <SelectSingle
                 label="Name"
                 {...this.bindSelect({
                     valueKey,
@@ -343,7 +343,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
 
     renderAccount() {
         return (
-            <SingleSelect
+            <SelectSingle
                 label="Account"
                 {...this.bindSelect({
                     valueKey: 'paymentMethod',
@@ -425,7 +425,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
 
     renderCategories() {
         return (
-            <MultiSelect
+            <SelectMulti
                 label="Categories"
                 {...this.bindSelect({
                     valueKey: 'categories',
@@ -455,7 +455,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, TransactionForm> {
         return (
             <RepeatContainer>
                 <div>
-                    <SingleSelect
+                    <SelectSingle
                         label="Repeat"
                         {...this.bindSelect({
                             valueKey: 'repeat',

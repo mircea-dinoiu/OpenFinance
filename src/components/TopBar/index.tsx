@@ -15,7 +15,7 @@ import DateIcon from '@material-ui/icons/DateRange';
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';
 import {DatePicker} from '@material-ui/pickers';
-import {SingleSelect} from 'components/dropdowns';
+import {SelectSingle} from 'components/dropdowns';
 import {ShiftDateOption, ShiftDateOptions, Sizes} from 'defs';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
@@ -116,7 +116,7 @@ export const TopBar = (props: {
                 marginTop: 2,
             }}
         >
-            <SingleSelect
+            <SelectSingle
                 value={preferences.endDateIncrement}
                 onChange={handleEndDateIntervalDropdownChange}
                 clearable={false}

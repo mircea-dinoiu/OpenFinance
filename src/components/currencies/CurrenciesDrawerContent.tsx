@@ -1,4 +1,4 @@
-import {SingleSelect} from 'components/dropdowns';
+import {SelectSingle} from 'components/dropdowns';
 import React from 'react';
 import {MenuItem, ListSubheader as Subheader} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
@@ -50,7 +50,7 @@ export const CurrenciesDrawerContent = () => {
                     padding: '0 15px',
                 }}
             >
-                <SingleSelect
+                <SelectSingle
                     options={Object.values(map).map((each: Currency) => ({
                         value: each.id,
                         label: each.iso_code,

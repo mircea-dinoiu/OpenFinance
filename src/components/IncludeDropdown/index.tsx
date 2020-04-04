@@ -1,4 +1,4 @@
-import {SingleSelect} from 'components/dropdowns';
+import {SelectSingle} from 'components/dropdowns';
 import {IncludeOption} from 'defs';
 import * as React from 'react';
 import {usePreferences} from 'state/hooks';
@@ -63,7 +63,7 @@ export const IncludeDropdown = ({onChange, value}) => {
     const options = getIncludeOptions({endDate});
 
     return (
-        <SingleSelect
+        <SelectSingle
             label="Include results"
             value={value}
             onChange={onChange}
