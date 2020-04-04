@@ -1,3 +1,7 @@
+import {FormControl, InputLabel, SelectProps} from '@material-ui/core';
+import MuiSelect from '@material-ui/core/Select';
+import {uniqueId} from 'lodash';
+import {ChangeEvent, useRef} from 'react';
 import * as React from 'react';
 import clsx from 'clsx';
 import Select from 'react-select';
@@ -173,25 +177,64 @@ const selectStyles = (theme) => ({
     }),
 });
 
-// @ts-ignore
-export const SelectSingle: typeof Select = withStyles(styles, {
-    withTheme: true,
-})(<O,>({theme, classes, label = '', ...props}) => (
-    <div className={classes.root}>
-        <Select<O>
-            classes={classes}
-            styles={selectStyles(theme)}
-            components={components}
-            TextFieldProps={{
-                label,
-                InputLabelProps: {
-                    shrink: true,
-                },
-            }}
-            {...props}
-        />
-    </div>
-));
+export const SelectSingle = <V extends string | number>({
+    value,
+    label,
+    options,
+    onChange,
+    isNullable,
+    ...props
+}: {
+    value: {value: V};
+    label?: SelectProps['label'];
+    options: Array<{value: V; label: string}>;
+    onChange: (value: {value: V}) => void;
+    isNullable?: boolean;
+} & Omit<SelectProps, 'value' | 'onChange'>) => {
+    const labelId = useRef(uniqueId());
+    const noneValue = useRef(uniqueId('none'));
+
+    return (
+        <FormControl fullWidth={true}>
+            {label && (
+                <InputLabel htmlFor={labelId.current}>{label}</InputLabel>
+            )}
+            <MuiSelect
+                labelId={labelId.current}
+                value={value && value.value}
+                onChange={(e: ChangeEvent<{value: V}>) => {
+                    const nextValue = e.target.value;
+
+                    // @ts-ignore supporting null
+                    if (nextValue === noneValue) {
+                        onChange({value: null});
+                    } else
+                        onChange({
+                            // @ts-ignore just ensuring value type stays consistent
+                            value:
+                                typeof value.value === 'number'
+                                    ? Number(nextValue)
+                                    : nextValue,
+                        });
+                }}
+                native
+                inputProps={{
+                    id: labelId.current,
+                }}
+                {...props}
+            >
+                {isNullable && (
+                    <option aria-label="None" value={noneValue.current} />
+                )}
+                {options.map((o) => (
+                    <option key={o.value} value={o.value}>
+                        {o.label}
+                    </option>
+                ))}
+            </MuiSelect>
+        </FormControl>
+    );
+};
 
 // @ts-ignore
 export const SelectMulti: typeof Select = withStyles(styles, {withTheme: true})(

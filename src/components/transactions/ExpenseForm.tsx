@@ -242,8 +242,8 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         const value = options.find((o) => o.value === this.state.description);
 
         return (
-            <SelectSingle
-                label="Name"
+            <Select
+                placeholder="Name"
                 onChange={this.handleDescriptionChange}
                 value={value}
                 onInputChange={this.handleDescriptionInputChange}
@@ -453,8 +453,9 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         return (
             <RepeatContainer>
                 <div>
-                    <SelectSingle
+                    <SelectSingle<RepeatOption | null>
                         label="Repeat"
+                        isNullable={true}
                         onChange={({value}: {value: RepeatOption}) =>
                             this.setState({repeat: value})
                         }
