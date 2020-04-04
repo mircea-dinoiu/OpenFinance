@@ -45,14 +45,10 @@ const styles = (theme) => ({
     noOptionsMessage: {
         padding: theme.spacing(1, 2),
     },
-    singleValue: {
-        fontSize: 16,
-    },
     placeholder: {
         position: 'absolute',
         left: 2,
         bottom: 6,
-        fontSize: 16,
     },
     paper: {
         position: 'absolute',
@@ -244,6 +240,7 @@ const addMaterialStyles = (Component) =>
             <div className={classes.root}>
                 <Component<O>
                     classes={classes}
+                    placeholder={label}
                     styles={selectStyles(theme)}
                     TextFieldProps={{
                         label,

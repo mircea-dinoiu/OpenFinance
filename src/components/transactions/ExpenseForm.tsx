@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Badge,
     Checkbox,
     FormControlLabel,
     FormGroup,
@@ -15,12 +14,11 @@ import {
     RadioGroup,
     Slider,
     TextField,
-    withStyles,
 } from '@material-ui/core';
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {CancelToken} from 'axios';
-import {MuiReactSelect, MuiSelectNative} from 'components/dropdowns';
+import {MuiReactSelect, MuiReactSelectAsyncCreatable, MuiSelectNative} from 'components/dropdowns';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
 import {routes} from 'defs/routes';
@@ -48,25 +46,6 @@ import {makeUrl} from 'utils/url';
 const boxStyle = {
     padding: '10px 0',
 };
-const badgeStyle = {
-    root: {
-        lineHeight: '16px',
-    },
-    badge: {
-        top: 0,
-        right: 0,
-        position: 'relative',
-        margin: '0 5px',
-        height: 16,
-        lineHeight: '16px',
-        width: 'auto',
-        padding: '0 5px',
-        borderRadius: 3,
-    },
-};
-// @ts-ignore
-const StyledBadge = withStyles(badgeStyle)(Badge);
-
 type TypeProps = {
     initialValues: TransactionForm;
     onFormChange: Function;
@@ -75,6 +54,11 @@ type TypeProps = {
     preferences: Preferences;
     user: Users;
     categories: Categories;
+};
+
+type DescriptionSuggestion = {
+    item: string;
+    usages: number;
 };
 
 export const setChargedPersonValueFactory = (
@@ -117,10 +101,7 @@ const FormControlLabelInline = styled(FormControlLabel)`
     display: inline-block;
 `;
 
-type State = TransactionForm & {
-    descriptionSuggestions: Array<{usages: number; item: string}>;
-    descriptionNewOptionText: string;
-};
+type State = TransactionForm;
 
 class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
     // @ts-ignore
@@ -128,8 +109,6 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
     categoriesCancelSource;
 
     state: State = {
-        descriptionSuggestions: [],
-        descriptionNewOptionText: this.props.initialValues.description || '',
         ...this.props.initialValues,
     };
 
@@ -137,29 +116,6 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         this.props.onFormChange({...this.state, ...state});
 
         return super.setState(state);
-    }
-
-    get descriptionNewOptions() {
-        const text = this.state.descriptionNewOptionText;
-        const arr = [];
-
-        if (text) {
-            arr.push({
-                value: text,
-                label: text,
-            });
-        }
-
-        const initialDescription = this.props.initialValues.description;
-
-        if (initialDescription && initialDescription !== text) {
-            arr.push({
-                value: initialDescription,
-                label: initialDescription,
-            });
-        }
-
-        return arr;
     }
 
     renderSum() {
@@ -223,26 +179,16 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
     }
 
     renderDescription() {
-        const options = this.descriptionNewOptions.concat(
-            this.state.descriptionSuggestions.map((each) => ({
-                value: each.item,
-                label: (
-                    <StyledBadge color="primary" badgeContent={each.usages}>
-                        {each.item}
-                    </StyledBadge>
-                ),
-            })),
-        );
-        const value = options.find((o) => o.value === this.state.description);
+        const value = this.state.description;
 
         return (
-            <MuiReactSelect
+            <MuiReactSelectAsyncCreatable
                 label="Name"
+                createOptionPosition="first"
                 onChange={this.handleDescriptionChange}
-                value={value}
-                onInputChange={this.handleDescriptionInputChange}
-                options={options}
-                inputValue={this.state.descriptionNewOptionText}
+                cacheOptions={true}
+                defaultOptions={value ? [{value, label: value}] : []}
+                loadOptions={this.fetchDescriptionSuggestions}
             />
         );
     }
@@ -259,32 +205,29 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         // @ts-ignore
         this.descriptionSuggestionsCancelSource = CancelToken.source();
 
-        const response = await createXHR({
+        const response = await createXHR<DescriptionSuggestion[]>({
             url: makeUrl(routes.transactionsSuggestions.descriptions, {
                 search,
                 end_date: this.props.preferences.endDate,
             }),
             cancelToken: this.descriptionSuggestionsCancelSource.token,
         });
-        const descriptionSuggestions = response.data;
 
-        this.setState({
-            descriptionSuggestions,
-        });
+        return response.data.map((ds) => ({
+            value: ds.item,
+            label: ds.item,
+        }));
     };
 
-    handleDescriptionInputChange = (value, {action}) => {
-        if (action === 'input-change') {
-            this.setState({
-                descriptionNewOptionText: value,
-            });
+    handleDescriptionChange = async ({
+        value: description,
+    }: {
+        value: string;
+        label: string;
+    }) => {
+        this.setState({description: description});
 
-            this.fetchDescriptionSuggestions(value);
-        }
-    };
-
-    handleDescriptionChange = async ({value: search}: {value: string}) => {
-        if (search) {
+        if (description) {
             if (this.categoriesCancelSource) {
                 this.categoriesCancelSource.cancel();
             }
@@ -294,7 +237,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
 
             const response = await createXHR({
                 url: makeUrl(routes.transactionsSuggestions.categories, {
-                    search,
+                    search: description,
                 }),
                 cancelToken: this.categoriesCancelSource.token,
             });
