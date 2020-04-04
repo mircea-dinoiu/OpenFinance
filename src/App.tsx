@@ -22,12 +22,7 @@ import {useSnackbars, useUsersWithActions} from 'state/hooks';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {paths} from 'js/defs';
 import {Home} from 'routes/Home';
-import {
-    Categories,
-    Accounts,
-    AccountTypes,
-    Users,
-} from './types';
+import {Categories, Accounts, AccountTypes, Users} from './types';
 import {fetchCurrencies, useCurrencies} from 'state/currencies';
 import {CurrenciesDrawer} from 'components/currencies/CurrenciesDrawer';
 
@@ -45,6 +40,10 @@ const ResponsiveGlobalStyle = createGlobalStyle`
 
     * {
         outline: none !important;
+    }
+    
+    .MuiSlider-valueLabel.MuiSlider-valueLabel {
+        z-index: auto
     }
 `;
 
