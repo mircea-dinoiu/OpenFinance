@@ -106,20 +106,16 @@ export const TopBar = (props: {
     const renderEndDateIntervalSelect = () => (
         <div
             style={{
-                float: 'left',
-                width: '120px',
                 marginRight: 12,
-                marginTop: 2,
             }}
         >
-            <SelectSingle
+            <SelectSingle<ShiftDateOption>
                 value={ShiftDateOptions.find(
                     (o) => o.value === preferences.endDateIncrement,
                 )}
-                onChange={({value}: {value: ShiftDateOption}) => {
+                onChange={({value}) => {
                     updatePreferences({endDateIncrement: value});
                 }}
-                clearable={false}
                 options={ShiftDateOptions}
             />
         </div>
@@ -139,7 +135,6 @@ export const TopBar = (props: {
 
     const renderShiftBack = () => (
         <IconButton
-            style={{float: 'left', height: INPUT_HEIGHT}}
             title={`Shift back ${
                 ShiftDateOption[preferences.endDateIncrement]
             }`}
@@ -230,7 +225,10 @@ export const TopBar = (props: {
                 {user && (
                     <Paper
                         style={{
-                            height: INPUT_HEIGHT,
+                            display: 'grid',
+                            gridTemplateColumns: 'auto 1fr auto 1fr',
+                            alignItems: 'center',
+                            justifyItems: 'center',
                             ...(isSmall
                                 ? {
                                       position: 'fixed',
@@ -248,10 +246,7 @@ export const TopBar = (props: {
                         <DatePicker
                             variant="inline"
                             style={{
-                                float: 'left',
-                                textAlign: 'center',
                                 width: '85px',
-                                marginTop: 5,
                             }}
                             format={'YYYY-MM-DD'}
                             value={
