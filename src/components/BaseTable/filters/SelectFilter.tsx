@@ -6,7 +6,7 @@ import {
     RadioGroup,
     withStyles,
 } from '@material-ui/core';
-import {SelectMulti, SelectSingle} from 'components/dropdowns';
+import {MuiReactSelect, MuiSelectNative} from 'components/dropdowns';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 import * as React from 'react';
 
@@ -183,7 +183,8 @@ class SelectFilterWrapped extends React.PureComponent<
 
         if (this.props.multi) {
             return (
-                <SelectMulti
+                <MuiReactSelect
+                    isMulti={true}
                     value={options.filter((o) => value.includes(o.value))}
                     onOpen={onOpen}
                     options={options}
@@ -195,7 +196,7 @@ class SelectFilterWrapped extends React.PureComponent<
         }
 
         return (
-            <SelectSingle
+            <MuiSelectNative
                 value={options.find((o) => value === o.value)}
                 onOpen={onOpen}
                 options={options}

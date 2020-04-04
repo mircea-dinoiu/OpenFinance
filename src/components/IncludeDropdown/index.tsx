@@ -1,4 +1,4 @@
-import {SelectSingle} from 'components/dropdowns';
+import {MuiSelectNative} from 'components/dropdowns';
 import {IncludeOption} from 'defs';
 import * as React from 'react';
 import {ValueType} from 'react-select/src/types';
@@ -70,7 +70,7 @@ export const IncludeDropdown = ({
     const options = getIncludeOptions({endDate});
 
     return (
-        <SelectSingle
+        <MuiSelectNative
             label="Include results"
             value={options.find((o) => o.value === value)}
             onChange={onChange}

@@ -1,4 +1,4 @@
-import {SelectSingle} from 'components/dropdowns';
+import {MuiSelectNative} from 'components/dropdowns';
 import React from 'react';
 import {MenuItem, ListSubheader as Subheader} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
@@ -51,7 +51,7 @@ export const CurrenciesDrawerContent = () => {
                     padding: '0 15px',
                 }}
             >
-                <SelectSingle
+                <MuiSelectNative
                     options={options}
                     value={options.find((o) => o.value === defaultCurrencyId)}
                     onChange={({value}: {value: number}) => {

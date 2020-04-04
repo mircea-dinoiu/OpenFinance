@@ -15,7 +15,7 @@ import DateIcon from '@material-ui/icons/DateRange';
 import MonetizationOn from '@material-ui/icons/MonetizationOn';
 import Refresh from '@material-ui/icons/Refresh';
 import {DatePicker} from '@material-ui/pickers';
-import {SelectSingle} from 'components/dropdowns';
+import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption, ShiftDateOptions, Sizes} from 'defs';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
@@ -109,7 +109,7 @@ export const TopBar = (props: {
                 marginRight: 12,
             }}
         >
-            <SelectSingle<ShiftDateOption>
+            <MuiSelectNative<ShiftDateOption>
                 value={ShiftDateOptions.find(
                     (o) => o.value === preferences.endDateIncrement,
                 )}

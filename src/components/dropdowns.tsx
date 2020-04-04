@@ -13,6 +13,7 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {emphasize} from '@material-ui/core/styles/colorManipulator';
+import AsyncCreatable from 'react-select/async-creatable';
 
 const styles = (theme) => ({
     root: {
@@ -177,7 +178,7 @@ const selectStyles = (theme) => ({
     }),
 });
 
-export const SelectSingle = <V extends string | number>({
+export const MuiSelectNative = <V extends string | number>({
     value,
     label,
     options,
@@ -236,23 +237,28 @@ export const SelectSingle = <V extends string | number>({
     );
 };
 
-// @ts-ignore
-export const SelectMulti: typeof Select = withStyles(styles, {withTheme: true})(
-    <O,>({classes, theme, label, ...props}) => (
-        <div className={classes.root}>
-            <Select<O>
-                classes={classes}
-                styles={selectStyles(theme)}
-                TextFieldProps={{
-                    label,
-                    InputLabelProps: {
-                        shrink: true,
-                    },
-                }}
-                components={components}
-                isMulti={true}
-                {...props}
-            />
-        </div>
-    ),
+const addMaterialStyles = (Component) =>
+    // @ts-ignore
+    withStyles(styles, {withTheme: true})(
+        <O,>({classes, theme, label, ...props}) => (
+            <div className={classes.root}>
+                <Component<O>
+                    classes={classes}
+                    styles={selectStyles(theme)}
+                    TextFieldProps={{
+                        label,
+                        InputLabelProps: {
+                            shrink: true,
+                        },
+                    }}
+                    components={components}
+                    {...props}
+                />
+            </div>
+        ),
+    );
+
+export const MuiReactSelect: typeof Select = addMaterialStyles(Select);
+export const MuiReactSelectAsyncCreatable: typeof AsyncCreatable = addMaterialStyles(
+    AsyncCreatable,
 );

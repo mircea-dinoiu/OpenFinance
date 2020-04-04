@@ -20,16 +20,11 @@ import {
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {CancelToken} from 'axios';
-import {SelectSingle} from 'components/dropdowns';
+import {MuiReactSelect, MuiSelectNative} from 'components/dropdowns';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
 import {routes} from 'defs/routes';
-import {
-    gridGap,
-    screenQuerySmall,
-    spacingLarge,
-    spacingSmall,
-} from 'defs/styles';
+import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles';
 import {findCurrencyById} from 'helpers/currency';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {sumArray} from 'js/utils/numbers';
@@ -37,7 +32,6 @@ import {sortBy} from 'lodash';
 
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
-import Select from 'react-select';
 import styled from 'styled-components';
 import {
     Accounts,
@@ -242,8 +236,8 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         const value = options.find((o) => o.value === this.state.description);
 
         return (
-            <Select
-                placeholder="Name"
+            <MuiReactSelect
+                label="Name"
                 onChange={this.handleDescriptionChange}
                 value={value}
                 onInputChange={this.handleDescriptionInputChange}
@@ -336,7 +330,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         );
 
         return (
-            <SelectSingle
+            <MuiSelectNative
                 label="Account"
                 options={options}
                 value={options.find(
@@ -421,8 +415,8 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         }));
 
         return (
-            <Select
-                placeholder="Categories"
+            <MuiReactSelect
+                label="Categories"
                 isMulti={true}
                 options={options}
                 value={options.filter((o) =>
@@ -453,7 +447,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         return (
             <RepeatContainer>
                 <div>
-                    <SelectSingle<RepeatOption | null>
+                    <MuiSelectNative<RepeatOption | null>
                         label="Repeat"
                         isNullable={true}
                         onChange={({value}: {value: RepeatOption}) =>
