@@ -9,7 +9,7 @@ import {createXHR} from 'utils/fetch';
 import {routes} from 'defs/routes';
 
 import {Login} from 'routes/Login';
-import {TopBar} from 'components/TopBar';
+import {TopBar} from 'components/top-bar/TopBar';
 
 import {getScreenQueries} from 'utils/getScreenQueries';
 import EventListener from 'react-event-listener';

@@ -173,6 +173,7 @@ class SelectFilterWrapped extends React.PureComponent<
         const options = this.props.items.map((item) => ({
             value: item.id,
             label: item[this.props.nameKey],
+            ...item,
         }));
         const value = this.getSelectValue(name);
 
@@ -200,6 +201,7 @@ class SelectFilterWrapped extends React.PureComponent<
                 value={options.find((o) => value === o.value)}
                 onOpen={onOpen}
                 options={options}
+                valueType="number"
                 onChange={({value}: {value: unknown}) => handleChange(value)}
             />
         );

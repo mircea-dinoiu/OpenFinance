@@ -180,6 +180,7 @@ export const MuiSelectNative = <V extends string | number>({
     options,
     onChange,
     isNullable,
+    valueType,
     ...props
 }: {
     value: {value: V};
@@ -187,6 +188,7 @@ export const MuiSelectNative = <V extends string | number>({
     options: Array<{value: V; label: string}>;
     onChange: (value: {value: V}) => void;
     isNullable?: boolean;
+    valueType?: 'string' | 'number';
 } & Omit<SelectProps, 'value' | 'onChange'>) => {
     const labelId = useRef(uniqueId());
     const noneValue = useRef(uniqueId('none'));
@@ -209,7 +211,7 @@ export const MuiSelectNative = <V extends string | number>({
                         onChange({
                             // @ts-ignore just ensuring value type stays consistent
                             value:
-                                typeof value.value === 'number'
+                                valueType === 'number'
                                     ? Number(nextValue)
                                     : nextValue,
                         });

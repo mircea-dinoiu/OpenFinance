@@ -286,6 +286,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
             <MuiSelectNative
                 label="Account"
                 options={options}
+                valueType="number"
                 value={options.find(
                     (o) => o.value === this.state.paymentMethod,
                 )}

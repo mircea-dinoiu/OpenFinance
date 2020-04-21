@@ -5,7 +5,7 @@ import {green, purple, red} from '@material-ui/core/colors';
 import {routes} from 'defs/routes';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
-import {IncludeDropdown} from 'components/IncludeDropdown';
+import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
 import {getStartDate} from 'utils/dates';
 import {spacingMedium} from 'defs/styles';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';

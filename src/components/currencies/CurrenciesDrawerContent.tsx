@@ -57,6 +57,7 @@ export const CurrenciesDrawerContent = () => {
                     onChange={({value}: {value: number}) => {
                         dispatch(setCurrenciesSelectedId(value));
                     }}
+                    valueType="number"
                 />
             </div>
 
