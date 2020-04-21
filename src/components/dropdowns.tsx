@@ -1,7 +1,7 @@
 import {FormControl, InputLabel, SelectProps} from '@material-ui/core';
 import MuiSelect from '@material-ui/core/Select';
 import {uniqueId} from 'lodash';
-import {ChangeEvent, useRef} from 'react';
+import {ChangeEvent, useRef, useState} from 'react';
 import * as React from 'react';
 import clsx from 'clsx';
 import Select from 'react-select';
@@ -191,7 +191,7 @@ export const MuiSelectNative = <V extends string | number>({
     valueType?: 'string' | 'number';
 } & Omit<SelectProps, 'value' | 'onChange'>) => {
     const labelId = useRef(uniqueId());
-    const noneValue = useRef(uniqueId('none'));
+    const {current: noneValue} = useRef(uniqueId('none'));
 
     return (
         <FormControl fullWidth={true}>
@@ -223,7 +223,7 @@ export const MuiSelectNative = <V extends string | number>({
                 {...props}
             >
                 {isNullable && (
-                    <option aria-label="None" value={noneValue.current} />
+                    <option aria-label="None" value={noneValue} />
                 )}
                 {options.map((o) => (
                     <option key={o.value} value={o.value}>
