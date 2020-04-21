@@ -102,7 +102,7 @@ export const getTrProps = ({
             });
 
             if (!selectedIds.includes(item.id)) {
-                onReceiveSelectedIds(selectedIds.concat(item.id));
+                onReceiveSelectedIds([item.id]);
             }
         }
     },
