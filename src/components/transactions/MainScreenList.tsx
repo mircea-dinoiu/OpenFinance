@@ -36,13 +36,18 @@ import {SplitAmountField} from 'components/transactions/SplitAmountField';
 import {StatsTable} from 'components/transactions/StatsTable';
 import {TransactionStatus} from 'defs';
 import {greyedOut} from 'defs/styles';
+import {QueryParam} from 'defs/url';
+import {mapUrlToFragment} from 'helpers';
 import {convertCurrencyToDefault} from 'helpers/currency';
+import * as H from 'history';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
-import {range, uniqueId} from 'lodash';
+import {isEqual, range, uniqueId} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import React, {PureComponent} from 'react';
+import React, {PureComponent, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {useHistory, useLocation} from 'react-router-dom';
+import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {
@@ -60,6 +65,13 @@ import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
 type TypeProps = {
+    history: H.History;
+    params: {
+        pageSize: number;
+        page: number;
+        sorters: SortingRule[];
+        filters: Filter[];
+    };
     api: string;
     endDate: string;
     entityName: string;
@@ -96,8 +108,6 @@ type TypeProps = {
 
 type TypeState = {
     firstLoad: boolean;
-    page: number;
-    pageSize: number;
     results: TransactionModel[];
     loading: number;
     refreshing: boolean;
@@ -118,8 +128,6 @@ type TypeState = {
 class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     state: TypeState = {
         firstLoad: true,
-        pageSize: 50,
-        page: 1,
         results: [],
         loading: 0,
         refreshing: false,
@@ -136,17 +144,9 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         displayHidden: false,
         splitAmount: '',
     };
-    sorters = [];
-    filters = [];
-
-    static defaultProps = {
-        defaultSorters: [{id: 'created_at', desc: true}],
-    };
 
     componentDidMount() {
-        if (!this.isDesktop()) {
-            this.loadMore();
-        }
+        this.loadMore();
     }
 
     handleReceiveNewRecord(newRecord) {
@@ -164,14 +164,13 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         }
     }
 
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({endDate, refreshWidgets}) {
-        if (refreshWidgets !== this.props.refreshWidgets) {
+    componentDidUpdate(prevProps) {
+        if (prevProps.refreshWidgets !== this.props.refreshWidgets) {
             this.refresh();
-        }
-
-        if (endDate !== this.props.endDate) {
-            this.refresh({endDate});
+        } else if (prevProps.endDate !== this.props.endDate) {
+            this.refresh();
+        } else if (!isEqual(prevProps.params, this.props.params)) {
+            this.refresh();
         }
     }
 
@@ -203,35 +202,32 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     };
 
     get hasFiltersSet() {
-        return this.filters.filter((each) => each.value.text !== '').length > 0;
+        return (
+            this.props.params.filters.filter((each) => each.value.text !== '')
+                .length > 0
+        );
     }
 
     get displayArchived() {
         return this.state.displayHidden || this.hasFiltersSet;
     }
 
-    loadMore = async ({
-        pageSize = this.state.pageSize,
-        page = this.state.page,
-        results = this.state.results,
-        endDate = this.props.endDate,
-    } = {}) => {
+    loadMore = async ({results = this.state.results} = {}) => {
         const infiniteScroll = !this.isDesktop();
 
         if (this.state.loading) {
             return;
         }
 
-        this.setState((state) => ({pageSize, loading: state.loading + 1}));
-        const sorters: {id: string; desc: boolean}[] = [];
+        this.handleCloseContextMenu();
 
-        this.sorters.forEach((sorter) => {
-            sorters.push(sorter);
-        });
+        const {pageSize, sorters, filters, page} = this.props.params;
+
+        this.setState((state) => ({loading: state.loading + 1}));
 
         const response = await createXHR<TransactionModel[]>({
             url: makeUrl(this.props.api, {
-                end_date: endDate,
+                end_date: this.props.endDate,
                 page,
                 limit: pageSize,
                 sorters: JSON.stringify(sorters),
@@ -243,7 +239,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                   id: 'hidden',
                                   value: false,
                               },
-                        ...this.filters,
+                        ...filters,
                     ].filter(Boolean),
                 ),
             }),
@@ -252,7 +248,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         const nextResults = infiniteScroll ? results.concat(json) : json;
 
         this.setState((state) => ({
-            page,
             results: nextResults,
             firstLoad: false,
             loading: state.loading - 1,
@@ -271,15 +266,13 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         );
     }
 
-    refresh = async ({endDate = this.props.endDate} = {}) => {
+    refresh = async () => {
         this.setState({
             refreshing: true,
         });
 
         await this.loadMore({
-            page: this.isDesktop() ? this.state.page : 1,
             results: [],
-            endDate,
         });
 
         this.setState({
@@ -742,8 +735,22 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         };
     }
 
+    setParam(param: QueryParam, value: string) {
+        const url = new URL(window.location.href);
+
+        url.searchParams.delete(QueryParam.page);
+        url.searchParams.set(
+            param,
+            value,
+        );
+        this.props.history.push(
+            mapUrlToFragment(url),
+        );
+    }
+
     renderContent() {
         const commonProps = this.getCommonProps();
+        const params = this.props.params;
 
         if (this.isDesktop()) {
             const results = this.getSortedResults();
@@ -754,13 +761,23 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     {this.renderTableHeader()}
                     <div>
                         <BaseTable<TransactionModel>
-                            defaultSorted={this.props.defaultSorters}
+                            filtered={params.filters}
+                            onFilteredChange={(value) => this.setParam(QueryParam.filters, JSON.stringify(value))}
+
+                            sorted={params.sorters}
+                            onSortedChange={(value) => this.setParam(QueryParam.sorters, JSON.stringify(value))}
                             defaultSortDesc={true}
-                            pageSize={this.state.pageSize}
+
+                            pageSize={params.pageSize}
+                            onPageSizeChange={value => this.setParam(QueryParam.pageSize, value.toString())}
+
+                            page={params.page - 1}
+                            onPageChange={value => this.setParam(QueryParam.page, (value + 1).toString())}
+
                             pages={
-                                count >= this.state.pageSize
-                                    ? this.state.page + 1
-                                    : this.state.page
+                                count >= params.pageSize
+                                    ? params.page + 1
+                                    : params.page
                             }
                             showPagination={true}
                             showPageSizeOptions={true}
@@ -771,19 +788,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                 updateRecords: this.updateRecords,
                             })}
                             getTrProps={this.getTrProps}
-                            onFetchData={(state) => {
-                                this.handleCloseContextMenu();
-
-                                this.sorters = state.sorted;
-                                this.filters = state.filtered.filter(
-                                    (filter) => filter.value !== undefined,
-                                );
-
-                                this.loadMore({
-                                    pageSize: state.pageSize,
-                                    page: state.page + 1,
-                                });
-                            }}
                         />
                     </div>
                     {this.renderTableFooter()}
@@ -884,7 +888,15 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         <LoadMore
                             loading={loading}
                             onClick={() => {
-                                this.loadMore({page: this.state.page + 1});
+                                const url = new URL(window.location.search);
+
+                                url.searchParams.set(
+                                    QueryParam.page,
+                                    String(this.props.params.page + 1),
+                                );
+                                this.props.history.replace(
+                                    mapUrlToFragment(url),
+                                );
                             }}
                         />
                     )}
@@ -928,13 +940,30 @@ export const MainScreenList = (ownProps) => {
     );
     const dispatch = useDispatch();
     const [endDate] = useEndDate();
+    const history = useHistory();
+    const location = useLocation();
+
+    const params = useMemo(() => {
+        const searchParams = new URLSearchParams(location.search);
+
+        return {
+            pageSize: JSON.parse(searchParams.get(QueryParam.pageSize)) ?? 50,
+            page: JSON.parse(searchParams.get(QueryParam.page)) ?? 1,
+            sorters: JSON.parse(searchParams.get(QueryParam.sorters)) ?? [
+                {id: 'created_at', desc: true},
+            ],
+            filters: JSON.parse(searchParams.get(QueryParam.filters)) ?? [],
+        };
+    }, [location.search]);
 
     return (
         <MainScreenListWrapped
             {...ownProps}
             {...stateProps}
             endDate={endDate}
+            history={history}
             dispatch={dispatch}
+            params={params}
         />
     );
 };

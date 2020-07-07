@@ -1,4 +1,5 @@
 import {IncludeOption} from 'defs';
+import {QueryParam} from 'defs/url';
 import {TransactionModel} from 'types';
 import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import {sumArray} from 'js/utils/numbers';
@@ -60,7 +61,7 @@ export const sortMoneyLocations = (items) =>
 
 export const useIncludePending = (): [boolean, (v: boolean) => void] => {
     const [value, setValue] = useQueryParamState(
-        'includePending',
+        QueryParam.includePending,
         'false' as string,
     );
 
@@ -68,4 +69,4 @@ export const useIncludePending = (): [boolean, (v: boolean) => void] => {
 };
 
 export const useInclude = () =>
-    useQueryParamState<IncludeOption>('include', IncludeOption.all);
+    useQueryParamState<IncludeOption>(QueryParam.include, IncludeOption.all);

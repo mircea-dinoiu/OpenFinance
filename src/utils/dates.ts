@@ -1,4 +1,5 @@
 import {IncludeOption, ShiftDateOption} from 'defs';
+import {QueryParam} from 'defs/url';
 import {mapUrlToFragment} from 'helpers';
 
 import {endOfDayToISOString} from 'js/utils/dates';
@@ -96,7 +97,7 @@ export const formatYMD = (date: Date = new Date()) =>
     moment(date).format('YYYY-MM-DD');
 
 export const useEndDate = () => {
-    return useQueryParamState('endDate', getInitialEndDate());
+    return useQueryParamState(QueryParam.endDate, getInitialEndDate());
 };
 
 export const useEndDateIncrement = () => {
