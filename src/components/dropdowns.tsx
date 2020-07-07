@@ -222,9 +222,7 @@ export const MuiSelectNative = <V extends string | number>({
                 }}
                 {...props}
             >
-                {isNullable && (
-                    <option aria-label="None" value={noneValue} />
-                )}
+                {isNullable && <option aria-label="None" value={noneValue} />}
                 {options.map((o) => (
                     <option key={o.value} value={o.value}>
                         {o.label}

@@ -45,10 +45,10 @@ import {
     Categories,
     Currencies,
     GlobalState,
-    Preferences,
     TransactionForm,
     Users,
 } from 'types';
+import {useEndDate} from 'utils/dates';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
@@ -61,7 +61,7 @@ type TypeProps = {
     onFormChange: Function;
     moneyLocations: Accounts;
     currencies: Currencies;
-    preferences: Preferences;
+    endDate: string;
     user: Users;
     categories: Categories;
 };
@@ -218,7 +218,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         const response = await createXHR<DescriptionSuggestion[]>({
             url: makeUrl(routes.transactionsSuggestions.descriptions, {
                 search,
-                end_date: this.props.preferences.endDate,
+                end_date: this.props.endDate,
             }),
             cancelToken: this.descriptionSuggestionsCancelSource.token,
         });
@@ -548,20 +548,21 @@ export const ExpenseForm = (ownProps) => {
     const stateProps = useSelector(
         ({
             currencies,
-            preferences,
             categories,
             moneyLocations,
             user,
         }: GlobalState) => ({
             currencies,
             categories,
-            preferences,
             moneyLocations,
             user,
         }),
     );
+    const [endDate] = useEndDate();
 
-    return <ExpenseFormWrapped {...ownProps} {...stateProps} />;
+    return (
+        <ExpenseFormWrapped {...ownProps} {...stateProps} endDate={endDate} />
+    );
 };
 
 const TypeStatusFlagsContainer = styled.div`

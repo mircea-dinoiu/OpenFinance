@@ -1,20 +1,13 @@
-import * as React from 'react';
-import {TransactionStatus, IncludeOption, ShiftDateOption} from 'defs';
-import {RepeatOption} from 'js/defs';
-import {$Values} from 'utility-types';
 import {AlertProps} from '@material-ui/lab';
+import {TransactionStatus} from 'defs';
+import {RepeatOption} from 'js/defs';
+import * as React from 'react';
+import {$Values} from 'utility-types';
 
 export type ScreenQueries = {
     isSmall: boolean;
     isMedium: boolean;
     isLarge: boolean;
-};
-
-export type Preferences = {
-    endDate: string;
-    endDateIncrement: ShiftDateOption;
-    include: IncludeOption;
-    includePending: boolean;
 };
 
 export type Currency = {
@@ -134,8 +127,6 @@ export type Snackbar = {
 } & SnackbarProps;
 
 export type GlobalState = {
-    preferences: Preferences;
-
     currencies: Currencies;
     currenciesDrawerOpen: boolean;
 

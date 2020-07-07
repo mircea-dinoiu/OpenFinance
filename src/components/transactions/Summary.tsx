@@ -1,3 +1,4 @@
+import {useInclude, useIncludePending} from 'components/transactions/helpers';
 import * as React from 'react';
 import {createXHR} from 'utils/fetch';
 import {Checkbox, FormControlLabel, Paper} from '@material-ui/core';
@@ -6,7 +7,7 @@ import {routes} from 'defs/routes';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
-import {getStartDate} from 'utils/dates';
+import {getStartDate, useEndDate} from 'utils/dates';
 import {spacingMedium} from 'defs/styles';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import moment from 'moment';
@@ -17,7 +18,6 @@ import {
     useCategories,
     useMoneyLocations,
     useMoneyLocationTypes,
-    usePreferencesWithActions,
     useRefreshWidgets,
     useUsers,
 } from 'state/hooks';
@@ -91,15 +91,14 @@ const getEndDateBasedOnIncludePreference = (
 export const Summary = () => {
     const [results, setResults] = React.useState(null);
     const [refreshing, setRefreshing] = React.useState(false);
-    const [preferences, {updatePreferences}] = usePreferencesWithActions();
     const refreshWidgets = useRefreshWidgets();
     const moneyLocationTypes = useMoneyLocationTypes();
     const user = useUsers();
     const categories = useCategories();
     const moneyLocations = useMoneyLocations();
-    const includePending = preferences.includePending;
-    const endDate = preferences.endDate;
-    const include = preferences.include;
+    const [includePending, setIncludePending] = useIncludePending();
+    const [endDate] = useEndDate();
+    const [include, setInclude] = useInclude();
     const reportQueryParams = new URLSearchParams({
         ...pickBy(
             {
@@ -139,13 +138,11 @@ export const Summary = () => {
         React.createElement(SummaryCategory, categoryProps);
 
     const onIncludeChange = ({value}: {value: IncludeOption}) => {
-        updatePreferences({include: value});
+        setInclude(value);
     };
 
     const handleToggleIncludePending = () => {
-        const includePending = !preferences.includePending;
-
-        updatePreferences({includePending});
+        setIncludePending(!includePending);
     };
 
     const parseTransactionsByLocation = (data) => {
@@ -178,13 +175,13 @@ export const Summary = () => {
                     }}
                 >
                     <IncludeDropdown
-                        value={preferences.include}
+                        value={include}
                         onChange={onIncludeChange}
                     />
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={preferences.includePending}
+                                checked={includePending}
                                 onChange={handleToggleIncludePending}
                                 color="default"
                             />

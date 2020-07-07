@@ -1,9 +1,8 @@
-import {useDispatch, useSelector} from 'react-redux';
 import * as React from 'react';
-import {useCallback} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {refreshWidgets, setUsers, updatePreferences, updateState} from 'state/actionCreators';
-import {GlobalState, ScreenQueries, Snackbar, Users, Preferences} from 'types';
+import {refreshWidgets, setUsers} from 'state/actionCreators';
+import {GlobalState, ScreenQueries, Snackbar, Users} from 'types';
 
 export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();
@@ -32,17 +31,7 @@ export const useUsersWithActions = (): [
 
 export const useMoneyLocations = () =>
     useSelector((s: GlobalState) => s.moneyLocations);
-export const usePreferences = () =>
-    useSelector((s: GlobalState) => s.preferences);
-export const usePreferencesWithActions = (): [
-    Preferences,
-    {updatePreferences: typeof updatePreferences},
-] => [
-    usePreferences(),
-    useActions({
-        updatePreferences,
-    }),
-];
+
 export const useCategories = () =>
     useSelector((s: GlobalState) => s.categories);
 export const useSnackbars = (): Snackbar[] =>

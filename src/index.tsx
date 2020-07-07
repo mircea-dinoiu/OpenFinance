@@ -5,7 +5,6 @@ import {applyMiddleware, compose, createStore} from 'redux';
 import {combinedReducers} from 'state/reducers';
 import {App} from './App';
 import thunk from 'redux-thunk';
-import {readState} from 'state/persistency';
 import * as serviceWorker from './serviceWorker';
 
 // @ts-ignore
@@ -13,7 +12,7 @@ const reduxExtension = window.__REDUX_DEVTOOLS_EXTENSION__;
 
 const store = createStore(
     combinedReducers,
-    readState(),
+    {},
     /* eslint no-underscore-dangle: 0 */
     compose(
         applyMiddleware(thunk),

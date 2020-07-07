@@ -1,7 +1,29 @@
+import {mapUrlToFragment} from 'helpers';
+import {useHistory, useLocation} from 'react-router-dom';
+
 export const makeUrl = (path: string, params: {} = {}): string => {
     const urlObj = new URL(path, window.location.origin);
 
     urlObj.search = new URLSearchParams(params).toString();
 
     return urlObj.toString();
+};
+
+export const useQueryParamState = <T extends string>(
+    key: string,
+    defaultValue: T,
+): [T, (v: T) => void] => {
+    const location = useLocation();
+    const history = useHistory();
+
+    return [
+        (new URLSearchParams(location.search).get(key) ?? defaultValue) as T,
+        (value) => {
+            const url = new URL(window.location.href);
+
+            url.searchParams.set(key, value);
+
+            history.push(mapUrlToFragment(url));
+        },
+    ];
 };

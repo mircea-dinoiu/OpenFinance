@@ -17,19 +17,25 @@ import Refresh from '@material-ui/icons/Refresh';
 import {DatePicker} from '@material-ui/pickers';
 import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption, ShiftDateOptions, Sizes} from 'defs';
+import {mapUrlToFragment} from 'helpers';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import React from 'react';
 import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
-import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import {
-    usePreferencesWithActions,
+    shiftDateBack,
+    shiftDateForward,
+    useEndDate,
+    useEndDateIncrement,
+} from 'utils/dates';
+import {
     useRefreshWidgetsDispatcher,
     useScreenSize,
     useUsers,
 } from '../../state/hooks';
 import {Logged} from './Logged';
 import {ShiftMenu} from './ShiftMenu';
+import {useHistory} from 'react-router-dom';
 
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 const MAX_TIMES = 10;
@@ -57,38 +63,30 @@ export const TopBar = (props: {
     const [showDateRange, setShowDateRange] = React.useState(false);
     const [showShiftMenu, setShowShiftMenu] = React.useState(false);
     const [shiftMenuAnchor, setShiftMenuAnchor] = React.useState(null);
-    const [preferences, {updatePreferences}] = usePreferencesWithActions();
     const refreshWidgets = useRefreshWidgetsDispatcher();
     const [, {setCurrenciesDrawerOpen}] = useCurrenciesDrawerOpenWithActions();
     const screenSize = useScreenSize();
     const user = useUsers();
+    const history = useHistory();
+    const [endDate, setEndDate] = useEndDate();
+    const [endDateIncrement, setEndDateIncrement] = useEndDateIncrement();
 
-    const shiftBack = (date) => {
-        updatePreferences({
-            endDate: endOfDayToISOString(date),
-        });
-    };
+    const setDate = (date) => {
+        const url = new URL(window.location.href);
 
-    const shiftForward = (date) => {
-        updatePreferences({
-            endDate: endOfDayToISOString(date),
-        });
+        url.searchParams.set('endDate', endOfDayToISOString(date));
+
+        history.push(mapUrlToFragment(url));
     };
 
     const handleShiftBack = () => {
-        shiftBack(
-            shiftDateBack(preferences.endDate, preferences.endDateIncrement),
-        );
+        setDate(shiftDateBack(endDate, endDateIncrement));
     };
     const handleShiftForward = () => {
-        shiftForward(
-            shiftDateForward(preferences.endDate, preferences.endDateIncrement),
-        );
+        setDate(shiftDateForward(endDate, endDateIncrement));
     };
     const onChangeEndDate = (date) => {
-        updatePreferences({
-            endDate: endOfDayToISOString(date),
-        });
+        setEndDate(endOfDayToISOString(date));
     };
 
     const onClickRefresh = () => {
@@ -111,10 +109,10 @@ export const TopBar = (props: {
         >
             <MuiSelectNative<ShiftDateOption>
                 value={ShiftDateOptions.find(
-                    (o) => o.value === preferences.endDateIncrement,
+                    (o) => o.value === endDateIncrement,
                 )}
                 onChange={({value}) => {
-                    updatePreferences({endDateIncrement: value});
+                    setEndDateIncrement(value);
                 }}
                 options={ShiftDateOptions}
             />
@@ -135,9 +133,7 @@ export const TopBar = (props: {
 
     const renderShiftBack = () => (
         <IconButton
-            title={`Shift back ${
-                ShiftDateOption[preferences.endDateIncrement]
-            }`}
+            title={`Shift back ${ShiftDateOption[endDateIncrement]}`}
             onClick={handleShiftBack}
         >
             <ArrowBack />
@@ -147,9 +143,7 @@ export const TopBar = (props: {
     const renderShiftForward = () => (
         <IconButton
             style={{float: 'left', height: INPUT_HEIGHT}}
-            title={`Shift forward ${
-                ShiftDateOption[preferences.endDateIncrement]
-            }`}
+            title={`Shift forward ${ShiftDateOption[endDateIncrement]}`}
             onClick={handleShiftForward}
         >
             <ArrowForward />
@@ -166,45 +160,43 @@ export const TopBar = (props: {
             <ShiftMenu>
                 <div>
                     <FormLabel component="legend">Previous</FormLabel>
-                    {getShiftBackOptions(
-                        preferences.endDate,
-                        preferences.endDateIncrement,
-                    ).map((date) => {
-                        const formattedDate = moment(date).format('ll');
+                    {getShiftBackOptions(endDate, endDateIncrement).map(
+                        (date) => {
+                            const formattedDate = moment(date).format('ll');
 
-                        return (
-                            <MenuItem2
-                                key={formattedDate}
-                                onClick={() => {
-                                    handleCloseShiftMenu();
-                                    shiftBack(date);
-                                }}
-                            >
-                                {formattedDate}
-                            </MenuItem2>
-                        );
-                    })}
+                            return (
+                                <MenuItem2
+                                    key={formattedDate}
+                                    onClick={() => {
+                                        handleCloseShiftMenu();
+                                        setDate(date);
+                                    }}
+                                >
+                                    {formattedDate}
+                                </MenuItem2>
+                            );
+                        },
+                    )}
                 </div>
                 <div>
                     <FormLabel component="legend">Next</FormLabel>
-                    {getShiftForwardOptions(
-                        preferences.endDate,
-                        preferences.endDateIncrement,
-                    ).map((date) => {
-                        const formattedDate = moment(date).format('ll');
+                    {getShiftForwardOptions(endDate, endDateIncrement).map(
+                        (date) => {
+                            const formattedDate = moment(date).format('ll');
 
-                        return (
-                            <MenuItem2
-                                key={formattedDate}
-                                onClick={() => {
-                                    handleCloseShiftMenu();
-                                    shiftForward(date);
-                                }}
-                            >
-                                {formattedDate}
-                            </MenuItem2>
-                        );
-                    })}
+                            return (
+                                <MenuItem2
+                                    key={formattedDate}
+                                    onClick={() => {
+                                        handleCloseShiftMenu();
+                                        setDate(date);
+                                    }}
+                                >
+                                    {formattedDate}
+                                </MenuItem2>
+                            );
+                        },
+                    )}
                 </div>
             </ShiftMenu>
         </Menu>
@@ -249,11 +241,7 @@ export const TopBar = (props: {
                                 width: '85px',
                             }}
                             format={'YYYY-MM-DD'}
-                            value={
-                                preferences.endDate
-                                    ? moment(preferences.endDate).toDate()
-                                    : null
-                            }
+                            value={endDate ? moment(endDate).toDate() : null}
                             onChange={onChangeEndDate}
                             onContextMenu={handleOpenShiftMenu}
                         />

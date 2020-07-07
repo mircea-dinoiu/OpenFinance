@@ -2,8 +2,6 @@ import {Action} from 'state/defs';
 import uniqueId from 'lodash/uniqueId';
 import {getScreenQueries} from 'utils/getScreenQueries';
 import {combineReducers} from 'redux';
-import {parsePreferences, validatePreferences} from 'utils/preferences';
-import {Preferences} from 'types';
 import {bindToUpdateState} from 'state/utils';
 import {currencies, currenciesDrawerOpen} from 'state/currencies';
 
@@ -15,14 +13,7 @@ const refreshWidgets = (state = uniqueId(), action) =>
     action.type === Action.REFRESH_WIDGETS ? uniqueId() : state;
 const user = (state = null, action) =>
     action.type === Action.SET_USERS ? action.value : state;
-const preferences = (state: Preferences = parsePreferences(), action) => {
-    switch (action.type) {
-        case Action.UPDATE_PREFERENCES:
-            return {...state, ...action.value};
-    }
 
-    return validatePreferences(state);
-};
 const snackbars = (state = [], action) => {
     switch (action.type) {
         case Action.SHOW_SNACKBAR:
@@ -50,6 +41,5 @@ export const combinedReducers = combineReducers({
     categories,
     moneyLocations,
     moneyLocationTypes,
-    preferences,
     snackbars,
 });

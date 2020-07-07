@@ -49,19 +49,19 @@ import {
     Accounts,
     Currencies,
     GlobalState,
-    Preferences,
     ScreenQueries,
     TransactionForm,
     TransactionModel,
     Users,
 } from 'types';
+import {useEndDate} from 'utils/dates';
 
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
 type TypeProps = {
     api: string;
-    preferences: Preferences;
+    endDate: string;
     entityName: string;
     nameProperty: string;
     screen: ScreenQueries;
@@ -165,14 +165,12 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps({preferences, refreshWidgets}) {
+    UNSAFE_componentWillReceiveProps({endDate, refreshWidgets}) {
         if (refreshWidgets !== this.props.refreshWidgets) {
             this.refresh();
         }
 
-        const {endDate} = preferences;
-
-        if (endDate !== this.props.preferences.endDate) {
+        if (endDate !== this.props.endDate) {
             this.refresh({endDate});
         }
     }
@@ -216,7 +214,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         pageSize = this.state.pageSize,
         page = this.state.page,
         results = this.state.results,
-        endDate = this.props.preferences.endDate,
+        endDate = this.props.endDate,
     } = {}) => {
         const infiniteScroll = !this.isDesktop();
 
@@ -273,7 +271,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         );
     }
 
-    refresh = async ({endDate = this.props.preferences.endDate} = {}) => {
+    refresh = async ({endDate = this.props.endDate} = {}) => {
         this.setState({
             refreshing: true,
         });
@@ -915,14 +913,12 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 export const MainScreenList = (ownProps) => {
     const stateProps = useSelector(
         ({
-            preferences,
             screen,
             refreshWidgets,
             currencies,
             moneyLocations,
             user,
         }: GlobalState) => ({
-            preferences,
             screen,
             refreshWidgets,
             currencies,
@@ -931,11 +927,13 @@ export const MainScreenList = (ownProps) => {
         }),
     );
     const dispatch = useDispatch();
+    const [endDate] = useEndDate();
 
     return (
         <MainScreenListWrapped
             {...ownProps}
             {...stateProps}
+            endDate={endDate}
             dispatch={dispatch}
         />
     );

@@ -122,7 +122,7 @@ const AppWrapped = () => {
             <MuiThemeProvider theme={theme}>
                 <>
                     <ResponsiveGlobalStyle />
-                    <>
+                    <BrowserRouter>
                         <EventListener
                             target="window"
                             onResize={onWindowResize}
@@ -133,23 +133,21 @@ const AppWrapped = () => {
                         />
                         {isCurrenciesDrawerReady() && <CurrenciesDrawer />}
                         {ready && (
-                            <BrowserRouter>
-                                <Switch>
-                                    <Route
-                                        path={paths.home}
-                                        exact={true}
-                                        component={Home}
-                                    />
-                                    <Route
-                                        path={paths.login}
-                                        exact={true}
-                                        component={Login}
-                                    />
-                                </Switch>
-                            </BrowserRouter>
+                            <Switch>
+                                <Route
+                                    path={paths.home}
+                                    exact={true}
+                                    component={Home}
+                                />
+                                <Route
+                                    path={paths.login}
+                                    exact={true}
+                                    component={Login}
+                                />
+                            </Switch>
                         )}
                         <CustomSnackbar {...snackbar} open={snackbar != null} />
-                    </>
+                    </BrowserRouter>
                 </>
             </MuiThemeProvider>
         </MuiPickersUtilsProvider>

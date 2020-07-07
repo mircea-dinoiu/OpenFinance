@@ -1,7 +1,10 @@
 import {IncludeOption, ShiftDateOption} from 'defs';
+import {mapUrlToFragment} from 'helpers';
 
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
+import {useLocation, useHistory} from 'react-router-dom';
+import {useQueryParamState} from 'utils/url';
 
 export const getStartDate = ({
     endDate,
@@ -91,3 +94,11 @@ export const getInitialEndDate = (): string => {
 
 export const formatYMD = (date: Date = new Date()) =>
     moment(date).format('YYYY-MM-DD');
+
+export const useEndDate = () => {
+    return useQueryParamState('endDate', getInitialEndDate());
+};
+
+export const useEndDateIncrement = () => {
+    return useQueryParamState<ShiftDateOption>('endDateIncrement', ShiftDateOption.oneWeek);
+};

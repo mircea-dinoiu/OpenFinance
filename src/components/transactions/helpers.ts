@@ -1,6 +1,8 @@
+import {IncludeOption} from 'defs';
 import {TransactionModel} from 'types';
 import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import {sumArray} from 'js/utils/numbers';
+import {useQueryParamState} from 'utils/url';
 
 export const mapItemToRepeatedUpdates = (item: TransactionModel) => {
     const extra: {
@@ -55,3 +57,15 @@ export const sortMoneyLocations = (items) =>
         (item) =>
             `${['open', 'locked', 'closed'].indexOf(item.status)}#${item.name}`,
     );
+
+export const useIncludePending = (): [boolean, (v: boolean) => void] => {
+    const [value, setValue] = useQueryParamState(
+        'includePending',
+        'false' as string,
+    );
+
+    return [value === 'true', (nextValue) => setValue(String(nextValue))];
+};
+
+export const useInclude = () =>
+    useQueryParamState<IncludeOption>('include', IncludeOption.all);

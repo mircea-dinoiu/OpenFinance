@@ -3,14 +3,14 @@ export const Sizes = {
 };
 
 export enum ShiftDateOption {
-    oneDay,
+    oneDay = '1d',
 
-    oneWeek,
-    twoWeeks,
+    oneWeek = '1w',
+    twoWeeks = '2w',
 
-    oneMonth,
+    oneMonth = '1m',
 
-    oneYear,
+    oneYear = '1y',
 }
 
 export const ShiftDateOptions: Array<{
@@ -31,21 +31,21 @@ export enum TransactionStatus {
 }
 
 export enum IncludeOption {
-    all,
+    all = 'all',
 
-    lastYear,
-    currentYear,
-    previousYear,
-    nextYear,
+    lastYear = 'lastYear',
+    currentYear = 'currentYear',
+    previousYear = 'previousYear',
+    nextYear = 'nextYear',
 
-    lastMonth,
+    lastMonth = 'lastMonth',
 
-    lastWeek,
+    lastWeek = 'lastWeek',
 
-    lastDay,
+    lastDay = 'lastDay',
 
-    untilToday,
-    untilTomorrow,
-    untilNow,
-    untilYesterday,
+    untilToday = 'untilToday',
+    untilTomorrow = 'untilTomorrow',
+    untilNow = 'untilNow',
+    untilYesterday = 'untilYesterday',
 }

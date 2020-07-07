@@ -2,7 +2,7 @@ import {MuiSelectNative} from 'components/dropdowns';
 import {IncludeOption} from 'defs';
 import * as React from 'react';
 import {ValueType} from 'react-select/src/types';
-import {usePreferences} from 'state/hooks';
+import {useEndDate} from 'utils/dates';
 
 const getIncludeOptions = ({endDate}: {endDate: string}) => {
     const currentYear = new Date(endDate).getFullYear();
@@ -66,7 +66,7 @@ export const IncludeDropdown = ({
     value: IncludeOption;
     onChange: (value: ValueType<{value: IncludeOption}>) => void;
 }) => {
-    const {endDate} = usePreferences();
+    const [endDate] = useEndDate();
     const options = getIncludeOptions({endDate});
 
     return (
