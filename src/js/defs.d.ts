@@ -10,9 +10,14 @@ export enum RepeatOption {
 
 export const paths: {
     home: string;
+    transactions: string;
+    transactionsSummary: string;
+    transactionsList: string;
     login: string;
+    categories: string;
+    accounts: string;
+    accountTypes: string;
 };
 
 export const PERC_MAX: number;
 export const PERC_STEP: number;
-

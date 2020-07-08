@@ -1,30 +1,36 @@
 import MomentUtils from '@date-io/moment';
-import {CustomSnackbar} from 'components/snackbars';
-import React, {useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {setScreen, updateState} from 'state/actionCreators';
 import {MuiThemeProvider} from '@material-ui/core/styles';
-
-import {createXHR} from 'utils/fetch';
+import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import {CurrenciesDrawer} from 'components/currencies/CurrenciesDrawer';
+import {CustomSnackbar} from 'components/snackbars';
+import {TopBar} from 'components/top-bar/TopBar';
 import {routes} from 'defs/routes';
+import {theme} from 'defs/styles';
+import {paths} from 'js/defs';
+import 'normalize.css';
+import React, {useState} from 'react';
+import EventListener from 'react-event-listener';
+import {hot} from 'react-hot-loader/root';
+import {useDispatch} from 'react-redux';
+import {
+    BrowserRouter,
+    Redirect,
+    Route,
+    RouteComponentProps,
+    Switch,
+} from 'react-router-dom';
+import {AppTabs} from 'routes/AppTabs';
 
 import {Login} from 'routes/Login';
-import {TopBar} from 'components/top-bar/TopBar';
+import {setScreen, updateState} from 'state/actionCreators';
+import {fetchCurrencies, useCurrencies} from 'state/currencies';
+import {useSnackbars, useUsers, useUsersWithActions} from 'state/hooks';
+import {createGlobalStyle} from 'styled-components';
+
+import {createXHR} from 'utils/fetch';
 
 import {getScreenQueries} from 'utils/getScreenQueries';
-import EventListener from 'react-event-listener';
-import {theme} from 'defs/styles';
-import {hot} from 'react-hot-loader/root';
-import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {createGlobalStyle} from 'styled-components';
-import 'normalize.css';
-import {useSnackbars, useUsersWithActions} from 'state/hooks';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import {paths} from 'js/defs';
-import {Home} from 'routes/Home';
-import {Categories, Accounts, AccountTypes, Users} from './types';
-import {fetchCurrencies, useCurrencies} from 'state/currencies';
-import {CurrenciesDrawer} from 'components/currencies/CurrenciesDrawer';
+import {Accounts, AccountTypes, Categories, Users} from './types';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
     html, body {
@@ -132,26 +138,38 @@ const AppWrapped = () => {
                             onLogout={onLogout}
                         />
                         {isCurrenciesDrawerReady() && <CurrenciesDrawer />}
-                        {ready && (
-                            <Switch>
-                                <Route
-                                    path={paths.home}
-                                    exact={true}
-                                    component={Home}
-                                />
-                                <Route
-                                    path={paths.login}
-                                    exact={true}
-                                    component={Login}
-                                />
-                            </Switch>
-                        )}
+                        <Switch>
+                            {ready && (
+                                <>
+                                    <Route
+                                        exact={true}
+                                        path={paths.login}
+                                        component={Login}
+                                    />
+                                    <Route component={AppInner} />
+                                </>
+                            )}
+                        </Switch>
                         <CustomSnackbar {...snackbar} open={snackbar != null} />
                     </BrowserRouter>
                 </>
             </MuiThemeProvider>
         </MuiPickersUtilsProvider>
     );
+};
+
+const AppInner = ({location}: RouteComponentProps) => {
+    const users = useUsers();
+
+    if (users) {
+        if (location.pathname === paths.home) {
+            return <Redirect to={paths.transactions} />;
+        }
+
+        return <AppTabs />;
+    }
+
+    return <Redirect to={paths.login} />;
 };
 
 export const App = hot(AppWrapped);

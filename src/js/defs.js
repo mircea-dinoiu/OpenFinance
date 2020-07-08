@@ -17,7 +17,12 @@ module.exports = {
     RepeatOption,
     paths: {
         home: '/',
-        login: '/login',
+        transactions: '/transactions',
+        transactionsSummary: '/transactions/summary',
+        transactionsList: '/transactions/list',
+        categories: '/categories',
+        accounts: '/accounts',
+        accountTypes: '/account-types',
     },
     apis: {},
 };

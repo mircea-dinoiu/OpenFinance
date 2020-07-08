@@ -170,7 +170,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         } else if (prevProps.endDate !== this.props.endDate) {
             this.refresh();
         } else if (!isEqual(prevProps.params, this.props.params)) {
-            this.refresh();
+            this.loadMore();
         }
     }
 
@@ -888,7 +888,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         <LoadMore
                             loading={loading}
                             onClick={() => {
-                                const url = new URL(window.location.search);
+                                const url = new URL(window.location.href);
 
                                 url.searchParams.set(
                                     QueryParam.page,
