@@ -27,6 +27,7 @@ const HomeMediumDown = () => {
             }}
         >
             <Redirect
+                exact={true}
                 from={paths.transactions}
                 to={paths.transactionsSummary}
             />

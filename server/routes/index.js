@@ -1,5 +1,4 @@
 module.exports = {
-    '/': require('./home'),
     '/api/transactions': require('./expense'),
     '/api/reports': require('./report'),
     '/api/currencies': require('./currency'),
@@ -7,4 +6,5 @@ module.exports = {
     '/api/users': require('./user'),
     '/api/money-locations': require('./money-location'),
     '/api/money-location-types': require('./money-location-type'),
+    '/': require('./home'),
 };

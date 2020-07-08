@@ -23,6 +23,7 @@ module.exports = {
         categories: '/categories',
         accounts: '/accounts',
         accountTypes: '/account-types',
+        login: '/login',
     },
     apis: {},
 };

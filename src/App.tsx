@@ -14,10 +14,10 @@ import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
 import {
     BrowserRouter,
+    Switch,
     Redirect,
     Route,
     RouteComponentProps,
-    Switch,
 } from 'react-router-dom';
 import {AppTabs} from 'routes/AppTabs';
 
@@ -138,18 +138,17 @@ const AppWrapped = () => {
                             onLogout={onLogout}
                         />
                         {isCurrenciesDrawerReady() && <CurrenciesDrawer />}
-                        <Switch>
-                            {ready && (
-                                <>
-                                    <Route
-                                        exact={true}
-                                        path={paths.login}
-                                        component={Login}
-                                    />
-                                    <Route component={AppInner} />
-                                </>
-                            )}
-                        </Switch>
+                        {ready && (
+                            <Switch>
+                                <Route
+                                    exact={true}
+                                    strict={false}
+                                    path={paths.login}
+                                    component={Login}
+                                />
+                                <Route component={AppInner} />
+                            </Switch>
+                        )}
                         <CustomSnackbar {...snackbar} open={snackbar != null} />
                     </BrowserRouter>
                 </>
@@ -158,7 +157,7 @@ const AppWrapped = () => {
     );
 };
 
-const AppInner = ({location}: RouteComponentProps) => {
+const AppInner = ({location, match}: RouteComponentProps) => {
     const users = useUsers();
 
     if (users) {
