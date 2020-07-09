@@ -7,6 +7,7 @@ module.exports = BaseController.extend({
     updateValidationRules: {
         id: ['isRequired', ['isId', Model]],
         name: ['sometimes', 'isRequired', 'isString'],
+        color: ['sometimes', 'isString'],
     },
 
     createValidationRules: {
@@ -18,6 +19,10 @@ module.exports = BaseController.extend({
 
         if (record.hasOwnProperty('name')) {
             values.name = record.name.trim();
+        }
+
+        if (record.hasOwnProperty('color')) {
+            values.color = record.color.trim();
         }
 
         return values;

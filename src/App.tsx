@@ -23,6 +23,7 @@ import {AppTabs} from 'routes/AppTabs';
 
 import {Login} from 'routes/Login';
 import {setScreen, updateState} from 'state/actionCreators';
+import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies, useCurrencies} from 'state/currencies';
 import {useSnackbars, useUsers, useUsersWithActions} from 'state/hooks';
 import {createGlobalStyle} from 'styled-components';
@@ -59,6 +60,7 @@ const AppWrapped = () => {
     const currencies = useCurrencies();
     const [snackbar] = useSnackbars();
     const [ready, setReady] = useState(false);
+    const readCategories = useCategoriesReader();
 
     const fetchUser = async () => {
         try {
@@ -76,20 +78,15 @@ const AppWrapped = () => {
     const fetchRequirements = async () => {
         dispatch(fetchCurrencies());
 
-        const [
-            categoriesResponse,
-            mlResponse,
-            mlTypesResponse,
-        ] = await Promise.all([
-            createXHR<Categories>({url: routes.categories}),
+        readCategories();
+
+        const [mlResponse, mlTypesResponse] = await Promise.all([
             createXHR<Accounts>({url: routes.moneyLocations}),
             createXHR<AccountTypes>({url: routes.moneyLocationTypes}),
         ]);
 
         dispatch(
             updateState({
-                // @ts-ignore
-                categories: categoriesResponse.data,
                 // @ts-ignore
                 moneyLocations: mlResponse.data,
                 moneyLocationTypes: mlTypesResponse.data,
