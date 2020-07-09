@@ -1,24 +1,21 @@
+import {Checkbox, FormControlLabel, Paper} from '@material-ui/core';
+import {green, purple, red} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
+import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';
+import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
 import {
     getEndDateBasedOnIncludePreference,
     useInclude,
     useIncludePending,
 } from 'components/transactions/helpers';
-import * as React from 'react';
-import {createXHR} from 'utils/fetch';
-import {Checkbox, FormControlLabel, Paper} from '@material-ui/core';
-import {green, purple, red} from '@material-ui/core/colors';
-import {routes} from 'defs/routes';
-import pickBy from 'lodash/pickBy';
-import identity from 'lodash/identity';
-import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
-import {getStartDate, useEndDate} from 'utils/dates';
-import {spacingMedium, spacingSmall} from 'defs/styles';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
-import moment from 'moment';
-import {endOfDayToISOString} from 'js/utils/dates';
-import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';
-import {makeUrl} from 'utils/url';
+import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
+import {IncludeOption, TransactionStatus} from 'defs';
+import {routes} from 'defs/routes';
+import {spacingMedium, spacingSmall} from 'defs/styles';
+import identity from 'lodash/identity';
+import pickBy from 'lodash/pickBy';
+import * as React from 'react';
 import {
     useCategories,
     useMoneyLocations,
@@ -26,9 +23,10 @@ import {
     useRefreshWidgets,
     useUsers,
 } from 'state/hooks';
-import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
+import {getStartDate, useEndDate} from 'utils/dates';
+import {createXHR} from 'utils/fetch';
+import {makeUrl} from 'utils/url';
 import {LoadingTopBar} from '../loaders';
-import {TransactionStatus, IncludeOption} from 'defs';
 
 const useStyles = makeStyles({
     sidebar: {
