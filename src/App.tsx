@@ -12,19 +12,13 @@ import React, {useState} from 'react';
 import EventListener from 'react-event-listener';
 import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
-import {
-    BrowserRouter,
-    Switch,
-    Redirect,
-    Route,
-    RouteComponentProps,
-} from 'react-router-dom';
+import {BrowserRouter, Redirect, Route, RouteComponentProps, Switch} from 'react-router-dom';
 import {AppTabs} from 'routes/AppTabs';
 
 import {Login} from 'routes/Login';
 import {useAccountsReader} from 'state/accounts';
 import {useAccountTypesReader} from 'state/accountTypes';
-import {setScreen, updateState} from 'state/actionCreators';
+import {setScreen} from 'state/actionCreators';
 import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies, useCurrencies} from 'state/currencies';
 import {useSnackbars, useUsers, useUsersWithActions} from 'state/hooks';
@@ -33,7 +27,7 @@ import {createGlobalStyle} from 'styled-components';
 import {createXHR} from 'utils/fetch';
 
 import {getScreenQueries} from 'utils/getScreenQueries';
-import {Accounts, AccountTypes, Categories, Users} from './types';
+import {Users} from './types';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
     html, body {
