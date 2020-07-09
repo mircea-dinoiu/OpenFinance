@@ -8,12 +8,13 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
-import ArrowBack from '@material-ui/icons/ArrowBack';
-import ArrowForward from '@material-ui/icons/ArrowForward';
-import DateIcon from '@material-ui/icons/DateRange';
+import IconArrowBack from '@material-ui/icons/ArrowBack';
+import IconArrowForward from '@material-ui/icons/ArrowForward';
+import IconDateIcon from '@material-ui/icons/DateRange';
+import IconExitToApp from '@material-ui/icons/ExitToApp';
 
-import MonetizationOn from '@material-ui/icons/MonetizationOn';
-import Refresh from '@material-ui/icons/Refresh';
+import IconMonetizationOn from '@material-ui/icons/MonetizationOn';
+import IconRefresh from '@material-ui/icons/Refresh';
 import {DatePicker} from '@material-ui/pickers';
 import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption, ShiftDateOptions, Sizes} from 'defs';
@@ -21,21 +22,11 @@ import {mapUrlToFragment} from 'helpers';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import React from 'react';
-import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
-import {
-    shiftDateBack,
-    shiftDateForward,
-    useEndDate,
-    useEndDateIncrement,
-} from 'utils/dates';
-import {
-    useRefreshWidgetsDispatcher,
-    useScreenSize,
-    useUsers,
-} from '../../state/hooks';
-import {Logged} from './Logged';
-import {ShiftMenu} from './ShiftMenu';
 import {useHistory} from 'react-router-dom';
+import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
+import {shiftDateBack, shiftDateForward, useEndDate, useEndDateIncrement} from 'utils/dates';
+import {useRefreshWidgetsDispatcher, useScreenSize, useUsers} from '../../state/hooks';
+import {ShiftMenu} from './ShiftMenu';
 
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 const MAX_TIMES = 10;
@@ -136,7 +127,7 @@ export const TopBar = (props: {
             title={`Shift back ${ShiftDateOption[endDateIncrement]}`}
             onClick={handleShiftBack}
         >
-            <ArrowBack />
+            <IconArrowBack />
         </IconButton>
     );
 
@@ -146,7 +137,7 @@ export const TopBar = (props: {
             title={`Shift forward ${ShiftDateOption[endDateIncrement]}`}
             onClick={handleShiftForward}
         >
-            <ArrowForward />
+            <IconArrowForward />
         </IconButton>
     );
 
@@ -258,22 +249,26 @@ export const TopBar = (props: {
                     <div style={{float: 'right', display: 'flex'}}>
                         {user && isSmall && (
                             <IconButton onClick={handleToggleDateRange}>
-                                <DateIcon htmlColor="white" />
+                                <IconDateIcon htmlColor="white" />
                             </IconButton>
                         )}
                         {props.showCurrenciesDrawer && (
                             <IconButton
                                 onClick={onClickCurrenciesDrawerTrigger}
                             >
-                                <MonetizationOn htmlColor="white" />
+                                <IconMonetizationOn htmlColor="white" />
                             </IconButton>
                         )}
                         {user && (
                             <IconButton onClick={onClickRefresh}>
-                                <Refresh htmlColor="white" />
+                                <IconRefresh htmlColor="white" />
                             </IconButton>
                         )}
-                        {user && <Logged onLogout={props.onLogout} />}
+                        {user && (
+                            <IconButton onClick={props.onLogout}>
+                                <IconExitToApp htmlColor="white" />
+                            </IconButton>
+                        )}
                     </div>
                 </div>
             </Toolbar>
