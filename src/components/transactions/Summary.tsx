@@ -1,4 +1,9 @@
-import {useInclude, useIncludePending} from 'components/transactions/helpers';
+import {makeStyles} from '@material-ui/core/styles';
+import {
+    getEndDateBasedOnIncludePreference,
+    useInclude,
+    useIncludePending,
+} from 'components/transactions/helpers';
 import * as React from 'react';
 import {createXHR} from 'utils/fetch';
 import {Checkbox, FormControlLabel, Paper} from '@material-ui/core';
@@ -8,7 +13,7 @@ import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
 import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
 import {getStartDate, useEndDate} from 'utils/dates';
-import {spacingMedium} from 'defs/styles';
+import {spacingMedium, spacingSmall} from 'defs/styles';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import moment from 'moment';
 import {endOfDayToISOString} from 'js/utils/dates';
@@ -25,70 +30,16 @@ import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
 import {LoadingTopBar} from '../loaders';
 import {TransactionStatus, IncludeOption} from 'defs';
 
-const getEndDateBasedOnIncludePreference = (
-    endDate,
-    include: IncludeOption,
-) => {
-    if (include === IncludeOption.previousYear) {
-        return endOfDayToISOString(
-            moment(endDate)
-                .month(0)
-                .date(1)
-                .subtract(1, 'day')
-                .toDate(),
-        );
-    }
-
-    if (include === IncludeOption.nextYear) {
-        return endOfDayToISOString(
-            moment(endDate)
-                .month(0)
-                .date(1)
-                .add(2, 'year')
-                .subtract(1, 'day')
-                .toDate(),
-        );
-    }
-
-    if (include === IncludeOption.currentYear) {
-        return endOfDayToISOString(
-            moment(endDate)
-                .month(0)
-                .date(1)
-                .add(1, 'year')
-                .subtract(1, 'day')
-                .toDate(),
-        );
-    }
-
-    if (include === IncludeOption.untilToday) {
-        return endOfDayToISOString();
-    }
-
-    if (include === IncludeOption.untilTomorrow) {
-        return endOfDayToISOString(
-            moment()
-                .add(1, 'day')
-                .toDate(),
-        );
-    }
-
-    if (include === IncludeOption.untilYesterday) {
-        return endOfDayToISOString(
-            moment()
-                .subtract(1, 'day')
-                .toDate(),
-        );
-    }
-
-    if (include === IncludeOption.untilNow) {
-        return moment().toISOString();
-    }
-
-    return endDate;
-};
+const useStyles = makeStyles({
+    sidebar: {
+        display: 'grid',
+        gridGap: spacingSmall,
+        gridTemplateColumns: '1fr',
+    },
+});
 
 export const Summary = () => {
+    const cls = useStyles();
     const [results, setResults] = React.useState(null);
     const [refreshing, setRefreshing] = React.useState(false);
     const refreshWidgets = useRefreshWidgets();
@@ -168,7 +119,7 @@ export const Summary = () => {
     return (
         <div>
             {refreshing && <LoadingTopBar />}
-            <>
+            <div className={cls.sidebar}>
                 <Paper
                     style={{
                         padding: spacingMedium,
@@ -189,66 +140,64 @@ export const Summary = () => {
                         label="Include pending transactions"
                     />
                 </Paper>
-                <div style={{margin: '0 0 20px'}}>
-                    <SummaryLazyCategory
-                        {...{
-                            backgroundColor: green[500],
-                            title: 'Balance by Account',
-                            entities: moneyLocationTypes,
-                            expandedByDefault: true,
-                            url: makeUrl(
-                                routes.reports.balanceByLocation,
-                                reportQueryParams,
-                            ),
-                            parser: parseTransactionsByLocation,
-                            renderDescription({reference}) {
-                                return <MoneyLocationDisplay id={reference} />;
-                            },
-                        }}
-                    />
-                    {results &&
-                        renderCategory({
-                            backgroundColor: green[500],
-                            title: 'Balance by Person',
-                            summaryObject: results.remainingData.byUser,
-                            entities: user.list,
-                            entityNameField: 'full_name',
-                        })}
+                <SummaryLazyCategory
+                    {...{
+                        backgroundColor: green[500],
+                        title: 'Balance by Account',
+                        entities: moneyLocationTypes,
+                        expandedByDefault: true,
+                        url: makeUrl(
+                            routes.reports.balanceByLocation,
+                            reportQueryParams,
+                        ),
+                        parser: parseTransactionsByLocation,
+                        renderDescription({reference}) {
+                            return <MoneyLocationDisplay id={reference} />;
+                        },
+                    }}
+                />
+                {results &&
+                    renderCategory({
+                        backgroundColor: green[500],
+                        title: 'Balance by Person',
+                        summaryObject: results.remainingData.byUser,
+                        entities: user.list,
+                        entityNameField: 'full_name',
+                    })}
 
-                    {results &&
-                        renderCategory({
-                            backgroundColor: purple[500],
-                            title: 'Transactions by Category',
-                            summaryObject: results.expensesByCategory,
-                            entities: categories,
-                            entityNameField: 'name',
-                            showSumInHeader: false,
-                        })}
+                {results &&
+                    renderCategory({
+                        backgroundColor: purple[500],
+                        title: 'Transactions by Category',
+                        summaryObject: results.expensesByCategory,
+                        entities: categories,
+                        entityNameField: 'name',
+                        showSumInHeader: false,
+                    })}
 
-                    <SummaryLazyCategory
-                        {...{
-                            backgroundColor: red[500],
-                            title: 'Expenses by Account',
-                            entities: moneyLocationTypes,
-                            entityNameField: 'name',
-                            url: makeUrl(
-                                routes.reports.expensesByLocation,
-                                reportQueryParams,
-                            ),
-                            parser: parseTransactionsByLocation,
-                        }}
-                    />
+                <SummaryLazyCategory
+                    {...{
+                        backgroundColor: red[500],
+                        title: 'Expenses by Account',
+                        entities: moneyLocationTypes,
+                        entityNameField: 'name',
+                        url: makeUrl(
+                            routes.reports.expensesByLocation,
+                            reportQueryParams,
+                        ),
+                        parser: parseTransactionsByLocation,
+                    }}
+                />
 
-                    {results &&
-                        renderCategory({
-                            backgroundColor: red[500],
-                            title: 'Expenses by Person',
-                            summaryObject: results.expensesData.byUser,
-                            entities: user.list,
-                            entityNameField: 'full_name',
-                        })}
-                </div>
-            </>
+                {results &&
+                    renderCategory({
+                        backgroundColor: red[500],
+                        title: 'Expenses by Person',
+                        summaryObject: results.expensesData.byUser,
+                        entities: user.list,
+                        entityNameField: 'full_name',
+                    })}
+            </div>
         </div>
     );
 };

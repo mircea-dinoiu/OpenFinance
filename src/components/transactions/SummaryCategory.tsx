@@ -76,7 +76,7 @@ export const SummaryCategory = (props) => {
     };
 
     return (
-        <Card style={{marginBottom: 10}}>
+        <Card>
             <CardHeader
                 style={{backgroundColor}}
                 title={title}

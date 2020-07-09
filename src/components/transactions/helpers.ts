@@ -1,5 +1,7 @@
 import {IncludeOption} from 'defs';
 import {QueryParam} from 'defs/url';
+import {endOfDayToISOString} from 'js/utils/dates';
+import moment from 'moment';
 import {TransactionModel} from 'types';
 import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import {sumArray} from 'js/utils/numbers';
@@ -70,3 +72,67 @@ export const useIncludePending = (): [boolean, (v: boolean) => void] => {
 
 export const useInclude = () =>
     useQueryParamState<IncludeOption>(QueryParam.include, IncludeOption.all);
+
+export
+const getEndDateBasedOnIncludePreference = (
+    endDate,
+    include: IncludeOption,
+) => {
+    if (include === IncludeOption.previousYear) {
+        return endOfDayToISOString(
+            moment(endDate)
+                .month(0)
+                .date(1)
+                .subtract(1, 'day')
+                .toDate(),
+        );
+    }
+
+    if (include === IncludeOption.nextYear) {
+        return endOfDayToISOString(
+            moment(endDate)
+                .month(0)
+                .date(1)
+                .add(2, 'year')
+                .subtract(1, 'day')
+                .toDate(),
+        );
+    }
+
+    if (include === IncludeOption.currentYear) {
+        return endOfDayToISOString(
+            moment(endDate)
+                .month(0)
+                .date(1)
+                .add(1, 'year')
+                .subtract(1, 'day')
+                .toDate(),
+        );
+    }
+
+    if (include === IncludeOption.untilToday) {
+        return endOfDayToISOString();
+    }
+
+    if (include === IncludeOption.untilTomorrow) {
+        return endOfDayToISOString(
+            moment()
+                .add(1, 'day')
+                .toDate(),
+        );
+    }
+
+    if (include === IncludeOption.untilYesterday) {
+        return endOfDayToISOString(
+            moment()
+                .subtract(1, 'day')
+                .toDate(),
+        );
+    }
+
+    if (include === IncludeOption.untilNow) {
+        return moment().toISOString();
+    }
+
+    return endDate;
+};

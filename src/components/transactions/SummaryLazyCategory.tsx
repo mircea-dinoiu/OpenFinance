@@ -42,7 +42,7 @@ export const SummaryLazyCategory = ({
     }
 
     return (
-        <Card style={{marginBottom: 10}}>
+        <Card>
             <CardHeader
                 classes={cardHeaderClasses}
                 style={{backgroundColor}}
