@@ -2,7 +2,7 @@ import MomentUtils from '@date-io/moment';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {CurrenciesDrawer} from 'components/currencies/CurrenciesDrawer';
-import {CustomSnackbar} from 'components/snackbars';
+import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
 import {routes} from 'defs/routes';
 import {theme} from 'defs/styles';
@@ -133,7 +133,7 @@ const AppWrapped = () => {
                                 <Route component={AppInner} />
                             </Switch>
                         )}
-                        <CustomSnackbar {...snackbar} open={snackbar != null} />
+                        <FloatingSnackbar {...snackbar} open={snackbar != null} />
                     </BrowserRouter>
                 </>
             </MuiThemeProvider>

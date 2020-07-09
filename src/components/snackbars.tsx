@@ -1,3 +1,4 @@
+import {Color} from '@material-ui/lab/Alert/Alert';
 import {hideSnackbar, showSnackbar} from 'state/actionCreators';
 import {uniqueId} from 'lodash';
 import * as React from 'react';
@@ -7,10 +8,18 @@ import {SnackbarProps, Snackbar as TypeSnackbar} from 'types';
 import {Alert, AlertProps} from '@material-ui/lab';
 import {ReactNode, useCallback, useEffect} from 'react';
 
-export const CustomSnackbar = (props: TypeSnackbar & {open: boolean}) => {
+export const FloatingSnackbar = ({
+    open = true,
+    severity,
+    message,
+}: {
+    message: ReactNode;
+    open?: boolean;
+    severity: Color;
+}) => {
     return (
-        <Snackbar open={props.open}>
-            <Alert severity={props.severity}>{props.message}</Alert>
+        <Snackbar open={open}>
+            <Alert severity={severity}>{message}</Alert>
         </Snackbar>
     );
 };

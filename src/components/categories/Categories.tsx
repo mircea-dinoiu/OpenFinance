@@ -18,7 +18,7 @@ export const Categories = () => {
             api={routes.categories}
             editableFields={['name', 'color']}
             onRefresh={refresh}
-            allowDelete={false}
+            allowDelete={true}
                 columns={(editor, setEditor) => [
                     {
                         id: 'name',
