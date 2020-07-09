@@ -14,11 +14,11 @@ export const Categories = () => {
     return (
         <Paper style={{padding: spacingMedium}}>
             <TableWithInlineEditing<Category>
-                data={rows}
-                api={routes.categories}
-                editableFields={['name', 'color']}
-                onRefresh={refresh}
-                allowDelete={false}
+            data={rows}
+            api={routes.categories}
+            editableFields={['name', 'color']}
+            onRefresh={refresh}
+            allowDelete={false}
                 columns={(editor, setEditor) => [
                     {
                         id: 'name',

@@ -22,6 +22,8 @@ import {
 import {AppTabs} from 'routes/AppTabs';
 
 import {Login} from 'routes/Login';
+import {useAccountsReader} from 'state/accounts';
+import {useAccountTypesReader} from 'state/accountTypes';
 import {setScreen, updateState} from 'state/actionCreators';
 import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies, useCurrencies} from 'state/currencies';
@@ -61,6 +63,8 @@ const AppWrapped = () => {
     const [snackbar] = useSnackbars();
     const [ready, setReady] = useState(false);
     const readCategories = useCategoriesReader();
+    const readAccounts = useAccountsReader();
+    const readAccountTypes = useAccountTypesReader();
 
     const fetchUser = async () => {
         try {
@@ -79,19 +83,8 @@ const AppWrapped = () => {
         dispatch(fetchCurrencies());
 
         readCategories();
-
-        const [mlResponse, mlTypesResponse] = await Promise.all([
-            createXHR<Accounts>({url: routes.moneyLocations}),
-            createXHR<AccountTypes>({url: routes.moneyLocationTypes}),
-        ]);
-
-        dispatch(
-            updateState({
-                // @ts-ignore
-                moneyLocations: mlResponse.data,
-                moneyLocationTypes: mlTypesResponse.data,
-            }),
-        );
+        readAccounts();
+        readAccountTypes();
     };
 
     React.useEffect(() => {

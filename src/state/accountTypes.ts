@@ -1,21 +1,21 @@
 import {routes} from 'defs/routes';
 import {useDispatch} from 'react-redux';
 import {updateState} from 'state/actionCreators';
-import {Categories} from 'types';
+import {Account} from 'types';
 import {createXHR} from 'utils/fetch';
 
-export const useCategoriesReader = () => {
+export const useAccountTypesReader = () => {
     const dispatch = useDispatch();
 
     return async () => {
-        const r = await createXHR<Categories>({
-            url: routes.categories,
+        const r = await createXHR<Account>({
+            url: routes.moneyLocationTypes,
         });
 
         dispatch(
             updateState({
                 // @ts-ignore
-                categories: r.data,
+                moneyLocationTypes: r.data,
             }),
         );
     };
