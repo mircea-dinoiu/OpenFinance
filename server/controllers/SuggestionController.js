@@ -4,7 +4,7 @@ const {Validator} = require('../validators');
 const {extractIdsFromModel} = require('../helpers');
 const defs = require('../../src/js/defs');
 
-module.exports = BaseController.extend({
+module.exports = class SuggestionController extends BaseController {
     async getCategories(req, res) {
         const search = req.query.search;
         let ret = [];
@@ -29,7 +29,7 @@ module.exports = BaseController.extend({
         }
 
         res.json(ret);
-    },
+    }
 
     async getExpenseDescriptions(req, res) {
         const {query} = req;
@@ -57,5 +57,5 @@ module.exports = BaseController.extend({
         } else {
             res.status(400).json(validator.errors());
         }
-    },
-});
+    }
+};

@@ -5,10 +5,12 @@ const fs = require('fs');
 const {Currency} = require('../models');
 const http = require('http');
 
-module.exports = {
-    data: null,
-    cacheFilePath: basePath('storage/currencies.json'),
-    currencies: null,
+module.exports = class CurrencyController {
+    constructor() {
+        this.data = null;
+        this.cacheFilePath = basePath('storage/currencies.json');
+        this.currencies = null;
+    }
 
     async getCurrencies(fetch = false) {
         if (this.currencies == null || fetch === true) {
@@ -16,7 +18,7 @@ module.exports = {
         }
 
         return this.currencies;
-    },
+    }
 
     async fetchCachedData() {
         return new Promise((resolve) => {
@@ -31,7 +33,7 @@ module.exports = {
                 }
             }
         });
-    },
+    }
 
     async fetchRates(allowedISOCodes) {
         const defaultCurrencyISOCode = 'USD';
@@ -67,7 +69,7 @@ module.exports = {
                 resolve(null);
             });
         });
-    },
+    }
 
     async fetchFreshData() {
         const map = {};
@@ -94,7 +96,7 @@ module.exports = {
             map,
             default: Number(Object.keys(map)[0]),
         };
-    },
+    }
 
     async cacheData() {
         return new Promise((resolve) => {
@@ -104,7 +106,7 @@ module.exports = {
                 resolve,
             );
         });
-    },
+    }
 
     async setupData({update = false} = {}) {
         let fromCache = false;
@@ -130,7 +132,7 @@ module.exports = {
         if (process.env.DEBUG === 'true') {
             this.data.from_cache = fromCache;
         }
-    },
+    }
 
     async list(req, res) {
         const update = req.query.update === 'true';
@@ -138,5 +140,5 @@ module.exports = {
         await this.setupData({update});
 
         res.json(this.data);
-    },
+    }
 };

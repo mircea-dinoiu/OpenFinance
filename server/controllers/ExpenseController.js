@@ -5,11 +5,10 @@ const {pickOwnProperties} = require('../helpers');
 const {sql} = require('../models');
 const defs = require('../../src/js/defs');
 
-module.exports = BaseController.extend({
-    Model,
-    Service,
-
-    updateValidationRules: {
+module.exports = class ExpenseController extends BaseController {
+    Model = Model;
+    Service = Service;
+    updateValidationRules = {
         id: ['isRequired', ['isId', Model]],
         sum: ['sometimes', 'isRequired', 'isFloat'],
         item: ['sometimes', 'isRequired', 'isString'],
@@ -30,9 +29,8 @@ module.exports = BaseController.extend({
         repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
 
         weight: ['sometimes', 'isNotNegative', 'isInt'],
-    },
-
-    createValidationRules: {
+    };
+    createValidationRules = {
         sum: ['isRequired', 'isFloat'],
         item: ['isRequired', 'isString'],
         favorite: ['sometimes', 'isInt'],
@@ -52,7 +50,7 @@ module.exports = BaseController.extend({
         repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
 
         weight: ['sometimes', 'isNotNegative', 'isInt'],
-    },
+    };
 
     async updateRelations({record, model}) {
         if (record.hasOwnProperty('categories')) {
@@ -91,7 +89,7 @@ module.exports = BaseController.extend({
         }
 
         return this.Model.scope('default').findOne({where: {id: model.id}});
-    },
+    }
 
     async createRelations({record, model, req}) {
         if (record.hasOwnProperty('categories')) {
@@ -122,7 +120,7 @@ module.exports = BaseController.extend({
         }
 
         return this.Model.scope('default').findOne({where: {id: model.id}});
-    },
+    }
 
     sanitizeValues(record) {
         const values = pickOwnProperties(record, [
@@ -170,13 +168,13 @@ module.exports = BaseController.extend({
         }
 
         return values;
-    },
+    }
 
     sanitizeCreateValues(record) {
         return this.sanitizeValues(record);
-    },
+    }
 
     sanitizeUpdateValues(record) {
         return this.sanitizeValues(record);
-    },
-});
+    }
+};

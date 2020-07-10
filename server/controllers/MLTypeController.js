@@ -1,17 +1,15 @@
 const {MLType: Model} = require('../models');
 const BaseController = require('./BaseController');
 
-module.exports = BaseController.extend({
-    Model,
-
-    updateValidationRules: {
+module.exports = class MLTypeController extends BaseController {
+    Model = Model;
+    updateValidationRules = {
         id: ['isRequired', ['isId', Model]],
         name: ['sometimes', 'isRequired', 'isString'],
-    },
-
-    createValidationRules: {
+    };
+    createValidationRules = {
         name: ['isRequired', 'isString'],
-    },
+    };
 
     sanitizeUpdateValues(record) {
         const values = {};
@@ -21,11 +19,11 @@ module.exports = BaseController.extend({
         }
 
         return values;
-    },
+    }
 
     sanitizeCreateValues(record) {
         return {
             name: record.name.trim(),
         };
-    },
-});
+    }
+};

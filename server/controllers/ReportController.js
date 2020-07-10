@@ -93,7 +93,7 @@ const sumByLocationFactory = ({where = []} = {}) => (req, res) => {
     });
 };
 
-module.exports = {
+module.exports = class ReportController {
     async getSummary(req, res) {
         const pullStart = Date.now();
 
@@ -189,13 +189,13 @@ module.exports = {
             expensesByCategory,
             remainingData,
         });
-    },
+    }
     async getBalanceByLocation(req, res) {
         sumByLocationFactory()(req, res);
-    },
+    }
     async getExpensesByLocation(req, res) {
         sumByLocationFactory({
             where: ['`sum` < 0'],
         })(req, res);
-    },
+    }
 };

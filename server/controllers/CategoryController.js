@@ -1,18 +1,19 @@
 const {Category: Model, Expense} = require('../models');
 const BaseController = require('./BaseController');
 
-module.exports = BaseController.extend({
-    Model,
-
-    updateValidationRules: {
-        id: ['isRequired', ['isId', Model]],
-        name: ['sometimes', 'isRequired', 'isString'],
-        color: ['sometimes', 'isString'],
-    },
-
-    createValidationRules: {
-        name: ['isRequired', 'isString'],
-    },
+module.exports = class CategoryController extends BaseController {
+    constructor() {
+        super();
+        this.Model = Model;
+        this.updateValidationRules = {
+            id: ['isRequired', ['isId', Model]],
+            name: ['sometimes', 'isRequired', 'isString'],
+            color: ['sometimes', 'isString'],
+        };
+        this.createValidationRules = {
+            name: ['isRequired', 'isString'],
+        };
+    }
 
     sanitizeUpdateValues(record) {
         const values = {};
@@ -26,13 +27,13 @@ module.exports = BaseController.extend({
         }
 
         return values;
-    },
+    }
 
     sanitizeCreateValues(record) {
         return {
             name: record.name.trim(),
         };
-    },
+    }
 
     async list(req, res) {
         const categories = await Model.findAll({
@@ -54,5 +55,5 @@ module.exports = BaseController.extend({
                 return json;
             }),
         );
-    },
-});
+    }
+};

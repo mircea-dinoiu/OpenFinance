@@ -4,10 +4,31 @@ const {Validator} = require('../validators');
 const chalk = require('chalk');
 const logger = require('../helpers/logger');
 
-module.exports = {
+module.exports = class BaseController {
+    updateValidationRules = {};
+    createValidationRules = {};
+    Service = undefined;
+    Model = undefined;
+
+    createRelations(opts) {
+        return opts.model;
+    }
+
+    updateRelations(opts) {
+        return opts.model;
+    }
+
+    sanitizeUpdateValues(record, model) {
+        return record;
+    }
+
+    sanitizeCreateValues(record) {
+        return record;
+    }
+
     parseRecord(record) {
         return record;
-    },
+    }
 
     async update(req, res) {
         const {data} = req.body;
@@ -70,7 +91,7 @@ module.exports = {
         } else {
             res.status(400).json(Messages.ERROR_INVALID_INPUT);
         }
-    },
+    }
 
     async create(req, res) {
         const {data} = req.body;
@@ -130,7 +151,7 @@ module.exports = {
         } else {
             res.status(400).json(Messages.ERROR_INVALID_INPUT);
         }
-    },
+    }
 
     async destroy(req, res) {
         const {data} = req.body;
@@ -162,7 +183,7 @@ module.exports = {
         } else {
             res.status(400).json(Messages.ERROR_INVALID_INPUT);
         }
-    },
+    }
 
     async list(req, res) {
         if (this.Service) {
@@ -176,9 +197,5 @@ module.exports = {
         } else {
             res.json(await this.Model.findAll());
         }
-    },
-
-    extend(overrides) {
-        return Object.assign({}, this, overrides);
-    },
+    }
 };
