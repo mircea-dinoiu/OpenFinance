@@ -1,19 +1,18 @@
-import {CurrencyDisplay} from 'components/BaseTable/cells/CurrencyDisplay';
-import {PricePerGDisplay} from 'components/BaseTable/cells/PricePerGDisplay';
-import {CategoriesFilter} from 'components/BaseTable/filters/CategoriesFilter';
-import {TransactionModel} from 'types';
-import * as React from 'react';
 import {DescriptionDisplay} from 'components/BaseTable/cells/DescriptionDisplay';
+import {PricePerGDisplay} from 'components/BaseTable/cells/PricePerGDisplay';
+import {AccountColumn} from 'components/BaseTable/columns/AccountColumn';
 import {AmountColumn} from 'components/BaseTable/columns/AmountColumn';
 import {DateTimeColumn} from 'components/BaseTable/columns/DateTimeColumn';
-import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
-import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay';
-import {AccountColumn} from 'components/BaseTable/columns/AccountColumn';
-import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import {RepeatColumn} from 'components/BaseTable/columns/RepeatColumn';
+import {CategoriesFilter} from 'components/BaseTable/filters/CategoriesFilter';
 import {DescriptionFilter} from 'components/BaseTable/filters/DescriptionFilter';
 import {UsersFilter} from 'components/BaseTable/filters/UsersFilter';
+import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay';
+import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import {RatingDisplay} from 'components/transactions/cells/RatingDisplay';
+import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
+import * as React from 'react';
+import {TransactionModel} from 'types';
 
 export const ExpenseTableColumns = ({updateRecords}) => [
     AmountColumn,
