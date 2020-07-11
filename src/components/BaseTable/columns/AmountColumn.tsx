@@ -8,7 +8,7 @@ export const AmountColumn = {
     Header: 'Amount',
     filterable: true,
     accessor: (item: TransactionModel) => (
-        <AmountDisplay showCurrency={false} item={item} />
+        <AmountDisplay item={item} />
     ),
     id: 'sum',
     //

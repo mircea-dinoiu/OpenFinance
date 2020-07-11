@@ -3,7 +3,7 @@ import {getItemCurrencyISOCode} from 'helpers';
 import React from 'react';
 import {useCurrencies} from 'state/currencies';
 
-export const AmountDisplay = ({item, showCurrency = true}) => {
+export const AmountDisplay = ({item}) => {
     const currencies = useCurrencies();
     const currencyISOCode = getItemCurrencyISOCode({
         item,
@@ -15,7 +15,6 @@ export const AmountDisplay = ({item, showCurrency = true}) => {
         <>
             {sign}
             {numericValue(Math.abs(item.sum), {
-                showCurrency,
                 currency: currencyISOCode,
             })}
         </>

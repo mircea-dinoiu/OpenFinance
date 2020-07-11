@@ -91,7 +91,7 @@ export const ExpenseListItemContent = ({item, expanded}) => {
             <DescriptionContainer>{descriptionDisplay}</DescriptionContainer>
             <PersonsContainer>{personsDisplay}</PersonsContainer>
             <AmountContainer>
-                <AmountDisplay showCurrency={true} item={item} />
+                <AmountDisplay item={item} />
                 <FlagsContainer>{flags}</FlagsContainer>
             </AmountContainer>
             <MlContainer>{moneyLocationDisplay}</MlContainer>

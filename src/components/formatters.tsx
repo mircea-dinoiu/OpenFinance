@@ -13,10 +13,19 @@ const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => (
     <span {...props}>▒▒▒▒</span>
 );
 
-export const formatNumericValue = (value) =>
+export const formatNumber = (value) =>
     new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(
         financialNum(value),
     );
+
+export const formatCurrency = (value: number, currency: string) => {
+    return new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency,
+        minimumSignificantDigits: 2,
+        maximumSignificantDigits: 2,
+    }).format(value);
+};
 
 const useStyles = makeStyles({
     value: {
@@ -24,12 +33,7 @@ const useStyles = makeStyles({
     },
 });
 
-const NumericValue = ({
-    currency: rawCurrency,
-    showCurrency = true,
-    value,
-    currencyStyle = {},
-}) => {
+const NumericValue = ({currency: rawCurrency, value}) => {
     const cls = useStyles();
     const currencies = useCurrencies();
     const currency = rawCurrency || currencies.selected.iso_code;
@@ -38,11 +42,6 @@ const NumericValue = ({
     const [isHidden, setIsHidden] = useState(privacyToggle);
     const inner = (
         <span>
-            {currency && showCurrency && (
-                <span style={{color: grey[500], ...currencyStyle}}>
-                    {currency}
-                </span>
-            )}{' '}
             <strong
                 className={cls.value}
                 onClick={() => {
@@ -56,7 +55,7 @@ const NumericValue = ({
                         }
                     />
                 ) : (
-                    formatNumericValue(value)
+                    formatCurrency(value, currency)
                 )}
             </strong>
         </span>
@@ -75,15 +74,15 @@ const NumericValue = ({
                 margin: `0 -${spacingSmall} ${spacingSmall}`,
             }}
         >
-            {currency} {formatNumericValue(value)}
+            {formatCurrency(value, currency)}
         </div>,
-        ...Object.entries(found ? found.rates : {}).map(
-            ([rateISO, rateMulti]) => (
-                <div key={rateISO}>
-                    {rateISO} {formatNumericValue(value * rateMulti)}
-                </div>
-            ),
-        ),
+        ...Object.entries(
+            found ? found.rates : {},
+        ).map(([rateISO, rateMulti]) => (
+            <div key={rateISO}>
+                {formatCurrency(value * rateMulti, currency)}
+            </div>
+        )),
     ];
 
     return <Tooltip tooltip={tooltip}>{inner}</Tooltip>;
@@ -93,18 +92,7 @@ export const numericValue = (
     value: number,
     {
         currency,
-        showCurrency = true,
-        currencyStyle = {},
     }: {
         currency?: string;
-        showCurrency?: boolean;
-        currencyStyle?: {};
     } = {},
-) => (
-    <NumericValue
-        value={value}
-        currency={currency}
-        showCurrency={showCurrency}
-        currencyStyle={currencyStyle}
-    />
-);
+) => <NumericValue value={value} currency={currency} />;

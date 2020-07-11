@@ -1,5 +1,5 @@
 import React from 'react';
-import {formatNumericValue} from 'components/formatters';
+import {formatNumber} from 'components/formatters';
 
 export const WeightDisplay = ({item}) => {
     if (item.weight == null) {
@@ -7,8 +7,8 @@ export const WeightDisplay = ({item}) => {
     }
 
     if (item.weight > 1000) {
-        return <>{formatNumericValue(item.weight / 1000)} kg</>;
+        return <>{formatNumber(item.weight / 1000)} kg</>;
     }
 
-    return <>{formatNumericValue(item.weight)} g</>;
+    return <>{formatNumber(item.weight)} g</>;
 };

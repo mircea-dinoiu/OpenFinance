@@ -67,7 +67,6 @@ export const SummaryCategory = (props) => {
             ...opts
         }: {
             currencyId?: number;
-            currencyStyle?: {};
         } = {},
     ) => {
         const currency = currencies[String(currencyId)].iso_code;
@@ -105,7 +104,6 @@ export const SummaryCategory = (props) => {
                                         0,
                                     ),
                                 ),
-                                {currencyStyle: {color: headerColor}},
                             )}
                         </div>
                     )

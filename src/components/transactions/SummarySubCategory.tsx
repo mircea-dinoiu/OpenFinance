@@ -21,7 +21,6 @@ export const SummarySubCategory = (props: {
         value: number,
         opts: {
             currencyId?: number;
-            currencyStyle?: {};
         },
     ) => string;
     excluded: {};
