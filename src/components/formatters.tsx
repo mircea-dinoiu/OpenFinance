@@ -5,7 +5,13 @@ import {spacingSmall} from 'defs/styles';
 import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
+import {HTMLAttributes, useState} from 'react';
 import {useCurrencies} from 'state/currencies';
+import {usePrivacyToggle} from 'state/privacyToggle';
+
+const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => (
+    <span {...props}>▒▒▒▒</span>
+);
 
 export const formatNumericValue = (value) =>
     new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(
@@ -28,6 +34,8 @@ const NumericValue = ({
     const currencies = useCurrencies();
     const currency = rawCurrency || currencies.selected.iso_code;
     const copyText = useCopyTextWithConfirmation();
+    const [privacyToggle] = usePrivacyToggle();
+    const [isHidden, setIsHidden] = useState(privacyToggle);
     const inner = (
         <span>
             {currency && showCurrency && (
@@ -41,7 +49,15 @@ const NumericValue = ({
                     copyText(value);
                 }}
             >
-                {formatNumericValue(value)}
+                {isHidden && privacyToggle ? (
+                    <PrivateValue
+                        onMouseOver={
+                            privacyToggle ? () => setIsHidden(false) : undefined
+                        }
+                    />
+                ) : (
+                    formatNumericValue(value)
+                )}
             </strong>
         </span>
     );

@@ -15,6 +15,8 @@ import IconExitToApp from '@material-ui/icons/ExitToApp';
 
 import IconMonetizationOn from '@material-ui/icons/MonetizationOn';
 import IconRefresh from '@material-ui/icons/Refresh';
+import IconVisibility from '@material-ui/icons/Visibility';
+import IconVisibilityOff from '@material-ui/icons/VisibilityOff';
 import {DatePicker} from '@material-ui/pickers';
 import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption, ShiftDateOptions, Sizes} from 'defs';
@@ -24,8 +26,18 @@ import moment from 'moment';
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
-import {shiftDateBack, shiftDateForward, useEndDate, useEndDateIncrement} from 'utils/dates';
-import {useRefreshWidgetsDispatcher, useScreenSize, useUsers} from '../../state/hooks';
+import {usePrivacyToggle} from 'state/privacyToggle';
+import {
+    shiftDateBack,
+    shiftDateForward,
+    useEndDate,
+    useEndDateIncrement,
+} from 'utils/dates';
+import {
+    useRefreshWidgetsDispatcher,
+    useScreenSize,
+    useUsers,
+} from '../../state/hooks';
 import {ShiftMenu} from './ShiftMenu';
 
 const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
@@ -51,6 +63,7 @@ export const TopBar = (props: {
     onLogout: () => void;
     showCurrenciesDrawer: boolean;
 }) => {
+    const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
     const [showDateRange, setShowDateRange] = React.useState(false);
     const [showShiftMenu, setShowShiftMenu] = React.useState(false);
     const [shiftMenuAnchor, setShiftMenuAnchor] = React.useState(null);
@@ -259,6 +272,15 @@ export const TopBar = (props: {
                                 <IconMonetizationOn htmlColor="white" />
                             </IconButton>
                         )}
+                        <IconButton
+                            onClick={() => setPrivacyToggle(!privacyToggle)}
+                        >
+                            {privacyToggle ? (
+                                <IconVisibilityOff htmlColor="white" />
+                            ) : (
+                                <IconVisibility htmlColor="white" />
+                            )}
+                        </IconButton>
                         {user && (
                             <IconButton onClick={onClickRefresh}>
                                 <IconRefresh htmlColor="white" />

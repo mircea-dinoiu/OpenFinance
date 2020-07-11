@@ -1,5 +1,6 @@
 import {Action} from 'state/defs';
 import uniqueId from 'lodash/uniqueId';
+import {privacyToggle} from 'state/privacyToggle';
 import {getScreenQueries} from 'utils/getScreenQueries';
 import {combineReducers} from 'redux';
 import {bindToUpdateState} from 'state/utils';
@@ -42,4 +43,5 @@ export const combinedReducers = combineReducers({
     moneyLocations,
     moneyLocationTypes,
     snackbars,
+    privacyToggle,
 });
