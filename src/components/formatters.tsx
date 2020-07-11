@@ -22,8 +22,7 @@ export const formatCurrency = (value: number, currency: string) => {
     return new Intl.NumberFormat(undefined, {
         style: 'currency',
         currency,
-        minimumSignificantDigits: 2,
-        maximumSignificantDigits: 2,
+        minimumIntegerDigits: 2,
     }).format(value);
 };
 
