@@ -18,16 +18,6 @@ import {RatingDisplay} from 'components/transactions/cells/RatingDisplay';
 export const ExpenseTableColumns = ({updateRecords}) => [
     AmountColumn,
     {
-        Header: '$',
-        filterable: false,
-        sortable: true,
-        accessor: (item: TransactionModel) => (
-            <CurrencyDisplay item={item} />
-        ),
-        id: 'money_location.currency_id',
-        width: 40,
-    },
-    {
         Header: 'Description',
         filterable: true,
         Filter: DescriptionFilter,
