@@ -38,7 +38,6 @@ const NumericValue = ({currency: rawCurrency, value}) => {
     const currency = rawCurrency || currencies.selected.iso_code;
     const copyText = useCopyTextWithConfirmation();
     const [privacyToggle] = usePrivacyToggle();
-    const [isHidden, setIsHidden] = useState(privacyToggle);
     const inner = (
         <span>
             <strong
@@ -47,12 +46,8 @@ const NumericValue = ({currency: rawCurrency, value}) => {
                     copyText(value);
                 }}
             >
-                {isHidden && privacyToggle ? (
-                    <PrivateValue
-                        onMouseOver={
-                            privacyToggle ? () => setIsHidden(false) : undefined
-                        }
-                    />
+                {privacyToggle ? (
+                    <PrivateValue />
                 ) : (
                     formatCurrency(value, currency)
                 )}
@@ -79,7 +74,7 @@ const NumericValue = ({currency: rawCurrency, value}) => {
             found ? found.rates : {},
         ).map(([rateISO, rateMulti]) => (
             <div key={rateISO}>
-                {formatCurrency(value * rateMulti, currency)}
+                {formatCurrency(value * rateMulti, rateISO)}
             </div>
         )),
     ];
