@@ -5,7 +5,7 @@ import {spacingSmall} from 'defs/styles';
 import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
-import {HTMLAttributes, useState} from 'react';
+import {HTMLAttributes} from 'react';
 import {useCurrencies} from 'state/currencies';
 import {usePrivacyToggle} from 'state/privacyToggle';
 
