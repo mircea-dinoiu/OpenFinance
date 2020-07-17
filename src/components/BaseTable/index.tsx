@@ -1,9 +1,9 @@
+import {green, red} from '@material-ui/core/colors';
+import {gridGap, spacingLarge, spacingSmall} from 'defs/styles';
 import * as React from 'react';
 import ReactTable, {TableProps} from 'react-table-6';
-import styled, {css} from 'styled-components';
 import 'react-table-6/react-table.css';
-import {green, red} from '@material-ui/core/colors';
-import {spacingLarge, spacingSmall, gridGap} from 'defs/styles';
+import styled from 'styled-components';
 
 export const Classes = {
     todayRow: 'todayRow',
@@ -14,12 +14,6 @@ export const Classes = {
     depositRow: 'depositRow',
     withdrawRow: 'withdrawRow',
 };
-
-const reactTableHideHead = css`
-    .rt-thead {
-        display: none;
-    }
-`;
 
 const ReactTableStyled = styled(ReactTable)`
     &.ReactTable {
@@ -65,9 +59,6 @@ const ReactTableStyled = styled(ReactTable)`
         .${Classes.notSelectable} {
             user-select: none;
         }
-
-        ${(props: {hideHeader?: boolean}) =>
-            props.hideHeader && reactTableHideHead}
     }
 `;
 
@@ -90,13 +81,7 @@ export const TableFooter = styled.div`
     box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.15);
 `;
 
-export function BaseTable<D>(
-    props: Partial<
-        TableProps<D> & {
-            hideHeader: boolean;
-        }
-    >,
-) {
+export function BaseTable<D>(props: Partial<TableProps<D>>) {
     return (
         <>
             <ReactTableStyled

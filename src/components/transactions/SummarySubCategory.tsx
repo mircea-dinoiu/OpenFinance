@@ -95,7 +95,6 @@ export const SummarySubCategory = (props: {
             {(shouldGroup === false || expanded) && (
                 <BaseTable<SummarySubCategoryModel>
                     data={items}
-                    hideHeader={true}
                     columns={[
                         {
                             id: 'description',
