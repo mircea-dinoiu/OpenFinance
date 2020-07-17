@@ -1,14 +1,13 @@
-import {makeStyles} from '@material-ui/core/styles';
-import React, {ReactNode, useState} from 'react';
 import {CardHeader, Checkbox, FormControlLabel} from '@material-ui/core';
-import {convertCurrencyToDefault} from 'helpers/currency';
-import {BaseTable} from 'components/BaseTable';
-import {spacingLarge, spacingMedium, spacingSmall, theme} from 'defs/styles';
-import {sortBy} from 'lodash';
-import {Currencies} from 'types';
+import {grey} from '@material-ui/core/colors';
+import {makeStyles} from '@material-ui/core/styles';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
-import {grey} from '@material-ui/core/colors';
+import {spacingMedium, spacingSmall, theme} from 'defs/styles';
+import {convertCurrencyToDefault} from 'helpers/currency';
+import {sortBy} from 'lodash';
+import React, {ReactNode, useState} from 'react';
+import {Currencies} from 'types';
 
 type SummarySubCategoryModel = {
     description: string;
