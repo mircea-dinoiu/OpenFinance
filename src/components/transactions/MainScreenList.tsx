@@ -739,13 +739,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         const url = new URL(window.location.href);
 
         url.searchParams.delete(QueryParam.page);
-        url.searchParams.set(
-            param,
-            value,
-        );
-        this.props.history.push(
-            mapUrlToFragment(url),
-        );
+        url.searchParams.set(param, value);
+        this.props.history.push(mapUrlToFragment(url));
     }
 
     renderContent() {
@@ -761,19 +756,38 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     {this.renderTableHeader()}
                     <div>
                         <BaseTable<TransactionModel>
+                            style={{
+                                height: 'calc(100vh - 230px)',
+                            }}
                             filtered={params.filters}
-                            onFilteredChange={(value) => this.setParam(QueryParam.filters, JSON.stringify(value))}
-
+                            onFilteredChange={(value) =>
+                                this.setParam(
+                                    QueryParam.filters,
+                                    JSON.stringify(value),
+                                )
+                            }
                             sorted={params.sorters}
-                            onSortedChange={(value) => this.setParam(QueryParam.sorters, JSON.stringify(value))}
+                            onSortedChange={(value) =>
+                                this.setParam(
+                                    QueryParam.sorters,
+                                    JSON.stringify(value),
+                                )
+                            }
                             defaultSortDesc={true}
-
                             pageSize={params.pageSize}
-                            onPageSizeChange={value => this.setParam(QueryParam.pageSize, value.toString())}
-
+                            onPageSizeChange={(value) =>
+                                this.setParam(
+                                    QueryParam.pageSize,
+                                    value.toString(),
+                                )
+                            }
                             page={params.page - 1}
-                            onPageChange={value => this.setParam(QueryParam.page, (value + 1).toString())}
-
+                            onPageChange={(value) =>
+                                this.setParam(
+                                    QueryParam.page,
+                                    (value + 1).toString(),
+                                )
+                            }
                             pages={
                                 count >= params.pageSize
                                     ? params.page + 1
