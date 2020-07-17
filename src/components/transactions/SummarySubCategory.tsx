@@ -1,12 +1,14 @@
+import {makeStyles} from '@material-ui/core/styles';
 import React, {ReactNode, useState} from 'react';
 import {CardHeader, Checkbox, FormControlLabel} from '@material-ui/core';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {BaseTable} from 'components/BaseTable';
-import {spacingMedium, spacingSmall, theme} from 'defs/styles';
+import {spacingLarge, spacingMedium, spacingSmall, theme} from 'defs/styles';
 import {sortBy} from 'lodash';
 import {Currencies} from 'types';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
+import {grey} from '@material-ui/core/colors';
 
 type SummarySubCategoryModel = {
     description: string;
@@ -48,6 +50,7 @@ export const SummarySubCategory = (props: {
 
     const items = sortBy(itemsFromProps, (item) => item.description);
     const numericValue = (value, opts?) => props.numericValueFn(value, opts);
+    const cls = useStyles();
 
     return (
         <div style={{padding: '0 5px', marginBottom: spacingMedium}}>
@@ -93,50 +96,63 @@ export const SummarySubCategory = (props: {
                 />
             )}
             {(shouldGroup === false || expanded) && (
-                <BaseTable<SummarySubCategoryModel>
-                    data={items}
-                    columns={[
-                        {
-                            id: 'description',
-                            accessor: (each) => (
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            style={{
-                                                padding: `0 ${spacingSmall} 0 ${spacingMedium}`,
-                                            }}
-                                            checked={
-                                                !props.excluded[each.reference]
-                                            }
-                                            onChange={() =>
-                                                props.onToggleExcluded(
-                                                    each.reference,
-                                                )
-                                            }
-                                            color="default"
-                                        />
-                                    }
-                                    label={
-                                        <span style={{fontWeight: 300}}>
-                                            {renderDescription
-                                                ? renderDescription(each)
-                                                : each.description}
-                                        </span>
-                                    }
-                                />
-                            ),
-                        },
-                        {
-                            id: 'sum',
-                            accessor: (each) =>
-                                numericValue(each.sum, {
+                <ul className={cls.list}>
+                    {items.map((each) => (
+                        <li className={cls.listItem}>
+                            <FormControlLabel
+                                className={cls.label}
+                                control={
+                                    <Checkbox
+                                        style={{
+                                            padding: `0 ${spacingSmall} 0 ${spacingMedium}`,
+                                        }}
+                                        checked={
+                                            !props.excluded[each.reference]
+                                        }
+                                        onChange={() =>
+                                            props.onToggleExcluded(
+                                                each.reference,
+                                            )
+                                        }
+                                        color="default"
+                                    />
+                                }
+                                label={
+                                    <div style={{fontWeight: 300}}>
+                                        {renderDescription
+                                            ? renderDescription(each)
+                                            : each.description}
+                                    </div>
+                                }
+                            />
+                            <div>
+                                {numericValue(each.sum, {
                                     currencyId: each.currencyId,
-                                }),
-                            style: {textAlign: 'right'},
-                        },
-                    ]}
-                />
+                                })}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
             )}
         </div>
     );
 };
+
+const useStyles = makeStyles({
+    list: {
+        padding: 0,
+        margin: 0,
+    },
+    listItem: {
+        display: 'flex',
+        borderBottom: `1px solid ${grey[200]}`,
+        padding: `${spacingSmall} 0`,
+        alignItems: 'center',
+        '&:hover': {
+            backgroundColor: grey[100],
+        },
+    },
+    label: {
+        flexGrow: 1,
+    },
+});
