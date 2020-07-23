@@ -6,7 +6,7 @@ import {GlobalState} from 'types';
 const key = 'privacyToggle';
 
 export const privacyToggle = createReducer<boolean>(
-    !!JSON.parse(localStorage.getItem(key)),
+    !!JSON.parse(localStorage.getItem(key) as string),
     {
         [Action.SET_DISCRETE]: (state, {payload}: {payload: boolean}) =>
             payload,

@@ -23,7 +23,9 @@ export const mapItemToRepeatedUpdates = (item: TransactionModel) => {
     return extra;
 };
 
-export const mapItemToDetachedUpdates = (item: TransactionModel) => ({
+export const mapItemToDetachedUpdates = (
+    item: TransactionModel,
+): Partial<TransactionModel> => ({
     id: item.id,
     repeat: null,
 });
@@ -73,8 +75,7 @@ export const useIncludePending = (): [boolean, (v: boolean) => void] => {
 export const useInclude = () =>
     useQueryParamState<IncludeOption>(QueryParam.include, IncludeOption.all);
 
-export
-const getEndDateBasedOnIncludePreference = (
+export const getEndDateBasedOnIncludePreference = (
     endDate,
     include: IncludeOption,
 ) => {

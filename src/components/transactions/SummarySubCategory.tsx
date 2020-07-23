@@ -72,7 +72,7 @@ export const SummarySubCategory = (props: {
                         Number(id) === 0 ? (
                             <em>Unclassified</em>
                         ) : (
-                            entities.find((each) => each[entityIdField] == id)[
+                            entities.find((each) => each[entityIdField] == id)?.[
                                 entityNameField
                             ]
                         )

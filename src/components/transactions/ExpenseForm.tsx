@@ -129,6 +129,10 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
     }
 
     renderSum() {
+        const currencyId = this.props.moneyLocations.find(
+            (each) => each.id == this.state.paymentMethod,
+        )?.currency_id;
+
         return (
             <SumContainer>
                 <div>
@@ -141,13 +145,9 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
                             startAdornment: (
                                 <InputAdornment position="start">
                                     {this.state.paymentMethod
-                                        ? findCurrencyById(
-                                              this.props.moneyLocations.find(
-                                                  (each) =>
-                                                      each.id ==
-                                                      this.state.paymentMethod,
-                                                  // @ts-ignore
-                                              ).currency_id,
+                                        ? currencyId &&
+                                          findCurrencyById(
+                                              currencyId,
                                               this.props.currencies,
                                           ).iso_code
                                         : ''}
@@ -404,7 +404,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
                     <MuiSelectNative<RepeatOption | null>
                         label="Repeat"
                         isNullable={true}
-                        onChange={({value}: {value: RepeatOption}) =>
+                        onChange={({value}) =>
                             this.setState({repeat: value})
                         }
                         value={options.find(
@@ -546,12 +546,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
 
 export const ExpenseForm = (ownProps) => {
     const stateProps = useSelector(
-        ({
-            currencies,
-            categories,
-            moneyLocations,
-            user,
-        }: GlobalState) => ({
+        ({currencies, categories, moneyLocations, user}: GlobalState) => ({
             currencies,
             categories,
             moneyLocations,

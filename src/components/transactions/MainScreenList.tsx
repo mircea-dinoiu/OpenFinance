@@ -686,9 +686,9 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         }
     };
     handleDetach = async () => {
-        const added = [];
-        const updated = [];
-        const promises = [];
+        const added: TransactionModel[] = [];
+        const updated: Partial<TransactionModel>[] = [];
+        const promises: Promise<unknown>[] = [];
 
         this.selectedItems.forEach((item) => {
             if (item.repeat != null) {
@@ -961,12 +961,16 @@ export const MainScreenList = (ownProps) => {
         const searchParams = new URLSearchParams(location.search);
 
         return {
-            pageSize: JSON.parse(searchParams.get(QueryParam.pageSize)) ?? 50,
-            page: JSON.parse(searchParams.get(QueryParam.page)) ?? 1,
-            sorters: JSON.parse(searchParams.get(QueryParam.sorters)) ?? [
-                {id: 'created_at', desc: true},
-            ],
-            filters: JSON.parse(searchParams.get(QueryParam.filters)) ?? [],
+            pageSize:
+                JSON.parse(searchParams.get(QueryParam.pageSize) as string) ??
+                50,
+            page: JSON.parse(searchParams.get(QueryParam.page) as string) ?? 1,
+            sorters: JSON.parse(
+                searchParams.get(QueryParam.sorters) as string,
+            ) ?? [{id: 'created_at', desc: true}],
+            filters:
+                JSON.parse(searchParams.get(QueryParam.filters) as string) ??
+                [],
         };
     }, [location.search]);
 

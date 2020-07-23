@@ -15,7 +15,7 @@ export const FloatingSnackbar = ({
 }: {
     message: ReactNode;
     open?: boolean;
-    severity: Color;
+    severity: AlertProps['color'];
 }) => {
     return (
         <Snackbar open={open}>

@@ -36,9 +36,19 @@ const useStyles = makeStyles({
     },
 });
 
+type Results = {
+    remainingData: {
+        byUser: {};
+    };
+    expensesData: {
+        byUser: {};
+    };
+    expensesByCategory: {};
+};
+
 export const Summary = () => {
     const cls = useStyles();
-    const [results, setResults] = React.useState(null);
+    const [results, setResults] = React.useState<Results | null>(null);
     const [refreshing, setRefreshing] = React.useState(false);
     const refreshWidgets = useRefreshWidgets();
     const moneyLocationTypes = useMoneyLocationTypes();
@@ -70,7 +80,7 @@ export const Summary = () => {
     const load = async () => {
         setRefreshing(true);
 
-        const response = await createXHR({
+        const response = await createXHR<Results>({
             url: makeUrl(routes.reports.summary, reportQueryParams),
         });
         const json = response.data;

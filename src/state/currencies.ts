@@ -13,7 +13,7 @@ export enum CurrenciesAction {
     drawerOpenSet = 'currencies/drawerOpen/set',
 }
 
-export const currencies = createReducer<Currencies>(null, {
+export const currencies = createReducer<Currencies | null>(null, {
     [CurrenciesAction.received]: (
         state,
         {

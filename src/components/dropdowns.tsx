@@ -174,7 +174,7 @@ const selectStyles = (theme) => ({
     }),
 });
 
-export const MuiSelectNative = <V extends string | number>({
+export const MuiSelectNative = <V extends string | number | null>({
     value,
     label,
     options,
@@ -183,7 +183,7 @@ export const MuiSelectNative = <V extends string | number>({
     valueType,
     ...props
 }: {
-    value: {value: V};
+    value: {value: V} | undefined;
     label?: SelectProps['label'];
     options: Array<{value: V; label: string}>;
     onChange: (value: {value: V}) => void;
@@ -204,8 +204,8 @@ export const MuiSelectNative = <V extends string | number>({
                 onChange={(e: ChangeEvent<{value: V}>) => {
                     const nextValue = e.target.value;
 
-                    // @ts-ignore supporting null
                     if (nextValue === noneValue) {
+                        // @ts-ignore supporting null
                         onChange({value: null});
                     } else
                         onChange({
@@ -223,8 +223,9 @@ export const MuiSelectNative = <V extends string | number>({
                 {...props}
             >
                 {isNullable && <option aria-label="None" value={noneValue} />}
-                {options.map((o) => (
-                    <option key={o.value} value={o.value}>
+                {options.map((o, i) => (
+                    // @ts-ignore
+                    <option key={i} value={o.value}>
                         {o.label}
                     </option>
                 ))}

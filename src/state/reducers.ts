@@ -1,6 +1,7 @@
 import {Action} from 'state/defs';
 import uniqueId from 'lodash/uniqueId';
 import {privacyToggle} from 'state/privacyToggle';
+import {Snackbar} from 'types';
 import {getScreenQueries} from 'utils/getScreenQueries';
 import {combineReducers} from 'redux';
 import {bindToUpdateState} from 'state/utils';
@@ -15,7 +16,7 @@ const refreshWidgets = (state = uniqueId(), action) =>
 const user = (state = null, action) =>
     action.type === Action.SET_USERS ? action.value : state;
 
-const snackbars = (state = [], action) => {
+const snackbars = (state: Snackbar[] = [], action) => {
     switch (action.type) {
         case Action.SHOW_SNACKBAR:
             return state.concat(action.value);

@@ -8,7 +8,7 @@ export const MainScreenListGroup = ({date, items, itemProps}) => (
     <div>
         <List>
             <ListSubheader style={{textAlign: 'center'}}>
-                {moment(date).calendar(null, CalendarWithoutTime)}
+                {moment(date).calendar(undefined, CalendarWithoutTime)}
             </ListSubheader>
             {items.map((item) => (
                 <MainScreenListItem key={item.id} item={item} {...itemProps} />

@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
 
     "strict": false,
+    "strictNullChecks": true,
     //"noUnusedLocals": true,
 
     "forceConsistentCasingInFileNames": true,

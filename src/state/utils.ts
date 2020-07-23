@@ -1,6 +1,6 @@
 import {Action} from 'state/defs';
 
-const stateKeysWithoutReducers = [];
+const stateKeysWithoutReducers: string[] = [];
 
 export const bindToUpdateState = (prop, defaultValue) => {
     stateKeysWithoutReducers.push(prop);

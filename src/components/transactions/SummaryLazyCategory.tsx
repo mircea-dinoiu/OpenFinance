@@ -15,7 +15,9 @@ export const SummaryLazyCategory = ({
 }) => {
     const cardHeaderClasses = useCardHeaderStyles();
     const [expanded, setExpanded] = React.useState(expandedByDefault);
-    const [data, setData] = React.useState(null);
+    const [data, setData] = React.useState<{
+        [key: string]: number;
+    } | null>(null);
     const {backgroundColor, title} = props;
     const refreshWidgets = useRefreshWidgets();
 
