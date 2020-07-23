@@ -724,7 +724,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         } else {
             url.searchParams.delete(param);
         }
-        
+
         this.props.history.push(mapUrlToFragment(url));
     }
 

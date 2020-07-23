@@ -1,7 +1,6 @@
 import {MuiSelectNative} from 'components/dropdowns';
 import {IncludeOption} from 'defs';
 import * as React from 'react';
-import {ValueType} from 'react-select/src/types';
 import {useEndDate} from 'utils/dates';
 
 const getIncludeOptions = ({endDate}: {endDate: string}) => {

@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
 import {routes} from 'defs/routes';
 import {sortBy} from 'lodash';
-import React, {useState} from 'react';
+import React from 'react';
 import {useEndDate} from 'utils/dates';
 import {useReader} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
