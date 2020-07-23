@@ -714,11 +714,17 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         };
     }
 
-    setParam(param: QueryParam, value: string) {
+    setParam(param: QueryParam, value: string | null) {
         const url = new URL(window.location.href);
 
         url.searchParams.delete(QueryParam.page);
-        url.searchParams.set(param, value);
+
+        if (value !== null) {
+            url.searchParams.set(param, value);
+        } else {
+            url.searchParams.delete(param);
+        }
+        
         this.props.history.push(mapUrlToFragment(url));
     }
 
@@ -738,12 +744,18 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                 height: 'calc(100vh - 230px)',
                             }}
                             filtered={params.filters}
-                            onFilteredChange={(value) =>
+                            onFilteredChange={(value) => {
+                                const filters = value.filter(
+                                    (f) => f.value != null,
+                                );
+
                                 this.setParam(
                                     QueryParam.filters,
-                                    JSON.stringify(value),
-                                )
-                            }
+                                    filters.length
+                                        ? JSON.stringify(filters)
+                                        : null,
+                                );
+                            }}
                             sorted={params.sorters}
                             onSortedChange={(value) =>
                                 this.setParam(
