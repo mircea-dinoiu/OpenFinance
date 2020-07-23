@@ -1,9 +1,12 @@
 const metaPrefix = 'financial_';
-let globalMetas: null | {
-    'csrf-token'?: string;
-} = null;
+
+enum MetaKey {
+    csrf = 'csrf-token',
+}
+
+let globalMetas: null | Partial<Record<MetaKey, string>> = null;
 const getMetas = () => {
-    const metas = {};
+    const metas: Partial<Record<MetaKey, string>> = {};
 
     Array.from(document.querySelectorAll('meta')).forEach((meta) => {
         const name = meta.getAttribute('name');
@@ -17,7 +20,7 @@ const getMetas = () => {
 
     return metas;
 };
-const getMeta = (name) => {
+const getMeta = (name: MetaKey) => {
     if (globalMetas == null) {
         globalMetas = getMetas();
     }
@@ -27,6 +30,6 @@ const getMeta = (name) => {
 
 export const config = {
     get csrfToken() {
-        return getMeta('csrf-token');
+        return getMeta(MetaKey.csrf);
     },
 };

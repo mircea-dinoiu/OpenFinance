@@ -3,36 +3,30 @@ import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
+import {SummaryModel} from 'components/transactions/types';
 import {spacingMedium, spacingSmall, theme} from 'defs/styles';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {sortBy} from 'lodash';
 import React, {ReactNode, useState} from 'react';
 import {Currencies} from 'types';
 
-type SummarySubCategoryModel = {
-    description: string;
-    reference: string;
-    currencyId: number;
-    sum: number;
-};
-
-export const SummarySubCategory = (props: {
+export const SummarySubCategory = <Ent,>(props: {
     expandedByDefault: boolean;
     numericValueFn: (
         value: number,
-        opts: {
+        opts?: {
             currencyId?: number;
         },
-    ) => string;
+    ) => JSX.Element;
     excluded: {};
     currencies: Currencies;
-    onToggleExcluded: (boolean) => void;
-    entities: [];
-    entityIdField: string;
-    entityNameField: string;
+    onToggleExcluded: (id: string) => void;
+    entities: Ent[];
+    entityIdField: keyof Ent;
+    entityNameField: keyof Ent;
     id: string;
-    items: SummarySubCategoryModel[];
-    renderDescription: (cat: SummarySubCategoryModel) => ReactNode;
+    items: SummaryModel[];
+    renderDescription?: (sm: SummaryModel) => ReactNode;
     shouldGroup: boolean;
 }) => {
     const cardHeaderClasses = useCardHeaderStyles();
@@ -48,7 +42,6 @@ export const SummarySubCategory = (props: {
     } = props;
 
     const items = sortBy(itemsFromProps, (item) => item.description);
-    const numericValue = (value, opts?) => props.numericValueFn(value, opts);
     const cls = useStyles();
 
     return (
@@ -72,12 +65,12 @@ export const SummarySubCategory = (props: {
                         Number(id) === 0 ? (
                             <em>Unclassified</em>
                         ) : (
-                            entities.find((each) => each[entityIdField] == id)?.[
-                                entityNameField
-                            ]
+                            entities.find(
+                                (each) => (each[entityIdField] as any) == id,
+                            )?.[entityNameField]
                         )
                     }
-                    subheader={numericValue(
+                    subheader={props.numericValueFn(
                         items.reduce(
                             // @ts-ignore
                             (acc, each) =>
@@ -125,8 +118,8 @@ export const SummarySubCategory = (props: {
                                 }
                             />
                             <div>
-                                {numericValue(each.sum, {
-                                    currencyId: each.currencyId,
+                                {props.numericValueFn(each.sum, {
+                                    currencyId: Number(each.currencyId),
                                 })}
                             </div>
                         </li>

@@ -1,16 +1,17 @@
-import * as React from 'react';
-import {SyntheticEvent} from 'react';
-import IconFilterList from '@material-ui/icons/FilterList';
-import {DebounceInput} from 'react-debounce-input';
-import {gridGap, spacingLarge} from 'defs/styles';
-import styled from 'styled-components';
 import {
-    Menu,
+    FormControlLabel,
     IconButton,
+    Menu,
     Radio,
     RadioGroup,
-    FormControlLabel,
 } from '@material-ui/core';
+import IconFilterList from '@material-ui/icons/FilterList';
+import {gridGap, spacingLarge} from 'defs/styles';
+import * as React from 'react';
+import {SyntheticEvent} from 'react';
+import {DebounceInput} from 'react-debounce-input';
+import {Filter} from 'react-table-6';
+import styled from 'styled-components';
 
 const PENDING = 'Pending';
 const RECURRENT = 'Recurrent';
@@ -19,7 +20,15 @@ const DEPOSIT = 'Deposit';
 const YES = 'yes';
 const NO = 'no';
 const ONLY = 'only';
-const Subfilter = ({filter, name, onChange}) => (
+const Subfilter = ({
+    filter,
+    name,
+    onChange,
+}: {
+    name: string;
+    filter: Filter;
+    onChange: (k: string, v: string) => void;
+}) => (
     <div>
         Display {name} Transactions
         <RadioGroup
@@ -49,19 +58,21 @@ const SubfilterGrid = styled.div`
     padding: 0 ${spacingLarge};
 `;
 
-export const DescriptionFilter = ({onChange, filter}) => {
-    const handleChange = (name, value) => {
+export const DescriptionFilter = ({
+    onChange,
+    filter,
+}: {
+    onChange: (filter: Filter) => void;
+    filter: Filter;
+}) => {
+    const handleChange = (name: string, value: string) => {
         const newFilter = {...(filter && filter.value)};
 
         newFilter[name] = value;
 
         onChange(newFilter);
     };
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -71,15 +82,13 @@ export const DescriptionFilter = ({onChange, filter}) => {
         <div style={{textAlign: 'left', display: 'flex', flexDirection: 'row'}}>
             <IconButton
                 style={{padding: 0, width: 'auto', height: 'auto'}}
-                onClick={handleClick}
+                onClick={(event) => {
+                    setAnchorEl(event.currentTarget);
+                }}
             >
                 <IconFilterList />
             </IconButton>
-            <Menu
-                anchorEl={anchorEl}
-                open={!!anchorEl}
-                onClose={handleClose}
-            >
+            <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleClose}>
                 <SubfilterGrid>
                     <Subfilter
                         onChange={handleChange}

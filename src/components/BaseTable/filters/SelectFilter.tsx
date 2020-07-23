@@ -9,6 +9,7 @@ import {
 import {MuiReactSelect, MuiSelectNative} from 'components/dropdowns';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 import * as React from 'react';
+import {Filter} from 'react-table-6';
 
 const styles = {
     paper: {
@@ -16,10 +17,12 @@ const styles = {
     },
 };
 
-type TypeProps = {
+type Mode = 'any' | 'one-of' | 'all' | 'exclude';
+
+export type SelectFilterProps = {
     items: Array<{id: number}>;
     nameKey: string;
-    filter: {value: any} | null | void;
+    filter: Filter;
     onChange: (value: any) => void;
     classes: any;
     multi?: boolean;
@@ -27,7 +30,7 @@ type TypeProps = {
 };
 
 class SelectFilterWrapped extends React.PureComponent<
-    TypeProps,
+    SelectFilterProps,
     {
         anchorEl: HTMLElement | null;
         radioValue: string;
@@ -42,10 +45,6 @@ class SelectFilterWrapped extends React.PureComponent<
         nameKey: 'name',
         multi: false,
         allowNone: true,
-    };
-
-    handleClick = (event) => {
-        this.setState({anchorEl: event.currentTarget});
     };
 
     handleClose = () => {
@@ -75,7 +74,7 @@ class SelectFilterWrapped extends React.PureComponent<
                 }
 
                 return filter.value
-                    .map((id) => {
+                    .map((id: number) => {
                         const found = selectOptions.find(
                             (option) => option.id === id,
                         );
@@ -87,7 +86,7 @@ class SelectFilterWrapped extends React.PureComponent<
         }
     }
 
-    triggerChange(value) {
+    triggerChange(value: 'any' | {mode: Mode; value: string}) {
         if (value === 'any') {
             this.props.onChange(undefined);
         } else {
@@ -95,23 +94,7 @@ class SelectFilterWrapped extends React.PureComponent<
         }
     }
 
-    handleChangeRadio = (event) => {
-        const radioValue = event.target.value;
-
-        if (['one-of', 'all', 'exclude'].includes(radioValue)) {
-            if (this.state[radioValue]) {
-                this.triggerChange({
-                    mode: radioValue,
-                    value: this.state[radioValue],
-                });
-            }
-        } else {
-            this.triggerChange(radioValue);
-        }
-        this.setState({radioValue});
-    };
-
-    handleChangeSelect = (mode) => (value) => {
+    handleChangeSelect = (mode: Mode) => (value: string) => {
         // @ts-ignore
         this.setState({[mode]: value});
 
@@ -134,7 +117,7 @@ class SelectFilterWrapped extends React.PureComponent<
         return (filter && filter.value) || 'any';
     }
 
-    getSelectValue(name) {
+    getSelectValue(name: string) {
         const filterValue = this.state[name];
 
         if (this.props.multi) {
@@ -158,7 +141,7 @@ class SelectFilterWrapped extends React.PureComponent<
         return filterValue;
     }
 
-    renderRadio({value, label}) {
+    renderRadio({value, label}: {value: string; label: string}) {
         return (
             <FormControlLabel
                 style={{margin: 0}}
@@ -169,7 +152,7 @@ class SelectFilterWrapped extends React.PureComponent<
         );
     }
 
-    renderSelect(name) {
+    renderSelect(name: Mode) {
         const options = this.props.items.map((item) => ({
             value: item.id,
             label: item[this.props.nameKey],
@@ -184,13 +167,15 @@ class SelectFilterWrapped extends React.PureComponent<
 
         if (this.props.multi) {
             return (
+                // @ts-ignore
                 <MuiReactSelect
                     isMulti={true}
                     value={options.filter((o) => value.includes(o.value))}
                     onOpen={onOpen}
                     options={options}
                     // @ts-ignore
-                    onChange={(values: Array<{value: unknown}>) =>
+                    onChange={(values: Array<{value: string}>) =>
+                        // @ts-ignore
                         handleChange(values.map((v) => v.value))
                     }
                 />
@@ -203,6 +188,7 @@ class SelectFilterWrapped extends React.PureComponent<
                 onOpen={onOpen}
                 options={options}
                 valueType="number"
+                // @ts-ignore
                 onChange={({value}: {value: unknown}) => handleChange(value)}
             />
         );
@@ -224,7 +210,9 @@ class SelectFilterWrapped extends React.PureComponent<
                         width: '100%',
                     }}
                     variant="outlined"
-                    onClick={this.handleClick}
+                    onClick={(event) => {
+                        this.setState({anchorEl: event.currentTarget});
+                    }}
                 >
                     {this.renderText()}
                 </Button>
@@ -242,7 +230,26 @@ class SelectFilterWrapped extends React.PureComponent<
                     >
                         <RadioGroup
                             value={this.state.radioValue}
-                            onChange={this.handleChangeRadio}
+                            onChange={(event) => {
+                                const radioValue = event.target.value as Mode;
+
+                                if (
+                                    ['one-of', 'all', 'exclude'].includes(
+                                        radioValue,
+                                    )
+                                ) {
+                                    if (this.state[radioValue]) {
+                                        this.triggerChange({
+                                            mode: radioValue ,
+                                            value: this.state[radioValue],
+                                        });
+                                    }
+                                } else {
+                                    // @ts-ignore
+                                    this.triggerChange(radioValue);
+                                }
+                                this.setState({radioValue});
+                            }}
                         >
                             {this.renderRadio({value: 'any', label: 'Any'})}
 

@@ -1,12 +1,12 @@
-import {Users} from 'types';
+import {TransactionForm, TransactionModel, Users} from 'types';
 import {TransactionStatus} from 'defs';
 
 export const formToModel = (
-    form,
+    form: TransactionForm,
     props: {
         user: Users;
     },
-) => {
+): TransactionModel => {
     const users =
         Object.keys(form.chargedPersons).length > 0
             ? form.chargedPersons
@@ -18,12 +18,13 @@ export const formToModel = (
         item: form.description,
         favorite: form.favorite,
         hidden: form.hidden,
+        // @ts-ignore
         created_at: form.date.toISOString(),
         categories: form.categories,
         money_location_id: form.paymentMethod,
         repeat: form.repeat,
         repeat_occurrences: form.repeatOccurrences,
-        weight: form.weight === '' ? null : form.weight,
+        weight: form.weight,
         users,
         status: form.status || TransactionStatus.pending,
     };

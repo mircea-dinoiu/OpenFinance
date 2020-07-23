@@ -7,15 +7,17 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Container, Drawer, Divider, Card} from '@material-ui/core';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 
-type TypeProps = {
-    entityName: string;
-    contentComponent: any;
-    onReceiveSelectedIds: (ids: number[]) => void;
-    contextMenuItemsProps: TypeContextMenuItemsProps;
-    item: {
+export type MainScreenListItemProps<
+    Item extends {
         id: number;
         persist: boolean;
-    };
+    }
+> = {
+    entityName: string;
+    contentComponent: React.ComponentType<{item: Item; expanded?: boolean}>;
+    onReceiveSelectedIds: (ids: number[]) => void;
+    contextMenuItemsProps: TypeContextMenuItemsProps;
+    item: Item;
 };
 
 const useStyles = makeStyles({
@@ -28,13 +30,20 @@ const useStyles = makeStyles({
     },
 });
 
-export const MainScreenListItem = (props: TypeProps) => {
+export const MainScreenListItem = <
+    Item extends {
+        id: number;
+        persist: boolean;
+    }
+>(
+    props: MainScreenListItemProps<Item>,
+) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const item = props.item;
     const ListItemContent = props.contentComponent;
     const cls = useStyles();
 
-    const handleOpenDrawer = (event) => {
+    const handleOpenDrawer = () => {
         props.onReceiveSelectedIds([props.item.id]);
         setIsDrawerOpen(true);
     };

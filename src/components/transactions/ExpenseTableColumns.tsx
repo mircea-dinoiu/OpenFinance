@@ -11,10 +11,15 @@ import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay
 import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import {RatingDisplay} from 'components/transactions/cells/RatingDisplay';
 import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
+import {UpdateRecords} from 'components/transactions/types';
 import * as React from 'react';
 import {TransactionModel} from 'types';
 
-export const ExpenseTableColumns = ({updateRecords}) => [
+export const ExpenseTableColumns = ({
+    updateRecords,
+}: {
+    updateRecords: UpdateRecords;
+}) => [
     AmountColumn,
     {
         Header: 'Description',
@@ -35,9 +40,7 @@ export const ExpenseTableColumns = ({updateRecords}) => [
         Header: 'Categories',
         filterable: true,
         Filter: CategoriesFilter,
-        accessor: (item: TransactionModel) => (
-            <CategoriesDisplay item={item} />
-        ),
+        accessor: (item: TransactionModel) => <CategoriesDisplay item={item} />,
         id: 'categories',
         sortable: false,
         minWidth: 300,
@@ -45,9 +48,7 @@ export const ExpenseTableColumns = ({updateRecords}) => [
     AccountColumn,
     {
         Header: 'Person(s)',
-        accessor: (item: TransactionModel) => (
-            <PersonsDisplay item={item} />
-        ),
+        accessor: (item: TransactionModel) => <PersonsDisplay item={item} />,
         Filter: UsersFilter,
         filterable: true,
         id: 'users',
@@ -83,9 +84,7 @@ export const ExpenseTableColumns = ({updateRecords}) => [
     {
         Header: 'Price/g',
         sortable: true,
-        accessor: (item: TransactionModel) => (
-            <PricePerGDisplay item={item} />
-        ),
+        accessor: (item: TransactionModel) => <PricePerGDisplay item={item} />,
         id: 'sum_per_weight',
         //
         width: 100,

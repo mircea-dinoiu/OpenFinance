@@ -1,7 +1,12 @@
 import React from 'react';
 import {formatNumber} from 'components/formatters';
+import {TransactionModel} from 'types';
 
-export const WeightDisplay = ({item}) => {
+export const WeightDisplay = ({
+    item,
+}: {
+    item: Pick<TransactionModel, 'weight'>;
+}) => {
     if (item.weight == null) {
         return null;
     }

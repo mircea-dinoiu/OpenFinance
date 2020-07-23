@@ -1,19 +1,20 @@
+import {Card, CardHeader} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import {numericValue} from 'components/formatters';
+import {headerColor, useCardHeaderStyles} from 'components/transactions/styles';
+import {SummaryExpander} from 'components/transactions/SummaryExpander';
+import {SummarySubCategory} from 'components/transactions/SummarySubCategory';
+import {SummaryModel} from 'components/transactions/types';
+import {spacingSmall} from 'defs/styles';
 import {convertCurrencyToDefault} from 'helpers/currency';
-
-import React from 'react';
+import {financialNum} from 'js/utils/numbers';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
-import {Card, CardHeader} from '@material-ui/core';
-import {financialNum} from 'js/utils/numbers';
-import {SummarySubCategory} from 'components/transactions/SummarySubCategory';
-import {numericValue} from 'components/formatters';
-import {useCurrencies} from 'state/currencies';
-import {makeStyles} from '@material-ui/core/styles';
-import {spacingSmall} from 'defs/styles';
-import {useCardHeaderStyles, headerColor} from 'components/transactions/styles';
-import {SummaryExpander} from 'components/transactions/SummaryExpander';
 
-const groupSorter = ([, items]) => {
+import React, {ReactNode} from 'react';
+import {useCurrencies} from 'state/currencies';
+
+const groupSorter = ([, items]: [unknown, SummaryModel[]]) => {
     if (items.length > 0) {
         // @ts-ignore
         const [firstItem] = items;
@@ -36,7 +37,23 @@ const useStyles = makeStyles({
     },
 });
 
-export const SummaryCategory = (props) => {
+export type SummaryCategoryProps<Ent> = {
+    backgroundColor: string;
+    title: string;
+    summaryObject: SummaryModel[];
+    expandedByDefault?: boolean;
+    entities: Ent[];
+    entityIdField?: keyof Ent;
+    entityNameField: keyof Ent;
+    showSumInHeader?: boolean;
+    setExpanded?: (e: boolean) => void;
+    expanded?: boolean;
+    renderDescription?: (cat: SummaryModel) => ReactNode;
+};
+
+export const SummaryCategory = <Ent extends {id: number}>(
+    props: SummaryCategoryProps<Ent>,
+) => {
     const cls = useStyles();
     const cardHeaderClasses = useCardHeaderStyles();
     const currencies = useCurrencies();
@@ -47,7 +64,7 @@ export const SummaryCategory = (props) => {
         expandedByDefault = false,
         entities,
         entityIdField = 'id',
-        entityNameField = 'name',
+        entityNameField,
         showSumInHeader,
     } = props;
     const expandedState = React.useState(expandedByDefault);
@@ -56,7 +73,7 @@ export const SummaryCategory = (props) => {
         : expandedState;
     const [excluded, setExcluded] = React.useState({});
 
-    const handleToggleExcluded = (id) => {
+    const handleToggleExcluded = (id: string) => {
         setExcluded({...excluded, [id]: !excluded[id]});
     };
 
@@ -82,7 +99,7 @@ export const SummaryCategory = (props) => {
                 classes={cardHeaderClasses}
                 action={
                     <SummaryExpander
-                        isExpanded={expanded}
+                        isExpanded={Boolean(expanded)}
                         onChange={setExpanded}
                     />
                 }
@@ -123,13 +140,12 @@ export const SummaryCategory = (props) => {
                         );
 
                         return (
-                            <SummarySubCategory
+                            <SummarySubCategory<Ent>
                                 key={id}
                                 excluded={excluded}
                                 shouldGroup={shouldGroup}
                                 id={id}
                                 items={items}
-                                // @ts-ignore
                                 numericValueFn={numericValueProxy}
                                 entities={entities}
                                 entityIdField={entityIdField}

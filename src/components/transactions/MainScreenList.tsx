@@ -22,6 +22,9 @@ import {ContextMenuItems} from 'components/MainScreen/ContextMenu/ContextMenuIte
 import {getTrProps} from 'components/MainScreen/Table/helpers';
 import {Tooltip} from 'components/Tooltip';
 import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
+import {ExpenseForm} from 'components/transactions/ExpenseForm';
+import {ExpenseListItemContent} from 'components/transactions/ExpenseListItemContent';
+import {ExpenseTableColumns} from 'components/transactions/ExpenseTableColumns';
 import {
     mapItemToDetachedUpdates,
     mapItemToRepeatedUpdates,
@@ -34,7 +37,12 @@ import {MainScreenEditDialog} from 'components/transactions/MainScreenEditDialog
 import {MainScreenListGroup} from 'components/transactions/MainScreenListGroup';
 import {SplitAmountField} from 'components/transactions/SplitAmountField';
 import {StatsTable} from 'components/transactions/StatsTable';
+import {formToModel} from 'components/transactions/transformers/formToModel';
+import {getFormDefaults} from 'components/transactions/transformers/getFormDefaults';
+import {modelToForm} from 'components/transactions/transformers/modelToForm';
+import {UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
+import {routes} from 'defs/routes';
 import {greyedOut} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import {mapUrlToFragment} from 'helpers';
@@ -44,7 +52,7 @@ import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {isEqual, range, uniqueId} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import React, {PureComponent, useMemo} from 'react';
+import React, {PureComponent, ReactNode, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 import {Filter, SortingRule} from 'react-table-6';
@@ -55,13 +63,12 @@ import {
     Currencies,
     GlobalState,
     ScreenQueries,
-    TransactionForm,
     TransactionModel,
     Users,
 } from 'types';
 import {useEndDate} from 'utils/dates';
 
-import {createXHR} from 'utils/fetch';
+import {createXHR, HttpMethod} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
 type TypeProps = {
@@ -72,35 +79,10 @@ type TypeProps = {
         sorters: SortingRule[];
         filters: Filter[];
     };
-    api: string;
     endDate: string;
-    entityName: string;
-    nameProperty: string;
     screen: ScreenQueries;
-    crudProps: {
-        // todo consider having stronger types here
-        modelToForm: (model: TransactionModel) => TransactionForm;
-        formToModel: (
-            model: TransactionForm,
-            detail: {user: Users},
-        ) => TransactionModel;
-        formComponent: React.ComponentType<{
-            initialValues: TransactionForm;
-            onFormChange: (TypeTransactionForm) => void;
-        }>;
-        getFormDefaults: () => TransactionForm;
-    };
-    tableColumns: (props: {
-        updateRecords: (ids: number[], data: TransactionModel) => unknown;
-    }) => Array<{}>;
-    contentComponent: React.PureComponent<any>;
     currencies: Currencies;
-    newRecord: {
-        id: number;
-        repeat: string;
-    };
     refreshWidgets: string;
-    defaultSorters: Array<{id: string; desc: boolean}>;
     dispatch: Dispatch;
     moneyLocations: Accounts;
     user: Users;
@@ -123,6 +105,15 @@ type TypeState = {
     contextMenuDisplay: boolean;
     contextMenuLeft: number;
     contextMenuTop: number;
+};
+
+const api = routes.transactions;
+const entityName = 'transaction';
+const crudProps = {
+    getFormDefaults,
+    modelToForm,
+    formToModel,
+    formComponent: ExpenseForm,
 };
 
 class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
@@ -149,12 +140,11 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.loadMore();
     }
 
-    handleReceiveNewRecord(newRecord) {
+    handleReceiveNewRecord(newRecord: TransactionModel) {
         if (
             newRecord &&
-            this.state.results.filter(
-                (each: {id: number}) => each.id == newRecord.id,
-            ).length === 0
+            this.state.results.filter((each) => each.id == newRecord.id)
+                .length === 0
         ) {
             this.setState({
                 results: this.state.results.concat(newRecord),
@@ -164,7 +154,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: TypeProps) {
         if (prevProps.refreshWidgets !== this.props.refreshWidgets) {
             this.refresh();
         } else if (prevProps.endDate !== this.props.endDate) {
@@ -226,7 +216,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.setState((state) => ({loading: state.loading + 1}));
 
         const response = await createXHR<TransactionModel[]>({
-            url: makeUrl(this.props.api, {
+            url: makeUrl(api, {
                 end_date: this.props.endDate,
                 page,
                 limit: pageSize,
@@ -280,15 +270,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         });
     };
 
-    getCommonProps() {
-        return {
-            api: this.props.api,
-            entityName: this.props.entityName,
-            nameProperty: this.props.nameProperty,
-            crudProps: this.props.crudProps,
-        };
-    }
-
     isDesktop() {
         return this.props.screen.isLarge;
     }
@@ -310,14 +291,14 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             contextMenuLeft: left,
         });
 
-    getTrProps = (state, item) =>
-        item
+    getTrProps = (state: any, rowInfo?: {original: TransactionModel}) =>
+        rowInfo
             ? getTrProps({
                   selectedIds: this.state.selectedIds,
                   onEdit: this.handleToggleEditDialog,
                   onReceiveSelectedIds: this.handleReceivedSelectedIds,
                   onChangeContextMenu: this.handleChangeContextMenu,
-                  item: item.original,
+                  item: rowInfo.original,
               })
             : {};
 
@@ -327,7 +308,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         );
     }
 
-    computeAmount(items) {
+    computeAmount(items: TransactionModel[]) {
         const mlIdToCurrencyId = this.props.moneyLocations.reduce(
             (acc, each) => {
                 acc[each.id] = each.currency_id;
@@ -348,15 +329,9 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         }, 0);
     }
 
-    computeWeight(items) {
+    computeWeight(items: TransactionModel[]) {
         return items.reduce((acc, each) => acc + (each.weight || 0), 0);
     }
-
-    handleSelectAll = (event) => {
-        event.preventDefault();
-
-        this.handleReceivedSelectedIds(this.state.results.map((r) => r.id));
-    };
 
     renderTableHeader() {
         const buttonProps: ButtonProps = {
@@ -389,7 +364,9 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         )}
                         placeholder="Split"
                         value={this.state.splitAmount}
-                        onChange={this.handleChangeSplitAmount}
+                        onChange={(event) => {
+                            this.setState({splitAmount: event.target.value});
+                        }}
                         margin="normal"
                         variant="outlined"
                         InputProps={{
@@ -411,7 +388,13 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 </>
                 <Button
                     variant="outlined"
-                    onClick={this.handleSelectAll}
+                    onClick={(event) => {
+                        event.preventDefault();
+
+                        this.handleReceivedSelectedIds(
+                            this.state.results.map((r) => r.id),
+                        );
+                    }}
                     {...buttonProps}
                 >
                     Select All
@@ -447,7 +430,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         );
     }
 
-    parseSplitAmount(number) {
+    parseSplitAmount(number: string) {
         const working = number.trim();
 
         if (!working) {
@@ -456,10 +439,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         return Number(working);
     }
-
-    handleChangeSplitAmount = (event) => {
-        this.setState({splitAmount: event.target.value});
-    };
 
     handleClickSplit = async () => {
         const selectedItems = this.selectedItems;
@@ -503,7 +482,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
     handleToggleDisplayHidden = this.handleToggleStateKey('displayHidden');
 
-    renderStats(head, items) {
+    renderStats(head: ReactNode, items: TransactionModel[]) {
         return (
             <div style={{display: 'inline-block', marginRight: 5}}>
                 <Tooltip
@@ -588,7 +567,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     handleCloseContextMenu = () =>
         this.handleChangeContextMenu({display: false});
 
-    updateRecords = async (ids, data) => {
+    updateRecords: UpdateRecords = async (ids, data) => {
         try {
             await this.handleRequestUpdate(ids.map((id) => ({id, ...data})));
 
@@ -599,13 +578,13 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         }
     };
 
-    updateSelectedRecords = (data) =>
+    updateSelectedRecords = (data: Partial<TransactionModel>) =>
         this.updateRecords(
             this.selectedItems.map((each) => each.id),
             data,
         );
 
-    withLoading = (fn) => async (...args: any[]) => {
+    withLoading = <Fn extends Function>(fn: Fn) => async (...args: any[]) => {
         this.setState((state) => ({loading: state.loading + 1}));
 
         const promise = fn(...args);
@@ -617,27 +596,27 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return await promise;
     };
 
-    handleRequest = this.withLoading((data, api: string, method) =>
-        createXHR({
-            url: api,
-            method,
-            data: {data},
-        }),
+    handleRequest = this.withLoading(
+        <D,>(data: D, api: string, method: HttpMethod) =>
+            createXHR({
+                url: api,
+                method,
+                data: {data},
+            }),
     );
-    handleRequestDelete = (data) =>
-        this.handleRequest(data, this.props.api, 'DELETE');
-    handleRequestUpdate = (data) =>
-        this.handleRequest(data, this.props.api, 'PUT');
-    handleRequestCreate = (data) =>
-        this.handleRequest(data, this.props.api, 'POST');
+    handleRequestDelete = (data: {id: number}[]) =>
+        this.handleRequest(data, api, 'DELETE');
+    handleRequestUpdate = (data: Partial<TransactionModel>[]) =>
+        this.handleRequest(data, api, 'PUT');
+    handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) =>
+        this.handleRequest(data, api, 'POST');
 
-    sanitizeItem = (item) =>
-        this.props.crudProps.formToModel(
-            this.props.crudProps.modelToForm(item),
-            {user: this.props.user},
-        );
+    sanitizeItem = (item: TransactionModel) =>
+        crudProps.formToModel(crudProps.modelToForm(item), {
+            user: this.props.user,
+        });
 
-    copyItem = (item) => {
+    copyItem = (item: TransactionModel): Omit<TransactionModel, 'id'> => {
         const copy = this.sanitizeItem(item);
 
         delete copy.id;
@@ -686,7 +665,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         }
     };
     handleDetach = async () => {
-        const added: TransactionModel[] = [];
+        const added: Omit<TransactionModel, 'id'>[] = [];
         const updated: Partial<TransactionModel>[] = [];
         const promises: Promise<unknown>[] = [];
 
@@ -744,7 +723,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     renderContent() {
-        const commonProps = this.getCommonProps();
         const params = this.props.params;
 
         if (this.isDesktop()) {
@@ -798,7 +776,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             manual={true}
                             loading={this.state.loading > 0}
                             data={results}
-                            columns={this.props.tableColumns({
+                            columns={ExpenseTableColumns({
                                 updateRecords: this.updateRecords,
                             })}
                             getTrProps={this.getTrProps}
@@ -828,8 +806,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 date={date}
                 items={items}
                 itemProps={{
-                    ...commonProps,
-                    contentComponent: this.props.contentComponent,
+                    entityName: entityName,
+                    contentComponent: ExpenseListItemContent,
                     contextMenuItemsProps: this.getContextMenuItemsProps(),
                     onReceiveSelectedIds: this.handleReceivedSelectedIds,
                 }}
@@ -850,14 +828,14 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     onCancel={this.handleToggleAddModal}
                     open={this.state.addModalOpen}
                     onRequestCreate={this.handleRequestCreate}
-                    entityName={this.props.entityName}
-                    {...this.props.crudProps}
+                    entityName={entityName}
+                    {...crudProps}
                 />
                 <MainScreenDeleteDialog
                     open={this.state.deleteDialogOpen}
                     onYes={this.handleDelete}
                     onNo={this.handleToggleDeleteDialog}
-                    entityName={this.props.entityName}
+                    entityName={entityName}
                     count={
                         Object.values(this.state.selectedIds).filter(Boolean)
                             .length
@@ -870,10 +848,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         items={selectedItems}
                         onCancel={this.handleToggleEditDialog}
                         onSave={this.handleUpdate}
-                        entityName={this.props.entityName}
+                        entityName={entityName}
                         onRequestUpdate={this.handleRequestUpdate}
                         user={this.props.user}
-                        {...this.props.crudProps}
+                        {...crudProps}
                     />
                 )}
             </>
@@ -900,7 +878,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     {this.renderContent()}
                     {isDesktop ? null : (
                         <LoadMore
-                            loading={loading}
+                            loading={Boolean(loading)}
                             onClick={() => {
                                 const url = new URL(window.location.href);
 
@@ -936,7 +914,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 }
 
-export const MainScreenList = (ownProps) => {
+export const MainScreenList = () => {
     const stateProps = useSelector(
         ({
             screen,
@@ -976,7 +954,6 @@ export const MainScreenList = (ownProps) => {
 
     return (
         <MainScreenListWrapped
-            {...ownProps}
             {...stateProps}
             endDate={endDate}
             history={history}

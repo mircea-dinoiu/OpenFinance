@@ -6,6 +6,7 @@ import Warning from '@material-ui/icons/Warning';
 import IconDrafts from '@material-ui/icons/Drafts';
 import startCase from 'lodash/startCase';
 import {TransactionStatus} from 'defs';
+import {TransactionModel} from 'types';
 
 const ICON_STYLE = {height: 20, width: 20};
 
@@ -33,7 +34,13 @@ export const DraftFlag = () => (
     </span>
 );
 
-export const Flags = ({item, entity}) => (
+export const Flags = ({
+    item,
+    entity,
+}: {
+    item: TransactionModel;
+    entity: string;
+}) => (
     <>
         {item.status === TransactionStatus.draft && <DraftFlag />}
         {item.status === TransactionStatus.pending && (

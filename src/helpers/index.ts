@@ -4,7 +4,7 @@ export const getItemCurrencyISOCode = ({
     item,
     currencies,
 }: {
-    item: TransactionModel;
+    item: Pick<TransactionModel, 'money_location'>;
     currencies: Currencies;
 }) => currencies[item.money_location.currency_id].iso_code;
 

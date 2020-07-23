@@ -2,10 +2,16 @@ import {Action} from 'state/defs';
 
 const stateKeysWithoutReducers: string[] = [];
 
-export const bindToUpdateState = (prop, defaultValue) => {
+export const bindToUpdateState = <T extends object>(prop: string, defaultValue: T) => {
     stateKeysWithoutReducers.push(prop);
 
-    return (state = defaultValue, action) => {
+    return (
+        state = defaultValue,
+        action: {
+            type: Action;
+            state: T;
+        },
+    ) => {
         if (action.type === Action.UPDATE_STATE) {
             Object.keys(action.state).forEach((key) => {
                 if (!stateKeysWithoutReducers.includes(key)) {

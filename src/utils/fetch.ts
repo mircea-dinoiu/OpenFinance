@@ -10,7 +10,7 @@ import {useEffect, useRef, useState} from 'react';
 import 'whatwg-fetch';
 import {config} from './config';
 
-const parseOpts = (opts) =>
+const parseOpts = (opts: AxiosRequestConfig) =>
     merge(
         {
             headers: {
@@ -74,3 +74,5 @@ export const useReader = <T>(
         cancelSource: cancelSource.current,
     };
 };
+
+export type HttpMethod = 'DELETE' | 'PUT' | 'POST';

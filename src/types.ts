@@ -84,17 +84,19 @@ export type TransactionForm = {
     favorite: number;
     hidden: boolean;
     paymentMethod: number;
-    weight: number;
-    date: number;
+    weight: number | null;
+    date: Date;
     chargedPersons: {
         [key: string]: number;
     };
     categories: number[];
-    repeatOccurrences: number;
-    repeat: TransactionRepeat;
+    repeatOccurrences: number | null;
+    repeat: TransactionRepeat | null;
     type: TransactionType;
     status: TransactionStatus;
 };
+
+export type TransactionFormDefaults = Omit<TransactionForm, 'id'>;
 
 export type TransactionModel = {
     id: number;
@@ -102,19 +104,21 @@ export type TransactionModel = {
     favorite: number;
     item: string;
     sum: number;
-    weight: number;
+    weight: number | null;
     users: {
         [key: string]: number;
     };
-    repeat_occurrences: number;
+    repeat_occurrences: number | null;
     repeat: null | TransactionRepeat;
     persist: boolean;
     type: TransactionType;
-    created_at: Date;
+    created_at: number;
+    updated_at: number;
     hidden: boolean;
     status: TransactionStatus;
     money_location_id: number;
     money_location: {currency_id: number};
+    sum_per_weight: number | null;
 };
 
 export type SnackbarProps = {

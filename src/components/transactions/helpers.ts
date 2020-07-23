@@ -2,7 +2,7 @@ import {IncludeOption} from 'defs';
 import {QueryParam} from 'defs/url';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
-import {TransactionModel} from 'types';
+import {Accounts, TransactionModel} from 'types';
 import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import {sumArray} from 'js/utils/numbers';
 import {useQueryParamState} from 'utils/url';
@@ -30,7 +30,9 @@ export const mapItemToDetachedUpdates = (
     repeat: null,
 });
 
-export const mergeItems = (items: TransactionModel[]) => {
+export const mergeItems = (
+    items: TransactionModel[],
+): Partial<TransactionModel> | null => {
     const [, ...rest] = items;
 
     if (!rest.length || uniqBy(items, 'money_location_id').length > 1) {
@@ -56,7 +58,7 @@ export const mergeItems = (items: TransactionModel[]) => {
     };
 };
 
-export const sortMoneyLocations = (items) =>
+export const sortMoneyLocations = (items: Accounts) =>
     sortBy(
         items,
         (item) =>
@@ -76,7 +78,7 @@ export const useInclude = () =>
     useQueryParamState<IncludeOption>(QueryParam.include, IncludeOption.all);
 
 export const getEndDateBasedOnIncludePreference = (
-    endDate,
+    endDate: string,
     include: IncludeOption,
 ) => {
     if (include === IncludeOption.previousYear) {

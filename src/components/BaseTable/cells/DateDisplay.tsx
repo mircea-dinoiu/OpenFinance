@@ -2,8 +2,9 @@ import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
 import moment from 'moment';
 import {useScreenSize} from 'state/hooks';
+import {TransactionModel} from 'types';
 
-export const DateDisplay = ({item}) => {
+export const DateDisplay = ({item}: {item: TransactionModel}) => {
     const screen = useScreenSize();
 
     return (

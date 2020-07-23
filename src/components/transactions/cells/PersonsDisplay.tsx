@@ -3,6 +3,7 @@ import {Avatar} from '@material-ui/core';
 import styled from 'styled-components';
 import {grey} from '@material-ui/core/colors';
 import {useUsers} from 'state/hooks';
+import {TransactionModel} from 'types';
 
 export const PersonAvatar = styled(Avatar)`
     height: 20px !important;
@@ -37,7 +38,7 @@ const TooltipStyled = styled.div`
         props.index === 0 ? 1 : 'initial'};
 `;
 
-export const PersonsDisplay = ({item}) => {
+export const PersonsDisplay = ({item}: {item: TransactionModel}) => {
     const userList = useUsers().list;
 
     return (

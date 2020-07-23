@@ -17,13 +17,17 @@ import {
 } from '@material-ui/core';
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
-import {CancelToken} from 'axios';
 import {MuiSelectNative} from 'components/dropdowns';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
 import {TransactionNameField} from 'components/transactions/TransactionNameField';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
-import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles';
+import {
+    gridGap,
+    screenQuerySmall,
+    spacingLarge,
+    spacingSmall,
+} from 'defs/styles';
 import {findCurrencyById} from 'helpers/currency';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {sumArray} from 'js/utils/numbers';
@@ -32,7 +36,14 @@ import {sortBy} from 'lodash';
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {Accounts, Categories, Currencies, GlobalState, TransactionForm, Users} from 'types';
+import {
+    Accounts,
+    Categories,
+    Currencies,
+    GlobalState,
+    TransactionFormDefaults,
+    Users,
+} from 'types';
 import {useEndDate} from 'utils/dates';
 
 const boxStyle = {
@@ -40,7 +51,7 @@ const boxStyle = {
 };
 
 type TypeProps = {
-    initialValues: TransactionForm;
+    initialValues: TransactionFormDefaults;
     onFormChange: Function;
     moneyLocations: Accounts;
     currencies: Currencies;
@@ -89,13 +100,9 @@ const FormControlLabelInline = styled(FormControlLabel)`
     display: inline-block;
 `;
 
-type State = TransactionForm;
+type State = TransactionFormDefaults;
 
 class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
-    // @ts-ignore
-    descriptionSuggestionsCancelSource = CancelToken.source();
-    categoriesCancelSource;
-
     state: State = {
         ...this.props.initialValues,
     };
@@ -158,7 +165,11 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
                             marginTop: '2px',
                         }}
                         onChange={(event) =>
-                            this.setState({weight: event.target.value})
+                            this.setState({
+                                weight: event.target.value
+                                    ? Number(event.target.value)
+                                    : null,
+                            })
                         }
                     />
                 </div>

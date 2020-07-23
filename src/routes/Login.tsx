@@ -65,7 +65,7 @@ export const Login = () => {
         }
     };
 
-    const handleTextFieldKeyDown = (event) => {
+    const handleTextFieldKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         switch (event.key) {
             case 'Enter':
                 submit();

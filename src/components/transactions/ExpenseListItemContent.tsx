@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
+import {TransactionModel} from 'types';
 
 const useStyles = makeStyles({
     expenseListItemContent: {
@@ -69,7 +70,10 @@ const CategoriesContainer = styled.div`
     grid-area: categories;
 `;
 
-export const ExpenseListItemContent = ({item, expanded}) => {
+export const ExpenseListItemContent = ({item, expanded}: {
+    item: TransactionModel,
+    expanded?: boolean
+}) => {
     const cls = useStyles();
     const personsDisplay = <PersonsDisplay item={item} />;
     const descriptionDisplay = item.item;

@@ -20,11 +20,10 @@ export const TransactionNameField = ({
     value: string;
     onChange: (v: string) => void;
 }) => {
-    const [search, setSearch] = useState(value);
     const endDate = useEndDate();
     const {response: suggestionsResponse} = useReader<DescriptionSuggestion[]>({
         url: makeUrl(routes.transactionsSuggestions.descriptions, {
-            search,
+            search: value,
             end_date: endDate,
         }),
     });
@@ -34,7 +33,7 @@ export const TransactionNameField = ({
     const cls = useStyles();
 
     return (
-        <Autocomplete
+        <Autocomplete<DescriptionSuggestion>
             freeSolo={true}
             options={suggestions}
             getOptionLabel={(o) => o.item}
@@ -48,12 +47,14 @@ export const TransactionNameField = ({
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => onChange(e.target.value)}
                     label="Name"
                 />
             )}
             defaultValue={{item: value, usages: 0}}
-            onChange={(event, v) => onChange(v.item)}
+            onChange={(event: any, v: DescriptionSuggestion | null) =>
+                v && onChange(v.item)
+            }
         />
     );
 };

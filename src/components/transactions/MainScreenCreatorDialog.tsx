@@ -1,23 +1,22 @@
-import * as React from 'react';
-import {parseCRUDError} from 'parsers';
-
-import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
-import {ButtonProgress} from 'components/loaders';
-
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
+import {ButtonProgress} from 'components/loaders';
+
+import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
 import {dialog} from 'defs/styles';
+import {parseCRUDError} from 'parsers';
+import * as React from 'react';
 import {useUsers} from 'state/hooks';
-import {TransactionForm} from 'types';
+import {TransactionForm, TransactionFormDefaults, TransactionModel, Users} from 'types';
 
 type TypeProps = {
-    getFormDefaults: ({user: TypeUsers}) => TransactionForm;
+    getFormDefaults: (props: {user: Users}) => TransactionFormDefaults;
     formToModel: Function;
     entityName: string;
-    onReceiveNewRecord: Function;
+    onReceiveNewRecord: (r: TransactionModel) => void;
     formComponent: React.ComponentType<{
-        initialValues: TransactionForm;
-        onFormChange: (TypeTransactionForm) => void;
+        initialValues: TransactionFormDefaults;
+        onFormChange: (form: TransactionForm) => void;
     }>;
     onRequestCreate: Function;
     onCancel: () => void;

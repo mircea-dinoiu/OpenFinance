@@ -10,7 +10,12 @@ import {
 } from 'components/transactions/helpers';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
-import {IncludeOption, TransactionStatus} from 'defs';
+import {
+    SummaryModel,
+    SummaryResults,
+    BalanceByLocation,
+} from 'components/transactions/types';
+import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 import identity from 'lodash/identity';
@@ -23,6 +28,7 @@ import {
     useRefreshWidgets,
     useUsers,
 } from 'state/hooks';
+import {AccountType, User} from 'types';
 import {getStartDate, useEndDate} from 'utils/dates';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
@@ -36,19 +42,9 @@ const useStyles = makeStyles({
     },
 });
 
-type Results = {
-    remainingData: {
-        byUser: {};
-    };
-    expensesData: {
-        byUser: {};
-    };
-    expensesByCategory: {};
-};
-
 export const Summary = () => {
     const cls = useStyles();
-    const [results, setResults] = React.useState<Results | null>(null);
+    const [results, setResults] = React.useState<SummaryResults | null>(null);
     const [refreshing, setRefreshing] = React.useState(false);
     const refreshWidgets = useRefreshWidgets();
     const moneyLocationTypes = useMoneyLocationTypes();
@@ -80,7 +76,7 @@ export const Summary = () => {
     const load = async () => {
         setRefreshing(true);
 
-        const response = await createXHR<Results>({
+        const response = await createXHR<SummaryResults>({
             url: makeUrl(routes.reports.summary, reportQueryParams),
         });
         const json = response.data;
@@ -93,31 +89,30 @@ export const Summary = () => {
         load();
     }, [reportQueryParams, refreshWidgets]);
 
-    const renderCategory = (categoryProps) =>
-        React.createElement(SummaryCategory, categoryProps);
-
     const handleToggleIncludePending = () => {
         setIncludePending(!includePending);
     };
 
-    const parseTransactionsByLocation = (data) => {
-        return Object.entries(data)
-            .map(([key, sum]) => {
-                const ml = moneyLocations.find((ml) => ml.id === Number(key));
+    const parseTransactionsByLocation = (
+        data: BalanceByLocation,
+    ): SummaryModel[] => {
+        const arr: SummaryModel[] = [];
 
-                if (!ml || sum === 0) {
-                    return null;
-                }
+        for (const [key, sum] of Object.entries(data)) {
+            const ml = moneyLocations.find((ml) => ml.id === Number(key));
 
-                return {
+            if (ml && sum !== 0) {
+                arr.push({
                     currencyId: ml.currency_id,
                     description: ml.name,
                     group: ml.type_id,
                     reference: key,
                     sum,
-                };
-            })
-            .filter(Boolean);
+                });
+            }
+        }
+
+        return arr;
     };
 
     return (
@@ -146,7 +141,7 @@ export const Summary = () => {
                         label="Include pending transactions"
                     />
                 </Paper>
-                <SummaryLazyCategory
+                <SummaryLazyCategory<BalanceByLocation, AccountType>
                     {...{
                         backgroundColor: green[500],
                         title: 'Balance by Account',
@@ -157,29 +152,36 @@ export const Summary = () => {
                             reportQueryParams,
                         ),
                         parser: parseTransactionsByLocation,
-                        renderDescription({reference}) {
+                        renderDescription({reference}: {reference: string}) {
                             return <MoneyLocationDisplay id={reference} />;
                         },
+                        entityNameField: 'name',
                     }}
                 />
-                {results &&
-                    renderCategory({
-                        backgroundColor: green[500],
-                        title: 'Balance by Person',
-                        summaryObject: results.remainingData.byUser,
-                        entities: user.list,
-                        entityNameField: 'full_name',
-                    })}
+                {results && (
+                    <SummaryCategory<User>
+                        {...{
+                            backgroundColor: green[500],
+                            title: 'Balance by Person',
+                            summaryObject: results.remainingData.byUser,
+                            entities: user.list,
+                            entityNameField: 'full_name',
+                        }}
+                    />
+                )}
 
-                {results &&
-                    renderCategory({
-                        backgroundColor: purple[500],
-                        title: 'Transactions by Category',
-                        summaryObject: results.expensesByCategory,
-                        entities: categories,
-                        entityNameField: 'name',
-                        showSumInHeader: false,
-                    })}
+                {results && (
+                    <SummaryCategory
+                        {...{
+                            backgroundColor: purple[500],
+                            title: 'Transactions by Category',
+                            summaryObject: results.expensesByCategory,
+                            entities: categories,
+                            entityNameField: 'name',
+                            showSumInHeader: false,
+                        }}
+                    />
+                )}
 
                 <SummaryLazyCategory
                     {...{
@@ -195,14 +197,17 @@ export const Summary = () => {
                     }}
                 />
 
-                {results &&
-                    renderCategory({
-                        backgroundColor: red[500],
-                        title: 'Expenses by Person',
-                        summaryObject: results.expensesData.byUser,
-                        entities: user.list,
-                        entityNameField: 'full_name',
-                    })}
+                {results && (
+                    <SummaryCategory<User>
+                        {...{
+                            backgroundColor: red[500],
+                            title: 'Expenses by Person',
+                            summaryObject: results.expensesData.byUser,
+                            entities: user.list,
+                            entityNameField: 'full_name',
+                        }}
+                    />
+                )}
             </div>
         </div>
     );

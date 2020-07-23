@@ -10,7 +10,7 @@ const StatusToIconComponent = {
     open: 'i',
 };
 
-export const MoneyLocationDisplay = ({id}) => {
+export const MoneyLocationDisplay = ({id}: {id: number | string}) => {
     const moneyLocations = useMoneyLocations();
 
     if (!id) {
@@ -24,22 +24,20 @@ export const MoneyLocationDisplay = ({id}) => {
     }
     const IconComponent = StatusToIconComponent[moneyLocation.status];
 
-    return (
-        id && (
-            <span
-                style={{fontSize: '1rem', color: grey[700]}}
-                title={moneyLocation.name}
-            >
-                <IconComponent
-                    style={{
-                        fontSize: '1rem',
-                        position: 'relative',
-                        top: 2,
-                        left: -1,
-                    }}
-                />
-                {moneyLocation.name}
-            </span>
-        )
-    );
+    return id ? (
+        <span
+            style={{fontSize: '1rem', color: grey[700]}}
+            title={moneyLocation.name}
+        >
+            <IconComponent
+                style={{
+                    fontSize: '1rem',
+                    position: 'relative',
+                    top: 2,
+                    left: -1,
+                }}
+            />
+            {moneyLocation.name}
+        </span>
+    ) : null;
 };

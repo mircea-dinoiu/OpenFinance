@@ -16,7 +16,7 @@ const store = createStore(
     /* eslint no-underscore-dangle: 0 */
     compose(
         applyMiddleware(thunk),
-        reduxExtension ? reduxExtension() : (noop) => noop,
+        reduxExtension ? reduxExtension() : (noop: any) => noop,
     ),
 );
 
