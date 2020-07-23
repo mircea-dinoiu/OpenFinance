@@ -1,6 +1,3 @@
-# Universal App Roadmap
-https://github.com/mircea-dinoiu/financial/issues/21
-
 # Mission
 This application is made to track down your monthly expenses and incomes in the family and help you understand better where your money are going and how can you be more careful what you're spending money on.
 
