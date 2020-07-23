@@ -15,26 +15,15 @@ import {
     Slider,
     TextField,
 } from '@material-ui/core';
-import {Autocomplete} from '@material-ui/lab';
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {CancelToken} from 'axios';
-import {
-    MuiReactSelect,
-    MuiReactSelectAsyncCreatable,
-    MuiSelectNative,
-} from 'components/dropdowns';
+import {MuiSelectNative} from 'components/dropdowns';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
 import {TransactionNameField} from 'components/transactions/TransactionNameField';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
-import {routes} from 'defs/routes';
-import {
-    gridGap,
-    screenQuerySmall,
-    spacingLarge,
-    spacingSmall,
-} from 'defs/styles';
+import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles';
 import {findCurrencyById} from 'helpers/currency';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {sumArray} from 'js/utils/numbers';
@@ -43,17 +32,8 @@ import {sortBy} from 'lodash';
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {
-    Accounts,
-    Categories,
-    Currencies,
-    GlobalState,
-    TransactionForm,
-    Users,
-} from 'types';
+import {Accounts, Categories, Currencies, GlobalState, TransactionForm, Users} from 'types';
 import {useEndDate} from 'utils/dates';
-import {createXHR} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
 
 const boxStyle = {
     padding: '10px 0',

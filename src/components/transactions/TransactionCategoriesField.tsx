@@ -4,7 +4,7 @@ import {MuiReactSelect} from 'components/dropdowns';
 import {routes} from 'defs/routes';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 import {sortBy} from 'lodash';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useCategories} from 'state/hooks';
 import {useReader} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
