@@ -15,6 +15,7 @@ import {
     Slider,
     TextField,
 } from '@material-ui/core';
+import {Autocomplete} from '@material-ui/lab';
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {CancelToken} from 'axios';
@@ -23,6 +24,8 @@ import {
     MuiReactSelectAsyncCreatable,
     MuiSelectNative,
 } from 'components/dropdowns';
+import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
+import {TransactionNameField} from 'components/transactions/TransactionNameField';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
 import {routes} from 'defs/routes';
@@ -64,11 +67,6 @@ type TypeProps = {
     endDate: string;
     user: Users;
     categories: Categories;
-};
-
-type DescriptionSuggestion = {
-    item: string;
-    usages: number;
 };
 
 export const setChargedPersonValueFactory = (
@@ -188,79 +186,6 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         );
     }
 
-    renderDescription() {
-        const value = this.state.description;
-
-        return (
-            <MuiReactSelectAsyncCreatable
-                label="Name"
-                createOptionPosition="first"
-                onChange={this.handleDescriptionChange}
-                cacheOptions={true}
-                defaultOptions={value ? [{value, label: value}] : []}
-                loadOptions={this.fetchDescriptionSuggestions}
-            />
-        );
-    }
-
-    fetchDescriptionSuggestions = async (search) => {
-        if (!search) {
-            return;
-        }
-
-        if (this.descriptionSuggestionsCancelSource) {
-            this.descriptionSuggestionsCancelSource.cancel();
-        }
-
-        // @ts-ignore
-        this.descriptionSuggestionsCancelSource = CancelToken.source();
-
-        const response = await createXHR<DescriptionSuggestion[]>({
-            url: makeUrl(routes.transactionsSuggestions.descriptions, {
-                search,
-                end_date: this.props.endDate,
-            }),
-            cancelToken: this.descriptionSuggestionsCancelSource.token,
-        });
-
-        return sortBy(response.data, (ds) => -ds.usages).map((ds) => ({
-            value: ds.item,
-            label: ds.item,
-        }));
-    };
-
-    handleDescriptionChange = async ({
-        value: description,
-    }: {
-        value: string;
-        label: string;
-    }) => {
-        this.setState({description: description});
-
-        if (description) {
-            if (this.categoriesCancelSource) {
-                this.categoriesCancelSource.cancel();
-            }
-
-            // @ts-ignore
-            this.categoriesCancelSource = CancelToken.source();
-
-            const response = await createXHR({
-                url: makeUrl(routes.transactionsSuggestions.categories, {
-                    search: description,
-                }),
-                cancelToken: this.categoriesCancelSource.token,
-            });
-            const categories = response.data;
-
-            this.setState((prevState) => ({
-                categories: prevState.categories
-                    ? prevState.categories
-                    : categories,
-            }));
-        }
-    };
-
     renderDateTime() {
         return (
             <DateTimePicker
@@ -362,36 +287,6 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
         );
     }
 
-    renderCategories() {
-        const options = sortBy(this.props.categories, 'name').map((each) => ({
-            value: each.id,
-            label: each.name,
-        }));
-
-        return (
-            <MuiReactSelect
-                label="Categories"
-                isMulti={true}
-                options={options}
-                value={options.filter((o) =>
-                    this.state.categories.includes(o.value),
-                )}
-                onChange={(
-                    nextOptions: Array<{
-                        value: number;
-                        label: string;
-                    }>,
-                ) =>
-                    this.setState({
-                        categories: nextOptions
-                            ? nextOptions.map((o) => o.value)
-                            : [],
-                    })
-                }
-            />
-        );
-    }
-
     renderRepeat() {
         const options = RepeatOptions.map((arr) => ({
             value: arr[0],
@@ -404,9 +299,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
                     <MuiSelectNative<RepeatOption | null>
                         label="Repeat"
                         isNullable={true}
-                        onChange={({value}) =>
-                            this.setState({repeat: value})
-                        }
+                        onChange={({value}) => this.setState({repeat: value})}
                         value={options.find(
                             (o) => o.value === this.state.repeat,
                         )}
@@ -441,11 +334,26 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
     render() {
         return (
             <div>
-                <div style={boxStyle}>{this.renderDescription()}</div>
+                <div style={boxStyle}>
+                    <TransactionNameField
+                        value={this.state.description}
+                        onChange={(description) =>
+                            this.setState({description: description})
+                        }
+                    />
+                </div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
                 <div style={boxStyle}>{this.renderDateTime()}</div>
-                <div style={boxStyle}>{this.renderCategories()}</div>
+                <div style={boxStyle}>
+                    <TransactionCategoriesField
+                        values={this.state.categories}
+                        description={this.state.description}
+                        onChange={(categories) =>
+                            this.setState({categories: categories})
+                        }
+                    />
+                </div>
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
                 <div style={boxStyle}>{this.renderRepeat()}</div>
                 <TypeStatusFlagsContainer>

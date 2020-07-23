@@ -1,7 +1,14 @@
-import 'whatwg-fetch';
+import axios, {
+    AxiosPromise,
+    AxiosRequestConfig,
+    AxiosResponse,
+    CancelToken,
+    CancelTokenSource,
+} from 'axios';
 import merge from 'lodash/merge';
+import {useEffect, useRef, useState} from 'react';
+import 'whatwg-fetch';
 import {config} from './config';
-import axios from 'axios';
 
 const parseOpts = (opts) =>
     merge(
@@ -15,14 +22,7 @@ const parseOpts = (opts) =>
         opts,
     );
 
-export const createXHR = <T>(opts: {
-    url: string;
-    method?: string;
-    data?: string | {};
-    cancelToken?: {};
-}): Promise<{
-    data: T;
-}> => {
+export const createXHR = <T>(opts: AxiosRequestConfig): AxiosPromise<T> => {
     const parsedOpts = parseOpts(opts);
 
     if (
@@ -39,4 +39,38 @@ export const createXHR = <T>(opts: {
     }
 
     return axios(parsedOpts);
+};
+
+export const useReader = <T>(
+    opts: Omit<AxiosRequestConfig, 'cancelToken'> & {
+        suspend?: boolean;
+    },
+): {
+    response: AxiosResponse<T> | undefined;
+    cancelSource: CancelTokenSource | null;
+} => {
+    const [response, setResponse] = useState<AxiosResponse<T> | undefined>();
+    const cancelSource = useRef<CancelTokenSource>(null);
+
+    useEffect(() => {
+        if (opts.suspend) {
+            return;
+        }
+        if (cancelSource.current) {
+            cancelSource.current.cancel();
+        }
+
+        // @ts-ignore
+        cancelSource.current = CancelToken.source();
+
+        createXHR<T>({
+            ...opts,
+            cancelToken: cancelSource.current?.token,
+        }).then((r) => setResponse(r));
+    }, [JSON.stringify(opts)]);
+
+    return {
+        response,
+        cancelSource: cancelSource.current,
+    };
 };
