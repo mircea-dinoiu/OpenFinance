@@ -1,4 +1,4 @@
-import {Currencies, GlobalState, CurrenciesApi} from 'types';
+import {Currencies, GlobalState, CurrenciesApi, Currency} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 import {routes} from 'defs/routes';
@@ -26,11 +26,11 @@ export const currencies = createReducer<Currencies | null>(null, {
         selected: payload.map[payload.default],
     }),
     [CurrenciesAction.selectedIdSet]: (
-        state: Currencies,
+        state,
         {payload}: {payload: number},
     ) => ({
         ...state,
-        selected: state[payload],
+        selected: state?.[payload] as Currency,
     }),
 });
 

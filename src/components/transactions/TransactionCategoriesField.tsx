@@ -41,12 +41,8 @@ export const TransactionCategoriesField = ({
                 isMulti={true}
                 options={options}
                 value={options.filter((o) => values.includes(o.value))}
-                onChange={(
-                    nextOptions: Array<{
-                        value: number;
-                        label: string;
-                    }>,
-                ) =>
+                onChange={(nextOptions) =>
+                    // @ts-ignore
                     onChange(nextOptions ? nextOptions.map((o) => o.value) : [])
                 }
             />

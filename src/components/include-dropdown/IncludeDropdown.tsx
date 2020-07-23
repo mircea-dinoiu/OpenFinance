@@ -64,7 +64,7 @@ export const IncludeDropdown = ({
     value,
 }: {
     value: IncludeOption;
-    onChange: (value: ValueType<{value: IncludeOption}>) => void;
+    onChange: (value: {value: IncludeOption}) => void;
 }) => {
     const [endDate] = useEndDate();
     const options = getIncludeOptions({endDate});

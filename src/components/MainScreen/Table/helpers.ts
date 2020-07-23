@@ -50,13 +50,11 @@ export const getTrProps = ({
     item,
 }: {
     item: TransactionModel;
-    onChangeContextMenu: (
-        props: Partial<{
-            display: boolean;
-            top?: number;
-            left?: number;
-        }>,
-    ) => void;
+    onChangeContextMenu: (props: {
+        display: boolean;
+        top?: number;
+        left?: number;
+    }) => void;
     onReceiveSelectedIds: (ids: number[]) => void;
     onEdit: () => void;
     selectedIds: number[];

@@ -201,6 +201,7 @@ export const MuiSelectNative = <V extends string | number | null>({
             <MuiSelect
                 labelId={labelId.current}
                 value={value && value.value}
+                // @ts-ignore
                 onChange={(e: ChangeEvent<{value: V}>) => {
                     const nextValue = e.target.value;
 

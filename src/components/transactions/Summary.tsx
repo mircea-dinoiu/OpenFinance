@@ -96,10 +96,6 @@ export const Summary = () => {
     const renderCategory = (categoryProps) =>
         React.createElement(SummaryCategory, categoryProps);
 
-    const onIncludeChange = ({value}: {value: IncludeOption}) => {
-        setInclude(value);
-    };
-
     const handleToggleIncludePending = () => {
         setIncludePending(!includePending);
     };
@@ -135,7 +131,9 @@ export const Summary = () => {
                 >
                     <IncludeDropdown
                         value={include}
-                        onChange={onIncludeChange}
+                        onChange={(option) => {
+                            setInclude(option.value);
+                        }}
                     />
                     <FormControlLabel
                         control={

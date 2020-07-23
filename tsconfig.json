@@ -11,9 +11,9 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
-    "strict": false,
-    "strictNullChecks": true,
+    "strict": true,
     //"noUnusedLocals": true,
+    "noImplicitAny": false,
 
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
@@ -23,7 +23,6 @@
     "noEmit": true,
     "jsx": "react",
     "baseUrl": "src",
-    "noImplicitAny": false
   },
   "include": [
     "src"

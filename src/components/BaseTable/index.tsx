@@ -83,13 +83,12 @@ export const TableFooter = styled.div`
 
 export function BaseTable<D>(props: Partial<TableProps<D>>) {
     return (
-        <>
-            <ReactTableStyled
-                showPagination={false}
-                pageSize={props.data?.length}
-                pageSizeOptions={[50, 100, 200, 400, 800]}
-                {...props}
-            />
-        </>
+        // @ts-ignore
+        <ReactTableStyled
+            showPagination={false}
+            pageSize={props.data?.length}
+            pageSizeOptions={[50, 100, 200, 400, 800]}
+            {...props}
+        />
     );
 }

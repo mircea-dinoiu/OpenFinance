@@ -189,6 +189,7 @@ class SelectFilterWrapped extends React.PureComponent<
                     value={options.filter((o) => value.includes(o.value))}
                     onOpen={onOpen}
                     options={options}
+                    // @ts-ignore
                     onChange={(values: Array<{value: unknown}>) =>
                         handleChange(values.map((v) => v.value))
                     }
