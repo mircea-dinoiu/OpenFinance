@@ -10,11 +10,7 @@ import {
 } from 'components/transactions/helpers';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
-import {
-    SummaryModel,
-    SummaryResults,
-    BalanceByLocation,
-} from 'components/transactions/types';
+import {BalanceByLocation, SummaryModel, SummaryResults} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {spacingMedium, spacingSmall} from 'defs/styles';
@@ -26,7 +22,6 @@ import {
     useMoneyLocations,
     useMoneyLocationTypes,
     useRefreshWidgets,
-    useBootstrap,
 } from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {AccountType, User} from 'types';
