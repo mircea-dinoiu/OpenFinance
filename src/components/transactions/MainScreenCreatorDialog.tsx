@@ -1,4 +1,10 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {ButtonProgress} from 'components/loaders';
 
@@ -6,11 +12,20 @@ import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
 import {dialog} from 'defs/styles';
 import {parseCRUDError} from 'parsers';
 import * as React from 'react';
-import {useUsers} from 'state/hooks';
-import {TransactionForm, TransactionFormDefaults, TransactionModel, Users} from 'types';
+import {useMoneyLocations, useBootstrap} from 'state/hooks';
+import {
+    Accounts,
+    TransactionForm,
+    TransactionFormDefaults,
+    TransactionModel,
+    Bootstrap,
+} from 'types';
 
 type TypeProps = {
-    getFormDefaults: (props: {user: Users}) => TransactionFormDefaults;
+    getFormDefaults: (props: {
+        user: Bootstrap;
+        mls: Accounts;
+    }) => TransactionFormDefaults;
     formToModel: Function;
     entityName: string;
     onReceiveNewRecord: (r: TransactionModel) => void;
@@ -28,17 +43,20 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState<React.ReactNode>(null);
     const [success, setSuccess] = React.useState<React.ReactNode>(null);
-    const user = useUsers();
+    const user = useBootstrap();
+    const mls = useMoneyLocations();
     const formDefaults = React.useMemo(
         () =>
             props.getFormDefaults({
                 user,
+                mls,
             }),
-        [props, user],
+        [props, user, mls],
     );
     const [formData, setFormData] = React.useState(
         props.getFormDefaults({
             user,
+            mls,
         }),
     );
 

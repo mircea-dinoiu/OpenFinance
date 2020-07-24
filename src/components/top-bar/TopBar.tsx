@@ -8,6 +8,7 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import IconArrowBack from '@material-ui/icons/ArrowBack';
 import IconArrowForward from '@material-ui/icons/ArrowForward';
 import IconDateIcon from '@material-ui/icons/DateRange';
@@ -20,23 +21,25 @@ import IconVisibilityOff from '@material-ui/icons/VisibilityOff';
 import {DatePicker} from '@material-ui/pickers';
 import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption, ShiftDateOptions, Sizes} from 'defs';
-import {mapUrlToFragment} from 'helpers';
+import {spacingMedium, spacingSmall} from 'defs/styles';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
 import {usePrivacyToggle} from 'state/privacyToggle';
+import {useProjects, useSelectedProject} from 'state/projects';
 import {
     shiftDateBack,
     shiftDateForward,
     useEndDate,
     useEndDateIncrement,
 } from 'utils/dates';
+import {mapUrlToFragment} from 'utils/url';
 import {
+    useBootstrap,
     useRefreshWidgetsDispatcher,
     useScreenSize,
-    useUsers,
 } from '../../state/hooks';
 import {ShiftMenu} from './ShiftMenu';
 
@@ -70,7 +73,7 @@ export const TopBar = (props: {
     const refreshWidgets = useRefreshWidgetsDispatcher();
     const [, {setCurrenciesDrawerOpen}] = useCurrenciesDrawerOpenWithActions();
     const screenSize = useScreenSize();
-    const user = useUsers();
+    const user = useBootstrap();
     const history = useHistory();
     const [endDate, setEndDate] = useEndDate();
     const [endDateIncrement, setEndDateIncrement] = useEndDateIncrement();
@@ -207,6 +210,9 @@ export const TopBar = (props: {
     );
 
     const isSmall = screenSize.isSmall;
+    const projects = useProjects();
+    const selectedProject = useSelectedProject();
+    const cls = useStyles();
 
     return (
         <AppBar position="sticky">
@@ -216,7 +222,34 @@ export const TopBar = (props: {
                 }}
             >
                 <Typography variant="h6" color="inherit">
-                    {document.title}
+                    {projects.length ? (
+                        <Paper className={cls.paper}>
+                            <MuiSelectNative
+                                onChange={(o) => {
+                                    const url = new URL(window.location.href);
+
+                                    url.searchParams.set(
+                                        'projectId',
+                                        o.value.toString(),
+                                    );
+
+                                    window.location.href = mapUrlToFragment(
+                                        url,
+                                    );
+                                }}
+                                options={projects.map((p) => ({
+                                    label: p.name,
+                                    value: p.id,
+                                }))}
+                                value={{
+                                    value: selectedProject.id,
+                                }}
+                                valueType="number"
+                            />
+                        </Paper>
+                    ) : (
+                        document.title
+                    )}
                 </Typography>
                 {user && (
                     <Paper
@@ -297,3 +330,9 @@ export const TopBar = (props: {
         </AppBar>
     );
 };
+
+const useStyles = makeStyles({
+    paper: {
+        padding: `${spacingSmall} ${spacingMedium}`,
+    },
+});

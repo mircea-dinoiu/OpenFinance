@@ -35,14 +35,16 @@ import {sortBy} from 'lodash';
 
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
+import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
 import {
     Accounts,
+    Bootstrap,
     Categories,
     Currencies,
     GlobalState,
     TransactionFormDefaults,
-    Users,
+    User,
 } from 'types';
 import {useEndDate} from 'utils/dates';
 
@@ -56,8 +58,9 @@ type TypeProps = {
     moneyLocations: Accounts;
     currencies: Currencies;
     endDate: string;
-    user: Users;
+    user: Bootstrap;
     categories: Categories;
+    users: User[];
 };
 
 export const setChargedPersonValueFactory = (
@@ -214,10 +217,11 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
     }
 
     renderChargedPersons() {
-        const sortedUsers = sortBy(
-            this.props.user.list,
-            (each) => each.full_name,
-        );
+        if (this.props.users.length < 2) {
+            return null;
+        }
+
+        const sortedUsers = sortBy(this.props.users, (each) => each.full_name);
         const {chargedPersons} = this.state;
         const step = PERC_STEP;
         const userIdsStringified = sortedUsers.map((user) => String(user.id));
@@ -453,9 +457,15 @@ export const ExpenseForm = (ownProps) => {
         }),
     );
     const [endDate] = useEndDate();
+    const users = useSelectedProject().users;
 
     return (
-        <ExpenseFormWrapped {...ownProps} {...stateProps} endDate={endDate} />
+        <ExpenseFormWrapped
+            {...ownProps}
+            {...stateProps}
+            endDate={endDate}
+            users={users}
+        />
     );
 };
 

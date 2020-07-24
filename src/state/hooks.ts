@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {refreshWidgets, setUsers} from 'state/actionCreators';
-import {GlobalState, ScreenQueries, Snackbar, Users} from 'types';
+import {Bootstrap, GlobalState, ScreenQueries, Snackbar, User} from 'types';
 
 export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();
@@ -15,15 +15,16 @@ export const useActions = <T>(actions: T): T => {
 };
 export const useScreenSize = (): ScreenQueries =>
     useSelector((s: GlobalState) => s.screenSize);
-export const useUsers = (): Users =>
+export const useBootstrap = (): Bootstrap =>
     useSelector((s: GlobalState) => s.user);
+
 export const useUsersWithActions = (): [
-    Users,
+    Bootstrap,
     {
         setUsers: typeof setUsers;
     },
 ] => [
-    useUsers(),
+    useBootstrap(),
     useActions({
         setUsers,
     }),

@@ -1,11 +1,10 @@
 import {IncludeOption, ShiftDateOption} from 'defs';
 import {QueryParam} from 'defs/url';
-import {mapUrlToFragment} from 'helpers';
 
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import {useLocation, useHistory} from 'react-router-dom';
-import {useQueryParamState} from 'utils/url';
+import {mapUrlToFragment, useQueryParamState} from 'utils/url';
 
 export const getStartDate = ({
     endDate,

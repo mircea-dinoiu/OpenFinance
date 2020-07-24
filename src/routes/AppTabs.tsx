@@ -1,4 +1,10 @@
-import {BottomNavigation, BottomNavigationAction, Paper, Tab, Tabs} from '@material-ui/core';
+import {
+    BottomNavigation,
+    BottomNavigationAction,
+    Paper,
+    Tab,
+    Tabs,
+} from '@material-ui/core';
 
 import AccountBalance from '@material-ui/icons/AccountBalance';
 import TrendingDown from '@material-ui/icons/TrendingDown';
@@ -11,9 +17,17 @@ import {Summary} from 'components/transactions/Summary';
 import {spacingSmall} from 'defs/styles';
 import {paths} from 'js/defs';
 import * as React from 'react';
-import {Redirect, Route, useHistory, useLocation} from 'react-router-dom';
+import {
+    Redirect,
+    Route,
+    useHistory,
+    useLocation,
+    generatePath,
+} from 'react-router-dom';
 import {useScreenSize} from 'state/hooks';
+import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
+import {makeUrl} from 'utils/url';
 
 const HomeMediumDown = () => {
     const history = useHistory();
@@ -70,6 +84,7 @@ const HomeMediumDown = () => {
 const HomeLarge = () => {
     const history = useHistory();
     const location = useLocation();
+    const project = useSelectedProject();
     const tabs = [
         paths.transactions,
         paths.categories,
@@ -82,7 +97,11 @@ const HomeLarge = () => {
             <Paper style={{marginBottom: spacingSmall}}>
                 <Tabs
                     value={tabs.indexOf(location.pathname)}
-                    onChange={(event, index) => history.push(tabs[index])}
+                    onChange={(event, index) => {
+                        history.push(
+                            makeUrl(tabs[index], {projectId: project.id}),
+                        );
+                    }}
                 >
                     <Tab label="Transactions" />
                     <Tab label="Categories" />

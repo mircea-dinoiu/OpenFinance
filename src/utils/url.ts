@@ -1,12 +1,14 @@
-import {mapUrlToFragment} from 'helpers';
 import {useHistory, useLocation} from 'react-router-dom';
+
+export const mapUrlToFragment = (url: URL) =>
+    url.pathname + url.search + url.hash;
 
 export const makeUrl = (path: string, params: {} = {}): string => {
     const urlObj = new URL(path, window.location.origin);
 
     urlObj.search = new URLSearchParams(params).toString();
 
-    return urlObj.toString();
+    return mapUrlToFragment(urlObj);
 };
 
 export const useQueryParamState = <T extends string>(

@@ -52,7 +52,11 @@ module.exports = {
         const validator = new Validator(input, rules);
 
         if (await validator.passes()) {
-            const where = [];
+            const where = [
+                {
+                    project_id: Number(query.projectId),
+                },
+            ];
             let having = [];
 
             where.push(mapStartDateToSQL(input.start_date, Model));

@@ -8,6 +8,7 @@ module.exports = (sequelize, types) =>
                 autoIncrement: true,
             },
             name: types.STRING,
+            project_id: types.INTEGER,
         },
         {
             timestamps: false,

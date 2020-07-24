@@ -1,10 +1,10 @@
-import {TransactionForm, TransactionModel, Users} from 'types';
+import {TransactionForm, TransactionModel, Bootstrap} from 'types';
 import {TransactionStatus} from 'defs';
 
 export const formToModel = (
     form: TransactionForm,
     props: {
-        user: Users;
+        user: Bootstrap;
     },
 ): TransactionModel => {
     const users =

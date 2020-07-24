@@ -8,5 +8,3 @@ export const getItemCurrencyISOCode = ({
     currencies: Currencies;
 }) => currencies[item.money_location.currency_id].iso_code;
 
-export const mapUrlToFragment = (url: URL) =>
-    url.pathname + url.search + url.hash;

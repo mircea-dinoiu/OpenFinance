@@ -9,10 +9,10 @@ import {ButtonProgress} from 'components/loaders';
 
 import {parseCRUDError} from 'parsers';
 import {dialog} from 'defs/styles';
-import {TransactionForm, TransactionModel, Users} from 'types';
+import {TransactionForm, TransactionModel, Bootstrap} from 'types';
 
 type TypeProps = {
-    user: Users;
+    user: Bootstrap;
     onRequestUpdate: (
         data: TransactionModel[],
     ) => Promise<{
@@ -24,7 +24,7 @@ type TypeProps = {
     ) => TransactionForm;
     formToModel: (
         form: TransactionForm,
-        detail: {user: Users},
+        detail: {user: Bootstrap},
     ) => TransactionModel;
     entityName: string;
     formComponent: React.ComponentType<{

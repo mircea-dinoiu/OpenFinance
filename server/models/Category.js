@@ -9,6 +9,7 @@ module.exports = (sequelize, types) => {
                 primaryKey: true,
                 autoIncrement: true,
             },
+            project_id: types.INTEGER,
         },
         {
             underscored: true,

@@ -122,7 +122,7 @@ module.exports = class ExpenseController extends BaseController {
         return this.Model.scope('default').findOne({where: {id: model.id}});
     }
 
-    sanitizeValues(record) {
+    sanitizeValues(record, req, res) {
         const values = pickOwnProperties(record, [
             'sum',
             'money_location_id',
@@ -167,14 +167,18 @@ module.exports = class ExpenseController extends BaseController {
             }
         }
 
+        console.log(req.query);
+
+        values.project_id = Number(req.query.projectId);
+
         return values;
     }
 
-    sanitizeCreateValues(record) {
-        return this.sanitizeValues(record);
+    sanitizeCreateValues(record, req, res) {
+        return this.sanitizeValues(record, req, res);
     }
 
-    sanitizeUpdateValues(record) {
-        return this.sanitizeValues(record);
+    sanitizeUpdateValues(record, req, res) {
+        return this.sanitizeValues(record, req, res);
     }
 };

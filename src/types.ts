@@ -2,6 +2,7 @@ import {AlertProps} from '@material-ui/lab';
 import {TransactionStatus} from 'defs';
 import {RepeatOption} from 'js/defs';
 import * as React from 'react';
+import {Project} from 'state/projects';
 import {$Values} from 'utility-types';
 
 export type ScreenQueries = {
@@ -62,16 +63,14 @@ export type AccountTypes = AccountType[];
 
 export type User = {
     avatar: string;
-    first_name: string;
-    last_name: string;
     full_name: string;
     id: number;
-    preferred_money_location_id: number;
 };
 
-export type Users = {
+export type Bootstrap = {
     current: User;
-    list: User[];
+    user: User;
+    projects: Project[];
 };
 
 export type TransactionType = 'deposit' | 'withdrawal';
@@ -141,6 +140,6 @@ export type GlobalState = {
     screen: ScreenQueries;
     screenSize: ScreenQueries;
     refreshWidgets: string;
-    user: Users;
+    user: Bootstrap;
     snackbars: Snackbar[];
 };

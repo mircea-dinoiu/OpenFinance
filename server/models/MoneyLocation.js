@@ -11,6 +11,7 @@ module.exports = (sequelize, types) =>
             type_id: types.INTEGER,
             currency_id: types.INTEGER,
             status: types.STRING,
+            project_id: types.INTEGER,
         },
         {
             timestamps: false,

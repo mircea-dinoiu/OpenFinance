@@ -18,11 +18,11 @@ module.exports = class BaseController {
         return opts.model;
     }
 
-    sanitizeUpdateValues(record, model) {
+    sanitizeUpdateValues(record) {
         return record;
     }
 
-    sanitizeCreateValues(record) {
+    sanitizeCreateValues(record, req, res) {
         return record;
     }
 
@@ -62,7 +62,7 @@ module.exports = class BaseController {
                     let model = await this.Model.findOne({
                         where: {id: record.id},
                     });
-                    let values = this.sanitizeUpdateValues(record, model);
+                    let values = this.sanitizeUpdateValues(record, req, res);
 
                     if (values instanceof Promise) {
                         values = await values;
@@ -122,7 +122,7 @@ module.exports = class BaseController {
                 const output = [];
 
                 for (const record of validRecords) {
-                    let values = this.sanitizeCreateValues(record);
+                    let values = this.sanitizeCreateValues(record, req, res);
 
                     if (values instanceof Promise) {
                         values = await values;
@@ -195,7 +195,13 @@ module.exports = class BaseController {
 
             res.json(json);
         } else {
-            res.json(await this.Model.findAll());
+            res.json(
+                await this.Model.findAll({
+                    where: {
+                        project_id: Number(req.query.projectId),
+                    },
+                }),
+            );
         }
     }
 };

@@ -42,6 +42,9 @@ module.exports = class CategoryController extends BaseController {
             ]),
             include: [{model: Expense, attributes: []}],
             group: ['id'],
+            where: {
+                project_id: Number(req.query.projectId),
+            },
         });
 
         res.json(

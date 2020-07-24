@@ -1,8 +1,9 @@
 import * as React from 'react';
 import {Avatar} from '@material-ui/core';
+import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
 import {grey} from '@material-ui/core/colors';
-import {useUsers} from 'state/hooks';
+import {useBootstrap} from 'state/hooks';
 import {TransactionModel} from 'types';
 
 export const PersonAvatar = styled(Avatar)`
@@ -39,7 +40,7 @@ const TooltipStyled = styled.div`
 `;
 
 export const PersonsDisplay = ({item}: {item: TransactionModel}) => {
-    const userList = useUsers().list;
+    const userList = useSelectedProject().users;
 
     return (
         <PersonsDisplayStyled>

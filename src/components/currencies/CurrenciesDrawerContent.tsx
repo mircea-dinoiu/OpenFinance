@@ -3,7 +3,7 @@ import React from 'react';
 import {MenuItem, ListSubheader as Subheader} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
 import {Currency} from 'types';
-import {useUsers} from 'state/hooks';
+import {useBootstrap} from 'state/hooks';
 import {
     fetchCurrencies,
     setCurrenciesSelectedId,
@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 });
 
 export const CurrenciesDrawerContent = () => {
-    const user = useUsers();
+    const user = useBootstrap();
     const currencies = useCurrencies();
     const map = currencies;
     const defaultCurrencyId = currencies.selected.id;

@@ -45,7 +45,6 @@ import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {greyedOut} from 'defs/styles';
 import {QueryParam} from 'defs/url';
-import {mapUrlToFragment} from 'helpers';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import * as H from 'history';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
@@ -58,18 +57,19 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
+import {Project, useSelectedProject} from 'state/projects';
 import {
     Accounts,
     Currencies,
     GlobalState,
     ScreenQueries,
     TransactionModel,
-    Users,
+    Bootstrap,
 } from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
+import {makeUrl, mapUrlToFragment} from 'utils/url';
 
 type TypeProps = {
     history: H.History;
@@ -85,7 +85,8 @@ type TypeProps = {
     refreshWidgets: string;
     dispatch: Dispatch;
     moneyLocations: Accounts;
-    user: Users;
+    user: Bootstrap;
+    project: Project;
 };
 
 type TypeState = {
@@ -232,6 +233,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         ...filters,
                     ].filter(Boolean),
                 ),
+                projectId: this.props.project.id,
             }),
         });
         const json = response.data;
@@ -599,7 +601,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     handleRequest = this.withLoading(
         <D,>(data: D, api: string, method: HttpMethod) =>
             createXHR({
-                url: api,
+                url: makeUrl(api, {projectId: this.props.project.id}),
                 method,
                 data: {data},
             }),
@@ -946,6 +948,7 @@ export const MainScreenList = () => {
     const [endDate] = useEndDate();
     const history = useHistory();
     const location = useLocation();
+    const project = useSelectedProject();
 
     const params = useMemo(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -971,6 +974,7 @@ export const MainScreenList = () => {
             history={history}
             dispatch={dispatch}
             params={params}
+            project={project}
         />
     );
 };

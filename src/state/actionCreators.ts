@@ -1,12 +1,12 @@
 import {Action} from 'state/defs';
-import {GlobalState, ScreenQueries, Snackbar, Users} from 'types';
+import {GlobalState, ScreenQueries, Snackbar, Bootstrap} from 'types';
 
 export const updateState = (state: Partial<GlobalState>) => ({
     type: Action.UPDATE_STATE,
     state,
 });
 
-export const setUsers = (users: null | Users) => ({
+export const setUsers = (users: null | Bootstrap) => ({
     type: Action.SET_USERS,
     value: users,
 });

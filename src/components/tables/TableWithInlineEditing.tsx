@@ -10,7 +10,9 @@ import {spacingSmall} from 'defs/styles';
 import {pick} from 'lodash';
 import React, {useState} from 'react';
 import {Column, TableProps} from 'react-table-6';
+import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';
+import {makeUrl} from 'utils/url';
 
 export const TableWithInlineEditing = <D extends {id: number}>({
     columns,
@@ -30,13 +32,14 @@ export const TableWithInlineEditing = <D extends {id: number}>({
     const [loading, setLoading] = useState(false);
     const cls = useStyles();
     const [deletingId, setDeletingId] = useState<number | null>(null);
+    const project = useSelectedProject();
 
     const deleteSelected = async () => {
         setDeletingId(null);
         setLoading(true);
 
         await createXHR({
-            url: api,
+            url: makeUrl(api, {projectId: project.id}),
             method: 'DELETE',
             data: {
                 data: [{id: deletingId}],

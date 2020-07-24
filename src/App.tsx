@@ -21,13 +21,15 @@ import {useAccountTypesReader} from 'state/accountTypes';
 import {setScreen} from 'state/actionCreators';
 import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies, useCurrencies} from 'state/currencies';
-import {useSnackbars, useUsers, useUsersWithActions} from 'state/hooks';
+import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';
+import {useSelectedProject} from 'state/projects';
 import {createGlobalStyle} from 'styled-components';
 
 import {createXHR} from 'utils/fetch';
 
 import {getScreenQueries} from 'utils/getScreenQueries';
-import {Users} from './types';
+import {makeUrl} from 'utils/url';
+import {Bootstrap} from './types';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
     html, body {
@@ -62,7 +64,7 @@ const AppWrapped = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await createXHR<Users>({
+            const response = await createXHR<Bootstrap>({
                 url: routes.user.list,
             });
 
@@ -133,7 +135,10 @@ const AppWrapped = () => {
                                 <Route component={AppInner} />
                             </Switch>
                         )}
-                        <FloatingSnackbar {...snackbar} open={snackbar != null} />
+                        <FloatingSnackbar
+                            {...snackbar}
+                            open={snackbar != null}
+                        />
                     </BrowserRouter>
                 </>
             </MuiThemeProvider>
@@ -142,11 +147,18 @@ const AppWrapped = () => {
 };
 
 const AppInner = ({location, match}: RouteComponentProps) => {
-    const users = useUsers();
+    const users = useBootstrap();
+    const project = useSelectedProject();
 
     if (users) {
         if (location.pathname === paths.home) {
-            return <Redirect to={paths.transactions} />;
+            return (
+                <Redirect
+                    to={makeUrl(paths.transactions, {
+                        projectId: project.id,
+                    })}
+                />
+            );
         }
 
         return <AppTabs />;

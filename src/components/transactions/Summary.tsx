@@ -26,8 +26,9 @@ import {
     useMoneyLocations,
     useMoneyLocationTypes,
     useRefreshWidgets,
-    useUsers,
+    useBootstrap,
 } from 'state/hooks';
+import {useSelectedProject} from 'state/projects';
 import {AccountType, User} from 'types';
 import {getStartDate, useEndDate} from 'utils/dates';
 import {createXHR} from 'utils/fetch';
@@ -48,12 +49,13 @@ export const Summary = () => {
     const [refreshing, setRefreshing] = React.useState(false);
     const refreshWidgets = useRefreshWidgets();
     const moneyLocationTypes = useMoneyLocationTypes();
-    const user = useUsers();
+    const users = useSelectedProject().users;
     const categories = useCategories();
     const moneyLocations = useMoneyLocations();
     const [includePending, setIncludePending] = useIncludePending();
     const [endDate] = useEndDate();
     const [include, setInclude] = useInclude();
+    const project = useSelectedProject();
     const reportQueryParams = new URLSearchParams({
         ...pickBy(
             {
@@ -62,6 +64,7 @@ export const Summary = () => {
                     include,
                     endDate,
                 }),
+                projectId: project.id,
             },
             identity,
         ),
@@ -164,7 +167,7 @@ export const Summary = () => {
                             backgroundColor: green[500],
                             title: 'Balance by Person',
                             summaryObject: results.remainingData.byUser,
-                            entities: user.list,
+                            entities: users,
                             entityNameField: 'full_name',
                         }}
                     />
@@ -203,7 +206,7 @@ export const Summary = () => {
                             backgroundColor: red[500],
                             title: 'Expenses by Person',
                             summaryObject: results.expensesData.byUser,
-                            entities: user.list,
+                            entities: users,
                             entityNameField: 'full_name',
                         }}
                     />

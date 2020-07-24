@@ -14,12 +14,12 @@ import {createXHR} from 'utils/fetch';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useDispatch} from 'react-redux';
 import {setUsers} from 'state/actionCreators';
-import {useUsers} from 'state/hooks';
+import {useBootstrap} from 'state/hooks';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';
 import styled from 'styled-components';
 import {screenQueryLarge, screenQueryMedium, screenQuerySmall, spacingLarge} from 'defs/styles';
-import {Users} from 'types';
+import {Bootstrap} from 'types';
 import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -35,7 +35,7 @@ export const Login = () => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
     const dispatch = useDispatch();
-    const user = useUsers();
+    const user = useBootstrap();
     const cls = useStyles();
 
     if (user) {
@@ -47,7 +47,7 @@ export const Login = () => {
         setError(null);
 
         try {
-            const response = await createXHR<Users>({
+            const response = await createXHR<Bootstrap>({
                 url: routes.user.login,
                 method: 'POST',
                 data: new URLSearchParams({
