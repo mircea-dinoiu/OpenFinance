@@ -70,6 +70,7 @@ export const TableHeader = styled.div`
     top: 64px;
     z-index: 1;
     background: white;
+    border-radius: 4px;
 `;
 
 export const TableHeaderTop = styled.div`

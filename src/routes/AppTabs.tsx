@@ -1,4 +1,6 @@
 import {BottomNavigation, BottomNavigationAction, Paper, Tab, Tabs} from '@material-ui/core';
+import {grey} from '@material-ui/core/colors';
+import {makeStyles} from '@material-ui/core/styles';
 
 import AccountBalance from '@material-ui/icons/AccountBalance';
 import TrendingDown from '@material-ui/icons/TrendingDown';
@@ -79,6 +81,7 @@ const HomeLarge = () => {
         paths.accounts,
         paths.accountTypes,
     ];
+    const cls = useStyles();
 
     return (
         <div style={{margin: spacingSmall}}>
@@ -101,10 +104,12 @@ const HomeLarge = () => {
                 path={paths.transactions}
                 render={() => (
                     <TransactionsContainer>
-                        <Summary />
-                        <TransactionsContentContainer>
+                        <Paper className={cls.summaryFloating} elevation={10}>
+                            <Summary />
+                        </Paper>
+                        <div className={cls.transactionsContentContainer}>
                             <Expenses />
-                        </TransactionsContentContainer>
+                        </div>
                     </TransactionsContainer>
                 )}
             />
@@ -122,12 +127,22 @@ export const AppTabs = () => {
 };
 
 const TransactionsContainer = styled.div`
-    display: grid;
-    grid-template-columns: 2fr 10fr;
     flex-grow: 1;
 `;
 
-const TransactionsContentContainer = styled.div`
-    width: calc(100vw / 12 * 10);
-    margin-left: ${spacingSmall};
-`;
+const useStyles = makeStyles({
+    summaryFloating: {
+        width: '500px',
+        position: 'absolute',
+        transform: 'translateX(-450px)',
+        zIndex: 2,
+        transition: 'all 0.5s',
+        '&:hover': {
+            transform: 'translateX(0)',
+        },
+        padding: spacingSmall,
+    },
+    transactionsContentContainer: {
+        paddingLeft: '65px',
+    },
+});
