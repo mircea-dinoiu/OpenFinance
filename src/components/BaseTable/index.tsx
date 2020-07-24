@@ -63,22 +63,22 @@ const ReactTableStyled = styled(ReactTable)`
 `;
 
 export const TableHeader = styled.div`
-    padding: 0 ${spacingLarge};
+    padding: 0 ${spacingLarge} ${spacingSmall};
     font-size: 1rem;
     border-bottom: 1px solid rgb(244, 244, 244);
+    position: sticky;
+    top: 64px;
+    z-index: 1;
+    background: white;
+`;
+
+export const TableHeaderTop = styled.div`
     display: grid;
     grid-gap: ${gridGap};
     grid-template-columns: repeat(
         ${(props: {columnCount: number}) => props.columnCount},
         max-content
     );
-`;
-
-export const TableFooter = styled.div`
-    padding: ${spacingSmall} ${spacingLarge};
-    font-size: 1rem;
-    border-top: 1px solid rgb(244, 244, 244);
-    box-shadow: 0 -2px 15px 0 rgba(0, 0, 0, 0.15);
 `;
 
 export function BaseTable<D>(props: Partial<TableProps<D>>) {

@@ -14,7 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import IconSplit from '@material-ui/icons/CallSplitRounded';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
-import {BaseTable, TableFooter, TableHeader} from 'components/BaseTable';
+import {BaseTable, TableHeader, TableHeaderTop} from 'components/BaseTable';
 import {numericValue} from 'components/formatters';
 
 import {BigLoader} from 'components/loaders';
@@ -60,11 +60,11 @@ import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
 import {
     Accounts,
+    Bootstrap,
     Currencies,
     GlobalState,
     ScreenQueries,
     TransactionModel,
-    Bootstrap,
 } from 'types';
 import {useEndDate} from 'utils/dates';
 
@@ -204,8 +204,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     loadMore = async ({results = this.state.results} = {}) => {
-        const infiniteScroll = !this.isDesktop();
-
         if (this.state.loading) {
             return;
         }
@@ -237,7 +235,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             }),
         });
         const json = response.data;
-        const nextResults = infiniteScroll ? results.concat(json) : json;
+        const nextResults = page > 1 ? results.concat(json) : json;
 
         this.setState((state) => ({
             results: nextResults,
@@ -343,72 +341,111 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 marginTop: '10px',
             },
         };
+        const page = this.state.results;
+        const selected = this.selectedItems;
 
         return (
-            <TableHeader columnCount={6}>
-                <>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={this.displayArchived}
-                                onChange={this.handleToggleDisplayHidden}
-                                color="default"
-                                disabled={this.hasFiltersSet}
-                            />
-                        }
-                        label="Display Archived"
-                    />
-                </>
-                <>
-                    <SplitAmountField
-                        error={isNaN(
-                            this.parseSplitAmount(this.state.splitAmount),
-                        )}
-                        placeholder="Split"
-                        value={this.state.splitAmount}
-                        onChange={(event) => {
-                            this.setState({splitAmount: event.target.value});
-                        }}
-                        margin="normal"
+            <TableHeader>
+                <TableHeaderTop columnCount={6}>
+                    <>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={this.displayArchived}
+                                    onChange={this.handleToggleDisplayHidden}
+                                    color="default"
+                                    disabled={this.hasFiltersSet}
+                                />
+                            }
+                            label="Display Archived"
+                        />
+                    </>
+                    <>
+                        <SplitAmountField
+                            error={isNaN(
+                                this.parseSplitAmount(this.state.splitAmount),
+                            )}
+                            placeholder="Split"
+                            value={this.state.splitAmount}
+                            onChange={(event) => {
+                                this.setState({
+                                    splitAmount: event.target.value,
+                                });
+                            }}
+                            margin="normal"
+                            variant="outlined"
+                            InputProps={{
+                                style: {
+                                    height: '32px',
+                                },
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={this.handleClickSplit}
+                                            disabled={
+                                                !this.isSplitAmountValid()
+                                            }
+                                        >
+                                            <IconSplit />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </>
+                    <Button
                         variant="outlined"
-                        InputProps={{
-                            style: {
-                                height: '32px',
-                            },
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={this.handleClickSplit}
-                                        disabled={!this.isSplitAmountValid()}
-                                    >
-                                        <IconSplit />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </>
-                <Button
-                    variant="outlined"
-                    onClick={(event) => {
-                        event.preventDefault();
+                        onClick={(event) => {
+                            event.preventDefault();
 
-                        this.handleReceivedSelectedIds(
-                            this.state.results.map((r) => r.id),
-                        );
-                    }}
-                    {...buttonProps}
-                >
-                    Select All
-                </Button>
-                <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={this.handleToggleAddModal}
-                    {...buttonProps}
-                >
-                    Create transaction
-                </Button>
+                            this.handleReceivedSelectedIds(
+                                this.state.results.map((r) => r.id),
+                            );
+                        }}
+                        {...buttonProps}
+                    >
+                        Select All
+                    </Button>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={this.handleToggleAddModal}
+                        {...buttonProps}
+                    >
+                        Create transaction
+                    </Button>
+                </TableHeaderTop>
+                <div>
+                    {this.renderStats('Current Page', page)}
+                    {this.renderStats('Selected', selected)}
+                    {range(0, 6).map((rating) =>
+                        this.renderStats(
+                            <React.Fragment>
+                                {rating === 0 ? (
+                                    <IconStarBorder
+                                        style={{height: 20, width: 20}}
+                                    />
+                                ) : (
+                                    range(0, rating).map((i) => (
+                                        <IconStar
+                                            key={i}
+                                            style={{
+                                                height: 20 - rating,
+                                                width: 20 - rating,
+                                            }}
+                                        />
+                                    ))
+                                )}
+                            </React.Fragment>,
+                            page.filter((each) =>
+                                rating === 0
+                                    ? each.favorite == null ||
+                                      each.favorite === 0
+                                    : each.favorite === rating,
+                            ),
+                        ),
+                    )}
+                </div>
             </TableHeader>
         );
     }
@@ -525,44 +562,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     />
                 </Tooltip>
             </div>
-        );
-    }
-
-    renderTableFooter() {
-        const page = this.state.results;
-        const selected = this.selectedItems;
-
-        return (
-            <TableFooter>
-                {this.renderStats('Current Page', page)}
-                {this.renderStats('Selected', selected)}
-                {range(0, 6).map((rating) =>
-                    this.renderStats(
-                        <React.Fragment>
-                            {rating === 0 ? (
-                                <IconStarBorder
-                                    style={{height: 20, width: 20}}
-                                />
-                            ) : (
-                                range(0, rating).map((i) => (
-                                    <IconStar
-                                        key={i}
-                                        style={{
-                                            height: 20 - rating,
-                                            width: 20 - rating,
-                                        }}
-                                    />
-                                ))
-                            )}
-                        </React.Fragment>,
-                        page.filter((each) =>
-                            rating === 0
-                                ? each.favorite == null || each.favorite === 0
-                                : each.favorite === rating,
-                        ),
-                    ),
-                )}
-            </TableFooter>
         );
     }
 
@@ -742,9 +741,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     {this.renderTableHeader()}
                     <div>
                         <BaseTable<TransactionModel>
-                            style={{
-                                height: 'calc(100vh - 230px)',
-                            }}
                             filtered={params.filters}
                             onFilteredChange={(value) => {
                                 const filters = value.filter(
@@ -785,8 +781,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                     ? params.page + 1
                                     : params.page
                             }
-                            showPagination={true}
-                            showPageSizeOptions={true}
                             manual={true}
                             loading={this.state.loading > 0}
                             data={results}
@@ -796,7 +790,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             getTrProps={this.getTrProps}
                         />
                     </div>
-                    {this.renderTableFooter()}
                     <Menu
                         open={this.state.contextMenuDisplay}
                         anchorReference="anchorPosition"
@@ -890,22 +883,18 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     }}
                 >
                     {this.renderContent()}
-                    {isDesktop ? null : (
-                        <LoadMore
-                            loading={Boolean(loading)}
-                            onClick={() => {
-                                const url = new URL(window.location.href);
+                    <LoadMore
+                        loading={Boolean(loading)}
+                        onClick={() => {
+                            const url = new URL(window.location.href);
 
-                                url.searchParams.set(
-                                    QueryParam.page,
-                                    String(this.props.params.page + 1),
-                                );
-                                this.props.history.replace(
-                                    mapUrlToFragment(url),
-                                );
-                            }}
-                        />
-                    )}
+                            url.searchParams.set(
+                                QueryParam.page,
+                                String(this.props.params.page + 1),
+                            );
+                            this.props.history.replace(mapUrlToFragment(url));
+                        }}
+                    />
                     {this.renderDialogs()}
                     {!isDesktop && (
                         <Fab
