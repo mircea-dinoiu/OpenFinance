@@ -1,48 +1,31 @@
 import {
     Button,
     ButtonProps,
-    Checkbox,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
     Step,
     StepLabel,
     Stepper,
     Typography,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconUpload from '@material-ui/icons/CloudUpload';
 import {AxiosResponse} from 'axios';
 import {MuiReactSelect} from 'components/dropdowns';
-import {formatCurrency} from 'components/formatters';
 import {FloatingSnackbar} from 'components/snackbars';
-import {ExpenseForm} from 'components/transactions/ExpenseForm';
 import {TransactionReviewAccordion} from 'components/transactions/TransactionReviewAccordion';
-import {formToModel} from 'components/transactions/transformers/formToModel';
-import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {routes} from 'defs/routes';
 import {spacingLarge, spacingSmall} from 'defs/styles';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
 import {useCurrencies} from 'state/currencies';
-import {
-    useBootstrap,
-    useMoneyLocations,
-    useRefreshWidgetsDispatcher,
-} from 'state/hooks';
+import {useBootstrap, useMoneyLocations} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {TransactionModel} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 enum ImportStep {
     ACCOUNT,
@@ -79,7 +62,6 @@ export const ImportTransactions = ({
     const [uploadResp, setUploadResp] = useState<AxiosResponse<{
         transactions: TransactionModel[];
     }> | null>(null);
-    const refreshWidgets = useRefreshWidgetsDispatcher();
     const currencyCode = account && currencies[account.currency_id].iso_code;
     const [excludedTransactions, setExcludedTransactions] = useState<
         Set<TransactionModel['fitid']>

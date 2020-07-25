@@ -3,7 +3,6 @@ const {
     User,
     MoneyLocation,
     Category,
-    ExpenseUser,
 } = require('../models');
 const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
@@ -231,28 +230,6 @@ module.exports = class ExpenseController extends BaseController {
                 };
             },
         );
-
-        /*await Model.bulkCreate(transactions, {
-            ignoreDuplicates: true,
-        });
-
-        const imported = await Model.findAll({
-            attributes: ['id'],
-            where: {
-                fitid: {
-                    $in: transactions.map((t) => t.fitid),
-                },
-            },
-        });
-
-        await ExpenseUser.bulkCreate(
-            imported.map((t) => ({
-                expense_id: t.id,
-                user_id: req.user.id,
-                blame: 1,
-                seen: 1,
-            })),
-        );*/
 
         return res.json({
             transactions,
