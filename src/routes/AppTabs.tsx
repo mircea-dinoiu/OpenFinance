@@ -1,5 +1,4 @@
 import {BottomNavigation, BottomNavigationAction, Paper, Tab, Tabs} from '@material-ui/core';
-import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 
 import AccountBalance from '@material-ui/icons/AccountBalance';

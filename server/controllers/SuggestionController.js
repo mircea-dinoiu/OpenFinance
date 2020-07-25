@@ -10,11 +10,11 @@ module.exports = class SuggestionController extends BaseController {
 
         if ('string' === typeof search && search.length) {
             const row = await sql.query(
-                `SELECT DISTINCT category_id FROM expenses JOIN category_expense ON category_expense.expense_id = expenses.id WHERE project_id = :projectId AND expenses.item = LOWER(TRIM(:search))`,
+                `SELECT DISTINCT category_id FROM expenses JOIN category_expense ON category_expense.expense_id = expenses.id WHERE project_id = :projectId AND LOWER(expenses.item) LIKE LOWER(:search)`,
                 {
                     replacements: {
                         projectId: req.projectId,
-                        search: search,
+                        search: `%${search.trim()}%`,
                     },
                     type: QueryTypes.SELECT,
                 },
@@ -41,12 +41,12 @@ module.exports = class SuggestionController extends BaseController {
         if (await validator.passes()) {
             res.json({
                 suggestions: await sql.query(
-                    `SELECT item, COUNT(item) as usages FROM expenses WHERE item LIKE :search AND created_at <= :endDate AND project_id = :projectId GROUP BY item ORDER BY usages DESC LIMIT 10`,
+                    `SELECT item, COUNT(item) as usages FROM expenses WHERE LOWER(item) LIKE LOWER(:search) AND created_at <= :endDate AND project_id = :projectId GROUP BY item ORDER BY usages DESC LIMIT 10`,
                     {
                         replacements: {
                             endDate: query.end_date,
                             projectId: req.projectId,
-                            search: `%${query.search}%`,
+                            search: `%${query.search.trim()}%`,
                         },
                         type: QueryTypes.SELECT,
                     },

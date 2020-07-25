@@ -11,7 +11,6 @@ const {pickOwnProperties} = require('../helpers');
 const {sql} = require('../models');
 const defs = require('../../src/js/defs');
 const ofx = require('ofx');
-const _ = require('lodash');
 const moment = require('moment');
 const {QueryTypes} = require('sequelize');
 

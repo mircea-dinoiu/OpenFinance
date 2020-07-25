@@ -19,7 +19,6 @@ import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useState} from 'react';
 import {useMoneyLocations, useRefreshWidgetsDispatcher} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
-import {TransactionModel} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 

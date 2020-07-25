@@ -2,7 +2,6 @@ import {Chip, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
 import {routes} from 'defs/routes';
-import {sortBy} from 'lodash';
 import React from 'react';
 import {useSelectedProject} from 'state/projects';
 import {useEndDate} from 'utils/dates';
