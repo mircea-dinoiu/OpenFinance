@@ -415,7 +415,13 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     >
                         Create transaction
                     </Button>
-                    <ImportTransactions buttonProps={buttonProps} />
+                    <ImportTransactions
+                        buttonProps={buttonProps}
+                        onSubmit={async (transactions) => {
+                            await this.handleRequestCreate(transactions);
+                            this.props.dispatch(onRefreshWidgets());
+                        }}
+                    />
                 </TableHeaderTop>
                 <div>
                     {this.renderStats('Current Page', page)}

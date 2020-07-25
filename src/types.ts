@@ -99,6 +99,7 @@ export type TransactionFormDefaults = Omit<TransactionForm, 'id'>;
 
 export type TransactionModel = {
     id: number;
+    fitid: string | null;
     categories: number[];
     favorite: number;
     item: string;

@@ -52,6 +52,7 @@ module.exports = class ExpenseController extends BaseController {
         ],
         money_location_id: ['isRequired', ['isId', MoneyLocation]],
         status: ['sometimes', 'isRequired', 'isStatusValue'],
+        fitid: ['sometimes', 'isRequired', 'isString'],
         categories: ['sometimes', ['isIdArray', Category]],
 
         repeat: ['sometimes', 'isRepeatValue'],
@@ -149,6 +150,7 @@ module.exports = class ExpenseController extends BaseController {
             'money_location_id',
             'repeat_occurrences',
             'weight',
+            'fitid',
         ]);
 
         if (record.hasOwnProperty('item')) {
@@ -201,57 +203,59 @@ module.exports = class ExpenseController extends BaseController {
         return this.sanitizeValues(record, req, res);
     }
 
-    async importFile({req, res}) {
-        try {
-            const {file} = req.files;
+    /**
+     * @param req
+     * @param res
+     * @returns A list of transactions that can be POSTed to the main API
+     */
+    async upload({req, res}) {
+        const {file} = req.files;
 
-            const data = ofx.parse(file.data.toString());
+        const data = ofx.parse(file.data.toString());
 
-            const transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN.map(
-                ({DTPOSTED, TRNAMT, FITID, NAME}) => {
-                    return {
-                        money_location_id: Number(req.query.accountId),
-                        project_id: req.projectId,
-                        fitid: FITID,
-                        item: NAME,
-                        status: 'pending',
-                        sum: Number(TRNAMT),
-                        created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
-                            .parseZone()
-                            .toISOString(),
-                    };
-                },
-            );
-
-            await Model.bulkCreate(transactions, {
-                ignoreDuplicates: true,
-            });
-
-            const imported = await Model.findAll({
-                attributes: ['id'],
-                where: {
-                    fitid: {
-                        $in: transactions.map((t) => t.fitid),
+        const transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN.map(
+            ({DTPOSTED, TRNAMT, FITID, NAME}) => {
+                return {
+                    money_location_id: Number(req.query.accountId),
+                    project_id: req.projectId,
+                    fitid: FITID,
+                    item: NAME,
+                    status: 'pending',
+                    sum: Number(TRNAMT),
+                    created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
+                        .parseZone()
+                        .toISOString(),
+                    users: {
+                        [req.user.id]: 100,
                     },
+                };
+            },
+        );
+
+        /*await Model.bulkCreate(transactions, {
+            ignoreDuplicates: true,
+        });
+
+        const imported = await Model.findAll({
+            attributes: ['id'],
+            where: {
+                fitid: {
+                    $in: transactions.map((t) => t.fitid),
                 },
-            });
+            },
+        });
 
-            await ExpenseUser.bulkCreate(
-                imported.map((t) => ({
-                    expense_id: t.id,
-                    user_id: req.user.id,
-                    blame: 1,
-                    seen: 1,
-                })),
-            );
+        await ExpenseUser.bulkCreate(
+            imported.map((t) => ({
+                expense_id: t.id,
+                user_id: req.user.id,
+                blame: 1,
+                seen: 1,
+            })),
+        );*/
 
-            return res.json({
-                imported: imported.length,
-            });
-        } catch (e) {
-            console.log(e);
-        }
-
-        return res.status(400);
+        return res.json({
+            transactions,
+        });
     }
 };

@@ -24,8 +24,8 @@ router.post('/', filters.authProject, async (req, res) => {
     res.wrapPromise(c.create(req, res));
 });
 
-router.post('/import', [filters.authProject, fileupload()], async (req, res) => {
-    res.wrapPromise(c.importFile({req, res}));
+router.post('/upload', [filters.authProject, fileupload()], async (req, res) => {
+    res.wrapPromise(c.upload({req, res}));
 });
 
 router.get('/suggestions/categories', filters.authProject, async (req, res) => {

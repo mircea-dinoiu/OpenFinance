@@ -1,57 +1,108 @@
 import {
     Button,
     ButtonProps,
+    Checkbox,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Step,
+    StepLabel,
+    Stepper,
     Typography,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconUpload from '@material-ui/icons/CloudUpload';
 import {AxiosResponse} from 'axios';
 import {MuiReactSelect} from 'components/dropdowns';
+import {formatCurrency} from 'components/formatters';
 import {FloatingSnackbar} from 'components/snackbars';
 import {routes} from 'defs/routes';
-import {dialog, spacingLarge} from 'defs/styles';
-import {merge} from 'lodash';
+import {spacingLarge, spacingSmall} from 'defs/styles';
 import {DropzoneArea} from 'material-ui-dropzone';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useCurrencies} from 'state/currencies';
 import {useMoneyLocations, useRefreshWidgetsDispatcher} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
+import {TransactionModel} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
+enum ImportStep {
+    ACCOUNT,
+    UPLOAD,
+    REVIEW,
+    //
+    FIRST = ACCOUNT,
+    LAST = REVIEW,
+}
+
 export const ImportTransactions = ({
     buttonProps,
+    onSubmit,
 }: {
     buttonProps: ButtonProps;
+    onSubmit: (transactions: TransactionModel[]) => void;
 }) => {
+    const currencies = useCurrencies();
+    const accounts = useMoneyLocations();
+    const project = useSelectedProject();
+
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
-    const [accountValue, setAccount] = useState<{
+    const [accountOption, setAccountOption] = useState<{
         value: number;
         label: string;
     } | null>(null);
-    const accounts = useMoneyLocations();
+    const account =
+        accountOption && accounts.find((a) => a.id === accountOption.value);
     const cls = useStyles();
     const dropzoneClasses = useDropzoneStyles();
     const [files, setFiles] = useState<File[]>([]);
-    const project = useSelectedProject();
     const [isUploading, setIsUploading] = useState(false);
     const [uploadResp, setUploadResp] = useState<AxiosResponse<{
-        imported: number;
+        transactions: TransactionModel[];
     }> | null>(null);
     const refreshWidgets = useRefreshWidgetsDispatcher();
+    const currencyCode = account && currencies[account.currency_id].iso_code;
+    const [excludedTransactions, setExcludedTransactions] = useState<
+        Set<TransactionModel['fitid']>
+    >(new Set([]));
+    const steps = [
+        'Select Target Account',
+        'Upload Transactions',
+        'Review Transactions',
+    ];
+    const activeStep = (() => {
+        if (accountOption === null) {
+            return ImportStep.ACCOUNT;
+        }
+
+        if (uploadResp?.status !== 200) {
+            return ImportStep.UPLOAD;
+        }
+
+        return ImportStep.REVIEW;
+    })();
+    const isFirstStep = activeStep === ImportStep.FIRST;
+    const isLastStep = activeStep === ImportStep.LAST;
+    const transactions: TransactionModel[] =
+        uploadResp?.data.transactions ?? [];
 
     const handleClose = () => {
-        setIsUploading(false);
         setDialogIsOpen(false);
+
+        setExcludedTransactions(new Set());
+        setIsUploading(false);
         setUploadResp(null);
         setFiles([]);
-        setAccount(null);
+        setAccountOption(null);
     };
 
-    const submit = async () => {
+    const upload = async () => {
         const formData = new FormData();
 
         formData.append('file', files[0]);
@@ -59,10 +110,10 @@ export const ImportTransactions = ({
         setIsUploading(true);
         setUploadResp(null);
 
-        const resp = await createXHR<{imported: number}>({
-            url: makeUrl(routes.transactionsImport, {
+        const resp = await createXHR<{transactions: TransactionModel[]}>({
+            url: makeUrl(routes.transactionsUpload, {
                 projectId: project.id,
-                accountId: accountValue?.value,
+                accountId: accountOption?.value,
             }),
             data: formData,
             method: 'POST',
@@ -72,15 +123,21 @@ export const ImportTransactions = ({
         });
 
         setUploadResp(resp);
-
-        if (resp.status === 200) {
-            refreshWidgets();
-        }
-
         setIsUploading(false);
-        setFiles([]);
-        setAccount(null);
     };
+
+    const importTransactions = () => {
+        onSubmit(
+            transactions.filter((t) => !excludedTransactions.has(t.fitid)),
+        );
+        handleClose();
+    };
+
+    useEffect(() => {
+        if (files.length) {
+            upload();
+        }
+    }, [files]);
 
     return (
         <>
@@ -93,65 +150,156 @@ export const ImportTransactions = ({
             >
                 Import Transactions
             </Button>
-            <Dialog open={dialogIsOpen} classes={cls}>
+            <Dialog
+                open={dialogIsOpen}
+                onClose={isUploading ? undefined : handleClose}
+            >
                 <DialogTitle>Import Transactions</DialogTitle>
                 <DialogContent className={cls.dialogContent}>
-                    {!accountValue && (
-                        <Typography variant="h4" className={cls.selectAccount}>
-                            First, select the account where the transactions
-                            will be imported
-                        </Typography>
-                    )}
-                    <MuiReactSelect
-                        options={accounts.map((a) => ({
-                            value: a.id,
-                            label: a.name,
-                        }))}
-                        value={accountValue}
-                        onChange={(o) =>
-                            setAccount(o as {value: number; label: string})
-                        }
-                        label="Target Account"
-                    />
-                    {accountValue && (
-                        <DropzoneArea
-                            classes={dropzoneClasses}
-                            onChange={setFiles}
-                            filesLimit={1}
-                            acceptedFiles={['.ofx']}
+                    <Stepper activeStep={activeStep} alternativeLabel>
+                        {steps.map((label) => (
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        ))}
+                    </Stepper>
+                    {activeStep === ImportStep.ACCOUNT && (
+                        <MuiReactSelect
+                            options={accounts.map((a) => ({
+                                value: a.id,
+                                label: a.name,
+                            }))}
+                            value={accountOption}
+                            onChange={(o) =>
+                                setAccountOption(
+                                    o as {value: number; label: string},
+                                )
+                            }
+                            label="Target Account"
                         />
                     )}
-                    {uploadResp?.status != null && (
-                        <FloatingSnackbar
-                            severity={
-                                uploadResp?.status === 200 ? 'success' : 'error'
-                            }
-                            message={
-                                uploadResp?.status === 200
-                                    ? `${uploadResp?.data?.imported} transactions were imported`
-                                    : 'Something went wrong trying to import your transactions'
-                            }
-                        />
+                    {activeStep === ImportStep.UPLOAD && (
+                        <>
+                            <DropzoneArea
+                                classes={dropzoneClasses}
+                                onChange={setFiles}
+                                filesLimit={1}
+                                acceptedFiles={['.ofx']}
+                            />
+                            {uploadResp && uploadResp.status !== 200 && (
+                                <FloatingSnackbar
+                                    severity="error"
+                                    message="Something went wrong trying to import your transactions"
+                                />
+                            )}
+                        </>
+                    )}
+                    {activeStep === ImportStep.REVIEW && (
+                        <>
+                            <div className={cls.reviewTitleGrid}>
+                                <Typography variant="h6">
+                                    Select the transactions to import
+                                </Typography>
+                                <Button
+                                    color="secondary"
+                                    onClick={() =>
+                                        setExcludedTransactions(new Set())
+                                    }
+                                >
+                                    All
+                                </Button>
+                                <Button
+                                    color="secondary"
+                                    onClick={() =>
+                                        setExcludedTransactions(
+                                            new Set(
+                                                transactions.map(
+                                                    (t) => t.fitid,
+                                                ),
+                                            ),
+                                        )
+                                    }
+                                >
+                                    None
+                                </Button>
+                            </div>
+                            <List>
+                                {uploadResp?.data.transactions.map((t) => (
+                                    <ListItem
+                                        key={t.fitid as string}
+                                        dense
+                                        button
+                                        onClick={() => {
+                                            const next = new Set(
+                                                excludedTransactions,
+                                            );
+
+                                            if (next.has(t.fitid)) {
+                                                next.delete(t.fitid);
+                                            } else {
+                                                next.add(t.fitid);
+                                            }
+
+                                            setExcludedTransactions(next);
+                                        }}
+                                    >
+                                        <ListItemIcon>
+                                            <Checkbox
+                                                checked={
+                                                    !excludedTransactions.has(
+                                                        t.fitid,
+                                                    )
+                                                }
+                                                tabIndex={-1}
+                                                disableRipple
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={t.item}
+                                            secondary={
+                                                <>
+                                                    {new Date(
+                                                        t.created_at,
+                                                    ).toLocaleString()}
+                                                    {' | '}
+                                                    {formatCurrency(
+                                                        -t.sum,
+                                                        currencyCode as string,
+                                                    )}
+                                                </>
+                                            }
+                                        />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </>
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        disabled={isUploading}
-                        onClick={handleClose}
-                        color="secondary"
-                    >
-                        Close
-                    </Button>
-                    <Button
-                        onClick={submit}
-                        color="primary"
-                        variant="contained"
-                        disabled={
-                            isUploading || !accountValue || files.length === 0
-                        }
-                    >
-                        Import
-                    </Button>
+                    {!isFirstStep && (
+                        <Button
+                            disabled={isUploading}
+                            onClick={() => {
+                                if (activeStep === ImportStep.UPLOAD) {
+                                    setAccountOption(null);
+                                } else if (activeStep === ImportStep.REVIEW) {
+                                    setFiles([]);
+                                }
+                            }}
+                            color="primary"
+                        >
+                            Back
+                        </Button>
+                    )}
+                    {isLastStep && (
+                        <Button
+                            onClick={importTransactions}
+                            color="primary"
+                            variant="contained"
+                        >
+                            Submit
+                        </Button>
+                    )}
                 </DialogActions>
             </Dialog>
         </>
@@ -161,23 +309,17 @@ export const ImportTransactions = ({
 const useDropzoneStyles = makeStyles({
     root: {
         padding: spacingLarge,
-        marginTop: spacingLarge,
+        marginTop: spacingSmall,
     },
 });
 
 const useStyles = makeStyles({
-    ...merge({}, dialog, {
-        paper: {
-            overflow: 'visible',
-        },
-    }),
-    selectAccount: {
-        marginBottom: spacingLarge,
-        textAlign: 'center',
-    },
     dialogContent: {
         minHeight: '200px',
         minWidth: '500px',
-        overflow: 'visible',
+    },
+    reviewTitleGrid: {
+        display: 'grid',
+        gridTemplateColumns: '1fr auto auto',
     },
 });

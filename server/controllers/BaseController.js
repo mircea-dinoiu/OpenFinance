@@ -126,18 +126,21 @@ module.exports = class BaseController {
                 const output = [];
 
                 for (const record of validRecords) {
-                    let values = this.sanitizeCreateValues(record, req, res);
-
-                    if (values instanceof Promise) {
-                        values = await values;
-                    }
+                    const values = this.sanitizeCreateValues(record, req, res);
+                    let model;
 
                     logger.log(
                         `Updating ${this.Model.name} #${record.id} with`,
                         chalk.green(JSON.stringify(values, null, 2)),
                     );
 
-                    let model = await this.Model.create(values);
+                    try {
+                        model = await this.Model.create(values);
+                    } catch (e) {
+                        if (e.original.code === 'ER_DUP_ENTRY') {
+                            continue;
+                        }
+                    }
 
                     if (this.createRelations) {
                         model = await this.createRelations({

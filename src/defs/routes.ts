@@ -1,6 +1,6 @@
 export const routes = {
     transactions: '/api/transactions',
-    transactionsImport: '/api/transactions/import',
+    transactionsUpload: '/api/transactions/upload',
     transactionsSuggestions: {
         categories: '/api/transactions/suggestions/categories',
         descriptions: '/api/transactions/suggestions/descriptions',

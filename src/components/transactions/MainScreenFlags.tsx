@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {blue, purple, yellow, blueGrey} from '@material-ui/core/colors';
+import {blue, purple, yellow, blueGrey, pink, grey} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';
 import TrendingUp from '@material-ui/icons/TrendingUp';
 import Warning from '@material-ui/icons/Warning';
 import IconDrafts from '@material-ui/icons/Drafts';
+import IconUpload from '@material-ui/icons/CloudUpload';
 import startCase from 'lodash/startCase';
 import {TransactionStatus} from 'defs';
 import {TransactionModel} from 'types';
@@ -34,6 +35,13 @@ export const DraftFlag = () => (
     </span>
 );
 
+export const ImportFlag = () => (
+    <span title="This transaction was imported">
+        <IconUpload style={ICON_STYLE} htmlColor={grey[900]} />
+    </span>
+);
+
+
 export const Flags = ({
     item,
     entity,
@@ -42,6 +50,7 @@ export const Flags = ({
     entity: string;
 }) => (
     <>
+        {item.fitid !== null && <ImportFlag />}
         {item.status === TransactionStatus.draft && <DraftFlag />}
         {item.status === TransactionStatus.pending && (
             <PendingReviewFlag entity={entity} />
