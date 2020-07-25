@@ -30,6 +30,7 @@ import {
     mapItemToRepeatedUpdates,
     mergeItems,
 } from 'components/transactions/helpers';
+import {ImportTransactions} from 'components/transactions/ImportTransactions';
 import {LoadMore} from 'components/transactions/LoadMore';
 import {MainScreenCreatorDialog} from 'components/transactions/MainScreenCreatorDialog';
 import {MainScreenDeleteDialog} from 'components/transactions/MainScreenDeleteDialog';
@@ -414,6 +415,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     >
                         Create transaction
                     </Button>
+                    <ImportTransactions buttonProps={buttonProps} />
                 </TableHeaderTop>
                 <div>
                     {this.renderStats('Current Page', page)}

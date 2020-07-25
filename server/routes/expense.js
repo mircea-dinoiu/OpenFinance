@@ -3,6 +3,7 @@ const router = express.Router();
 const Controller = require('../controllers/ExpenseController');
 const SuggestionController = require('../controllers/SuggestionController');
 const filters = require('../filters');
+const fileupload = require('express-fileupload');
 
 const c = new Controller();
 const sc = new SuggestionController();
@@ -23,12 +24,20 @@ router.post('/', filters.authProject, async (req, res) => {
     res.wrapPromise(c.create(req, res));
 });
 
+router.post('/import', [filters.authProject, fileupload()], async (req, res) => {
+    res.wrapPromise(c.importFile({req, res}));
+});
+
 router.get('/suggestions/categories', filters.authProject, async (req, res) => {
     res.wrapPromise(sc.getCategories(req, res));
 });
 
-router.get('/suggestions/descriptions', filters.authProject, async (req, res) => {
-    res.wrapPromise(sc.getExpenseDescriptions(req, res));
-});
+router.get(
+    '/suggestions/descriptions',
+    filters.authProject,
+    async (req, res) => {
+        res.wrapPromise(sc.getExpenseDescriptions(req, res));
+    },
+);
 
 module.exports = router;

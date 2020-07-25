@@ -6,6 +6,7 @@ import {spacingMedium, spacingSmall} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React from 'react';
 import {useCategories} from 'state/hooks';
+import {useSelectedProject} from 'state/projects';
 import {useReader} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
@@ -23,9 +24,11 @@ export const TransactionCategoriesField = ({
         value: each.id,
         label: each.name,
     }));
+    const project = useSelectedProject();
     const {response: suggestionsResponse} = useReader<number[]>({
         url: makeUrl(routes.transactionsSuggestions.categories, {
             search: description,
+            projectId: project.id,
         }),
         suspend: !description,
     });

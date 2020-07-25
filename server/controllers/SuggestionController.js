@@ -11,10 +11,11 @@ module.exports = class SuggestionController extends BaseController {
 
         if ('string' === typeof search && search.length) {
             const response = await Expense.scope('default').findAll({
-                where: sql.where(
-                    sql.fn('lower', sql.col('item')),
+                where: [
+                    'lower(item) = ? AND expenses.project_id = ?',
                     search.toLowerCase().trim(),
-                ),
+                    req.projectId,
+                ],
                 order: [[sql.col('created_at'), 'DESC']],
             });
 
@@ -46,9 +47,10 @@ module.exports = class SuggestionController extends BaseController {
                 await Expense.findAll({
                     attributes: ['item', [sql.fn('COUNT', 'item'), 'usages']],
                     where: [
-                        'created_at <= ? AND LOWER(item) LIKE ?',
+                        'created_at <= ? AND LOWER(item) LIKE ? AND project_id = ?',
                         query.end_date,
                         `%${query.search}%`,
+                        req.projectId,
                     ],
                     group: 'item',
                     order: 'usages DESC LIMIT 10',

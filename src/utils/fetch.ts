@@ -32,7 +32,7 @@ export const createXHR = <T>(opts: AxiosRequestConfig): AxiosPromise<T> => {
         if ('object' === typeof parsedOpts.data) {
             parsedOpts.data = JSON.stringify(parsedOpts.data);
             parsedOpts.headers['Content-Type'] = 'application/json';
-        } else {
+        } else if ('string' === typeof parsedOpts.data) {
             parsedOpts.headers['Content-Type'] =
                 'application/x-www-form-urlencoded; charset=UTF-8';
         }

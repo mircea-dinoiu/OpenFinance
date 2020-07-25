@@ -80,7 +80,11 @@ module.exports = class BaseController {
                     await model.update(values);
 
                     if (this.updateRelations) {
-                        model = await this.updateRelations({record, model});
+                        model = await this.updateRelations({
+                            record,
+                            model,
+                            req,
+                        });
                     }
 
                     output.push(model.toJSON());
@@ -198,7 +202,7 @@ module.exports = class BaseController {
             res.json(
                 await this.Model.findAll({
                     where: {
-                        project_id: Number(req.query.projectId),
+                        project_id: req.projectId,
                     },
                 }),
             );

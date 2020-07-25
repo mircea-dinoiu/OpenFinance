@@ -5,6 +5,7 @@ import {useSelectedProject} from 'state/projects';
 import {Account} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
+import {sortBy} from 'lodash';
 
 export const useAccountsReader = () => {
     const dispatch = useDispatch();
@@ -18,7 +19,7 @@ export const useAccountsReader = () => {
         dispatch(
             updateState({
                 // @ts-ignore
-                moneyLocations: r.data,
+                moneyLocations: sortBy(r.data, 'name'),
             }),
         );
     };

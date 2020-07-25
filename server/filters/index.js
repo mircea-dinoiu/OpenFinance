@@ -26,6 +26,7 @@ const filters = {
                 );
 
                 if (results.length) {
+                    req.projectId = Number(req.query.projectId);
                     next();
                 } else {
                     res.status(404);

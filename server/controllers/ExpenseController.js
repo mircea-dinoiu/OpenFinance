@@ -1,9 +1,18 @@
-const {Expense: Model, User, MoneyLocation, Category} = require('../models');
+const {
+    Expense: Model,
+    User,
+    MoneyLocation,
+    Category,
+    ExpenseUser,
+} = require('../models');
 const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
 const {pickOwnProperties} = require('../helpers');
 const {sql} = require('../models');
 const defs = require('../../src/js/defs');
+const ofx = require('ofx');
+const _ = require('lodash');
+const moment = require('moment');
 
 module.exports = class ExpenseController extends BaseController {
     Model = Model;
@@ -52,7 +61,7 @@ module.exports = class ExpenseController extends BaseController {
         weight: ['sometimes', 'isNotNegative', 'isInt'],
     };
 
-    async updateRelations({record, model}) {
+    async updateRelations({record, model, req}) {
         if (record.hasOwnProperty('categories')) {
             await sql.query(
                 'DELETE FROM category_expense WHERE expense_id = ?',
@@ -72,7 +81,7 @@ module.exports = class ExpenseController extends BaseController {
         }
 
         if (record.hasOwnProperty('users')) {
-            const users = await User.findAll();
+            const users = await this.getUsers(req);
 
             for (const user of users) {
                 await sql.query(
@@ -91,6 +100,17 @@ module.exports = class ExpenseController extends BaseController {
         return this.Model.scope('default').findOne({where: {id: model.id}});
     }
 
+    getUsers(req) {
+        return sql.query(
+            `select user_id as id from project_user where project_id = :projectId`,
+            {
+                replacements: {
+                    projectId: req.projectId,
+                },
+            },
+        );
+    }
+
     async createRelations({record, model, req}) {
         if (record.hasOwnProperty('categories')) {
             for (const id of record.categories) {
@@ -103,7 +123,7 @@ module.exports = class ExpenseController extends BaseController {
             }
         }
 
-        const users = await User.findAll();
+        const users = await this.getUsers(req);
 
         for (const user of users) {
             await sql.query(
@@ -167,9 +187,7 @@ module.exports = class ExpenseController extends BaseController {
             }
         }
 
-        console.log(req.query);
-
-        values.project_id = Number(req.query.projectId);
+        values.project_id = req.projectId;
 
         return values;
     }
@@ -180,5 +198,59 @@ module.exports = class ExpenseController extends BaseController {
 
     sanitizeUpdateValues(record, req, res) {
         return this.sanitizeValues(record, req, res);
+    }
+
+    async importFile({req, res}) {
+        try {
+            const {file} = req.files;
+
+            const data = ofx.parse(file.data.toString());
+
+            const transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN.map(
+                ({DTPOSTED, TRNAMT, FITID, NAME}) => {
+                    return {
+                        money_location_id: Number(req.query.accountId),
+                        project_id: req.projectId,
+                        fitid: FITID,
+                        item: NAME,
+                        status: 'pending',
+                        sum: Number(TRNAMT),
+                        created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
+                            .parseZone()
+                            .toISOString(),
+                    };
+                },
+            );
+
+            await Model.bulkCreate(transactions, {
+                ignoreDuplicates: true,
+            });
+
+            const imported = await Model.findAll({
+                attributes: ['id'],
+                where: {
+                    fitid: {
+                        $in: transactions.map((t) => t.fitid),
+                    },
+                },
+            });
+
+            await ExpenseUser.bulkCreate(
+                imported.map((t) => ({
+                    expense_id: t.id,
+                    user_id: req.user.id,
+                    blame: 1,
+                    seen: 1,
+                })),
+            );
+
+            return res.json({
+                imported: imported.length,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+
+        return res.status(400);
     }
 };
