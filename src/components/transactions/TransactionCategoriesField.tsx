@@ -25,14 +25,14 @@ export const TransactionCategoriesField = ({
         label: each.name,
     }));
     const project = useSelectedProject();
-    const {response: suggestionsResponse} = useReader<number[]>({
+    const {response: suggestionsResponse} = useReader<{suggestions: number[]}>({
         url: makeUrl(routes.transactionsSuggestions.categories, {
             search: description,
             projectId: project.id,
         }),
         suspend: !description,
     });
-    const suggestedIds = (suggestionsResponse?.data ?? []).filter(
+    const suggestedIds = (suggestionsResponse?.data.suggestions ?? []).filter(
         (id) => !values.includes(id),
     );
     const cls = useStyles();

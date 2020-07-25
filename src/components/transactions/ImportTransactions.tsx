@@ -146,6 +146,7 @@ export const ImportTransactions = ({
                     <Button
                         onClick={submit}
                         color="primary"
+                        variant="contained"
                         disabled={
                             isUploading || !accountValue || files.length === 0
                         }
@@ -166,7 +167,7 @@ const useDropzoneStyles = makeStyles({
 });
 
 const useStyles = makeStyles({
-    ...merge(dialog, {
+    ...merge({}, dialog, {
         paper: {
             overflow: 'visible',
         },

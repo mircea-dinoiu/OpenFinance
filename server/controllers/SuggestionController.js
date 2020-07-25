@@ -1,36 +1,31 @@
 const BaseController = require('./BaseController');
-const {Expense, sql} = require('../models');
+const {sql} = require('../models');
 const {Validator} = require('../validators');
-const {extractIdsFromModel} = require('../helpers');
 const defs = require('../../src/js/defs');
 const {QueryTypes} = require('sequelize');
 
 module.exports = class SuggestionController extends BaseController {
     async getCategories(req, res) {
         const search = req.query.search;
-        let ret = [];
 
         if ('string' === typeof search && search.length) {
-            const response = await Expense.scope('default').findAll({
-                where: [
-                    'lower(item) = ? AND expenses.project_id = ?',
-                    search.toLowerCase().trim(),
-                    req.projectId,
-                ],
-                order: [[sql.col('created_at'), 'DESC']],
+            const row = await sql.query(
+                `SELECT DISTINCT category_id FROM expenses JOIN category_expense ON category_expense.expense_id = expenses.id WHERE project_id = :projectId AND expenses.item = LOWER(TRIM(:search))`,
+                {
+                    replacements: {
+                        projectId: req.projectId,
+                        search: search,
+                    },
+                    type: QueryTypes.SELECT,
+                },
+            );
+
+            return res.json({
+                suggestions: row.map((row) => row.category_id),
             });
-
-            for (const record of response) {
-                const categories = extractIdsFromModel(record, 'categoryIds');
-
-                if (categories.length) {
-                    ret = categories;
-                    break;
-                }
-            }
         }
 
-        res.json(ret);
+        res.json({suggestions: []});
     }
 
     async getExpenseDescriptions(req, res) {
@@ -45,18 +40,16 @@ module.exports = class SuggestionController extends BaseController {
 
         if (await validator.passes()) {
             res.json({
-                suggestions: (
-                    await sql.query(
-                        `SELECT item, COUNT(item) as usages FROM expenses WHERE item LIKE :search AND created_at <= :endDate AND project_id = :projectId GROUP BY item ORDER BY usages DESC LIMIT 10`,
-                        {
-                            replacements: {
-                                endDate: query.end_date,
-                                projectId: req.projectId,
-                                search: `%${query.search}%`,
-                            },
-                            type: QueryTypes.SELECT,
+                suggestions: await sql.query(
+                    `SELECT item, COUNT(item) as usages FROM expenses WHERE item LIKE :search AND created_at <= :endDate AND project_id = :projectId GROUP BY item ORDER BY usages DESC LIMIT 10`,
+                    {
+                        replacements: {
+                            endDate: query.end_date,
+                            projectId: req.projectId,
+                            search: `%${query.search}%`,
                         },
-                    )
+                        type: QueryTypes.SELECT,
+                    },
                 ),
             });
         } else {
