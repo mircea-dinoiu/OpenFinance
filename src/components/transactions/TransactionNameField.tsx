@@ -21,18 +21,18 @@ export const TransactionNameField = ({
     value: string;
     onChange: (v: string) => void;
 }) => {
-    const endDate = useEndDate();
+    const [endDate] = useEndDate();
     const project = useSelectedProject();
-    const {response: suggestionsResponse} = useReader<DescriptionSuggestion[]>({
+    const {response: suggestionsResponse} = useReader<{
+        suggestions: DescriptionSuggestion[];
+    }>({
         url: makeUrl(routes.transactionsSuggestions.descriptions, {
             search: value,
             end_date: endDate,
             projectId: project.id,
         }),
     });
-    const suggestions = suggestionsResponse?.data
-        ? sortBy(suggestionsResponse.data, (s) => -s.usages)
-        : [];
+    const suggestions = suggestionsResponse?.data.suggestions ?? [];
     const cls = useStyles();
 
     return (

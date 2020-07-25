@@ -3,6 +3,7 @@ const {Expense, sql} = require('../models');
 const {Validator} = require('../validators');
 const {extractIdsFromModel} = require('../helpers');
 const defs = require('../../src/js/defs');
+const {QueryTypes} = require('sequelize');
 
 module.exports = class SuggestionController extends BaseController {
     async getCategories(req, res) {
@@ -43,19 +44,21 @@ module.exports = class SuggestionController extends BaseController {
         });
 
         if (await validator.passes()) {
-            res.json(
-                await Expense.findAll({
-                    attributes: ['item', [sql.fn('COUNT', 'item'), 'usages']],
-                    where: [
-                        'created_at <= ? AND LOWER(item) LIKE ? AND project_id = ?',
-                        query.end_date,
-                        `%${query.search}%`,
-                        req.projectId,
-                    ],
-                    group: 'item',
-                    order: 'usages DESC LIMIT 10',
-                }),
-            );
+            res.json({
+                suggestions: (
+                    await sql.query(
+                        `SELECT item, COUNT(item) as usages FROM expenses WHERE item LIKE :search AND created_at <= :endDate AND project_id = :projectId GROUP BY item ORDER BY usages DESC LIMIT 10`,
+                        {
+                            replacements: {
+                                endDate: query.end_date,
+                                projectId: req.projectId,
+                                search: `%${query.search}%`,
+                            },
+                            type: QueryTypes.SELECT,
+                        },
+                    )
+                ),
+            });
         } else {
             res.status(400).json(validator.errors());
         }

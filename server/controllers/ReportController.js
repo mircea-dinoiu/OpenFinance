@@ -12,6 +12,7 @@ const logger = require('../helpers/logger');
 const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
 const {mapStartDateToSQL, mapEndDateToSQL} = require('../helpers/sql');
 const {flatten} = require('lodash');
+const {QueryTypes} = require('sequelize');
 
 const makeWhere = (queryParams, extra = []) => {
     const where = [
@@ -56,8 +57,13 @@ const getClones = async (
         '`repeat_occurrences`',
     ].join(', ')} FROM expenses ${where}`;
 
+    const records = await sql.query(select, {
+        replacements,
+        type: QueryTypes.SELECT,
+    });
+
     return RepeatedModelsHelper.getClonesForRecords({
-        records: (await sql.query(select, {replacements}))[0],
+        records: records,
         endDate: queryParams.end_date,
         startDate: startDate,
     });
@@ -75,10 +81,10 @@ const sumByLocationFactory = ({where = []} = {}) => (req, res) => {
         }),
         sql.query(
             `SELECT money_location_id as \`key\`, SUM(sum) as \`value\` FROM expenses ${groupedWhere.query} GROUP by money_location_id`,
-            {replacements: groupedWhere.replacements},
+            {replacements: groupedWhere.replacements, type: QueryTypes.SELECT},
         ),
     ]).then(([clones, grouped]) => {
-        const result = grouped[0].reduce(
+        const result = grouped.reduce(
             (acc, {key, value}) => ({...acc, [key]: value}),
             {},
         );

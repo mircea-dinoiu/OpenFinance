@@ -13,6 +13,7 @@ const defs = require('../../src/js/defs');
 const ofx = require('ofx');
 const _ = require('lodash');
 const moment = require('moment');
+const {QueryTypes} = require('sequelize');
 
 module.exports = class ExpenseController extends BaseController {
     Model = Model;
@@ -107,6 +108,7 @@ module.exports = class ExpenseController extends BaseController {
                 replacements: {
                     projectId: req.projectId,
                 },
+                type: QueryTypes.SELECT,
             },
         );
     }
