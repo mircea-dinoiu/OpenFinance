@@ -1,12 +1,12 @@
-import * as React from 'react';
-import {blue, purple, yellow, blueGrey, pink, grey} from '@material-ui/core/colors';
+import {blue, blueGrey, grey, purple, yellow} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';
+import IconUpload from '@material-ui/icons/CloudUpload';
+import IconDrafts from '@material-ui/icons/Drafts';
 import TrendingUp from '@material-ui/icons/TrendingUp';
 import Warning from '@material-ui/icons/Warning';
-import IconDrafts from '@material-ui/icons/Drafts';
-import IconUpload from '@material-ui/icons/CloudUpload';
-import startCase from 'lodash/startCase';
 import {TransactionStatus} from 'defs';
+import startCase from 'lodash/startCase';
+import * as React from 'react';
 import {TransactionModel} from 'types';
 
 const ICON_STYLE = {height: 20, width: 20};

@@ -1,5 +1,5 @@
 import {Checkbox, FormControlLabel, Paper} from '@material-ui/core';
-import {green, purple, red} from '@material-ui/core/colors';
+import {green, purple} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';
 import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
@@ -10,11 +10,7 @@ import {
 } from 'components/transactions/helpers';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
-import {
-    BalanceByLocation,
-    SummaryModel,
-    SummaryResults,
-} from 'components/transactions/types';
+import {BalanceByLocation, SummaryModel, SummaryResults} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {spacingMedium, spacingSmall} from 'defs/styles';
