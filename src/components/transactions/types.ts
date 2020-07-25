@@ -25,11 +25,6 @@ type ByML = {
     index: number;
 };
 
-type ExpensesData = {
-    byUser: ByUser[];
-    byML: ByML[];
-};
-
 type ExpensesByCategory = {
     sum: number;
     description: string;
@@ -44,7 +39,6 @@ type RemainingData = {
 };
 
 export type SummaryResults = {
-    expensesData: ExpensesData;
     expensesByCategory: ExpensesByCategory[];
     remainingData: RemainingData;
 };

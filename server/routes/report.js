@@ -13,8 +13,4 @@ router.get('/balance-by-location', filters.authProject, (req, res) => {
     res.wrapPromise(c.getBalanceByLocation(req, res));
 });
 
-router.get('/expenses-by-location', filters.authProject, (req, res) => {
-    res.wrapPromise(c.getExpensesByLocation(req, res));
-});
-
 module.exports = router;

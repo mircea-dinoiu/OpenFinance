@@ -10,7 +10,11 @@ import {
 } from 'components/transactions/helpers';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
-import {BalanceByLocation, SummaryModel, SummaryResults} from 'components/transactions/types';
+import {
+    BalanceByLocation,
+    SummaryModel,
+    SummaryResults,
+} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {spacingMedium, spacingSmall} from 'defs/styles';
@@ -177,32 +181,6 @@ export const Summary = () => {
                             entities: categories,
                             entityNameField: 'name',
                             showSumInHeader: false,
-                        }}
-                    />
-                )}
-
-                <SummaryLazyCategory
-                    {...{
-                        backgroundColor: red[500],
-                        title: 'Expenses by Account',
-                        entities: moneyLocationTypes,
-                        entityNameField: 'name',
-                        url: makeUrl(
-                            routes.reports.expensesByLocation,
-                            reportQueryParams,
-                        ),
-                        parser: parseTransactionsByLocation,
-                    }}
-                />
-
-                {results && (
-                    <SummaryCategory<User>
-                        {...{
-                            backgroundColor: red[500],
-                            title: 'Expenses by Person',
-                            summaryObject: results.expensesData.byUser,
-                            entities: users,
-                            entityNameField: 'full_name',
                         }}
                     />
                 )}

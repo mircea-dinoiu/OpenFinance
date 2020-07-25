@@ -162,14 +162,6 @@ module.exports = class ReportController {
             mlRecords,
             ...common,
         });
-        const expenses = SummaryReportService.getTransactions({
-            expenseRecords: expenseRecordsAsJSON.filter(
-                (transaction) => transaction.sum < 0,
-            ),
-            userRecords,
-            mlRecords,
-            ...common,
-        });
 
         const expensesByCategory = SummaryReportService.getExpensesByCategory({
             expenseRecords: expenseRecordsAsJSON,
@@ -191,17 +183,11 @@ module.exports = class ReportController {
         );
 
         res.json({
-            expensesData: expenses,
             expensesByCategory,
             remainingData,
         });
     }
     async getBalanceByLocation(req, res) {
         sumByLocationFactory()(req, res);
-    }
-    async getExpensesByLocation(req, res) {
-        sumByLocationFactory({
-            where: ['`sum` < 0'],
-        })(req, res);
     }
 };
