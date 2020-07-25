@@ -7,7 +7,7 @@ export const modelToForm = (model: TransactionModel): TransactionForm => ({
     sum: Math.abs(model.sum),
     description: model.item,
     date: moment(model.created_at).toDate(),
-    categories: model.categories,
+    categories: model.categories ?? [],
     paymentMethod: model.money_location_id,
     repeatOccurrences: model.repeat_occurrences,
     chargedPersons: model.users,

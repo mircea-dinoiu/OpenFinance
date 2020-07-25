@@ -13,18 +13,13 @@ export const formToModel = (
             : {[props.user.current.id]: 100};
 
     return {
-        id: form.id,
+        ...form,
         sum: (form.type === 'deposit' ? 1 : -1) * form.sum,
         item: form.description,
-        favorite: form.favorite,
-        hidden: form.hidden,
         // @ts-ignore
         created_at: form.date.toISOString(),
-        categories: form.categories,
         money_location_id: form.paymentMethod,
-        repeat: form.repeat,
         repeat_occurrences: form.repeatOccurrences,
-        weight: form.weight,
         users,
         status: form.status || TransactionStatus.pending,
     };

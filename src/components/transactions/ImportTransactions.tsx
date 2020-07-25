@@ -14,6 +14,9 @@ import {
     StepLabel,
     Stepper,
     Typography,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconUpload from '@material-ui/icons/CloudUpload';
@@ -21,16 +24,25 @@ import {AxiosResponse} from 'axios';
 import {MuiReactSelect} from 'components/dropdowns';
 import {formatCurrency} from 'components/formatters';
 import {FloatingSnackbar} from 'components/snackbars';
+import {ExpenseForm} from 'components/transactions/ExpenseForm';
+import {TransactionReviewAccordion} from 'components/transactions/TransactionReviewAccordion';
+import {formToModel} from 'components/transactions/transformers/formToModel';
+import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {routes} from 'defs/routes';
 import {spacingLarge, spacingSmall} from 'defs/styles';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
 import {useCurrencies} from 'state/currencies';
-import {useMoneyLocations, useRefreshWidgetsDispatcher} from 'state/hooks';
+import {
+    useBootstrap,
+    useMoneyLocations,
+    useRefreshWidgetsDispatcher,
+} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {TransactionModel} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 enum ImportStep {
     ACCOUNT,
@@ -51,6 +63,7 @@ export const ImportTransactions = ({
     const currencies = useCurrencies();
     const accounts = useMoneyLocations();
     const project = useSelectedProject();
+    const bootstrap = useBootstrap();
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
     const [accountOption, setAccountOption] = useState<{
@@ -89,8 +102,7 @@ export const ImportTransactions = ({
     })();
     const isFirstStep = activeStep === ImportStep.FIRST;
     const isLastStep = activeStep === ImportStep.LAST;
-    const transactions: TransactionModel[] =
-        uploadResp?.data.transactions ?? [];
+    const [transactions, setTransactions] = useState<TransactionModel[]>([]);
 
     const handleClose = () => {
         setDialogIsOpen(false);
@@ -100,6 +112,7 @@ export const ImportTransactions = ({
         setUploadResp(null);
         setFiles([]);
         setAccountOption(null);
+        setTransactions([]);
     };
 
     const upload = async () => {
@@ -123,6 +136,11 @@ export const ImportTransactions = ({
         });
 
         setUploadResp(resp);
+
+        if (resp.status === 200) {
+            setTransactions(resp.data.transactions);
+        }
+
         setIsUploading(false);
     };
 
@@ -223,55 +241,44 @@ export const ImportTransactions = ({
                                     None
                                 </Button>
                             </div>
-                            <List>
-                                {uploadResp?.data.transactions.map((t) => (
-                                    <ListItem
-                                        key={t.fitid as string}
-                                        dense
-                                        button
-                                        onClick={() => {
+                            <>
+                                {transactions.map((transaction) => (
+                                    <TransactionReviewAccordion
+                                        key={transaction.fitid as string}
+                                        transaction={transaction}
+                                        excluded={excludedTransactions.has(
+                                            transaction.fitid,
+                                        )}
+                                        onExcludedChange={(excluded) => {
                                             const next = new Set(
                                                 excludedTransactions,
                                             );
 
-                                            if (next.has(t.fitid)) {
-                                                next.delete(t.fitid);
+                                            if (excluded) {
+                                                next.add(transaction.fitid);
                                             } else {
-                                                next.add(t.fitid);
+                                                next.delete(transaction.fitid);
                                             }
 
                                             setExcludedTransactions(next);
                                         }}
-                                    >
-                                        <ListItemIcon>
-                                            <Checkbox
-                                                checked={
-                                                    !excludedTransactions.has(
-                                                        t.fitid,
-                                                    )
-                                                }
-                                                tabIndex={-1}
-                                                disableRipple
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={t.item}
-                                            secondary={
-                                                <>
-                                                    {new Date(
-                                                        t.created_at,
-                                                    ).toLocaleString()}
-                                                    {' | '}
-                                                    {formatCurrency(
-                                                        -t.sum,
-                                                        currencyCode as string,
-                                                    )}
-                                                </>
-                                            }
-                                        />
-                                    </ListItem>
+                                        currencyCode={currencyCode as string}
+                                        onTransactionChange={(
+                                            nextTransaction,
+                                        ) => {
+                                            setTransactions(
+                                                transactions.map((t) =>
+                                                    t.fitid ===
+                                                    nextTransaction.fitid
+                                                        ? nextTransaction
+                                                        : t,
+                                                ),
+                                            );
+                                        }}
+                                        bootstrap={bootstrap}
+                                    />
                                 ))}
-                            </List>
+                            </>
                         </>
                     )}
                 </DialogContent>
