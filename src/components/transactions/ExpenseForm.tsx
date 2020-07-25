@@ -52,9 +52,12 @@ const boxStyle = {
     padding: '10px 0',
 };
 
-type TypeProps = {
+type TypeOwnProps = {
     initialValues: TransactionFormDefaults;
     onFormChange: Function;
+};
+
+type TypeProps = TypeOwnProps & {
     moneyLocations: Accounts;
     currencies: Currencies;
     endDate: string;
@@ -447,7 +450,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
     };
 }
 
-export const ExpenseForm = (ownProps) => {
+export const ExpenseForm = (ownProps: TypeOwnProps) => {
     const stateProps = useSelector(
         ({currencies, categories, moneyLocations, user}: GlobalState) => ({
             currencies,
