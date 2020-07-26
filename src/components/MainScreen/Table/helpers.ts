@@ -1,4 +1,4 @@
-import {TransactionModel} from 'types';
+import {TransactionModel} from 'components/transactions/types';
 import {formatYMD} from 'utils/dates';
 import {Classes} from 'components/BaseTable';
 import {TransactionStatus} from 'defs';

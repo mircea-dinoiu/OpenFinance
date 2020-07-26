@@ -1,12 +1,12 @@
-import moment from 'moment';
+import {TransactionForm, TransactionModel} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
-import {TransactionForm, TransactionModel} from 'types';
+import moment from 'moment';
 
 export const modelToForm = (model: TransactionModel): TransactionForm => ({
     ...model,
     sum: Math.abs(model.sum),
     description: model.item,
-    date: moment(model.created_at).toDate(),
+    date: moment(model.created_at),
     categories: model.categories ?? [],
     paymentMethod: model.money_location_id,
     repeatOccurrences: model.repeat_occurrences,

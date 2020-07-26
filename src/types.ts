@@ -1,9 +1,6 @@
 import {AlertProps} from '@material-ui/lab';
-import {TransactionStatus} from 'defs';
-import {RepeatOption} from 'js/defs';
 import * as React from 'react';
 import {Project} from 'state/projects';
-import {$Values} from 'utility-types';
 
 export type ScreenQueries = {
     isSmall: boolean;
@@ -71,54 +68,6 @@ export type Bootstrap = {
     current: User;
     user: User;
     projects: Project[];
-};
-
-export type TransactionType = 'deposit' | 'withdrawal';
-export type TransactionRepeat = $Values<typeof RepeatOption>;
-
-export type TransactionForm = {
-    id: number;
-    sum: number;
-    description: string;
-    favorite: number;
-    hidden: boolean;
-    paymentMethod: number;
-    weight: number | null;
-    date: Date;
-    chargedPersons: {
-        [key: string]: number;
-    };
-    categories: number[];
-    repeatOccurrences: number | null;
-    repeat: TransactionRepeat | null;
-    type: TransactionType;
-    status: TransactionStatus;
-};
-
-export type TransactionFormDefaults = Omit<TransactionForm, 'id'>;
-
-export type TransactionModel = {
-    id: number;
-    fitid: string | null;
-    categories: number[];
-    favorite: number;
-    item: string;
-    sum: number;
-    weight: number | null;
-    users: {
-        [key: string]: number;
-    };
-    repeat_occurrences: number | null;
-    repeat: null | TransactionRepeat;
-    persist: boolean;
-    type: TransactionType;
-    created_at: number;
-    updated_at: number;
-    hidden: boolean;
-    status: TransactionStatus;
-    money_location_id: number;
-    money_location: {currency_id: number};
-    sum_per_weight: number | null;
 };
 
 export type SnackbarProps = {

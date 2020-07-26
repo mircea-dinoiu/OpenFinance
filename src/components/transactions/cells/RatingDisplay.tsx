@@ -1,10 +1,10 @@
 import {blue} from '@material-ui/core/colors';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
-import * as React from 'react';
+import {TransactionModel} from 'components/transactions/types';
 import {range} from 'lodash';
+import * as React from 'react';
 import styled from 'styled-components';
-import {TransactionModel} from 'types';
 
 const Star = styled.span`
     cursor: pointer;
@@ -12,12 +12,9 @@ const Star = styled.span`
 
 export class RatingDisplay extends React.PureComponent<{
     item: TransactionModel;
-    updateRecords: (
-        ids: number[],
-        model: Partial<TransactionModel>,
-    ) => void;
+    updateRecords: (ids: number[], model: Partial<TransactionModel>) => void;
 }> {
-    handleClick = (rating) => (event) => {
+    handleClick = (rating: number) => (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         event.stopPropagation();
 

@@ -11,9 +11,8 @@ import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay
 import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import {RatingDisplay} from 'components/transactions/cells/RatingDisplay';
 import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
-import {UpdateRecords} from 'components/transactions/types';
+import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import * as React from 'react';
-import {TransactionModel} from 'types';
 
 export const ExpenseTableColumns = ({
     updateRecords,

@@ -1,4 +1,5 @@
-import {Currencies, TransactionModel} from 'types';
+import {TransactionModel} from 'components/transactions/types';
+import {Currencies} from 'types';
 
 export const getItemCurrencyISOCode = ({
     item,

@@ -69,7 +69,7 @@ export const TopBar = (props: {
     const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
     const [showDateRange, setShowDateRange] = React.useState(false);
     const [showShiftMenu, setShowShiftMenu] = React.useState(false);
-    const [shiftMenuAnchor, setShiftMenuAnchor] = React.useState(null);
+    const [shiftMenuAnchor, setShiftMenuAnchor] = React.useState<HTMLDivElement | null>(null);
     const refreshWidgets = useRefreshWidgetsDispatcher();
     const [, {setCurrenciesDrawerOpen}] = useCurrenciesDrawerOpenWithActions();
     const screenSize = useScreenSize();
@@ -78,7 +78,7 @@ export const TopBar = (props: {
     const [endDate, setEndDate] = useEndDate();
     const [endDateIncrement, setEndDateIncrement] = useEndDateIncrement();
 
-    const setDate = (date) => {
+    const setDate = (date: Date) => {
         const url = new URL(window.location.href);
 
         url.searchParams.set('endDate', endOfDayToISOString(date));
@@ -92,10 +92,6 @@ export const TopBar = (props: {
     const handleShiftForward = () => {
         setDate(shiftDateForward(endDate, endDateIncrement));
     };
-    const onChangeEndDate = (date) => {
-        setEndDate(endOfDayToISOString(date));
-    };
-
     const onClickRefresh = () => {
         refreshWidgets();
     };
@@ -125,14 +121,6 @@ export const TopBar = (props: {
             />
         </div>
     );
-
-    const handleOpenShiftMenu = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        setShowShiftMenu(true);
-        setShiftMenuAnchor(event.currentTarget);
-    };
 
     const handleCloseShiftMenu = () => {
         setShowShiftMenu(false);
@@ -279,8 +267,16 @@ export const TopBar = (props: {
                             }}
                             format={'YYYY-MM-DD'}
                             value={endDate ? moment(endDate).toDate() : null}
-                            onChange={onChangeEndDate}
-                            onContextMenu={handleOpenShiftMenu}
+                            onChange={(date) => {
+                                setEndDate(endOfDayToISOString(date as any));
+                            }}
+                            onContextMenu={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+
+                                setShowShiftMenu(true);
+                                setShiftMenuAnchor(event.currentTarget);
+                            }}
                         />
                         {renderShiftMenu()}
                         {renderShiftForward()}

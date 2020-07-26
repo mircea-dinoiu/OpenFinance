@@ -1,6 +1,7 @@
+import {TransactionForm, TransactionFormState} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import moment from 'moment';
-import {Accounts, TransactionFormDefaults, Bootstrap} from 'types';
+import {Accounts, Bootstrap} from 'types';
 
 export const getFormDefaults = ({
     user,
@@ -8,7 +9,7 @@ export const getFormDefaults = ({
 }: {
     user: Bootstrap;
     mls: Accounts;
-}): TransactionFormDefaults => {
+}): TransactionForm => {
     return {
         description: '',
         type: 'withdrawal',
@@ -18,7 +19,7 @@ export const getFormDefaults = ({
         chargedPersons: {[user.current.id]: 100},
         categories: [],
         repeat: null,
-        date: moment().toDate(),
+        date: moment(),
         hidden: false,
         weight: null,
         favorite: 0,

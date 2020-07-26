@@ -1,7 +1,6 @@
 import {
     Button,
     ButtonProps,
-    Checkbox,
     Dialog,
     DialogActions,
     DialogContent,
@@ -19,9 +18,9 @@ import {
 import {makeStyles} from '@material-ui/core/styles';
 import IconUpload from '@material-ui/icons/CloudUpload';
 import {AxiosResponse} from 'axios';
-import {MuiReactSelect} from 'components/dropdowns';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TransactionReviewAccordion} from 'components/transactions/TransactionReviewAccordion';
+import {TransactionModel} from 'components/transactions/types';
 import {routes} from 'defs/routes';
 import {spacingLarge, spacingSmall} from 'defs/styles';
 import {DropzoneArea} from 'material-ui-dropzone';
@@ -30,7 +29,6 @@ import {AccountStatus} from 'state/accounts';
 import {useCurrencies} from 'state/currencies';
 import {useBootstrap, useMoneyLocations} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
-import {TransactionModel} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 

@@ -1,10 +1,11 @@
+import {TransactionModel} from 'components/transactions/types';
 import {IncludeOption} from 'defs';
 import {QueryParam} from 'defs/url';
 import {endOfDayToISOString} from 'js/utils/dates';
-import moment from 'moment';
-import {Accounts, TransactionModel} from 'types';
-import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import {sumArray} from 'js/utils/numbers';
+import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
+import moment from 'moment';
+import {Accounts} from 'types';
 import {useQueryParamState} from 'utils/url';
 
 export const mapItemToRepeatedUpdates = (item: TransactionModel) => {

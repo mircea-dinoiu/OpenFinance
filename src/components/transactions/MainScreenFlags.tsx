@@ -4,10 +4,10 @@ import IconUpload from '@material-ui/icons/CloudUpload';
 import IconDrafts from '@material-ui/icons/Drafts';
 import TrendingUp from '@material-ui/icons/TrendingUp';
 import Warning from '@material-ui/icons/Warning';
+import {TransactionModel} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import startCase from 'lodash/startCase';
 import * as React from 'react';
-import {TransactionModel} from 'types';
 
 const ICON_STYLE = {height: 20, width: 20};
 

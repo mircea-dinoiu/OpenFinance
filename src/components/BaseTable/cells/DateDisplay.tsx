@@ -1,8 +1,8 @@
-import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
+import {TransactionModel} from 'components/transactions/types';
 import moment from 'moment';
+import * as React from 'react';
 import {useScreenSize} from 'state/hooks';
-import {TransactionModel} from 'types';
 
 export const DateDisplay = ({item}: {item: TransactionModel}) => {
     const screen = useScreenSize();

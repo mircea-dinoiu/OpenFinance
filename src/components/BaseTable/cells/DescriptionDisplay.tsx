@@ -1,7 +1,7 @@
-import * as React from 'react';
 import {Flags} from 'components/transactions/MainScreenFlags';
+import {TransactionModel} from 'components/transactions/types';
+import * as React from 'react';
 import styled from 'styled-components';
-import {TransactionModel} from 'types';
 
 const DescriptionDisplayStyled = styled.span`
     white-space: nowrap;

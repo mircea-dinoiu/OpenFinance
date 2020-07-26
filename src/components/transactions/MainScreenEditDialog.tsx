@@ -1,15 +1,15 @@
-import {isEqual} from 'lodash';
-import * as React from 'react';
-
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
-
-import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
 import {ButtonProgress} from 'components/loaders';
 
-import {parseCRUDError} from 'parsers';
+import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
+import {TransactionForm, TransactionModel} from 'components/transactions/types';
 import {dialog} from 'defs/styles';
-import {TransactionForm, TransactionModel, Bootstrap} from 'types';
+import {isEqual} from 'lodash';
+
+import {parseCRUDError} from 'parsers';
+import * as React from 'react';
+import {Bootstrap} from 'types';
 
 type TypeProps = {
     user: Bootstrap;
@@ -29,7 +29,7 @@ type TypeProps = {
     entityName: string;
     formComponent: React.ComponentType<{
         initialValues: TransactionForm;
-        onFormChange: (TypeTransactionForm) => void;
+        onFormChange: (form: TransactionForm) => void;
     }>;
     open: boolean;
     classes: {};

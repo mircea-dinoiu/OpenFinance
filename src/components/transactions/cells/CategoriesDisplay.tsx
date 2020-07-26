@@ -1,8 +1,8 @@
+import {TransactionModel} from 'components/transactions/types';
 import * as React from 'react';
 import {Chip} from '@material-ui/core';
 import {useCategories, useScreenSize} from 'state/hooks';
 import {spacingSmall} from 'defs/styles';
-import {TransactionModel} from 'types';
 
 export const CategoriesDisplay = ({item}: {item: TransactionModel}) => {
     const categories = useCategories();

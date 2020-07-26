@@ -1,4 +1,4 @@
-import {TransactionModel} from 'types';
+import {TransactionModel} from 'components/transactions/types';
 import * as React from 'react';
 import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';
 import {AccountFilter} from 'components/BaseTable/filters/AccountFilter';

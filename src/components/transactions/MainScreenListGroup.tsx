@@ -1,12 +1,12 @@
-import * as React from 'react';
-import moment from 'moment';
-import {CalendarWithoutTime} from 'defs/formats';
 import {List, ListSubheader} from '@material-ui/core';
 import {
     MainScreenListItem,
     MainScreenListItemProps,
 } from 'components/transactions/MainScreenListItem';
-import {TransactionModel} from 'types';
+import {TransactionModel} from 'components/transactions/types';
+import {CalendarWithoutTime} from 'defs/formats';
+import moment from 'moment';
+import * as React from 'react';
 
 export const MainScreenListGroup = ({
     date,

@@ -1,4 +1,4 @@
-import {TransactionModel} from 'types';
+import {TransactionModel} from 'components/transactions/types';
 import * as React from 'react';
 import {DateDisplay} from 'components/BaseTable/cells/DateDisplay';
 

@@ -9,7 +9,7 @@ import {FloatingSnackbar} from 'components/snackbars';
 import {spacingSmall} from 'defs/styles';
 import {pick} from 'lodash';
 import React, {useState} from 'react';
-import {Column, TableProps} from 'react-table-6';
+import {Column, RowInfo, TableProps} from 'react-table-6';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
@@ -55,8 +55,8 @@ export const TableWithInlineEditing = <D extends {id: number}>({
             <BaseTable
                 {...props}
                 loading={loading}
-                getTrProps={(state, item) => ({
-                    onDoubleClick: () => setEditor(item.original),
+                getTrProps={(state: any, item: RowInfo | undefined) => ({
+                    onDoubleClick: () => item && setEditor(item.original),
                 })}
                 columns={[
                     {

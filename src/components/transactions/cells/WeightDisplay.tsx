@@ -1,6 +1,6 @@
+import {TransactionModel} from 'components/transactions/types';
 import React from 'react';
 import {formatNumber} from 'components/formatters';
-import {TransactionModel} from 'types';
 
 export const WeightDisplay = ({
     item,

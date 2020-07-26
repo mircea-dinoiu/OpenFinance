@@ -1,4 +1,7 @@
-import {TransactionModel} from 'types';
+import {MaterialUiPickersDate} from '@material-ui/pickers/typings/date';
+import {TransactionStatus} from 'defs';
+import {RepeatOption} from 'js/defs';
+import {$Values} from 'utility-types';
 
 export type SummaryModel = {
     currencyId: number | string;
@@ -52,6 +55,49 @@ export type SummarySubCategoryModel = {
 
 export type BalanceByLocation = Record<number, number>;
 
+export type TransactionType = 'deposit' | 'withdrawal';
+export type TransactionRepeat = $Values<typeof RepeatOption>;
+export type TransactionForm = {
+    sum: number;
+    description: string;
+    favorite: number;
+    hidden: boolean;
+    paymentMethod: number;
+    weight: number | null;
+    date: MaterialUiPickersDate;
+    chargedPersons: {
+        [key: string]: number;
+    };
+    categories: number[];
+    repeatOccurrences: number | null;
+    repeat: TransactionRepeat | null;
+    type: TransactionType;
+    status: TransactionStatus;
+};
+export type TransactionFormState = Omit<TransactionForm, 'id'>;
+export type TransactionModel = {
+    id: number;
+    fitid: string | null;
+    categories: number[];
+    favorite: number;
+    item: string;
+    sum: number;
+    weight: number | null;
+    users: {
+        [key: string]: number;
+    };
+    repeat_occurrences: number | null;
+    repeat: null | TransactionRepeat;
+    persist: boolean;
+    type: TransactionType;
+    created_at: number;
+    updated_at: number;
+    hidden: boolean;
+    status: TransactionStatus;
+    money_location_id: number;
+    money_location: {currency_id: number};
+    sum_per_weight: number | null;
+};
 export type UpdateRecords = (
     ids: number[],
     data: Partial<TransactionModel>,

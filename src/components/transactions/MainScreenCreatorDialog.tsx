@@ -9,15 +9,17 @@ import {withStyles} from '@material-ui/core/styles';
 import {ButtonProgress} from 'components/loaders';
 
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
+import {
+    TransactionForm,
+    TransactionFormState,
+    TransactionModel,
+} from 'components/transactions/types';
 import {dialog} from 'defs/styles';
 import {parseCRUDError} from 'parsers';
 import * as React from 'react';
 import {useMoneyLocations, useBootstrap} from 'state/hooks';
 import {
     Accounts,
-    TransactionForm,
-    TransactionFormDefaults,
-    TransactionModel,
     Bootstrap,
 } from 'types';
 
@@ -25,12 +27,12 @@ type TypeProps = {
     getFormDefaults: (props: {
         user: Bootstrap;
         mls: Accounts;
-    }) => TransactionFormDefaults;
+    }) => TransactionForm;
     formToModel: Function;
     entityName: string;
     onReceiveNewRecord: (r: TransactionModel) => void;
     formComponent: React.ComponentType<{
-        initialValues: TransactionFormDefaults;
+        initialValues: TransactionForm;
         onFormChange: (form: TransactionForm) => void;
     }>;
     onRequestCreate: Function;

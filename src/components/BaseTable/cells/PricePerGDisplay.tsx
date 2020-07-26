@@ -1,6 +1,6 @@
 import {AmountDisplay} from 'components/BaseTable/cells/AmountDisplay';
+import {TransactionModel} from 'components/transactions/types';
 import * as React from 'react';
-import {TransactionModel} from 'types';
 
 export const PricePerGDisplay = ({item}: {item: TransactionModel}) =>
     item.sum_per_weight != null ? (

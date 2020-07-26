@@ -13,7 +13,7 @@ const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => (
     <span {...props}>▒▒▒▒</span>
 );
 
-export const formatNumber = (value) =>
+export const formatNumber = (value: number) =>
     new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(
         financialNum(value),
     );
@@ -32,7 +32,13 @@ const useStyles = makeStyles({
     },
 });
 
-const NumericValue = ({currency: rawCurrency, value}) => {
+const NumericValue = ({
+    currency: rawCurrency,
+    value,
+}: {
+    currency?: string;
+    value: number;
+}) => {
     const cls = useStyles();
     const currencies = useCurrencies();
     const currency = rawCurrency || currencies.selected.iso_code;

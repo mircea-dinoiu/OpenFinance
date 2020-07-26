@@ -13,9 +13,8 @@ import {uniqueId} from 'lodash';
 import * as React from 'react';
 import {ChangeEvent, useRef} from 'react';
 import Select from 'react-select';
-import AsyncCreatable from 'react-select/async-creatable';
 
-const styles = (theme) => ({
+const styles = (theme: any) => ({
     root: {
         flexGrow: 1,
     },
@@ -62,7 +61,7 @@ const styles = (theme) => ({
     },
 });
 
-const NoOptionsMessage = (props) => (
+const NoOptionsMessage = (props: any) => (
     <Typography
         color="textSecondary"
         className={props.selectProps.classes.noOptionsMessage}
@@ -72,11 +71,11 @@ const NoOptionsMessage = (props) => (
     </Typography>
 );
 
-const inputComponent = ({inputRef, ...props}) => (
+const inputComponent = ({inputRef, ...props}: any) => (
     <div ref={inputRef} {...props} />
 );
 
-const Control = (props) => (
+const Control = (props: any) => (
     <TextField
         fullWidth
         InputProps={{
@@ -92,7 +91,7 @@ const Control = (props) => (
     />
 );
 
-const Option = (props) => (
+const Option = (props: any) => (
     <MenuItem
         ref={props.innerRef}
         selected={props.isFocused}
@@ -106,7 +105,7 @@ const Option = (props) => (
     </MenuItem>
 );
 
-const Placeholder = (props) => (
+const Placeholder = (props: any) => (
     <Typography
         color="textSecondary"
         className={props.selectProps.classes.placeholder}
@@ -116,7 +115,7 @@ const Placeholder = (props) => (
     </Typography>
 );
 
-const SingleValue = (props) => (
+const SingleValue = (props: any) => (
     <Typography
         className={props.selectProps.classes.singleValue}
         {...props.innerProps}
@@ -125,13 +124,13 @@ const SingleValue = (props) => (
     </Typography>
 );
 
-const ValueContainer = (props) => (
+const ValueContainer = (props: any) => (
     <div className={props.selectProps.classes.valueContainer}>
         {props.children}
     </div>
 );
 
-const MultiValue = (props) => (
+const MultiValue = (props: any) => (
     <Chip
         tabIndex={-1}
         label={props.children}
@@ -143,7 +142,7 @@ const MultiValue = (props) => (
     />
 );
 
-const Menu = (props) => (
+const Menu = (props: any) => (
     <Paper
         square
         className={props.selectProps.classes.paper}
@@ -164,8 +163,8 @@ const components = {
     ValueContainer,
 };
 
-const selectStyles = (theme) => ({
-    input: (base) => ({
+const selectStyles = (theme: any) => ({
+    input: (base: any) => ({
         ...base,
         color: theme.palette.text.primary,
         '& input': {
@@ -235,9 +234,10 @@ export const MuiSelectNative = <V extends string | number | null>({
     );
 };
 
-const addMaterialStyles = (Component) =>
+const addMaterialStyles = (Component: typeof Select) =>
     // @ts-ignore
     withStyles(styles, {withTheme: true})(
+        // @ts-ignore
         <O,>({classes, theme, label, ...props}) => (
             <div className={classes.root}>
                 <Component<O>
@@ -258,6 +258,3 @@ const addMaterialStyles = (Component) =>
     );
 
 export const MuiReactSelect: typeof Select = addMaterialStyles(Select);
-export const MuiReactSelectAsyncCreatable: typeof AsyncCreatable = addMaterialStyles(
-    AsyncCreatable,
-);

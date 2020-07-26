@@ -1,8 +1,8 @@
-import * as React from 'react';
 import {grey} from '@material-ui/core/colors';
+import {TransactionModel} from 'components/transactions/types';
 import {RepeatOptions} from 'defs/repeatOptions';
+import * as React from 'react';
 import {useScreenSize} from 'state/hooks';
-import {TransactionModel} from 'types';
 
 export const RepeatsDisplay = ({item}: {item: TransactionModel}) => {
     const screenSize = useScreenSize();

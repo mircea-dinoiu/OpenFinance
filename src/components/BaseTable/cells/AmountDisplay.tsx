@@ -1,8 +1,8 @@
 import {numericValue} from 'components/formatters';
+import {TransactionModel} from 'components/transactions/types';
 import {getItemCurrencyISOCode} from 'helpers';
 import React from 'react';
 import {useCurrencies} from 'state/currencies';
-import {TransactionModel} from 'types';
 
 export const AmountDisplay = ({
     item,

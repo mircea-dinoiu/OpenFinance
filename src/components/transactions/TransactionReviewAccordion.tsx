@@ -11,8 +11,9 @@ import {formatCurrency} from 'components/formatters';
 import {ExpenseForm} from 'components/transactions/ExpenseForm';
 import {formToModel} from 'components/transactions/transformers/formToModel';
 import {modelToForm} from 'components/transactions/transformers/modelToForm';
+import {TransactionModel} from 'components/transactions/types';
 import React, {useRef, useState} from 'react';
-import {Bootstrap, TransactionModel} from 'types';
+import {Bootstrap} from 'types';
 
 export const TransactionReviewAccordion = ({
     transaction,

@@ -1,5 +1,6 @@
-import {TransactionForm, TransactionModel, Bootstrap} from 'types';
+import {TransactionForm, TransactionModel} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
+import {Bootstrap} from 'types';
 
 export const formToModel = (
     form: TransactionForm,

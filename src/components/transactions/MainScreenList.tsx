@@ -41,7 +41,7 @@ import {StatsTable} from 'components/transactions/StatsTable';
 import {formToModel} from 'components/transactions/transformers/formToModel';
 import {getFormDefaults} from 'components/transactions/transformers/getFormDefaults';
 import {modelToForm} from 'components/transactions/transformers/modelToForm';
-import {UpdateRecords} from 'components/transactions/types';
+import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {greyedOut} from 'defs/styles';
@@ -59,14 +59,7 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
-import {
-    Accounts,
-    Bootstrap,
-    Currencies,
-    GlobalState,
-    ScreenQueries,
-    TransactionModel,
-} from 'types';
+import {Accounts, Bootstrap, Currencies, GlobalState, ScreenQueries} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';

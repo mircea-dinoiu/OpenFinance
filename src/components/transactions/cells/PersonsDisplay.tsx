@@ -1,9 +1,9 @@
 import {Avatar} from '@material-ui/core';
 import {grey} from '@material-ui/core/colors';
+import {TransactionModel} from 'components/transactions/types';
 import * as React from 'react';
 import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
-import {TransactionModel} from 'types';
 
 export const PersonAvatar = styled(Avatar)`
     height: 20px !important;

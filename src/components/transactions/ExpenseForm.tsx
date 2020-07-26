@@ -20,6 +20,7 @@ import {DateTimePicker} from '@material-ui/pickers';
 import {MuiSelectNative} from 'components/dropdowns';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
 import {TransactionNameField} from 'components/transactions/TransactionNameField';
+import {TransactionForm, TransactionType} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
 import {
@@ -43,7 +44,6 @@ import {
     Categories,
     Currencies,
     GlobalState,
-    TransactionFormDefaults,
     User,
 } from 'types';
 import {useEndDate} from 'utils/dates';
@@ -53,11 +53,11 @@ const boxStyle = {
 };
 
 type TypeOwnProps = {
-    initialValues: TransactionFormDefaults;
-    onFormChange: Function;
+    initialValues: TransactionForm;
+    onFormChange: (form: TransactionForm) => void;
 };
 
-type TypeProps = TypeOwnProps & {
+type Props = TypeOwnProps & {
     moneyLocations: Accounts;
     currencies: Currencies;
     endDate: string;
@@ -67,12 +67,18 @@ type TypeProps = TypeOwnProps & {
 };
 
 export const setChargedPersonValueFactory = (
-    id,
-    value,
-    {userIdsStringified, adjust = true},
-) => (prevState) => {
+    id: string,
+    value: number,
+    {
+        userIdsStringified,
+        adjust = true,
+    }: {
+        userIdsStringified: string[];
+        adjust?: boolean;
+    },
+) => (prevState: Partial<State>) => {
     const step = PERC_STEP;
-    const nextChargedPersons = {
+    const nextChargedPersons: Record<number, number> = {
         ...userIdsStringified.reduce((acc, idString) => {
             acc[idString] = 0;
 
@@ -106,14 +112,21 @@ const FormControlLabelInline = styled(FormControlLabel)`
     display: inline-block;
 `;
 
-type State = TransactionFormDefaults;
+type State = TransactionForm;
 
-class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
+class ExpenseFormWrapped extends PureComponent<Props, State> {
     state: State = {
         ...this.props.initialValues,
     };
 
-    setState(state) {
+    setState<K extends keyof State>(
+        state:
+            | ((
+                  prevState: Readonly<State>,
+                  props: Readonly<Props>,
+              ) => Pick<State, K> | State | null)
+            | (Pick<State, K> | State | null),
+    ) {
         this.props.onFormChange({...this.state, ...state});
 
         return super.setState(state);
@@ -153,7 +166,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
                             marginTop: '2px',
                         }}
                         onChange={(event) =>
-                            this.setState({sum: event.target.value})
+                            this.setState({sum: event.target.value as any})
                         }
                     />
                 </div>
@@ -261,7 +274,7 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
                                     this.setState(
                                         setChargedPersonValueFactory(
                                             id,
-                                            value,
+                                            value as number,
                                             {
                                                 userIdsStringified,
                                             },
@@ -317,11 +330,12 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
                         style={{
                             marginTop: '2px',
                         }}
-                        onChange={(event) =>
+                        onChange={(event) => {
                             this.setState({
+                                // @ts-ignore
                                 repeatOccurrences: event.target.value,
-                            })
-                        }
+                            });
+                        }}
                         disabled={this.state.repeat == null}
                     />
                 </div>
@@ -369,7 +383,11 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
                 <FormLabel>Type</FormLabel>
                 <RadioGroup
                     value={this.state.type}
-                    onChange={this.handleChangeType}
+                    onChange={(event) => {
+                        this.setState({
+                            type: event.target.value as TransactionType,
+                        });
+                    }}
                     row
                 >
                     <FormControlLabelInline
@@ -386,10 +404,6 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
             </>
         );
     }
-
-    handleChangeType = (event) => {
-        this.setState({type: event.target.value});
-    };
 
     renderFlags() {
         return (
@@ -422,7 +436,11 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
                 <FormLabel>Status</FormLabel>
                 <RadioGroup
                     value={this.state.status}
-                    onChange={this.handleChangeStatus}
+                    onChange={(event) => {
+                        this.setState({
+                            status: event.target.value as TransactionStatus,
+                        });
+                    }}
                     row
                 >
                     <FormControlLabelInline
@@ -444,10 +462,6 @@ class ExpenseFormWrapped extends PureComponent<TypeProps, State> {
             </>
         );
     }
-
-    handleChangeStatus = (event) => {
-        this.setState({status: event.target.value});
-    };
 }
 
 export const ExpenseForm = (ownProps: TypeOwnProps) => {
