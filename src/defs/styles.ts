@@ -1,12 +1,5 @@
-import * as React from 'react';
-import {createMuiTheme} from '@material-ui/core/styles';
 import {blue, grey} from '@material-ui/core/colors';
-
-export const flexColumn: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: 1,
-};
+import {createMuiTheme} from '@material-ui/core/styles';
 
 export const greyedOut = {
     filter: 'grayscale(100%)',
@@ -40,8 +33,5 @@ export const theme = createMuiTheme({
         background: {
             default: grey[300]
         }
-    },
-    typography: {
-        htmlFontSize: 16,
     },
 });

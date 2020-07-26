@@ -1,10 +1,16 @@
 import {
     Button,
     ButtonProps,
+    Checkbox,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Radio,
     Step,
     StepLabel,
     Stepper,
@@ -20,6 +26,7 @@ import {routes} from 'defs/routes';
 import {spacingLarge, spacingSmall} from 'defs/styles';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
+import {AccountStatus} from 'state/accounts';
 import {useCurrencies} from 'state/currencies';
 import {useBootstrap, useMoneyLocations} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
@@ -49,12 +56,8 @@ export const ImportTransactions = ({
     const bootstrap = useBootstrap();
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
-    const [accountOption, setAccountOption] = useState<{
-        value: number;
-        label: string;
-    } | null>(null);
-    const account =
-        accountOption && accounts.find((a) => a.id === accountOption.value);
+    const [accountId, setAccountId] = useState<number | null>(null);
+    const account = accountId && accounts.find((a) => a.id === accountId);
     const cls = useStyles();
     const dropzoneClasses = useDropzoneStyles();
     const [files, setFiles] = useState<File[]>([]);
@@ -72,7 +75,7 @@ export const ImportTransactions = ({
         'Review Transactions',
     ];
     const activeStep = (() => {
-        if (accountOption === null) {
+        if (accountId === null) {
             return ImportStep.ACCOUNT;
         }
 
@@ -93,7 +96,7 @@ export const ImportTransactions = ({
         setIsUploading(false);
         setUploadResp(null);
         setFiles([]);
-        setAccountOption(null);
+        setAccountId(null);
         setTransactions([]);
     };
 
@@ -108,7 +111,7 @@ export const ImportTransactions = ({
         const resp = await createXHR<{transactions: TransactionModel[]}>({
             url: makeUrl(routes.transactionsUpload, {
                 projectId: project.id,
-                accountId: accountOption?.value,
+                accountId,
             }),
             data: formData,
             method: 'POST',
@@ -164,19 +167,25 @@ export const ImportTransactions = ({
                         ))}
                     </Stepper>
                     {activeStep === ImportStep.ACCOUNT && (
-                        <MuiReactSelect
-                            options={accounts.map((a) => ({
-                                value: a.id,
-                                label: a.name,
-                            }))}
-                            value={accountOption}
-                            onChange={(o) =>
-                                setAccountOption(
-                                    o as {value: number; label: string},
-                                )
-                            }
-                            label="Target Account"
-                        />
+                        <List>
+                            {accounts.map((a) =>
+                                a.status === AccountStatus.OPEN ? (
+                                    <ListItem
+                                        key={a.id}
+                                        dense
+                                        button
+                                        onClick={() => setAccountId(a.id)}
+                                    >
+                                        <ListItemIcon>
+                                            <Radio
+                                                checked={accountId === a.id}
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText primary={a.name} />
+                                    </ListItem>
+                                ) : null,
+                            )}
+                        </List>
                     )}
                     {activeStep === ImportStep.UPLOAD && (
                         <>
@@ -270,7 +279,7 @@ export const ImportTransactions = ({
                             disabled={isUploading}
                             onClick={() => {
                                 if (activeStep === ImportStep.UPLOAD) {
-                                    setAccountOption(null);
+                                    setAccountId(null);
                                 } else if (activeStep === ImportStep.REVIEW) {
                                     setFiles([]);
                                 }

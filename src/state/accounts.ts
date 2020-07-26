@@ -24,3 +24,9 @@ export const useAccountsReader = () => {
         );
     };
 };
+
+export enum AccountStatus {
+    OPEN = 'open',
+    CLOSED = 'closed',
+    LOCKED = 'locked',
+}
