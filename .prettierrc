@@ -4,5 +4,13 @@
   "tabWidth": 4,
   "bracketSpacing": false,
   "semi": true,
-  "arrowParens": "always"
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": ["*.json", ".prettierrc"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
 }

@@ -21,6 +21,8 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",
     "@material-ui/pickers": "^3.2.10",
+    "@types/csurf": "^1.9.36",
+    "@types/express": "4",
     "@types/jest": "^24.0.19",
     "@types/lodash": "^4.14.149",
     "@types/node": "^12.11.1",
@@ -86,6 +88,7 @@
     "sequelize": "3.30.4",
     "sequelize-cli": "4.1.1",
     "serve-favicon": "^2.5.0",
+    "ts-node": "^8.10.2",
     "validator": "^10.7.1"
   },
   "scripts": {
@@ -93,6 +96,7 @@
     "build": "rm -rf build && react-scripts build && mv build/index.html build/app.html",
     "dev": "react-scripts start",
     "start": "node ./bin/www",
+    "start:ts": "TS_NODE_PROJECT=tsconfig.server.json ts-node server/index.ts",
     "test": "react-scripts test",
     "test-related": "react-scripts test --findRelatedTests",
     "test-all": "react-scripts test --watchAll=false",
