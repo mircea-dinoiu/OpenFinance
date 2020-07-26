@@ -32,6 +32,10 @@ import {makeUrl} from 'utils/url';
 import {Bootstrap} from './types';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
+    html, body {
+        font-size: 14px;
+    }
+    
     body {
         font-family: Roboto, sans-serif;
         font-weight: 300;
