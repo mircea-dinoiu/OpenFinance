@@ -70,6 +70,7 @@ const useStyles = makeStyles({
         marginTop: spacingMedium,
     },
     chip: {
+        marginTop: spacingSmall,
         marginLeft: spacingSmall,
     },
 });

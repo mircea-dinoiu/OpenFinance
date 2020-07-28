@@ -4,17 +4,34 @@ const {Validator} = require('../validators');
 const defs = require('../../src/js/defs');
 const {QueryTypes} = require('sequelize');
 
+const mapSearchToMatchAgainst = (search) =>
+    search
+        .split(/\W/)
+        .filter(Boolean)
+        .map((w) => `+${w}`)
+        .join(' ');
+
 module.exports = class SuggestionController extends BaseController {
     async getCategories(req, res) {
         const search = req.query.search;
 
-        if ('string' === typeof search && search.length) {
+        if ('string' === typeof search && search.trim().length) {
             const row = await sql.query(
-                `SELECT DISTINCT category_id FROM expenses JOIN category_expense ON category_expense.expense_id = expenses.id WHERE project_id = :projectId AND LOWER(expenses.item) LIKE LOWER(:search)`,
+                `
+SELECT DISTINCT
+   category_id 
+FROM
+   expenses 
+   JOIN
+      category_expense 
+      ON category_expense.expense_id = expenses.id 
+WHERE
+   project_id = :projectId 
+   AND MATCH(expenses.item) AGAINST(:search)`,
                 {
                     replacements: {
                         projectId: req.projectId,
-                        search: `%${search.trim()}%`,
+                        search: mapSearchToMatchAgainst(search),
                     },
                     type: QueryTypes.SELECT,
                 },
@@ -41,12 +58,25 @@ module.exports = class SuggestionController extends BaseController {
         if (await validator.passes()) {
             res.json({
                 suggestions: await sql.query(
-                    `SELECT item, COUNT(item) as usages FROM expenses WHERE LOWER(item) LIKE LOWER(:search) AND created_at <= :endDate AND project_id = :projectId GROUP BY item ORDER BY usages DESC LIMIT 10`,
+                    `
+SELECT
+   item,
+   COUNT(item) as usages 
+FROM
+   expenses 
+WHERE
+   (:search = '' OR MATCH(expenses.item) AGAINST(:search))
+   AND created_at <= :endDate 
+   AND project_id = :projectId 
+GROUP BY
+   item 
+ORDER BY
+   usages DESC LIMIT 10`,
                     {
                         replacements: {
                             endDate: query.end_date,
                             projectId: req.projectId,
-                            search: `%${query.search.trim()}%`,
+                            search: mapSearchToMatchAgainst(query.search),
                         },
                         type: QueryTypes.SELECT,
                     },
