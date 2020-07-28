@@ -8,6 +8,7 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
+import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import IconArrowBack from '@material-ui/icons/ArrowBack';
 import IconArrowForward from '@material-ui/icons/ArrowForward';
@@ -69,7 +70,10 @@ export const TopBar = (props: {
     const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
     const [showDateRange, setShowDateRange] = React.useState(false);
     const [showShiftMenu, setShowShiftMenu] = React.useState(false);
-    const [shiftMenuAnchor, setShiftMenuAnchor] = React.useState<HTMLDivElement | null>(null);
+    const [
+        shiftMenuAnchor,
+        setShiftMenuAnchor,
+    ] = React.useState<HTMLDivElement | null>(null);
     const refreshWidgets = useRefreshWidgetsDispatcher();
     const [, {setCurrenciesDrawerOpen}] = useCurrenciesDrawerOpenWithActions();
     const screenSize = useScreenSize();
@@ -204,11 +208,7 @@ export const TopBar = (props: {
 
     return (
         <AppBar position="sticky">
-            <Toolbar
-                style={{
-                    paddingRight: 10,
-                }}
-            >
+            <Toolbar className={cls.toolbar}>
                 <Typography variant="h6" color="inherit">
                     {projects.length ? (
                         <Paper className={cls.paper}>
@@ -328,6 +328,10 @@ export const TopBar = (props: {
 };
 
 const useStyles = makeStyles({
+    toolbar: {
+        backgroundColor: grey[900],
+        paddingRight: spacingMedium,
+    },
     paper: {
         padding: `${spacingSmall} ${spacingMedium}`,
     },
