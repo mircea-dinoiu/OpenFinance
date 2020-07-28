@@ -6,6 +6,7 @@ import {
     FormControlLabel,
     Menu,
     Paper,
+    TextField,
 } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
@@ -38,13 +39,19 @@ import {MainScreenEditDialog} from 'components/transactions/MainScreenEditDialog
 import {MainScreenListGroup} from 'components/transactions/MainScreenListGroup';
 import {SplitAmountField} from 'components/transactions/SplitAmountField';
 import {StatsTable} from 'components/transactions/StatsTable';
+import {TransactionsSearchField} from 'components/transactions/TransactionsSearchField';
 import {formToModel} from 'components/transactions/transformers/formToModel';
 import {getFormDefaults} from 'components/transactions/transformers/getFormDefaults';
 import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
-import {greyedOut} from 'defs/styles';
+import {
+    greyedOut,
+    spacingMedium,
+    spacingSmall,
+    stickyHeaderTop,
+} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import * as H from 'history';
@@ -59,7 +66,13 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
-import {Accounts, Bootstrap, Currencies, GlobalState, ScreenQueries} from 'types';
+import {
+    Accounts,
+    Bootstrap,
+    Currencies,
+    GlobalState,
+    ScreenQueries,
+} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';
@@ -808,19 +821,27 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             );
         }
 
-        return Object.entries(this.getGroupedResults()).map(([date, items]) => (
-            <MainScreenListGroup
-                key={date}
-                date={date}
-                items={items}
-                itemProps={{
-                    entityName: entityName,
-                    contentComponent: ExpenseListItemContent,
-                    contextMenuItemsProps: this.getContextMenuItemsProps(),
-                    onReceiveSelectedIds: this.handleReceivedSelectedIds,
-                }}
-            />
-        ));
+        return (
+            <>
+                <TransactionsSearchField />
+                {Object.entries(this.getGroupedResults()).map(
+                    ([date, items]) => (
+                        <MainScreenListGroup
+                            key={date}
+                            date={date}
+                            items={items}
+                            itemProps={{
+                                entityName: entityName,
+                                contentComponent: ExpenseListItemContent,
+                                contextMenuItemsProps: this.getContextMenuItemsProps(),
+                                onReceiveSelectedIds: this
+                                    .handleReceivedSelectedIds,
+                            }}
+                        />
+                    ),
+                )}
+            </>
+        );
     }
 
     renderDialogs() {

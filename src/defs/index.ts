@@ -49,3 +49,7 @@ export enum IncludeOption {
     untilNow = 'untilNow',
     untilYesterday = 'untilYesterday',
 }
+
+export const Timers = {
+    SEARCH_DEBOUNCE: 250,
+};

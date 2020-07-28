@@ -1,5 +1,5 @@
 import {green, red} from '@material-ui/core/colors';
-import {gridGap, spacingLarge, spacingSmall} from 'defs/styles';
+import {gridGap, spacingLarge, spacingSmall, stickyHeaderTop} from 'defs/styles';
 import * as React from 'react';
 import ReactTable, {TableProps} from 'react-table-6';
 import 'react-table-6/react-table.css';
@@ -67,7 +67,7 @@ export const TableHeader = styled.div`
     font-size: 1rem;
     border-bottom: 1px solid rgb(244, 244, 244);
     position: sticky;
-    top: 64px;
+    top: ${stickyHeaderTop};
     z-index: 1;
     background: white;
     border-radius: 4px;

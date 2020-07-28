@@ -19,7 +19,7 @@ import {useAccountsReader} from 'state/accounts';
 import {useAccountTypesReader} from 'state/accountTypes';
 import {setScreen} from 'state/actionCreators';
 import {useCategoriesReader} from 'state/categories';
-import {fetchCurrencies, useCurrencies} from 'state/currencies';
+import {fetchCurrencies} from 'state/currencies';
 import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createGlobalStyle} from 'styled-components';
@@ -54,7 +54,6 @@ const ResponsiveGlobalStyle = createGlobalStyle`
 const AppWrapped = () => {
     const dispatch = useDispatch();
     const [users, {setUsers}] = useUsersWithActions();
-    const currencies = useCurrencies();
     const [snackbar] = useSnackbars();
     const [ready, setReady] = useState(false);
     const readCategories = useCategoriesReader();

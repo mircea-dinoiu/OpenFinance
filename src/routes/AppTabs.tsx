@@ -45,7 +45,7 @@ const HomeMediumDown = () => {
             />
             <Route path={paths.transactionsList} component={Expenses} />
             <Paper
-                elevation={1}
+                elevation={9}
                 style={{
                     position: 'fixed',
                     bottom: 0,

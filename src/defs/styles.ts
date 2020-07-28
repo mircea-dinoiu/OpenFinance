@@ -20,6 +20,8 @@ export const spacingSmall = '5px';
 export const spacingMedium = '10px';
 export const spacingLarge = '20px';
 
+export const stickyHeaderTop = '64px';
+
 export const gridGap = spacingMedium;
 
 export const screenQuerySmall = '(min-width: 0px) and (max-width: 480px)';
