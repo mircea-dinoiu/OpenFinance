@@ -1,4 +1,5 @@
 import {Paper, TextField} from '@material-ui/core';
+import {MuiSelectNative} from 'components/dropdowns';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {routes} from 'defs/routes';
 import {spacingMedium} from 'defs/styles';
@@ -19,7 +20,7 @@ export const Accounts = () => {
             <TableWithInlineEditing<Account>
                 data={rows}
                 api={routes.moneyLocations}
-                editableFields={['name']}
+                editableFields={['name', 'type_id']}
                 onRefresh={refresh}
                 allowDelete={false}
                 columns={(editor, setEditor) => [
@@ -55,9 +56,33 @@ export const Accounts = () => {
                     {
                         id: 'type',
                         Header: 'Type',
-                        accessor: (r) =>
-                            Object.values(types).find((t) => t.id === r.type_id)
-                                ?.name,
+                        accessor: (row) => {
+                            if (editor && editor.id === row.id) {
+                                const options = types.map((t) => ({
+                                    value: t.id,
+                                    label: t.name,
+                                }));
+
+                                return (
+                                    <MuiSelectNative<number>
+                                        value={options.find(
+                                            (o) => o.value === editor.type_id,
+                                        )}
+                                        options={options}
+                                        onChange={(o) =>
+                                            setEditor({
+                                                ...editor,
+                                                type_id: o.value,
+                                            })
+                                        }
+                                    />
+                                );
+                            }
+
+                            return Object.values(types).find(
+                                (t) => t.id === row.type_id,
+                            )?.name;
+                        },
                     },
                 ]}
             />

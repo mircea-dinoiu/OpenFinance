@@ -83,7 +83,9 @@ export const TableWithInlineEditing = <D extends {id: number}>({
                                                 setLoading(true);
 
                                                 await createXHR({
-                                                    url: api,
+                                                    url: makeUrl(api, {
+                                                        projectId: project.id,
+                                                    }),
                                                     method: 'PUT',
                                                     data: {
                                                         data: [
