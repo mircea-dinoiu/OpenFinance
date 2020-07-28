@@ -1,7 +1,6 @@
 import MomentUtils from '@date-io/moment';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {CurrenciesDrawer} from 'components/currencies/CurrenciesDrawer';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
 import {routes} from 'defs/routes';
@@ -103,7 +102,6 @@ const AppWrapped = () => {
         }
     };
 
-    const isCurrenciesDrawerReady = () => users != null && currencies != null;
 
     const onWindowResize = () => {
         dispatch(setScreen(getScreenQueries()));
@@ -120,10 +118,8 @@ const AppWrapped = () => {
                             onResize={onWindowResize}
                         />
                         <TopBar
-                            showCurrenciesDrawer={isCurrenciesDrawerReady()}
                             onLogout={onLogout}
                         />
-                        {isCurrenciesDrawerReady() && <CurrenciesDrawer />}
                         {ready && (
                             <Switch>
                                 <Route

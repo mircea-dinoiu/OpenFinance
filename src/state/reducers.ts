@@ -1,11 +1,11 @@
-import {Action} from 'state/defs';
 import uniqueId from 'lodash/uniqueId';
+import {combineReducers} from 'redux';
+import {currencies} from 'state/currencies';
+import {Action} from 'state/defs';
 import {privacyToggle} from 'state/privacyToggle';
+import {bindToUpdateState} from 'state/utils';
 import {ScreenQueries, Snackbar, User} from 'types';
 import {getScreenQueries} from 'utils/getScreenQueries';
-import {combineReducers} from 'redux';
-import {bindToUpdateState} from 'state/utils';
-import {currencies, currenciesDrawerOpen} from 'state/currencies';
 
 const screen = (
     state = getScreenQueries(),
@@ -55,7 +55,6 @@ export const combinedReducers = combineReducers({
     screenSize,
 
     currencies,
-    currenciesDrawerOpen,
 
     refreshWidgets,
     user,

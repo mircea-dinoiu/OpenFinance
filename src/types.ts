@@ -81,7 +81,6 @@ export type Snackbar = {
 
 export type GlobalState = {
     currencies: Currencies;
-    currenciesDrawerOpen: boolean;
     privacyToggle: boolean;
 
     categories: Categories;

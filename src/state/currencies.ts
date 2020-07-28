@@ -1,16 +1,14 @@
-import {Currencies, GlobalState, CurrenciesApi, Currency} from 'types';
+import {createAction, createReducer} from '@reduxjs/toolkit';
+import {routes} from 'defs/routes';
+import {Dispatch} from 'react';
+import {useSelector} from 'react-redux';
+import {Currencies, CurrenciesApi, Currency, GlobalState} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
-import {routes} from 'defs/routes';
-import {useSelector} from 'react-redux';
-import {createAction, createReducer} from '@reduxjs/toolkit';
-import {useActions} from 'state/hooks';
-import {Dispatch} from 'react';
 
 export enum CurrenciesAction {
     selectedIdSet = 'currencies/selectedId/set',
     received = 'currencies/received',
-    drawerOpenSet = 'currencies/drawerOpen/set',
 }
 
 export const currencies = createReducer<Currencies | null>(null, {
@@ -53,26 +51,3 @@ export const fetchCurrencies = (
 export const useCurrencies = (): Currencies =>
     useSelector((s: GlobalState) => s.currencies);
 
-/**
- * currenciesDrawerOpen
- */
-export const currenciesDrawerOpen = createReducer(false, {
-    [CurrenciesAction.drawerOpenSet]: (
-        prevState: boolean,
-        action: {payload: boolean},
-    ) => action.payload,
-});
-
-const setCurrenciesDrawerOpen = createAction<boolean>(
-    CurrenciesAction.drawerOpenSet,
-);
-
-export const useCurrenciesDrawerOpenWithActions = (): [
-    boolean,
-    {setCurrenciesDrawerOpen: typeof setCurrenciesDrawerOpen},
-] => {
-    return [
-        useSelector((s: GlobalState) => s.currenciesDrawerOpen),
-        useActions({setCurrenciesDrawerOpen}),
-    ];
-};

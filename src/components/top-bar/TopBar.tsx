@@ -1,7 +1,13 @@
 import {
     AppBar,
+    Divider,
+    Drawer,
     FormLabel,
     IconButton,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
     Menu,
     MenuItem as MenuItem2,
     Paper,
@@ -12,22 +18,21 @@ import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import IconArrowBack from '@material-ui/icons/ArrowBack';
 import IconArrowForward from '@material-ui/icons/ArrowForward';
-import IconDateIcon from '@material-ui/icons/DateRange';
 import IconExitToApp from '@material-ui/icons/ExitToApp';
-
-import IconMonetizationOn from '@material-ui/icons/MonetizationOn';
+import IconMenu from '@material-ui/icons/Menu';
 import IconRefresh from '@material-ui/icons/Refresh';
 import IconVisibility from '@material-ui/icons/Visibility';
 import IconVisibilityOff from '@material-ui/icons/VisibilityOff';
 import {DatePicker} from '@material-ui/pickers';
+import {CurrenciesDrawerContent} from 'components/currencies/CurrenciesDrawerContent';
 import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption, ShiftDateOptions, Sizes} from 'defs';
 import {spacingMedium, spacingSmall} from 'defs/styles';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
-import React from 'react';
+import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {useCurrenciesDrawerOpenWithActions} from 'state/currencies';
+import {useCurrencies} from 'state/currencies';
 import {usePrivacyToggle} from 'state/privacyToggle';
 import {useProjects, useSelectedProject} from 'state/projects';
 import {
@@ -63,24 +68,22 @@ export const getShiftForwardOptions = (
         .fill(null)
         .map((each, index) => shiftDateForward(date, by, index + 1));
 
-export const TopBar = (props: {
-    onLogout: () => void;
-    showCurrenciesDrawer: boolean;
-}) => {
+export const TopBar = (props: {onLogout: () => void}) => {
     const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
-    const [showDateRange, setShowDateRange] = React.useState(false);
     const [showShiftMenu, setShowShiftMenu] = React.useState(false);
     const [
         shiftMenuAnchor,
         setShiftMenuAnchor,
     ] = React.useState<HTMLDivElement | null>(null);
     const refreshWidgets = useRefreshWidgetsDispatcher();
-    const [, {setCurrenciesDrawerOpen}] = useCurrenciesDrawerOpenWithActions();
     const screenSize = useScreenSize();
     const user = useBootstrap();
     const history = useHistory();
+    const currencies = useCurrencies();
     const [endDate, setEndDate] = useEndDate();
     const [endDateIncrement, setEndDateIncrement] = useEndDateIncrement();
+    const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+    const isCurrenciesDrawerReady = () => user != null && currencies != null;
 
     const setDate = (date: Date) => {
         const url = new URL(window.location.href);
@@ -98,14 +101,6 @@ export const TopBar = (props: {
     };
     const onClickRefresh = () => {
         refreshWidgets();
-    };
-
-    const onClickCurrenciesDrawerTrigger = () => {
-        setCurrenciesDrawerOpen(true);
-    };
-
-    const handleToggleDateRange = () => {
-        setShowDateRange(!showDateRange);
     };
 
     const renderEndDateIntervalSelect = () => (
@@ -206,124 +201,150 @@ export const TopBar = (props: {
     const selectedProject = useSelectedProject();
     const cls = useStyles();
 
+    const dateRange = user && (
+        <div
+            style={{
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr auto 1fr',
+                alignItems: 'center',
+                justifyItems: 'center',
+            }}
+        >
+            {renderShiftBack()}
+            <DatePicker
+                variant="inline"
+                style={{
+                    width: '85px',
+                }}
+                format={'YYYY-MM-DD'}
+                value={endDate ? moment(endDate).toDate() : null}
+                onChange={(date) => {
+                    setEndDate(endOfDayToISOString(date as any));
+                }}
+                onContextMenu={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    setShowShiftMenu(true);
+                    setShiftMenuAnchor(event.currentTarget);
+                }}
+            />
+            {renderShiftMenu()}
+            {renderShiftForward()}
+            {renderEndDateIntervalSelect()}
+        </div>
+    );
+
     return (
-        <AppBar position="sticky">
-            <Toolbar className={cls.toolbar}>
-                <Typography variant="h6" color="inherit">
-                    {projects.length ? (
-                        <Paper className={cls.paper}>
-                            <MuiSelectNative
-                                onChange={(o) => {
-                                    const url = new URL(window.location.href);
+        <>
+            <AppBar position="sticky">
+                <Toolbar className={cls.toolbar}>
+                    <Typography variant="h6" color="inherit">
+                        {projects.length ? (
+                            <Paper className={cls.paper}>
+                                <MuiSelectNative
+                                    onChange={(o) => {
+                                        const url = new URL(
+                                            window.location.href,
+                                        );
 
-                                    url.searchParams.set(
-                                        'projectId',
-                                        o.value.toString(),
-                                    );
+                                        url.searchParams.set(
+                                            'projectId',
+                                            o.value.toString(),
+                                        );
 
-                                    window.location.href = mapUrlToFragment(
-                                        url,
-                                    );
-                                }}
-                                options={projects.map((p) => ({
-                                    label: p.name,
-                                    value: p.id,
-                                }))}
-                                value={{
-                                    value: selectedProject.id,
-                                }}
-                                valueType="number"
-                            />
+                                        window.location.href = mapUrlToFragment(
+                                            url,
+                                        );
+                                    }}
+                                    options={projects.map((p) => ({
+                                        label: p.name,
+                                        value: p.id,
+                                    }))}
+                                    value={{
+                                        value: selectedProject.id,
+                                    }}
+                                    valueType="number"
+                                />
+                            </Paper>
+                        ) : (
+                            document.title
+                        )}
+                    </Typography>
+                    {!isSmall && (
+                        <Paper
+                            style={{
+                                position: 'absolute',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                            }}
+                        >
+                            {dateRange}
                         </Paper>
-                    ) : (
-                        document.title
                     )}
-                </Typography>
-                {user && (
-                    <Paper
+                    <div
                         style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'auto 1fr auto 1fr',
-                            alignItems: 'center',
-                            justifyItems: 'center',
-                            ...(isSmall
-                                ? {
-                                      position: 'fixed',
-                                      display: showDateRange ? 'block' : 'none',
-                                      top: Sizes.HEADER_SIZE,
-                                  }
-                                : {
-                                      position: 'absolute',
-                                      left: '50%',
-                                      transform: 'translateX(-50%)',
-                                  }),
+                            flex: 1,
                         }}
                     >
-                        {renderShiftBack()}
-                        <DatePicker
-                            variant="inline"
-                            style={{
-                                width: '85px',
-                            }}
-                            format={'YYYY-MM-DD'}
-                            value={endDate ? moment(endDate).toDate() : null}
-                            onChange={(date) => {
-                                setEndDate(endOfDayToISOString(date as any));
-                            }}
-                            onContextMenu={(event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-
-                                setShowShiftMenu(true);
-                                setShiftMenuAnchor(event.currentTarget);
-                            }}
-                        />
-                        {renderShiftMenu()}
-                        {renderShiftForward()}
-                        {renderEndDateIntervalSelect()}
-                    </Paper>
-                )}
-                <div
-                    style={{
-                        flex: 1,
-                    }}
-                >
-                    <div style={{float: 'right', display: 'flex'}}>
-                        {user && isSmall && (
-                            <IconButton onClick={handleToggleDateRange}>
-                                <IconDateIcon htmlColor="white" />
-                            </IconButton>
-                        )}
-                        {props.showCurrenciesDrawer && (
-                            <IconButton
-                                onClick={onClickCurrenciesDrawerTrigger}
-                            >
-                                <IconMonetizationOn htmlColor="white" />
-                            </IconButton>
-                        )}
-                        <IconButton
-                            onClick={() => setPrivacyToggle(!privacyToggle)}
-                        >
-                            {privacyToggle ? (
-                                <IconVisibilityOff htmlColor="white" />
-                            ) : (
-                                <IconVisibility htmlColor="white" />
+                        <div style={{float: 'right', display: 'flex'}}>
+                            {user && (
+                                <IconButton
+                                    onClick={() => setDrawerIsOpen(true)}
+                                >
+                                    <IconMenu htmlColor="white" />
+                                </IconButton>
                             )}
-                        </IconButton>
-                        {user && (
-                            <IconButton onClick={onClickRefresh}>
-                                <IconRefresh htmlColor="white" />
-                            </IconButton>
-                        )}
-                        {user && (
-                            <IconButton onClick={props.onLogout}>
-                                <IconExitToApp htmlColor="white" />
-                            </IconButton>
-                        )}
+                        </div>
                     </div>
-                </div>
-            </Toolbar>
-        </AppBar>
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                anchor="right"
+                open={drawerIsOpen}
+                onClose={() => setDrawerIsOpen(false)}
+            >
+                <List>
+                    {isSmall && (
+                        <>
+                            <ListItem disableGutters>{dateRange}</ListItem>
+                            <Divider />
+                        </>
+                    )}
+                    <ListItem
+                        button
+                        onClick={() => setPrivacyToggle(!privacyToggle)}
+                    >
+                        <ListItemIcon>
+                            {privacyToggle ? (
+                                <IconVisibilityOff />
+                            ) : (
+                                <IconVisibility />
+                            )}
+                        </ListItemIcon>
+                        <ListItemText primary="Privacy Mode" />
+                    </ListItem>
+                    <ListItem button onClick={onClickRefresh}>
+                        <ListItemIcon>
+                            <IconRefresh />
+                        </ListItemIcon>
+                        <ListItemText primary="Reload" />
+                    </ListItem>
+                    <ListItem button onClick={props.onLogout}>
+                        <ListItemIcon>
+                            <IconExitToApp />
+                        </ListItemIcon>
+                        <ListItemText primary="Logout" />
+                    </ListItem>
+                    <Divider />
+                    {isCurrenciesDrawerReady() && (
+                        <ListItem disableGutters>
+                            <CurrenciesDrawerContent />
+                        </ListItem>
+                    )}
+                </List>
+            </Drawer>
+        </>
     );
 };
 
