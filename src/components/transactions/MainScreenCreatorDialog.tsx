@@ -1,27 +1,14 @@
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from '@material-ui/core';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {ButtonProgress} from 'components/loaders';
 
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
-import {
-    TransactionForm,
-    TransactionFormState,
-    TransactionModel,
-} from 'components/transactions/types';
+import {TransactionForm, TransactionModel} from 'components/transactions/types';
 import {dialog} from 'defs/styles';
 import {parseCRUDError} from 'parsers';
 import * as React from 'react';
-import {useMoneyLocations, useBootstrap} from 'state/hooks';
-import {
-    Accounts,
-    Bootstrap,
-} from 'types';
+import {useBootstrap, useMoneyLocations} from 'state/hooks';
+import {Accounts, Bootstrap} from 'types';
 
 type TypeProps = {
     getFormDefaults: (props: {
