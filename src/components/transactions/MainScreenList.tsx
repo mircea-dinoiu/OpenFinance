@@ -709,6 +709,24 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             this.props.dispatch(onRefreshWidgets());
         }
     };
+    handleSkip = async () => {
+        const updated: Partial<TransactionModel>[] = [];
+
+        this.selectedItems.forEach((item) => {
+            if (item.repeat != null) {
+                updated.push({
+                    id: item.id,
+                    created_at: advanceRepeatDate(item).created_at,
+                    ...mapItemToRepeatedUpdates(item),
+                });
+            }
+        });
+
+        if (updated.length) {
+            await this.handleRequestUpdate(updated);
+            this.props.dispatch(onRefreshWidgets());
+        }
+    };
 
     getContextMenuItemsProps() {
         return {
@@ -717,6 +735,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             onClickDelete: this.handleToggleDeleteDialog,
             onClickDuplicate: this.handleDuplicate,
             onClickDetach: this.handleDetach,
+            onClickSkip: this.handleSkip,
             onClickMerge: this.handleMerge,
             onCloseContextMenu: this.handleCloseContextMenu,
 

@@ -10,6 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 import DuplicateIcon from '@material-ui/icons/FileCopy';
 import DetachIcon from '@material-ui/icons/ViewAgenda';
+import IconSkip from '@material-ui/icons/SkipNext';
 import MergeIcon from '@material-ui/icons/MergeType';
 import LockIcon from '@material-ui/icons/Lock';
 import IconDrafts from '@material-ui/icons/Drafts';
@@ -25,6 +26,7 @@ export type TypeContextMenuItemsProps = {
     onClickDelete: TypeOnClick;
     onClickDuplicate: TypeOnClick;
     onClickDetach: TypeOnClick;
+    onClickSkip: TypeOnClick;
     onClickMerge: TypeOnClick;
     onClickDraft: TypeOnClick;
     onClickReviewed: TypeOnClick;
@@ -40,6 +42,7 @@ export function ContextMenuItems({
     onClickDelete,
     onClickDuplicate,
     onClickDetach,
+    onClickSkip,
 
     onClickDraft,
     onClickReviewed,
@@ -84,6 +87,12 @@ export function ContextMenuItems({
                     disabled: disabledForZero,
                     icon: DetachIcon,
                     text: 'Detach',
+                },
+                {
+                    onClick: onClickSkip,
+                    disabled: disabledForZero,
+                    icon: IconSkip,
+                    text: 'Skip',
                 },
                 {
                     onClick: onClickMerge,
