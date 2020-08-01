@@ -68,14 +68,16 @@ export const TransactionReviewAccordion = ({
                     )}
                     <Button
                         variant="contained"
+                        color="secondary"
                         fullWidth={true}
-                        onClick={() =>
+                        onClick={() => {
                             onTransactionChange(
                                 formToModel(formValues.current, {
                                     user: bootstrap,
                                 }),
-                            )
-                        }
+                            );
+                            setExpanded(false);
+                        }}
                     >
                         Save
                     </Button>
