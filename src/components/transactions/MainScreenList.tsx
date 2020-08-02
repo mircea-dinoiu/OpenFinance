@@ -6,7 +6,6 @@ import {
     FormControlLabel,
     Menu,
     Paper,
-    TextField,
 } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
@@ -46,12 +45,7 @@ import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
-import {
-    greyedOut,
-    spacingMedium,
-    spacingSmall,
-    stickyHeaderTop,
-} from 'defs/styles';
+import {greyedOut} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import * as H from 'history';
@@ -66,13 +60,7 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
-import {
-    Accounts,
-    Bootstrap,
-    Currencies,
-    GlobalState,
-    ScreenQueries,
-} from 'types';
+import {Accounts, Bootstrap, Currencies, GlobalState, ScreenQueries} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';
