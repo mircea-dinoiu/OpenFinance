@@ -7,4 +7,6 @@ export enum Action {
 
     SHOW_SNACKBAR = 'SHOW_SNACKBAR',
     HIDE_SNACKBAR = 'HIDE_SNACKBAR',
+
+    SUMMARY_ASSIGNED = '@summary/assigned'
 }

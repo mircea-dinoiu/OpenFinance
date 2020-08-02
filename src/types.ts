@@ -1,6 +1,7 @@
 import {AlertProps} from '@material-ui/lab';
 import * as React from 'react';
 import {Project} from 'state/projects';
+import {Summary} from 'state/summary';
 
 export type ScreenQueries = {
     isSmall: boolean;
@@ -91,4 +92,5 @@ export type GlobalState = {
     refreshWidgets: string;
     user: Bootstrap;
     snackbars: Snackbar[];
+    summary: Summary;
 };

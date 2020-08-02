@@ -4,7 +4,6 @@ import {
     FormControlLabel,
     FormGroup,
     FormLabel,
-    InputAdornment,
     List,
     ListItem,
     ListItemAvatar,
@@ -18,6 +17,7 @@ import {
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {MuiSelectNative} from 'components/dropdowns';
+import {TransactionAmountFields} from 'components/transactions/TransactionAmountFields';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
 import {TransactionNameField} from 'components/transactions/TransactionNameField';
 import {TransactionForm} from 'components/transactions/types';
@@ -29,7 +29,6 @@ import {
     spacingLarge,
     spacingSmall,
 } from 'defs/styles';
-import {findCurrencyById} from 'helpers/currency';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {sumArray} from 'js/utils/numbers';
 import {sortBy} from 'lodash';
@@ -133,66 +132,12 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
     }
 
     renderSum() {
-        const currencyId = this.props.moneyLocations.find(
-            (each) => each.id == this.state.paymentMethod,
-        )?.currency_id;
-
         return (
-            <SumContainer>
-                <div>
-                    <TextField
-                        label="Amount"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    {this.state.paymentMethod
-                                        ? currencyId &&
-                                          findCurrencyById(
-                                              currencyId,
-                                              this.props.currencies,
-                                          ).iso_code
-                                        : ''}
-                                </InputAdornment>
-                            ),
-                        }}
-                        value={this.state.sum}
-                        fullWidth={true}
-                        type="number"
-                        margin="none"
-                        style={{
-                            marginTop: '2px',
-                        }}
-                        onChange={(event) =>
-                            this.setState({sum: event.target.value as any})
-                        }
-                    />
-                </div>
-                <div>
-                    <TextField
-                        label="Weight (grams)"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        value={this.state.weight}
-                        fullWidth={true}
-                        type="number"
-                        margin="none"
-                        style={{
-                            marginTop: '2px',
-                        }}
-                        onChange={(event) =>
-                            this.setState({
-                                weight: event.target.value
-                                    ? Number(event.target.value)
-                                    : null,
-                            })
-                        }
-                    />
-                </div>
-            </SumContainer>
+            <TransactionAmountFields
+                accountId={this.state.paymentMethod}
+                value={this.state.sum}
+                onChange={(value) => this.setState({sum: value})}
+            />
         );
     }
 
@@ -356,6 +301,28 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                 </div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
+                <div style={boxStyle}>
+                    <TextField
+                        label="Weight (grams)"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={this.state.weight}
+                        fullWidth={true}
+                        type="number"
+                        margin="none"
+                        style={{
+                            marginTop: '2px',
+                        }}
+                        onChange={(event) =>
+                            this.setState({
+                                weight: event.target.value
+                                    ? Number(event.target.value)
+                                    : null,
+                            })
+                        }
+                    />
+                </div>
                 <div style={boxStyle}>{this.renderDateTime()}</div>
                 <div style={boxStyle}>
                     <TransactionCategoriesField
@@ -467,12 +434,6 @@ const TypeStatusFlagsContainer = styled.div`
         grid-template-rows: 1fr 1fr;
         grid-gap: ${spacingSmall};
     }
-`;
-
-const SumContainer = styled.div`
-    display: grid;
-    grid-gap: ${gridGap};
-    grid-template-columns: 1fr 1fr;
 `;
 
 const RepeatContainer = styled.div`

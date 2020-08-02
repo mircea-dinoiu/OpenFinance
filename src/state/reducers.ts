@@ -3,6 +3,7 @@ import {combineReducers} from 'redux';
 import {currencies} from 'state/currencies';
 import {Action} from 'state/defs';
 import {privacyToggle} from 'state/privacyToggle';
+import {summaryReducer} from 'state/summary';
 import {bindToUpdateState} from 'state/utils';
 import {ScreenQueries, Snackbar, User} from 'types';
 import {getScreenQueries} from 'utils/getScreenQueries';
@@ -63,4 +64,5 @@ export const combinedReducers = combineReducers({
     moneyLocationTypes,
     snackbars,
     privacyToggle,
+    summary: summaryReducer,
 });

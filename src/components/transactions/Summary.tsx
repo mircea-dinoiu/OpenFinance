@@ -10,7 +10,11 @@ import {
 } from 'components/transactions/helpers';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
-import {BalanceByLocation, SummaryModel, SummaryResults} from 'components/transactions/types';
+import {
+    BalanceByLocation,
+    SummaryModel,
+    SummaryResults,
+} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {spacingMedium, spacingSmall} from 'defs/styles';
@@ -24,6 +28,7 @@ import {
     useRefreshWidgets,
 } from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
+import {SummaryKey} from 'state/summary';
 import {AccountType, User} from 'types';
 import {getStartDate, useEndDate} from 'utils/dates';
 import {createXHR} from 'utils/fetch';
@@ -153,6 +158,7 @@ export const Summary = () => {
                         renderDescription({reference}: {reference: string}) {
                             return <MoneyLocationDisplay id={reference} />;
                         },
+                        globalStateKey: SummaryKey.BALANCE_BY_ACCOUNT,
                         entityNameField: 'name',
                     }}
                 />

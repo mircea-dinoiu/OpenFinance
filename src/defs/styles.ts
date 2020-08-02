@@ -33,7 +33,7 @@ export const theme = createMuiTheme({
         primary: blue,
         // type: 'dark',
         background: {
-            default: grey[300]
-        }
+            default: grey[300],
+        },
     },
 });
