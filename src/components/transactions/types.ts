@@ -55,7 +55,6 @@ export type SummarySubCategoryModel = {
 
 export type BalanceByLocation = Record<number, number>;
 
-export type TransactionType = 'deposit' | 'withdrawal';
 export type TransactionRepeat = $Values<typeof RepeatOption>;
 export type TransactionForm = {
     sum: number;
@@ -71,7 +70,6 @@ export type TransactionForm = {
     categories: number[];
     repeatOccurrences: number | null;
     repeat: TransactionRepeat | null;
-    type: TransactionType;
     status: TransactionStatus;
 };
 export type TransactionFormState = Omit<TransactionForm, 'id'>;
@@ -89,7 +87,6 @@ export type TransactionModel = {
     repeat_occurrences: number | null;
     repeat: null | TransactionRepeat;
     persist: boolean;
-    type: TransactionType;
     created_at: number;
     updated_at: number;
     hidden: boolean;

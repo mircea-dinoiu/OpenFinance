@@ -1,4 +1,4 @@
-import {TransactionForm, TransactionFormState} from 'components/transactions/types';
+import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import moment from 'moment';
 import {Accounts, Bootstrap} from 'types';
@@ -12,7 +12,6 @@ export const getFormDefaults = ({
 }): TransactionForm => {
     return {
         description: '',
-        type: 'withdrawal',
         status: TransactionStatus.pending,
         sum: 0,
         paymentMethod: mls[0]?.id,

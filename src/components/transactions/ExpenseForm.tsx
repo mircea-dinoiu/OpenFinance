@@ -20,7 +20,7 @@ import {DateTimePicker} from '@material-ui/pickers';
 import {MuiSelectNative} from 'components/dropdowns';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
 import {TransactionNameField} from 'components/transactions/TransactionNameField';
-import {TransactionForm, TransactionType} from 'components/transactions/types';
+import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
 import {
@@ -369,39 +369,10 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
                 <div style={boxStyle}>{this.renderRepeat()}</div>
                 <TypeStatusFlagsContainer>
-                    <div>{this.renderType()}</div>
                     <div>{this.renderStatus()}</div>
                     <div>{this.renderFlags()}</div>
                 </TypeStatusFlagsContainer>
             </div>
-        );
-    }
-
-    renderType() {
-        return (
-            <>
-                <FormLabel>Type</FormLabel>
-                <RadioGroup
-                    value={this.state.type}
-                    onChange={(event) => {
-                        this.setState({
-                            type: event.target.value as TransactionType,
-                        });
-                    }}
-                    row
-                >
-                    <FormControlLabelInline
-                        value="withdrawal"
-                        control={<Radio color="primary" />}
-                        label="Withdrawal"
-                    />
-                    <FormControlLabelInline
-                        value="deposit"
-                        control={<Radio color="primary" />}
-                        label="Deposit"
-                    />
-                </RadioGroup>
-            </>
         );
     }
 
@@ -488,12 +459,12 @@ export const ExpenseForm = (ownProps: TypeOwnProps) => {
 
 const TypeStatusFlagsContainer = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-gap: ${spacingLarge};
 
     @media ${screenQuerySmall} {
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
         grid-gap: ${spacingSmall};
     }
 `;

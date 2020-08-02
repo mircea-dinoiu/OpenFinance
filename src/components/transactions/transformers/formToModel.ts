@@ -15,7 +15,6 @@ export const formToModel = (
 
     return {
         ...form,
-        sum: (form.type === 'deposit' ? 1 : -1) * form.sum,
         item: form.description,
         // @ts-ignore
         created_at: form.date.toISOString(),

@@ -14,12 +14,10 @@ export const AmountDisplay = ({
         item,
         currencies,
     });
-    const sign = item.sum > 0 ? '+' : '';
 
     return (
         <>
-            {sign}
-            {numericValue(Math.abs(item.sum), {
+            {numericValue(item.sum, {
                 currency: currencyISOCode,
             })}
         </>
