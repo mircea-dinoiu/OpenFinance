@@ -51,7 +51,7 @@ export const TransactionReviewAccordion = ({
                             {new Date(transaction.created_at).toLocaleString()}
                             {' | '}
                             {formatCurrency(
-                                -transaction.sum,
+                                transaction.sum,
                                 currencyCode as string,
                             )}
                         </>
