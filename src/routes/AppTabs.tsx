@@ -1,8 +1,16 @@
-import {BottomNavigation, BottomNavigationAction, Paper, Tab, Tabs} from '@material-ui/core';
+import {
+    BottomNavigation,
+    BottomNavigationAction,
+    Button,
+    Paper,
+    Tab,
+    Tabs,
+} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 import AccountBalance from '@material-ui/icons/AccountBalance';
 import TrendingDown from '@material-ui/icons/TrendingDown';
+import clsx from 'clsx';
 import {Accounts} from 'components/accounts/Accounts';
 import {AccountTypes} from 'components/accountTypes/AccountTypes';
 import {Categories} from 'components/categories/Categories';
@@ -11,6 +19,7 @@ import {Expenses} from 'components/transactions/Expenses';
 import {Summary} from 'components/transactions/Summary';
 import {spacingSmall} from 'defs/styles';
 import {paths} from 'js/defs';
+import {useState} from 'react';
 import * as React from 'react';
 import {Redirect, Route, useHistory, useLocation} from 'react-router-dom';
 import {useScreenSize} from 'state/hooks';
@@ -80,6 +89,7 @@ const HomeLarge = () => {
         paths.accounts,
         paths.accountTypes,
     ];
+    const [summaryIsPinned, setSummaryIsPinned] = useState(false);
     const cls = useStyles();
 
     return (
@@ -103,10 +113,33 @@ const HomeLarge = () => {
                 path={paths.transactions}
                 render={() => (
                     <TransactionsContainer>
-                        <Paper className={cls.summaryFloating} elevation={10}>
+                        <Paper
+                            className={clsx(
+                                cls.summaryFloating,
+                                summaryIsPinned && cls.summaryFloatingPinned,
+                            )}
+                            elevation={10}
+                        >
+                            <div className={cls.pinContainer}>
+                                <Button
+                                    size="small"
+                                    variant="outlined"
+                                    onClick={() =>
+                                        setSummaryIsPinned(!summaryIsPinned)
+                                    }
+                                >
+                                    {summaryIsPinned ? 'Unpin' : 'Pin'}
+                                </Button>
+                            </div>
                             <Summary />
                         </Paper>
-                        <div className={cls.transactionsContentContainer}>
+                        <div
+                            className={clsx(
+                                cls.transactionsContentContainer,
+                                summaryIsPinned &&
+                                    cls.transactionsContentContainerPinned,
+                            )}
+                        >
                             <Expenses />
                         </div>
                     </TransactionsContainer>
@@ -129,11 +162,15 @@ const TransactionsContainer = styled.div`
     flex-grow: 1;
 `;
 
+const sidebarWidth = 500;
+const sidebarCollapsedWidth = 50;
+const gapWidth = 15;
+
 const useStyles = makeStyles({
     summaryFloating: {
-        width: '500px',
+        width: `${sidebarWidth}px`,
         position: 'absolute',
-        transform: 'translateX(-450px)',
+        transform: `translateX(-${sidebarWidth - sidebarCollapsedWidth}px)`,
         zIndex: 2,
         transition: 'all 0.5s',
         '&:hover': {
@@ -141,7 +178,18 @@ const useStyles = makeStyles({
         },
         padding: spacingSmall,
     },
+    summaryFloatingPinned: {
+        transform: 'translateX(0)',
+    },
+    pinContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+    },
     transactionsContentContainer: {
-        paddingLeft: '65px',
+        transition: 'all 0.5s',
+        paddingLeft: `${sidebarCollapsedWidth + gapWidth}px`,
+    },
+    transactionsContentContainerPinned: {
+        paddingLeft: `${sidebarWidth + gapWidth}px`,
     },
 });
