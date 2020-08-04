@@ -137,6 +137,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                 accountId={this.state.paymentMethod}
                 value={this.state.sum}
                 onChange={(value) => this.setState({sum: value})}
+                balanceOffset={this.props.initialValues.sum}
             />
         );
     }

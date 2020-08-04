@@ -12,36 +12,35 @@ export const TransactionAmountFields = ({
     accountId,
     value,
     onChange,
+    balanceOffset,
 }: {
     accountId: number;
     value: number;
     onChange: (value: number) => void;
+    balanceOffset: number;
 }) => {
     const accounts = useMoneyLocations();
     const currencies = useCurrencies();
     const balanceByAccount = useSummary(SummaryKey.BALANCE_BY_ACCOUNT);
-    const balance = balanceByAccount?.[accountId] ?? 0;
+    const balance = (balanceByAccount?.[accountId] ?? 0) - balanceOffset;
 
     const currencyId = accounts.find((each) => each.id == accountId)
         ?.currency_id;
+    const startAdornment = (
+        <InputAdornment position="start">
+            {accountId
+                ? currencyId &&
+                  findCurrencyById(currencyId, currencies).iso_code
+                : ''}
+        </InputAdornment>
+    );
 
     return (
         <TransactionAmountFieldsStyled>
             <TextField
                 label="Amount"
-                InputLabelProps={{
-                    shrink: true,
-                }}
                 InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            {accountId
-                                ? currencyId &&
-                                  findCurrencyById(currencyId, currencies)
-                                      .iso_code
-                                : ''}
-                        </InputAdornment>
-                    ),
+                    startAdornment,
                 }}
                 value={value}
                 fullWidth={true}
@@ -56,6 +55,9 @@ export const TransactionAmountFields = ({
             />
             <TextField
                 tabIndex={-1}
+                InputProps={{
+                    startAdornment,
+                }}
                 label="Future Balance (Based on Summary)"
                 value={financialNum(balance + Number(value || 0))}
                 onChange={(event) => {
