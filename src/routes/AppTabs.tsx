@@ -89,7 +89,7 @@ const HomeLarge = () => {
         paths.accounts,
         paths.accountTypes,
     ];
-    const [summaryIsPinned, setSummaryIsPinned] = useState(false);
+    const [summaryIsPinned, setSummaryIsPinned] = useState(true);
     const cls = useStyles();
 
     return (
