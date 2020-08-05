@@ -162,7 +162,7 @@ const TransactionsContainer = styled.div`
     flex-grow: 1;
 `;
 
-const sidebarWidth = 500;
+const sidebarWidth = 400;
 const sidebarCollapsedWidth = 50;
 const gapWidth = 15;
 
