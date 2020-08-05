@@ -62,9 +62,9 @@ export const SummaryLazyCategory = <Raw, Ent extends {id: number}>({
                 action={
                     <SummaryExpander
                         isExpanded={expanded}
-                        onChange={setExpanded}
                     />
                 }
+                onClick={() => setExpanded(!expanded)}
                 title={title}
             />
 

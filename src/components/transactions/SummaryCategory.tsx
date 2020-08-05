@@ -73,8 +73,14 @@ export const SummaryCategory = <Ent extends {id: number}>(
         : expandedState;
     const [excluded, setExcluded] = React.useState({});
 
-    const handleToggleExcluded = (id: string) => {
-        setExcluded({...excluded, [id]: !excluded[id]});
+    const handleToggleExcluded = (ids: string[]) => {
+        const next = {...excluded};
+
+        for (const id of ids) {
+            next[id] = !excluded[id];
+        }
+
+        setExcluded(next);
     };
 
     const numericValueProxy = (
@@ -97,12 +103,8 @@ export const SummaryCategory = <Ent extends {id: number}>(
                 style={{backgroundColor}}
                 title={title}
                 classes={cardHeaderClasses}
-                action={
-                    <SummaryExpander
-                        isExpanded={Boolean(expanded)}
-                        onChange={setExpanded}
-                    />
-                }
+                onClick={() => setExpanded(!expanded)}
+                action={<SummaryExpander isExpanded={Boolean(expanded)} />}
                 subheader={
                     showSumInHeader && (
                         <div style={{color: headerColor}}>

@@ -5,6 +5,7 @@ export const headerColor = 'rgba(255, 255, 255, 0.9)';
 export const useCardHeaderStyles = makeStyles({
     root: {
         color: headerColor,
+        cursor: 'pointer',
     },
     title: {
         fontSize: 'medium',

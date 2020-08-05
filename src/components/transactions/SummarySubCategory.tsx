@@ -1,6 +1,7 @@
-import {CardHeader, Checkbox, FormControlLabel} from '@material-ui/core';
+import {CardHeader, Checkbox} from '@material-ui/core';
 import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
+import clsx from 'clsx';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
 import {SummaryModel} from 'components/transactions/types';
@@ -20,7 +21,7 @@ export const SummarySubCategory = <Ent,>(props: {
     ) => JSX.Element;
     excluded: {};
     currencies: Currencies;
-    onToggleExcluded: (id: string) => void;
+    onToggleExcluded: (ids: string[]) => void;
     entities: Ent[];
     entityIdField: keyof Ent;
     entityNameField: keyof Ent;
@@ -55,12 +56,8 @@ export const SummarySubCategory = <Ent,>(props: {
                         cursor: 'pointer',
                         color: theme.palette.text.primary,
                     }}
-                    action={
-                        <SummaryExpander
-                            isExpanded={expanded}
-                            onChange={setExpanded}
-                        />
-                    }
+                    onClick={() => setExpanded(!expanded)}
+                    action={<SummaryExpander isExpanded={expanded} />}
                     title={
                         Number(id) === 0 ? (
                             <em>Unclassified</em>
@@ -70,60 +67,66 @@ export const SummarySubCategory = <Ent,>(props: {
                             )?.[entityNameField]
                         )
                     }
-                    subheader={props.numericValueFn(
-                        items.reduce(
-                            // @ts-ignore
-                            (acc, each) =>
-                                acc +
-                                (props.excluded[each.reference]
-                                    ? 0
-                                    : convertCurrencyToDefault(
-                                          each.sum,
-                                          each.currencyId,
-                                          props.currencies,
-                                      )),
-                            0,
-                        ),
-                    )}
                 />
             )}
             {(shouldGroup === false || expanded) && (
                 <ul className={cls.list}>
                     {items.map((each) => (
                         <li className={cls.listItem}>
-                            <FormControlLabel
-                                className={cls.label}
-                                control={
-                                    <Checkbox
-                                        style={{
-                                            padding: `0 ${spacingSmall} 0 ${spacingMedium}`,
-                                        }}
-                                        checked={
-                                            !props.excluded[each.reference]
-                                        }
-                                        onChange={() =>
-                                            props.onToggleExcluded(
-                                                each.reference,
-                                            )
-                                        }
-                                        color="default"
-                                    />
-                                }
-                                label={
-                                    <div style={{fontWeight: 300}}>
-                                        {renderDescription
-                                            ? renderDescription(each)
-                                            : each.description}
-                                    </div>
-                                }
-                            />
+                            <div>
+                                {renderDescription
+                                    ? renderDescription(each)
+                                    : each.description}
+                            </div>
                             <div>
                                 {props.numericValueFn(each.sum, {
                                     currencyId: Number(each.currencyId),
                                 })}
                             </div>
+                            <Checkbox
+                                className={cls.checkbox}
+                                checked={!props.excluded[each.reference]}
+                                onChange={() =>
+                                    props.onToggleExcluded([each.reference])
+                                }
+                                color="default"
+                            />
                         </li>
                     ))}
+                    <li className={clsx(cls.listItem, cls.listItemTotal)}>
+                        <div>TOTAL</div>
+                        <div>
+                            {props.numericValueFn(
+                                items.reduce(
+                                    // @ts-ignore
+                                    (acc, each) =>
+                                        acc +
+                                        (props.excluded[each.reference]
+                                            ? 0
+                                            : convertCurrencyToDefault(
+                                                  each.sum,
+                                                  each.currencyId,
+                                                  props.currencies,
+                                              )),
+                                    0,
+                                ),
+                            )}
+                        </div>
+                        <div>
+                            <Checkbox
+                                className={cls.checkbox}
+                                checked={items.every(
+                                    (item) => !props.excluded[item.reference],
+                                )}
+                                onChange={() =>
+                                    props.onToggleExcluded(
+                                        items.map((item) => item.reference),
+                                    )
+                                }
+                                color="default"
+                            />
+                        </div>
+                    </li>
                 </ul>
             )}
         </div>
@@ -131,12 +134,17 @@ export const SummarySubCategory = <Ent,>(props: {
 };
 
 const useStyles = makeStyles({
+    checkbox: {
+        padding: 0,
+    },
     list: {
         padding: 0,
         margin: 0,
     },
     listItem: {
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '1fr auto auto',
+        gridGap: spacingSmall,
         borderBottom: `1px solid ${grey[200]}`,
         padding: `${spacingSmall} 0`,
         alignItems: 'center',
@@ -144,7 +152,8 @@ const useStyles = makeStyles({
             backgroundColor: grey[100],
         },
     },
-    label: {
-        flexGrow: 1,
+    listItemTotal: {
+        backgroundColor: grey[100],
+        fontWeight: 500,
     },
 });

@@ -48,7 +48,8 @@ const NumericValue = ({
         <span>
             <strong
                 className={cls.value}
-                onClick={() => {
+                onClick={(e) => {
+                    e.stopPropagation()
                     copyText(value);
                 }}
             >

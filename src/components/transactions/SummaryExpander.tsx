@@ -4,13 +4,11 @@ import React from 'react';
 
 export const SummaryExpander = ({
     isExpanded,
-    onChange,
 }: {
     isExpanded: boolean;
-    onChange: (value: boolean) => unknown;
 }) => {
     return (
-        <IconButton color="inherit" onClick={() => onChange(!isExpanded)}>
+        <IconButton color="inherit">
             {isExpanded ? <UnfoldLess /> : <UnfoldMore />}
         </IconButton>
     );
