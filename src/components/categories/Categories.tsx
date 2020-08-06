@@ -14,16 +14,17 @@ export const Categories = () => {
     return (
         <Paper style={{padding: spacingMedium}}>
             <TableWithInlineEditing<Category>
-            data={rows}
-            api={routes.categories}
-            editableFields={['name', 'color']}
-            onRefresh={refresh}
-            allowDelete={true}
+                data={rows}
+                api={routes.categories}
+                editableFields={['name', 'color']}
+                onRefresh={refresh}
+                defaultSorted={[{id: 'name', desc: false}]}
+                allowDelete={true}
                 columns={(editor, setEditor) => [
                     {
-                        id: 'name',
                         Header: 'Name',
-                        accessor: (row) =>
+                        accessor: 'name',
+                        Cell: ({original: row}) =>
                             editor && editor.id === row.id ? (
                                 <TextField
                                     value={editor.name}
@@ -40,9 +41,9 @@ export const Categories = () => {
                             ),
                     },
                     {
-                        id: 'color',
+                        accessor: 'color',
                         Header: 'Color',
-                        accessor: (row) =>
+                        Cell: ({original: row}) =>
                             editor && editor.id === row.id ? (
                                 <TextField
                                     value={editor.color}

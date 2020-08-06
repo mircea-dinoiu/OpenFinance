@@ -19,11 +19,12 @@ export const AccountTypes = () => {
                 editableFields={['name']}
                 onRefresh={refresh}
                 allowDelete={false}
+                defaultSorted={[{id: 'name', desc: false}]}
                 columns={(editor, setEditor) => [
                     {
-                        id: 'name',
+                        accessor: 'name',
                         Header: 'Name',
-                        accessor: (row) =>
+                        Cell: ({original: row}) =>
                             editor && editor.id === row.id ? (
                                 <TextField
                                     value={editor.name}

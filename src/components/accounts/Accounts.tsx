@@ -23,11 +23,12 @@ export const Accounts = () => {
                 editableFields={['name', 'type_id']}
                 onRefresh={refresh}
                 allowDelete={false}
+                defaultSorted={[{id: 'name', desc: false}]}
                 columns={(editor, setEditor) => [
                     {
-                        id: 'name',
+                        accessor: 'name',
                         Header: 'Name',
-                        accessor: (row) =>
+                        Cell: ({original: row}) =>
                             editor && editor.id === row.id ? (
                                 <TextField
                                     value={editor.name}
@@ -43,20 +44,24 @@ export const Accounts = () => {
                                 row.name
                             ),
                     },
-                    {id: 'status', Header: 'Status', accessor: (r) => r.status},
                     {
-                        id: 'currency',
+                        accessor: 'status',
+                        Header: 'Status',
+                        Cell: ({original: r}) => r.status,
+                    },
+                    {
+                        accessor: 'currency',
                         Header: 'Currency',
-                        accessor: (r) => {
+                        Cell: ({original: r}) => {
                             return Object.values(currencies).find(
                                 (c) => c.id === r.currency_id,
                             )?.iso_code;
                         },
                     },
                     {
-                        id: 'type',
+                        accessor: 'type',
                         Header: 'Type',
-                        accessor: (row) => {
+                        Cell: ({original: row}) => {
                             if (editor && editor.id === row.id) {
                                 const options = types.map((t) => ({
                                     value: t.id,
