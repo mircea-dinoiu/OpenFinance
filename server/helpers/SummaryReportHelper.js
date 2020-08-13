@@ -32,10 +32,6 @@ module.exports = {
         return this.safeNum(-filteredTransactions);
     },
 
-    formatMLName(id, {mlRecords}) {
-        return mlRecords.find((each) => each.id == id).name;
-    },
-
     addMLEntries({data, mls, mlRecords, html}) {
         const push = ({id, name, group, currencyId}) => {
             data.push({
