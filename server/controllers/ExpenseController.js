@@ -1,9 +1,4 @@
-const {
-    Expense: Model,
-    User,
-    MoneyLocation,
-    Category,
-} = require('../models');
+const {Expense: Model, User, MoneyLocation, Category} = require('../models');
 const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
 const {pickOwnProperties} = require('../helpers');
@@ -12,6 +7,7 @@ const defs = require('../../src/js/defs');
 const ofx = require('ofx');
 const moment = require('moment');
 const {QueryTypes} = require('sequelize');
+const {advanceRepeatDate} = require('../../src/js/helpers/repeatedModels');
 
 module.exports = class ExpenseController extends BaseController {
     Model = Model;
@@ -33,8 +29,7 @@ module.exports = class ExpenseController extends BaseController {
         categories: ['sometimes', ['isIdArray', Category]],
 
         repeat: ['sometimes', 'isRepeatValue'],
-        repeat_end_date: ['sometimes', 'isInt'],
-        repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
+        repeat_occurrences: ['sometimes', 'isInt'],
 
         weight: ['sometimes', 'isNotNegative', 'isInt'],
     };
@@ -55,49 +50,13 @@ module.exports = class ExpenseController extends BaseController {
         categories: ['sometimes', ['isIdArray', Category]],
 
         repeat: ['sometimes', 'isRepeatValue'],
-        repeat_end_date: ['sometimes', 'isInt'],
         repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
 
         weight: ['sometimes', 'isNotNegative', 'isInt'],
     };
 
     async updateRelations({record, model, req}) {
-        if (record.hasOwnProperty('categories')) {
-            await sql.query(
-                'DELETE FROM category_expense WHERE expense_id = ?',
-                {
-                    replacements: [model.id],
-                },
-            );
-
-            for (const id of record.categories) {
-                await sql.query(
-                    'INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)',
-                    {
-                        replacements: [id, model.id],
-                    },
-                );
-            }
-        }
-
-        if (record.hasOwnProperty('users')) {
-            const users = await this.getUsers(req);
-
-            for (const user of users) {
-                await sql.query(
-                    'UPDATE expense_user SET blame = ? WHERE expense_id = ? AND user_id = ?',
-                    {
-                        replacements: [
-                            record.users[user.id] || 0,
-                            model.id,
-                            user.id,
-                        ],
-                    },
-                );
-            }
-        }
-
-        return this.Model.scope('default').findOne({where: {id: model.id}});
+        return this.createRelations({record, model, req, cleanup: true});
     }
 
     getUsers(req) {
@@ -112,81 +71,115 @@ module.exports = class ExpenseController extends BaseController {
         );
     }
 
-    async createRelations({record, model, req}) {
-        if (record.hasOwnProperty('categories')) {
-            for (const id of record.categories) {
-                await sql.query(
-                    'INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)',
-                    {
-                        replacements: [id, model.id],
-                    },
-                );
+    async createRelations({record, model, req, cleanup = false}) {
+        const allModels = await this.withRepeatedModels({model, cleanup});
+        const users = await this.getUsers(req);
+
+        for (const m of allModels) {
+            if (record.hasOwnProperty('categories')) {
+                if (cleanup) {
+                    await sql.query(
+                        'DELETE FROM category_expense WHERE expense_id = ?',
+                        {
+                            replacements: [m.id],
+                        },
+                    );
+                }
+
+                for (const id of record.categories) {
+                    await sql.query(
+                        'INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)',
+                        {
+                            replacements: [id, m.id],
+                        },
+                    );
+                }
+            }
+
+            if (record.hasOwnProperty('users')) {
+                if (cleanup) {
+                    await sql.query(
+                        'DELETE FROM expense_user WHERE expense_id = ?',
+                        {
+                            replacements: [m.id],
+                        },
+                    );
+                }
+
+                for (const user of users) {
+                    await sql.query(
+                        'INSERT INTO expense_user (user_id, expense_id, blame, seen) VALUES (?, ?, ?, ?)',
+                        {
+                            replacements: [
+                                user.id,
+                                m.id,
+                                record.users[user.id] || 0,
+                                user.id === req.user.id,
+                            ],
+                        },
+                    );
+                }
             }
         }
 
-        const users = await this.getUsers(req);
+        return this.Model.scope('default').findOne({where: {id: model.id}});
+    }
 
-        for (const user of users) {
+    async withRepeatedModels({model, cleanup = false}) {
+        const models = [model];
+
+        if (model.repeat && model.repeat_occurrences) {
+            if (cleanup) {
+                await sql.query(
+                    'DELETE FROM expenses WHERE repeat_link_id = ?',
+                    {
+                        replacements: [model.id],
+                    },
+                );
+            }
+
+            while (models[models.length - 1].repeat_occurrences > 0) {
+                const prevModel = models[models.length - 1];
+                const {id, ...record} = prevModel.dataValues;
+                const payload = {
+                    ...advanceRepeatDate(record),
+                    repeat_occurrences: prevModel.repeat_occurrences - 1,
+                    repeat_link_id: prevModel.id,
+                };
+
+                models.push(await this.Model.create(payload));
+            }
+        } else if (cleanup) {
             await sql.query(
-                'INSERT INTO expense_user (user_id, expense_id, blame, seen) VALUES (?, ?, ?, ?)',
+                'UPDATE expenses SET repeat_link_id = NULL WHERE repeat_link_id = ?',
                 {
-                    replacements: [
-                        user.id,
-                        model.id,
-                        record.users[user.id] || 0,
-                        user.id === req.user.id,
-                    ],
+                    replacements: [model.id],
                 },
             );
         }
 
-        return this.Model.scope('default').findOne({where: {id: model.id}});
+        return models;
     }
 
     sanitizeValues(record, req, res) {
         const values = pickOwnProperties(record, [
             'sum',
             'money_location_id',
-            'repeat_occurrences',
             'weight',
             'fitid',
+            'favorite',
+            'hidden',
+            'created_at',
+            'repeat',
+            'repeat_occurrences',
         ]);
 
         if (record.hasOwnProperty('item')) {
             values.item = record.item.trim();
         }
 
-        if (record.hasOwnProperty('favorite')) {
-            values.favorite = record.favorite;
-        }
-
-        if (record.hasOwnProperty('hidden')) {
-            values.hidden = record.hidden;
-        }
-
-        if (record.hasOwnProperty('created_at')) {
-            values.created_at = record.created_at;
-        }
-
-        if (record.hasOwnProperty('repeat')) {
-            values.repeat = record.repeat;
-
-            if (values.repeat != null) {
-                if (record.status === 'finished') {
-                    values.status = 'pending';
-                }
-            } else {
-                values.repeat_occurrences = null;
-                values.repeat_end_date = null;
-            }
-        }
-
         if (record.hasOwnProperty('status') && values.status == null) {
             values.status = record.status;
-
-            if (values.status === 'finished') {
-                values.repeat = null;
-            }
         }
 
         values.project_id = req.projectId;
@@ -200,6 +193,14 @@ module.exports = class ExpenseController extends BaseController {
 
     sanitizeUpdateValues(record, req, res) {
         return this.sanitizeValues(record, req, res);
+    }
+
+    async destroyModel(model) {
+        await sql.query('DELETE FROM expenses WHERE repeat_link_id = ?', {
+            replacements: [model.id],
+        });
+
+        return super.destroyModel(model);
     }
 
     /**

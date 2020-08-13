@@ -9,15 +9,16 @@ import {Accounts} from 'types';
 import {useQueryParamState} from 'utils/url';
 
 export const mapItemToRepeatedUpdates = (item: TransactionModel) => {
-    const extra: {
-        repeat_occurrences?: number | null;
-    } = {};
+    const extra: Pick<
+        Partial<TransactionModel>,
+        'repeat_occurrences' | 'repeat'
+    > = {};
 
     if (item.repeat_occurrences) {
         extra.repeat_occurrences = item.repeat_occurrences - 1;
 
         if (extra.repeat_occurrences === 0) {
-            extra.repeat_occurrences = null;
+            extra.repeat = null;
         }
     }
 
@@ -29,6 +30,7 @@ export const mapItemToDetachedUpdates = (
 ): Partial<TransactionModel> => ({
     id: item.id,
     repeat: null,
+    repeat_occurrences: 0,
 });
 
 export const mergeItems = (

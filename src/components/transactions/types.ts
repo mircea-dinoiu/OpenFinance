@@ -68,7 +68,7 @@ export type TransactionForm = {
         [key: string]: number;
     };
     categories: number[];
-    repeatOccurrences: number | null;
+    repeatOccurrences: number;
     repeat: TransactionRepeat | null;
     status: TransactionStatus;
 };
@@ -84,9 +84,9 @@ export type TransactionModel = {
     users: {
         [key: string]: number;
     };
-    repeat_occurrences: number | null;
+    repeat_occurrences: number;
+    repeat_link_id: number | null,
     repeat: null | TransactionRepeat;
-    persist: boolean;
     created_at: number;
     updated_at: number;
     hidden: boolean;

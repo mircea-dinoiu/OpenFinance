@@ -30,7 +30,7 @@ const advanceRepeatDate = (obj, rawRepeats) => {
             break;
     }
 
-    newObject.created_at = date;
+    newObject.created_at = date.toDate();
 
     return newObject;
 };

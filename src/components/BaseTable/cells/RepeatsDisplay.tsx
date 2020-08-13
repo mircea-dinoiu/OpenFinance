@@ -10,17 +10,15 @@ export const RepeatsDisplay = ({item}: {item: TransactionModel}) => {
         ? RepeatOptions.filter((each) => each[0] === item.repeat)[0][1]
         : '';
     const repeatsDisplay = (
-        <span style={{fontSize: '1rem', color: grey[500]}}>
+        <span
+            style={{fontSize: '1rem', color: grey[500]}}
+            title={`${item.repeat_occurrences} occurrences`}
+        >
             {screenSize.isLarge
                 ? repeatsText
                 : repeatsText
                 ? `Repeats ${repeatsText}`
-                : 'Does not repeat'}
-            {item.repeat_occurrences && (
-                <>
-                    <br />({item.repeat_occurrences} occurrences)
-                </>
-            )}
+                : ''}
         </span>
     );
 

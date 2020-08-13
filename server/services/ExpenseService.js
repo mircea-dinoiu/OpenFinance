@@ -1,7 +1,6 @@
 const {pick} = require('lodash');
 const {Validator} = require('../validators');
 const {Expense: Model, sql} = require('../models');
-const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
 const {sanitizeFilters, sanitizeSorters} = require('../helpers');
 const defs = require('../../src/js/defs');
 const {
@@ -62,17 +61,11 @@ module.exports = {
             where.push(mapStartDateToSQL(input.start_date, Model));
             where.push(mapEndDateToSQL(input.end_date, Model));
 
-            let displayGenerated = 'yes';
-
             sanitizeFilters(input.filters).forEach(({id, value}) => {
                 switch (id) {
                     case 'item':
                         where.push(mapTextFilterToSQL(id, value.text));
                         where.push(mapFlagsToSQL(value));
-
-                        if (value.Generated) {
-                            displayGenerated = value.Generated;
-                        }
                         break;
                     case 'categories':
                         having.push(
@@ -127,16 +120,8 @@ module.exports = {
 
             return {
                 error: false,
-                json: RepeatedModelsHelper.filterClones(
-                    RepeatedModelsHelper.addClonesToRecords({
-                        records: await Model.scope('default').findAll(
-                            queryOpts,
-                        ),
-                        endDate: input.end_date,
-                        startDate: input.start_date,
-                        sorters,
-                    }),
-                    displayGenerated,
+                json: await Model.scope('default').findAll(
+                    queryOpts,
                 ),
             };
         }

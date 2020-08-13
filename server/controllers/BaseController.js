@@ -160,6 +160,10 @@ module.exports = class BaseController {
         }
     }
 
+    async destroyModel(model) {
+        return model.destroy();
+    }
+
     async destroy(req, res) {
         const {data} = req.body;
 
@@ -169,13 +173,13 @@ module.exports = class BaseController {
             for (const record of data) {
                 if (isPlainObject(record)) {
                     const model = await this.Model.findOne({
-                        where: {id: record.id},
+                        where: {id: record.id, project_id: req.projectId},
                     });
 
                     if (model) {
                         output.push(model.toJSON());
 
-                        await model.destroy();
+                        await this.destroyModel(model);
                     } else {
                         output.push({
                             id: Messages.ERROR_INVALID_ID,

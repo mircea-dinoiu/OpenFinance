@@ -56,6 +56,6 @@ export const Flags = ({
             <PendingReviewFlag entity={entity} />
         )}
         {item.repeat != null && <RecurrentFlag entity={entity} />}
-        {item.persist === false && <GeneratedFlag entity={entity} />}
+        {item.repeat_link_id !== null && <GeneratedFlag entity={entity} />}
     </>
 );

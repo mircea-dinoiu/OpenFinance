@@ -22,6 +22,6 @@ export const getFormDefaults = ({
         hidden: false,
         weight: null,
         favorite: 0,
-        repeatOccurrences: null,
+        repeatOccurrences: 0,
     };
 };

@@ -20,7 +20,7 @@ module.exports = (sequelize, types) => {
 
             repeat: types.STRING,
             repeat_occurrences: types.INTEGER,
-            repeat_end_date: types.DATE,
+            repeat_link_id: types.INTEGER,
 
             weight: types.INTEGER,
 

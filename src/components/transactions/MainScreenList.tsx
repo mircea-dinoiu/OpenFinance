@@ -60,7 +60,13 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
-import {Accounts, Bootstrap, Currencies, GlobalState, ScreenQueries} from 'types';
+import {
+    Accounts,
+    Bootstrap,
+    Currencies,
+    GlobalState,
+    ScreenQueries,
+} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';
@@ -668,24 +674,14 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         }
     };
     handleDetach = async () => {
-        const added: Omit<TransactionModel, 'id'>[] = [];
         const updated: Partial<TransactionModel>[] = [];
         const promises: Promise<unknown>[] = [];
 
         this.selectedItems.forEach((item) => {
             if (item.repeat != null) {
-                const extra = mapItemToRepeatedUpdates(item);
-
-                added.push(
-                    this.copyItem(advanceRepeatDate({...item, ...extra})),
-                );
                 updated.push(mapItemToDetachedUpdates(item));
             }
         });
-
-        if (added.length) {
-            promises.push(this.handleRequestCreate(added));
-        }
 
         if (updated.length) {
             promises.push(this.handleRequestUpdate(updated));

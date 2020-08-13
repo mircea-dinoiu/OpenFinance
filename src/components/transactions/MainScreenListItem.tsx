@@ -10,7 +10,7 @@ import {spacingMedium, spacingSmall} from 'defs/styles';
 export type MainScreenListItemProps<
     Item extends {
         id: number;
-        persist: boolean;
+        repeat_link_id: number | null;
     }
 > = {
     entityName: string;
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 export const MainScreenListItem = <
     Item extends {
         id: number;
-        persist: boolean;
+        repeat_link_id: number | null;
     }
 >(
     props: MainScreenListItemProps<Item>,
@@ -56,7 +56,7 @@ export const MainScreenListItem = <
                 square={true}
                 variant={'outlined'}
                 className={cls.container}
-                onClick={item.persist === false ? undefined : handleOpenDrawer}
+                onClick={item.repeat_link_id === null ? handleOpenDrawer : undefined}
             >
                 <ListItemContent item={item} />
             </Card>

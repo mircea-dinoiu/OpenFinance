@@ -64,6 +64,23 @@ const mapFlagsToSQL = (flags) => {
             break;
     }
 
+    switch (flags.Generated) {
+        case 'no':
+            where.push({
+                repeat_link_id: {
+                    $eq: null,
+                },
+            });
+            break;
+        case 'only':
+            where.push({
+                repeat_link_id: {
+                    $ne: null,
+                },
+            });
+            break;
+    }
+
     return where;
 };
 

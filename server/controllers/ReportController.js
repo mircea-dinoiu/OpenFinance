@@ -9,7 +9,6 @@ const {
     sql,
 } = require('../models');
 const logger = require('../helpers/logger');
-const RepeatedModelsHelper = require('../helpers/RepeatedModelsHelper');
 const {mapStartDateToSQL, mapEndDateToSQL} = require('../helpers/sql');
 const {flatten} = require('lodash');
 const {QueryTypes} = require('sequelize');
@@ -42,57 +41,18 @@ const makeWhere = (queryParams, extra = []) => {
           };
 };
 
-const getClones = async (
-    {start_date: startDate, ...queryParams},
-    {cols, where: whereExtra},
-) => {
-    const {query: where, replacements} = makeWhere(queryParams, [
-        '`repeat` IS NOT null',
-        ...whereExtra,
-    ]);
-    const select = `SELECT ${[
-        ...cols,
-        '`created_at`',
-        '`repeat`',
-        '`repeat_occurrences`',
-    ].join(', ')} FROM expenses ${where}`;
-
-    const records = await sql.query(select, {
-        replacements,
-        type: QueryTypes.SELECT,
-    });
-
-    return RepeatedModelsHelper.getClonesForRecords({
-        records: records,
-        endDate: queryParams.end_date,
-        startDate: startDate,
-    });
-};
-
 const sumByLocationFactory = ({where = []} = {}) => (req, res) => {
     const pullStart = Date.now();
-    const queryParams = req.query;
     const groupedWhere = makeWhere(req.query, where);
 
-    Promise.all([
-        getClones(queryParams, {
-            cols: ['money_location_id', 'sum'],
-            where,
-        }),
-        sql.query(
-            `SELECT money_location_id as \`key\`, SUM(sum) as \`value\` FROM expenses ${groupedWhere.query} GROUP by money_location_id`,
-            {replacements: groupedWhere.replacements, type: QueryTypes.SELECT},
-        ),
-    ]).then(([clones, grouped]) => {
+    sql.query(
+        `SELECT money_location_id as \`key\`, SUM(sum) as \`value\` FROM expenses ${groupedWhere.query} GROUP by money_location_id`,
+        {replacements: groupedWhere.replacements, type: QueryTypes.SELECT},
+    ).then((grouped) => {
         const result = grouped.reduce(
             (acc, {key, value}) => ({...acc, [key]: value}),
             {},
         );
-
-        clones.forEach((record) => {
-            result[record.money_location_id] =
-                (result[record.money_location_id] || 0) + record.sum;
-        });
 
         logger.log(req.path, 'Pulling took', Date.now() - pullStart, 'millis');
         res.json(result);

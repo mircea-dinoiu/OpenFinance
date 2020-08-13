@@ -61,7 +61,7 @@ export const getTrProps = ({
 }) => ({
     className: getTrClassName(item, {selectedIds}),
     onDoubleClick: () => {
-        if (item.persist !== false) {
+        if (item.repeat_link_id === null) {
             onReceiveSelectedIds([item.id]);
             onEdit();
         } else {
@@ -74,7 +74,7 @@ export const getTrProps = ({
         let nextSelected = selectedIds;
 
         if (event.metaKey || event.ctrlKey) {
-            if (item.persist !== false) {
+            if (item.repeat_link_id === null) {
                 if (selectedIds.includes(item.id)) {
                     nextSelected = nextSelected.filter((id) => id !== item.id);
                 } else {
@@ -84,7 +84,7 @@ export const getTrProps = ({
                 return;
             }
         } else {
-            nextSelected = item.persist !== false ? [item.id] : [];
+            nextSelected = item.repeat_link_id === null ? [item.id] : [];
         }
 
         onReceiveSelectedIds(nextSelected);
@@ -92,7 +92,7 @@ export const getTrProps = ({
     onContextMenu: (event: MouseEvent) => {
         event.preventDefault();
 
-        if (item.persist !== false) {
+        if (item.repeat_link_id === null) {
             onChangeContextMenu({
                 display: true,
                 left: event.clientX,

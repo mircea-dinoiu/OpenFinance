@@ -278,8 +278,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                         }}
                         onChange={(event) => {
                             this.setState({
-                                // @ts-ignore
-                                repeatOccurrences: event.target.value,
+                                repeatOccurrences: Number(event.target.value),
                             });
                         }}
                         disabled={this.state.repeat == null}
