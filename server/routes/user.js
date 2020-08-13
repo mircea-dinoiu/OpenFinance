@@ -51,4 +51,8 @@ router.post('/logout', filters.auth, (req, res) => {
     }
 });
 
+router.put('/password/set', filters.auth, (req, res) => {
+    res.wrapPromise(c.passwordSet(req, res));
+});
+
 module.exports = router;

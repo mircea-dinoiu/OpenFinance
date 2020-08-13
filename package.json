@@ -21,6 +21,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",
     "@material-ui/pickers": "^3.2.10",
+    "@types/bcrypt": "^3.0.0",
     "@types/csurf": "^1.9.36",
     "@types/express": "4",
     "@types/jest": "^24.0.19",
@@ -65,7 +66,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.2.5",
-    "bcrypt-nodejs": "^0.0.3",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "chalk": "^2.4.1",
     "connect-session-sequelize": "^5.2.2",

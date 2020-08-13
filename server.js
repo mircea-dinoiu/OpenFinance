@@ -69,7 +69,7 @@ app.use(
  */
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcrypt');
 
 passport.use(
     new LocalStrategy(
@@ -92,16 +92,15 @@ passport.use(
                     return cb(null, false);
                 }
 
-                if (
-                    !bcrypt.compareSync(
+                bcrypt
+                    .compare(
                         pass,
+                        // legacy password support
                         user.password.replace(/^\$2y(.+)$/i, '$2a$1'),
                     )
-                ) {
-                    return cb(null, false);
-                }
-
-                return cb(null, user);
+                    .then((isValid) => {
+                        return isValid ? cb(null, user) : cb(null, false);
+                    });
             });
         },
     ),

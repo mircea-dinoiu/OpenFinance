@@ -2,6 +2,10 @@ const {sql} = require('../models');
 const {QueryTypes} = require('sequelize');
 const _ = require('lodash');
 const md5 = require('md5');
+const bcrypt = require('bcrypt');
+
+const MIN_PASSWORD_LENGTH = 20;
+const SALT_ROUNDS = 10;
 
 module.exports = class UserController {
     async list(req, res) {
@@ -33,5 +37,35 @@ module.exports = class UserController {
                 }),
             ),
         });
+    }
+
+    async passwordSet({res, req}){
+        const {prevPassword, nextPassword} = req.body;
+
+        if (
+            'string' !== typeof prevPassword ||
+            'string' !== typeof nextPassword ||
+            nextPassword.length < MIN_PASSWORD_LENGTH
+        ) {
+            return res.sendStatus(400);
+        }
+
+        const prevPasswordIsValid = await bcrypt.compare(
+            prevPassword,
+            // legacy password support
+            req.user.password.replace(/^\$2y(.+)$/i, '$2a$1'),
+        );
+
+        if (!prevPasswordIsValid) {
+            return res.sendStatus(400);
+        }
+
+        const nextPasswordHash = await bcrypt.hash(nextPassword, SALT_ROUNDS);
+
+        await req.user.update({
+            password: nextPasswordHash,
+        });
+
+        res.sendStatus(200);
     }
 };

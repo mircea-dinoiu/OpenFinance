@@ -41,6 +41,11 @@ export const createXHR = <T>(opts: AxiosRequestConfig): AxiosPromise<T> => {
     return axios(parsedOpts);
 };
 
+if (process.env.NODE_ENV !== 'production') {
+    // @ts-ignore
+    window.createXHR = createXHR;
+}
+
 export const useReader = <T>(
     opts: Omit<AxiosRequestConfig, 'cancelToken'> & {
         suspend?: boolean;
