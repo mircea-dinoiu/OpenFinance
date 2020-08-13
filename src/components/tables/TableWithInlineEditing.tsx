@@ -42,7 +42,7 @@ export const TableWithInlineEditing = <D extends {id: number}>({
             url: makeUrl(api, {projectId: project.id}),
             method: 'DELETE',
             data: {
-                data: [{id: deletingId}],
+                ids: [deletingId],
             },
         });
 

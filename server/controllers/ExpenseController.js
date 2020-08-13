@@ -13,7 +13,7 @@ module.exports = class ExpenseController extends BaseController {
     Model = Model;
     Service = Service;
     updateValidationRules = {
-        id: ['isRequired', ['isId', Model]],
+        id: ['isRequired', 'isTransactionId'],
         sum: ['sometimes', 'isRequired', 'isFloat'],
         item: ['sometimes', 'isRequired', 'isString'],
         favorite: ['sometimes', 'isInt'],
@@ -50,7 +50,7 @@ module.exports = class ExpenseController extends BaseController {
         categories: ['sometimes', ['isIdArray', Category]],
 
         repeat: ['sometimes', 'isRepeatValue'],
-        repeat_occurrences: ['sometimes', 'isNotZero', 'isInt'],
+        repeat_occurrences: ['sometimes', 'isInt'],
 
         weight: ['sometimes', 'isNotNegative', 'isInt'],
     };
@@ -139,9 +139,12 @@ module.exports = class ExpenseController extends BaseController {
         if (model.repeat && model.repeat_occurrences) {
             while (occurrences > 0) {
                 const {id, ...record} = model.dataValues;
+                const repeatOccurrences = occurrences - 1;
                 const payload = {
-                    ...advanceRepeatDate(record, repeats),
-                    repeat_occurrences: occurrences - 1,
+                    ...record,
+                    created_at: advanceRepeatDate(record, repeats),
+                    repeat_occurrences: repeatOccurrences,
+                    repeat: repeatOccurrences ? record.repeat : null,
                     repeat_link_id: model.id,
                 };
 
@@ -177,6 +180,17 @@ module.exports = class ExpenseController extends BaseController {
 
         if (record.hasOwnProperty('item')) {
             values.item = record.item.trim();
+        }
+
+        /**
+         * repeat and repeat_occurrences need to be in sync
+         * when repeat is falsy, repeat_occurrences needs to be 0
+         * when repeat_occurrences is 0, repeat needs to be null
+         */
+        if (values.repeat === null) {
+            values.repeat_occurrences = 0;
+        } else if (values.repeat_occurrences === 0) {
+            values.repeat = null;
         }
 
         if (record.hasOwnProperty('status') && values.status == null) {

@@ -25,9 +25,7 @@ import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
 import {ExpenseForm} from 'components/transactions/ExpenseForm';
 import {ExpenseListItemContent} from 'components/transactions/ExpenseListItemContent';
 import {ExpenseTableColumns} from 'components/transactions/ExpenseTableColumns';
-import {
-    mergeItems,
-} from 'components/transactions/helpers';
+import {mergeItems} from 'components/transactions/helpers';
 import {ImportTransactions} from 'components/transactions/ImportTransactions';
 import {LoadMore} from 'components/transactions/LoadMore';
 import {MainScreenCreatorDialog} from 'components/transactions/MainScreenCreatorDialog';
@@ -47,7 +45,6 @@ import {greyedOut} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import * as H from 'history';
-import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {isEqual, range, uniqueId} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
@@ -180,7 +177,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.handleToggleDeleteDialog();
 
         await this.handleRequestDelete(
-            this.selectedItems.map((each: {id: number}) => ({id: each.id})),
+            this.selectedItems.map((each) => each.id),
         );
 
         this.props.dispatch(onRefreshWidgets());
@@ -611,8 +608,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 data,
             }),
     );
-    handleRequestDelete = (data: {id: number}[]) =>
-        this.handleRequest({data}, api, 'DELETE');
+    handleRequestDelete = (ids: number[]) =>
+        this.handleRequest({ids}, api, 'DELETE');
     handleRequestUpdate = (data: Partial<TransactionModel>[]) =>
         this.handleRequest({data}, api, 'PUT');
     handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) =>
@@ -666,7 +663,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         if (merged) {
             await this.handleRequestUpdate([{id: first.id, ...merged}]);
-            await this.handleRequestDelete(rest.map((each) => ({id: each.id})));
+            await this.handleRequestDelete(rest.map((each) => each.id));
 
             this.props.dispatch(onRefreshWidgets());
         }

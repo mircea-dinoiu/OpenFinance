@@ -5,9 +5,7 @@ module.exports = {
         const {ids} = req.body;
         const prevHeads = await Model.findAll({
             where: {
-                id: {
-                    $in: ids,
-                },
+                id: ids,
             },
         });
         const promises = [];
@@ -30,9 +28,7 @@ module.exports = {
         const {ids} = req.body;
         const prevHeads = await Model.findAll({
             where: {
-                id: {
-                    $in: ids,
-                },
+                id: ids,
             },
         });
 

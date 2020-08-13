@@ -4,7 +4,6 @@ const Controller = require('../controllers/ExpenseController');
 const SuggestionController = require('../controllers/SuggestionController');
 const filters = require('../filters');
 const fileupload = require('express-fileupload');
-const {Expense} = require('../models');
 
 const c = new Controller();
 const sc = new SuggestionController();
@@ -14,9 +13,18 @@ router.get('/', filters.authProject, (req, res) => {
     res.wrapPromise(c.list(req, res));
 });
 
-router.delete('/', filters.authProject, async (req, res) => {
-    res.wrapPromise(c.destroy(req, res));
-});
+router.delete(
+    '/',
+    [
+        filters.authProject,
+        filters.validateBody({
+            ids: ['isRequired', 'isTransactionIdArray'],
+        }),
+    ],
+    async (req, res) => {
+        res.wrapPromise(c.destroy(req, res));
+    },
+);
 
 router.put('/', filters.authProject, async (req, res) => {
     res.wrapPromise(c.update(req, res));
@@ -31,7 +39,7 @@ router.post(
     [
         filters.authProject,
         filters.validateBody({
-            ids: ['isRequired', ['isIdArray', Expense]],
+            ids: ['isRequired', 'isTransactionIdArray'],
         }),
     ],
     async (req, res) => {
@@ -43,7 +51,7 @@ router.post(
     [
         filters.authProject,
         filters.validateBody({
-            ids: ['isRequired', ['isIdArray', Expense]],
+            ids: ['isRequired', 'isTransactionIdArray'],
         }),
     ],
     async (req, res) => {

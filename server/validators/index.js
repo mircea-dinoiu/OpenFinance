@@ -8,6 +8,7 @@ const stringIsFloat = validator.isFloat;
 const logger = require('../helpers/logger');
 const defs = require('../../src/js/defs');
 const {sumArray} = require('../../src/js/utils/numbers');
+const {Expense} = require('../models');
 
 Object.assign(validator, {
     isInt: (value) => {
@@ -34,6 +35,32 @@ Object.assign(validator, {
 
         return Boolean(await Model.find({where: {id}}));
     },
+    isTransactionId: async (id, opts) => {
+        return this.isTransactionIdArray([id], opts);
+    },
+    isTransactionIdArray: async (array, opts) => {
+        if (!validator.isArray(array)) {
+            return false;
+        }
+
+        const ids = Array.from(new Set(array));
+        const idsAreInt = ids.every((id) => validator.isInt(id));
+
+        if (!idsAreInt) {
+            return false;
+        }
+
+        return (
+            ids.length ===
+            (await Expense.count({
+                where: {
+                    repeat_link_id: null,
+                    project_id: opts.req.projectId,
+                    id: ids,
+                },
+            }))
+        );
+    },
     isIdArray: async (array, Model, opts) => {
         if (!validator.isArray(array)) {
             return false;
@@ -49,7 +76,7 @@ Object.assign(validator, {
         return (
             ids.length ===
             (await Model.count({
-                where: {project_id: opts.req.projectId, id: {$in: ids}},
+                where: {project_id: opts.req.projectId, id: ids},
             }))
         );
     },

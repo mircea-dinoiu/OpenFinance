@@ -4,6 +4,7 @@ import {
     FormControlLabel,
     FormGroup,
     FormLabel,
+    InputAdornment,
     List,
     ListItem,
     ListItemAvatar,
@@ -14,6 +15,7 @@ import {
     Slider,
     TextField,
 } from '@material-ui/core';
+import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {MuiSelectNative} from 'components/dropdowns';
@@ -281,6 +283,27 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                                 repeatOccurrences: Number(event.target.value),
                             });
                         }}
+                        InputProps={
+                            this.state.repeat
+                                ? {
+                                      endAdornment: (
+                                          <InputAdornment position="end">
+                                              Ends on{' '}
+                                              {advanceRepeatDate(
+                                                  {
+                                                      created_at: this.state
+                                                          .date,
+                                                      repeat: this.state.repeat,
+                                                  },
+                                                  this.state.repeatOccurrences,
+                                              )
+                                                  .toDate()
+                                                  .toLocaleDateString()}
+                                          </InputAdornment>
+                                      ),
+                                  }
+                                : {}
+                        }
                         disabled={this.state.repeat == null}
                     />
                 </div>

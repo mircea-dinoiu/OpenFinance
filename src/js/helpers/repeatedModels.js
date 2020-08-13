@@ -1,12 +1,11 @@
 const moment = require('moment');
 const {RepeatOption} = require('../defs');
 
-const advanceRepeatDate = (obj, rawRepeats) => {
-    const newObject = Object.assign({}, obj);
-    const date = moment(newObject.created_at);
+const advanceRepeatDate = (model, rawRepeats) => {
+    const date = moment(model.created_at);
     const repeats = Number(rawRepeats) || 1;
 
-    switch (newObject.repeat) {
+    switch (model.repeat) {
         case RepeatOption.DAILY:
             date.add(repeats, 'day');
             break;
@@ -30,9 +29,7 @@ const advanceRepeatDate = (obj, rawRepeats) => {
             break;
     }
 
-    newObject.created_at = date;
-
-    return newObject;
+    return date;
 };
 
 module.exports = {advanceRepeatDate};
