@@ -1,4 +1,5 @@
 const {sql} = require('../models');
+const {Validator} = require('../validators');
 const {QueryTypes} = require('sequelize');
 
 const filters = {
@@ -35,6 +36,19 @@ const filters = {
             } else {
                 res.status(400);
                 res.json('Provide projectId');
+            }
+        });
+    },
+
+    validateBody: (rules) => (req, res, next) => {
+        const validator = new Validator(req.body, rules, {req});
+
+        validator.passes().then((passed) => {
+            if (passed) {
+                next();
+            } else {
+                res.status(400);
+                res.json(validator.errors());
             }
         });
     },

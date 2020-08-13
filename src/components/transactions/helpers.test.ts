@@ -1,37 +1,4 @@
-import {mapItemToRepeatedUpdates, mapItemToDetachedUpdates, mergeItems} from 'components/transactions/helpers';
-
-describe('#mapItemToRepeatedUpdates()', () => {
-    describe('When repeat_occurrences is not null', () => {
-        describe('When repeat_occurrences = 1', () => {
-            it('should set it to null', () => {
-                expect(
-                    mapItemToRepeatedUpdates({
-                        repeat_occurrences: 1,
-                    }),
-                ).toEqual({repeat_occurrences: null});
-            });
-        });
-
-        describe('When repeat_occurrences > 1', () => {
-            it('should decrease it by 1', () => {
-                expect(
-                    mapItemToRepeatedUpdates({
-                        repeat_occurrences: 2,
-                    }),
-                ).toEqual({repeat_occurrences: 1});
-            });
-        });
-    });
-});
-
-describe('#mapItemToDetachedUpdates()', () => {
-    it('should return item id + repeat null by default', () => {
-        expect(mapItemToDetachedUpdates({id: 300})).toEqual({
-            id: 300,
-            repeat: null,
-        });
-    });
-});
+import {mergeItems} from 'components/transactions/helpers';
 
 describe('#mergeItems()', () => {
     describe('When there are not enough items', () => {

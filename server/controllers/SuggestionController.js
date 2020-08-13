@@ -53,7 +53,7 @@ WHERE
                 'isRequired',
                 ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
             ],
-        });
+        }, {req});
 
         if (await validator.passes()) {
             res.json({

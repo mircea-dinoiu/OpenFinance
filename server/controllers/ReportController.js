@@ -70,7 +70,7 @@ module.exports = class ReportController {
             categoryRecords,
             currencyRecords,
         ] = await Promise.all([
-            ExpenseService.list(req.query),
+            ExpenseService.list(req),
             User.findAll(),
             MoneyLocation.findAll(),
             Category.findAll(),

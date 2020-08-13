@@ -34,22 +34,24 @@ Object.assign(validator, {
 
         return Boolean(await Model.find({where: {id}}));
     },
-    isIdArray: async (array, Model) => {
+    isIdArray: async (array, Model, opts) => {
         if (!validator.isArray(array)) {
             return false;
         }
 
-        if (array.length !== new Set(array).size) {
+        const ids = Array.from(new Set(array));
+        const idsAreInt = ids.every((id) => validator.isInt(id));
+
+        if (!idsAreInt) {
             return false;
         }
 
-        for (const id of array) {
-            if ((await validator.isId(id, Model)) !== true) {
-                return false;
-            }
-        }
-
-        return true;
+        return (
+            ids.length ===
+            (await Model.count({
+                where: {project_id: opts.req.projectId, id: {$in: ids}},
+            }))
+        );
     },
     isPercentageObject: async (obj, Model) => {
         if (!validator.isPlainObject(obj)) {
@@ -150,9 +152,10 @@ Object.assign(validator, {
 });
 
 class Validator {
-    constructor(data, rules) {
+    constructor(data, rules, opts) {
         this.data = data;
         this.rules = rules;
+        this.opts = opts;
         this.messages = {};
     }
 
@@ -189,7 +192,12 @@ class Validator {
                     let result = false;
 
                     try {
-                        result = ruleFn.call(validator, value, ...params);
+                        result = ruleFn.call(
+                            validator,
+                            value,
+                            ...params,
+                            this.opts,
+                        );
                     } catch (e) {
                         console.trace(e);
                     }

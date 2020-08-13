@@ -15,7 +15,8 @@ const {
 } = require('../helpers/sql');
 
 module.exports = {
-    async list(query) {
+    async list(req) {
+        const {query} = req;
         const input = pick(
             query,
             'start_date',
@@ -48,7 +49,7 @@ module.exports = {
                 ['isTableSorters', Model, ['money_location.currency_id']],
             ],
         };
-        const validator = new Validator(input, rules);
+        const validator = new Validator(input, rules, {req});
 
         if (await validator.passes()) {
             const where = [

@@ -41,7 +41,7 @@ module.exports = class BaseController {
             for (const record of data) {
                 if (isPlainObject(record)) {
                     const workingRecord = this.parseRecord(record);
-                    const validator = new Validator(workingRecord, rules);
+                    const validator = new Validator(workingRecord, rules, {req});
 
                     if (await validator.passes()) {
                         validRecords.push(workingRecord);
@@ -108,7 +108,7 @@ module.exports = class BaseController {
             for (const record of data) {
                 if (isPlainObject(record)) {
                     const workingRecord = this.parseRecord(record);
-                    const validator = new Validator(workingRecord, rules);
+                    const validator = new Validator(workingRecord, rules, {req});
 
                     if (await validator.passes()) {
                         validRecords.push(workingRecord);
@@ -198,7 +198,7 @@ module.exports = class BaseController {
 
     async list(req, res) {
         if (this.Service) {
-            const {error, json} = await this.Service.list(req.query);
+            const {error, json} = await this.Service.list(req);
 
             if (error) {
                 res.status(400);

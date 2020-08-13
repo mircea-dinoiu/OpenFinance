@@ -126,28 +126,29 @@ module.exports = class ExpenseController extends BaseController {
     }
 
     async withRepeatedModels({model, cleanup = false}) {
-        const models = [model];
+        const promises = [Promise.resolve(model)];
+        let occurrences = model.repeat_occurrences;
+        let repeats = 1;
+
+        if (cleanup) {
+            await sql.query('DELETE FROM expenses WHERE repeat_link_id = ?', {
+                replacements: [model.id],
+            });
+        }
 
         if (model.repeat && model.repeat_occurrences) {
-            if (cleanup) {
-                await sql.query(
-                    'DELETE FROM expenses WHERE repeat_link_id = ?',
-                    {
-                        replacements: [model.id],
-                    },
-                );
-            }
-
-            while (models[models.length - 1].repeat_occurrences > 0) {
-                const prevModel = models[models.length - 1];
-                const {id, ...record} = prevModel.dataValues;
+            while (occurrences > 0) {
+                const {id, ...record} = model.dataValues;
                 const payload = {
-                    ...advanceRepeatDate(record),
-                    repeat_occurrences: prevModel.repeat_occurrences - 1,
-                    repeat_link_id: prevModel.id,
+                    ...advanceRepeatDate(record, repeats),
+                    repeat_occurrences: occurrences - 1,
+                    repeat_link_id: model.id,
                 };
 
-                models.push(await this.Model.create(payload));
+                repeats++;
+                occurrences--;
+
+                promises.push(this.Model.create(payload));
             }
         } else if (cleanup) {
             await sql.query(
@@ -158,7 +159,7 @@ module.exports = class ExpenseController extends BaseController {
             );
         }
 
-        return models;
+        return Promise.all(promises);
     }
 
     sanitizeValues(record, req, res) {
@@ -193,14 +194,6 @@ module.exports = class ExpenseController extends BaseController {
 
     sanitizeUpdateValues(record, req, res) {
         return this.sanitizeValues(record, req, res);
-    }
-
-    async destroyModel(model) {
-        await sql.query('DELETE FROM expenses WHERE repeat_link_id = ?', {
-            replacements: [model.id],
-        });
-
-        return super.destroyModel(model);
     }
 
     /**

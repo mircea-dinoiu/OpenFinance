@@ -26,8 +26,6 @@ import {ExpenseForm} from 'components/transactions/ExpenseForm';
 import {ExpenseListItemContent} from 'components/transactions/ExpenseListItemContent';
 import {ExpenseTableColumns} from 'components/transactions/ExpenseTableColumns';
 import {
-    mapItemToDetachedUpdates,
-    mapItemToRepeatedUpdates,
     mergeItems,
 } from 'components/transactions/helpers';
 import {ImportTransactions} from 'components/transactions/ImportTransactions';
@@ -610,15 +608,15 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             createXHR({
                 url: makeUrl(api, {projectId: this.props.project.id}),
                 method,
-                data: {data},
+                data,
             }),
     );
     handleRequestDelete = (data: {id: number}[]) =>
-        this.handleRequest(data, api, 'DELETE');
+        this.handleRequest({data}, api, 'DELETE');
     handleRequestUpdate = (data: Partial<TransactionModel>[]) =>
-        this.handleRequest(data, api, 'PUT');
+        this.handleRequest({data}, api, 'PUT');
     handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) =>
-        this.handleRequest(data, api, 'POST');
+        this.handleRequest({data}, api, 'POST');
 
     sanitizeItem = (item: TransactionModel) =>
         crudProps.formToModel(crudProps.modelToForm(item), {
@@ -673,44 +671,24 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             this.props.dispatch(onRefreshWidgets());
         }
     };
-    handleDetach = async () => {
-        const updated: Partial<TransactionModel>[] = [];
-        const promises: Promise<unknown>[] = [];
-
-        this.selectedItems.forEach((item) => {
+    handleTransactionRepeat = async (api: string) => {
+        const ids = this.selectedItems.reduce((acc, item) => {
             if (item.repeat != null) {
-                updated.push(mapItemToDetachedUpdates(item));
+                acc.push(item.id);
             }
-        });
 
-        if (updated.length) {
-            promises.push(this.handleRequestUpdate(updated));
-        }
+            return acc;
+        }, [] as number[]);
 
-        if (promises.length) {
-            await Promise.all(promises);
+        if (ids.length) {
+            await this.handleRequest({ids}, api, 'POST');
 
             this.props.dispatch(onRefreshWidgets());
         }
     };
-    handleSkip = async () => {
-        const updated: Partial<TransactionModel>[] = [];
-
-        this.selectedItems.forEach((item) => {
-            if (item.repeat != null) {
-                updated.push({
-                    id: item.id,
-                    created_at: advanceRepeatDate(item).created_at,
-                    ...mapItemToRepeatedUpdates(item),
-                });
-            }
-        });
-
-        if (updated.length) {
-            await this.handleRequestUpdate(updated);
-            this.props.dispatch(onRefreshWidgets());
-        }
-    };
+    handleDetach = () =>
+        this.handleTransactionRepeat(routes.transactionsDetach);
+    handleSkip = () => this.handleTransactionRepeat(routes.transactionsSkip);
 
     getContextMenuItemsProps() {
         return {

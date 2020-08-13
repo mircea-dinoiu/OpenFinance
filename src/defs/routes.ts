@@ -1,5 +1,7 @@
 export const routes = {
     transactions: '/api/transactions',
+    transactionsDetach: '/api/transactions/detach',
+    transactionsSkip: '/api/transactions/skip',
     transactionsUpload: '/api/transactions/upload',
     transactionsSuggestions: {
         categories: '/api/transactions/suggestions/categories',
