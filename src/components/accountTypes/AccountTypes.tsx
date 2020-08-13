@@ -1,4 +1,5 @@
-import {Paper, TextField} from '@material-ui/core';
+import {Paper} from '@material-ui/core';
+import {TextFieldCell} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {routes} from 'defs/routes';
 import {spacingMedium} from 'defs/styles';
@@ -20,25 +21,11 @@ export const AccountTypes = () => {
                 onRefresh={refresh}
                 allowDelete={false}
                 defaultSorted={[{id: 'name', desc: false}]}
-                columns={(editor, setEditor) => [
+                columns={[
                     {
                         accessor: 'name',
                         Header: 'Name',
-                        Cell: ({original: row}) =>
-                            editor && editor.id === row.id ? (
-                                <TextField
-                                    value={editor.name}
-                                    onChange={(e) =>
-                                        setEditor({
-                                            ...editor,
-                                            name: e.target.value,
-                                        })
-                                    }
-                                    fullWidth={true}
-                                />
-                            ) : (
-                                row.name
-                            ),
+                        Cell: TextFieldCell,
                     },
                 ]}
             />

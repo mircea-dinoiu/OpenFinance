@@ -1,4 +1,5 @@
-import {Paper, TextField} from '@material-ui/core';
+import {Paper} from '@material-ui/core';
+import {TextFieldCell} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {routes} from 'defs/routes';
 import {spacingMedium} from 'defs/styles';
@@ -20,44 +21,16 @@ export const Categories = () => {
                 onRefresh={refresh}
                 defaultSorted={[{id: 'name', desc: false}]}
                 allowDelete={true}
-                columns={(editor, setEditor) => [
+                columns={[
                     {
                         Header: 'Name',
                         accessor: 'name',
-                        Cell: ({original: row}) =>
-                            editor && editor.id === row.id ? (
-                                <TextField
-                                    value={editor.name}
-                                    onChange={(e) =>
-                                        setEditor({
-                                            ...editor,
-                                            name: e.target.value,
-                                        })
-                                    }
-                                    fullWidth={true}
-                                />
-                            ) : (
-                                row.name
-                            ),
+                        Cell: TextFieldCell,
                     },
                     {
                         accessor: 'color',
                         Header: 'Color',
-                        Cell: ({original: row}) =>
-                            editor && editor.id === row.id ? (
-                                <TextField
-                                    value={editor.color}
-                                    onChange={(e) =>
-                                        setEditor({
-                                            ...editor,
-                                            color: e.target.value,
-                                        })
-                                    }
-                                    fullWidth={true}
-                                />
-                            ) : (
-                                row.color
-                            ),
+                        Cell: TextFieldCell,
                     },
                     {accessor: 'expenses', Header: 'Transaction Count'},
                 ]}

@@ -9,7 +9,7 @@ import {FloatingSnackbar} from 'components/snackbars';
 import {spacingSmall} from 'defs/styles';
 import {pick} from 'lodash';
 import React, {useState} from 'react';
-import {Column, RowInfo, TableProps} from 'react-table-6';
+import {RowInfo, TableProps} from 'react-table-6';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
@@ -21,8 +21,8 @@ export const TableWithInlineEditing = <D extends {id: number}>({
     onRefresh,
     api,
     ...props
-}: Omit<Partial<TableProps<D>>, 'columns' | 'loading'> & {
-    columns: (editor: D | null, setEditor: (e: D) => void) => Column<D>[];
+}: Omit<Partial<TableProps<D>>, 'loading'> & {
+    columns: Required<TableProps<D>>['columns'];
     allowDelete: boolean;
     api: string;
     editableFields?: string[];
@@ -124,7 +124,10 @@ export const TableWithInlineEditing = <D extends {id: number}>({
                             </div>
                         ),
                     },
-                    ...columns(editor, setEditor),
+                    ...columns.map((c) => ({
+                        ...c,
+                        getProps: () => ({editor, setEditor}),
+                    })),
                 ]}
             />
             {deletingId && (
