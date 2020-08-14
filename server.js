@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
+
+require('express-async-errors');
 const app = express();
 const {wrapPromise} = require('./server/helpers');
 

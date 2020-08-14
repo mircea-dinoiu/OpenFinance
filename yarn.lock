@@ -5043,6 +5043,11 @@ expect@^24.9.0:
     jest-message-util "^24.9.0"
     jest-regex-util "^24.9.0"
 
+express-async-errors@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/express-async-errors/-/express-async-errors-3.1.1.tgz#6053236d61d21ddef4892d6bd1d736889fc9da41"
+  integrity sha512-h6aK1da4tpqWSbyCa3FxB/V6Ehd4EEB15zyQq9qe75OZBp0krinNKuH4rAY+S/U/2I36vdLAUFSjQJ+TFmODng==
+
 express-fileupload@^1.1.7-alpha.4:
   version "1.1.7-alpha.4"
   resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.1.7-alpha.4.tgz#c87dcb7880fe2e5a1d15ea97a225719c5ac0a30d"
