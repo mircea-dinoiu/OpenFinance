@@ -1,3 +1,4 @@
+import {DialogOrDrawer} from 'components/dialogs';
 import React, {useState} from 'react';
 import {
     ContextMenuItems,
@@ -60,10 +61,9 @@ export const MainScreenListItem = <
             >
                 <ListItemContent item={item} />
             </Card>
-            <Drawer
+            <DialogOrDrawer
                 onClose={handleCloseDrawer}
                 open={isDrawerOpen}
-                anchor="bottom"
             >
                 <Container className={cls.container}>
                     <ListItemContent item={item} expanded={true} />
@@ -73,7 +73,7 @@ export const MainScreenListItem = <
                     {...props.contextMenuItemsProps}
                     onCloseContextMenu={handleCloseDrawer}
                 />
-            </Drawer>
+            </DialogOrDrawer>
         </>
     );
 };

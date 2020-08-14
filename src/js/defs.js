@@ -18,8 +18,6 @@ module.exports = {
     paths: {
         home: '/',
         transactions: '/transactions',
-        transactionsSummary: '/transactions/summary',
-        transactionsList: '/transactions/list',
         categories: '/categories',
         accounts: '/accounts',
         accountTypes: '/account-types',

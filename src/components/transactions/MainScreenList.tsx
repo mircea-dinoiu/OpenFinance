@@ -10,6 +10,7 @@ import {
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import IconSummary from '@material-ui/icons/AccountBalance';
 import AddIcon from '@material-ui/icons/Add';
 import IconSplit from '@material-ui/icons/CallSplitRounded';
 import IconStar from '@material-ui/icons/Star';
@@ -41,14 +42,14 @@ import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
-import {greyedOut} from 'defs/styles';
+import {greyedOut, spacingMedium} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import * as H from 'history';
 import {isEqual, range, uniqueId} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import React, {PureComponent, ReactNode, useMemo} from 'react';
+import React, {CSSProperties, PureComponent, ReactNode, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 import {Filter, SortingRule} from 'react-table-6';
@@ -67,6 +68,10 @@ import {useEndDate} from 'utils/dates';
 import {createXHR, HttpMethod} from 'utils/fetch';
 import {makeUrl, mapUrlToFragment} from 'utils/url';
 
+type TypeOwnProps = {
+    onSummaryOpen?: () => void;
+};
+
 type TypeProps = {
     history: H.History;
     params: {
@@ -83,7 +88,7 @@ type TypeProps = {
     moneyLocations: Accounts;
     user: Bootstrap;
     project: Project;
-};
+} & TypeOwnProps;
 
 type TypeState = {
     firstLoad: boolean;
@@ -896,28 +901,49 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         }}
                     />
                     {this.renderDialogs()}
-                    {!isDesktop && (
-                        <Fab
-                            variant="extended"
-                            color="primary"
-                            onClick={this.handleToggleAddModal}
-                            style={{
-                                position: 'fixed',
-                                bottom: '70px',
-                                right: '10px',
-                                zIndex: 1,
-                            }}
-                        >
-                            <AddIcon />
-                        </Fab>
-                    )}
+                    {!isDesktop && this.renderStickyButtons()}
                 </div>
             </div>
         );
     }
+
+    renderStickyButtons() {
+        const style: CSSProperties = {
+            position: 'fixed',
+            bottom: spacingMedium,
+            zIndex: 1,
+        };
+
+        return (
+            <>
+                <Fab
+                    variant="extended"
+                    color="secondary"
+                    onClick={this.props.onSummaryOpen}
+                    style={{
+                        ...style,
+                        right: '70px',
+                    }}
+                >
+                    <IconSummary />
+                </Fab>
+                <Fab
+                    variant="extended"
+                    color="primary"
+                    onClick={this.handleToggleAddModal}
+                    style={{
+                        ...style,
+                        right: spacingMedium,
+                    }}
+                >
+                    <AddIcon />
+                </Fab>
+            </>
+        );
+    }
 }
 
-export const MainScreenList = () => {
+export const MainScreenList = (ownProps: TypeOwnProps) => {
     const stateProps = useSelector(
         ({
             screen,
@@ -959,6 +985,7 @@ export const MainScreenList = () => {
     return (
         <MainScreenListWrapped
             {...stateProps}
+            {...ownProps}
             endDate={endDate}
             history={history}
             dispatch={dispatch}

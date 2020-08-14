@@ -11,8 +11,6 @@ export enum RepeatOption {
 export const paths: {
     home: string;
     transactions: string;
-    transactionsSummary: string;
-    transactionsList: string;
     login: string;
     categories: string;
     accounts: string;
