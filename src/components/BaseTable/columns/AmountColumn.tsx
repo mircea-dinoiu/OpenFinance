@@ -7,10 +7,10 @@ const style = {textAlign: 'right'};
 export const AmountColumn = {
     Header: 'Amount',
     filterable: true,
-    accessor: (item: TransactionModel) => (
+    Cell: ({original: item}: {original: TransactionModel}) => (
         <AmountDisplay item={item} />
     ),
-    id: 'sum',
+    accessor: 'sum',
     //
     width: 100,
     headerStyle: style,

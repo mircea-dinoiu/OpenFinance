@@ -1,7 +1,6 @@
-import * as React from 'react';
-import grey from '@material-ui/core/colors/grey';
 import IconBlock from '@material-ui/icons/Block';
 import IconLock from '@material-ui/icons/Lock';
+import * as React from 'react';
 import {useMoneyLocations} from 'state/hooks';
 
 const StatusToIconComponent = {
@@ -26,7 +25,6 @@ export const MoneyLocationDisplay = ({id}: {id: number | string}) => {
 
     return id ? (
         <span
-            style={{fontSize: '1rem', color: grey[700]}}
             title={moneyLocation.name}
         >
             <IconComponent

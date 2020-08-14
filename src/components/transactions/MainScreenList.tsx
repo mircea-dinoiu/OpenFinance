@@ -24,7 +24,7 @@ import {Tooltip} from 'components/Tooltip';
 import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
 import {ExpenseForm} from 'components/transactions/ExpenseForm';
 import {ExpenseListItemContent} from 'components/transactions/ExpenseListItemContent';
-import {ExpenseTableColumns} from 'components/transactions/ExpenseTableColumns';
+import {makeTransactionsColumns} from 'components/transactions/ExpenseTableColumns';
 import {mergeItems} from 'components/transactions/helpers';
 import {ImportTransactions} from 'components/transactions/ImportTransactions';
 import {LoadMore} from 'components/transactions/LoadMore';
@@ -776,7 +776,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             manual={true}
                             loading={this.state.loading > 0}
                             data={results}
-                            columns={ExpenseTableColumns({
+                            columns={makeTransactionsColumns({
                                 updateRecords: this.updateRecords,
                             })}
                             getTrProps={this.getTrProps}
