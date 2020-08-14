@@ -4,7 +4,7 @@ import IconSummary from '@material-ui/icons/AccountBalance';
 import AddIcon from '@material-ui/icons/Add';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {TransactionsSearchField} from 'components/transactions/TransactionsSearchField';
-import {ScreenQuery, spacingNormal, spacingSmall} from 'defs/styles';
+import {ScreenQuery, spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
 import React from 'react';
 
 export const TransactionsMobileHeader = ({
@@ -46,7 +46,7 @@ const useStyles = makeStyles({
     paper: {
         padding: spacingNormal,
         position: 'sticky',
-        top: '56px',
+        top: stickyHeaderHeight,
         zIndex: 2,
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
