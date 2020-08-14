@@ -59,6 +59,7 @@ export type TransactionRepeat = $Values<typeof RepeatOption>;
 export type TransactionForm = {
     sum: number;
     description: string;
+    notes: string;
     favorite: number;
     hidden: boolean;
     paymentMethod: number;
@@ -72,13 +73,13 @@ export type TransactionForm = {
     repeat: TransactionRepeat | null;
     status: TransactionStatus;
 };
-export type TransactionFormState = Omit<TransactionForm, 'id'>;
 export type TransactionModel = {
     id: number;
     fitid: string | null;
     categories: number[];
     favorite: number;
     item: string;
+    notes: string;
     sum: number;
     weight: number | null;
     users: {

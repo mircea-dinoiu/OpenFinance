@@ -12,6 +12,7 @@ export const getFormDefaults = ({
 }): TransactionForm => {
     return {
         description: '',
+        notes: '',
         status: TransactionStatus.pending,
         sum: 0,
         paymentMethod: mls[0]?.id,

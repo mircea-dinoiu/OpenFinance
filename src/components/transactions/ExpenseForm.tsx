@@ -322,6 +322,15 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                         }
                     />
                 </div>
+                <div style={boxStyle}>
+                    <TextField
+                        multiline
+                        fullWidth={true}
+                        label="Notes"
+                        value={this.state.notes}
+                        onChange={(e) => this.setState({notes: e.target.value})}
+                    />
+                </div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
                 <div style={boxStyle}>

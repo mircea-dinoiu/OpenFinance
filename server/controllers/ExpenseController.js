@@ -16,6 +16,7 @@ module.exports = class ExpenseController extends BaseController {
         id: ['isRequired', 'isTransactionId'],
         sum: ['sometimes', 'isRequired', 'isFloat'],
         item: ['sometimes', 'isRequired', 'isString'],
+        notes: ['sometimes', 'isString'],
         favorite: ['sometimes', 'isInt'],
         hidden: ['sometimes', 'isBool'],
         created_at: [
@@ -36,6 +37,7 @@ module.exports = class ExpenseController extends BaseController {
     createValidationRules = {
         sum: ['isRequired', 'isFloat'],
         item: ['isRequired', 'isString'],
+        notes: ['sometimes', 'isString'],
         favorite: ['sometimes', 'isInt'],
         hidden: ['sometimes', 'isBool'],
         users: ['isRequired', ['isPercentageObject', User]],
@@ -176,6 +178,7 @@ module.exports = class ExpenseController extends BaseController {
             'created_at',
             'repeat',
             'repeat_occurrences',
+            'notes',
         ]);
 
         if (record.hasOwnProperty('item')) {
