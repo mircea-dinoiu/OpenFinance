@@ -147,38 +147,6 @@ Object.entries(require('./server/routes')).forEach(([route, handler]) => {
 });
 
 /**
- * ERROR HANDLING
- */
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-    const err = new Error('Not Found');
-
-    err.status = 404;
-    next(err);
-});
-
-// error handler
-app.use((err, req, res, next) => {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = process.env.DEBUG === 'true' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.send(`
-<html>
-<body>
-    <h1>${res.locals.message}</h1>
-    <h2>${res.locals.status}</h2>
-    <pre>
-        ${res.locals.error.stack}}
-    </pre>
-</body>
-</html>
-`);
-});
-
-/**
  * Export the app
  */
 module.exports = app;
