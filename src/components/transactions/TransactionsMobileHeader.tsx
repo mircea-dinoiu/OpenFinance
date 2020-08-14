@@ -51,6 +51,7 @@ const useStyles = makeStyles({
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         alignItems: 'end',
+        gridGap: spacingSmall,
         [ScreenQuery.SMALL]: {
             gridTemplateColumns: '1fr',
             gridTemplateRows: 'auto auto',

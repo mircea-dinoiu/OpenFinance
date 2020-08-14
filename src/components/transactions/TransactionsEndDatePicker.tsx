@@ -1,11 +1,13 @@
 import {FormLabel, IconButton, Menu, MenuItem as MenuItem2} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import IconArrowBack from '@material-ui/icons/ArrowBack';
 import IconArrowForward from '@material-ui/icons/ArrowForward';
 import {DatePicker} from '@material-ui/pickers';
 import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftMenu} from 'components/top-bar/ShiftMenu';
 import {getShiftBackOptions, getShiftForwardOptions} from 'components/top-bar/TopBar';
-import {ShiftDateOption, ShiftDateOptions, Sizes} from 'defs';
+import {ShiftDateOption, ShiftDateOptions} from 'defs';
+import {ScreenQuery} from 'defs/styles';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import * as React from 'react';
@@ -13,8 +15,6 @@ import {useHistory} from 'react-router-dom';
 import {useBootstrap} from 'state/hooks';
 import {shiftDateBack, shiftDateForward, useEndDate, useEndDateIncrement} from 'utils/dates';
 import {mapUrlToFragment} from 'utils/url';
-
-const INPUT_HEIGHT = `${parseInt(Sizes.HEADER_SIZE) - 4}px`;
 
 export const TransactionsEndDatePicker = () => {
     const history = useHistory();
@@ -26,6 +26,7 @@ export const TransactionsEndDatePicker = () => {
         setShiftMenuAnchor,
     ] = React.useState<HTMLDivElement | null>(null);
     const user = useBootstrap();
+    const cls = useStyles();
 
     const setDate = (date: Date) => {
         const url = new URL(window.location.href);
@@ -68,6 +69,7 @@ export const TransactionsEndDatePicker = () => {
         <IconButton
             title={`Shift back ${ShiftDateOption[endDateIncrement]}`}
             onClick={handleShiftBack}
+            className={cls.button}
         >
             <IconArrowBack />
         </IconButton>
@@ -75,9 +77,10 @@ export const TransactionsEndDatePicker = () => {
 
     const renderShiftForward = () => (
         <IconButton
-            style={{float: 'left', height: INPUT_HEIGHT}}
+            style={{float: 'left'}}
             title={`Shift forward ${ShiftDateOption[endDateIncrement]}`}
             onClick={handleShiftForward}
+            className={cls.button}
         >
             <IconArrowForward />
         </IconButton>
@@ -137,14 +140,7 @@ export const TransactionsEndDatePicker = () => {
 
     return (
         user && (
-            <div
-                style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'auto 1fr auto 1fr',
-                    alignItems: 'center',
-                    justifyItems: 'center',
-                }}
-            >
+            <div className={cls.root}>
                 {renderShiftBack()}
                 <DatePicker
                     variant="inline"
@@ -171,3 +167,18 @@ export const TransactionsEndDatePicker = () => {
         )
     );
 };
+
+const useStyles = makeStyles({
+    button: {
+        [ScreenQuery.SMALL]: {paddingTop: 0, paddingBottom: 0},
+        [ScreenQuery.MEDIUM]: {paddingTop: 0, paddingBottom: 0},
+    },
+    root: {
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr auto 1fr',
+        justifyItems: 'center',
+        [ScreenQuery.LARGE]: {
+            alignItems: 'center',
+        },
+    },
+});

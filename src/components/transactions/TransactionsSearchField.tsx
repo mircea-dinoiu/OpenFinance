@@ -29,7 +29,7 @@ export const TransactionsSearchField = () => {
         <TextField
             type="search"
             fullWidth={true}
-            label="Search Transactions"
+            placeholder="Search Transactions"
             value={value}
             onChange={(e) => {
                 setValue(e.target.value);
