@@ -15,7 +15,13 @@ import React, {useState} from 'react';
 import EventListener from 'react-event-listener';
 import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
-import {BrowserRouter, Redirect, Route, RouteComponentProps, Switch} from 'react-router-dom';
+import {
+    BrowserRouter,
+    Redirect,
+    Route,
+    RouteComponentProps,
+    Switch,
+} from 'react-router-dom';
 
 import {Login} from 'routes/Login';
 import {useAccountsReader} from 'state/accounts';
@@ -23,7 +29,12 @@ import {useAccountTypesReader} from 'state/accountTypes';
 import {setScreen} from 'state/actionCreators';
 import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies} from 'state/currencies';
-import {useBootstrap, useScreenSize, useSnackbars, useUsersWithActions} from 'state/hooks';
+import {
+    useBootstrap,
+    useScreenSize,
+    useSnackbars,
+    useUsersWithActions,
+} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createGlobalStyle} from 'styled-components';
 
@@ -43,6 +54,7 @@ const ResponsiveGlobalStyle = createGlobalStyle`
         font-weight: 300;
         background: ${theme.palette.background.default};
         -webkit-font-smoothing: antialiased;
+        overflow-y: scroll;
     }
 
     * {
