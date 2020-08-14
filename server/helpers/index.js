@@ -1,6 +1,5 @@
 const path = require('path');
 const basePath = (string = '') => path.join(__dirname, '../../', string);
-const Messages = require('../Messages');
 const defs = require('../../src/js/defs');
 
 const extractIdsFromModel = (model, key) => {

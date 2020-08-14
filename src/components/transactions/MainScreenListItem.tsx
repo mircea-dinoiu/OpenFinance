@@ -1,12 +1,12 @@
+import {Card, Container, Divider} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import {DialogOrDrawer} from 'components/dialogs';
-import React, {useState} from 'react';
 import {
     ContextMenuItems,
     TypeContextMenuItemsProps,
 } from 'components/MainScreen/ContextMenu/ContextMenuItems';
-import {makeStyles} from '@material-ui/core/styles';
-import {Container, Drawer, Divider, Card} from '@material-ui/core';
-import {spacingMedium, spacingSmall} from 'defs/styles';
+import {spacingNormal, spacingSmall} from 'defs/styles';
+import React, {useState} from 'react';
 
 export type MainScreenListItemProps<
     Item extends {
@@ -23,7 +23,7 @@ export type MainScreenListItemProps<
 
 const useStyles = makeStyles({
     container: {
-        padding: spacingMedium,
+        padding: spacingNormal,
         marginBottom: spacingSmall,
     },
     moreIcon: {

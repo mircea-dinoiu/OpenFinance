@@ -17,7 +17,7 @@ import {
 } from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
-import {spacingMedium, spacingSmall} from 'defs/styles';
+import {spacingNormal, spacingSmall} from 'defs/styles';
 import identity from 'lodash/identity';
 import pickBy from 'lodash/pickBy';
 import * as React from 'react';
@@ -124,7 +124,7 @@ export const Summary = () => {
             <div className={cls.sidebar}>
                 <Paper
                     style={{
-                        padding: spacingMedium,
+                        padding: spacingNormal,
                     }}
                 >
                     <IncludeDropdown

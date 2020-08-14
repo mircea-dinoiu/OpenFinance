@@ -7,7 +7,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 import {MuiReactSelect, MuiSelectNative} from 'components/dropdowns';
-import {spacingMedium, spacingSmall} from 'defs/styles';
+import {spacingNormal, spacingSmall} from 'defs/styles';
 import * as React from 'react';
 import {Filter} from 'react-table-6';
 
@@ -224,7 +224,7 @@ class SelectFilterWrapped extends React.PureComponent<
                 >
                     <div
                         style={{
-                            padding: `${spacingSmall} ${spacingMedium}`,
+                            padding: `${spacingSmall} ${spacingNormal}`,
                             width: 200,
                         }}
                     >

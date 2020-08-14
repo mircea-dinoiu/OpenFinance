@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
 import {SummaryModel} from 'components/transactions/types';
-import {spacingMedium, spacingSmall, theme} from 'defs/styles';
+import {spacingNormal, spacingSmall, theme} from 'defs/styles';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import {sortBy} from 'lodash';
 import React, {ReactNode, useState} from 'react';
@@ -46,7 +46,7 @@ export const SummarySubCategory = <Ent,>(props: {
     const cls = useStyles();
 
     return (
-        <div style={{padding: '0 5px', marginBottom: spacingMedium}}>
+        <div style={{padding: '0 5px', marginBottom: spacingNormal}}>
             {shouldGroup && (
                 <CardHeader
                     classes={cardHeaderClasses}

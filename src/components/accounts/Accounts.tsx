@@ -2,7 +2,7 @@ import {Paper} from '@material-ui/core';
 import {AccountTypeCell, CurrencyCell, TextFieldCell} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {routes} from 'defs/routes';
-import {spacingMedium} from 'defs/styles';
+import {spacingNormal} from 'defs/styles';
 import React from 'react';
 import {useAccountsReader} from 'state/accounts';
 import {useMoneyLocations} from 'state/hooks';
@@ -13,7 +13,7 @@ export const Accounts = () => {
     const refresh = useAccountsReader();
 
     return (
-        <Paper style={{padding: spacingMedium}}>
+        <Paper style={{padding: spacingNormal}}>
             <TableWithInlineEditing<Account>
                 data={rows}
                 api={routes.moneyLocations}

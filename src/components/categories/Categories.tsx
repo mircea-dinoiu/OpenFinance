@@ -2,7 +2,7 @@ import {Paper} from '@material-ui/core';
 import {TextFieldCell} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {routes} from 'defs/routes';
-import {spacingMedium} from 'defs/styles';
+import {spacingNormal} from 'defs/styles';
 import React from 'react';
 import {useCategoriesReader} from 'state/categories';
 import {useCategories} from 'state/hooks';
@@ -13,7 +13,7 @@ export const Categories = () => {
     const refresh = useCategoriesReader();
 
     return (
-        <Paper style={{padding: spacingMedium}}>
+        <Paper style={{padding: spacingNormal}}>
             <TableWithInlineEditing<Category>
                 data={rows}
                 api={routes.categories}

@@ -2,7 +2,7 @@ import {Chip} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {MuiReactSelect} from 'components/dropdowns';
 import {routes} from 'defs/routes';
-import {spacingMedium, spacingSmall} from 'defs/styles';
+import {spacingNormal, spacingSmall} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React from 'react';
 import {useCategories} from 'state/hooks';
@@ -67,7 +67,7 @@ export const TransactionCategoriesField = ({
 
 const useStyles = makeStyles({
     suggestions: {
-        marginTop: spacingMedium,
+        marginTop: spacingNormal,
     },
     chip: {
         marginTop: spacingSmall,

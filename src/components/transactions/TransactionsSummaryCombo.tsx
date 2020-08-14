@@ -1,10 +1,10 @@
-import {Button, Container, Drawer, Paper} from '@material-ui/core';
+import {Button, Paper} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {DialogOrDrawer} from 'components/dialogs';
 import {MainScreenList} from 'components/transactions/MainScreenList';
 import {Summary} from 'components/transactions/Summary';
-import {spacingLarge, spacingSmall} from 'defs/styles';
+import {spacingSmall} from 'defs/styles';
 import * as React from 'react';
 import {useState} from 'react';
 import {useScreenSize} from 'state/hooks';
@@ -15,6 +15,8 @@ export const TransactionsSummaryCombo = () => {
     const [summaryIsPinned, setSummaryIsPinned] = useState(true);
     const cls = useStyles();
     const [summaryIsOpen, setSummaryIsOpen] = useState(false);
+
+
 
     if (screenSize.isLarge) {
         return (
@@ -103,3 +105,4 @@ const useStyles = makeStyles({
         paddingLeft: `${sidebarWidth + gapWidth}px`,
     },
 });
+

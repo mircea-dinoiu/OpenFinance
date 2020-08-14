@@ -8,7 +8,7 @@ import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay
 import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import {Flags} from 'components/transactions/MainScreenFlags';
 import {TransactionModel} from 'components/transactions/types';
-import {spacingMedium, spacingSmall} from 'defs/styles';
+import {spacingNormal, spacingSmall} from 'defs/styles';
 import * as React from 'react';
 import styled from 'styled-components';
 
@@ -50,7 +50,7 @@ const AmountContainer = styled.div`
 `;
 
 const FlagsContainer = styled.div`
-    margin-left: ${spacingMedium};
+    margin-left: ${spacingNormal};
 `;
 
 const MlContainer = styled.div`

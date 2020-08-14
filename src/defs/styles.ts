@@ -17,16 +17,21 @@ export const dialog = {
 };
 
 export const spacingSmall = '5px';
-export const spacingMedium = '10px';
+export const spacingNormal = '10px';
 export const spacingLarge = '20px';
 
 export const stickyHeaderTop = '64px';
 
-export const gridGap = spacingMedium;
+export const gridGap = spacingNormal;
 
 export const screenQuerySmall = '(min-width: 0px) and (max-width: 480px)';
 export const screenQueryMedium = '(min-width: 481px) and (max-width: 1024px)';
 export const screenQueryLarge = '(min-width: 1025px)';
+export enum ScreenQuery {
+    SMALL = '@media (min-width: 0px) and (max-width: 480px)',
+    MEDIUM = '@media (min-width: 481px) and (max-width: 1024px)',
+    LARGE = '@media (min-width: 1025px)',
+}
 
 export const theme = createMuiTheme({
     palette: {

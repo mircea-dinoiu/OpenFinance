@@ -2,7 +2,6 @@ import {
     Button,
     ButtonProps,
     Checkbox,
-    Fab,
     FormControlLabel,
     Menu,
     Paper,
@@ -10,8 +9,6 @@ import {
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import IconSummary from '@material-ui/icons/AccountBalance';
-import AddIcon from '@material-ui/icons/Add';
 import IconSplit from '@material-ui/icons/CallSplitRounded';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
@@ -35,21 +32,22 @@ import {MainScreenEditDialog} from 'components/transactions/MainScreenEditDialog
 import {MainScreenListGroup} from 'components/transactions/MainScreenListGroup';
 import {SplitAmountField} from 'components/transactions/SplitAmountField';
 import {StatsTable} from 'components/transactions/StatsTable';
-import {TransactionsSearchField} from 'components/transactions/TransactionsSearchField';
+import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
+import {TransactionsMobileHeader} from 'components/transactions/TransactionsMobileHeader';
 import {formToModel} from 'components/transactions/transformers/formToModel';
 import {getFormDefaults} from 'components/transactions/transformers/getFormDefaults';
 import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
-import {greyedOut, spacingMedium} from 'defs/styles';
+import {greyedOut} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import * as H from 'history';
 import {isEqual, range, uniqueId} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import React, {CSSProperties, PureComponent, ReactNode, useMemo} from 'react';
+import React, {PureComponent, ReactNode, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 import {Filter, SortingRule} from 'react-table-6';
@@ -347,7 +345,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         return (
             <TableHeader>
-                <TableHeaderTop columnCount={6}>
+                <TableHeaderTop columnCount={7}>
+                    <TransactionsEndDatePicker />
                     <>
                         <FormControlLabel
                             control={
@@ -806,7 +805,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         return (
             <>
-                <TransactionsSearchField />
+                <TransactionsMobileHeader
+                    onTransactionAdd={this.handleToggleAddModal}
+                    onSummaryOpen={this.props.onSummaryOpen as () => void}
+                />
                 {Object.entries(this.getGroupedResults()).map(
                     ([date, items]) => (
                         <MainScreenListGroup
@@ -901,44 +903,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         }}
                     />
                     {this.renderDialogs()}
-                    {!isDesktop && this.renderStickyButtons()}
                 </div>
             </div>
-        );
-    }
-
-    renderStickyButtons() {
-        const style: CSSProperties = {
-            position: 'fixed',
-            bottom: spacingMedium,
-            zIndex: 1,
-        };
-
-        return (
-            <>
-                <Fab
-                    variant="extended"
-                    color="secondary"
-                    onClick={this.props.onSummaryOpen}
-                    style={{
-                        ...style,
-                        right: '70px',
-                    }}
-                >
-                    <IconSummary />
-                </Fab>
-                <Fab
-                    variant="extended"
-                    color="primary"
-                    onClick={this.handleToggleAddModal}
-                    style={{
-                        ...style,
-                        right: spacingMedium,
-                    }}
-                >
-                    <AddIcon />
-                </Fab>
-            </>
         );
     }
 }
