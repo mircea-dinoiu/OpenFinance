@@ -25,7 +25,6 @@ import {ExpenseListItemContent} from 'components/transactions/ExpenseListItemCon
 import {makeTransactionsColumns} from 'components/transactions/ExpenseTableColumns';
 import {mergeItems} from 'components/transactions/helpers';
 import {ImportTransactions} from 'components/transactions/ImportTransactions';
-import {LoadMore} from 'components/transactions/LoadMore';
 import {MainScreenCreatorDialog} from 'components/transactions/MainScreenCreatorDialog';
 import {MainScreenDeleteDialog} from 'components/transactions/MainScreenDeleteDialog';
 import {MainScreenEditDialog} from 'components/transactions/MainScreenEditDialog';
@@ -48,6 +47,7 @@ import {isEqual, range, uniqueId} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import React, {PureComponent, ReactNode, useMemo} from 'react';
+import EventListener from 'react-event-listener';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 import {Filter, SortingRule} from 'react-table-6';
@@ -64,6 +64,7 @@ import {
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';
+import {scrollReachedBottom} from 'utils/scroll';
 import {makeUrl, mapUrlToFragment} from 'utils/url';
 
 type TypeOwnProps = {
@@ -877,7 +878,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             return <BigLoader />;
         }
 
-        const {loading} = this.state;
         const isDesktop = this.isDesktop();
 
         return (
@@ -890,23 +890,27 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     }}
                 >
                     {this.renderContent()}
-                    <LoadMore
-                        loading={Boolean(loading)}
-                        onClick={() => {
-                            const url = new URL(window.location.href);
-
-                            url.searchParams.set(
-                                QueryParam.page,
-                                String(this.props.params.page + 1),
-                            );
-                            this.props.history.replace(mapUrlToFragment(url));
-                        }}
-                    />
                     {this.renderDialogs()}
                 </div>
+                <EventListener
+                    target="window"
+                    onScroll={this.handleWindowScroll}
+                />
             </div>
         );
     }
+
+    handleWindowScroll = () => {
+        if (scrollReachedBottom(document.scrollingElement as HTMLElement)) {
+            const url = new URL(window.location.href);
+
+            url.searchParams.set(
+                QueryParam.page,
+                String(this.props.params.page + 1),
+            );
+            this.props.history.replace(mapUrlToFragment(url));
+        }
+    };
 }
 
 export const MainScreenList = (ownProps: TypeOwnProps) => {
