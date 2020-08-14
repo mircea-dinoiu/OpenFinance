@@ -40,8 +40,8 @@ const filters = {
         });
     },
 
-    validateBody: (rules) => (req, res, next) => {
-        const validator = new Validator(req.body, rules, {req});
+    validatePayload: (rules, type = 'body') => (req, res, next) => {
+        const validator = new Validator(req[type], rules, {req});
 
         validator.passes().then((passed) => {
             if (passed) {

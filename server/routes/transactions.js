@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/ExpenseController');
-const SuggestionController = require('../controllers/SuggestionController');
 const filters = require('../filters');
 const fileupload = require('express-fileupload');
+const defs = require('../../src/js/defs');
 
 const c = new Controller();
-const sc = new SuggestionController();
 const transactionsRepeat = require('./transactions/repeat');
+const {getExpenseDescriptions} = require('./transactions/suggestions');
+const {getCategories} = require('./transactions/suggestions');
 
 router.get('/', filters.authProject, (req, res) => {
     res.wrapPromise(c.list(req, res));
@@ -17,7 +18,7 @@ router.delete(
     '/',
     [
         filters.authProject,
-        filters.validateBody({
+        filters.validatePayload({
             ids: ['isRequired', 'isTransactionIdArray'],
         }),
     ],
@@ -38,7 +39,7 @@ router.post(
     '/detach',
     [
         filters.authProject,
-        filters.validateBody({
+        filters.validatePayload({
             ids: ['isRequired', 'isTransactionIdArray'],
         }),
     ],
@@ -50,11 +51,11 @@ router.post(
     '/skip',
     [
         filters.authProject,
-        filters.validateBody({
+        filters.validatePayload({
             ids: ['isRequired', 'isTransactionIdArray'],
         }),
     ],
-    async (req, res) => {
+    (req, res) => {
         res.wrapPromise(transactionsRepeat.skip({req, res}));
     },
 );
@@ -67,16 +68,28 @@ router.post(
     },
 );
 
-router.get('/suggestions/categories', filters.authProject, async (req, res) => {
-    res.wrapPromise(sc.getCategories(req, res));
-});
-
 router.get(
-    '/suggestions/descriptions',
-    filters.authProject,
-    async (req, res) => {
-        res.wrapPromise(sc.getExpenseDescriptions(req, res));
+    '/suggestions/categories',
+    [
+        filters.authProject,
+        filters.validatePayload(
+            {
+                search: ['isString'],
+                end_date: [
+                    'isRequired',
+                    ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+                ],
+            },
+            'query',
+        ),
+    ],
+    (req, res) => {
+        res.wrapPromise(getCategories(req, res));
     },
 );
+
+router.get('/suggestions/descriptions', filters.authProject, (req, res) => {
+    res.wrapPromise(getExpenseDescriptions(req, res));
+});
 
 module.exports = router;

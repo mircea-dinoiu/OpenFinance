@@ -14,7 +14,7 @@ router.delete(
     '/',
     [
         filters.authProject,
-        filters.validateBody({
+        filters.validatePayload({
             ids: ['isRequired', ['isIdArray', Model]],
         }),
     ],
