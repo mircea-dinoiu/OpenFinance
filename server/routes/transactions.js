@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/ExpenseController');
-const filters = require('../filters');
+const {
+    validateAuth,
+    validateProject,
+    validatePayload,
+} = require('../middlewares');
 const fileupload = require('express-fileupload');
 const defs = require('../../src/js/defs');
 
@@ -10,15 +14,16 @@ const transactionsRepeat = require('./transactions/repeat');
 const {getExpenseDescriptions} = require('./transactions/suggestions');
 const {getCategories} = require('./transactions/suggestions');
 
-router.get('/', filters.authProject, (req, res) => {
+router.get('/', [validateAuth, validateProject], (req, res) => {
     res.wrapPromise(c.list(req, res));
 });
 
 router.delete(
     '/',
     [
-        filters.authProject,
-        filters.validatePayload({
+        validateAuth,
+        validateProject,
+        validatePayload({
             ids: ['isRequired', 'isTransactionIdArray'],
         }),
     ],
@@ -27,19 +32,20 @@ router.delete(
     },
 );
 
-router.put('/', filters.authProject, async (req, res) => {
+router.put('/', [validateAuth, validateProject], async (req, res) => {
     res.wrapPromise(c.update(req, res));
 });
 
-router.post('/', filters.authProject, async (req, res) => {
+router.post('/', [validateAuth, validateProject], async (req, res) => {
     res.wrapPromise(c.create(req, res));
 });
 
 router.post(
     '/detach',
     [
-        filters.authProject,
-        filters.validatePayload({
+        validateAuth,
+        validateProject,
+        validatePayload({
             ids: ['isRequired', 'isTransactionIdArray'],
         }),
     ],
@@ -50,8 +56,9 @@ router.post(
 router.post(
     '/skip',
     [
-        filters.authProject,
-        filters.validatePayload({
+        validateAuth,
+        validateProject,
+        validatePayload({
             ids: ['isRequired', 'isTransactionIdArray'],
         }),
     ],
@@ -62,7 +69,7 @@ router.post(
 
 router.post(
     '/upload',
-    [filters.authProject, fileupload()],
+    [validateAuth, validateProject, fileupload()],
     async (req, res) => {
         res.wrapPromise(c.upload({req, res}));
     },
@@ -71,8 +78,9 @@ router.post(
 router.get(
     '/suggestions/categories',
     [
-        filters.authProject,
-        filters.validatePayload(
+        validateAuth,
+        validateProject,
+        validatePayload(
             {
                 search: ['isString'],
                 end_date: [
@@ -88,8 +96,12 @@ router.get(
     },
 );
 
-router.get('/suggestions/descriptions', filters.authProject, (req, res) => {
-    res.wrapPromise(getExpenseDescriptions(req, res));
-});
+router.get(
+    '/suggestions/descriptions',
+    [validateAuth, validateProject],
+    (req, res) => {
+        res.wrapPromise(getExpenseDescriptions(req, res));
+    },
+);
 
 module.exports = router;

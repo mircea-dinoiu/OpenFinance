@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/CurrencyController');
-const filters = require('../filters');
+const {validateAuth} = require('../middlewares');
 
 const c = new Controller();
 
-router.get('/', filters.auth, async (req, res) => {
+router.get('/', validateAuth, async (req, res) => {
     res.wrapPromise(c.list(req, res));
 });
 

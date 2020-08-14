@@ -2,15 +2,15 @@ const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/UserController');
 const passport = require('passport');
-const filters = require('../filters');
+const {validateAuth, validateGuest} = require('../middlewares');
 
 const c = new Controller();
 
-router.get('/', filters.auth, async (req, res) => {
+router.get('/', validateAuth, async (req, res) => {
     res.wrapPromise(c.list(req, res));
 });
 
-router.post('/login', filters.guest, async (req, res, next) => {
+router.post('/login', validateGuest, async (req, res, next) => {
     passport.authenticate('local', (authErr, user) => {
         if (authErr) {
             return next(authErr);
@@ -41,7 +41,7 @@ router.post('/login', filters.guest, async (req, res, next) => {
     })(req, res, next);
 });
 
-router.post('/logout', filters.auth, (req, res) => {
+router.post('/logout', validateAuth, (req, res) => {
     req.session.destroy();
 
     if (req.xhr) {
@@ -51,7 +51,7 @@ router.post('/logout', filters.auth, (req, res) => {
     }
 });
 
-router.put('/password/set', filters.auth, (req, res) => {
+router.put('/password/set', validateAuth, (req, res) => {
     res.wrapPromise(c.passwordSet(req, res));
 });
 

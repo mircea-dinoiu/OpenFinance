@@ -39,7 +39,7 @@ module.exports = class UserController {
         });
     }
 
-    async passwordSet({res, req}){
+    async passwordSet({res, req}) {
         const {prevPassword, nextPassword} = req.body;
 
         if (

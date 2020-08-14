@@ -121,9 +121,7 @@ module.exports = {
 
             return {
                 error: false,
-                json: await Model.scope('default').findAll(
-                    queryOpts,
-                ),
+                json: await Model.scope('default').findAll(queryOpts),
             };
         }
 
