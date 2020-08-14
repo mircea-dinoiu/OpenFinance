@@ -36,7 +36,7 @@ Object.assign(validator, {
         return Boolean(await Model.find({where: {id}}));
     },
     isTransactionId: async (id, opts) => {
-        return this.isTransactionIdArray([id], opts);
+        return validator.isTransactionIdArray([id], opts);
     },
     isTransactionIdArray: async (array, opts) => {
         if (!validator.isArray(array)) {
