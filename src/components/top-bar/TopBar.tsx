@@ -8,6 +8,8 @@ import {
     ListItemIcon,
     ListItemText,
     Paper,
+    Tab,
+    Tabs,
     Toolbar,
     Typography,
 } from '@material-ui/core';
@@ -21,14 +23,20 @@ import IconVisibilityOff from '@material-ui/icons/VisibilityOff';
 import {CurrenciesDrawerContent} from 'components/currencies/CurrenciesDrawerContent';
 import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption} from 'defs';
-import {spacingNormal, spacingSmall} from 'defs/styles';
+import {spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
+import {paths} from 'js/defs';
 import React, {useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
 import {useCurrencies} from 'state/currencies';
 import {usePrivacyToggle} from 'state/privacyToggle';
 import {useProjects, useSelectedProject} from 'state/projects';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
-import {mapUrlToFragment} from 'utils/url';
-import {useBootstrap, useRefreshWidgetsDispatcher} from '../../state/hooks';
+import {makeUrl, mapUrlToFragment} from 'utils/url';
+import {
+    useBootstrap,
+    useRefreshWidgetsDispatcher,
+    useScreenSize,
+} from '../../state/hooks';
 
 const MAX_TIMES = 10;
 
@@ -55,6 +63,16 @@ export const TopBar = (props: {onLogout: () => void}) => {
     const currencies = useCurrencies();
     const [drawerIsOpen, setDrawerIsOpen] = useState(false);
     const isCurrenciesDrawerReady = () => user != null && currencies != null;
+    const history = useHistory();
+    const location = useLocation();
+    const project = useSelectedProject();
+    const tabs = [
+        paths.transactions,
+        paths.categories,
+        paths.accounts,
+        paths.accountTypes,
+    ];
+    const screenSize = useScreenSize();
 
     const onClickRefresh = () => {
         refreshWidgets();
@@ -100,6 +118,25 @@ export const TopBar = (props: {onLogout: () => void}) => {
                             document.title
                         )}
                     </Typography>
+                    {screenSize.isLarge && (
+                        <Paper className={cls.tabs}>
+                            <Tabs
+                                value={tabs.indexOf(location.pathname)}
+                                onChange={(event, index) => {
+                                    history.push(
+                                        makeUrl(tabs[index], {
+                                            projectId: project.id,
+                                        }),
+                                    );
+                                }}
+                            >
+                                <Tab label="Transactions" />
+                                <Tab label="Categories" />
+                                <Tab label="Accounts" />
+                                <Tab label="Account Types" />
+                            </Tabs>
+                        </Paper>
+                    )}
                     <div
                         style={{
                             flex: 1,
@@ -165,8 +202,16 @@ const useStyles = makeStyles({
         backgroundColor: grey[900],
         paddingRight: spacingNormal,
         paddingLeft: spacingNormal,
+        minHeight: stickyHeaderHeight,
     },
     paper: {
         padding: `${spacingSmall} ${spacingNormal}`,
+    },
+    tabs: {
+        backgroundColor: 'transparent',
+        color: grey[100],
+        left: '50%',
+        position: 'absolute',
+        transform: 'translateX(-50%)',
     },
 });

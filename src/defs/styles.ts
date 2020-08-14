@@ -20,7 +20,7 @@ export const spacingSmall = '5px';
 export const spacingNormal = '10px';
 export const spacingLarge = '20px';
 
-export const stickyHeaderTop = '64px';
+export const stickyHeaderHeight = '48px';
 
 export const gridGap = spacingNormal;
 

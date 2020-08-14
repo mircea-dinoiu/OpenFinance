@@ -1,6 +1,6 @@
 import {Dialog, Drawer} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {stickyHeaderTop} from 'defs/styles';
+import {stickyHeaderHeight} from 'defs/styles';
 import React, {ReactNode} from 'react';
 import {useScreenSize} from 'state/hooks';
 
@@ -28,6 +28,6 @@ export const DialogOrDrawer = ({
 
 const useStyles = makeStyles({
     paper: {
-        top: stickyHeaderTop,
+        top: stickyHeaderHeight,
     },
 });

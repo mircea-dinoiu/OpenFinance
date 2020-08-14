@@ -1,10 +1,14 @@
 import MomentUtils from '@date-io/moment';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import {Accounts} from 'components/accounts/Accounts';
+import {AccountTypes} from 'components/accountTypes/AccountTypes';
+import {Categories} from 'components/categories/Categories';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
+import {TransactionsSummaryCombo} from 'components/transactions/TransactionsSummaryCombo';
 import {routes} from 'defs/routes';
-import {theme} from 'defs/styles';
+import {spacingSmall, theme} from 'defs/styles';
 import {paths} from 'js/defs';
 import 'normalize.css';
 import React, {useState} from 'react';
@@ -12,7 +16,6 @@ import EventListener from 'react-event-listener';
 import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
 import {BrowserRouter, Redirect, Route, RouteComponentProps, Switch} from 'react-router-dom';
-import {AppTabs} from 'routes/AppTabs';
 
 import {Login} from 'routes/Login';
 import {useAccountsReader} from 'state/accounts';
@@ -20,7 +23,7 @@ import {useAccountTypesReader} from 'state/accountTypes';
 import {setScreen} from 'state/actionCreators';
 import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies} from 'state/currencies';
-import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';
+import {useBootstrap, useScreenSize, useSnackbars, useUsersWithActions} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createGlobalStyle} from 'styled-components';
 
@@ -101,7 +104,6 @@ const AppWrapped = () => {
         }
     };
 
-
     const onWindowResize = () => {
         dispatch(setScreen(getScreenQueries()));
     };
@@ -116,9 +118,7 @@ const AppWrapped = () => {
                             target="window"
                             onResize={onWindowResize}
                         />
-                        <TopBar
-                            onLogout={onLogout}
-                        />
+                        <TopBar onLogout={onLogout} />
                         {ready && (
                             <Switch>
                                 <Route
@@ -144,6 +144,7 @@ const AppWrapped = () => {
 const AppInner = ({location, match}: RouteComponentProps) => {
     const users = useBootstrap();
     const project = useSelectedProject();
+    const screenSize = useScreenSize();
 
     if (users) {
         if (location.pathname === paths.home) {
@@ -156,7 +157,17 @@ const AppInner = ({location, match}: RouteComponentProps) => {
             );
         }
 
-        return <AppTabs />;
+        return (
+            <div style={{margin: screenSize.isLarge ? spacingSmall : 0}}>
+                <Route
+                    path={paths.transactions}
+                    component={TransactionsSummaryCombo}
+                />
+                <Route path={paths.categories} component={Categories} />
+                <Route path={paths.accounts} component={Accounts} />
+                <Route path={paths.accountTypes} component={AccountTypes} />
+            </div>
+        );
     }
 
     return <Redirect to={paths.login} />;
