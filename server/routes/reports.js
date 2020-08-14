@@ -11,7 +11,7 @@ const logger = require('../helpers/logger');
 const c = new Controller();
 
 router.get('/summary', [validateAuth, validateProject], (req, res) => {
-    res.wrapPromise(c.getSummary(req, res));
+    c.getSummary(req, res);
 });
 
 router.get(

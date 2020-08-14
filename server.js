@@ -5,7 +5,6 @@ const logger = require('morgan');
 
 require('express-async-errors');
 const app = express();
-const {wrapPromise} = require('./server/helpers');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
@@ -41,7 +40,6 @@ app.use(bodyParser.urlencoded({extended: false}));
  * Add promise rejection wrapper
  */
 app.use((req, res, next) => {
-    res.wrapPromise = wrapPromise;
     req.connection.setNoDelay(true);
     next();
 });

@@ -7,7 +7,7 @@ const {validateAuth, validateGuest} = require('../middlewares');
 const c = new Controller();
 
 router.get('/', validateAuth, async (req, res) => {
-    res.wrapPromise(c.list(req, res));
+    c.list(req, res);
 });
 
 router.post('/login', validateGuest, async (req, res, next) => {
@@ -52,7 +52,7 @@ router.post('/logout', validateAuth, (req, res) => {
 });
 
 router.put('/password/set', validateAuth, (req, res) => {
-    res.wrapPromise(c.passwordSet(req, res));
+    c.passwordSet(req, res);
 });
 
 module.exports = router;

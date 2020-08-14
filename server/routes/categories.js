@@ -11,7 +11,7 @@ const {Category: Model} = require('../models');
 const c = new Controller();
 
 router.get('/', [validateAuth, validateProject], async (req, res) => {
-    res.wrapPromise(c.list(req, res));
+    c.list(req, res);
 });
 
 router.delete(
@@ -24,16 +24,16 @@ router.delete(
         }),
     ],
     (req, res) => {
-        res.wrapPromise(c.destroy(req, res));
+        c.destroy(req, res);
     },
 );
 
 router.put('/', [validateAuth, validateProject], (req, res) => {
-    res.wrapPromise(c.update(req, res));
+    c.update(req, res);
 });
 
 router.post('/', [validateAuth, validateProject], (req, res) => {
-    res.wrapPromise(c.create(req, res));
+    c.create(req, res);
 });
 
 module.exports = router;

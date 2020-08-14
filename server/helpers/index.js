@@ -74,14 +74,4 @@ module.exports = {
 
         return dest;
     },
-
-    wrapPromise(promise) {
-        promise.catch((e) => {
-            console.error(e);
-            this.status(500);
-            this.json(Messages.ERROR_UNEXPECTED);
-        });
-
-        return promise;
-    },
 };
