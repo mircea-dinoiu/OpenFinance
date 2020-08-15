@@ -17,7 +17,7 @@ export const Categories = () => {
             <TableWithInlineEditing<Category>
                 data={rows}
                 api={routes.categories}
-                editableFields={['name', 'color']}
+                editableFields={['name']}
                 onRefresh={refresh}
                 defaultSorted={[{id: 'name', desc: false}]}
                 allowDelete={true}
@@ -25,11 +25,6 @@ export const Categories = () => {
                     {
                         Header: 'Name',
                         accessor: 'name',
-                        Cell: TextFieldCell,
-                    },
-                    {
-                        accessor: 'color',
-                        Header: 'Color',
                         Cell: TextFieldCell,
                     },
                     {accessor: 'expenses', Header: 'Transaction Count'},

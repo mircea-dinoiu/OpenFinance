@@ -3,7 +3,6 @@ module.exports = (sequelize, types) => {
         'categories',
         {
             name: types.STRING,
-            color: types.STRING,
             id: {
                 type: types.INTEGER,
                 primaryKey: true,

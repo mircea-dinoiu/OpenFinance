@@ -20,7 +20,6 @@ export const CategoriesDisplay = ({item}: {item: TransactionModel}) => {
                     <Chip
                         key={each.id}
                         style={{
-                            background: each.color,
                             margin: `${
                                 screen.isLarge ? 0 : spacingSmall
                             } ${spacingSmall} 0 0`,
