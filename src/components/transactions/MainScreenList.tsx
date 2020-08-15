@@ -140,20 +140,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.refresh();
     }
 
-    handleReceiveNewRecord(newRecord: TransactionModel) {
-        if (
-            newRecord &&
-            this.state.results.filter((each) => each.id == newRecord.id)
-                .length === 0
-        ) {
-            this.setState({
-                results: this.state.results.concat(newRecord),
-            });
-
-            this.props.dispatch(onRefreshWidgets());
-        }
-    }
-
     componentDidUpdate(prevProps: TypeProps) {
         if (prevProps.refreshWidgets !== this.props.refreshWidgets) {
             this.refresh();
@@ -824,8 +810,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return (
             <>
                 <MainScreenCreatorDialog
-                    onReceiveNewRecord={(newRecord) => {
-                        this.handleReceiveNewRecord(newRecord);
+                    onSave={() => {
+                        this.props.dispatch(onRefreshWidgets());
                         this.handleToggleAddModal();
                     }}
                     onCancel={this.handleToggleAddModal}

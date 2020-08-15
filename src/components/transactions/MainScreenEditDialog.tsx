@@ -37,7 +37,7 @@ type TypeProps = {
     }>;
     open: boolean;
     onCancel: () => void;
-    onSave: ({}) => void;
+    onSave: () => void;
 };
 
 export const MainScreenEditDialog = (props: TypeProps) => {
@@ -78,7 +78,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
 
             console.info('[UPDATES]', updates);
 
-            const response = await props.onRequestUpdate(
+            await props.onRequestUpdate(
                 data.map((each) =>
                     props.formToModel(
                         {...each, ...updates},
@@ -88,11 +88,10 @@ export const MainScreenEditDialog = (props: TypeProps) => {
                     ),
                 ),
             );
-            const json = response.data;
 
             setSaving(false);
             setError(null);
-            props.onSave(json[0]);
+            props.onSave();
         } catch (e) {
             if (e.response) {
                 setError(parseCRUDError(e.response.data));

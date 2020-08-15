@@ -4,13 +4,11 @@ import {
     DialogContent,
     DialogTitle,
 } from '@material-ui/core';
-import {withStyles} from '@material-ui/core/styles';
 import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
 import {ErrorSnackbar} from 'components/snackbars';
-import {TransactionForm, TransactionModel} from 'components/transactions/types';
-import {dialog} from 'defs/styles';
+import {TransactionForm} from 'components/transactions/types';
 import {parseCRUDError} from 'parsers';
 import * as React from 'react';
 import {useBootstrap, useMoneyLocations} from 'state/hooks';
@@ -23,7 +21,7 @@ type TypeProps = {
     }) => TransactionForm;
     formToModel: Function;
     entityName: string;
-    onReceiveNewRecord: (r: TransactionModel) => void;
+    onSave: () => void;
     formComponent: React.ComponentType<{
         initialValues: TransactionForm;
         onFormChange: (form: TransactionForm) => void;
@@ -31,11 +29,10 @@ type TypeProps = {
     }>;
     onRequestCreate: Function;
     onCancel: () => void;
-    classes: {};
     open: boolean;
 };
 
-const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
+export const MainScreenCreatorDialog = (props: TypeProps) => {
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState<React.ReactNode>(null);
     const user = useBootstrap();
@@ -62,16 +59,15 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
         setSaving(true);
 
         try {
-            const response = await props.onRequestCreate([
+            await props.onRequestCreate([
                 props.formToModel(data, {
                     user,
                 }),
             ]);
-            const json = response.data;
 
             setSaving(false);
 
-            props.onReceiveNewRecord(json[0]);
+            props.onSave();
         } catch (e) {
             if (e.response) {
                 setError(parseCRUDError(e.response.data));
@@ -123,7 +119,3 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
         </SmartDrawer>
     );
 };
-
-export const MainScreenCreatorDialog = withStyles(dialog)(
-    MainScreenCreatorDialogWrapped,
-);

@@ -123,8 +123,6 @@ module.exports = class ExpenseController extends BaseController {
                 }
             }
         }
-
-        return this.Model.scope('default').findOne({where: {id: model.id}});
     }
 
     async withRepeatedModels({model, cleanup = false}) {

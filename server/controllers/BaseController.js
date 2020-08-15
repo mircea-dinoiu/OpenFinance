@@ -58,10 +58,8 @@ module.exports = class BaseController {
             if (errors.length) {
                 res.status(400).json(errors);
             } else {
-                const output = [];
-
                 for (const record of validRecords) {
-                    let model = await this.Model.findOne({
+                    const model = await this.Model.findOne({
                         where: {id: record.id},
                     });
                     let values = this.sanitizeUpdateValues(record, req, res);
@@ -82,17 +80,15 @@ module.exports = class BaseController {
                     await model.update(values);
 
                     if (this.updateRelations) {
-                        model = await this.updateRelations({
+                        await this.updateRelations({
                             record,
                             model,
                             req,
                         });
                     }
-
-                    output.push(model.toJSON());
                 }
 
-                res.json(output);
+                res.sendStatus(200);
             }
         } else {
             res.status(400).json(Messages.ERROR_INVALID_INPUT);
@@ -127,8 +123,6 @@ module.exports = class BaseController {
             if (errors.length) {
                 res.status(400).json(errors);
             } else {
-                const output = [];
-
                 for (const record of validRecords) {
                     const values = this.sanitizeCreateValues(record, req, res);
                     let model;
@@ -147,17 +141,15 @@ module.exports = class BaseController {
                     }
 
                     if (this.createRelations) {
-                        model = await this.createRelations({
+                        await this.createRelations({
                             record,
                             model,
                             req,
                         });
                     }
-
-                    output.push(model.toJSON());
                 }
 
-                res.json(output);
+                res.sendStatus(200);
             }
         } else {
             res.status(400).json(Messages.ERROR_INVALID_INPUT);
