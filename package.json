@@ -108,6 +108,11 @@
     "format-all": "yarn run format \"server/**/*.js\" \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" \"*.js\"",
     "nodemon": "nodemon --ignore 'sources/**/*.ts' --ignore 'sources/**/*.tsx' --ignore '*.test.js*' --ignore storage/"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "yarn run format",
