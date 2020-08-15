@@ -80,6 +80,7 @@ export const TableHeaderTop = styled.div`
         ${(props: {columnCount: number}) => props.columnCount},
         max-content
     );
+    align-items: center;
 `;
 
 export function BaseTable<D>(props: Partial<TableProps<D>>) {

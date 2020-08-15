@@ -1,7 +1,16 @@
-import {Button, ButtonProps, Checkbox, FormControlLabel, Menu, Paper} from '@material-ui/core';
+import {
+    Button,
+    ButtonProps,
+    Checkbox,
+    Fab,
+    FormControlLabel,
+    Menu,
+    Paper,
+} from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import AddIcon from '@material-ui/icons/Add';
 import IconSplit from '@material-ui/icons/CallSplitRounded';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
@@ -47,7 +56,13 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
-import {Accounts, Bootstrap, Currencies, GlobalState, ScreenQueries} from 'types';
+import {
+    Accounts,
+    Bootstrap,
+    Currencies,
+    GlobalState,
+    ScreenQueries,
+} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';
@@ -321,13 +336,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     renderTableHeader() {
-        const buttonProps: ButtonProps = {
-            size: 'small',
-            style: {
-                height: '32px',
-                marginTop: '10px',
-            },
-        };
         const page = this.state.results;
         const selected = this.selectedItems;
 
@@ -390,20 +398,18 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                 this.state.results.map((r) => r.id),
                             );
                         }}
-                        {...buttonProps}
                     >
                         Select All
                     </Button>
-                    <Button
+                    <Fab
+                        variant="extended"
                         color="primary"
-                        variant="contained"
                         onClick={this.handleToggleAddModal}
-                        {...buttonProps}
+                        size="small"
                     >
-                        Create transaction
-                    </Button>
+                        <AddIcon />
+                    </Fab>
                     <ImportTransactions
-                        buttonProps={buttonProps}
                         onSubmit={async (transactions) => {
                             await this.handleRequestCreate(transactions);
                             this.props.dispatch(onRefreshWidgets());

@@ -4,7 +4,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle,
+    DialogTitle, Fab,
     List,
     ListItem,
     ListItemIcon,
@@ -16,8 +16,10 @@ import {
     Typography,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
 import IconUpload from '@material-ui/icons/CloudUpload';
 import {AxiosResponse} from 'axios';
+import {TableHeaderTop} from 'components/BaseTable';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TransactionReviewAccordion} from 'components/transactions/TransactionReviewAccordion';
 import {TransactionModel} from 'components/transactions/types';
@@ -42,10 +44,8 @@ enum ImportStep {
 }
 
 export const ImportTransactions = ({
-    buttonProps,
     onSubmit,
 }: {
-    buttonProps: ButtonProps;
     onSubmit: (transactions: TransactionModel[]) => void;
 }) => {
     const currencies = useCurrencies();
@@ -142,15 +142,14 @@ export const ImportTransactions = ({
 
     return (
         <>
-            <Button
+            <Fab
+                variant="extended"
                 color="primary"
-                variant="contained"
-                startIcon={<IconUpload />}
                 onClick={() => setDialogIsOpen(true)}
-                {...buttonProps}
+                size="small"
             >
-                Import Transactions
-            </Button>
+                <IconUpload />
+            </Fab>
             <Dialog
                 open={dialogIsOpen}
                 onClose={isUploading ? undefined : handleClose}
