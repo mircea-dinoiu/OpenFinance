@@ -753,7 +753,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                     : params.page
                             }
                             manual={true}
-                            loading={this.state.loading > 0}
                             data={results}
                             columns={makeTransactionsColumns({
                                 updateRecords: this.updateRecords,
