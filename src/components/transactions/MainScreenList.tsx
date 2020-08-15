@@ -1,11 +1,4 @@
-import {
-    Button,
-    ButtonProps,
-    Checkbox,
-    FormControlLabel,
-    Menu,
-    Paper,
-} from '@material-ui/core';
+import {Button, ButtonProps, Checkbox, FormControlLabel, Menu, Paper} from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -54,13 +47,7 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
-import {
-    Accounts,
-    Bootstrap,
-    Currencies,
-    GlobalState,
-    ScreenQueries,
-} from 'types';
+import {Accounts, Bootstrap, Currencies, GlobalState, ScreenQueries} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';
@@ -858,7 +845,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 />
                 {selectedItems.length > 0 && (
                     <MainScreenEditDialog
-                        key={this.state.editDialogKey}
                         open={this.state.editDialogOpen}
                         items={selectedItems}
                         onCancel={this.handleToggleEditDialog}

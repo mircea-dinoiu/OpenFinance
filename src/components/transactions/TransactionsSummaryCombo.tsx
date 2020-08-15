@@ -1,7 +1,7 @@
 import {Button, Paper} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
-import {DialogOrDrawer} from 'components/dialogs';
+import {SmartDrawer} from 'components/drawers';
 import {MainScreenList} from 'components/transactions/MainScreenList';
 import {Summary} from 'components/transactions/Summary';
 import {spacingSmall} from 'defs/styles';
@@ -54,14 +54,14 @@ export const TransactionsSummaryCombo = () => {
 
     return (
         <>
-            <DialogOrDrawer
+            <SmartDrawer
                 open={summaryIsOpen}
                 onClose={() => setSummaryIsOpen(false)}
             >
                 <div className={cls.summaryContainer}>
                     <Summary />
                 </div>
-            </DialogOrDrawer>
+            </SmartDrawer>
             <MainScreenList onSummaryOpen={() => setSummaryIsOpen(true)} />
         </>
     );

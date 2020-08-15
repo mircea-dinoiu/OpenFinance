@@ -1,12 +1,12 @@
 import {InputAdornment, TextField} from '@material-ui/core';
 import {gridGap} from 'defs/styles';
 import {findCurrencyById} from 'helpers/currency';
+import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {useCurrencies} from 'state/currencies';
 import {useMoneyLocations} from 'state/hooks';
 import {SummaryKey, useSummary} from 'state/summary';
 import styled from 'styled-components';
-import {financialNum} from 'js/utils/numbers';
 
 export const TransactionAmountFields = ({
     accountId,

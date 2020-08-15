@@ -1,8 +1,8 @@
-import {ClassNameMap} from '@material-ui/core/styles/withStyles';
-import * as React from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
+import {ClassNameMap} from '@material-ui/core/styles/withStyles';
 import {dialog} from 'defs/styles';
+import * as React from 'react';
 
 const MainScreenDeleteDialogWrapped = ({
     open,

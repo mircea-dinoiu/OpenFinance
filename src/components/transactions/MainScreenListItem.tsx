@@ -1,6 +1,6 @@
 import {Card, Container, Divider} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {DialogOrDrawer} from 'components/dialogs';
+import {SmartDrawer} from 'components/drawers';
 import {
     ContextMenuItems,
     TypeContextMenuItemsProps,
@@ -61,7 +61,7 @@ export const MainScreenListItem = <
             >
                 <ListItemContent item={item} />
             </Card>
-            <DialogOrDrawer
+            <SmartDrawer
                 onClose={handleCloseDrawer}
                 open={isDrawerOpen}
             >
@@ -73,7 +73,7 @@ export const MainScreenListItem = <
                     {...props.contextMenuItemsProps}
                     onCloseContextMenu={handleCloseDrawer}
                 />
-            </DialogOrDrawer>
+            </SmartDrawer>
         </>
     );
 };

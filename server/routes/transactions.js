@@ -7,7 +7,6 @@ const {
     validatePayload,
 } = require('../middlewares');
 const fileupload = require('express-fileupload');
-const defs = require('../../src/js/defs');
 
 const c = new Controller();
 const transactionsRepeat = require('./transactions/repeat');

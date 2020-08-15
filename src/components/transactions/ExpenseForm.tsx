@@ -15,7 +15,6 @@ import {
     Slider,
     TextField,
 } from '@material-ui/core';
-import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {MuiSelectNative} from 'components/dropdowns';
@@ -25,13 +24,9 @@ import {TransactionNameField} from 'components/transactions/TransactionNameField
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
-import {
-    gridGap,
-    screenQuerySmall,
-    spacingLarge,
-    spacingSmall,
-} from 'defs/styles';
+import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
+import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
 import {sortBy} from 'lodash';
 
@@ -39,14 +34,7 @@ import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
-import {
-    Accounts,
-    Bootstrap,
-    Categories,
-    Currencies,
-    GlobalState,
-    User,
-} from 'types';
+import {Accounts, Bootstrap, Categories, Currencies, GlobalState, User} from 'types';
 import {useEndDate} from 'utils/dates';
 
 const boxStyle = {

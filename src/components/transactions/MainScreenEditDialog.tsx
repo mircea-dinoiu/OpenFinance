@@ -1,14 +1,14 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
-import {withStyles} from '@material-ui/core/styles';
+import {Button, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
+import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
 import {TransactionForm, TransactionModel} from 'components/transactions/types';
-import {dialog} from 'defs/styles';
 import {isEqual} from 'lodash';
 
 import {parseCRUDError} from 'parsers';
 import * as React from 'react';
+import {ReactNode, useEffect, useRef, useState} from 'react';
 import {Bootstrap} from 'types';
 
 type TypeProps = {
@@ -19,9 +19,7 @@ type TypeProps = {
         data: TransactionModel[];
     }>;
     items: TransactionModel[];
-    modelToForm: (
-        model: TransactionModel,
-    ) => TransactionForm;
+    modelToForm: (model: TransactionModel) => TransactionForm;
     formToModel: (
         form: TransactionForm,
         detail: {user: Bootstrap},
@@ -32,148 +30,127 @@ type TypeProps = {
         onFormChange: (form: TransactionForm) => void;
     }>;
     open: boolean;
-    classes: {};
     onCancel: () => void;
     onSave: ({}) => void;
 };
 
-class MainScreenEditDialogWrapped extends React.PureComponent<
-    TypeProps,
-    {
-        saving: boolean;
-        success: React.ReactNode;
-        error: React.ReactNode;
-    }
-> {
-    state = {
-        saving: false,
-        success: null,
-        error: null,
-    };
-    formData = this.props.items.map(this.props.modelToForm);
-    initialData = this.props.items.map(this.props.modelToForm);
+export const MainScreenEditDialog = (props: TypeProps) => {
+    const [saving, setSaving] = useState(false);
+    const [success, setSuccess] = useState<ReactNode>(null);
+    const [error, setError] = useState<ReactNode>(null);
+    const formData = useRef(props.items.map(props.modelToForm));
+    const initialData = useRef(props.items.map(props.modelToForm));
 
-    getUpdates() {
+    useEffect(() => {
+        setSaving(false);
+        setSuccess(null);
+        setError(null);
+        formData.current = props.items.map(props.modelToForm);
+        initialData.current = props.items.map(props.modelToForm);
+    }, [props.open]);
+
+    const getUpdates = () => {
         const updates = {};
 
-        for (const key in this.initialData[0]) {
-            if (!isEqual(this.initialData[0][key], this.formData[0][key])) {
-                updates[key] = this.formData[0][key];
+        for (const key in initialData.current[0]) {
+            if (
+                !isEqual(initialData.current[0][key], formData.current[0][key])
+            ) {
+                updates[key] = formData.current[0][key];
             }
         }
 
         return updates;
-    }
+    };
 
-    save = async () => {
-        const data = this.formData;
+    const save = async () => {
+        const data = formData.current;
 
-        this.setState({
-            error: null,
-            success: null,
-            saving: true,
-        });
+        setError(null);
+        setSuccess(null);
+        setSaving(true);
 
         try {
-            const updates = this.getUpdates();
+            const updates = getUpdates();
 
             console.info('[UPDATES]', updates);
 
-            const response = await this.props.onRequestUpdate(
+            const response = await props.onRequestUpdate(
                 data.map((each) =>
-                    this.props.formToModel(
+                    props.formToModel(
                         {...each, ...updates},
                         {
-                            user: this.props.user,
+                            user: props.user,
                         },
                     ),
                 ),
             );
             const json = response.data;
 
-            this.setState({
-                success: `The ${this.props.entityName} was successfully updated`,
-                saving: false,
-            });
+            setSuccess(`The ${props.entityName} was successfully updated`);
+            setSaving(false);
 
             setTimeout(() => {
-                this.setState({
-                    error: null,
-                    success: null,
-                });
-                this.props.onSave(json[0]);
+                setError(null);
+                setSuccess(null);
+                props.onSave(json[0]);
             }, 500);
         } catch (e) {
             if (e.response) {
-                this.setState({
-                    error: parseCRUDError(e.response.data),
-                    saving: false,
-                });
+                setError(parseCRUDError(e.response.data));
+                setSaving(false);
             } else {
-                this.setState({
-                    error: e.message,
-                    saving: false,
-                });
+                setError(e.message);
+                setSaving(false);
             }
         }
     };
 
-    render() {
-        const Form = this.props.formComponent;
+    const Form = props.formComponent;
 
-        return (
-            <Dialog
-                open={this.props.open}
-                classes={this.props.classes}
-                fullWidth={true}
-            >
-                <DialogTitle>{`Edit ${this.props.entityName}${
-                    this.props.items.length === 1 ? '' : 's'
-                }`}</DialogTitle>
-                <DialogContent style={{overflow: 'visible'}}>
-                    <Form
-                        onFormChange={(formData) =>
-                            (this.formData[0] = formData)
-                        }
-                        initialValues={this.formData[0]}
-                    />
-                    {this.state.error && (
-                        <ErrorSnackbar message={this.state.error} />
-                    )}
-                    {this.state.success && (
-                        <SuccessSnackbar message={this.state.success} />
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        variant="contained"
-                        disabled={this.state.saving}
-                        onClick={this.props.onCancel}
-                        style={{marginRight: 5}}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        variant="contained"
-                        disabled={this.state.saving}
-                        color="primary"
-                        onClick={this.save}
-                        style={{float: 'right'}}
-                    >
-                        {this.state.saving ? (
-                            <ButtonProgress />
-                        ) : this.props.items.length === 1 ? (
-                            'Update'
-                        ) : (
-                            'Update Multiple'
-                        )}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
-}
+    return (
+        <SmartDrawer
+            open={props.open}
+            onClose={saving ? undefined : props.onCancel}
+        >
+            <DialogTitle>{`Edit ${props.entityName}${
+                props.items.length === 1 ? '' : 's'
+            }`}</DialogTitle>
 
-export const MainScreenEditDialog = withStyles(dialog)(
-    MainScreenEditDialogWrapped,
-);
+            <DialogContent dividers={true}>
+                <Form
+                    onFormChange={(nextFormData) =>
+                        (formData.current[0] = nextFormData)
+                    }
+                    initialValues={formData.current[0]}
+                />
+                {error && <ErrorSnackbar message={error} />}
+                {success && <SuccessSnackbar message={success} />}
+            </DialogContent>
+
+            <DialogActions>
+                <Button
+                    variant="contained"
+                    disabled={saving}
+                    onClick={props.onCancel}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    variant="contained"
+                    disabled={saving}
+                    color="primary"
+                    onClick={save}
+                >
+                    {saving ? (
+                        <ButtonProgress />
+                    ) : props.items.length === 1 ? (
+                        'Update'
+                    ) : (
+                        'Update Multiple'
+                    )}
+                </Button>
+            </DialogActions>
+        </SmartDrawer>
+    );
+};

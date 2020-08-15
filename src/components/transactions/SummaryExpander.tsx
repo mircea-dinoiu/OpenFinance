@@ -1,5 +1,5 @@
-import {UnfoldLess, UnfoldMore} from '@material-ui/icons';
 import {IconButton} from '@material-ui/core';
+import {UnfoldLess, UnfoldMore} from '@material-ui/icons';
 import React from 'react';
 
 export const SummaryExpander = ({

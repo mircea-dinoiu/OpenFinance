@@ -1,5 +1,6 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
+import {Button, DialogActions, DialogContent, DialogTitle, Divider} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
+import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
 import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
@@ -82,22 +83,28 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
     const Form = props.formComponent;
 
     return (
-        <Dialog open={props.open} classes={props.classes}>
+        <SmartDrawer
+            open={props.open}
+            onClose={saving ? undefined : props.onCancel}
+        >
             <DialogTitle>{`Create ${props.entityName}`}</DialogTitle>
-            <DialogContent style={{overflow: 'visible'}}>
+
+            <DialogContent dividers={true}>
                 <Form
                     onFormChange={(nextFormData) => setFormData(nextFormData)}
                     initialValues={formDefaults}
                 />
                 {error && <ErrorSnackbar message={error} />}
                 {success && <SuccessSnackbar message={success} />}
+
+                <Divider />
             </DialogContent>
+
             <DialogActions>
                 <Button
                     variant="contained"
                     disabled={saving}
                     onClick={props.onCancel}
-                    style={{marginRight: 5}}
                 >
                     Cancel
                 </Button>
@@ -106,12 +113,11 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
                     disabled={saving}
                     color="primary"
                     onClick={save}
-                    style={{float: 'right'}}
                 >
                     {saving ? <ButtonProgress /> : 'Create'}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </SmartDrawer>
     );
 };
 
