@@ -880,7 +880,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     handleWindowScroll = () => {
-        if (scrollReachedBottom(document.scrollingElement as HTMLElement)) {
+        if (
+            !this.state.loading &&
+            scrollReachedBottom(document.scrollingElement as HTMLElement)
+        ) {
             const url = new URL(window.location.href);
 
             url.searchParams.set(
