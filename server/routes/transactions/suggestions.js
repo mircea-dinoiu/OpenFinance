@@ -15,7 +15,6 @@ FROM
    expenses 
 WHERE
    (:search = '' OR MATCH(expenses.item) AGAINST(:search IN BOOLEAN MODE))
-   AND created_at <= :endDate 
    AND project_id = :projectId 
 GROUP BY
    item 

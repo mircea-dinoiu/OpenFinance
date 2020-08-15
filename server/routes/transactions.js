@@ -83,10 +83,6 @@ router.get(
         validatePayload(
             {
                 search: ['isString'],
-                end_date: [
-                    'isRequired',
-                    ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
-                ],
             },
             'query',
         ),
@@ -98,7 +94,16 @@ router.get(
 
 router.get(
     '/suggestions/descriptions',
-    [validateAuth, validateProject],
+    [
+        validateAuth,
+        validateProject,
+        validatePayload(
+            {
+                search: ['isString'],
+            },
+            'query',
+        ),
+    ],
     (req, res) => {
         getExpenseDescriptions(req, res);
     },

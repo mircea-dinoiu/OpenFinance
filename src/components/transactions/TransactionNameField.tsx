@@ -4,7 +4,6 @@ import {Autocomplete} from '@material-ui/lab';
 import {routes} from 'defs/routes';
 import React from 'react';
 import {useSelectedProject} from 'state/projects';
-import {useEndDate} from 'utils/dates';
 import {useReader} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
@@ -20,14 +19,12 @@ export const TransactionNameField = ({
     value: string;
     onChange: (v: string) => void;
 }) => {
-    const [endDate] = useEndDate();
     const project = useSelectedProject();
     const {response: suggestionsResponse} = useReader<{
         suggestions: DescriptionSuggestion[];
     }>({
         url: makeUrl(routes.transactionsSuggestions.descriptions, {
             search: value,
-            end_date: endDate,
             projectId: project.id,
         }),
     });
