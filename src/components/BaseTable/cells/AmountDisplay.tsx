@@ -15,11 +15,5 @@ export const AmountDisplay = ({
         currencies,
     });
 
-    return (
-        <>
-            {numericValue(item.sum, {
-                currency: currencyISOCode,
-            })}
-        </>
-    );
+    return <>{numericValue(item.sum, currencyISOCode)}</>;
 };

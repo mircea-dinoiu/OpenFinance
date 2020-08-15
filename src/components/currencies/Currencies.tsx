@@ -1,13 +1,9 @@
 import {ListSubheader as Subheader, MenuItem, Paper} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {MuiSelectNative} from 'components/dropdowns';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {
-    fetchCurrencies,
-    setCurrenciesSelectedId,
-    useCurrencies,
-} from 'state/currencies';
+import {fetchCurrencies, useCurrencies} from 'state/currencies';
 import {useBootstrap} from 'state/hooks';
 import {Currency} from 'types';
 
@@ -32,10 +28,16 @@ const CurrenciesInner = () => {
     const user = useBootstrap();
     const currencies = useCurrencies();
     const map = currencies;
-    const defaultCurrencyId = currencies.selected.id;
-    const defaultCurrency = map[String(defaultCurrencyId)];
     const dispatch = useDispatch();
     const cls = useStyles();
+    const firstCurrencyCode = Object.values(map)[0]?.iso_code;
+    const [baseCurrencyCode, setBaseCurrencyCode] = useState(firstCurrencyCode);
+
+    useEffect(() => {
+        if (!baseCurrencyCode) {
+            setBaseCurrencyCode(firstCurrencyCode);
+        }
+    }, [firstCurrencyCode]);
 
     React.useEffect(() => {
         const interval = setInterval(() => {
@@ -50,7 +52,7 @@ const CurrenciesInner = () => {
     }, [dispatch, user]);
 
     const options = Object.values(map).map((each: Currency) => ({
-        value: each.id,
+        value: each.iso_code,
         label: each.iso_code,
     }));
 
@@ -64,21 +66,21 @@ const CurrenciesInner = () => {
             >
                 <MuiSelectNative
                     options={options}
-                    value={options.find((o) => o.value === defaultCurrencyId)}
-                    onChange={({value}: {value: number}) => {
-                        dispatch(setCurrenciesSelectedId(value));
+                    value={options.find((o) => o.value === baseCurrencyCode)}
+                    onChange={({value}) => {
+                        setBaseCurrencyCode(value);
                     }}
-                    valueType="number"
+                    valueType="string"
                 />
             </div>
 
             <Subheader>Exchange Rates</Subheader>
             {Object.values(map).map(
                 (each: Currency) =>
-                    each.id !== defaultCurrencyId && (
+                    each.iso_code !== baseCurrencyCode && (
                         <MenuItem key={each.id}>
                             <strong>{each.iso_code}</strong>:{' '}
-                            {each.rates[defaultCurrency.iso_code]}
+                            {each.rates[baseCurrencyCode]}
                         </MenuItem>
                     ),
             )}

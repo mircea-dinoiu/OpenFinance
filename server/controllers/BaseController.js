@@ -5,10 +5,12 @@ const chalk = require('chalk');
 const logger = require('../helpers/logger');
 
 module.exports = class BaseController {
-    updateValidationRules = {};
-    createValidationRules = {};
-    Service = undefined;
-    Model = undefined;
+    constructor() {
+        this.updateValidationRules = {};
+        this.createValidationRules = {};
+        this.Service = undefined;
+        this.Model = undefined;
+    }
 
     createRelations(opts) {
         return opts.model;

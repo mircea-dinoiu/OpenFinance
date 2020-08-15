@@ -10,52 +10,56 @@ const {QueryTypes} = require('sequelize');
 const {advanceRepeatDate} = require('../../src/js/helpers/repeatedModels');
 
 module.exports = class ExpenseController extends BaseController {
-    Model = Model;
-    Service = Service;
-    updateValidationRules = {
-        id: ['isRequired', 'isTransactionId'],
-        sum: ['sometimes', 'isRequired', 'isFloat'],
-        item: ['sometimes', 'isRequired', 'isString'],
-        notes: ['sometimes', 'isString'],
-        favorite: ['sometimes', 'isInt'],
-        hidden: ['sometimes', 'isBool'],
-        created_at: [
-            'sometimes',
-            'isRequired',
-            ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
-        ],
-        money_location_id: ['sometimes', ['isId', MoneyLocation]],
-        status: ['sometimes', 'isRequired', 'isStatusValue'],
-        users: ['sometimes', 'isRequired', ['isPercentageObject', User]],
-        categories: ['sometimes', ['isIdArray', Category]],
+    constructor() {
+        super();
 
-        repeat: ['sometimes', 'isRepeatValue'],
-        repeat_occurrences: ['sometimes', 'isInt'],
+        this.Model = Model;
+        this.Service = Service;
+        this.updateValidationRules = {
+            id: ['isRequired', 'isTransactionId'],
+            sum: ['sometimes', 'isRequired', 'isFloat'],
+            item: ['sometimes', 'isRequired', 'isString'],
+            notes: ['sometimes', 'isString'],
+            favorite: ['sometimes', 'isInt'],
+            hidden: ['sometimes', 'isBool'],
+            created_at: [
+                'sometimes',
+                'isRequired',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
+            money_location_id: ['sometimes', ['isId', MoneyLocation]],
+            status: ['sometimes', 'isRequired', 'isStatusValue'],
+            users: ['sometimes', 'isRequired', ['isPercentageObject', User]],
+            categories: ['sometimes', ['isIdArray', Category]],
 
-        weight: ['sometimes', 'isNotNegative', 'isInt'],
-    };
-    createValidationRules = {
-        sum: ['isRequired', 'isFloat'],
-        item: ['isRequired', 'isString'],
-        notes: ['sometimes', 'isString'],
-        favorite: ['sometimes', 'isInt'],
-        hidden: ['sometimes', 'isBool'],
-        users: ['isRequired', ['isPercentageObject', User]],
-        created_at: [
-            'sometimes',
-            'isRequired',
-            ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
-        ],
-        money_location_id: ['isRequired', ['isId', MoneyLocation]],
-        status: ['sometimes', 'isRequired', 'isStatusValue'],
-        fitid: ['sometimes', 'isRequired', 'isString'],
-        categories: ['sometimes', ['isIdArray', Category]],
+            repeat: ['sometimes', 'isRepeatValue'],
+            repeat_occurrences: ['sometimes', 'isInt'],
 
-        repeat: ['sometimes', 'isRepeatValue'],
-        repeat_occurrences: ['sometimes', 'isInt'],
+            weight: ['sometimes', 'isNotNegative', 'isInt'],
+        };
+        this.createValidationRules = {
+            sum: ['isRequired', 'isFloat'],
+            item: ['isRequired', 'isString'],
+            notes: ['sometimes', 'isString'],
+            favorite: ['sometimes', 'isInt'],
+            hidden: ['sometimes', 'isBool'],
+            users: ['isRequired', ['isPercentageObject', User]],
+            created_at: [
+                'sometimes',
+                'isRequired',
+                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
+            ],
+            money_location_id: ['isRequired', ['isId', MoneyLocation]],
+            status: ['sometimes', 'isRequired', 'isStatusValue'],
+            fitid: ['sometimes', 'isRequired', 'isString'],
+            categories: ['sometimes', ['isIdArray', Category]],
 
-        weight: ['sometimes', 'isNotNegative', 'isInt'],
-    };
+            repeat: ['sometimes', 'isRepeatValue'],
+            repeat_occurrences: ['sometimes', 'isInt'],
+
+            weight: ['sometimes', 'isNotNegative', 'isInt'],
+        };
+    }
 
     async updateRelations({record, model, req}) {
         return this.createRelations({record, model, req, cleanup: true});

@@ -5,13 +5,8 @@ export const findCurrencyById = (
     currencies: Currencies,
 ): Currency => currencies[String(id)];
 
-export const getCurrencyByISOCode = (
-    ISOCode: string,
-    currencies: Currencies,
-) =>
-    Object.values(currencies).find(
-        (each) => each.iso_code === ISOCode,
-    );
+export const getCurrencyByISOCode = (ISOCode: string, currencies: Currencies) =>
+    Object.values(currencies).find((each) => each.iso_code === ISOCode);
 
 export const convertCurrency = ({
     value,
@@ -53,15 +48,3 @@ export const convertCurrency = ({
     // @ts-ignore
     return value * from.rates[to.iso_code];
 };
-
-export const convertCurrencyToDefault = (
-    value: number,
-    from: CurrencyIdentifier,
-    currencies: Currencies,
-) =>
-    convertCurrency({
-        value,
-        from,
-        to: currencies.selected,
-        currencies,
-    });

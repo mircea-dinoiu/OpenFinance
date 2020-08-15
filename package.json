@@ -93,7 +93,7 @@
     "validator": "^10.7.1"
   },
   "scripts": {
-    "ci": "run-p --aggregate-output test-all lint-all",
+    "ci": "run-p --aggregate-output test-server test-all lint-all",
     "build": "rm -rf build && react-scripts build && mv build/index.html build/app.html",
     "dev": "react-scripts start",
     "start": "node ./bin/www",
@@ -102,6 +102,7 @@
     "test-related": "react-scripts test --findRelatedTests",
     "test-all": "react-scripts test --watchAll=false",
     "test-cov": "open build/coverage/index.html",
+    "test-server": "yarn jest server",
     "lint": "eslint --quiet --ext .js,.ts.,.tsx",
     "lint-all": "yarn lint server src",
     "format": "prettier-eslint --write",

@@ -1,13 +1,11 @@
 import {Card, CardHeader} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {numericValue} from 'components/formatters';
 import {headerColor, useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
 import {SummarySubCategory} from 'components/transactions/SummarySubCategory';
+import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {SummaryModel} from 'components/transactions/types';
 import {spacingSmall} from 'defs/styles';
-import {convertCurrencyToDefault} from 'helpers/currency';
-import {financialNum} from 'js/utils/numbers';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 
@@ -71,7 +69,7 @@ export const SummaryCategory = <Ent extends {id: number}>(
     const [expanded, setExpanded] = props.setExpanded
         ? [props.expanded, props.setExpanded]
         : expandedState;
-    const [excluded, setExcluded] = React.useState({});
+    const [excluded, setExcluded] = React.useState<Record<string, boolean>>({});
 
     const handleToggleExcluded = (ids: string[]) => {
         const next = {...excluded};
@@ -81,20 +79,6 @@ export const SummaryCategory = <Ent extends {id: number}>(
         }
 
         setExcluded(next);
-    };
-
-    const numericValueProxy = (
-        value: number,
-        {
-            currencyId = currencies.selected.id,
-            ...opts
-        }: {
-            currencyId?: number;
-        } = {},
-    ) => {
-        const currency = currencies[String(currencyId)].iso_code;
-
-        return numericValue(value, {...opts, currency});
     };
 
     return (
@@ -108,22 +92,10 @@ export const SummaryCategory = <Ent extends {id: number}>(
                 subheader={
                     showSumInHeader && (
                         <div style={{color: headerColor}}>
-                            {numericValueProxy(
-                                financialNum(
-                                    summaryObject.reduce(
-                                        (acc, each) =>
-                                            acc +
-                                            (excluded[each.reference]
-                                                ? 0
-                                                : convertCurrencyToDefault(
-                                                      each.sum,
-                                                      each.currencyId,
-                                                      currencies,
-                                                  )),
-                                        0,
-                                    ),
-                                ),
-                            )}
+                            <SummaryTotal
+                                summaryItems={summaryObject}
+                                excludedRecord={excluded}
+                            />
                         </div>
                     )
                 }
@@ -148,7 +120,6 @@ export const SummaryCategory = <Ent extends {id: number}>(
                                 shouldGroup={shouldGroup}
                                 id={id}
                                 items={items}
-                                numericValueFn={numericValueProxy}
                                 entities={entities}
                                 entityIdField={entityIdField}
                                 entityNameField={entityNameField}

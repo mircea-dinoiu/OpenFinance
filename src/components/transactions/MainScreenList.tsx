@@ -15,7 +15,6 @@ import IconSplit from '@material-ui/icons/CallSplitRounded';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {BaseTable, TableHeader, TableHeaderTop} from 'components/BaseTable';
-import {numericValue} from 'components/formatters';
 
 import {BigLoader} from 'components/loaders';
 import {ContextMenuItems} from 'components/MainScreen/ContextMenu/ContextMenuItems';
@@ -33,6 +32,7 @@ import {MainScreenEditDialog} from 'components/transactions/MainScreenEditDialog
 import {MainScreenListGroup} from 'components/transactions/MainScreenListGroup';
 import {SplitAmountField} from 'components/transactions/SplitAmountField';
 import {StatsTable} from 'components/transactions/StatsTable';
+import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {TransactionsMobileHeader} from 'components/transactions/TransactionsMobileHeader';
 import {formToModel} from 'components/transactions/transformers/formToModel';
@@ -41,7 +41,6 @@ import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {QueryParam} from 'defs/url';
-import {convertCurrencyToDefault} from 'helpers/currency';
 import * as H from 'history';
 import {isEqual, range} from 'lodash';
 import groupBy from 'lodash/groupBy';
@@ -281,7 +280,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         );
     }
 
-    computeAmount(items: TransactionModel[]) {
+    computeAmount(transactions: TransactionModel[]) {
         const mlIdToCurrencyId = this.props.moneyLocations.reduce(
             (acc, each) => {
                 acc[each.id] = each.currency_id;
@@ -291,15 +290,15 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             {},
         );
 
-        return items.reduce((acc, each) => {
-            const sum = convertCurrencyToDefault(
-                each.sum,
-                mlIdToCurrencyId[each.money_location_id],
-                this.props.currencies,
-            );
-
-            return acc + sum;
-        }, 0);
+        return (
+            <SummaryTotal
+                summaryItems={transactions.map((t) => ({
+                    sum: t.sum,
+                    currencyId: mlIdToCurrencyId[t.money_location_id],
+                    reference: t.toString(),
+                }))}
+            />
+        );
     }
 
     computeWeight(items: TransactionModel[]) {
@@ -502,11 +501,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             <tbody>
                                 <tr>
                                     <th>Balance:</th>
-                                    <td>
-                                        {numericValue(
-                                            this.computeAmount(items),
-                                        )}
-                                    </td>
+                                    <td>{this.computeAmount(items)}</td>
                                 </tr>
                                 <tr>
                                     <th>Weight:</th>

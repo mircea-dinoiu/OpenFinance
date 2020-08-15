@@ -2,23 +2,19 @@ import {CardHeader, Checkbox} from '@material-ui/core';
 import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
+import {numericValue} from 'components/formatters';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
+import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {SummaryModel} from 'components/transactions/types';
 import {spacingNormal, spacingSmall, theme} from 'defs/styles';
-import {convertCurrencyToDefault} from 'helpers/currency';
 import {sortBy} from 'lodash';
 import React, {ReactNode, useState} from 'react';
+import {useCurrencies} from 'state/currencies';
 import {Currencies} from 'types';
 
 export const SummarySubCategory = <Ent,>(props: {
     expandedByDefault: boolean;
-    numericValueFn: (
-        value: number,
-        opts?: {
-            currencyId?: number;
-        },
-    ) => JSX.Element;
     excluded: {};
     currencies: Currencies;
     onToggleExcluded: (ids: string[]) => void;
@@ -44,6 +40,7 @@ export const SummarySubCategory = <Ent,>(props: {
 
     const items = sortBy(itemsFromProps, (item) => item.description);
     const cls = useStyles();
+    const currencies = useCurrencies();
 
     return (
         <div style={{padding: '0 5px', marginBottom: spacingNormal}}>
@@ -79,9 +76,10 @@ export const SummarySubCategory = <Ent,>(props: {
                                     : each.description}
                             </div>
                             <div>
-                                {props.numericValueFn(each.sum, {
-                                    currencyId: Number(each.currencyId),
-                                })}
+                                {numericValue(
+                                    each.sum,
+                                    currencies[each.currencyId].iso_code,
+                                )}
                             </div>
                             <Checkbox
                                 className={cls.checkbox}
@@ -95,22 +93,11 @@ export const SummarySubCategory = <Ent,>(props: {
                     ))}
                     <li className={clsx(cls.listItem, cls.listItemTotal)}>
                         <div>TOTAL</div>
-                        <div>
-                            {props.numericValueFn(
-                                items.reduce(
-                                    // @ts-ignore
-                                    (acc, each) =>
-                                        acc +
-                                        (props.excluded[each.reference]
-                                            ? 0
-                                            : convertCurrencyToDefault(
-                                                  each.sum,
-                                                  each.currencyId,
-                                                  props.currencies,
-                                              )),
-                                    0,
-                                ),
-                            )}
+                        <div style={{textAlign: 'right'}}>
+                            <SummaryTotal
+                                summaryItems={items}
+                                excludedRecord={props.excluded}
+                            />
                         </div>
                         <div>
                             <Checkbox

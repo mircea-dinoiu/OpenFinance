@@ -1,6 +1,5 @@
 import {
     convertCurrency,
-    convertCurrencyToDefault,
     findCurrencyById,
     getCurrencyByISOCode,
 } from './currency';
@@ -117,13 +116,5 @@ describe('#convertCurrency()', () => {
                 }),
             ).toEqual(34);
         });
-    });
-});
-
-describe('#convertCurrencyToDefault()', () => {
-    it('should convert to default', () => {
-        expect(convertCurrencyToDefault(135.4016, RON, currencies)).toEqual(
-            33.99934176,
-        );
     });
 });

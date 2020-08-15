@@ -32,16 +32,9 @@ const useStyles = makeStyles({
     },
 });
 
-const NumericValue = ({
-    currency: rawCurrency,
-    value,
-}: {
-    currency?: string;
-    value: number;
-}) => {
+const NumericValue = ({currency, value}: {currency: string; value: number}) => {
     const cls = useStyles();
     const currencies = useCurrencies();
-    const currency = rawCurrency || currencies.selected.iso_code;
     const copyText = useCopyTextWithConfirmation();
     const [privacyToggle] = usePrivacyToggle();
     const inner = (
@@ -49,7 +42,7 @@ const NumericValue = ({
             <strong
                 className={cls.value}
                 onClick={(e) => {
-                    e.stopPropagation()
+                    e.stopPropagation();
                     copyText(value);
                 }}
             >
@@ -89,11 +82,6 @@ const NumericValue = ({
     return <Tooltip tooltip={tooltip}>{inner}</Tooltip>;
 };
 
-export const numericValue = (
-    value: number,
-    {
-        currency,
-    }: {
-        currency?: string;
-    } = {},
-) => <NumericValue value={value} currency={currency} />;
+export const numericValue = (value: number, currency: string) => (
+    <NumericValue value={value} currency={currency} />
+);

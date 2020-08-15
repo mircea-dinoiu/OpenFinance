@@ -4,6 +4,7 @@ const logger = require('../helpers/logger');
 const fs = require('fs');
 const {Currency} = require('../models');
 const http = require('http');
+const moment = require('moment');
 
 module.exports = class CurrencyController {
     constructor() {
@@ -20,19 +21,26 @@ module.exports = class CurrencyController {
         return this.currencies;
     }
 
-    async fetchCachedData() {
-        return new Promise((resolve) => {
-            if (this.data != null) {
-                resolve(true);
-            } else {
-                try {
-                    this.data = require(this.cacheFilePath);
-                    resolve(true);
-                } catch (e) {
-                    resolve(false);
-                }
-            }
-        });
+    static isExpired(cached, compareAgainst = new Date()) {
+        if (cached.date == null) {
+            return true;
+        }
+
+        return moment(compareAgainst).diff(cached.date, 'days', true) >= 1;
+    }
+
+    fetchCachedData() {
+        if (this.data != null) {
+            return !this.constructor.isExpired(this.data);
+        }
+
+        try {
+            this.data = require(this.cacheFilePath);
+
+            return !this.constructor.isExpired(this.data);
+        } catch (e) {
+            return false;
+        }
     }
 
     async fetchRates(allowedISOCodes) {
@@ -85,7 +93,7 @@ module.exports = class CurrencyController {
         const rates = await this.fetchRates(allowedISOCodes);
 
         if (rates == null) {
-            await this.fetchCachedData();
+            this.fetchCachedData();
 
             return;
         }
@@ -94,7 +102,7 @@ module.exports = class CurrencyController {
 
         this.data = {
             map,
-            default: Number(Object.keys(map)[0]),
+            date: new Date().toISOString(),
         };
     }
 
@@ -108,36 +116,23 @@ module.exports = class CurrencyController {
         });
     }
 
-    async setupData({update = false} = {}) {
-        let fromCache = false;
+    async setupData() {
+        if (this.fetchCachedData()) {
+            logger.log('Currencies fetched from cache');
 
-        if (update !== true) {
-            if ((await this.fetchCachedData()) === false) {
-                await this.fetchFreshData();
-                await this.cacheData();
-            } else {
-                fromCache = true;
-            }
-        } else {
-            try {
-                await this.fetchFreshData();
-                await this.cacheData();
-            } catch (e) {
-                logger.error(e);
-                await this.fetchCachedData();
-                fromCache = true;
-            }
+            return;
         }
 
-        if (process.env.DEBUG === 'true') {
-            this.data.from_cache = fromCache;
+        try {
+            await this.fetchFreshData();
+            await this.cacheData();
+        } catch (e) {
+            logger.error(e);
         }
     }
 
     async list(req, res) {
-        const update = req.query.update === 'true';
-
-        await this.setupData({update});
+        await this.setupData();
 
         res.json(this.data);
     }

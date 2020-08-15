@@ -27,7 +27,7 @@ export type CurrenciesApi = {
     };
 };
 
-export type Currencies = {selected: Currency} & {
+export type Currencies = {
     [key: number]: Currency;
 };
 
