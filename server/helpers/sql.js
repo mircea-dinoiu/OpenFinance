@@ -1,10 +1,14 @@
-const sql = require('sequelize');
+const Sequelize = require('sequelize');
+const {mapSearchToMatchAgainst} = require('./search');
+const {sql} = require('../models');
 
-const mapTextFilterToSQL = (id, value) => {
-    if (value) {
-        return sql.where(sql.fn('LOWER', sql.col(id)), {
-            $like: sql.fn('LOWER', `%${value.trim()}%`),
-        });
+const mapTextFilterToSQL = (ids, value) => {
+    if (value && value.trim()) {
+        return Sequelize.literal(
+            `MATCH(${ids.join()}) AGAINST(${sql.escape(
+                mapSearchToMatchAgainst(value),
+            )} IN BOOLEAN MODE)`,
+        );
     }
 
     return null;
@@ -116,8 +120,12 @@ const mapGroupConcatToHavingSQL = (filter, groupConcatName, columnId) => {
 
         filter.value.forEach((eachId) => {
             conditions.push(
-                sql.where(
-                    sql.fn('Find_In_Set', eachId, sql.col(groupConcatName)),
+                Sequelize.where(
+                    Sequelize.fn(
+                        'Find_In_Set',
+                        eachId,
+                        Sequelize.col(groupConcatName),
+                    ),
                     {
                         [filter.mode === 'exclude' ? '$eq' : '$gt']: 0,
                     },
@@ -126,11 +134,11 @@ const mapGroupConcatToHavingSQL = (filter, groupConcatName, columnId) => {
         });
 
         return ['exclude', 'all'].includes(filter.mode)
-            ? sql.and(...conditions)
-            : sql.or(...conditions);
+            ? Sequelize.and(...conditions)
+            : Sequelize.or(...conditions);
     } else if (filter === 'none') {
-        return sql.where(sql.col(columnId), {
-            $is: sql.literal('NULL'),
+        return Sequelize.where(Sequelize.col(columnId), {
+            $is: Sequelize.literal('NULL'),
         });
     }
 
@@ -147,7 +155,7 @@ const mapEntityFilterToWhereSQL = (filter, columnId) => {
     } else if (filter === 'none') {
         return {
             [columnId]: {
-                $eq: sql.literal('NULL'),
+                $eq: Sequelize.literal('NULL'),
             },
         };
     }
@@ -169,11 +177,14 @@ const exported = {
                 };
             }
 
-            return sql.or(
-                sql.where(sql.col(`${Model.tableName}.created_at`), {
-                    $gte: startDate,
-                }),
-                sql.where(sql.col(`${Model.tableName}.repeat`), {
+            return Sequelize.or(
+                Sequelize.where(
+                    Sequelize.col(`${Model.tableName}.created_at`),
+                    {
+                        $gte: startDate,
+                    },
+                ),
+                Sequelize.where(Sequelize.col(`${Model.tableName}.repeat`), {
                     $ne: null,
                 }),
             );
@@ -190,9 +201,12 @@ const exported = {
                 };
             }
 
-            return sql.where(sql.col(`${Model.tableName}.created_at`), {
-                $lte: endDate,
-            });
+            return Sequelize.where(
+                Sequelize.col(`${Model.tableName}.created_at`),
+                {
+                    $lte: endDate,
+                },
+            );
         }
 
         return null;

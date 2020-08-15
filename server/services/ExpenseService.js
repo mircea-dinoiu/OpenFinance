@@ -65,7 +65,7 @@ module.exports = {
             sanitizeFilters(input.filters).forEach(({id, value}) => {
                 switch (id) {
                     case 'item':
-                        where.push(mapTextFilterToSQL(id, value.text));
+                        where.push(mapTextFilterToSQL(['item', 'notes'], value.text));
                         where.push(mapFlagsToSQL(value));
                         break;
                     case 'categories':

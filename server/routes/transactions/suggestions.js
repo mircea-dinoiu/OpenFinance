@@ -1,3 +1,4 @@
+const {mapSearchToMatchAgainst} = require('../../helpers/search');
 const {sql} = require('../../models');
 const {QueryTypes} = require('sequelize');
 
@@ -13,7 +14,7 @@ SELECT
 FROM
    expenses 
 WHERE
-   (:search = '' OR MATCH(expenses.item) AGAINST(:search))
+   (:search = '' OR MATCH(expenses.item) AGAINST(:search IN BOOLEAN MODE))
    AND created_at <= :endDate 
    AND project_id = :projectId 
 GROUP BY
@@ -47,7 +48,7 @@ FROM
       ON category_expense.expense_id = expenses.id 
 WHERE
    project_id = :projectId 
-   AND MATCH(expenses.item) AGAINST(:search)`,
+   AND MATCH(expenses.item) AGAINST(:search IN BOOLEAN MODE)`,
             {
                 replacements: {
                     projectId: req.projectId,
@@ -64,10 +65,3 @@ WHERE
 
     res.json({suggestions: []});
 };
-
-const mapSearchToMatchAgainst = (search) =>
-    search
-        .split(/\W/)
-        .filter(Boolean)
-        .map((w) => `+${w}`)
-        .join(' ');
