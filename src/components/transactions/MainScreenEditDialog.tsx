@@ -7,7 +7,7 @@ import {
 import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
-import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
+import {ErrorSnackbar} from 'components/snackbars';
 import {TransactionForm, TransactionModel} from 'components/transactions/types';
 import {isEqual} from 'lodash';
 
@@ -42,14 +42,12 @@ type TypeProps = {
 
 export const MainScreenEditDialog = (props: TypeProps) => {
     const [saving, setSaving] = useState(false);
-    const [success, setSuccess] = useState<ReactNode>(null);
     const [error, setError] = useState<ReactNode>(null);
     const formData = useRef(props.items.map(props.modelToForm));
     const initialData = useRef(props.items.map(props.modelToForm));
 
     useEffect(() => {
         setSaving(false);
-        setSuccess(null);
         setError(null);
         formData.current = props.items.map(props.modelToForm);
         initialData.current = props.items.map(props.modelToForm);
@@ -73,7 +71,6 @@ export const MainScreenEditDialog = (props: TypeProps) => {
         const data = formData.current;
 
         setError(null);
-        setSuccess(null);
         setSaving(true);
 
         try {
@@ -93,14 +90,9 @@ export const MainScreenEditDialog = (props: TypeProps) => {
             );
             const json = response.data;
 
-            setSuccess(`The ${props.entityName} was successfully updated`);
             setSaving(false);
-
-            setTimeout(() => {
-                setError(null);
-                setSuccess(null);
-                props.onSave(json[0]);
-            }, 500);
+            setError(null);
+            props.onSave(json[0]);
         } catch (e) {
             if (e.response) {
                 setError(parseCRUDError(e.response.data));
@@ -132,7 +124,6 @@ export const MainScreenEditDialog = (props: TypeProps) => {
                     onSubmit={save}
                 />
                 {error && <ErrorSnackbar message={error} />}
-                {success && <SuccessSnackbar message={success} />}
             </DialogContent>
 
             <DialogActions>

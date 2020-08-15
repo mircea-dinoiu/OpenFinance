@@ -8,7 +8,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
-import {ErrorSnackbar, SuccessSnackbar} from 'components/snackbars';
+import {ErrorSnackbar} from 'components/snackbars';
 import {TransactionForm, TransactionModel} from 'components/transactions/types';
 import {dialog} from 'defs/styles';
 import {parseCRUDError} from 'parsers';
@@ -38,7 +38,6 @@ type TypeProps = {
 const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState<React.ReactNode>(null);
-    const [success, setSuccess] = React.useState<React.ReactNode>(null);
     const user = useBootstrap();
     const mls = useMoneyLocations();
     const formDefaults = React.useMemo(
@@ -60,7 +59,6 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
         const data = formData;
 
         setError(null);
-        setSuccess(null);
         setSaving(true);
 
         try {
@@ -71,7 +69,6 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
             ]);
             const json = response.data;
 
-            setSuccess(`The ${props.entityName} was successfully created`);
             setSaving(false);
 
             props.onReceiveNewRecord(json[0]);
@@ -102,7 +99,6 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
                     onSubmit={save}
                 />
                 {error && <ErrorSnackbar message={error} />}
-                {success && <SuccessSnackbar message={success} />}
             </DialogContent>
 
             <DialogActions>
