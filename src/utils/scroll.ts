@@ -8,4 +8,4 @@ export const scrollIsAt = (element: HTMLElement, at: number) =>
     getScrollPct(element) >= at;
 
 export const scrollReachedBottom = (element: HTMLElement) =>
-    scrollIsAt(element, 100);
+    scrollIsAt(element, 95);

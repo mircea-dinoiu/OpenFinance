@@ -1,9 +1,9 @@
 import {
     Button,
-    ButtonProps,
     Checkbox,
     Fab,
     FormControlLabel,
+    LinearProgress,
     Menu,
     Paper,
 } from '@material-ui/core';
@@ -41,7 +41,6 @@ import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
-import {greyedOut} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import * as H from 'history';
@@ -95,7 +94,6 @@ type TypeState = {
     firstLoad: boolean;
     results: TransactionModel[];
     loading: number;
-    refreshing: boolean;
     selectedIds: number[];
 
     addModalOpen: boolean;
@@ -124,7 +122,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         firstLoad: true,
         results: [],
         loading: 0,
-        refreshing: false,
         selectedIds: [],
         contextMenuDisplay: false,
         contextMenuTop: 0,
@@ -140,7 +137,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     };
 
     componentDidMount() {
-        this.loadMore();
+        this.refresh();
     }
 
     handleReceiveNewRecord(newRecord: TransactionModel) {
@@ -205,14 +202,18 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return this.state.displayHidden || this.hasFiltersSet;
     }
 
-    loadMore = async ({results = this.state.results} = {}) => {
+    loadMore = async ({
+        results = this.state.results,
+        page = this.props.params.page,
+        pageSize = this.props.params.pageSize,
+    } = {}) => {
         if (this.state.loading) {
             return;
         }
 
         this.handleCloseContextMenu();
 
-        const {pageSize, sorters, filters, page} = this.props.params;
+        const {sorters, filters} = this.props.params;
 
         this.setState((state) => ({loading: state.loading + 1}));
 
@@ -259,16 +260,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     refresh = async () => {
-        this.setState({
-            refreshing: true,
-        });
-
         await this.loadMore({
             results: [],
-        });
-
-        this.setState({
-            refreshing: false,
+            page: 1,
+            pageSize: this.props.params.page * this.props.params.pageSize,
         });
     };
 
@@ -870,20 +865,12 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             return <BigLoader />;
         }
 
-        const isDesktop = this.isDesktop();
-
         return (
             <div>
-                <div
-                    style={{
-                        ...(this.state.refreshing && !isDesktop
-                            ? greyedOut
-                            : {}),
-                    }}
-                >
-                    {this.renderContent()}
-                    {this.renderDialogs()}
-                </div>
+                {this.renderContent()}
+                {this.state.loading > 0 && <LinearProgress />}
+                {this.renderDialogs()}
+
                 <EventListener
                     target="window"
                     onScroll={this.handleWindowScroll}
@@ -933,7 +920,7 @@ export const MainScreenList = (ownProps: TypeOwnProps) => {
         return {
             pageSize:
                 JSON.parse(searchParams.get(QueryParam.pageSize) as string) ??
-                50,
+                30,
             page: JSON.parse(searchParams.get(QueryParam.page) as string) ?? 1,
             sorters: JSON.parse(
                 searchParams.get(QueryParam.sorters) as string,
