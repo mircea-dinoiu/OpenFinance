@@ -96,8 +96,6 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
                 />
                 {error && <ErrorSnackbar message={error} />}
                 {success && <SuccessSnackbar message={success} />}
-
-                <Divider />
             </DialogContent>
 
             <DialogActions>
@@ -105,6 +103,7 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
                     variant="contained"
                     disabled={saving}
                     onClick={props.onCancel}
+                    fullWidth={true}
                 >
                     Cancel
                 </Button>
@@ -113,6 +112,7 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
                     disabled={saving}
                     color="primary"
                     onClick={save}
+                    fullWidth={true}
                 >
                     {saving ? <ButtonProgress /> : 'Create'}
                 </Button>

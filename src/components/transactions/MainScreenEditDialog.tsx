@@ -133,6 +133,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
                     variant="contained"
                     disabled={saving}
                     onClick={props.onCancel}
+                    fullWidth={true}
                 >
                     Cancel
                 </Button>
@@ -141,6 +142,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
                     disabled={saving}
                     color="primary"
                     onClick={save}
+                    fullWidth={true}
                 >
                     {saving ? (
                         <ButtonProgress />
