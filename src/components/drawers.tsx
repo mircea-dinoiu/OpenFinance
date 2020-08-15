@@ -27,9 +27,9 @@ export const SmartDrawer = ({
 };
 
 const useSmartDrawerStyles = makeStyles({
-    root: {
+    paper: {
         [ScreenQuery.SMALL]: {
-            paddingTop: stickyHeaderHeight,
+            top: stickyHeaderHeight,
         },
     },
 });
