@@ -4,6 +4,7 @@ import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {Accounts} from 'components/accounts/Accounts';
 import {AccountTypes} from 'components/accountTypes/AccountTypes';
 import {Categories} from 'components/categories/Categories';
+import {Currencies} from 'components/currencies/Currencies';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
 import {TransactionsSummaryCombo} from 'components/transactions/TransactionsSummaryCombo';
@@ -178,6 +179,7 @@ const AppInner = ({location, match}: RouteComponentProps) => {
                 <Route path={paths.categories} component={Categories} />
                 <Route path={paths.accounts} component={Accounts} />
                 <Route path={paths.accountTypes} component={AccountTypes} />
+                <Route path={paths.currencies} component={Currencies} />
             </div>
         );
     }

@@ -1,12 +1,6 @@
 import {
     AppBar,
-    Divider,
-    Drawer,
     IconButton,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
     Paper,
     Tab,
     Tabs,
@@ -16,27 +10,19 @@ import {
 import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import IconExitToApp from '@material-ui/icons/ExitToApp';
-import IconMenu from '@material-ui/icons/Menu';
-import IconRefresh from '@material-ui/icons/Refresh';
 import IconVisibility from '@material-ui/icons/Visibility';
 import IconVisibilityOff from '@material-ui/icons/VisibilityOff';
-import {CurrenciesDrawerContent} from 'components/currencies/CurrenciesDrawerContent';
 import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption} from 'defs';
 import {spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
 import {paths} from 'js/defs';
-import React, {useState} from 'react';
+import React from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
-import {useCurrencies} from 'state/currencies';
 import {usePrivacyToggle} from 'state/privacyToggle';
 import {useProjects, useSelectedProject} from 'state/projects';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import {makeUrl, mapUrlToFragment} from 'utils/url';
-import {
-    useBootstrap,
-    useRefreshWidgetsDispatcher,
-    useScreenSize,
-} from '../../state/hooks';
+import {useBootstrap, useScreenSize} from '../../state/hooks';
 
 const MAX_TIMES = 10;
 
@@ -58,11 +44,7 @@ export const getShiftForwardOptions = (
 
 export const TopBar = (props: {onLogout: () => void}) => {
     const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
-    const refreshWidgets = useRefreshWidgetsDispatcher();
     const user = useBootstrap();
-    const currencies = useCurrencies();
-    const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-    const isCurrenciesDrawerReady = () => user != null && currencies != null;
     const history = useHistory();
     const location = useLocation();
     const project = useSelectedProject();
@@ -71,13 +53,9 @@ export const TopBar = (props: {onLogout: () => void}) => {
         paths.categories,
         paths.accounts,
         paths.accountTypes,
+        paths.currencies,
     ];
     const screenSize = useScreenSize();
-
-    const onClickRefresh = () => {
-        refreshWidgets();
-    };
-
     const projects = useProjects();
     const selectedProject = useSelectedProject();
     const cls = useStyles();
@@ -134,65 +112,40 @@ export const TopBar = (props: {onLogout: () => void}) => {
                                 <Tab label="Categories" />
                                 <Tab label="Accounts" />
                                 <Tab label="Account Types" />
+                                <Tab label="Currencies" />
                             </Tabs>
                         </Paper>
                     )}
-                    <div
-                        style={{
-                            flex: 1,
-                        }}
-                    >
-                        <div style={{float: 'right', display: 'flex'}}>
-                            {user && (
+                    {user && (
+                        <div
+                            style={{
+                                flex: 1,
+                            }}
+                        >
+                            <div style={{float: 'right', display: 'flex'}}>
                                 <IconButton
-                                    onClick={() => setDrawerIsOpen(true)}
+                                    color="inherit"
+                                    onClick={() =>
+                                        setPrivacyToggle(!privacyToggle)
+                                    }
                                 >
-                                    <IconMenu htmlColor="white" />
+                                    {privacyToggle ? (
+                                        <IconVisibilityOff />
+                                    ) : (
+                                        <IconVisibility />
+                                    )}
                                 </IconButton>
-                            )}
+                                <IconButton
+                                    color="inherit"
+                                    onClick={props.onLogout}
+                                >
+                                    <IconExitToApp />
+                                </IconButton>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </Toolbar>
             </AppBar>
-            <Drawer
-                anchor="right"
-                open={drawerIsOpen}
-                onClose={() => setDrawerIsOpen(false)}
-            >
-                <List>
-                    <ListItem
-                        button
-                        onClick={() => setPrivacyToggle(!privacyToggle)}
-                    >
-                        <ListItemIcon>
-                            {privacyToggle ? (
-                                <IconVisibilityOff />
-                            ) : (
-                                <IconVisibility />
-                            )}
-                        </ListItemIcon>
-                        <ListItemText primary="Privacy Mode" />
-                    </ListItem>
-                    <ListItem button onClick={onClickRefresh}>
-                        <ListItemIcon>
-                            <IconRefresh />
-                        </ListItemIcon>
-                        <ListItemText primary="Reload" />
-                    </ListItem>
-                    <ListItem button onClick={props.onLogout}>
-                        <ListItemIcon>
-                            <IconExitToApp />
-                        </ListItemIcon>
-                        <ListItemText primary="Logout" />
-                    </ListItem>
-                    <Divider />
-                    {isCurrenciesDrawerReady() && (
-                        <ListItem disableGutters>
-                            <CurrenciesDrawerContent />
-                        </ListItem>
-                    )}
-                </List>
-            </Drawer>
         </>
     );
 };

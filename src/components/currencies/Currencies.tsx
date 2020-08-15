@@ -1,15 +1,15 @@
+import {ListSubheader as Subheader, MenuItem, Paper} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import {MuiSelectNative} from 'components/dropdowns';
 import React from 'react';
-import {MenuItem, ListSubheader as Subheader} from '@material-ui/core';
 import {useDispatch} from 'react-redux';
-import {Currency} from 'types';
-import {useBootstrap} from 'state/hooks';
 import {
     fetchCurrencies,
     setCurrenciesSelectedId,
     useCurrencies,
 } from 'state/currencies';
-import {makeStyles} from '@material-ui/core/styles';
+import {useBootstrap} from 'state/hooks';
+import {Currency} from 'types';
 
 const useStyles = makeStyles({
     main: {
@@ -17,7 +17,18 @@ const useStyles = makeStyles({
     },
 });
 
-export const CurrenciesDrawerContent = () => {
+export const Currencies = () => {
+    const user = useBootstrap();
+    const currencies = useCurrencies();
+
+    if (user && currencies) {
+        return <CurrenciesInner />;
+    }
+
+    return null;
+};
+
+const CurrenciesInner = () => {
     const user = useBootstrap();
     const currencies = useCurrencies();
     const map = currencies;
@@ -44,7 +55,7 @@ export const CurrenciesDrawerContent = () => {
     }));
 
     return (
-        <div className={cls.main}>
+        <Paper className={cls.main}>
             <Subheader>Base Currency</Subheader>
             <div
                 style={{
@@ -71,6 +82,6 @@ export const CurrenciesDrawerContent = () => {
                         </MenuItem>
                     ),
             )}
-        </div>
+        </Paper>
     );
 };

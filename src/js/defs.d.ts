@@ -15,6 +15,7 @@ export const paths: {
     categories: string;
     accounts: string;
     accountTypes: string;
+    currencies: string;
 };
 
 export const PERC_MAX: number;
