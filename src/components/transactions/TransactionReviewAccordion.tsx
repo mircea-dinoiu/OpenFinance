@@ -32,6 +32,14 @@ export const TransactionReviewAccordion = ({
 }) => {
     const [expanded, setExpanded] = useState(false);
     const formValues = useRef(modelToForm(transaction));
+    const save = () => {
+        onTransactionChange(
+            formToModel(formValues.current, {
+                user: bootstrap,
+            }),
+        );
+        setExpanded(false);
+    };
 
     return (
         <Accordion expanded={expanded} onChange={(e, v) => setExpanded(v)}>
@@ -64,20 +72,14 @@ export const TransactionReviewAccordion = ({
                         <ExpenseForm
                             initialValues={formValues.current}
                             onFormChange={(form) => (formValues.current = form)}
+                            onSubmit={save}
                         />
                     )}
                     <Button
                         variant="contained"
                         color="secondary"
                         fullWidth={true}
-                        onClick={() => {
-                            onTransactionChange(
-                                formToModel(formValues.current, {
-                                    user: bootstrap,
-                                }),
-                            );
-                            setExpanded(false);
-                        }}
+                        onClick={save}
                     >
                         Save
                     </Button>

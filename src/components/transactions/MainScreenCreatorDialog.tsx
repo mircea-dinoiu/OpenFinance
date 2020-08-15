@@ -1,4 +1,9 @@
-import {Button, DialogActions, DialogContent, DialogTitle, Divider} from '@material-ui/core';
+import {
+    Button,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
@@ -22,6 +27,7 @@ type TypeProps = {
     formComponent: React.ComponentType<{
         initialValues: TransactionForm;
         onFormChange: (form: TransactionForm) => void;
+        onSubmit: () => void;
     }>;
     onRequestCreate: Function;
     onCancel: () => void;
@@ -93,6 +99,7 @@ const MainScreenCreatorDialogWrapped = (props: TypeProps) => {
                 <Form
                     onFormChange={(nextFormData) => setFormData(nextFormData)}
                     initialValues={formDefaults}
+                    onSubmit={save}
                 />
                 {error && <ErrorSnackbar message={error} />}
                 {success && <SuccessSnackbar message={success} />}

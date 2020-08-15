@@ -24,7 +24,12 @@ import {TransactionNameField} from 'components/transactions/TransactionNameField
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
-import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles';
+import {
+    gridGap,
+    screenQuerySmall,
+    spacingLarge,
+    spacingSmall,
+} from 'defs/styles';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
@@ -34,7 +39,14 @@ import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
-import {Accounts, Bootstrap, Categories, Currencies, GlobalState, User} from 'types';
+import {
+    Accounts,
+    Bootstrap,
+    Categories,
+    Currencies,
+    GlobalState,
+    User,
+} from 'types';
 import {useEndDate} from 'utils/dates';
 
 const boxStyle = {
@@ -44,6 +56,7 @@ const boxStyle = {
 type TypeOwnProps = {
     initialValues: TransactionForm;
     onFormChange: (form: TransactionForm) => void;
+    onSubmit: () => void;
 };
 
 type Props = TypeOwnProps & {
@@ -301,7 +314,13 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
 
     render() {
         return (
-            <div>
+            <div
+                onKeyDown={(e) => {
+                    if (e.ctrlKey && e.keyCode === 13 && this.props.onSubmit) {
+                        this.props.onSubmit();
+                    }
+                }}
+            >
                 <div style={boxStyle}>
                     <TransactionNameField
                         value={this.state.description}

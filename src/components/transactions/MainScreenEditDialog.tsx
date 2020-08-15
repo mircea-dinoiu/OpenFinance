@@ -1,4 +1,9 @@
-import {Button, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
+import {
+    Button,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@material-ui/core';
 import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
@@ -28,6 +33,7 @@ type TypeProps = {
     formComponent: React.ComponentType<{
         initialValues: TransactionForm;
         onFormChange: (form: TransactionForm) => void;
+        onSubmit: () => void;
     }>;
     open: boolean;
     onCancel: () => void;
@@ -47,7 +53,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
         setError(null);
         formData.current = props.items.map(props.modelToForm);
         initialData.current = props.items.map(props.modelToForm);
-    }, [props.open]);
+    }, [props.items, props.modelToForm, props.open]);
 
     const getUpdates = () => {
         const updates = {};
@@ -123,6 +129,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
                         (formData.current[0] = nextFormData)
                     }
                     initialValues={formData.current[0]}
+                    onSubmit={save}
                 />
                 {error && <ErrorSnackbar message={error} />}
                 {success && <SuccessSnackbar message={success} />}
