@@ -8,17 +8,13 @@ import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
 import {ErrorSnackbar} from 'components/snackbars';
+import {useTransactionFormDefaults} from 'components/transactions/transformers/useTransactionFormDefaults';
 import {TransactionForm} from 'components/transactions/types';
 import {parseCRUDError} from 'parsers';
 import * as React from 'react';
-import {useBootstrap, useMoneyLocations} from 'state/hooks';
-import {Accounts, Bootstrap} from 'types';
+import {useBootstrap} from 'state/hooks';
 
 type TypeProps = {
-    getFormDefaults: (props: {
-        user: Bootstrap;
-        mls: Accounts;
-    }) => TransactionForm;
     formToModel: Function;
     entityName: string;
     onSave: () => void;
@@ -36,20 +32,9 @@ export const MainScreenCreatorDialog = (props: TypeProps) => {
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState<React.ReactNode>(null);
     const user = useBootstrap();
-    const mls = useMoneyLocations();
-    const formDefaults = React.useMemo(
-        () =>
-            props.getFormDefaults({
-                user,
-                mls,
-            }),
-        [props, user, mls],
-    );
+    const formDefaults = useTransactionFormDefaults();
     const [formData, setFormData] = React.useState(
-        props.getFormDefaults({
-            user,
-            mls,
-        }),
+        useTransactionFormDefaults(),
     );
 
     const save = async () => {

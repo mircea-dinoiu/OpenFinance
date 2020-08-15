@@ -6,15 +6,27 @@
         "prefer-const": "error",
         "one-var": ["error", "never"],
         "no-underscore-dangle": ["error", {"allowAfterThis": true}],
-        "max-statements-per-line": ["error", { "max": 1 }],
+        "max-statements-per-line": ["error", {"max": 1}],
         "camelcase": ["warn", {"properties": "never"}],
-        "lines-around-directive": ["error", {"before": "never", "after": "always"}],
+        "lines-around-directive": [
+            "error",
+            {"before": "never", "after": "always"}
+        ],
         "padding-line-between-statements": [
             "error",
-            { "blankLine": "always", "prev": "*", "next": "return" },
-            { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*"},
-            { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]}
+            {"blankLine": "always", "prev": "*", "next": "return"},
+            {
+                "blankLine": "always",
+                "prev": ["const", "let", "var"],
+                "next": "*"
+            },
+            {
+                "blankLine": "any",
+                "prev": ["const", "let", "var"],
+                "next": ["const", "let", "var"]
+            }
         ],
-        "import/no-default-export": "warn"
+        "import/no-default-export": "warn",
+        "react-hooks/exhaustive-deps": "off"
     }
 }

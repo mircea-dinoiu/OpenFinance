@@ -36,7 +36,6 @@ import {StatsTable} from 'components/transactions/StatsTable';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {TransactionsMobileHeader} from 'components/transactions/TransactionsMobileHeader';
 import {formToModel} from 'components/transactions/transformers/formToModel';
-import {getFormDefaults} from 'components/transactions/transformers/getFormDefaults';
 import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
@@ -44,7 +43,7 @@ import {routes} from 'defs/routes';
 import {QueryParam} from 'defs/url';
 import {convertCurrencyToDefault} from 'helpers/currency';
 import * as H from 'history';
-import {isEqual, range, uniqueId} from 'lodash';
+import {isEqual, range} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import React, {PureComponent, ReactNode, useMemo} from 'react';
@@ -98,7 +97,6 @@ type TypeState = {
 
     addModalOpen: boolean;
     editDialogOpen: boolean;
-    editDialogKey: string;
     deleteDialogOpen: boolean;
     displayHidden: boolean;
     splitAmount: string;
@@ -111,7 +109,6 @@ type TypeState = {
 const api = routes.transactions;
 const entityName = 'transaction';
 const crudProps = {
-    getFormDefaults,
     modelToForm,
     formToModel,
     formComponent: ExpenseForm,
@@ -129,7 +126,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         addModalOpen: false,
         editDialogOpen: false,
-        editDialogKey: uniqueId(),
         deleteDialogOpen: false,
 
         displayHidden: false,
@@ -155,7 +151,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     handleToggleEditDialog = () =>
         this.setState((state) => ({
             editDialogOpen: !state.editDialogOpen,
-            editDialogKey: uniqueId(),
         }));
     handleToggleAddModal = () =>
         this.setState((state) => ({
@@ -169,11 +164,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             this.selectedItems.map((each) => each.id),
         );
 
-        this.props.dispatch(onRefreshWidgets());
-    };
-
-    handleUpdate = () => {
-        this.handleToggleEditDialog();
         this.props.dispatch(onRefreshWidgets());
     };
 
@@ -700,6 +690,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.props.history.push(mapUrlToFragment(url));
     }
 
+    columns = makeTransactionsColumns({
+        updateRecords: this.updateRecords,
+    });
+
     renderContent() {
         const params = this.props.params;
 
@@ -754,9 +748,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             }
                             manual={true}
                             data={results}
-                            columns={makeTransactionsColumns({
-                                updateRecords: this.updateRecords,
-                            })}
+                            columns={this.columns}
                             getTrProps={this.getTrProps}
                         />
                     </div>
@@ -829,18 +821,19 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             .length
                     }
                 />
-                {selectedItems.length > 0 && (
-                    <MainScreenEditDialog
-                        open={this.state.editDialogOpen}
-                        items={selectedItems}
-                        onCancel={this.handleToggleEditDialog}
-                        onSave={this.handleUpdate}
-                        entityName={entityName}
-                        onRequestUpdate={this.handleRequestUpdate}
-                        user={this.props.user}
-                        {...crudProps}
-                    />
-                )}
+                <MainScreenEditDialog
+                    open={this.state.editDialogOpen}
+                    items={selectedItems}
+                    onCancel={this.handleToggleEditDialog}
+                    onSave={() => {
+                        this.handleToggleEditDialog();
+                        this.props.dispatch(onRefreshWidgets());
+                    }}
+                    entityName={entityName}
+                    onRequestUpdate={this.handleRequestUpdate}
+                    user={this.props.user}
+                    {...crudProps}
+                />
             </>
         );
     }

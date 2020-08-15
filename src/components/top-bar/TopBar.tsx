@@ -118,7 +118,7 @@ export const TopBar = (props: {onLogout: () => void}) => {
                             document.title
                         )}
                     </Typography>
-                    {screenSize.isLarge && (
+                    {user && screenSize.isLarge && (
                         <Paper className={cls.tabs}>
                             <Tabs
                                 value={tabs.indexOf(location.pathname)}

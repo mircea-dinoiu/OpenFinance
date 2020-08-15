@@ -8,6 +8,7 @@ import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
 import {ErrorSnackbar} from 'components/snackbars';
+import {useTransactionFormDefaults} from 'components/transactions/transformers/useTransactionFormDefaults';
 import {TransactionForm, TransactionModel} from 'components/transactions/types';
 import {isEqual} from 'lodash';
 
@@ -45,13 +46,14 @@ export const MainScreenEditDialog = (props: TypeProps) => {
     const [error, setError] = useState<ReactNode>(null);
     const formData = useRef(props.items.map(props.modelToForm));
     const initialData = useRef(props.items.map(props.modelToForm));
+    const formDefaults = useTransactionFormDefaults();
 
     useEffect(() => {
         setSaving(false);
         setError(null);
         formData.current = props.items.map(props.modelToForm);
         initialData.current = props.items.map(props.modelToForm);
-    }, [props.items, props.modelToForm, props.open]);
+    }, [props.open]);
 
     const getUpdates = () => {
         const updates = {};
@@ -89,18 +91,16 @@ export const MainScreenEditDialog = (props: TypeProps) => {
                 ),
             );
 
-            setSaving(false);
-            setError(null);
             props.onSave();
         } catch (e) {
             if (e.response) {
                 setError(parseCRUDError(e.response.data));
-                setSaving(false);
             } else {
                 setError(e.message);
-                setSaving(false);
             }
         }
+
+        setSaving(false);
     };
 
     const Form = props.formComponent;
@@ -119,7 +119,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
                     onFormChange={(nextFormData) =>
                         (formData.current[0] = nextFormData)
                     }
-                    initialValues={formData.current[0]}
+                    initialValues={formData.current[0] ?? formDefaults}
                     onSubmit={save}
                 />
                 {error && <ErrorSnackbar message={error} />}

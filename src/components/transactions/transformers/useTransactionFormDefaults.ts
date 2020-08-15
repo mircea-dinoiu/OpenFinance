@@ -1,15 +1,12 @@
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import moment from 'moment';
-import {Accounts, Bootstrap} from 'types';
+import {useBootstrap, useMoneyLocations} from 'state/hooks';
 
-export const getFormDefaults = ({
-    user,
-    mls,
-}: {
-    user: Bootstrap;
-    mls: Accounts;
-}): TransactionForm => {
+export const useTransactionFormDefaults = (): TransactionForm => {
+    const user = useBootstrap();
+    const mls = useMoneyLocations();
+
     return {
         description: '',
         notes: '',
