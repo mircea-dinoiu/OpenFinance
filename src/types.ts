@@ -12,8 +12,6 @@ export type ScreenQueries = {
 export type Currency = {
     id: number;
     iso_code: string;
-    currency: string;
-    symbol: string;
     rates: {
         [key: string]: number;
     };
