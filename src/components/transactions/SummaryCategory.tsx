@@ -10,7 +10,7 @@ import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 
 import React, {ReactNode} from 'react';
-import {useCurrencies} from 'state/currencies';
+import {useCurrenciesMap} from 'state/currencies';
 
 const groupSorter = ([, items]: [unknown, SummaryModel[]]) => {
     if (items.length > 0) {
@@ -54,7 +54,7 @@ export const SummaryCategory = <Ent extends {id: number}>(
 ) => {
     const cls = useStyles();
     const cardHeaderClasses = useCardHeaderStyles();
-    const currencies = useCurrencies();
+    const currencies = useCurrenciesMap();
     const {
         backgroundColor,
         title,

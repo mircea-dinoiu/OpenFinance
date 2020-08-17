@@ -17,15 +17,14 @@ export type Currency = {
     };
 };
 
-export type CurrenciesApi = {
-    default: number;
-    from_cache: boolean;
+export type Currencies = {
+    date: string;
     map: {
         [key: string]: Currency;
     };
 };
 
-export type Currencies = {
+export type CurrencyMap = {
     [key: number]: Currency;
 };
 

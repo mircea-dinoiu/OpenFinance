@@ -10,13 +10,13 @@ import {SummaryModel} from 'components/transactions/types';
 import {spacingNormal, spacingSmall, theme} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React, {ReactNode, useState} from 'react';
-import {useCurrencies} from 'state/currencies';
-import {Currencies} from 'types';
+import {useCurrenciesMap} from 'state/currencies';
+import {CurrencyMap} from 'types';
 
 export const SummarySubCategory = <Ent,>(props: {
     expandedByDefault: boolean;
     excluded: {};
-    currencies: Currencies;
+    currencies: CurrencyMap;
     onToggleExcluded: (ids: string[]) => void;
     entities: Ent[];
     entityIdField: keyof Ent;
@@ -40,7 +40,7 @@ export const SummarySubCategory = <Ent,>(props: {
 
     const items = sortBy(itemsFromProps, (item) => item.description);
     const cls = useStyles();
-    const currencies = useCurrencies();
+    const currencies = useCurrenciesMap();
 
     return (
         <div style={{padding: '0 5px', marginBottom: spacingNormal}}>

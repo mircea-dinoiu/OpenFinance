@@ -56,7 +56,7 @@ import {Project, useSelectedProject} from 'state/projects';
 import {
     Accounts,
     Bootstrap,
-    Currencies,
+    CurrencyMap,
     GlobalState,
     ScreenQueries,
 } from 'types';
@@ -80,7 +80,7 @@ type TypeProps = {
     };
     endDate: string;
     screen: ScreenQueries;
-    currencies: Currencies;
+    currencies: CurrencyMap;
     refreshWidgets: string;
     dispatch: Dispatch;
     moneyLocations: Accounts;

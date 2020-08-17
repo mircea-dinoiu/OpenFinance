@@ -43,7 +43,7 @@ import {
     Accounts,
     Bootstrap,
     Categories,
-    Currencies,
+    CurrencyMap,
     GlobalState,
     User,
 } from 'types';
@@ -61,7 +61,7 @@ type TypeOwnProps = {
 
 type Props = TypeOwnProps & {
     moneyLocations: Accounts;
-    currencies: Currencies;
+    currencies: CurrencyMap;
     endDate: string;
     user: Bootstrap;
     categories: Categories;

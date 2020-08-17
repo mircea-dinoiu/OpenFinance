@@ -3,7 +3,7 @@ import {SummaryModel} from 'components/transactions/types';
 import {financialNum} from 'js/utils/numbers';
 import groupBy from 'lodash/groupBy';
 import React from 'react';
-import {useCurrencies} from 'state/currencies';
+import {useCurrenciesMap} from 'state/currencies';
 
 export const SummaryTotal = ({
     summaryItems,
@@ -12,7 +12,7 @@ export const SummaryTotal = ({
     summaryItems: Pick<SummaryModel, 'sum' | 'reference' | 'currencyId'>[];
     excludedRecord?: Record<string, boolean>;
 }) => {
-    const currencies = useCurrencies();
+    const currencies = useCurrenciesMap();
 
     return (
         <>

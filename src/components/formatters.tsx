@@ -6,7 +6,7 @@ import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
 import {HTMLAttributes} from 'react';
-import {useCurrencies} from 'state/currencies';
+import {useCurrenciesMap} from 'state/currencies';
 import {usePrivacyToggle} from 'state/privacyToggle';
 
 const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => (
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 
 const NumericValue = ({currency, value}: {currency: string; value: number}) => {
     const cls = useStyles();
-    const currencies = useCurrencies();
+    const currencies = useCurrenciesMap();
     const copyText = useCopyTextWithConfirmation();
     const [privacyToggle] = usePrivacyToggle();
     const inner = (

@@ -2,7 +2,7 @@ import {TextField} from '@material-ui/core';
 import {MuiSelectNative} from 'components/dropdowns';
 import React from 'react';
 import {TableCellRenderer} from 'react-table-6';
-import {useCurrencies} from 'state/currencies';
+import {useCurrenciesMap} from 'state/currencies';
 import {useMoneyLocationTypes} from 'state/hooks';
 
 export const TextFieldCell: TableCellRenderer = ({
@@ -29,13 +29,16 @@ export const TextFieldCell: TableCellRenderer = ({
 };
 
 export const CurrencyCell: TableCellRenderer = ({original: r}) => {
-    const currencies = useCurrencies();
+    const currencies = useCurrenciesMap();
 
     return Object.values(currencies).find((c) => c.id === r.currency_id)
         ?.iso_code;
 };
 
-export const AccountTypeCell: TableCellRenderer = ({original: row, columnProps}) => {
+export const AccountTypeCell: TableCellRenderer = ({
+    original: row,
+    columnProps,
+}) => {
     const types = useMoneyLocationTypes();
     const {editor, setEditor} = columnProps.rest;
 

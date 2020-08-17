@@ -1,12 +1,14 @@
-import {Currencies, Currency, CurrencyIdentifier} from 'types';
+import {CurrencyMap, Currency, CurrencyIdentifier} from 'types';
 
 export const findCurrencyById = (
     id: number,
-    currencies: Currencies,
+    currencies: CurrencyMap,
 ): Currency => currencies[String(id)];
 
-export const getCurrencyByISOCode = (ISOCode: string, currencies: Currencies) =>
-    Object.values(currencies).find((each) => each.iso_code === ISOCode);
+export const getCurrencyByISOCode = (
+    ISOCode: string,
+    currencies: CurrencyMap,
+) => Object.values(currencies).find((each) => each.iso_code === ISOCode);
 
 export const convertCurrency = ({
     value,
@@ -17,7 +19,7 @@ export const convertCurrency = ({
     value: number;
     from: CurrencyIdentifier;
     to: CurrencyIdentifier;
-    currencies: Currencies;
+    currencies: CurrencyMap;
 }) => {
     let from = rawFrom;
     let to = rawTo;

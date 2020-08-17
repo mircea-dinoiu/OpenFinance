@@ -3,19 +3,23 @@ import {makeStyles} from '@material-ui/core/styles';
 import {MuiSelectNative} from 'components/dropdowns';
 import React, {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {fetchCurrencies, useCurrencies} from 'state/currencies';
+import {
+    fetchCurrencies,
+    useCurrencies,
+    useCurrenciesMap,
+} from 'state/currencies';
 import {useBootstrap} from 'state/hooks';
 import {Currency} from 'types';
 
 const useStyles = makeStyles({
     main: {
-        width: 250,
+        width: '100%',
     },
 });
 
 export const Currencies = () => {
     const user = useBootstrap();
-    const currencies = useCurrencies();
+    const currencies = useCurrenciesMap();
 
     if (user && currencies) {
         return <CurrenciesInner />;
@@ -27,7 +31,7 @@ export const Currencies = () => {
 const CurrenciesInner = () => {
     const user = useBootstrap();
     const currencies = useCurrencies();
-    const map = currencies;
+    const {map} = currencies;
     const dispatch = useDispatch();
     const cls = useStyles();
     const firstCurrencyCode = Object.values(map)[0]?.iso_code;
@@ -74,7 +78,10 @@ const CurrenciesInner = () => {
                 />
             </div>
 
-            <Subheader>Exchange Rates</Subheader>
+            <Subheader>
+                Exchange Rates as of{' '}
+                {new Date(currencies.date).toLocaleString()}
+            </Subheader>
             {Object.values(map).map(
                 (each: Currency) =>
                     each.iso_code !== baseCurrencyCode && (

@@ -2,7 +2,7 @@ import {createAction, createReducer} from '@reduxjs/toolkit';
 import {routes} from 'defs/routes';
 import {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
-import {Currencies, CurrenciesApi, GlobalState} from 'types';
+import {CurrencyMap, Currencies, GlobalState} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
@@ -10,28 +10,36 @@ export enum CurrenciesAction {
     received = 'currencies/received',
 }
 
-export const currencies = createReducer<Currencies | null>(null, {
-    [CurrenciesAction.received]: (
-        state,
-        {
-            payload,
-        }: {
-            payload: CurrenciesApi;
-        },
-    ) => payload.map,
-});
+export const currencies = createReducer<Currencies>(
+    {
+        date: '',
+        map: {},
+    },
+    {
+        [CurrenciesAction.received]: (
+            state,
+            {
+                payload,
+            }: {
+                payload: Currencies;
+            },
+        ) => payload,
+    },
+);
 
-export const receiveCurrencies = createAction<Currencies>(
+export const receiveCurrencies = createAction<CurrencyMap>(
     CurrenciesAction.received,
 );
 export const fetchCurrencies = (
     params: {update?: boolean} = Object.freeze({}),
 ) => async (dispatch: Dispatch<{type: string; payload: unknown}>) => {
-    const currenciesResponse = await createXHR<Currencies>({
+    const currenciesResponse = await createXHR<CurrencyMap>({
         url: makeUrl(routes.currencies, params),
     });
 
     dispatch(receiveCurrencies(currenciesResponse.data));
 };
+export const useCurrenciesMap = (): CurrencyMap =>
+    useSelector((s: GlobalState) => s.currencies.map);
 export const useCurrencies = (): Currencies =>
     useSelector((s: GlobalState) => s.currencies);

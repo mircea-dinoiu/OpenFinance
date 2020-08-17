@@ -1,10 +1,10 @@
 import {
     Button,
-    ButtonProps,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle, Fab,
+    DialogTitle,
+    Fab,
     List,
     ListItem,
     ListItemIcon,
@@ -16,10 +16,8 @@ import {
     Typography,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
 import IconUpload from '@material-ui/icons/CloudUpload';
 import {AxiosResponse} from 'axios';
-import {TableHeaderTop} from 'components/BaseTable';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TransactionReviewAccordion} from 'components/transactions/TransactionReviewAccordion';
 import {TransactionModel} from 'components/transactions/types';
@@ -28,7 +26,7 @@ import {spacingLarge, spacingSmall} from 'defs/styles';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
 import {AccountStatus} from 'state/accounts';
-import {useCurrencies} from 'state/currencies';
+import {useCurrenciesMap} from 'state/currencies';
 import {useBootstrap, useMoneyLocations} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';
@@ -48,7 +46,7 @@ export const ImportTransactions = ({
 }: {
     onSubmit: (transactions: TransactionModel[]) => void;
 }) => {
-    const currencies = useCurrencies();
+    const currencies = useCurrenciesMap();
     const accounts = useMoneyLocations();
     const project = useSelectedProject();
     const bootstrap = useBootstrap();
