@@ -53,7 +53,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
         setError(null);
         formData.current = props.items.map(props.modelToForm);
         initialData.current = props.items.map(props.modelToForm);
-    }, [props.open]);
+    }, [props.items]);
 
     const getUpdates = () => {
         const updates = {};
