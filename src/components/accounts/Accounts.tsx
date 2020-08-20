@@ -36,11 +36,16 @@ export const Accounts = () => {
                         accessor: 'status',
                         Header: 'Status',
                         Cell: StatusCell,
+                        width: 100,
                     },
                     {
                         accessor: 'currency',
                         Header: 'Currency',
                         Cell: CurrencyCell,
+                        width: 100,
+                        style: {
+                            textAlign: 'center',
+                        },
                     },
                     {
                         accessor: 'type_id',

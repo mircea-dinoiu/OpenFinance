@@ -62,7 +62,11 @@ export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
             }
         />
     ) : (
-        <Alert icon={false} severity={SeverityByStatus[row.status]}>
+        <Alert
+            icon={false}
+            severity={SeverityByStatus[row.status]}
+            style={{justifyContent: 'center'}}
+        >
             {row.status}
         </Alert>
     );
