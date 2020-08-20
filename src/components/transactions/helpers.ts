@@ -5,6 +5,7 @@ import {endOfDayToISOString} from 'js/utils/dates';
 import {sumArray} from 'js/utils/numbers';
 import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import moment from 'moment';
+import {AccountStatus} from 'state/accounts';
 import {Accounts} from 'types';
 import {useQueryParamState} from 'utils/url';
 
@@ -40,7 +41,7 @@ export const sortMoneyLocations = (items: Accounts) =>
     sortBy(
         items,
         (item) =>
-            `${['open', 'locked', 'closed'].indexOf(item.status)}#${item.name}`,
+            `${Object.values(AccountStatus).indexOf(item.status)}#${item.name}`,
     );
 
 export const useIncludePending = (): [boolean, (v: boolean) => void] => {

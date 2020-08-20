@@ -1,5 +1,6 @@
 import {AlertProps} from '@material-ui/lab';
 import * as React from 'react';
+import {AccountStatus} from 'state/accounts';
 import {Project} from 'state/projects';
 import {Summary} from 'state/summary';
 
@@ -43,7 +44,7 @@ export type Account = {
     currency_id: number;
     id: number;
     name: string;
-    status: 'open' | 'closed' | 'locked';
+    status: AccountStatus;
     type_id: number;
 };
 

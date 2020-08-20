@@ -1,7 +1,9 @@
 import {TextField} from '@material-ui/core';
+import {Alert, AlertProps} from '@material-ui/lab';
 import {MuiSelectNative} from 'components/dropdowns';
 import React from 'react';
 import {TableCellRenderer} from 'react-table-6';
+import {AccountStatus} from 'state/accounts';
 import {useCurrenciesMap} from 'state/currencies';
 import {useMoneyLocationTypes} from 'state/hooks';
 
@@ -33,6 +35,37 @@ export const CurrencyCell: TableCellRenderer = ({original: r}) => {
 
     return Object.values(currencies).find((c) => c.id === r.currency_id)
         ?.iso_code;
+};
+
+const SeverityByStatus: Record<AccountStatus, AlertProps['severity']> = {
+    [AccountStatus.OPEN]: 'success',
+    [AccountStatus.CLOSED]: 'error',
+    [AccountStatus.LOCKED]: 'warning',
+};
+
+export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
+    const {editor, setEditor} = columnProps.rest;
+    const options = Object.values(AccountStatus).map((value) => ({
+        value: value,
+        label: value,
+    }));
+
+    return editor && editor.id === row.id ? (
+        <MuiSelectNative
+            options={options}
+            value={options.find((o) => o.value === editor.status)}
+            onChange={(o) =>
+                setEditor({
+                    ...editor,
+                    status: o.value,
+                })
+            }
+        />
+    ) : (
+        <Alert icon={false} severity={SeverityByStatus[row.status]}>
+            {row.status}
+        </Alert>
+    );
 };
 
 export const AccountTypeCell: TableCellRenderer = ({

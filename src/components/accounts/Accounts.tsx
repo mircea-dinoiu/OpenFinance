@@ -1,5 +1,10 @@
 import {Paper} from '@material-ui/core';
-import {AccountTypeCell, CurrencyCell, TextFieldCell} from 'components/cells';
+import {
+    AccountTypeCell,
+    CurrencyCell,
+    StatusCell,
+    TextFieldCell,
+} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {routes} from 'defs/routes';
 import {spacingNormal} from 'defs/styles';
@@ -17,7 +22,7 @@ export const Accounts = () => {
             <TableWithInlineEditing<Account>
                 data={rows}
                 api={routes.moneyLocations}
-                editableFields={['name', 'type_id']}
+                editableFields={['name', 'type_id', 'status']}
                 onRefresh={refresh}
                 allowDelete={false}
                 defaultSorted={[{id: 'name', desc: false}]}
@@ -30,6 +35,7 @@ export const Accounts = () => {
                     {
                         accessor: 'status',
                         Header: 'Status',
+                        Cell: StatusCell,
                     },
                     {
                         accessor: 'currency',
