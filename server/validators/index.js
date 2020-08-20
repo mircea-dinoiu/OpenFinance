@@ -157,6 +157,7 @@ Object.assign(validator, {
     },
     isRepeatValue: (value) => Object.values(defs.RepeatOption).includes(value),
     isStatusValue: (value) => ['finished', 'pending', 'draft'].includes(value),
+    isAccountStatus: (value) => ['open', 'locked', 'closed'].includes(value),
     isNotZero: (value) => Number(value) !== 0,
     isNotNegative: (value) => Number(value) >= 0,
     isString: (value) => typeof value === 'string',

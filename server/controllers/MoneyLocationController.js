@@ -1,27 +1,26 @@
 const {MoneyLocation: Model, MLType} = require('../models');
 const BaseController = require('./BaseController');
+const {pick} = require('lodash');
 
 module.exports = class MoneyLocationController extends BaseController {
     Model = Model;
     updateValidationRules = {
         id: ['isRequired', ['isId', Model]],
         name: ['sometimes', 'isRequired', 'isString'],
+        status: ['sometimes', 'isRequired', 'isAccountStatus'],
         type_id: ['sometimes', 'isRequired', ['isId', MLType]],
     };
     createValidationRules = {
         name: ['isRequired', 'isString'],
+        status: ['isRequired', 'isAccountStatus'],
         type_id: ['isRequired', ['isId', MLType]],
     };
 
     sanitizeUpdateValues(record) {
-        const values = {};
+        const values = pick(record, 'status', 'type_id');
 
         if (record.hasOwnProperty('name')) {
             values.name = record.name.trim();
-        }
-
-        if (record.hasOwnProperty('type_id')) {
-            values.type_id = record.type_id;
         }
 
         return values;
@@ -29,8 +28,8 @@ module.exports = class MoneyLocationController extends BaseController {
 
     sanitizeCreateValues(record) {
         return {
+            ...pick(record, 'status', 'type_id'),
             name: record.name.trim(),
-            type_id: record.type_id,
         };
     }
 };
