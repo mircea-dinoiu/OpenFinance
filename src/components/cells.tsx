@@ -7,6 +7,16 @@ import {AccountStatus} from 'state/accounts';
 import {useCurrenciesMap} from 'state/currencies';
 import {useMoneyLocationTypes} from 'state/hooks';
 
+export const UrlCell: TableCellRenderer = ({original: row, column}) => {
+    const url = row[column.id as string];
+
+    return url ? (
+        <a href={url} target="_blank" rel="noreferrer noopener">
+            {url}
+        </a>
+    ) : null;
+};
+
 export const TextFieldCell: TableCellRenderer = ({
     original: row,
     columnProps,

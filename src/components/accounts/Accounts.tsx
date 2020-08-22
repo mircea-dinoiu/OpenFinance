@@ -4,6 +4,7 @@ import {
     CurrencyCell,
     StatusCell,
     TextFieldCell,
+    UrlCell,
 } from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {routes} from 'defs/routes';
@@ -25,7 +26,10 @@ export const Accounts = () => {
                 editableFields={['name', 'type_id', 'status']}
                 onRefresh={refresh}
                 allowDelete={false}
-                defaultSorted={[{id: 'name', desc: false}]}
+                defaultSorted={[
+                    {id: 'status', desc: true},
+                    {id: 'name', desc: false},
+                ]}
                 columns={[
                     {
                         accessor: 'name',
@@ -46,6 +50,11 @@ export const Accounts = () => {
                         style: {
                             textAlign: 'center',
                         },
+                    },
+                    {
+                        accessor: 'url',
+                        Header: 'URL',
+                        Cell: UrlCell,
                     },
                     {
                         accessor: 'type_id',

@@ -8,6 +8,7 @@ module.exports = (sequelize, types) =>
                 autoIncrement: true,
             },
             name: types.STRING,
+            url: types.STRING,
             type_id: types.INTEGER,
             currency_id: types.INTEGER,
             status: types.STRING,
