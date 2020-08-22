@@ -1,7 +1,7 @@
 import {Checkbox, FormControlLabel, Paper} from '@material-ui/core';
 import {green, purple} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
-import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';
+import {AccountDisplayById} from 'components/BaseTable/cells/AccountDisplayById';
 import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
 import {
     getEndDateBasedOnIncludePreference,
@@ -10,16 +10,20 @@ import {
 } from 'components/transactions/helpers';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
-import {BalanceByLocation, SummaryModel, SummaryResults} from 'components/transactions/types';
+import {
+    BalanceByLocation,
+    SummaryModel,
+    SummaryResults,
+} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {spacingNormal, spacingSmall} from 'defs/styles';
 import identity from 'lodash/identity';
 import pickBy from 'lodash/pickBy';
 import * as React from 'react';
+import {useAccounts} from 'state/accounts';
 import {
     useCategories,
-    useMoneyLocations,
     useMoneyLocationTypes,
     useRefreshWidgets,
 } from 'state/hooks';
@@ -47,7 +51,7 @@ export const Summary = () => {
     const moneyLocationTypes = useMoneyLocationTypes();
     const users = useSelectedProject().users;
     const categories = useCategories();
-    const moneyLocations = useMoneyLocations();
+    const moneyLocations = useAccounts();
     const [includePending, setIncludePending] = useIncludePending();
     const [endDate] = useEndDate();
     const [include, setInclude] = useInclude();
@@ -152,7 +156,7 @@ export const Summary = () => {
                         ),
                         parser: parseTransactionsByLocation,
                         renderDescription({reference}: {reference: string}) {
-                            return <MoneyLocationDisplay id={reference} />;
+                            return <AccountDisplayById id={reference} />;
                         },
                         globalStateKey: SummaryKey.BALANCE_BY_ACCOUNT,
                         entityNameField: 'name',

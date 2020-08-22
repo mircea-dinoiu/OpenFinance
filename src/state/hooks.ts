@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {refreshWidgets, setUsers} from 'state/actionCreators';
-import {Bootstrap, GlobalState, ScreenQueries, Snackbar, User} from 'types';
+import {Bootstrap, GlobalState, ScreenQueries, Snackbar} from 'types';
 
 export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();
@@ -29,9 +29,6 @@ export const useUsersWithActions = (): [
         setUsers,
     }),
 ];
-
-export const useMoneyLocations = () =>
-    useSelector((s: GlobalState) => s.moneyLocations);
 
 export const useCategories = () =>
     useSelector((s: GlobalState) => s.categories);

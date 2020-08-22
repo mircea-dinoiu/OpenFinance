@@ -1,11 +1,11 @@
 import {routes} from 'defs/routes';
-import {useDispatch} from 'react-redux';
+import {sortBy} from 'lodash';
+import {useDispatch, useSelector} from 'react-redux';
 import {updateState} from 'state/actionCreators';
 import {useSelectedProject} from 'state/projects';
-import {Account} from 'types';
+import {Account, GlobalState} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
-import {sortBy} from 'lodash';
 
 export const useAccountsReader = () => {
     const dispatch = useDispatch();
@@ -27,6 +27,14 @@ export const useAccountsReader = () => {
 
 export enum AccountStatus {
     OPEN = 'open',
-    CLOSED = 'closed',
     LOCKED = 'locked',
+    CLOSED = 'closed',
 }
+
+export const useAccounts = () =>
+    useSelector((s: GlobalState) => s.moneyLocations);
+
+export const useAccountsOpen = () =>
+    useSelector((s: GlobalState) =>
+        s.moneyLocations.filter((a) => a.status === AccountStatus.OPEN),
+    );

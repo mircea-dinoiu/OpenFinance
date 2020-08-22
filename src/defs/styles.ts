@@ -1,11 +1,6 @@
 import {blue, grey} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
 
-export const greyedOut = {
-    filter: 'grayscale(100%)',
-    opacity: 0.5,
-};
-
 export const dialog = {
     root: {
         padding: 10,

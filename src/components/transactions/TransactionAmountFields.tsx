@@ -3,8 +3,8 @@ import {gridGap} from 'defs/styles';
 import {findCurrencyById} from 'helpers/currency';
 import {financialNum} from 'js/utils/numbers';
 import React from 'react';
+import {useAccounts} from 'state/accounts';
 import {useCurrenciesMap} from 'state/currencies';
-import {useMoneyLocations} from 'state/hooks';
 import {SummaryKey, useSummary} from 'state/summary';
 import styled from 'styled-components';
 
@@ -19,7 +19,7 @@ export const TransactionAmountFields = ({
     onChange: (value: number) => void;
     balanceOffset: number;
 }) => {
-    const accounts = useMoneyLocations();
+    const accounts = useAccounts();
     const currencies = useCurrenciesMap();
     const balanceByAccount = useSummary(SummaryKey.BALANCE_BY_ACCOUNT);
     const balance = (balanceByAccount?.[accountId] ?? 0) - balanceOffset;

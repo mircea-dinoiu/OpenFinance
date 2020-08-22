@@ -25,9 +25,9 @@ import {routes} from 'defs/routes';
 import {spacingLarge, spacingSmall} from 'defs/styles';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
-import {AccountStatus} from 'state/accounts';
+import {useAccountsOpen} from 'state/accounts';
 import {useCurrenciesMap} from 'state/currencies';
-import {useBootstrap, useMoneyLocations} from 'state/hooks';
+import {useBootstrap} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
@@ -47,7 +47,7 @@ export const ImportTransactions = ({
     onSubmit: (transactions: TransactionModel[]) => void;
 }) => {
     const currencies = useCurrenciesMap();
-    const accounts = useMoneyLocations();
+    const accounts = useAccountsOpen();
     const project = useSelectedProject();
     const bootstrap = useBootstrap();
 
@@ -163,23 +163,19 @@ export const ImportTransactions = ({
                     </Stepper>
                     {activeStep === ImportStep.ACCOUNT && (
                         <List>
-                            {accounts.map((a) =>
-                                a.status === AccountStatus.OPEN ? (
-                                    <ListItem
-                                        key={a.id}
-                                        dense
-                                        button
-                                        onClick={() => setAccountId(a.id)}
-                                    >
-                                        <ListItemIcon>
-                                            <Radio
-                                                checked={accountId === a.id}
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemText primary={a.name} />
-                                    </ListItem>
-                                ) : null,
-                            )}
+                            {accounts.map((a) => (
+                                <ListItem
+                                    key={a.id}
+                                    dense
+                                    button
+                                    onClick={() => setAccountId(a.id)}
+                                >
+                                    <ListItemIcon>
+                                        <Radio checked={accountId === a.id} />
+                                    </ListItemIcon>
+                                    <ListItemText primary={a.name} />
+                                </ListItem>
+                            ))}
                         </List>
                     )}
                     {activeStep === ImportStep.UPLOAD && (

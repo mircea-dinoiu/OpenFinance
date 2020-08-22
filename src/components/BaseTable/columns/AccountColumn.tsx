@@ -1,6 +1,6 @@
 import {TransactionModel} from 'components/transactions/types';
 import * as React from 'react';
-import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';
+import {AccountDisplayById} from 'components/BaseTable/cells/AccountDisplayById';
 import {AccountFilter} from 'components/BaseTable/filters/AccountFilter';
 
 const style = {textAlign: 'center'};
@@ -10,7 +10,7 @@ export const AccountColumn = {
     filterable: true,
     Filter: AccountFilter,
     Cell: ({original: item}: {original: TransactionModel}) => (
-        <MoneyLocationDisplay id={item.money_location_id} />
+        <AccountDisplayById id={item.money_location_id} />
     ),
     accessor: 'money_location_id',
     sortable: true,

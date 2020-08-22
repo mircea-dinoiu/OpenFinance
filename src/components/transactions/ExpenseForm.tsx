@@ -1,10 +1,12 @@
 import {
     Avatar,
     Checkbox,
+    FormControl,
     FormControlLabel,
     FormGroup,
     FormLabel,
     InputAdornment,
+    InputLabel,
     List,
     ListItem,
     ListItemAvatar,
@@ -15,6 +17,7 @@ import {
     Slider,
     TextField,
 } from '@material-ui/core';
+import Select from '@material-ui/core/Select';
 import {DateTimePicker} from '@material-ui/pickers';
 // @ts-ignore
 import {MuiSelectNative} from 'components/dropdowns';
@@ -33,10 +36,11 @@ import {
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
-import {sortBy} from 'lodash';
+import {sortBy, groupBy, startCase} from 'lodash';
 
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
+import {AccountStatus} from 'state/accounts';
 import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
 import {
@@ -159,25 +163,40 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
     }
 
     renderAccount() {
-        const options = sortBy(this.props.moneyLocations, 'name').map(
-            (map) => ({
-                value: map.id,
-                label: map.name,
-            }),
-        );
-
         return (
-            <MuiSelectNative
-                label="Account"
-                options={options}
-                valueType="number"
-                value={options.find(
-                    (o) => o.value === this.state.paymentMethod,
-                )}
-                onChange={({value}: {value: number}) =>
-                    this.setState({paymentMethod: value})
-                }
-            />
+            <FormControl fullWidth={true}>
+                <InputLabel>Account</InputLabel>
+
+                <Select
+                    native
+                    onChange={(e) =>
+                        this.setState({paymentMethod: e.target.value as number})
+                    }
+                    value={this.state.paymentMethod}
+                >
+                    {sortBy(
+                        Object.entries(
+                            groupBy(this.props.moneyLocations, 'status'),
+                        ),
+                        (e) =>
+                            Object.values(AccountStatus).indexOf(
+                                e[0] as AccountStatus,
+                            ),
+                    ).map(([status, accounts]) => {
+                        return (
+                            accounts.length > 0 && (
+                                <optgroup label={startCase(status)}>
+                                    {accounts.map((a) => (
+                                        <option key={a.id} value={a.id}>
+                                            {a.name}
+                                        </option>
+                                    ))}
+                                </optgroup>
+                            )
+                        );
+                    })}
+                </Select>
+            </FormControl>
         );
     }
 

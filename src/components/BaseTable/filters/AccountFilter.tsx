@@ -1,6 +1,6 @@
 import {sortMoneyLocations} from 'components/transactions/helpers';
 import * as React from 'react';
-import {useMoneyLocations} from 'state/hooks';
+import {useAccounts} from 'state/accounts';
 import {SelectFilter, SelectFilterProps} from './SelectFilter';
 
 export const AccountFilter = ({
@@ -11,6 +11,6 @@ export const AccountFilter = ({
         onChange={onChange}
         filter={filter}
         allowNone={false}
-        items={sortMoneyLocations(useMoneyLocations())}
+        items={sortMoneyLocations(useAccounts())}
     />
 );

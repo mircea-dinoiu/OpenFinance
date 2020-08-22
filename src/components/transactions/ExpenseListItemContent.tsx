@@ -2,7 +2,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {AmountDisplay} from 'components/BaseTable/cells/AmountDisplay';
 import {DateDisplay} from 'components/BaseTable/cells/DateDisplay';
-import {MoneyLocationDisplay} from 'components/BaseTable/cells/MoneyLocationDisplay';
+import {AccountDisplayById} from 'components/BaseTable/cells/AccountDisplayById';
 import {RepeatsDisplay} from 'components/BaseTable/cells/RepeatsDisplay';
 import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay';
 import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
@@ -70,16 +70,19 @@ const CategoriesContainer = styled.div`
     grid-area: categories;
 `;
 
-export const ExpenseListItemContent = ({item, expanded}: {
-    item: TransactionModel,
-    expanded?: boolean
+export const ExpenseListItemContent = ({
+    item,
+    expanded,
+}: {
+    item: TransactionModel;
+    expanded?: boolean;
 }) => {
     const cls = useStyles();
     const personsDisplay = <PersonsDisplay item={item} />;
     const descriptionDisplay = item.item;
     const flags = <Flags entity="transaction" item={item} />;
     const moneyLocationDisplay = (
-        <MoneyLocationDisplay id={item.money_location_id} />
+        <AccountDisplayById id={item.money_location_id} />
     );
     const categoriesDisplay = <CategoriesDisplay item={item} />;
     const dateDisplay = <DateDisplay item={item} />;

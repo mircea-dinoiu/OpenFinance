@@ -1,6 +1,7 @@
 import {TextField} from '@material-ui/core';
-import {Alert, AlertProps} from '@material-ui/lab';
+import {green, orange, red} from '@material-ui/core/colors';
 import {MuiSelectNative} from 'components/dropdowns';
+import startCase from 'lodash/startCase';
 import React from 'react';
 import {TableCellRenderer} from 'react-table-6';
 import {AccountStatus} from 'state/accounts';
@@ -47,17 +48,17 @@ export const CurrencyCell: TableCellRenderer = ({original: r}) => {
         ?.iso_code;
 };
 
-const SeverityByStatus: Record<AccountStatus, AlertProps['severity']> = {
-    [AccountStatus.OPEN]: 'success',
-    [AccountStatus.CLOSED]: 'error',
-    [AccountStatus.LOCKED]: 'warning',
+const ColorByStatus: Record<AccountStatus, string> = {
+    [AccountStatus.OPEN]: green[500],
+    [AccountStatus.CLOSED]: red[500],
+    [AccountStatus.LOCKED]: orange[500],
 };
 
 export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
     const {editor, setEditor} = columnProps.rest;
     const options = Object.values(AccountStatus).map((value) => ({
         value: value,
-        label: value,
+        label: startCase(value),
     }));
 
     return editor && editor.id === row.id ? (
@@ -72,13 +73,15 @@ export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
             }
         />
     ) : (
-        <Alert
-            icon={false}
-            severity={SeverityByStatus[row.status]}
-            style={{justifyContent: 'center'}}
+        <div
+            style={{
+                textAlign: 'center',
+                color: ColorByStatus[row.status],
+                fontWeight: 500,
+            }}
         >
-            {row.status}
-        </Alert>
+            {startCase(row.status)}
+        </div>
     );
 };
 

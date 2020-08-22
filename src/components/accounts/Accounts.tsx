@@ -10,12 +10,11 @@ import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {routes} from 'defs/routes';
 import {spacingNormal} from 'defs/styles';
 import React from 'react';
-import {useAccountsReader} from 'state/accounts';
-import {useMoneyLocations} from 'state/hooks';
+import {useAccountsReader, useAccounts} from 'state/accounts';
 import {Account} from 'types';
 
 export const Accounts = () => {
-    const rows = useMoneyLocations();
+    const rows = useAccounts();
     const refresh = useAccountsReader();
 
     return (
