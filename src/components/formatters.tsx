@@ -1,5 +1,6 @@
-import {grey} from '@material-ui/core/colors';
+import {green, grey, red} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
+import clsx from 'clsx';
 import {Tooltip} from 'components/Tooltip';
 import {spacingSmall} from 'defs/styles';
 import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
@@ -27,18 +28,51 @@ export const formatCurrency = (value: number, currency: string) => {
 };
 
 const useStyles = makeStyles({
+    container: {
+        borderRadius: 5,
+        paddingLeft: spacingSmall,
+        paddingRight: spacingSmall,
+    },
+    positive: {
+        background: green[50],
+        color: green[900],
+        borderRadius: 5,
+    },
+    negative: {
+        background: red[50],
+        color: red[900],
+        borderRadius: 5,
+    },
     value: {
         cursor: 'grabbing',
     },
 });
 
-const NumericValue = ({currency, value}: {currency: string; value: number}) => {
+export const NumericValue = ({
+    currency,
+    value,
+    colorize = true,
+}: {
+    currency: string;
+    value: number;
+    colorize?: boolean;
+}) => {
     const cls = useStyles();
     const currencies = useCurrenciesMap();
     const copyText = useCopyTextWithConfirmation();
     const [privacyToggle] = usePrivacyToggle();
     const inner = (
-        <span>
+        <span
+            className={
+                colorize
+                    ? clsx(
+                          cls.container,
+                          value > 0 && cls.positive,
+                          value < 0 && cls.negative,
+                      )
+                    : undefined
+            }
+        >
             <strong
                 className={cls.value}
                 onClick={(e) => {
@@ -81,7 +115,3 @@ const NumericValue = ({currency, value}: {currency: string; value: number}) => {
 
     return <Tooltip tooltip={tooltip}>{inner}</Tooltip>;
 };
-
-export const numericValue = (value: number, currency: string) => (
-    <NumericValue value={value} currency={currency} />
-);

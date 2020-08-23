@@ -1,4 +1,4 @@
-import {numericValue} from 'components/formatters';
+import {NumericValue} from 'components/formatters';
 import {SummaryModel} from 'components/transactions/types';
 import {financialNum} from 'js/utils/numbers';
 import groupBy from 'lodash/groupBy';
@@ -8,9 +8,11 @@ import {useCurrenciesMap} from 'state/currencies';
 export const SummaryTotal = ({
     summaryItems,
     excludedRecord,
+    colorize,
 }: {
     summaryItems: Pick<SummaryModel, 'sum' | 'reference' | 'currencyId'>[];
     excludedRecord?: Record<string, boolean>;
+    colorize?: boolean;
 }) => {
     const currencies = useCurrenciesMap();
 
@@ -19,8 +21,9 @@ export const SummaryTotal = ({
             {Object.entries(groupBy(summaryItems, 'currencyId')).map(
                 ([currencyId, items]) => (
                     <div>
-                        {numericValue(
-                            financialNum(
+                        <NumericValue
+                            currency={currencies[currencyId].iso_code}
+                            value={financialNum(
                                 items.reduce(
                                     (acc, each) =>
                                         acc +
@@ -29,9 +32,9 @@ export const SummaryTotal = ({
                                             : each.sum),
                                     0,
                                 ),
-                            ),
-                            currencies[currencyId].iso_code,
-                        )}
+                            )}
+                            colorize={colorize}
+                        />
                     </div>
                 ),
             )}

@@ -95,6 +95,7 @@ export const SummaryCategory = <Ent extends {id: number}>(
                             <SummaryTotal
                                 summaryItems={summaryObject}
                                 excludedRecord={excluded}
+                                colorize={false}
                             />
                         </div>
                     )

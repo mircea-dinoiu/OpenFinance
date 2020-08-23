@@ -1,7 +1,7 @@
-import {TransactionModel} from 'components/transactions/types';
-import {formatYMD} from 'utils/dates';
 import {Classes} from 'components/BaseTable';
+import {TransactionModel} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
+import {formatYMD} from 'utils/dates';
 
 const today = formatYMD(new Date());
 
@@ -17,14 +17,6 @@ export const getTrClassName = (
 
     if (formatYMD(item.created_at) === today) {
         classes.push(Classes.todayRow);
-    }
-
-    if (item.sum < 0) {
-        classes.push(Classes.withdrawRow);
-    }
-
-    if (item.sum > 0) {
-        classes.push(Classes.depositRow);
     }
 
     if (item.status !== TransactionStatus.finished) {

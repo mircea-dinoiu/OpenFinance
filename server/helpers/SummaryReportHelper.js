@@ -29,7 +29,7 @@ module.exports = {
             ? filteredTransactions.sum
             : 0;
 
-        return this.safeNum(-filteredTransactions);
+        return this.safeNum(filteredTransactions);
     },
 
     addMLEntries({data, mls, mlRecords, html}) {

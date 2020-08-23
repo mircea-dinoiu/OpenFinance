@@ -2,7 +2,7 @@ import {CardHeader, Checkbox} from '@material-ui/core';
 import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
-import {numericValue} from 'components/formatters';
+import {NumericValue} from 'components/formatters';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
 import {SummaryTotal} from 'components/transactions/SummaryTotal';
@@ -76,10 +76,12 @@ export const SummarySubCategory = <Ent,>(props: {
                                     : each.description}
                             </div>
                             <div>
-                                {numericValue(
-                                    each.sum,
-                                    currencies[each.currencyId].iso_code,
-                                )}
+                                <NumericValue
+                                    currency={
+                                        currencies[each.currencyId].iso_code
+                                    }
+                                    value={each.sum}
+                                />
                             </div>
                             <Checkbox
                                 className={cls.checkbox}

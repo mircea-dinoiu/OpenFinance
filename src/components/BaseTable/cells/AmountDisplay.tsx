@@ -1,4 +1,4 @@
-import {numericValue} from 'components/formatters';
+import {NumericValue} from 'components/formatters';
 import {TransactionModel} from 'components/transactions/types';
 import {getItemCurrencyISOCode} from 'helpers';
 import React from 'react';
@@ -15,5 +15,5 @@ export const AmountDisplay = ({
         currencies,
     });
 
-    return <>{numericValue(item.sum, currencyISOCode)}</>;
+    return <NumericValue value={item.sum} currency={currencyISOCode} />;
 };
