@@ -297,6 +297,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     currencyId: mlIdToCurrencyId[t.money_location_id],
                     reference: t.toString(),
                 }))}
+                colorize={false}
             />
         );
     }
