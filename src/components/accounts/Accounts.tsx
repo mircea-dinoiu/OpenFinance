@@ -22,7 +22,7 @@ export const Accounts = () => {
             <TableWithInlineEditing<Account>
                 data={rows}
                 api={routes.moneyLocations}
-                editableFields={['name', 'type_id', 'status']}
+                editableFields={['name', 'type_id', 'status', 'currency_id']}
                 onRefresh={refresh}
                 allowDelete={false}
                 defaultSorted={[

@@ -41,10 +41,34 @@ export const TextFieldCell: TableCellRenderer = ({
     );
 };
 
-export const CurrencyCell: TableCellRenderer = ({original: r}) => {
+export const CurrencyCell: TableCellRenderer = ({
+    original: row,
+    columnProps,
+}) => {
     const currencies = useCurrenciesMap();
+    const {editor, setEditor} = columnProps.rest;
 
-    return Object.values(currencies).find((c) => c.id === r.currency_id)
+    if (editor && editor.id === row.id) {
+        const options = Object.values(currencies).map((t) => ({
+            value: t.id,
+            label: t.iso_code,
+        }));
+
+        return (
+            <MuiSelectNative<number>
+                value={options.find((o) => o.value === editor.currency_id)}
+                options={options}
+                onChange={(o) =>
+                    setEditor({
+                        ...editor,
+                        currency_id: Number(o.value),
+                    })
+                }
+            />
+        );
+    }
+
+    return Object.values(currencies).find((c) => c.id === row.currency_id)
         ?.iso_code;
 };
 
