@@ -12,23 +12,6 @@ import sortBy from 'lodash/sortBy';
 import React, {ReactNode} from 'react';
 import {useCurrenciesMap} from 'state/currencies';
 
-const groupSorter = ([, items]: [unknown, SummaryModel[]]) => {
-    if (items.length > 0) {
-        // @ts-ignore
-        const [firstItem] = items;
-
-        if (firstItem.index != null) {
-            return firstItem.index;
-        }
-
-        if (firstItem.group != null) {
-            return firstItem.group;
-        }
-    }
-
-    return 0;
-};
-
 const useStyles = makeStyles({
     expandable: {
         padding: spacingSmall,
@@ -108,7 +91,27 @@ export const SummaryCategory = <Ent extends {id: number}>(
                 <div className={cls.expandable}>
                     {sortBy(
                         Object.entries(groupBy(summaryObject, 'group')),
-                        groupSorter,
+                        ([, items]: [unknown, SummaryModel[]]) => {
+                            if (items.length > 0) {
+                                const [firstItem] = items;
+                                const {index, group} = firstItem;
+
+                                if (index != null) {
+                                    return index;
+                                }
+
+                                if (group != null) {
+                                    return entities.find((e) => {
+                                        return (
+                                            // @ts-ignore
+                                            e[entityIdField] === group
+                                        );
+                                    })?.[entityNameField];
+                                }
+                            }
+
+                            return 0;
+                        },
                     ).map(([id, items]) => {
                         const shouldGroup = items.every((each) =>
                             each.hasOwnProperty('group'),
