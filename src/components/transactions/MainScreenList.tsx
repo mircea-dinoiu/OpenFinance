@@ -40,9 +40,10 @@ import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
+import {spacingSmall} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import * as H from 'history';
-import {isEqual, range} from 'lodash';
+import _, {isEqual, range} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import React, {PureComponent, ReactNode, useMemo} from 'react';
@@ -388,7 +389,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     />
                 </TableHeaderTop>
                 <div>
-                    {this.renderStats('Current Page', page)}
+                    {this.renderStats('Loaded', page)}
                     {this.renderStats('Selected', selected)}
                     {range(0, 6).map((rating) =>
                         this.renderStats(
@@ -418,6 +419,39 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         ),
                     )}
                 </div>
+                {(() => {
+                    const byYear = Object.entries(
+                        _.groupBy(page, (t) =>
+                            new Date(t.created_at).getFullYear(),
+                        ),
+                    ).reverse();
+                    const byMonth = Object.entries(
+                        _.groupBy(page, (t) =>
+                            moment(t.created_at).format('YYYY-MM'),
+                        ),
+                    ).slice(0, 12);
+
+                    return (
+                        <div style={{marginTop: spacingSmall}}>
+                            {byYear.map(([year, transactions]) =>
+                                this.renderStats(year, transactions),
+                            )}
+                            {byMonth.map(([dateString, transactions]) => {
+                                const date = moment(dateString);
+
+                                return this.renderStats(
+                                    date.format(
+                                        date.toDate().getFullYear() !==
+                                            Number(byYear[0][0])
+                                            ? 'MMM YYYY'
+                                            : 'MMM',
+                                    ),
+                                    transactions,
+                                );
+                            })}
+                        </div>
+                    );
+                })()}
             </TableHeader>
         );
     }
