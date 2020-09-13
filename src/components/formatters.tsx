@@ -51,7 +51,7 @@ const useStyles = makeStyles({
         gridGap: spacingNormal,
         gridTemplateColumns: '1fr',
         margin: 0,
-        padding: spacingSmall,
+        padding: 0,
         listStyleType: 'none',
     },
     tooltipPart: {
@@ -108,26 +108,18 @@ export const NumericValue = ({
     const found = Object.values(currencies).find(
         (each) => each.iso_code === currency,
     );
-    const tooltip = [
-        <div
-            key={currency}
-            style={{
-                backgroundColor: grey[700],
-                borderRadius: '3px',
-                padding: `3px ${spacingSmall}`,
-                margin: `0 -${spacingSmall} ${spacingSmall}`,
-            }}
-        >
-            {formatCurrency(value, currency)}
-        </div>,
-        ...Object.entries(
-            found ? found.rates : {},
-        ).map(([rateISO, rateMulti]) => (
-            <div key={rateISO}>
-                {formatCurrency(value * rateMulti, rateISO)}
-            </div>
-        )),
-    ] as ReactNode[];
+    const tooltip = (
+        <>
+            <div key={currency}>{formatCurrency(value, currency)}</div>
+            {Object.entries(found ? found.rates : {}).map(
+                ([rateISO, rateMulti]) => (
+                    <div key={rateISO}>
+                        {formatCurrency(value * rateMulti, rateISO)}
+                    </div>
+                ),
+            )}
+        </>
+    );
 
     return (
         <Tooltip

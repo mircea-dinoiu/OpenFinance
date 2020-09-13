@@ -1,6 +1,7 @@
-import {ReactNode} from 'react';
-import * as React from 'react';
 import {Tooltip as MaterialUITooltip} from '@material-ui/core';
+import {spacingSmall} from 'defs/styles';
+import * as React from 'react';
+import {ReactNode} from 'react';
 
 export const Tooltip = ({
     children,
@@ -12,7 +13,17 @@ export const Tooltip = ({
     tooltip: ReactNode;
 }) => (
     <MaterialUITooltip
-        title={<div style={{fontSize: '1.5em'}}>{title}</div>}
+        title={
+            <div
+                style={{
+                    fontSize: '1rem',
+                    lineHeight: 1,
+                    padding: spacingSmall,
+                }}
+            >
+                {title}
+            </div>
+        }
         disableFocusListener={true}
         placement="bottom"
     >
