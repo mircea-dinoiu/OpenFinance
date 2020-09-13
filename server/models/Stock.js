@@ -7,6 +7,6 @@ module.exports = (sequelize, types) =>
             price: types.FLOAT,
         },
         {
-            timestamps: false,
+            underscored: true,
         },
     );

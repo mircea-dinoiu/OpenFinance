@@ -26,7 +26,7 @@ module.exports = {
         )[0];
 
         filteredTransactions = filteredTransactions
-            ? filteredTransactions.sum
+            ? filteredTransactions.cashValue
             : 0;
 
         return this.safeNum(filteredTransactions);
@@ -35,7 +35,7 @@ module.exports = {
     addMLEntries({data, mls, mlRecords, html}) {
         const push = ({id, name, group, currencyId}) => {
             data.push({
-                sum: mls[id],
+                cashValue: mls[id],
                 description: this.description(name, {html}),
                 reference: id,
                 group,
