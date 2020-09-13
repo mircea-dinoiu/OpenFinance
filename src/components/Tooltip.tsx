@@ -1,3 +1,4 @@
+import {ReactNode} from 'react';
 import * as React from 'react';
 import {Tooltip as MaterialUITooltip} from '@material-ui/core';
 
@@ -8,7 +9,7 @@ export const Tooltip = ({
 }: {
     children: React.ReactNode;
     className?: string;
-    tooltip: JSX.Element | JSX.Element[];
+    tooltip: ReactNode;
 }) => (
     <MaterialUITooltip
         title={<div style={{fontSize: '1.5em'}}>{title}</div>}

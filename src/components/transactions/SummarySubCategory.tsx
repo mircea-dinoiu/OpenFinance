@@ -2,7 +2,7 @@ import {CardHeader, Checkbox} from '@material-ui/core';
 import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
-import {NumericValue} from 'components/formatters';
+import {AccountValue} from 'components/transactions/AccountValue';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
 import {SummaryTotal} from 'components/transactions/SummaryTotal';
@@ -10,7 +10,6 @@ import {SummaryModel} from 'components/transactions/types';
 import {spacingNormal, spacingSmall, theme} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React, {ReactNode, useState} from 'react';
-import {useCurrenciesMap} from 'state/currencies';
 import {CurrencyMap} from 'types';
 
 export const SummarySubCategory = <Ent,>(props: {
@@ -40,7 +39,6 @@ export const SummarySubCategory = <Ent,>(props: {
 
     const items = sortBy(itemsFromProps, (item) => item.description);
     const cls = useStyles();
-    const currencies = useCurrenciesMap();
 
     return (
         <div style={{padding: '0 5px', marginBottom: spacingNormal}}>
@@ -76,11 +74,10 @@ export const SummarySubCategory = <Ent,>(props: {
                                     : each.description}
                             </div>
                             <div>
-                                <NumericValue
-                                    currency={
-                                        currencies[each.currencyId].iso_code
-                                    }
-                                    value={each.marketValue || each.cashValue}
+                                <AccountValue
+                                    marketValue={each.marketValue ?? 0}
+                                    cashValue={each.cashValue}
+                                    currencyId={Number(each.currencyId)}
                                 />
                             </div>
                             <Checkbox

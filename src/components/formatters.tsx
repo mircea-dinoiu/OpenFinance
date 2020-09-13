@@ -2,11 +2,11 @@ import {green, grey, red} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {Tooltip} from 'components/Tooltip';
-import {spacingSmall} from 'defs/styles';
+import {spacingNormal, spacingSmall, theme} from 'defs/styles';
 import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
-import {HTMLAttributes} from 'react';
+import {HTMLAttributes, ReactNode} from 'react';
 import {useCurrenciesMap} from 'state/currencies';
 import {usePrivacyToggle} from 'state/privacyToggle';
 
@@ -46,13 +46,29 @@ const useStyles = makeStyles({
     value: {
         cursor: 'grabbing',
     },
+    tooltipParts: {
+        display: 'grid',
+        gridGap: spacingNormal,
+        gridTemplateColumns: '1fr',
+        margin: 0,
+        padding: spacingSmall,
+        listStyleType: 'none',
+    },
+    tooltipPart: {
+        backgroundColor: grey[800],
+        margin: 0,
+        padding: spacingSmall,
+        borderRadius: theme.shape.borderRadius,
+    },
 });
 
 export const NumericValue = ({
     currency,
     value,
     colorize = true,
+    tooltip: tooltipFromProps,
 }: {
+    tooltip?: ReactNode;
     currency: string;
     value: number;
     colorize?: boolean;
@@ -111,7 +127,22 @@ export const NumericValue = ({
                 {formatCurrency(value * rateMulti, rateISO)}
             </div>
         )),
-    ];
+    ] as ReactNode[];
 
-    return <Tooltip tooltip={tooltip}>{inner}</Tooltip>;
+    return (
+        <Tooltip
+            tooltip={
+                tooltipFromProps ? (
+                    <ul className={cls.tooltipParts}>
+                        <li className={cls.tooltipPart}>{tooltipFromProps}</li>
+                        <li className={cls.tooltipPart}>{tooltip}</li>
+                    </ul>
+                ) : (
+                    tooltip
+                )
+            }
+        >
+            {inner}
+        </Tooltip>
+    );
 };
