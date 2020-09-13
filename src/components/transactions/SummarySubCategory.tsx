@@ -80,7 +80,7 @@ export const SummarySubCategory = <Ent,>(props: {
                                     currency={
                                         currencies[each.currencyId].iso_code
                                     }
-                                    value={each.sum}
+                                    value={each.marketValue || each.cashValue}
                                 />
                             </div>
                             <Checkbox

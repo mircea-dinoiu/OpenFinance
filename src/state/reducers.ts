@@ -1,6 +1,7 @@
 import uniqueId from 'lodash/uniqueId';
 import {combineReducers} from 'redux';
 import {currencies} from 'state/currencies';
+import {stocks} from 'state/stocks';
 import {Action} from 'state/defs';
 import {privacyToggle} from 'state/privacyToggle';
 import {summaryReducer} from 'state/summary';
@@ -60,6 +61,7 @@ export const combinedReducers = combineReducers({
     refreshWidgets,
     user,
     categories,
+    stocks,
     moneyLocations,
     moneyLocationTypes,
     snackbars,

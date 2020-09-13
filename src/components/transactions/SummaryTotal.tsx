@@ -10,7 +10,10 @@ export const SummaryTotal = ({
     excludedRecord,
     colorize,
 }: {
-    summaryItems: Pick<SummaryModel, 'sum' | 'reference' | 'currencyId'>[];
+    summaryItems: Pick<
+        SummaryModel,
+        'cashValue' | 'marketValue' | 'reference' | 'currencyId'
+    >[];
     excludedRecord?: Record<string, boolean>;
     colorize?: boolean;
 }) => {
@@ -19,24 +22,25 @@ export const SummaryTotal = ({
     return (
         <>
             {Object.entries(groupBy(summaryItems, 'currencyId')).map(
-                ([currencyId, items]) => (
-                    <div>
-                        <NumericValue
-                            currency={currencies[currencyId].iso_code}
-                            value={financialNum(
-                                items.reduce(
-                                    (acc, each) =>
-                                        acc +
-                                        (excludedRecord?.[each.reference]
-                                            ? 0
-                                            : each.sum),
-                                    0,
-                                ),
-                            )}
-                            colorize={colorize}
-                        />
-                    </div>
-                ),
+                ([currencyId, items]) => {
+                    const value = items.reduce((acc, each) => {
+                        if (!excludedRecord?.[each.reference]) {
+                            return acc + (each.marketValue || each.cashValue);
+                        }
+
+                        return acc;
+                    }, 0);
+
+                    return (
+                        <div>
+                            <NumericValue
+                                currency={currencies[currencyId].iso_code}
+                                value={financialNum(value)}
+                                colorize={colorize}
+                            />
+                        </div>
+                    );
+                },
             )}
         </>
     );

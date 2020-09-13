@@ -23,6 +23,9 @@ module.exports = (sequelize, types) => {
             repeat_occurrences: types.INTEGER,
             repeat_link_id: types.INTEGER,
 
+            stock_units: types.FLOAT,
+            stock_id: types.INTEGER,
+
             weight: types.INTEGER,
 
             sum_per_weight: {
@@ -45,6 +48,7 @@ module.exports = (sequelize, types) => {
                         timestamps: false,
                     });
                     Expense.belongsTo(models.MoneyLocation);
+                    Expense.belongsTo(models.Stock);
 
                     Expense.addScope('default', {
                         attributes: Object.keys(Expense.rawAttributes).concat([

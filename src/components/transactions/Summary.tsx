@@ -101,16 +101,18 @@ export const Summary = () => {
     ): SummaryModel[] => {
         const arr: SummaryModel[] = [];
 
-        for (const [key, sum] of Object.entries(data)) {
-            const ml = moneyLocations.find((ml) => ml.id === Number(key));
+        for (const each of data) {
+            const {id, cashValue, marketValue} = each;
+            const ml = moneyLocations.find((ml) => ml.id === Number(id));
 
-            if (ml && sum !== 0) {
+            if (ml && (cashValue !== 0 || marketValue !== null)) {
                 arr.push({
                     currencyId: ml.currency_id,
                     description: ml.name,
                     group: ml.type_id,
-                    reference: key,
-                    sum,
+                    reference: String(id),
+                    cashValue,
+                    marketValue,
                 });
             }
         }

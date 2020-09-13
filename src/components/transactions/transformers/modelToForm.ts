@@ -11,4 +11,6 @@ export const modelToForm = (model: TransactionModel): TransactionForm => ({
     repeatOccurrences: model.repeat_occurrences,
     chargedPersons: model.users,
     status: model.status || TransactionStatus.pending,
+    stockUnits: model.stock_units,
+    stockId: model.stock_id,
 });

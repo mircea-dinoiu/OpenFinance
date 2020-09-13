@@ -20,6 +20,8 @@ export const formToModel = (
         created_at: form.date.toISOString(),
         money_location_id: form.paymentMethod,
         repeat_occurrences: form.repeatOccurrences,
+        stock_units: form.stockUnits,
+        stock_id: form.stockId,
         users,
         status: form.status || TransactionStatus.pending,
     };

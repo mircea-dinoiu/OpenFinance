@@ -24,6 +24,7 @@ import {MuiSelectNative} from 'components/dropdowns';
 import {TransactionAmountFields} from 'components/transactions/TransactionAmountFields';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
 import {TransactionNameField} from 'components/transactions/TransactionNameField';
+import {TransactionStockFields} from 'components/transactions/TransactionStockFields';
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
@@ -359,6 +360,15 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                 </div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
+                <div style={boxStyle}>
+                    <TransactionStockFields
+                        values={{
+                            stockUnits: this.state.stockUnits,
+                            stockId: this.state.stockId,
+                        }}
+                        onChange={(values) => this.setState({...values})}
+                    />
+                </div>
                 <div style={boxStyle}>
                     <TextField
                         label="Weight (grams)"

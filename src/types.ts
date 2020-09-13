@@ -25,6 +25,8 @@ export type Currencies = {
     };
 };
 
+export type Stock = {id: number; price: number; symbol: string};
+
 export type CurrencyMap = {
     [key: number]: Currency;
 };
@@ -91,4 +93,5 @@ export type GlobalState = {
     user: Bootstrap;
     snackbars: Snackbar[];
     summary: Summary;
+    stocks: Stock[];
 };

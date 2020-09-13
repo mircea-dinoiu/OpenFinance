@@ -294,7 +294,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return (
             <SummaryTotal
                 summaryItems={transactions.map((t) => ({
-                    sum: t.sum,
+                    cashValue: t.sum,
                     currencyId: mlIdToCurrencyId[t.money_location_id],
                     reference: t.toString(),
                 }))}

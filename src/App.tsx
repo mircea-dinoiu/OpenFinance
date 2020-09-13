@@ -37,6 +37,7 @@ import {
     useUsersWithActions,
 } from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
+import {fetchStocks} from 'state/stocks';
 import {createGlobalStyle} from 'styled-components';
 
 import {createXHR} from 'utils/fetch';
@@ -91,6 +92,7 @@ const AppWrapped = () => {
 
     const fetchRequirements = async () => {
         dispatch(fetchCurrencies());
+        dispatch(fetchStocks());
 
         readCategories();
         readAccounts();

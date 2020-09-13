@@ -1,4 +1,10 @@
-const {Expense: Model, User, MoneyLocation, Category} = require('../models');
+const {
+    Expense: Model,
+    User,
+    Stock,
+    MoneyLocation,
+    Category,
+} = require('../models');
 const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
 const {pickOwnProperties} = require('../helpers');
@@ -35,6 +41,9 @@ module.exports = class ExpenseController extends BaseController {
             repeat: ['sometimes', 'isRepeatValue'],
             repeat_occurrences: ['sometimes', 'isInt'],
 
+            stock_units: ['sometimes', 'isRequired', 'isFloat'],
+            stock_id: ['sometimes', ['isId', Stock]],
+
             weight: ['sometimes', 'isNotNegative', 'isInt'],
         };
         this.createValidationRules = {
@@ -56,6 +65,9 @@ module.exports = class ExpenseController extends BaseController {
 
             repeat: ['sometimes', 'isRepeatValue'],
             repeat_occurrences: ['sometimes', 'isInt'],
+
+            stock_units: ['sometimes', 'isRequired', 'isFloat'],
+            stock_id: ['sometimes', ['isId', Stock]],
 
             weight: ['sometimes', 'isNotNegative', 'isInt'],
         };
@@ -173,6 +185,8 @@ module.exports = class ExpenseController extends BaseController {
         const values = pickOwnProperties(record, [
             'sum',
             'money_location_id',
+            'stock_id',
+            'stock_units',
             'weight',
             'fitid',
             'favorite',

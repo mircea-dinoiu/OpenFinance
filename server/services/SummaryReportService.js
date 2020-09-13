@@ -36,7 +36,7 @@ module.exports = {
 
             if (sum !== 0) {
                 data.byUser.push({
-                    sum,
+                    cashValue: sum,
                     reference,
                     description: `${userIdToFullName[id]} (${currencyIdToISOCode[currencyId]})`,
                     currencyId,
@@ -87,7 +87,7 @@ module.exports = {
             if (users[id]) {
                 Object.entries(users[id]).forEach(([currencyId, sum]) => {
                     data.byUser.push({
-                        sum,
+                        cashValue: sum,
                         description: `${user.full_name} (${currencyIdToISOCode[currencyId]})`,
                         reference: `${id}:${currencyId}`,
                         currencyId,
@@ -181,7 +181,7 @@ module.exports = {
                 ([userId, currencies]) => {
                     Object.entries(currencies).forEach(([currencyId, sum]) => {
                         data.push({
-                            sum,
+                            cashValue: sum,
                             description: `${userIdToFullName[userId]} (${currencyIdToISOCode[currencyId]})`,
                             reference: `${categoryId}:${userId}:${currencyId}`,
                             group: categoryId,

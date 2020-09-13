@@ -22,20 +22,21 @@ router.get(
         const groupedWhere = makeWhere(req.query);
 
         const grouped = await sql.query(
-            `SELECT money_location_id as \`key\`, SUM(sum) as \`value\` FROM expenses ${groupedWhere.query} GROUP by money_location_id`,
+            `SELECT 
+                money_location_id as \`id\`, 
+                SUM(sum) as \`cashValue\`, 
+                SUM(expenses.stock_units * stocks.price) as \`marketValue\` 
+                FROM expenses
+                LEFT JOIN stocks on expenses.stock_id = stocks.id 
+                ${groupedWhere.query} GROUP by money_location_id`,
             {
                 replacements: groupedWhere.replacements,
                 type: QueryTypes.SELECT,
             },
         );
 
-        const result = grouped.reduce(
-            (acc, {key, value}) => ({...acc, [key]: value}),
-            {},
-        );
-
         logger.log(req.path, 'Pulling took', Date.now() - pullStart, 'millis');
-        res.json(result);
+        res.json(grouped);
     },
 );
 

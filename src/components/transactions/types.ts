@@ -8,19 +8,20 @@ export type SummaryModel = {
     description: string;
     group?: number;
     reference: string;
-    sum: number;
+    cashValue: number;
+    marketValue?: number | null;
     index?: number;
 };
 
 type ByUser = {
-    sum: number;
+    cashValue: number;
     description: string;
     reference: string;
     currencyId: string;
 };
 
 type ByML = {
-    sum: number;
+    cashValue: number;
     description: string;
     reference: number;
     group: number;
@@ -29,7 +30,7 @@ type ByML = {
 };
 
 type ExpensesByCategory = {
-    sum: number;
+    cashValue: number;
     description: string;
     reference: string;
     group: number;
@@ -50,10 +51,14 @@ export type SummarySubCategoryModel = {
     description: string;
     reference: string;
     currencyId: number;
-    sum: number;
+    cashValue: number;
 };
 
-export type BalanceByLocation = Record<number, number>;
+export type BalanceByLocation = {
+    id: number;
+    cashValue: number;
+    marketValue: number;
+}[];
 
 export type TransactionRepeat = $Values<typeof RepeatOption>;
 export type TransactionForm = {
@@ -72,6 +77,8 @@ export type TransactionForm = {
     repeatOccurrences: number;
     repeat: TransactionRepeat | null;
     status: TransactionStatus;
+    stockUnits: number;
+    stockId: number | null;
 };
 export type TransactionModel = {
     id: number;
@@ -86,7 +93,7 @@ export type TransactionModel = {
         [key: string]: number;
     };
     repeat_occurrences: number;
-    repeat_link_id: number | null,
+    repeat_link_id: number | null;
     repeat: null | TransactionRepeat;
     created_at: number;
     updated_at: number;
@@ -95,6 +102,8 @@ export type TransactionModel = {
     money_location_id: number;
     money_location: {currency_id: number};
     sum_per_weight: number | null;
+    stock_units: number;
+    stock_id: number | null;
 };
 export type UpdateRecords = (
     ids: number[],
