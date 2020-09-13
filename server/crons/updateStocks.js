@@ -14,10 +14,12 @@ module.exports = async () => {
             if (!error) {
                 const {c: price} = data;
 
-                logger.log(
-                    `Updating ${model.symbol} price: ${model.price} → ${price}`,
-                );
-                model.update({price});
+                if (model.price !== price) {
+                    logger.log(
+                        `Updating ${model.symbol} price: ${model.price} → ${price}`,
+                    );
+                    model.update({price});
+                }
             } else {
                 console.log(error);
             }
