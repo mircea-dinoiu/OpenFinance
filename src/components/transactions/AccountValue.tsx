@@ -18,6 +18,8 @@ export const AccountValue = ({
     const currency = currencies[currencyId].iso_code;
 
     if (marketValue) {
+        const roi = marketValue - cashValue;
+
         return (
             <div>
                 <NumericValue
@@ -41,12 +43,11 @@ export const AccountValue = ({
                                 {
                                     <NumericValue
                                         currency={currency}
-                                        value={financialNum(
-                                            marketValue - cashValue,
-                                        )}
+                                        value={financialNum(roi)}
                                         colorize={false}
                                     />
-                                }
+                                }{' '}
+                                ({financialNum((roi / cashValue) * 100)}%)
                             </div>
                         </>
                     }
