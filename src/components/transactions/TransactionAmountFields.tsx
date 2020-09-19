@@ -22,21 +22,19 @@ export const TransactionAmountFields = ({
     const accounts = useAccounts();
     const currencies = useCurrenciesMap();
     const balanceByAccount = useSummary(SummaryKey.BALANCE_BY_ACCOUNT);
-    const balance = (balanceByAccount?.[accountId] ?? 0) - balanceOffset;
+    const sumForSelectedAccount = balanceByAccount?.cash.find((c) => c.money_location_id === accountId);
+    const cashForSelectedAccount = balanceByAccount?.stocks.find((c) => c.money_location_id === accountId);
+    const balance = (sumForSelectedAccount?.sum ?? 0) - balanceOffset;
 
-    const currencyId = accounts.find((each) => each.id == accountId)
-        ?.currency_id;
+    const currencyId = accounts.find((each) => each.id == accountId)?.currency_id;
     const startAdornment = (
         <InputAdornment position="start">
-            {accountId
-                ? currencyId &&
-                  findCurrencyById(currencyId, currencies).iso_code
-                : ''}
+            {accountId ? currencyId && findCurrencyById(currencyId, currencies).iso_code : ''}
         </InputAdornment>
     );
 
     return (
-        <TransactionAmountFieldsStyled>
+        <TransactionAmountFieldsStyled count={cashForSelectedAccount == null ? 2 : 1}>
             <TextField
                 label="Amount"
                 InputProps={{
@@ -49,23 +47,21 @@ export const TransactionAmountFields = ({
                 style={{
                     marginTop: '2px',
                 }}
-                onChange={(event) =>
-                    onChange((event.target.value as any) as number)
-                }
+                onChange={(event) => onChange((event.target.value as any) as number)}
             />
-            <TextField
-                tabIndex={-1}
-                InputProps={{
-                    startAdornment,
-                }}
-                label="Future Balance (Based on Summary)"
-                value={financialNum(balance + Number(value || 0))}
-                onChange={(event) => {
-                    onChange(
-                        financialNum(Number(event.target.value || 0) - balance),
-                    );
-                }}
-            />
+            {cashForSelectedAccount == null && (
+                <TextField
+                    tabIndex={-1}
+                    InputProps={{
+                        startAdornment,
+                    }}
+                    label="Future Balance (Based on Summary)"
+                    value={financialNum(balance + Number(value || 0))}
+                    onChange={(event) => {
+                        onChange(financialNum(Number(event.target.value || 0) - balance));
+                    }}
+                />
+            )}
         </TransactionAmountFieldsStyled>
     );
 };
@@ -73,6 +69,6 @@ export const TransactionAmountFields = ({
 const TransactionAmountFieldsStyled = styled.div`
     display: grid;
     grid-gap: ${gridGap};
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(${(props: {count: number}) => props.count}, 1fr);
     align-items: center;
 `;

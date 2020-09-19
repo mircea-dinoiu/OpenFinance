@@ -1,4 +1,5 @@
 import {formatNumber, NumericValue} from 'components/formatters';
+import {useStockValue} from 'components/summary/useStockValue';
 import {BalanceByLocationStock} from 'components/transactions/types';
 import {financialNum} from 'js/utils/numbers';
 import React from 'react';
@@ -20,11 +21,7 @@ export const AccountValue = ({
     const currency = currencies[currencyId].iso_code;
     const stockPrices = useStockPrices();
     const stockSymbols = useStockSymbols();
-    const marketValue = stocks.reduce(
-        (acc, stock) =>
-            acc + stock.stock_units * (stockPrices.get(stock.stock_id) ?? 0),
-        0,
-    );
+    const marketValue = useStockValue(stocks);
 
     if (marketValue) {
         const roi = marketValue - cashValue;
@@ -39,24 +36,11 @@ export const AccountValue = ({
                         <>
                             <div>
                                 Invested:{' '}
-                                {
-                                    <NumericValue
-                                        currency={currency}
-                                        value={financialNum(cashValue)}
-                                        colorize={false}
-                                    />
-                                }
+                                {<NumericValue currency={currency} value={financialNum(cashValue)} colorize={false} />}
                             </div>
                             <div>
-                                ROI:{' '}
-                                {
-                                    <NumericValue
-                                        currency={currency}
-                                        value={financialNum(roi)}
-                                        colorize={false}
-                                    />
-                                }{' '}
-                                ({financialNum((roi / cashValue) * 100)}%)
+                                ROI: {<NumericValue currency={currency} value={financialNum(roi)} colorize={false} />} (
+                                {financialNum((roi / cashValue) * 100)}%)
                             </div>
                         </>,
                         <table>
@@ -72,11 +56,7 @@ export const AccountValue = ({
                                     <td>
                                         <NumericValue
                                             currency={currency}
-                                            value={
-                                                s.stock_units *
-                                                (stockPrices.get(s.stock_id) ??
-                                                    0)
-                                            }
+                                            value={s.stock_units * (stockPrices.get(s.stock_id) ?? 0)}
                                             colorize={false}
                                         />
                                     </td>
@@ -91,11 +71,7 @@ export const AccountValue = ({
 
     return (
         <div>
-            <NumericValue
-                currency={currency}
-                value={financialNum(cashValue)}
-                colorize={colorize}
-            />
+            <NumericValue currency={currency} value={financialNum(cashValue)} colorize={colorize} />
         </div>
     );
 };
