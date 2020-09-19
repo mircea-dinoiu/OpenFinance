@@ -49,19 +49,26 @@ export const AccountValue = ({
                                 <th>Symbol</th>
                                 <th>Total</th>
                             </tr>
-                            {stocks.map((s) => (
-                                <tr key={s.stock_id}>
-                                    <td>{formatNumber(s.stock_units)}</td>
-                                    <td>{stockSymbols.get(s.stock_id)}</td>
-                                    <td>
-                                        <NumericValue
-                                            currency={currency}
-                                            value={s.stock_units * (stockPrices.get(s.stock_id) ?? 0)}
-                                            colorize={false}
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
+                            {stocks.map((s) => {
+                                const stockPrice = stockPrices.get(s.stock_id) ?? 0;
+
+                                return (
+                                    <tr key={s.stock_id}>
+                                        <td>
+                                            {formatNumber(s.stock_units)} @{' '}
+                                            <NumericValue currency={currency} value={stockPrice} colorize={false} />{' '}
+                                        </td>
+                                        <td>{stockSymbols.get(s.stock_id)}</td>
+                                        <td>
+                                            <NumericValue
+                                                currency={currency}
+                                                value={s.stock_units * stockPrice}
+                                                colorize={false}
+                                            />
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </table>,
                     ]}
                 />
