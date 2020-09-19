@@ -1,21 +1,30 @@
-import {NumericValue} from 'components/formatters';
+import {formatNumber, NumericValue} from 'components/formatters';
+import {BalanceByLocationStock} from 'components/transactions/types';
 import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {useCurrenciesMap} from 'state/currencies';
+import {useStockPrices, useStockSymbols} from 'state/stocks';
 
 export const AccountValue = ({
-    marketValue,
+    stocks,
     cashValue,
     colorize,
     currencyId,
 }: {
-    marketValue: number;
+    stocks: Omit<BalanceByLocationStock, 'money_location_id'>[];
     cashValue: number;
     colorize?: boolean;
     currencyId: number;
 }) => {
     const currencies = useCurrenciesMap();
     const currency = currencies[currencyId].iso_code;
+    const stockPrices = useStockPrices();
+    const stockSymbols = useStockSymbols();
+    const marketValue = stocks.reduce(
+        (acc, stock) =>
+            acc + stock.stock_units * (stockPrices.get(stock.stock_id) ?? 0),
+        0,
+    );
 
     if (marketValue) {
         const roi = marketValue - cashValue;
@@ -26,7 +35,7 @@ export const AccountValue = ({
                     currency={currency}
                     value={financialNum(marketValue)}
                     colorize={colorize}
-                    tooltip={
+                    tooltip={[
                         <>
                             <div>
                                 Invested:{' '}
@@ -49,8 +58,32 @@ export const AccountValue = ({
                                 }{' '}
                                 ({financialNum((roi / cashValue) * 100)}%)
                             </div>
-                        </>
-                    }
+                        </>,
+                        <table>
+                            <tr>
+                                <th>Units</th>
+                                <th>Symbol</th>
+                                <th>Total</th>
+                            </tr>
+                            {stocks.map((s) => (
+                                <tr key={s.stock_id}>
+                                    <td>{formatNumber(s.stock_units)}</td>
+                                    <td>{stockSymbols.get(s.stock_id)}</td>
+                                    <td>
+                                        <NumericValue
+                                            currency={currency}
+                                            value={
+                                                s.stock_units *
+                                                (stockPrices.get(s.stock_id) ??
+                                                    0)
+                                            }
+                                            colorize={false}
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </table>,
+                    ]}
                 />
             </div>
         );

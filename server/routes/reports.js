@@ -19,24 +19,35 @@ router.get(
     [validateAuth, validateProject],
     async (req, res) => {
         const pullStart = Date.now();
-        const groupedWhere = makeWhere(req.query);
+        const cashWhere = makeWhere(req.query);
+        const marketWhere = makeWhere(req.query, ['stock_id IS NOT NULL']);
 
-        const grouped = await sql.query(
-            `SELECT 
-                money_location_id as \`id\`, 
-                SUM(sum) as \`cashValue\`, 
-                SUM(expenses.stock_units * stocks.price) as \`marketValue\` 
-                FROM expenses
-                LEFT JOIN stocks on expenses.stock_id = stocks.id 
-                ${groupedWhere.query} GROUP by money_location_id`,
-            {
-                replacements: groupedWhere.replacements,
-                type: QueryTypes.SELECT,
-            },
-        );
+        const [cash, stocks] = await Promise.all([
+            sql.query(
+                `SELECT 
+                money_location_id, 
+                SUM(sum) as \`sum\`
+                FROM expenses ${cashWhere.query} GROUP by money_location_id HAVING sum != 0`,
+                {
+                    replacements: cashWhere.replacements,
+                    type: QueryTypes.SELECT,
+                },
+            ),
+            sql.query(
+                `SELECT 
+                money_location_id, 
+                SUM(stock_units) as stock_units,
+                stock_id
+                FROM expenses ${marketWhere.query} GROUP by money_location_id, stock_id`,
+                {
+                    replacements: marketWhere.replacements,
+                    type: QueryTypes.SELECT,
+                },
+            ),
+        ]);
 
         logger.log(req.path, 'Pulling took', Date.now() - pullStart, 'millis');
-        res.json(grouped);
+        res.json({cash, stocks});
     },
 );
 

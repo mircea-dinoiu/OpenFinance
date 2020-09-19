@@ -75,7 +75,7 @@ export const SummarySubCategory = <Ent,>(props: {
                             </div>
                             <div>
                                 <AccountValue
-                                    marketValue={each.marketValue ?? 0}
+                                    stocks={each.stocks ?? []}
                                     cashValue={each.cashValue}
                                     currencyId={Number(each.currencyId)}
                                 />

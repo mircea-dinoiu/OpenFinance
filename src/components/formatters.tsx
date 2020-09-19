@@ -126,7 +126,11 @@ export const NumericValue = ({
             tooltip={
                 tooltipFromProps ? (
                     <ul className={cls.tooltipParts}>
-                        <li className={cls.tooltipPart}>{tooltipFromProps}</li>
+                        {React.Children.map(tooltipFromProps, (child, key) => (
+                            <li className={cls.tooltipPart} key={key}>
+                                {child}
+                            </li>
+                        ))}
                         <li className={cls.tooltipPart}>{tooltip}</li>
                     </ul>
                 ) : (

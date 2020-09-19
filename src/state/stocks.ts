@@ -35,3 +35,23 @@ export const fetchStocks = (
 
 export const useStocks = (): Stock[] =>
     useSelector((s: GlobalState) => s.stocks);
+export const useStockPrices = (): Map<number, number> => {
+    const stocks = useStocks();
+    const map = new Map();
+
+    for (const stock of stocks) {
+        map.set(stock.id, stock.price);
+    }
+
+    return map;
+};
+export const useStockSymbols = (): Map<number, string> => {
+    const stocks = useStocks();
+    const map = new Map();
+
+    for (const stock of stocks) {
+        map.set(stock.id, stock.symbol);
+    }
+
+    return map;
+};

@@ -3,13 +3,24 @@ import {TransactionStatus} from 'defs';
 import {RepeatOption} from 'js/defs';
 import {$Values} from 'utility-types';
 
+type BalanceByLocationCash = {
+    money_location_id: number;
+    sum: number;
+};
+
+export type BalanceByLocationStock = {
+    money_location_id: number;
+    stock_units: number;
+    stock_id: number;
+};
+
 export type SummaryModel = {
     currencyId: number | string;
     description: string;
     group?: number;
     reference: string;
     cashValue: number;
-    marketValue?: number | null;
+    stocks?: BalanceByLocationStock[];
     index?: number;
 };
 
@@ -55,10 +66,9 @@ export type SummarySubCategoryModel = {
 };
 
 export type BalanceByLocation = {
-    id: number;
-    cashValue: number;
-    marketValue: number;
-}[];
+    cash: BalanceByLocationCash[];
+    stocks: BalanceByLocationStock[];
+};
 
 export type TransactionRepeat = $Values<typeof RepeatOption>;
 export type TransactionForm = {
@@ -77,7 +87,7 @@ export type TransactionForm = {
     repeatOccurrences: number;
     repeat: TransactionRepeat | null;
     status: TransactionStatus;
-    stockUnits: number;
+    stockUnits: number | null;
     stockId: number | null;
 };
 export type TransactionModel = {
@@ -102,7 +112,7 @@ export type TransactionModel = {
     money_location_id: number;
     money_location: {currency_id: number};
     sum_per_weight: number | null;
-    stock_units: number;
+    stock_units: number | null;
     stock_id: number | null;
 };
 export type UpdateRecords = (

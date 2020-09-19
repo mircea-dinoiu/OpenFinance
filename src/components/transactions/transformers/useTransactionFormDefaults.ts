@@ -23,6 +23,6 @@ export const useTransactionFormDefaults = (): TransactionForm => {
         favorite: 0,
         repeatOccurrences: 0,
         stockId: null,
-        stockUnits: 0,
+        stockUnits: null,
     };
 };

@@ -10,33 +10,42 @@ export const SummaryTotal = ({
 }: {
     summaryItems: Pick<
         SummaryModel,
-        'cashValue' | 'marketValue' | 'reference' | 'currencyId'
+        'cashValue' | 'stocks' | 'reference' | 'currencyId'
     >[];
     excludedRecord?: Record<string, boolean>;
     colorize?: boolean;
 }) => {
+    console.log('clowns', summaryItems);
+
     return (
         <>
             {Object.entries(groupBy(summaryItems, 'currencyId')).map(
                 ([currencyId, items]) => {
-                    const marketValue = items.reduce(
-                        (acc, each) =>
-                            !excludedRecord?.[each.reference]
-                                ? acc + (each.marketValue ?? 0)
-                                : acc,
-                        0,
-                    );
-                    const cashValue = items.reduce(
-                        (acc, each) =>
-                            !excludedRecord?.[each.reference]
-                                ? acc + (each.cashValue ?? 0)
-                                : acc,
-                        0,
-                    );
+                    let cashValue = 0;
+                    const stocksMap = new Map();
+
+                    items.forEach((item) => {
+                        cashValue += !excludedRecord?.[item.reference]
+                            ? item.cashValue ?? 0
+                            : 0;
+
+                        item.stocks?.forEach((stock) => {
+                            stocksMap.set(
+                                stock.stock_id,
+                                (stocksMap.get(stock.stock_id) ?? 0) +
+                                    stock.stock_units,
+                            );
+                        });
+                    });
 
                     return (
                         <AccountValue
-                            marketValue={marketValue}
+                            stocks={Array.from(stocksMap.entries()).map(
+                                ([id, units]) => ({
+                                    stock_units: units,
+                                    stock_id: id,
+                                }),
+                            )}
                             cashValue={cashValue}
                             colorize={colorize}
                             currencyId={Number(currencyId)}
