@@ -1,4 +1,4 @@
-import {formatNumber, NumericValue} from 'components/formatters';
+import {NumericValue} from 'components/formatters';
 import {useStockValue} from 'components/summary/useStockValue';
 import {BalanceByLocationStock} from 'components/transactions/types';
 import {financialNum} from 'js/utils/numbers';
@@ -55,7 +55,7 @@ export const AccountValue = ({
                                 return (
                                     <tr key={s.stock_id}>
                                         <td>
-                                            {formatNumber(s.stock_units)} @{' '}
+                                            {s.stock_units} @{' '}
                                             <NumericValue currency={currency} value={stockPrice} colorize={false} />{' '}
                                         </td>
                                         <td>{stockSymbols.get(s.stock_id)}</td>
