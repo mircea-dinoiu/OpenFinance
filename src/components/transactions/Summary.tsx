@@ -3,18 +3,10 @@ import {green, purple} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import {AccountDisplayById} from 'components/BaseTable/cells/AccountDisplayById';
 import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
-import {
-    getEndDateBasedOnIncludePreference,
-    useInclude,
-    useIncludePending,
-} from 'components/transactions/helpers';
+import {getEndDateBasedOnIncludePreference, useInclude, useIncludePending} from 'components/transactions/helpers';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {SummaryLazyCategory} from 'components/transactions/SummaryLazyCategory';
-import {
-    BalanceByLocation,
-    SummaryModel,
-    SummaryResults,
-} from 'components/transactions/types';
+import {BalanceByLocation, SummaryModel, SummaryResults} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {routes} from 'defs/routes';
 import {spacingNormal, spacingSmall} from 'defs/styles';
@@ -22,11 +14,7 @@ import identity from 'lodash/identity';
 import pickBy from 'lodash/pickBy';
 import * as React from 'react';
 import {useAccounts} from 'state/accounts';
-import {
-    useCategories,
-    useMoneyLocationTypes,
-    useRefreshWidgets,
-} from 'state/hooks';
+import {useCategories, useMoneyLocationTypes, useRefreshWidgets} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {SummaryKey} from 'state/summary';
 import {AccountType, User} from 'types';
@@ -69,11 +57,7 @@ export const Summary = () => {
             identity,
         ),
         include_pending: String(includePending),
-        filters: JSON.stringify(
-            includePending
-                ? []
-                : [{id: 'status', value: TransactionStatus.finished}],
-        ),
+        filters: JSON.stringify(includePending ? [] : [{id: 'status', value: TransactionStatus.finished}]),
     }).toString();
 
     const load = async () => {
@@ -96,9 +80,7 @@ export const Summary = () => {
         setIncludePending(!includePending);
     };
 
-    const parseTransactionsByLocation = (
-        data: BalanceByLocation,
-    ): SummaryModel[] => {
+    const parseTransactionsByLocation = (data: BalanceByLocation): SummaryModel[] => {
         const arr: SummaryModel[] = [];
 
         for (const each of data.cash) {
@@ -112,9 +94,7 @@ export const Summary = () => {
                     group: ml.type_id,
                     reference: String(id),
                     cashValue,
-                    stocks: data.stocks.filter(
-                        (d) => d.money_location_id === id,
-                    ),
+                    stocks: data.stocks.filter((d) => d.money_location_id === id),
                 });
             }
         }
@@ -139,11 +119,7 @@ export const Summary = () => {
                     />
                     <FormControlLabel
                         control={
-                            <Checkbox
-                                checked={includePending}
-                                onChange={handleToggleIncludePending}
-                                color="default"
-                            />
+                            <Checkbox checked={includePending} onChange={handleToggleIncludePending} color="default" />
                         }
                         label="Include pending transactions"
                     />
@@ -154,10 +130,7 @@ export const Summary = () => {
                         title: 'Balance by Account',
                         entities: moneyLocationTypes,
                         expandedByDefault: true,
-                        url: makeUrl(
-                            routes.reports.balanceByLocation,
-                            reportQueryParams,
-                        ),
+                        url: makeUrl(routes.reports.balanceByLocation, reportQueryParams),
                         parser: parseTransactionsByLocation,
                         renderDescription({reference}: {reference: string}) {
                             return <AccountDisplayById id={reference} />;
@@ -186,7 +159,6 @@ export const Summary = () => {
                             summaryObject: results.expensesByCategory,
                             entities: categories,
                             entityNameField: 'name',
-                            showSumInHeader: false,
                         }}
                     />
                 )}

@@ -3,7 +3,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import {headerColor, useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryExpander} from 'components/transactions/SummaryExpander';
 import {SummarySubCategory} from 'components/transactions/SummarySubCategory';
-import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {SummaryModel} from 'components/transactions/types';
 import {spacingSmall} from 'defs/styles';
 import groupBy from 'lodash/groupBy';
@@ -26,15 +25,12 @@ export type SummaryCategoryProps<Ent> = {
     entities: Ent[];
     entityIdField?: keyof Ent;
     entityNameField: keyof Ent;
-    showSumInHeader?: boolean;
     setExpanded?: (e: boolean) => void;
     expanded?: boolean;
     renderDescription?: (cat: SummaryModel) => ReactNode;
 };
 
-export const SummaryCategory = <Ent extends {id: number}>(
-    props: SummaryCategoryProps<Ent>,
-) => {
+export const SummaryCategory = <Ent extends {id: number}>(props: SummaryCategoryProps<Ent>) => {
     const cls = useStyles();
     const cardHeaderClasses = useCardHeaderStyles();
     const currencies = useCurrenciesMap();
@@ -46,12 +42,9 @@ export const SummaryCategory = <Ent extends {id: number}>(
         entities,
         entityIdField = 'id',
         entityNameField,
-        showSumInHeader,
     } = props;
     const expandedState = React.useState(expandedByDefault);
-    const [expanded, setExpanded] = props.setExpanded
-        ? [props.expanded, props.setExpanded]
-        : expandedState;
+    const [expanded, setExpanded] = props.setExpanded ? [props.expanded, props.setExpanded] : expandedState;
     const [excluded, setExcluded] = React.useState<Record<string, boolean>>({});
 
     const handleToggleExcluded = (ids: string[]) => {
@@ -72,50 +65,34 @@ export const SummaryCategory = <Ent extends {id: number}>(
                 classes={cardHeaderClasses}
                 onClick={() => setExpanded(!expanded)}
                 action={<SummaryExpander isExpanded={Boolean(expanded)} />}
-                subheader={
-                    showSumInHeader && (
-                        <div style={{color: headerColor}}>
-                            <SummaryTotal
-                                summaryItems={summaryObject}
-                                excludedRecord={excluded}
-                                colorize={false}
-                            />
-                        </div>
-                    )
-                }
             >
                 <div style={{color: headerColor}}>{title}</div>
             </CardHeader>
 
             {expanded && (
                 <div className={cls.expandable}>
-                    {sortBy(
-                        Object.entries(groupBy(summaryObject, 'group')),
-                        ([, items]: [unknown, SummaryModel[]]) => {
-                            if (items.length > 0) {
-                                const [firstItem] = items;
-                                const {index, group} = firstItem;
+                    {sortBy(Object.entries(groupBy(summaryObject, 'group')), ([, items]: [unknown, SummaryModel[]]) => {
+                        if (items.length > 0) {
+                            const [firstItem] = items;
+                            const {index, group} = firstItem;
 
-                                if (index != null) {
-                                    return index;
-                                }
-
-                                if (group != null) {
-                                    return entities.find((e) => {
-                                        return (
-                                            // @ts-ignore
-                                            e[entityIdField] === group
-                                        );
-                                    })?.[entityNameField];
-                                }
+                            if (index != null) {
+                                return index;
                             }
 
-                            return 0;
-                        },
-                    ).map(([id, items]) => {
-                        const shouldGroup = items.every((each) =>
-                            each.hasOwnProperty('group'),
-                        );
+                            if (group != null) {
+                                return entities.find((e) => {
+                                    return (
+                                        // @ts-ignore
+                                        e[entityIdField] === group
+                                    );
+                                })?.[entityNameField];
+                            }
+                        }
+
+                        return 0;
+                    }).map(([id, items]) => {
+                        const shouldGroup = items.every((each) => each.hasOwnProperty('group'));
 
                         return (
                             <SummarySubCategory<Ent>
@@ -138,8 +115,4 @@ export const SummaryCategory = <Ent extends {id: number}>(
             )}
         </Card>
     );
-};
-
-SummaryCategory.defaultProps = {
-    showSumInHeader: true,
 };
