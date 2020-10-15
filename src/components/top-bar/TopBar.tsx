@@ -30,7 +30,6 @@ export const TopBar = (props: {onLogout: () => void}) => {
     const user = useBootstrap();
     const history = useHistory();
     const location = useLocation();
-    const project = useSelectedProject();
     const tabs = [paths.dashboard, paths.transactions, paths.categories, paths.accounts, paths.currencies];
     const screenSize = useScreenSize();
     const projects = useProjects();
@@ -72,9 +71,7 @@ export const TopBar = (props: {onLogout: () => void}) => {
                                 value={tabs.indexOf(location.pathname)}
                                 onChange={(event, index) => {
                                     history.push(
-                                        makeUrl(tabs[index], {
-                                            projectId: project.id,
-                                        }),
+                                        makeUrl(tabs[index], Object.fromEntries(new URLSearchParams(location.search))),
                                     );
                                 }}
                             >
