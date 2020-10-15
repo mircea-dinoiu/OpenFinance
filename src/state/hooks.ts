@@ -8,15 +8,10 @@ export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();
 
     // @ts-ignore
-    return React.useMemo(() => bindActionCreators(actions, dispatch), [
-        actions,
-        dispatch,
-    ]);
+    return React.useMemo(() => bindActionCreators(actions, dispatch), [actions, dispatch]);
 };
-export const useScreenSize = (): ScreenQueries =>
-    useSelector((s: GlobalState) => s.screenSize);
-export const useBootstrap = (): Bootstrap =>
-    useSelector((s: GlobalState) => s.user);
+export const useScreenSize = (): ScreenQueries => useSelector((s: GlobalState) => s.screenSize);
+export const useBootstrap = (): Bootstrap => useSelector((s: GlobalState) => s.user);
 
 export const useUsersWithActions = (): [
     Bootstrap,
@@ -30,14 +25,8 @@ export const useUsersWithActions = (): [
     }),
 ];
 
-export const useCategories = () =>
-    useSelector((s: GlobalState) => s.categories);
-export const useSnackbars = (): Snackbar[] =>
-    useSelector((s: GlobalState) => s.snackbars);
+export const useCategories = () => useSelector((s: GlobalState) => s.categories);
+export const useSnackbars = (): Snackbar[] => useSelector((s: GlobalState) => s.snackbars);
 
-export const useMoneyLocationTypes = () =>
-    useSelector((s: GlobalState) => s.moneyLocationTypes);
-
-export const useRefreshWidgets = () =>
-    useSelector((s: GlobalState) => s.refreshWidgets);
+export const useRefreshWidgets = () => useSelector((s: GlobalState) => s.refreshWidgets);
 export const useRefreshWidgetsDispatcher = () => useActions(refreshWidgets);

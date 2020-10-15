@@ -1,4 +1,4 @@
-const {MoneyLocation: Model, MLType, Currency} = require('../models');
+const {MoneyLocation: Model, Currency} = require('../models');
 const BaseController = require('./BaseController');
 const {pick} = require('lodash');
 
@@ -8,18 +8,18 @@ module.exports = class MoneyLocationController extends BaseController {
         id: ['isRequired', ['isId', Model]],
         name: ['sometimes', 'isRequired', 'isString'],
         status: ['sometimes', 'isRequired', 'isAccountStatus'],
-        type_id: ['sometimes', 'isRequired', ['isId', MLType]],
+        type: ['sometimes', 'isRequired', 'isAccountType'],
         currency_id: ['sometimes', 'isRequired', ['isId', Currency]],
     };
     createValidationRules = {
         name: ['isRequired', 'isString'],
         status: ['isRequired', 'isAccountStatus'],
-        type_id: ['isRequired', ['isId', MLType]],
+        type: ['isRequired', 'isAccountType'],
         currency: ['isRequired', ['isId', Currency]],
     };
 
     sanitizeUpdateValues(record) {
-        const values = pick(record, 'status', 'type_id', 'currency_id');
+        const values = pick(record, 'status', 'type', 'currency_id');
 
         if (record.hasOwnProperty('name')) {
             values.name = record.name.trim();
@@ -30,7 +30,7 @@ module.exports = class MoneyLocationController extends BaseController {
 
     sanitizeCreateValues(record) {
         return {
-            ...pick(record, 'status', 'type_id', 'currency_id'),
+            ...pick(record, 'status', 'type', 'currency_id'),
             name: record.name.trim(),
         };
     }

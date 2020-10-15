@@ -10,14 +10,10 @@ import {HTMLAttributes, ReactNode} from 'react';
 import {useCurrenciesMap} from 'state/currencies';
 import {usePrivacyToggle} from 'state/privacyToggle';
 
-const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => (
-    <span {...props}>▒▒▒▒</span>
-);
+const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => <span {...props}>▒▒▒▒</span>;
 
 export const formatNumber = (value: number) =>
-    new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(
-        financialNum(value),
-    );
+    new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(financialNum(value));
 
 export const formatCurrency = (value: number, currency: string) => {
     return new Intl.NumberFormat(undefined, {
@@ -63,31 +59,24 @@ const useStyles = makeStyles({
 });
 
 export const NumericValue = ({
-    currency,
+    currency: currencyFromProps,
     value,
     colorize = true,
     tooltip: tooltipFromProps,
 }: {
     tooltip?: ReactNode;
-    currency: string;
+    currency: string | number;
     value: number;
     colorize?: boolean;
 }) => {
     const cls = useStyles();
     const currencies = useCurrenciesMap();
+    const currency = typeof currencyFromProps === 'number' ? currencies[currencyFromProps].iso_code : currencyFromProps;
     const copyText = useCopyTextWithConfirmation();
     const [privacyToggle] = usePrivacyToggle();
     const inner = (
         <span
-            className={
-                colorize
-                    ? clsx(
-                          cls.container,
-                          value > 0 && cls.positive,
-                          value < 0 && cls.negative,
-                      )
-                    : undefined
-            }
+            className={colorize ? clsx(cls.container, value > 0 && cls.positive, value < 0 && cls.negative) : undefined}
         >
             <strong
                 className={cls.value}
@@ -96,28 +85,18 @@ export const NumericValue = ({
                     copyText(value);
                 }}
             >
-                {privacyToggle ? (
-                    <PrivateValue />
-                ) : (
-                    formatCurrency(value, currency)
-                )}
+                {privacyToggle ? <PrivateValue /> : formatCurrency(value, currency)}
             </strong>
         </span>
     );
 
-    const found = Object.values(currencies).find(
-        (each) => each.iso_code === currency,
-    );
+    const found = Object.values(currencies).find((each) => each.iso_code === currency);
     const tooltip = (
         <>
             <div key={currency}>{formatCurrency(value, currency)}</div>
-            {Object.entries(found ? found.rates : {}).map(
-                ([rateISO, rateMulti]) => (
-                    <div key={rateISO}>
-                        {formatCurrency(value * rateMulti, rateISO)}
-                    </div>
-                ),
-            )}
+            {Object.entries(found ? found.rates : {}).map(([rateISO, rateMulti]) => (
+                <div key={rateISO}>{formatCurrency(value * rateMulti, rateISO)}</div>
+            ))}
         </>
     );
 

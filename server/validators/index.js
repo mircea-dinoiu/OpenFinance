@@ -91,14 +91,7 @@ Object.assign(validator, {
             return false;
         }
 
-        if (
-            values.some(
-                (value) =>
-                    value < defs.PERC_MIN ||
-                    value > defs.PERC_MAX ||
-                    !validator.isInt(value),
-            )
-        ) {
+        if (values.some((value) => value < defs.PERC_MIN || value > defs.PERC_MAX || !validator.isInt(value))) {
             return false;
         }
 
@@ -116,10 +109,7 @@ Object.assign(validator, {
 
             if (Array.isArray(json)) {
                 for (const pair of json) {
-                    if (
-                        !Model.attributes.hasOwnProperty(pair.id) &&
-                        !extra.includes(pair.id)
-                    ) {
+                    if (!Model.attributes.hasOwnProperty(pair.id) && !extra.includes(pair.id)) {
                         return false;
                     }
                 }
@@ -158,6 +148,7 @@ Object.assign(validator, {
     isRepeatValue: (value) => Object.values(defs.RepeatOption).includes(value),
     isStatusValue: (value) => ['finished', 'pending', 'draft'].includes(value),
     isAccountStatus: (value) => ['open', 'locked', 'closed'].includes(value),
+    isAccountType: (value) => ['cash', 'credit', 'brokerage'].includes(value),
     isNotZero: (value) => Number(value) !== 0,
     isNotNegative: (value) => Number(value) >= 0,
     isString: (value) => typeof value === 'string',
@@ -212,20 +203,13 @@ class Validator {
                     const ruleFn = validator[ruleName];
 
                     if (!ruleFn) {
-                        throw new Error(
-                            `Invalid validation rule specified: "${ruleName}"`,
-                        );
+                        throw new Error(`Invalid validation rule specified: "${ruleName}"`);
                     }
 
                     let result = false;
 
                     try {
-                        result = ruleFn.call(
-                            validator,
-                            value,
-                            ...params,
-                            this.opts,
-                        );
+                        result = ruleFn.call(validator, value, ...params, this.opts);
                     } catch (e) {
                         console.trace(e);
                     }
@@ -241,13 +225,9 @@ class Validator {
 
                     if (debug) {
                         logger.log(
-                            result
-                                ? 'Validation rule passed'
-                                : 'Validation rule failed',
+                            result ? 'Validation rule passed' : 'Validation rule failed',
                             chalk[result ? 'green' : 'red'](
-                                `${dataKey}: validator.${ruleName}(${[value]
-                                    .concat(params)
-                                    .join(', ')})`,
+                                `${dataKey}: validator.${ruleName}(${[value].concat(params).join(', ')})`,
                             ),
                         );
                     }

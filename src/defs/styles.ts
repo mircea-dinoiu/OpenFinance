@@ -1,5 +1,6 @@
 import {blue, grey} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
+import {Column} from 'react-table-6';
 
 export const dialog = {
     root: {
@@ -37,3 +38,12 @@ export const theme = createMuiTheme({
         },
     },
 });
+
+export const lastColumnStyles: Column<any> = {
+    headerStyle: {
+        textAlign: 'right',
+    },
+    style: {
+        textAlign: 'right',
+    },
+};

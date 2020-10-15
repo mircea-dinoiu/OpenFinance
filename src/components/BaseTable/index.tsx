@@ -1,9 +1,5 @@
-import {
-    gridGap,
-    spacingLarge,
-    spacingSmall,
-    stickyHeaderHeight,
-} from 'defs/styles';
+import {grey} from '@material-ui/core/colors';
+import {gridGap, spacingLarge, spacingSmall, stickyHeaderHeight} from 'defs/styles';
 import * as React from 'react';
 import ReactTable, {TableProps} from 'react-table-6';
 import 'react-table-6/react-table.css';
@@ -29,6 +25,17 @@ const ReactTableStyled = styled(ReactTable)`
         .rt-td {
             line-height: 20px;
             padding-bottom: 2px;
+        }
+
+        .rt-thead.-header {
+            box-shadow: none;
+            font-weight: 500;
+            border-bottom: 1px solid ${grey[400]};
+        }
+        .rt-tfoot {
+            box-shadow: none;
+            border-top: 1px solid ${grey[200]};
+            background-color: ${grey[50]};
         }
 
         .${Classes.pendingRow} {
@@ -67,10 +74,7 @@ export const TableHeader = styled.div`
 export const TableHeaderTop = styled.div`
     display: grid;
     grid-gap: ${gridGap};
-    grid-template-columns: repeat(
-        ${(props: {columnCount: number}) => props.columnCount},
-        max-content
-    );
+    grid-template-columns: repeat(${(props: {columnCount: number}) => props.columnCount}, max-content);
     align-items: center;
 `;
 

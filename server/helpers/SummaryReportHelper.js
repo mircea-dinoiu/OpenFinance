@@ -11,23 +11,15 @@ module.exports = {
     safeNum,
 
     getUniques(records) {
-        return uniq(
-            records
-                .filter((item) => item.isTotal !== true)
-                .map((item) => item.reference),
-        );
+        return uniq(records.filter((item) => item.isTotal !== true).map((item) => item.reference));
     },
 
     getRemainingSum(transactions, id) {
         let filteredTransactions;
 
-        filteredTransactions = transactions.filter(
-            (t) => t.reference === id,
-        )[0];
+        filteredTransactions = transactions.filter((t) => t.reference === id)[0];
 
-        filteredTransactions = filteredTransactions
-            ? filteredTransactions.cashValue
-            : 0;
+        filteredTransactions = filteredTransactions ? filteredTransactions.cashValue : 0;
 
         return this.safeNum(filteredTransactions);
     },
@@ -51,7 +43,7 @@ module.exports = {
                 push({
                     id,
                     name: record.name,
-                    group: record.type_id,
+                    group: record.type,
                     currencyId: record.currency_id,
                 });
             }

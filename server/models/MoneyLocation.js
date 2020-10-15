@@ -9,7 +9,7 @@ module.exports = (sequelize, types) =>
             },
             name: types.STRING,
             url: types.STRING,
-            type_id: types.INTEGER,
+            type: types.STRING,
             currency_id: types.INTEGER,
             status: types.STRING,
             project_id: types.INTEGER,

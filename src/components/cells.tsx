@@ -1,12 +1,12 @@
 import {TextField} from '@material-ui/core';
 import {green, orange, red} from '@material-ui/core/colors';
 import {MuiSelectNative} from 'components/dropdowns';
+import _ from 'lodash';
 import startCase from 'lodash/startCase';
 import React from 'react';
 import {TableCellRenderer} from 'react-table-6';
-import {AccountStatus} from 'state/accounts';
+import {AccountStatus, AccountType} from 'state/accounts';
 import {useCurrenciesMap} from 'state/currencies';
-import {useMoneyLocationTypes} from 'state/hooks';
 
 export const UrlCell: TableCellRenderer = ({original: row, column}) => {
     const url = row[column.id as string];
@@ -18,11 +18,7 @@ export const UrlCell: TableCellRenderer = ({original: row, column}) => {
     ) : null;
 };
 
-export const TextFieldCell: TableCellRenderer = ({
-    original: row,
-    columnProps,
-    column,
-}) => {
+export const TextFieldCell: TableCellRenderer = ({original: row, columnProps, column}) => {
     const {editor, setEditor} = columnProps.rest;
 
     return editor && editor.id === row.id ? (
@@ -41,10 +37,7 @@ export const TextFieldCell: TableCellRenderer = ({
     );
 };
 
-export const CurrencyCell: TableCellRenderer = ({
-    original: row,
-    columnProps,
-}) => {
+export const CurrencyCell: TableCellRenderer = ({original: row, columnProps}) => {
     const currencies = useCurrenciesMap();
     const {editor, setEditor} = columnProps.rest;
 
@@ -68,8 +61,7 @@ export const CurrencyCell: TableCellRenderer = ({
         );
     }
 
-    return Object.values(currencies).find((c) => c.id === row.currency_id)
-        ?.iso_code;
+    return Object.values(currencies).find((c) => c.id === row.currency_id)?.iso_code;
 };
 
 const ColorByStatus: Record<AccountStatus, string> = {
@@ -109,32 +101,29 @@ export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
     );
 };
 
-export const AccountTypeCell: TableCellRenderer = ({
-    original: row,
-    columnProps,
-}) => {
-    const types = useMoneyLocationTypes();
+export const AccountTypeCell: TableCellRenderer = ({original: row, columnProps}) => {
+    const types = Object.values(AccountType);
     const {editor, setEditor} = columnProps.rest;
 
     if (editor && editor.id === row.id) {
         const options = types.map((t) => ({
-            value: t.id,
-            label: t.name,
+            value: t,
+            label: _.capitalize(t),
         }));
 
         return (
-            <MuiSelectNative<number>
-                value={options.find((o) => o.value === editor.type_id)}
+            <MuiSelectNative<string>
+                value={options.find((o) => o.value === editor.type)}
                 options={options}
                 onChange={(o) =>
                     setEditor({
                         ...editor,
-                        type_id: o.value,
+                        type: o.value,
                     })
                 }
             />
         );
     }
 
-    return Object.values(types).find((t) => t.id === row.type_id)?.name;
+    return Object.values(types).find((t) => t === row.type);
 };

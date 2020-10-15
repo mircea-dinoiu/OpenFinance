@@ -2,12 +2,12 @@ import MomentUtils from '@date-io/moment';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {Accounts} from 'components/accounts/Accounts';
-import {AccountTypes} from 'components/accountTypes/AccountTypes';
 import {Categories} from 'components/categories/Categories';
 import {Currencies} from 'components/currencies/Currencies';
+import {Dashboard} from 'components/dashboard/Dashboard';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
-import {TransactionsSummaryCombo} from 'components/transactions/TransactionsSummaryCombo';
+import {Transactions} from 'components/transactions/Transactions';
 import {routes} from 'defs/routes';
 import {spacingSmall, theme} from 'defs/styles';
 import {paths} from 'js/defs';
@@ -16,26 +16,14 @@ import React, {useState} from 'react';
 import EventListener from 'react-event-listener';
 import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
-import {
-    BrowserRouter,
-    Redirect,
-    Route,
-    RouteComponentProps,
-    Switch,
-} from 'react-router-dom';
+import {BrowserRouter, Redirect, Route, RouteComponentProps, Switch} from 'react-router-dom';
 
 import {Login} from 'routes/Login';
 import {useAccountsReader} from 'state/accounts';
-import {useAccountTypesReader} from 'state/accountTypes';
 import {setScreen} from 'state/actionCreators';
 import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies} from 'state/currencies';
-import {
-    useBootstrap,
-    useScreenSize,
-    useSnackbars,
-    useUsersWithActions,
-} from 'state/hooks';
+import {useBootstrap, useScreenSize, useSnackbars, useUsersWithActions} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {fetchStocks} from 'state/stocks';
 import {createGlobalStyle} from 'styled-components';
@@ -75,7 +63,6 @@ const AppWrapped = () => {
     const [ready, setReady] = useState(false);
     const readCategories = useCategoriesReader();
     const readAccounts = useAccountsReader();
-    const readAccountTypes = useAccountTypesReader();
 
     const fetchUser = async () => {
         try {
@@ -96,7 +83,6 @@ const AppWrapped = () => {
 
         readCategories();
         readAccounts();
-        readAccountTypes();
     };
 
     React.useEffect(() => {
@@ -129,26 +115,15 @@ const AppWrapped = () => {
                 <>
                     <ResponsiveGlobalStyle />
                     <BrowserRouter>
-                        <EventListener
-                            target="window"
-                            onResize={onWindowResize}
-                        />
+                        <EventListener target="window" onResize={onWindowResize} />
                         <TopBar onLogout={onLogout} />
                         {ready && (
                             <Switch>
-                                <Route
-                                    exact={true}
-                                    strict={false}
-                                    path={paths.login}
-                                    component={Login}
-                                />
+                                <Route exact={true} strict={false} path={paths.login} component={Login} />
                                 <Route component={AppInner} />
                             </Switch>
                         )}
-                        <FloatingSnackbar
-                            {...snackbar}
-                            open={snackbar != null}
-                        />
+                        <FloatingSnackbar {...snackbar} open={snackbar != null} />
                     </BrowserRouter>
                 </>
             </MuiThemeProvider>
@@ -165,7 +140,7 @@ const AppInner = ({location, match}: RouteComponentProps) => {
         if (location.pathname === paths.home) {
             return (
                 <Redirect
-                    to={makeUrl(paths.transactions, {
+                    to={makeUrl(paths.dashboard, {
                         projectId: project.id,
                     })}
                 />
@@ -174,13 +149,10 @@ const AppInner = ({location, match}: RouteComponentProps) => {
 
         return (
             <div style={{margin: screenSize.isLarge ? spacingSmall : 0}}>
-                <Route
-                    path={paths.transactions}
-                    component={TransactionsSummaryCombo}
-                />
+                <Route path={paths.dashboard} component={Dashboard} />
+                <Route path={paths.transactions} component={Transactions} />
                 <Route path={paths.categories} component={Categories} />
                 <Route path={paths.accounts} component={Accounts} />
-                <Route path={paths.accountTypes} component={AccountTypes} />
                 <Route path={paths.currencies} component={Currencies} />
             </div>
         );

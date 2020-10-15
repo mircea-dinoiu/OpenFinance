@@ -6,6 +6,5 @@ module.exports = {
     '/api/categories': require('./categories'),
     '/api/users': require('./users'),
     '/api/money-locations': require('./accounts'),
-    '/api/money-location-types': require('./account-types'),
     '/': require('./html'),
 };

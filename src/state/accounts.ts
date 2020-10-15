@@ -31,10 +31,13 @@ export enum AccountStatus {
     CLOSED = 'closed',
 }
 
-export const useAccounts = () =>
-    useSelector((s: GlobalState) => s.moneyLocations);
+export enum AccountType {
+    CASH = 'cash',
+    CREDIT = 'credit',
+    BROKERAGE = 'brokerage',
+}
+
+export const useAccounts = () => useSelector((s: GlobalState) => s.moneyLocations);
 
 export const useAccountsOpen = () =>
-    useSelector((s: GlobalState) =>
-        s.moneyLocations.filter((a) => a.status === AccountStatus.OPEN),
-    );
+    useSelector((s: GlobalState) => s.moneyLocations.filter((a) => a.status === AccountStatus.OPEN));

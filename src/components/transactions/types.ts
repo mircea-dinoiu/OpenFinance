@@ -17,7 +17,7 @@ export type BalanceByLocationStock = {
 export type SummaryModel = {
     currencyId: number | string;
     description: string;
-    group?: number;
+    group?: number | string;
     reference: string;
     cashValue: number;
     stocks?: BalanceByLocationStock[];
@@ -115,7 +115,4 @@ export type TransactionModel = {
     stock_units: number | null;
     stock_id: number | null;
 };
-export type UpdateRecords = (
-    ids: number[],
-    data: Partial<TransactionModel>,
-) => Promise<void>;
+export type UpdateRecords = (ids: number[], data: Partial<TransactionModel>) => Promise<void>;

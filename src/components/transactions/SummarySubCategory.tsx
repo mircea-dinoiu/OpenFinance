@@ -2,18 +2,16 @@ import {CardHeader, Checkbox} from '@material-ui/core';
 import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
-import {AccountValue} from 'components/transactions/AccountValue';
+import {NumericValue} from 'components/formatters';
 import {useCardHeaderStyles} from 'components/transactions/styles';
-import {SummaryExpander} from 'components/transactions/SummaryExpander';
 import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {SummaryModel} from 'components/transactions/types';
 import {spacingNormal, spacingSmall, theme} from 'defs/styles';
 import {sortBy} from 'lodash';
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode} from 'react';
 import {CurrencyMap} from 'types';
 
 export const SummarySubCategory = <Ent,>(props: {
-    expandedByDefault: boolean;
     excluded: {};
     currencies: CurrencyMap;
     onToggleExcluded: (ids: string[]) => void;
@@ -26,16 +24,7 @@ export const SummarySubCategory = <Ent,>(props: {
     shouldGroup: boolean;
 }) => {
     const cardHeaderClasses = useCardHeaderStyles();
-    const [expanded, setExpanded] = useState(props.expandedByDefault);
-    const {
-        shouldGroup,
-        entities,
-        id,
-        entityIdField,
-        entityNameField,
-        items: itemsFromProps,
-        renderDescription,
-    } = props;
+    const {shouldGroup, entities, id, entityIdField, entityNameField, items: itemsFromProps, renderDescription} = props;
 
     const items = sortBy(itemsFromProps, (item) => item.description);
     const cls = useStyles();
@@ -51,70 +40,45 @@ export const SummarySubCategory = <Ent,>(props: {
                         cursor: 'pointer',
                         color: theme.palette.text.primary,
                     }}
-                    onClick={() => setExpanded(!expanded)}
-                    action={<SummaryExpander isExpanded={expanded} />}
                     title={
                         Number(id) === 0 ? (
                             <em>Unclassified</em>
                         ) : (
-                            entities.find(
-                                (each) => (each[entityIdField] as any) == id,
-                            )?.[entityNameField]
+                            entities.find((each) => (each[entityIdField] as any) == id)?.[entityNameField]
                         )
                     }
                 />
             )}
-            {(shouldGroup === false || expanded) && (
-                <ul className={cls.list}>
-                    {items.map((each) => (
-                        <li className={cls.listItem}>
-                            <div>
-                                {renderDescription
-                                    ? renderDescription(each)
-                                    : each.description}
-                            </div>
-                            <div>
-                                <AccountValue
-                                    stocks={each.stocks ?? []}
-                                    cashValue={each.cashValue}
-                                    currencyId={Number(each.currencyId)}
-                                />
-                            </div>
-                            <Checkbox
-                                className={cls.checkbox}
-                                checked={!props.excluded[each.reference]}
-                                onChange={() =>
-                                    props.onToggleExcluded([each.reference])
-                                }
-                                color="default"
-                            />
-                        </li>
-                    ))}
-                    <li className={clsx(cls.listItem, cls.listItemTotal)}>
-                        <div>TOTAL</div>
-                        <div style={{textAlign: 'right'}}>
-                            <SummaryTotal
-                                summaryItems={items}
-                                excludedRecord={props.excluded}
-                            />
-                        </div>
+            <ul className={cls.list}>
+                {items.map((each) => (
+                    <li className={cls.listItem}>
+                        <div>{renderDescription ? renderDescription(each) : each.description}</div>
                         <div>
-                            <Checkbox
-                                className={cls.checkbox}
-                                checked={items.every(
-                                    (item) => !props.excluded[item.reference],
-                                )}
-                                onChange={() =>
-                                    props.onToggleExcluded(
-                                        items.map((item) => item.reference),
-                                    )
-                                }
-                                color="default"
-                            />
+                            <NumericValue value={each.cashValue} currency={Number(each.currencyId)} />
                         </div>
+                        <Checkbox
+                            className={cls.checkbox}
+                            checked={!props.excluded[each.reference]}
+                            onChange={() => props.onToggleExcluded([each.reference])}
+                            color="default"
+                        />
                     </li>
-                </ul>
-            )}
+                ))}
+                <li className={clsx(cls.listItem, cls.listItemTotal)}>
+                    <div>TOTAL</div>
+                    <div style={{textAlign: 'right'}}>
+                        <SummaryTotal summaryItems={items} excludedRecord={props.excluded} />
+                    </div>
+                    <div>
+                        <Checkbox
+                            className={cls.checkbox}
+                            checked={items.every((item) => !props.excluded[item.reference])}
+                            onChange={() => props.onToggleExcluded(items.map((item) => item.reference))}
+                            color="default"
+                        />
+                    </div>
+                </li>
+            </ul>
         </div>
     );
 };

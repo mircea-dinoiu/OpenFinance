@@ -1,9 +1,9 @@
 import uniqueId from 'lodash/uniqueId';
 import {combineReducers} from 'redux';
 import {currencies} from 'state/currencies';
-import {stocks} from 'state/stocks';
 import {Action} from 'state/defs';
 import {privacyToggle} from 'state/privacyToggle';
+import {stocks} from 'state/stocks';
 import {summaryReducer} from 'state/summary';
 import {bindToUpdateState} from 'state/utils';
 import {ScreenQueries, Snackbar, User} from 'types';
@@ -34,9 +34,7 @@ const user = (state: User | null = null, action: {type: Action; value: User}) =>
 
 const snackbars = (
     state: Snackbar[] = [],
-    action:
-        | {value: string; type: Action.HIDE_SNACKBAR}
-        | {value: Snackbar; type: Action.SHOW_SNACKBAR},
+    action: {value: string; type: Action.HIDE_SNACKBAR} | {value: Snackbar; type: Action.SHOW_SNACKBAR},
 ) => {
     switch (action.type) {
         case Action.SHOW_SNACKBAR:
@@ -49,7 +47,6 @@ const snackbars = (
 };
 const categories = bindToUpdateState('categories', []);
 const moneyLocations = bindToUpdateState('moneyLocations', []);
-const moneyLocationTypes = bindToUpdateState('moneyLocationTypes', []);
 
 export const combinedReducers = combineReducers({
     // @deprecated screen is a global in Window, use screenSize instead
@@ -63,7 +60,6 @@ export const combinedReducers = combineReducers({
     categories,
     stocks,
     moneyLocations,
-    moneyLocationTypes,
     snackbars,
     privacyToggle,
     summary: summaryReducer,

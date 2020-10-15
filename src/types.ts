@@ -1,6 +1,6 @@
 import {AlertProps} from '@material-ui/lab';
 import * as React from 'react';
-import {AccountStatus} from 'state/accounts';
+import {AccountStatus, AccountType} from 'state/accounts';
 import {Project} from 'state/projects';
 import {Summary} from 'state/summary';
 
@@ -25,7 +25,7 @@ export type Currencies = {
     };
 };
 
-export type Stock = {id: number; price: number; symbol: string};
+export type Stock = {id: number; price: number; symbol: string; currency_id: number};
 
 export type CurrencyMap = {
     [key: number]: Currency;
@@ -47,17 +47,10 @@ export type Account = {
     id: number;
     name: string;
     status: AccountStatus;
-    type_id: number;
+    type: AccountType;
 };
 
 export type Accounts = Account[];
-
-export type AccountType = {
-    id: number;
-    name: string;
-};
-
-export type AccountTypes = AccountType[];
 
 export type User = {
     avatar: string;
@@ -85,7 +78,6 @@ export type GlobalState = {
     privacyToggle: boolean;
 
     categories: Categories;
-    moneyLocationTypes: AccountTypes;
     moneyLocations: Accounts;
     screen: ScreenQueries;
     screenSize: ScreenQueries;

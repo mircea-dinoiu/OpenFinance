@@ -17,6 +17,7 @@ module.exports = {
     RepeatOption,
     paths: {
         home: '/',
+        dashboard: '/dashboard',
         transactions: '/transactions',
         categories: '/categories',
         accounts: '/accounts',

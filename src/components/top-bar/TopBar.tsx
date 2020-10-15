@@ -1,17 +1,10 @@
-import {
-    AppBar,
-    IconButton,
-    Paper,
-    Tab,
-    Tabs,
-    Toolbar,
-    Typography,
-} from '@material-ui/core';
+import {AppBar, IconButton, Paper, Tab, Tabs, Toolbar, Typography} from '@material-ui/core';
 import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import IconExitToApp from '@material-ui/icons/ExitToApp';
 import IconVisibility from '@material-ui/icons/Visibility';
 import IconVisibilityOff from '@material-ui/icons/VisibilityOff';
+import IconHome from '@material-ui/icons/Home';
 import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption} from 'defs';
 import {spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
@@ -26,21 +19,11 @@ import {useBootstrap, useScreenSize} from '../../state/hooks';
 
 const MAX_TIMES = 10;
 
-export const getShiftBackOptions = (
-    date: string,
-    by: ShiftDateOption,
-): Date[] =>
-    new Array(MAX_TIMES)
-        .fill(null)
-        .map((each, index) => shiftDateBack(date, by, index + 1));
+export const getShiftBackOptions = (date: string, by: ShiftDateOption): Date[] =>
+    new Array(MAX_TIMES).fill(null).map((each, index) => shiftDateBack(date, by, index + 1));
 
-export const getShiftForwardOptions = (
-    date: string,
-    by: ShiftDateOption,
-): Date[] =>
-    new Array(MAX_TIMES)
-        .fill(null)
-        .map((each, index) => shiftDateForward(date, by, index + 1));
+export const getShiftForwardOptions = (date: string, by: ShiftDateOption): Date[] =>
+    new Array(MAX_TIMES).fill(null).map((each, index) => shiftDateForward(date, by, index + 1));
 
 export const TopBar = (props: {onLogout: () => void}) => {
     const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
@@ -48,13 +31,7 @@ export const TopBar = (props: {onLogout: () => void}) => {
     const history = useHistory();
     const location = useLocation();
     const project = useSelectedProject();
-    const tabs = [
-        paths.transactions,
-        paths.categories,
-        paths.accounts,
-        paths.accountTypes,
-        paths.currencies,
-    ];
+    const tabs = [paths.dashboard, paths.transactions, paths.categories, paths.accounts, paths.currencies];
     const screenSize = useScreenSize();
     const projects = useProjects();
     const selectedProject = useSelectedProject();
@@ -69,18 +46,11 @@ export const TopBar = (props: {onLogout: () => void}) => {
                             <Paper className={cls.paper}>
                                 <MuiSelectNative
                                     onChange={(o) => {
-                                        const url = new URL(
-                                            window.location.href,
-                                        );
+                                        const url = new URL(window.location.href);
 
-                                        url.searchParams.set(
-                                            'projectId',
-                                            o.value.toString(),
-                                        );
+                                        url.searchParams.set('projectId', o.value.toString());
 
-                                        window.location.href = mapUrlToFragment(
-                                            url,
-                                        );
+                                        window.location.href = mapUrlToFragment(url);
                                     }}
                                     options={projects.map((p) => ({
                                         label: p.name,
@@ -108,10 +78,10 @@ export const TopBar = (props: {onLogout: () => void}) => {
                                     );
                                 }}
                             >
+                                <Tab label={<IconHome />} />
                                 <Tab label="Transactions" />
                                 <Tab label="Categories" />
                                 <Tab label="Accounts" />
-                                <Tab label="Account Types" />
                                 <Tab label="Currencies" />
                             </Tabs>
                         </Paper>
@@ -123,22 +93,10 @@ export const TopBar = (props: {onLogout: () => void}) => {
                             }}
                         >
                             <div style={{float: 'right', display: 'flex'}}>
-                                <IconButton
-                                    color="inherit"
-                                    onClick={() =>
-                                        setPrivacyToggle(!privacyToggle)
-                                    }
-                                >
-                                    {privacyToggle ? (
-                                        <IconVisibilityOff />
-                                    ) : (
-                                        <IconVisibility />
-                                    )}
+                                <IconButton color="inherit" onClick={() => setPrivacyToggle(!privacyToggle)}>
+                                    {privacyToggle ? <IconVisibilityOff /> : <IconVisibility />}
                                 </IconButton>
-                                <IconButton
-                                    color="inherit"
-                                    onClick={props.onLogout}
-                                >
+                                <IconButton color="inherit" onClick={props.onLogout}>
                                     <IconExitToApp />
                                 </IconButton>
                             </div>

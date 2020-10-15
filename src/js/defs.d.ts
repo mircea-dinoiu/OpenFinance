@@ -10,11 +10,11 @@ export enum RepeatOption {
 
 export const paths: {
     home: string;
+    dashboard: string;
     transactions: string;
     login: string;
     categories: string;
     accounts: string;
-    accountTypes: string;
     currencies: string;
 };
 

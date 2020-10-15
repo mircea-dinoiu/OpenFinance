@@ -1,12 +1,4 @@
-import {
-    Button,
-    Checkbox,
-    Fab,
-    FormControlLabel,
-    LinearProgress,
-    Menu,
-    Paper,
-} from '@material-ui/core';
+import {Button, Checkbox, Fab, FormControlLabel, LinearProgress, Menu, Paper} from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -54,13 +46,7 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
-import {
-    Accounts,
-    Bootstrap,
-    CurrencyMap,
-    GlobalState,
-    ScreenQueries,
-} from 'types';
+import {Accounts, Bootstrap, CurrencyMap, GlobalState, ScreenQueries} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';
@@ -146,8 +132,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         }
     }
 
-    handleToggleDeleteDialog = () =>
-        this.setState((state) => ({deleteDialogOpen: !state.deleteDialogOpen}));
+    handleToggleDeleteDialog = () => this.setState((state) => ({deleteDialogOpen: !state.deleteDialogOpen}));
     handleToggleEditDialog = () =>
         this.setState((state) => ({
             editDialogOpen: !state.editDialogOpen,
@@ -160,18 +145,13 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     handleDelete = async () => {
         this.handleToggleDeleteDialog();
 
-        await this.handleRequestDelete(
-            this.selectedItems.map((each) => each.id),
-        );
+        await this.handleRequestDelete(this.selectedItems.map((each) => each.id));
 
         this.props.dispatch(onRefreshWidgets());
     };
 
     get hasFiltersSet() {
-        return (
-            this.props.params.filters.filter((each) => each.value.text !== '')
-                .length > 0
-        );
+        return this.props.params.filters.filter((each) => each.value.text !== '').length > 0;
     }
 
     get displayArchived() {
@@ -230,9 +210,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     getGroupedResults() {
         const results = this.getSortedResults();
 
-        return groupBy(results, (each) =>
-            moment(each.created_at).format('YYYY-MM-DD'),
-        );
+        return groupBy(results, (each) => moment(each.created_at).format('YYYY-MM-DD'));
     }
 
     refresh = async () => {
@@ -247,17 +225,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return this.props.screen.isLarge;
     }
 
-    handleReceivedSelectedIds = (selectedIds: number[]) =>
-        this.setState({selectedIds});
-    handleChangeContextMenu = ({
-        display,
-        top = 0,
-        left = 0,
-    }: {
-        display: boolean;
-        top?: number;
-        left?: number;
-    }) =>
+    handleReceivedSelectedIds = (selectedIds: number[]) => this.setState({selectedIds});
+    handleChangeContextMenu = ({display, top = 0, left = 0}: {display: boolean; top?: number; left?: number}) =>
         this.setState({
             contextMenuDisplay: display,
             contextMenuTop: top,
@@ -276,20 +245,15 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             : {};
 
     get selectedItems() {
-        return this.state.results.filter((r) =>
-            this.state.selectedIds.includes(r.id),
-        );
+        return this.state.results.filter((r) => this.state.selectedIds.includes(r.id));
     }
 
     computeAmount(transactions: TransactionModel[]) {
-        const mlIdToCurrencyId = this.props.moneyLocations.reduce(
-            (acc, each) => {
-                acc[each.id] = each.currency_id;
+        const mlIdToCurrencyId = this.props.moneyLocations.reduce((acc, each) => {
+            acc[each.id] = each.currency_id;
 
-                return acc;
-            },
-            {},
-        );
+            return acc;
+        }, {});
 
         return (
             <SummaryTotal
@@ -330,9 +294,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     </>
                     <>
                         <SplitAmountField
-                            error={isNaN(
-                                this.parseSplitAmount(this.state.splitAmount),
-                            )}
+                            error={isNaN(this.parseSplitAmount(this.state.splitAmount))}
                             placeholder="Split"
                             value={this.state.splitAmount}
                             onChange={(event) => {
@@ -350,9 +312,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                     <InputAdornment position="end">
                                         <IconButton
                                             onClick={this.handleClickSplit}
-                                            disabled={
-                                                !this.isSplitAmountValid()
-                                            }
+                                            disabled={!this.isSplitAmountValid()}
                                         >
                                             <IconSplit />
                                         </IconButton>
@@ -366,19 +326,12 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         onClick={(event) => {
                             event.preventDefault();
 
-                            this.handleReceivedSelectedIds(
-                                this.state.results.map((r) => r.id),
-                            );
+                            this.handleReceivedSelectedIds(this.state.results.map((r) => r.id));
                         }}
                     >
                         Select All
                     </Button>
-                    <Fab
-                        variant="extended"
-                        color="primary"
-                        onClick={this.handleToggleAddModal}
-                        size="small"
-                    >
+                    <Fab variant="extended" color="primary" onClick={this.handleToggleAddModal} size="small">
                         <AddIcon />
                     </Fab>
                     <ImportTransactions
@@ -395,9 +348,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         this.renderStats(
                             <React.Fragment>
                                 {rating === 0 ? (
-                                    <IconStarBorder
-                                        style={{height: 20, width: 20}}
-                                    />
+                                    <IconStarBorder style={{height: 20, width: 20}} />
                                 ) : (
                                     range(0, rating).map((i) => (
                                         <IconStar
@@ -411,40 +362,28 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                 )}
                             </React.Fragment>,
                             page.filter((each) =>
-                                rating === 0
-                                    ? each.favorite == null ||
-                                      each.favorite === 0
-                                    : each.favorite === rating,
+                                rating === 0 ? each.favorite == null || each.favorite === 0 : each.favorite === rating,
                             ),
                         ),
                     )}
                 </div>
                 {(() => {
                     const byYear = Object.entries(
-                        _.groupBy(page, (t) =>
-                            new Date(t.created_at).getFullYear(),
-                        ),
+                        _.groupBy(page, (t) => new Date(t.created_at).getFullYear()),
                     ).reverse();
                     const byMonth = Object.entries(
-                        _.groupBy(page, (t) =>
-                            moment(t.created_at).format('YYYY-MM'),
-                        ),
+                        _.groupBy(page, (t) => moment(t.created_at).format('YYYY-MM')),
                     ).slice(0, 12);
 
                     return (
                         <div style={{marginTop: spacingSmall}}>
-                            {byYear.map(([year, transactions]) =>
-                                this.renderStats(year, transactions),
-                            )}
+                            {byYear.map(([year, transactions]) => this.renderStats(year, transactions))}
                             {byMonth.map(([dateString, transactions]) => {
                                 const date = moment(dateString);
 
                                 return this.renderStats(
                                     date.format(
-                                        date.toDate().getFullYear() !==
-                                            Number(byYear[0][0])
-                                            ? 'MMM YYYY'
-                                            : 'MMM',
+                                        date.toDate().getFullYear() !== Number(byYear[0][0]) ? 'MMM YYYY' : 'MMM',
                                     ),
                                     transactions,
                                 );
@@ -469,10 +408,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         const selectedItems = this.selectedItems;
 
-        return (
-            selectedItems.length >= 1 &&
-            selectedItems.every((each) => Math.abs(each.sum) > Math.abs(amount))
-        );
+        return selectedItems.length >= 1 && selectedItems.every((each) => Math.abs(each.sum) > Math.abs(amount));
     }
 
     parseSplitAmount(number: string) {
@@ -543,9 +479,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                     <td>
                                         <WeightDisplay
                                             item={{
-                                                weight: this.computeWeight(
-                                                    items,
-                                                ),
+                                                weight: this.computeWeight(items),
                                             }}
                                         />
                                     </td>
@@ -567,8 +501,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         );
     }
 
-    handleCloseContextMenu = () =>
-        this.handleChangeContextMenu({display: false});
+    handleCloseContextMenu = () => this.handleChangeContextMenu({display: false});
 
     updateRecords: UpdateRecords = async (ids, data) => {
         try {
@@ -599,20 +532,16 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return await promise;
     };
 
-    handleRequest = this.withLoading(
-        <D,>(data: D, api: string, method: HttpMethod) =>
-            createXHR({
-                url: makeUrl(api, {projectId: this.props.project.id}),
-                method,
-                data,
-            }),
+    handleRequest = this.withLoading(<D,>(data: D, api: string, method: HttpMethod) =>
+        createXHR({
+            url: makeUrl(api, {projectId: this.props.project.id}),
+            method,
+            data,
+        }),
     );
-    handleRequestDelete = (ids: number[]) =>
-        this.handleRequest({ids}, api, 'DELETE');
-    handleRequestUpdate = (data: Partial<TransactionModel>[]) =>
-        this.handleRequest({data}, api, 'PUT');
-    handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) =>
-        this.handleRequest({data}, api, 'POST');
+    handleRequestDelete = (ids: number[]) => this.handleRequest({ids}, api, 'DELETE');
+    handleRequestUpdate = (data: Partial<TransactionModel>[]) => this.handleRequest({data}, api, 'PUT');
+    handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) => this.handleRequest({data}, api, 'POST');
 
     sanitizeItem = (item: TransactionModel) =>
         crudProps.formToModel(crudProps.modelToForm(item), {
@@ -643,12 +572,9 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.props.dispatch(onRefreshWidgets());
     };
 
-    handleClickDraft = () =>
-        this.updateSelectedRecords({status: TransactionStatus.draft});
-    handleClickReviewed = () =>
-        this.updateSelectedRecords({status: TransactionStatus.finished});
-    handleClickNeedsReview = () =>
-        this.updateSelectedRecords({status: TransactionStatus.pending});
+    handleClickDraft = () => this.updateSelectedRecords({status: TransactionStatus.draft});
+    handleClickReviewed = () => this.updateSelectedRecords({status: TransactionStatus.finished});
+    handleClickNeedsReview = () => this.updateSelectedRecords({status: TransactionStatus.pending});
     handleClickHide = () =>
         this.updateSelectedRecords({
             hidden: true,
@@ -682,8 +608,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             this.props.dispatch(onRefreshWidgets());
         }
     };
-    handleDetach = () =>
-        this.handleTransactionRepeat(routes.transactionsDetach);
+    handleDetach = () => this.handleTransactionRepeat(routes.transactionsDetach);
     handleSkip = () => this.handleTransactionRepeat(routes.transactionsSkip);
 
     getContextMenuItemsProps() {
@@ -738,44 +663,18 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         <BaseTable<TransactionModel>
                             filtered={params.filters}
                             onFilteredChange={(value) => {
-                                const filters = value.filter(
-                                    (f) => f.value != null,
-                                );
+                                const filters = value.filter((f) => f.value != null);
 
-                                this.setParam(
-                                    QueryParam.filters,
-                                    filters.length
-                                        ? JSON.stringify(filters)
-                                        : null,
-                                );
+                                this.setParam(QueryParam.filters, filters.length ? JSON.stringify(filters) : null);
                             }}
                             sorted={params.sorters}
-                            onSortedChange={(value) =>
-                                this.setParam(
-                                    QueryParam.sorters,
-                                    JSON.stringify(value),
-                                )
-                            }
+                            onSortedChange={(value) => this.setParam(QueryParam.sorters, JSON.stringify(value))}
                             defaultSortDesc={true}
                             pageSize={params.pageSize}
-                            onPageSizeChange={(value) =>
-                                this.setParam(
-                                    QueryParam.pageSize,
-                                    value.toString(),
-                                )
-                            }
+                            onPageSizeChange={(value) => this.setParam(QueryParam.pageSize, value.toString())}
                             page={params.page - 1}
-                            onPageChange={(value) =>
-                                this.setParam(
-                                    QueryParam.page,
-                                    (value + 1).toString(),
-                                )
-                            }
-                            pages={
-                                count >= params.pageSize
-                                    ? params.page + 1
-                                    : params.page
-                            }
+                            onPageChange={(value) => this.setParam(QueryParam.page, (value + 1).toString())}
+                            pages={count >= params.pageSize ? params.page + 1 : params.page}
                             manual={true}
                             data={results}
                             columns={this.columns}
@@ -791,9 +690,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                         }}
                         onClose={this.handleCloseContextMenu}
                     >
-                        <ContextMenuItems
-                            {...this.getContextMenuItemsProps()}
-                        />
+                        <ContextMenuItems {...this.getContextMenuItemsProps()} />
                     </Menu>
                 </Paper>
             );
@@ -805,22 +702,19 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     onTransactionAdd={this.handleToggleAddModal}
                     onSummaryOpen={this.props.onSummaryOpen as () => void}
                 />
-                {Object.entries(this.getGroupedResults()).map(
-                    ([date, items]) => (
-                        <MainScreenListGroup
-                            key={date}
-                            date={date}
-                            items={items}
-                            itemProps={{
-                                entityName: entityName,
-                                contentComponent: ExpenseListItemContent,
-                                contextMenuItemsProps: this.getContextMenuItemsProps(),
-                                onReceiveSelectedIds: this
-                                    .handleReceivedSelectedIds,
-                            }}
-                        />
-                    ),
-                )}
+                {Object.entries(this.getGroupedResults()).map(([date, items]) => (
+                    <MainScreenListGroup
+                        key={date}
+                        date={date}
+                        items={items}
+                        itemProps={{
+                            entityName: entityName,
+                            contentComponent: ExpenseListItemContent,
+                            contextMenuItemsProps: this.getContextMenuItemsProps(),
+                            onReceiveSelectedIds: this.handleReceivedSelectedIds,
+                        }}
+                    />
+                ))}
             </>
         );
     }
@@ -846,10 +740,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     onYes={this.handleDelete}
                     onNo={this.handleToggleDeleteDialog}
                     entityName={entityName}
-                    count={
-                        Object.values(this.state.selectedIds).filter(Boolean)
-                            .length
-                    }
+                    count={Object.values(this.state.selectedIds).filter(Boolean).length}
                 />
                 <MainScreenEditDialog
                     open={this.state.editDialogOpen}
@@ -879,46 +770,29 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 {this.state.loading > 0 && <LinearProgress />}
                 {this.renderDialogs()}
 
-                <EventListener
-                    target="window"
-                    onScroll={this.handleWindowScroll}
-                />
+                <EventListener target="window" onScroll={this.handleWindowScroll} />
             </div>
         );
     }
 
     handleWindowScroll = () => {
-        if (
-            !this.state.loading &&
-            scrollReachedBottom(document.scrollingElement as HTMLElement)
-        ) {
+        if (!this.state.loading && scrollReachedBottom(document.scrollingElement as HTMLElement)) {
             const url = new URL(window.location.href);
 
-            url.searchParams.set(
-                QueryParam.page,
-                String(this.props.params.page + 1),
-            );
+            url.searchParams.set(QueryParam.page, String(this.props.params.page + 1));
             this.props.history.replace(mapUrlToFragment(url));
         }
     };
 }
 
-export const MainScreenList = (ownProps: TypeOwnProps) => {
-    const stateProps = useSelector(
-        ({
-            screen,
-            refreshWidgets,
-            currencies,
-            moneyLocations,
-            user,
-        }: GlobalState) => ({
-            screen,
-            refreshWidgets,
-            currencies,
-            moneyLocations,
-            user,
-        }),
-    );
+export const Transactions = (ownProps: TypeOwnProps) => {
+    const stateProps = useSelector(({screen, refreshWidgets, currencies, moneyLocations, user}: GlobalState) => ({
+        screen,
+        refreshWidgets,
+        currencies,
+        moneyLocations,
+        user,
+    }));
     const dispatch = useDispatch();
     const [endDate] = useEndDate();
     const history = useHistory();
@@ -929,16 +803,10 @@ export const MainScreenList = (ownProps: TypeOwnProps) => {
         const searchParams = new URLSearchParams(location.search);
 
         return {
-            pageSize:
-                JSON.parse(searchParams.get(QueryParam.pageSize) as string) ??
-                30,
+            pageSize: JSON.parse(searchParams.get(QueryParam.pageSize) as string) ?? 30,
             page: JSON.parse(searchParams.get(QueryParam.page) as string) ?? 1,
-            sorters: JSON.parse(
-                searchParams.get(QueryParam.sorters) as string,
-            ) ?? [{id: 'created_at', desc: true}],
-            filters:
-                JSON.parse(searchParams.get(QueryParam.filters) as string) ??
-                [],
+            sorters: JSON.parse(searchParams.get(QueryParam.sorters) as string) ?? [{id: 'created_at', desc: true}],
+            filters: JSON.parse(searchParams.get(QueryParam.filters) as string) ?? [],
         };
     }, [location.search]);
 

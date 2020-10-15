@@ -9,7 +9,6 @@ export const routes = {
     },
     categories: '/api/categories',
     moneyLocations: '/api/money-locations',
-    moneyLocationTypes: '/api/money-location-types',
     reports: {
         summary: '/api/reports/summary',
         balanceByLocation: '/api/reports/balance-by-location',

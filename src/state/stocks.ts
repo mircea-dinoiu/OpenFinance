@@ -23,9 +23,9 @@ export const stocks = createReducer<Stock[]>([], {
 
 const receiveStocks = createAction<Stock[]>(Action.received);
 
-export const fetchStocks = (
-    params: {update?: boolean} = Object.freeze({}),
-) => async (dispatch: Dispatch<{type: string; payload: unknown}>) => {
+export const fetchStocks = (params: {update?: boolean} = Object.freeze({})) => async (
+    dispatch: Dispatch<{type: string; payload: unknown}>,
+) => {
     const response = await createXHR<Stock[]>({
         url: makeUrl(routes.stocks, params),
     });
@@ -33,8 +33,7 @@ export const fetchStocks = (
     dispatch(receiveStocks(response.data));
 };
 
-export const useStocks = (): Stock[] =>
-    useSelector((s: GlobalState) => s.stocks);
+export const useStocks = (): Stock[] => useSelector((s: GlobalState) => s.stocks);
 export const useStockPrices = (): Map<number, number> => {
     const stocks = useStocks();
     const map = new Map();
@@ -45,12 +44,13 @@ export const useStockPrices = (): Map<number, number> => {
 
     return map;
 };
-export const useStockSymbols = (): Map<number, string> => {
+
+export const useStocksMap = (): Map<number, Stock> => {
     const stocks = useStocks();
     const map = new Map();
 
     for (const stock of stocks) {
-        map.set(stock.id, stock.symbol);
+        map.set(stock.id, stock);
     }
 
     return map;
