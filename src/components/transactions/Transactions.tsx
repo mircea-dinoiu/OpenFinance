@@ -53,9 +53,7 @@ import {createXHR, HttpMethod} from 'utils/fetch';
 import {scrollReachedBottom} from 'utils/scroll';
 import {makeUrl, mapUrlToFragment} from 'utils/url';
 
-type TypeOwnProps = {
-    onSummaryOpen?: () => void;
-};
+type TypeOwnProps = {};
 
 type TypeProps = {
     history: H.History;
@@ -698,10 +696,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         return (
             <>
-                <TransactionsMobileHeader
-                    onTransactionAdd={this.handleToggleAddModal}
-                    onSummaryOpen={this.props.onSummaryOpen as () => void}
-                />
+                <TransactionsMobileHeader onTransactionAdd={this.handleToggleAddModal} />
                 {Object.entries(this.getGroupedResults()).map(([date, items]) => (
                     <MainScreenListGroup
                         key={date}
