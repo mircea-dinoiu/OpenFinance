@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
 import {BalanceByLocationStock} from 'components/transactions/types';
-import {lastColumnStyles, ScreenQuery, spacingNormal} from 'defs/styles';
+import {firstColumnStyles, numericColumnStyles, ScreenQuery, spacingNormal} from 'defs/styles';
 import _ from 'lodash';
 import React, {useState} from 'react';
 import {useAccounts} from 'state/accounts';
@@ -51,27 +51,7 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
                     {
                         Header: 'Symbol',
                         accessor: 'symbol',
-                        headerStyle: {
-                            textAlign: 'center',
-                        },
-                    },
-                    {
-                        Header: 'Units',
-                        accessor: 'units',
-                        style: {
-                            textAlign: 'center',
-                        },
-                    },
-
-                    {
-                        Header: 'Market Price',
-                        accessor: 'price',
-                        Cell: ({value, original}) => {
-                            return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
-                        },
-                        style: {
-                            textAlign: 'center',
-                        },
+                        ...firstColumnStyles,
                     },
                     {
                         Header: 'Value',
@@ -80,7 +60,21 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
                         Cell: ({value, original}) => {
                             return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
                         },
-                        ...lastColumnStyles,
+                        ...numericColumnStyles,
+                    },
+                    {
+                        Header: 'Units',
+                        accessor: 'units',
+                        ...numericColumnStyles,
+                    },
+
+                    {
+                        Header: 'Market Price',
+                        accessor: 'price',
+                        Cell: ({value, original}) => {
+                            return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+                        },
+                        ...numericColumnStyles,
                     },
                 ]}
             />

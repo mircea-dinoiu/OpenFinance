@@ -1,6 +1,6 @@
 import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
 import {NumericValue} from 'components/formatters';
-import {lastColumnStyles} from 'defs/styles';
+import {firstColumnStyles, numericColumnStyles} from 'defs/styles';
 import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {Column} from 'react-table-6';
@@ -25,9 +25,7 @@ const TotalFooter = ({data, column}: {data: {_original: CashAccount}[]; column: 
 export const NameCol: Column<CashAccount> = {
     accessor: 'name',
     Header: 'Name',
-    headerStyle: {
-        textAlign: 'left',
-    },
+    ...firstColumnStyles,
 };
 
 export const TotalCol: Column<CashAccount> = {
@@ -35,7 +33,7 @@ export const TotalCol: Column<CashAccount> = {
     accessor: 'total',
     Cell: ({original: a}: {original: CashAccount}) => <NumericValue currency={a.currency_id} value={a.total} />,
     Footer: TotalFooter,
-    ...lastColumnStyles,
+    ...numericColumnStyles,
 };
 export const CostBasisCol: Column<BrokerageAccount> = {
     Header: 'Cost Basis',
@@ -44,9 +42,7 @@ export const CostBasisCol: Column<BrokerageAccount> = {
         <NumericValue currency={a.currency_id} value={a.costBasis} />
     ),
     Footer: TotalFooter,
-    style: {
-        textAlign: 'center',
-    },
+    ...numericColumnStyles,
 };
 export const RoiCol: Column<BrokerageAccount> = {
     Header: 'ROI',
@@ -56,9 +52,7 @@ export const RoiCol: Column<BrokerageAccount> = {
         <NumericValue currency={a.currency_id} value={value} />
     ),
     Footer: TotalFooter,
-    style: {
-        textAlign: 'center',
-    },
+    ...numericColumnStyles,
 };
 export const RoiPercCol: Column<BrokerageAccount> = {
     Header: 'ROI%',
@@ -73,7 +67,5 @@ export const RoiPercCol: Column<BrokerageAccount> = {
             </>
         );
     },
-    style: {
-        textAlign: 'center',
-    },
+    ...numericColumnStyles,
 };

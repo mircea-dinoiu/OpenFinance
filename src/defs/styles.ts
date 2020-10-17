@@ -39,11 +39,16 @@ export const theme = createMuiTheme({
     },
 });
 
-export const lastColumnStyles: Column<any> = {
+export const numericColumnStyles: Column<any> = {
     headerStyle: {
         textAlign: 'right',
     },
     style: {
         textAlign: 'right',
+    },
+};
+export const firstColumnStyles: Column<any> = {
+    headerStyle: {
+        textAlign: 'left',
     },
 };

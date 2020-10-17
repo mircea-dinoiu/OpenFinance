@@ -162,7 +162,7 @@ export const Dashboard = () => {
                                 {Object.values(groupBy(brokerageWithTotal, 'currency_id')).map((data) => (
                                     <BaseTable<BrokerageAccount>
                                         data={data}
-                                        columns={[NameCol, CostBasisCol, RoiCol, RoiPercCol, TotalCol]}
+                                        columns={[NameCol, TotalCol, CostBasisCol, RoiCol, RoiPercCol]}
                                     />
                                 ))}
 
