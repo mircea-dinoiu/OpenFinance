@@ -45,39 +45,41 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
                     <FormControlLabel value={o.value} control={<Radio />} label={o.label} />
                 ))}
             </RadioGroup>
-            <BaseTable
-                data={Object.values(stockHoldingsById).filter((sh) => sh.units > 0)}
-                columns={[
-                    {
-                        Header: 'Symbol',
-                        accessor: 'symbol',
-                        ...firstColumnStyles,
-                    },
-                    {
-                        Header: 'Value',
-                        id: 'value',
-                        accessor: (sh) => sh.units * sh.price,
-                        Cell: ({value, original}) => {
-                            return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+            <div>
+                <BaseTable
+                    data={Object.values(stockHoldingsById).filter((sh) => sh.units > 0)}
+                    columns={[
+                        {
+                            Header: 'Symbol',
+                            accessor: 'symbol',
+                            ...firstColumnStyles,
                         },
-                        ...numericColumnStyles,
-                    },
-                    {
-                        Header: 'Units',
-                        accessor: 'units',
-                        ...numericColumnStyles,
-                    },
+                        {
+                            Header: 'Value',
+                            id: 'value',
+                            accessor: (sh) => sh.units * sh.price,
+                            Cell: ({value, original}) => {
+                                return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+                            },
+                            ...numericColumnStyles,
+                        },
+                        {
+                            Header: 'Units',
+                            accessor: 'units',
+                            ...numericColumnStyles,
+                        },
 
-                    {
-                        Header: 'Market Price',
-                        accessor: 'price',
-                        Cell: ({value, original}) => {
-                            return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+                        {
+                            Header: 'Market Price',
+                            accessor: 'price',
+                            Cell: ({value, original}) => {
+                                return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+                            },
+                            ...numericColumnStyles,
                         },
-                        ...numericColumnStyles,
-                    },
-                ]}
-            />
+                    ]}
+                />
+            </div>
         </div>
     );
 };

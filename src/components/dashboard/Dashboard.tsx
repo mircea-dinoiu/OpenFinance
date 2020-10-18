@@ -16,7 +16,7 @@ import {useInclude, useIncludePending} from 'components/transactions/helpers';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {BalanceByLocation} from 'components/transactions/types';
 import {routes} from 'defs/routes';
-import {ScreenQuery, spacingNormal, spacingSmall} from 'defs/styles';
+import {ScreenQuery, spacingLarge, spacingNormal, spacingSmall} from 'defs/styles';
 import _, {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
@@ -138,29 +138,32 @@ export const Dashboard = () => {
 
                 {tab === 0 && (
                     <>
-                        {cashWithTotal.length > 0 && (
-                            <>
-                                <CardHeader className={cls.cardHeader} title="Cash" />
-                                {Object.values(groupBy(cashWithTotal, 'currency_id')).map((data) => (
-                                    <BaseTable data={data} columns={[NameCol, TotalCol]} />
-                                ))}
-                            </>
-                        )}
+                        <div className={cls.cashCreditGrid}>
+                            {cashWithTotal.length > 0 && (
+                                <div>
+                                    <CardHeader className={cls.cardHeader} title="Cash" />
+                                    {Object.values(groupBy(cashWithTotal, 'currency_id')).map((data) => (
+                                        <BaseTable className={cls.table} data={data} columns={[NameCol, TotalCol]} />
+                                    ))}
+                                </div>
+                            )}
 
-                        {creditWithTotal.length > 0 && (
-                            <>
-                                <CardHeader className={cls.cardHeader} title="Credit" />
-                                {Object.values(groupBy(creditWithTotal, 'currency_id')).map((data) => (
-                                    <BaseTable data={data} columns={[NameCol, TotalCol]} />
-                                ))}
-                            </>
-                        )}
+                            {creditWithTotal.length > 0 && (
+                                <div>
+                                    <CardHeader className={cls.cardHeader} title="Credit" />
+                                    {Object.values(groupBy(creditWithTotal, 'currency_id')).map((data) => (
+                                        <BaseTable className={cls.table} data={data} columns={[NameCol, TotalCol]} />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
                         {brokerageWithTotal.length > 0 && (
                             <>
                                 <CardHeader className={cls.cardHeader} title="Investments" />
                                 {Object.values(groupBy(brokerageWithTotal, 'currency_id')).map((data) => (
                                     <BaseTable<BrokerageAccount>
+                                        className={cls.table}
                                         data={data}
                                         columns={[NameCol, TotalCol, CostBasisCol, RoiCol, RoiPercCol]}
                                     />
@@ -221,5 +224,19 @@ const useStyles = makeStyles({
     },
     cardHeader: {
         paddingLeft: 0,
+    },
+    cashCreditGrid: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gridGap: spacingLarge,
+
+        [ScreenQuery.SMALL]: {
+            gridTemplateColumns: '1fr',
+        },
+    },
+    table: {
+        '&:not(:last-child)': {
+            marginBottom: spacingLarge,
+        },
     },
 });
