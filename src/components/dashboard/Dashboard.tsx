@@ -21,7 +21,7 @@ import _, {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {AccountType, useAccounts} from 'state/accounts';
-import {useRefreshWidgets} from 'state/hooks';
+import {useRefreshWidgets, useScreenSize} from 'state/hooks';
 import {useStockPrices} from 'state/stocks';
 import {summaryAssign, SummaryKey} from 'state/summary';
 import {Account} from 'types';
@@ -41,6 +41,7 @@ export const Dashboard = () => {
     const url = makeUrl(routes.reports.balanceByLocation, reportQueryParams);
     const stockPrices = useStockPrices();
     const [tab, setTab] = useState(0);
+    const screenSize = useScreenSize();
 
     React.useEffect(() => {
         createXHR<BalanceByLocation>({
@@ -165,7 +166,11 @@ export const Dashboard = () => {
                                     <BaseTable<BrokerageAccount>
                                         className={cls.table}
                                         data={data}
-                                        columns={[NameCol, TotalCol, CostBasisCol, RoiCol, RoiPercCol]}
+                                        columns={
+                                            screenSize.isSmall
+                                                ? [NameCol, TotalCol]
+                                                : [NameCol, TotalCol, CostBasisCol, RoiCol, RoiPercCol]
+                                        }
                                     />
                                 ))}
 

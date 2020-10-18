@@ -6,9 +6,13 @@ import {BalanceByLocationStock} from 'components/transactions/types';
 import {firstColumnStyles, numericColumnStyles, ScreenQuery, spacingNormal} from 'defs/styles';
 import _ from 'lodash';
 import React, {useState} from 'react';
+import {Column} from 'react-table-6';
 import {useAccounts} from 'state/accounts';
+import {useScreenSize} from 'state/hooks';
 import {useStocksMap} from 'state/stocks';
 import {Stock} from 'types';
+
+type StockWithUnits = Stock & {units: number};
 
 export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationStock[]}) => {
     const [account, setAccount] = useState('');
@@ -21,6 +25,7 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
         'label',
     );
     const cls = useStyles();
+    const screenSize = useScreenSize();
 
     const filteredStockHoldings = stockHoldings.filter((sh) => !account || sh.money_location_id === Number(account));
     const stocksMap = useStocksMap();
@@ -48,40 +53,42 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
             <div>
                 <BaseTable
                     data={Object.values(stockHoldingsById).filter((sh) => sh.units > 0)}
-                    columns={[
-                        {
-                            Header: 'Symbol',
-                            accessor: 'symbol',
-                            ...firstColumnStyles,
-                        },
-                        {
-                            Header: 'Value',
-                            id: 'value',
-                            accessor: (sh) => sh.units * sh.price,
-                            Cell: ({value, original}) => {
-                                return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
-                            },
-                            ...numericColumnStyles,
-                        },
-                        {
-                            Header: 'Units',
-                            accessor: 'units',
-                            ...numericColumnStyles,
-                        },
-
-                        {
-                            Header: 'Market Price',
-                            accessor: 'price',
-                            Cell: ({value, original}) => {
-                                return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
-                            },
-                            ...numericColumnStyles,
-                        },
-                    ]}
+                    columns={screenSize.isSmall ? [SymbolCol, TotalCol] : [SymbolCol, TotalCol, UnitsCol, PriceCol]}
                 />
             </div>
         </div>
     );
+};
+
+const SymbolCol: Column<StockWithUnits> = {
+    Header: 'Symbol',
+    accessor: 'symbol',
+    ...firstColumnStyles,
+};
+
+const TotalCol: Column<StockWithUnits> = {
+    Header: 'Value',
+    id: 'value',
+    accessor: (sh) => sh.units * sh.price,
+    Cell: ({value, original}) => {
+        return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+    },
+    ...numericColumnStyles,
+};
+
+const UnitsCol: Column<StockWithUnits> = {
+    Header: 'Units',
+    accessor: 'units',
+    ...numericColumnStyles,
+};
+
+const PriceCol: Column<StockWithUnits> = {
+    Header: 'Market Price',
+    accessor: 'price',
+    Cell: ({value, original}) => {
+        return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+    },
+    ...numericColumnStyles,
 };
 
 const useStyles = makeStyles({
