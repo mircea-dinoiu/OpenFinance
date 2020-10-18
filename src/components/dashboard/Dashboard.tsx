@@ -1,5 +1,8 @@
 import {CardHeader, Checkbox, Divider, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
+import IconCash from '@material-ui/icons/AccountBalance';
+import IconCredit from '@material-ui/icons/CreditCard';
+import IconStock from '@material-ui/icons/TrendingUp';
 import {Alert, AlertTitle} from '@material-ui/lab';
 import {BaseTable} from 'components/BaseTable';
 import {CategoriesTab} from 'components/dashboard/CategoriesTab';
@@ -130,60 +133,101 @@ export const Dashboard = () => {
                     ) : null;
                 })}
             </Paper>
-            <Paper className={cls.paper}>
-                <Tabs value={tab} onChange={(e, t) => setTab(t)}>
-                    <Tab label="Accounts" />
-                    <Tab label="Users" />
-                    <Tab label="Categories" />
-                </Tabs>
-
+            <div>
+                <Paper className={cls.paperNoPadding}>
+                    <Tabs value={tab} onChange={(e, t) => setTab(t)}>
+                        <Tab label="Accounts" />
+                        <Tab label="Users" />
+                        <Tab label="Categories" />
+                    </Tabs>
+                </Paper>
                 {tab === 0 && (
                     <>
                         <div className={cls.cashCreditGrid}>
                             {cashWithTotal.length > 0 && (
-                                <div>
-                                    <CardHeader className={cls.cardHeader} title="Cash" />
+                                <Paper className={cls.paper}>
+                                    <CardHeader
+                                        className={cls.cardHeader}
+                                        title={
+                                            <>
+                                                <IconCash /> Cash
+                                            </>
+                                        }
+                                    />
                                     {Object.values(groupBy(cashWithTotal, 'currency_id')).map((data) => (
                                         <BaseTable className={cls.table} data={data} columns={[NameCol, TotalCol]} />
                                     ))}
-                                </div>
+                                </Paper>
                             )}
 
                             {creditWithTotal.length > 0 && (
-                                <div>
-                                    <CardHeader className={cls.cardHeader} title="Credit" />
+                                <Paper className={cls.paper}>
+                                    <CardHeader
+                                        className={cls.cardHeader}
+                                        title={
+                                            <>
+                                                <IconCredit /> Credit
+                                            </>
+                                        }
+                                    />
                                     {Object.values(groupBy(creditWithTotal, 'currency_id')).map((data) => (
                                         <BaseTable className={cls.table} data={data} columns={[NameCol, TotalCol]} />
                                     ))}
-                                </div>
+                                </Paper>
                             )}
                         </div>
 
                         {brokerageWithTotal.length > 0 && (
                             <>
-                                <CardHeader className={cls.cardHeader} title="Investments" />
-                                {Object.values(groupBy(brokerageWithTotal, 'currency_id')).map((data) => (
-                                    <BaseTable<BrokerageAccount>
-                                        className={cls.table}
-                                        data={data}
-                                        columns={
-                                            screenSize.isSmall
-                                                ? [NameCol, TotalCol]
-                                                : [NameCol, TotalCol, CostBasisCol, RoiCol, RoiPercCol]
+                                <Paper className={cls.paper}>
+                                    <CardHeader
+                                        className={cls.cardHeader}
+                                        title={
+                                            <>
+                                                <IconStock /> Investments
+                                            </>
                                         }
                                     />
-                                ))}
+                                    {Object.values(groupBy(brokerageWithTotal, 'currency_id')).map((data) => (
+                                        <BaseTable<BrokerageAccount>
+                                            className={cls.table}
+                                            data={data}
+                                            columns={
+                                                screenSize.isSmall
+                                                    ? [NameCol, TotalCol]
+                                                    : [NameCol, TotalCol, CostBasisCol, RoiCol, RoiPercCol]
+                                            }
+                                        />
+                                    ))}
+                                </Paper>
 
-                                <CardHeader className={cls.cardHeader} title="Stocks" />
-                                <StocksTable stockHoldings={data.stocks} />
+                                <Paper className={cls.paper}>
+                                    <CardHeader
+                                        className={cls.cardHeader}
+                                        title={
+                                            <>
+                                                <IconStock /> Stocks
+                                            </>
+                                        }
+                                    />
+                                    <StocksTable stockHoldings={data.stocks} />
+                                </Paper>
                             </>
                         )}
                     </>
                 )}
 
-                {tab === 1 && <UsersTab reportQueryParams={reportQueryParams} />}
-                {tab === 2 && <CategoriesTab reportQueryParams={reportQueryParams} />}
-            </Paper>
+                {tab === 1 && (
+                    <Paper className={cls.paper}>
+                        <UsersTab reportQueryParams={reportQueryParams} />
+                    </Paper>
+                )}
+                {tab === 2 && (
+                    <Paper className={cls.paper}>
+                        <CategoriesTab reportQueryParams={reportQueryParams} />
+                    </Paper>
+                )}
+            </div>
         </div>
     );
 };
@@ -224,16 +268,26 @@ const useStyles = makeStyles({
             gridTemplateColumns: '1fr',
         },
     },
+    paperNoPadding: {
+        marginBottom: spacingSmall,
+    },
     paper: {
         padding: spacingNormal,
+        marginBottom: spacingSmall,
     },
     cardHeader: {
         paddingLeft: 0,
+        '& .MuiCardHeader-title': {
+            display: 'grid',
+            alignItems: 'center',
+            gridGap: spacingSmall,
+            gridTemplateColumns: 'auto 1fr',
+        },
     },
     cashCreditGrid: {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gridGap: spacingLarge,
+        gridGap: spacingSmall,
 
         [ScreenQuery.SMALL]: {
             gridTemplateColumns: '1fr',
