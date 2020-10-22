@@ -14,42 +14,40 @@ router.get('/summary', [validateAuth, validateProject], (req, res) => {
     c.getSummary(req, res);
 });
 
-router.get(
-    '/balance-by-location',
-    [validateAuth, validateProject],
-    async (req, res) => {
-        const pullStart = Date.now();
-        const cashWhere = makeWhere(req.query);
-        const marketWhere = makeWhere(req.query, ['stock_id IS NOT NULL']);
+router.get('/balance-by-location', [validateAuth, validateProject], async (req, res) => {
+    const pullStart = Date.now();
+    const cashWhere = makeWhere(req.query);
+    const marketWhere = makeWhere(req.query, ['stock_id IS NOT NULL', 'expenses.stock_units != 0']);
 
-        const [cash, stocks] = await Promise.all([
-            sql.query(
-                `SELECT 
+    const [cash, stocks] = await Promise.all([
+        sql.query(
+            `SELECT 
                 money_location_id, 
                 SUM(sum) as \`sum\`
                 FROM expenses ${cashWhere.query} GROUP by money_location_id HAVING sum != 0`,
-                {
-                    replacements: cashWhere.replacements,
-                    type: QueryTypes.SELECT,
-                },
-            ),
-            sql.query(
-                `SELECT 
+            {
+                replacements: cashWhere.replacements,
+                type: QueryTypes.SELECT,
+            },
+        ),
+        sql.query(
+            `SELECT 
                 money_location_id, 
+                AVG(expenses.sum / stock_units) as cost_basis,
                 SUM(stock_units) as stock_units,
                 stock_id
-                FROM expenses ${marketWhere.query} GROUP by money_location_id, stock_id`,
-                {
-                    replacements: marketWhere.replacements,
-                    type: QueryTypes.SELECT,
-                },
-            ),
-        ]);
+                FROM expenses ${marketWhere.query}
+                GROUP by money_location_id, stock_id`,
+            {
+                replacements: marketWhere.replacements,
+                type: QueryTypes.SELECT,
+            },
+        ),
+    ]);
 
-        logger.log(req.path, 'Pulling took', Date.now() - pullStart, 'millis');
-        res.json({cash, stocks});
-    },
-);
+    logger.log(req.path, 'Pulling took', Date.now() - pullStart, 'millis');
+    res.json({cash, stocks});
+});
 
 const makeWhere = (queryParams, extra = []) => {
     const where = [
@@ -66,12 +64,8 @@ const makeWhere = (queryParams, extra = []) => {
 
     return where.length
         ? {
-              query: `WHERE ${where
-                  .map((each) => each.query || each)
-                  .join(' AND ')}`,
-              replacements: flatten(
-                  where.map((each) => each.replacements || null),
-              ).filter(Boolean),
+              query: `WHERE ${where.map((each) => each.query || each).join(' AND ')}`,
+              replacements: flatten(where.map((each) => each.replacements || null)).filter(Boolean),
           }
         : {
               query: '',

@@ -11,6 +11,7 @@ type BalanceByLocationCash = {
 export type BalanceByLocationStock = {
     money_location_id: number;
     stock_units: number;
+    cost_basis: number;
     stock_id: number;
 };
 

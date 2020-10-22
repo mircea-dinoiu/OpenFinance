@@ -11,8 +11,9 @@ import {useAccounts} from 'state/accounts';
 import {useScreenSize} from 'state/hooks';
 import {useStocksMap} from 'state/stocks';
 import {Stock} from 'types';
+import {financialNum} from 'js/utils/numbers';
 
-type StockWithUnits = Stock & {units: number};
+type StockWithUnits = Stock & {units: number; accounts: number; costBasis: number};
 
 export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationStock[]}) => {
     const [account, setAccount] = useState('');
@@ -29,18 +30,26 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
 
     const filteredStockHoldings = stockHoldings.filter((sh) => !account || sh.money_location_id === Number(account));
     const stocksMap = useStocksMap();
-    const stockHoldingsById: Record<string, Stock & {units: number}> = filteredStockHoldings.reduce((acc, sh) => {
+    const stockHoldingsById: Record<string, StockWithUnits> = filteredStockHoldings.reduce((acc, sh) => {
         if (acc[sh.stock_id] === undefined) {
             acc[sh.stock_id] = {
                 ...stocksMap.get(sh.stock_id),
+                accounts: 0,
                 units: 0,
+                costBasis: 0,
             };
         }
 
+        acc[sh.stock_id].accounts += 1;
         acc[sh.stock_id].units += sh.stock_units;
+        acc[sh.stock_id].costBasis += sh.cost_basis;
 
         return acc;
     }, {});
+
+    Object.values(stockHoldingsById).forEach((sh) => {
+        sh.costBasis /= sh.accounts;
+    });
 
     return (
         <div className={cls.root}>
@@ -53,7 +62,11 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
             <div>
                 <BaseTable
                     data={Object.values(stockHoldingsById).filter((sh) => sh.units > 0)}
-                    columns={screenSize.isSmall ? [SymbolCol, TotalCol] : [SymbolCol, TotalCol, UnitsCol, PriceCol]}
+                    columns={
+                        screenSize.isSmall
+                            ? [SymbolCol, TotalCol]
+                            : [SymbolCol, TotalCol, UnitsCol, CostBasisCol, RoiCol, RoiPercCol, MarketPrice]
+                    }
                 />
             </div>
         </div>
@@ -76,13 +89,43 @@ const TotalCol: Column<StockWithUnits> = {
     ...numericColumnStyles,
 };
 
+const CostBasisCol: Column<StockWithUnits> = {
+    Header: 'Average Cost Basis',
+    id: 'costBasis',
+    accessor: (sh) => sh.costBasis,
+    Cell: ({value, original}) => {
+        return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+    },
+    ...numericColumnStyles,
+};
+
+const RoiCol: Column<StockWithUnits> = {
+    Header: 'Average ROI',
+    id: 'roi',
+    accessor: (sh) => ((sh.price - sh.costBasis) / sh.costBasis) * sh.price,
+    Cell: ({value, original}) => {
+        return <NumericValue colorize={true} currency={original.currency_id} value={value} />;
+    },
+    ...numericColumnStyles,
+};
+
+const RoiPercCol: Column<StockWithUnits> = {
+    Header: 'Average ROI%',
+    id: 'roiPerc',
+    accessor: (sh) => financialNum(((sh.price - sh.costBasis) / sh.costBasis) * 100),
+    Cell: ({value, original}) => {
+        return `${value}%`;
+    },
+    ...numericColumnStyles,
+};
+
 const UnitsCol: Column<StockWithUnits> = {
     Header: 'Units',
     accessor: 'units',
     ...numericColumnStyles,
 };
 
-const PriceCol: Column<StockWithUnits> = {
+const MarketPrice: Column<StockWithUnits> = {
     Header: 'Market Price',
     accessor: 'price',
     Cell: ({value, original}) => {
