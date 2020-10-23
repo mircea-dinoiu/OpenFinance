@@ -6,32 +6,33 @@ import {DateTimeColumn} from 'components/BaseTable/columns/DateTimeColumn';
 import {RepeatColumn} from 'components/BaseTable/columns/RepeatColumn';
 import {CategoriesFilter} from 'components/BaseTable/filters/CategoriesFilter';
 import {DescriptionFilter} from 'components/BaseTable/filters/DescriptionFilter';
+import {StockSymbolFilter} from 'components/BaseTable/filters/StockSymbolFilter';
 import {UsersFilter} from 'components/BaseTable/filters/UsersFilter';
 import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay';
 import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import {RatingDisplay} from 'components/transactions/cells/RatingDisplay';
 import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
+import {numericColumnStyles} from 'defs/styles';
 import * as React from 'react';
+import {useStocksMap} from 'state/stocks';
 
-export const makeTransactionsColumns = ({
-    updateRecords,
-}: {
-    updateRecords: UpdateRecords;
-}) => [
+export const makeTransactionsColumns = ({updateRecords}: {updateRecords: UpdateRecords}) => [
     AmountColumn,
     DescriptionColumn,
     DateTimeColumn,
     CategoriesColumn,
     AccountColumn,
     PersonsColumn,
+    RepeatColumn,
+    StockUnitsCol,
+    StockSymbolCol,
     {
         ...RatingColumn,
         getProps: () => ({updateRecords}),
     },
     WeightColumn,
     PricePerWeightColumn,
-    RepeatColumn,
 ];
 
 const DescriptionColumn = {
@@ -49,9 +50,7 @@ const CategoriesColumn = {
     Header: 'Categories',
     filterable: true,
     Filter: CategoriesFilter,
-    Cell: ({original: item}: {original: TransactionModel}) => (
-        <CategoriesDisplay item={item} />
-    ),
+    Cell: ({original: item}: {original: TransactionModel}) => <CategoriesDisplay item={item} />,
     accessor: 'categories',
     sortable: false,
     minWidth: 300,
@@ -59,9 +58,7 @@ const CategoriesColumn = {
 
 const PersonsColumn = {
     Header: 'Person(s)',
-    Cell: ({original: item}: {original: TransactionModel}) => (
-        <PersonsDisplay item={item} />
-    ),
+    Cell: ({original: item}: {original: TransactionModel}) => <PersonsDisplay item={item} />,
     Filter: UsersFilter,
     filterable: true,
     accessor: 'users',
@@ -86,12 +83,7 @@ const RatingColumn = {
                 updateRecords: UpdateRecords;
             };
         };
-    }) => (
-        <RatingDisplay
-            item={item}
-            updateRecords={columnProps.rest.updateRecords}
-        />
-    ),
+    }) => <RatingDisplay item={item} updateRecords={columnProps.rest.updateRecords} />,
     accessor: 'favorite',
     //
     width: 120,
@@ -102,9 +94,7 @@ const RatingColumn = {
 const WeightColumn = {
     Header: 'Weight (g)',
     filterable: true,
-    Cell: ({original: item}: {original: TransactionModel}) => (
-        <WeightDisplay item={item} />
-    ),
+    Cell: ({original: item}: {original: TransactionModel}) => <WeightDisplay item={item} />,
     accessor: 'weight',
     //
     width: 110,
@@ -115,12 +105,30 @@ const WeightColumn = {
 const PricePerWeightColumn = {
     Header: 'Price/g',
     sortable: true,
-    Cell: ({original: item}: {original: TransactionModel}) => (
-        <PricePerGDisplay item={item} />
-    ),
+    Cell: ({original: item}: {original: TransactionModel}) => <PricePerGDisplay item={item} />,
     accessor: 'sum_per_weight',
     //
     width: 100,
     headerStyle: {textAlign: 'center'},
     style: {textAlign: 'right'},
-}
+};
+
+const StockUnitsCol = {
+    Header: 'Stock Units',
+    sortable: true,
+    accessor: 'stock_units',
+    ...numericColumnStyles,
+};
+
+const StockSymbolCol = {
+    Header: 'Stock Symbol',
+    accessor: 'stock_id',
+    Filter: StockSymbolFilter,
+    filterable: true,
+    Cell: ({original: item}: {original: TransactionModel}) => {
+        const stocksMap = useStocksMap();
+
+        return item.stock_id ? stocksMap.get(item.stock_id)?.symbol : null;
+    },
+    ...numericColumnStyles,
+};

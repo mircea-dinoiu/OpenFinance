@@ -17,37 +17,14 @@ const {
 module.exports = {
     async list(req) {
         const {query} = req;
-        const input = pick(
-            query,
-            'start_date',
-            'end_date',
-            'filters',
-            'page',
-            'limit',
-            'sorters',
-        );
+        const input = pick(query, 'start_date', 'end_date', 'filters', 'page', 'limit', 'sorters');
         const rules = {
-            start_date: [
-                'sometimes',
-                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
-            ],
-            end_date: [
-                'isRequired',
-                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
-            ],
-            filters: [
-                'sometimes',
-                [
-                    'isTableFilters',
-                    [...Object.keys(Model.attributes), 'categories', 'users'],
-                ],
-            ],
+            start_date: ['sometimes', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
+            end_date: ['isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
+            filters: ['sometimes', ['isTableFilters', [...Object.keys(Model.attributes), 'categories', 'users']]],
             page: ['sometimes', 'isInt'],
             limit: ['sometimes', 'isInt'],
-            sorters: [
-                'sometimes',
-                ['isTableSorters', Model, ['money_location.currency_id']],
-            ],
+            sorters: ['sometimes', ['isTableSorters', Model, ['money_location.currency_id']]],
         };
         const validator = new Validator(input, rules, {req});
 
@@ -70,29 +47,17 @@ module.exports = {
                         break;
                     case 'categories':
                         having.push(
-                            mapGroupConcatToHavingSQL(
-                                value,
-                                'categoryIds',
-                                'categories.category_expense.category_id',
-                            ),
+                            mapGroupConcatToHavingSQL(value, 'categoryIds', 'categories.category_expense.category_id'),
                         );
                         break;
                     case 'users':
-                        having.push(
-                            mapGroupConcatToHavingSQL(
-                                value,
-                                'userIds',
-                                'users.expense_user.user_id',
-                            ),
-                        );
+                        having.push(mapGroupConcatToHavingSQL(value, 'userIds', 'users.expense_user.user_id'));
                         break;
                     case 'money_location_id':
-                        where.push(
-                            mapEntityFilterToWhereSQL(
-                                value,
-                                'money_location_id',
-                            ),
-                        );
+                        where.push(mapEntityFilterToWhereSQL(value, 'money_location_id'));
+                        break;
+                    case 'stock_id':
+                        where.push(mapEntityFilterToWhereSQL(value, 'stock_id'));
                         break;
                     default:
                         where.push({
@@ -116,8 +81,7 @@ module.exports = {
 
             const sorters = sanitizeSorters(input.sorters);
 
-            queryOpts.order =
-                mapSortersToSQL(sorters) + mapInputToLimitSQL(input);
+            queryOpts.order = mapSortersToSQL(sorters) + mapInputToLimitSQL(input);
 
             return {
                 error: false,

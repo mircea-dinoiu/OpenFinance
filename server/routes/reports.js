@@ -33,7 +33,7 @@ router.get('/balance-by-location', [validateAuth, validateProject], async (req, 
         sql.query(
             `SELECT 
                 money_location_id, 
-                AVG(expenses.sum / stock_units) as cost_basis,
+                SUM(expenses.sum) as cost_basis,
                 SUM(stock_units) as stock_units,
                 stock_id
                 FROM expenses ${marketWhere.query}

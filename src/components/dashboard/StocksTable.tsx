@@ -47,10 +47,6 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
         return acc;
     }, {});
 
-    Object.values(stockHoldingsById).forEach((sh) => {
-        sh.costBasis /= sh.accounts;
-    });
-
     return (
         <div className={cls.root}>
             <RadioGroup value={account} onChange={(e) => setAccount(e.target.value)}>
@@ -65,7 +61,16 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
                     columns={
                         screenSize.isSmall
                             ? [SymbolCol, TotalCol]
-                            : [SymbolCol, TotalCol, UnitsCol, CostBasisCol, RoiCol, RoiPercCol, MarketPrice]
+                            : [
+                                  SymbolCol,
+                                  TotalCol,
+                                  UnitsCol,
+                                  CostPerShareCol,
+                                  TotalCostCol,
+                                  MarketPrice,
+                                  RoiCol,
+                                  RoiPercCol,
+                              ]
                     }
                 />
             </div>
@@ -89,9 +94,19 @@ const TotalCol: Column<StockWithUnits> = {
     ...numericColumnStyles,
 };
 
-const CostBasisCol: Column<StockWithUnits> = {
-    Header: 'Average Cost Basis',
-    id: 'costBasis',
+const CostPerShareCol: Column<StockWithUnits> = {
+    Header: 'Cost Per Share',
+    id: 'costPerShare',
+    accessor: (sh) => sh.costBasis / sh.units,
+    Cell: ({value, original}) => {
+        return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+    },
+    ...numericColumnStyles,
+};
+
+const TotalCostCol: Column<StockWithUnits> = {
+    Header: 'Total Cost',
+    id: 'costTotal',
     accessor: (sh) => sh.costBasis,
     Cell: ({value, original}) => {
         return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
@@ -100,9 +115,9 @@ const CostBasisCol: Column<StockWithUnits> = {
 };
 
 const RoiCol: Column<StockWithUnits> = {
-    Header: 'Average ROI',
+    Header: 'ROI',
     id: 'roi',
-    accessor: (sh) => ((sh.price - sh.costBasis) / sh.costBasis) * sh.price,
+    accessor: (sh) => sh.price * sh.units - sh.costBasis,
     Cell: ({value, original}) => {
         return <NumericValue colorize={true} currency={original.currency_id} value={value} />;
     },
@@ -110,9 +125,13 @@ const RoiCol: Column<StockWithUnits> = {
 };
 
 const RoiPercCol: Column<StockWithUnits> = {
-    Header: 'Average ROI%',
+    Header: 'ROI%',
     id: 'roiPerc',
-    accessor: (sh) => financialNum(((sh.price - sh.costBasis) / sh.costBasis) * 100),
+    accessor: (sh) => {
+        const marketPrice = sh.price * sh.units;
+
+        return financialNum(((marketPrice - sh.costBasis) / sh.costBasis) * 100);
+    },
     Cell: ({value, original}) => {
         return `${value}%`;
     },

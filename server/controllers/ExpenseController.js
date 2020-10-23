@@ -1,10 +1,4 @@
-const {
-    Expense: Model,
-    User,
-    Stock,
-    MoneyLocation,
-    Category,
-} = require('../models');
+const {Expense: Model, User, Stock, MoneyLocation, Category} = require('../models');
 const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
 const {pickOwnProperties} = require('../helpers');
@@ -28,11 +22,7 @@ module.exports = class ExpenseController extends BaseController {
             notes: ['sometimes', 'isString'],
             favorite: ['sometimes', 'isInt'],
             hidden: ['sometimes', 'isBool'],
-            created_at: [
-                'sometimes',
-                'isRequired',
-                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
-            ],
+            created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
             money_location_id: ['sometimes', ['isId', MoneyLocation]],
             status: ['sometimes', 'isRequired', 'isStatusValue'],
             users: ['sometimes', 'isRequired', ['isPercentageObject', User]],
@@ -53,11 +43,7 @@ module.exports = class ExpenseController extends BaseController {
             favorite: ['sometimes', 'isInt'],
             hidden: ['sometimes', 'isBool'],
             users: ['isRequired', ['isPercentageObject', User]],
-            created_at: [
-                'sometimes',
-                'isRequired',
-                ['isDateFormat', defs.FULL_DATE_FORMAT_TZ],
-            ],
+            created_at: ['sometimes', 'isRequired', ['isDateFormat', defs.FULL_DATE_FORMAT_TZ]],
             money_location_id: ['isRequired', ['isId', MoneyLocation]],
             status: ['sometimes', 'isRequired', 'isStatusValue'],
             fitid: ['sometimes', 'isRequired', 'isString'],
@@ -78,15 +64,12 @@ module.exports = class ExpenseController extends BaseController {
     }
 
     getUsers(req) {
-        return sql.query(
-            `select user_id as id from project_user where project_id = :projectId`,
-            {
-                replacements: {
-                    projectId: req.projectId,
-                },
-                type: QueryTypes.SELECT,
+        return sql.query(`select user_id as id from project_user where project_id = :projectId`, {
+            replacements: {
+                projectId: req.projectId,
             },
-        );
+            type: QueryTypes.SELECT,
+        });
     }
 
     async createRelations({record, model, req, cleanup = false}) {
@@ -96,46 +79,29 @@ module.exports = class ExpenseController extends BaseController {
         for (const m of allModels) {
             if (record.hasOwnProperty('categories')) {
                 if (cleanup) {
-                    await sql.query(
-                        'DELETE FROM category_expense WHERE expense_id = ?',
-                        {
-                            replacements: [m.id],
-                        },
-                    );
+                    await sql.query('DELETE FROM category_expense WHERE expense_id = ?', {
+                        replacements: [m.id],
+                    });
                 }
 
                 for (const id of record.categories) {
-                    await sql.query(
-                        'INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)',
-                        {
-                            replacements: [id, m.id],
-                        },
-                    );
+                    await sql.query('INSERT INTO category_expense (category_id, expense_id) VALUES (?, ?)', {
+                        replacements: [id, m.id],
+                    });
                 }
             }
 
             if (record.hasOwnProperty('users')) {
                 if (cleanup) {
-                    await sql.query(
-                        'DELETE FROM expense_user WHERE expense_id = ?',
-                        {
-                            replacements: [m.id],
-                        },
-                    );
+                    await sql.query('DELETE FROM expense_user WHERE expense_id = ?', {
+                        replacements: [m.id],
+                    });
                 }
 
                 for (const user of users) {
-                    await sql.query(
-                        'INSERT INTO expense_user (user_id, expense_id, blame, seen) VALUES (?, ?, ?, ?)',
-                        {
-                            replacements: [
-                                user.id,
-                                m.id,
-                                record.users[user.id] || 0,
-                                user.id === req.user.id,
-                            ],
-                        },
-                    );
+                    await sql.query('INSERT INTO expense_user (user_id, expense_id, blame, seen) VALUES (?, ?, ?, ?)', {
+                        replacements: [user.id, m.id, record.users[user.id] || 0, user.id === req.user.id],
+                    });
                 }
             }
         }
@@ -170,12 +136,9 @@ module.exports = class ExpenseController extends BaseController {
                 promises.push(this.Model.create(payload));
             }
         } else if (cleanup) {
-            await sql.query(
-                'UPDATE expenses SET repeat_link_id = NULL WHERE repeat_link_id = ?',
-                {
-                    replacements: [model.id],
-                },
-            );
+            await sql.query('UPDATE expenses SET repeat_link_id = NULL WHERE repeat_link_id = ?', {
+                replacements: [model.id],
+            });
         }
 
         return Promise.all(promises);
@@ -210,6 +173,11 @@ module.exports = class ExpenseController extends BaseController {
             values.repeat_occurrences = 0;
         } else if (values.repeat_occurrences === 0) {
             values.repeat = null;
+        }
+
+        if (!values.stock_units) {
+            values.stock_units = null;
+            values.stock_id = null;
         }
 
         if (record.hasOwnProperty('status') && values.status == null) {
