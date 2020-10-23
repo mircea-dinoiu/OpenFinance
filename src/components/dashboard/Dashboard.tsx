@@ -251,9 +251,9 @@ const HeaderWithTotals = ({title, totals}: {title: string; totals: Record<string
         title={title}
         style={{paddingLeft: 0}}
         subheader={Object.entries(totals).map(([currencyId, total]) => (
-            <span style={{fontSize: 24}}>
+            <div style={{fontSize: 24}}>
                 <NumericValue currency={Number(currencyId)} value={total} />{' '}
-            </span>
+            </div>
         ))}
     />
 );

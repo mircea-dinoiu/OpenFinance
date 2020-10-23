@@ -5,21 +5,24 @@ import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {Column} from 'react-table-6';
 
-const Total = <T extends {_original: CashAccount}>({data, id}: {data: Array<T>; id: string}) => {
+const makeTotalFooter = ({colorize}: {colorize?: boolean} = {}) => ({
+    data,
+    column,
+}: {
+    data: {_original: CashAccount}[];
+    column: {id: string};
+}) => {
     return data[0] ? (
         <>
             <strong>Total: </strong>
             <NumericValue
+                colorize={colorize}
                 // eslint-disable-next-line no-underscore-dangle
                 currency={Number(data[0]._original.currency_id)}
-                value={data.reduce((acc, row) => acc + row[id], 0)}
+                value={data.reduce((acc, row) => acc + row[column.id], 0)}
             />
         </>
     ) : null;
-};
-
-const TotalFooter = ({data, column}: {data: {_original: CashAccount}[]; column: {id: string}}) => {
-    return <Total data={data} id={column.id} />;
 };
 
 export const NameCol: Column<CashAccount> = {
@@ -32,7 +35,7 @@ export const TotalCol: Column<CashAccount> = {
     Header: 'Value',
     accessor: 'total',
     Cell: ({original: a}: {original: CashAccount}) => <NumericValue currency={a.currency_id} value={a.total} />,
-    Footer: TotalFooter,
+    Footer: makeTotalFooter(),
     ...numericColumnStyles,
 };
 export const CostBasisCol: Column<BrokerageAccount> = {
@@ -41,7 +44,7 @@ export const CostBasisCol: Column<BrokerageAccount> = {
     Cell: ({original: a}: {original: BrokerageAccount}) => (
         <NumericValue currency={a.currency_id} value={a.costBasis} />
     ),
-    Footer: TotalFooter,
+    Footer: makeTotalFooter(),
     ...numericColumnStyles,
 };
 export const RoiCol: Column<BrokerageAccount> = {
@@ -49,21 +52,27 @@ export const RoiCol: Column<BrokerageAccount> = {
     id: 'roi',
     accessor: (a) => a.total - a.costBasis,
     Cell: ({original: a, value}: {original: BrokerageAccount; value: number}) => (
-        <NumericValue currency={a.currency_id} value={value} />
+        <NumericValue colorize={true} currency={a.currency_id} value={value} />
     ),
-    Footer: TotalFooter,
+    Footer: makeTotalFooter({colorize: true}),
     ...numericColumnStyles,
 };
 export const RoiPercCol: Column<BrokerageAccount> = {
     Header: 'ROI%',
     id: 'roiPerc',
     accessor: (a) => financialNum(((a.total - a.costBasis) / a.costBasis) * 100),
-    Cell: ({original: a, value}: {original: BrokerageAccount; value: number}) => <strong>{value}%</strong>,
+    Cell: ({original: a, value}: {original: BrokerageAccount; value: number}) => (
+        <NumericValue colorize={true} value={value} after="%" />
+    ),
     Footer: ({data, column}: {data: {_original: CashAccount}[]; column: {id: string}}) => {
         return (
             <>
                 <strong>Average: </strong>
-                {financialNum(data.reduce((acc, row) => acc + row[column.id], 0) / data.length)}%
+                <NumericValue
+                    colorize={true}
+                    value={financialNum(data.reduce((acc, row) => acc + row[column.id], 0) / data.length)}
+                    after="%"
+                />
             </>
         );
     },

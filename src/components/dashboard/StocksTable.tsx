@@ -63,10 +63,10 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
                             ? [SymbolCol, TotalCol]
                             : [
                                   SymbolCol,
-                                  TotalCol,
                                   UnitsCol,
-                                  CostPerShareCol,
+                                  TotalCol,
                                   TotalCostCol,
+                                  CostPerShareCol,
                                   MarketPrice,
                                   RoiCol,
                                   RoiPercCol,
@@ -132,15 +132,14 @@ const RoiPercCol: Column<StockWithUnits> = {
 
         return financialNum(((marketPrice - sh.costBasis) / sh.costBasis) * 100);
     },
-    Cell: ({value, original}) => {
-        return `${value}%`;
-    },
+    Cell: ({value, original}) => <NumericValue colorize={true} value={value} after="%" />,
     ...numericColumnStyles,
 };
 
 const UnitsCol: Column<StockWithUnits> = {
-    Header: 'Units',
+    Header: 'Quantity',
     accessor: 'units',
+    Cell: ({value, original}) => <NumericValue value={value} />,
     ...numericColumnStyles,
 };
 

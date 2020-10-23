@@ -61,60 +61,66 @@ const useStyles = makeStyles({
 export const NumericValue = ({
     currency: currencyFromProps,
     value,
-    colorize = true,
+    colorize = false,
     tooltip: tooltipFromProps,
+    before,
+    after,
 }: {
     tooltip?: ReactNode;
-    currency: string | number;
+    currency?: string | number;
     value: number;
     colorize?: boolean;
+    before?: ReactNode;
+    after?: ReactNode;
 }) => {
     const cls = useStyles();
     const currencies = useCurrenciesMap();
     const currency = typeof currencyFromProps === 'number' ? currencies[currencyFromProps].iso_code : currencyFromProps;
     const copyText = useCopyTextWithConfirmation();
     const [privacyToggle] = usePrivacyToggle();
+    const valueToDisplay = currency ? formatCurrency(value, currency) : value;
     const inner = (
         <span
-            className={colorize ? clsx(cls.container, value > 0 && cls.positive, value < 0 && cls.negative) : undefined}
+            className={
+                colorize && !privacyToggle
+                    ? clsx(cls.container, value > 0 && cls.positive, value < 0 && cls.negative)
+                    : undefined
+            }
         >
-            <strong
+            <span
                 className={cls.value}
                 onClick={(e) => {
                     e.stopPropagation();
                     copyText(value);
                 }}
             >
-                {privacyToggle ? <PrivateValue /> : formatCurrency(value, currency)}
-            </strong>
+                {privacyToggle ? (
+                    <PrivateValue />
+                ) : (
+                    <>
+                        {before}
+                        {valueToDisplay}
+                        {after}
+                    </>
+                )}
+            </span>
         </span>
     );
 
-    const found = Object.values(currencies).find((each) => each.iso_code === currency);
-    const tooltip = (
-        <>
-            <div key={currency}>{formatCurrency(value, currency)}</div>
-            {Object.entries(found ? found.rates : {}).map(([rateISO, rateMulti]) => (
-                <div key={rateISO}>{formatCurrency(value * rateMulti, rateISO)}</div>
-            ))}
-        </>
-    );
+    if (!tooltipFromProps) {
+        return inner;
+    }
 
     return (
         <Tooltip
             tooltip={
-                tooltipFromProps ? (
-                    <ul className={cls.tooltipParts}>
-                        {React.Children.map(tooltipFromProps, (child, key) => (
-                            <li className={cls.tooltipPart} key={key}>
-                                {child}
-                            </li>
-                        ))}
-                        <li className={cls.tooltipPart}>{tooltip}</li>
-                    </ul>
-                ) : (
-                    tooltip
-                )
+                <ul className={cls.tooltipParts}>
+                    {React.Children.map(tooltipFromProps, (child, key) => (
+                        <li className={cls.tooltipPart} key={key}>
+                            {child}
+                        </li>
+                    ))}
+                </ul>
             }
         >
             {inner}
