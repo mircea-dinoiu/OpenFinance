@@ -5,7 +5,7 @@ import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {Column} from 'react-table-6';
 
-const makeTotalFooter = ({colorize}: {colorize?: boolean} = {}) => ({
+export const makeTotalFooter = ({colorize}: {colorize?: boolean} = {}) => ({
     data,
     column,
 }: {

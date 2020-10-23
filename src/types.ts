@@ -48,6 +48,7 @@ export type Account = {
     name: string;
     status: AccountStatus;
     type: AccountType;
+    credit_limit: number | null;
 };
 
 export type Accounts = Account[];

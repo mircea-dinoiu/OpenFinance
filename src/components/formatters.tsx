@@ -87,7 +87,7 @@ export const NumericValue = ({
                     : undefined
             }
         >
-            <span
+            <strong
                 className={cls.value}
                 onClick={(e) => {
                     e.stopPropagation();
@@ -103,7 +103,7 @@ export const NumericValue = ({
                         {after}
                     </>
                 )}
-            </span>
+            </strong>
         </span>
     );
 

@@ -7,6 +7,7 @@ import {Alert, AlertTitle} from '@material-ui/lab';
 import {BaseTable} from 'components/BaseTable';
 import {CategoriesTab} from 'components/dashboard/CategoriesTab';
 import {CostBasisCol, NameCol, RoiCol, RoiPercCol, TotalCol} from 'components/dashboard/columns';
+import {BalanceCol} from 'components/dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
 import {StocksTable} from 'components/dashboard/StocksTable';
 import {useDashboardQueryParams} from 'components/dashboard/useDashboardQueryParams';
@@ -171,7 +172,7 @@ export const Dashboard = () => {
                                         }
                                     />
                                     {Object.values(groupBy(creditWithTotal, 'currency_id')).map((data) => (
-                                        <BaseTable className={cls.table} data={data} columns={[NameCol, TotalCol]} />
+                                        <BaseTable className={cls.table} data={data} columns={[NameCol, BalanceCol]} />
                                     ))}
                                 </Paper>
                             )}
