@@ -19,10 +19,12 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
     const [account, setAccount] = useState('');
     const accounts = useAccounts();
     const accountOptions = _.sortBy(
-        _.uniqBy(stockHoldings, 'money_location_id').map((sh) => ({
-            value: String(sh.money_location_id),
-            label: accounts.find((a) => a.id === sh.money_location_id)?.name ?? '',
-        })),
+        _.uniqBy(stockHoldings, 'money_location_id')
+            .filter((sh) => sh.stock_units !== 0)
+            .map((sh) => ({
+                value: String(sh.money_location_id),
+                label: accounts.find((a) => a.id === sh.money_location_id)?.name ?? '',
+            })),
         'label',
     );
     const cls = useStyles();
