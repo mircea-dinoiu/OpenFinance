@@ -175,7 +175,10 @@ module.exports = class ExpenseController extends BaseController {
             values.repeat = null;
         }
 
-        if (!values.stock_units) {
+        if (record.hasOwnProperty('stock_units') && !values.stock_units) {
+            values.stock_units = null;
+            values.stock_id = null;
+        } else if (record.hasOwnProperty('stock_id') && !values.stock_id) {
             values.stock_units = null;
             values.stock_id = null;
         }
