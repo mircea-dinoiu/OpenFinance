@@ -4,6 +4,7 @@ import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
 import {BalanceByLocationStock} from 'components/transactions/types';
 import {firstColumnStyles, numericColumnStyles, ScreenQuery, spacingLarge, spacingNormal} from 'defs/styles';
+import {financialNum} from 'js/utils/numbers';
 import _ from 'lodash';
 import React, {useState} from 'react';
 import {Column} from 'react-table-6';
@@ -11,7 +12,6 @@ import {useAccounts} from 'state/accounts';
 import {useScreenSize} from 'state/hooks';
 import {useStocksMap} from 'state/stocks';
 import {Stock} from 'types';
-import {financialNum} from 'js/utils/numbers';
 
 type StockWithUnits = Stock & {units: number; accounts: number; costBasis: number};
 
@@ -67,14 +67,15 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
                     <BaseTable
                         data={data}
                         className={cls.table}
+                        defaultSorted={[{id: 'value', desc: true}]}
                         columns={
                             screenSize.isSmall
-                                ? [SymbolCol, TotalCol]
+                                ? [SymbolCol, ValueCol]
                                 : [
                                       SymbolCol,
                                       UnitsCol,
-                                      TotalCol,
-                                      TotalCostCol,
+                                      ValueCol,
+                                      CostCol,
                                       makePercCol(data.reduce((acc, r) => acc + r.units * r.price, 0)),
                                       CostPerShareCol,
                                       MarketPrice,
@@ -95,7 +96,7 @@ const SymbolCol: Column<StockWithUnits> = {
     ...firstColumnStyles,
 };
 
-const TotalCol: Column<StockWithUnits> = {
+const ValueCol: Column<StockWithUnits> = {
     Header: 'Value',
     id: 'value',
     accessor: (sh) => sh.units * sh.price,
@@ -124,7 +125,7 @@ const CostPerShareCol: Column<StockWithUnits> = {
     ...numericColumnStyles,
 };
 
-const TotalCostCol: Column<StockWithUnits> = {
+const CostCol: Column<StockWithUnits> = {
     Header: 'Total Cost',
     id: 'costTotal',
     accessor: (sh) => sh.costBasis,

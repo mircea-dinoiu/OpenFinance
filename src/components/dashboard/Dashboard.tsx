@@ -6,7 +6,7 @@ import IconStock from '@material-ui/icons/TrendingUp';
 import {Alert, AlertTitle} from '@material-ui/lab';
 import {BaseTable} from 'components/BaseTable';
 import {CategoriesTab} from 'components/dashboard/CategoriesTab';
-import {CostBasisCol, NameCol, RoiCol, RoiPercCol, TotalCol} from 'components/dashboard/columns';
+import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'components/dashboard/columns';
 import {BalanceCol} from 'components/dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
 import {StocksTable} from 'components/dashboard/StocksTable';
@@ -156,7 +156,12 @@ export const Dashboard = () => {
                                         }
                                     />
                                     {Object.values(groupBy(cashWithTotal, 'currency_id')).map((data) => (
-                                        <BaseTable className={cls.table} data={data} columns={[NameCol, TotalCol]} />
+                                        <BaseTable
+                                            defaultSorted={[{id: 'value', desc: true}]}
+                                            className={cls.table}
+                                            data={data}
+                                            columns={[NameCol, ValueCol]}
+                                        />
                                     ))}
                                 </Paper>
                             )}
@@ -172,7 +177,12 @@ export const Dashboard = () => {
                                         }
                                     />
                                     {Object.values(groupBy(creditWithTotal, 'currency_id')).map((data) => (
-                                        <BaseTable className={cls.table} data={data} columns={[NameCol, BalanceCol]} />
+                                        <BaseTable
+                                            defaultSorted={[{id: 'balance', desc: true}]}
+                                            className={cls.table}
+                                            data={data}
+                                            columns={[NameCol, BalanceCol]}
+                                        />
                                     ))}
                                 </Paper>
                             )}
@@ -191,12 +201,13 @@ export const Dashboard = () => {
                                     />
                                     {Object.values(groupBy(brokerageWithTotal, 'currency_id')).map((data) => (
                                         <BaseTable<BrokerageAccount>
+                                            defaultSorted={[{id: 'value', desc: true}]}
                                             className={cls.table}
                                             data={data}
                                             columns={
                                                 screenSize.isSmall
-                                                    ? [NameCol, TotalCol]
-                                                    : [NameCol, TotalCol, CostBasisCol, RoiCol, RoiPercCol]
+                                                    ? [NameCol, ValueCol]
+                                                    : [NameCol, ValueCol, CostBasisCol, RoiCol, RoiPercCol]
                                             }
                                         />
                                     ))}

@@ -31,8 +31,9 @@ export const NameCol: Column<CashAccount> = {
     ...firstColumnStyles,
 };
 
-export const TotalCol: Column<CashAccount> = {
+export const ValueCol: Column<CashAccount> = {
     Header: 'Value',
+    id: 'value',
     accessor: 'total',
     Cell: ({original: a}: {original: CashAccount}) => <NumericValue currency={a.currency_id} value={a.total} />,
     Footer: makeTotalFooter(),
