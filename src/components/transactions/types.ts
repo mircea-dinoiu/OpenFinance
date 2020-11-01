@@ -13,6 +13,7 @@ export type BalanceByLocationStock = {
     stock_units: number;
     cost_basis: number;
     stock_id: number;
+    currency_id: number;
 };
 
 export type SummaryModel = {

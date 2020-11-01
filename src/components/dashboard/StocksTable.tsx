@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
 import {BalanceByLocationStock} from 'components/transactions/types';
-import {firstColumnStyles, numericColumnStyles, ScreenQuery, spacingNormal} from 'defs/styles';
+import {firstColumnStyles, numericColumnStyles, ScreenQuery, spacingLarge, spacingNormal} from 'defs/styles';
 import _ from 'lodash';
 import React, {useState} from 'react';
 import {Column} from 'react-table-6';
@@ -58,23 +58,32 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
                 ))}
             </RadioGroup>
             <div>
-                <BaseTable
-                    data={Object.values(stockHoldingsById).filter((sh) => sh.units > 0)}
-                    columns={
-                        screenSize.isSmall
-                            ? [SymbolCol, TotalCol]
-                            : [
-                                  SymbolCol,
-                                  UnitsCol,
-                                  TotalCol,
-                                  TotalCostCol,
-                                  CostPerShareCol,
-                                  MarketPrice,
-                                  RoiCol,
-                                  RoiPercCol,
-                              ]
-                    }
-                />
+                {Object.values(
+                    _.groupBy(
+                        Object.values(stockHoldingsById).filter((sh) => sh.units > 0),
+                        'currency_id',
+                    ),
+                ).map((data) => (
+                    <BaseTable
+                        data={data}
+                        className={cls.table}
+                        columns={
+                            screenSize.isSmall
+                                ? [SymbolCol, TotalCol]
+                                : [
+                                      SymbolCol,
+                                      UnitsCol,
+                                      TotalCol,
+                                      TotalCostCol,
+                                      makePercCol(data.reduce((acc, r) => acc + r.units * r.price, 0)),
+                                      CostPerShareCol,
+                                      MarketPrice,
+                                      RoiCol,
+                                      RoiPercCol,
+                                  ]
+                        }
+                    />
+                ))}
             </div>
         </div>
     );
@@ -95,6 +104,15 @@ const TotalCol: Column<StockWithUnits> = {
     },
     ...numericColumnStyles,
 };
+const makePercCol: (total: number) => Column<StockWithUnits> = _.memoize((total) => ({
+    Header: '% of Portfolio',
+    id: 'percPortfolio',
+    accessor: (sh) => ((sh.units * sh.price) / total) * 100,
+    Cell: ({value}) => {
+        return <NumericValue colorize={false} value={financialNum(value)} after="%" />;
+    },
+    ...numericColumnStyles,
+}));
 
 const CostPerShareCol: Column<StockWithUnits> = {
     Header: 'Cost Per Share',
@@ -161,6 +179,11 @@ const useStyles = makeStyles({
         gridGap: spacingNormal,
         [ScreenQuery.SMALL]: {
             gridTemplateColumns: '1fr',
+        },
+    },
+    table: {
+        '&:not(:last-child)': {
+            marginBottom: spacingLarge,
         },
     },
 });
