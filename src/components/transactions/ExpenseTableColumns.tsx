@@ -26,8 +26,9 @@ export const makeTransactionsColumns = ({updateRecords}: {updateRecords: UpdateR
     AccountColumn,
     PersonsColumn,
     RepeatColumn,
-    StockUnitsCol,
     StockSymbolCol,
+    StockUnitsCol,
+    StockPriceCol,
     {
         ...RatingColumn,
         getProps: () => ({updateRecords}),
@@ -118,15 +119,19 @@ const StockUnitsCol = {
     Header: 'Stock Units',
     sortable: true,
     accessor: 'stock_units',
+    ...numericColumnStyles,
+};
+
+const StockPriceCol = {
+    Header: 'Stock Price',
+    sortable: false,
+    id: 'stock_price',
     Cell: ({original: transaction}: {original: TransactionModel}) =>
         transaction.stock_units ? (
-            <>
-                {transaction.stock_units} @{' '}
-                <NumericValue
-                    value={transaction.sum / transaction.stock_units}
-                    currency={transaction.money_location.currency_id}
-                />
-            </>
+            <NumericValue
+                value={transaction.sum / transaction.stock_units}
+                currency={transaction.money_location.currency_id}
+            />
         ) : null,
     ...numericColumnStyles,
 };
