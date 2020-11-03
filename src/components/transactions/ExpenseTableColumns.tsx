@@ -8,6 +8,7 @@ import {CategoriesFilter} from 'components/BaseTable/filters/CategoriesFilter';
 import {DescriptionFilter} from 'components/BaseTable/filters/DescriptionFilter';
 import {StockSymbolFilter} from 'components/BaseTable/filters/StockSymbolFilter';
 import {UsersFilter} from 'components/BaseTable/filters/UsersFilter';
+import {NumericValue} from 'components/formatters';
 import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay';
 import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import {RatingDisplay} from 'components/transactions/cells/RatingDisplay';
@@ -117,6 +118,16 @@ const StockUnitsCol = {
     Header: 'Stock Units',
     sortable: true,
     accessor: 'stock_units',
+    Cell: ({original: transaction}: {original: TransactionModel}) =>
+        transaction.stock_units ? (
+            <>
+                {transaction.stock_units} @{' '}
+                <NumericValue
+                    value={transaction.sum / transaction.stock_units}
+                    currency={transaction.money_location.currency_id}
+                />
+            </>
+        ) : null,
     ...numericColumnStyles,
 };
 
