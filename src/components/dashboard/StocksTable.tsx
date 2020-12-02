@@ -18,15 +18,19 @@ type StockWithUnits = Stock & {units: number; accounts: number; costBasis: numbe
 export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationStock[]}) => {
     const [account, setAccount] = useState('');
     const accounts = useAccounts();
-    const accountOptions = _.sortBy(
-        _.uniqBy(stockHoldings, 'money_location_id')
-            .filter((sh) => sh.stock_units !== 0)
-            .map((sh) => ({
-                value: String(sh.money_location_id),
-                label: accounts.find((a) => a.id === sh.money_location_id)?.name ?? '',
-            })),
-        'label',
+    const accountOptions = _.uniqBy(
+        _.sortBy(
+            stockHoldings
+                .filter((sh) => sh.stock_units !== 0)
+                .map((sh) => ({
+                    value: String(sh.money_location_id),
+                    label: accounts.find((a) => a.id === sh.money_location_id)?.name ?? '',
+                })),
+            'label',
+        ),
+        'value',
     );
+
     const cls = useStyles();
     const screenSize = useScreenSize();
 
