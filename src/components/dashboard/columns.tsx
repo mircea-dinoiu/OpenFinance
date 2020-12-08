@@ -65,15 +65,14 @@ export const RoiPercCol: Column<BrokerageAccount> = {
     Cell: ({original: a, value}: {original: BrokerageAccount; value: number}) => (
         <NumericValue colorize={true} value={value} after="%" />
     ),
-    Footer: ({data, column}: {data: {_original: CashAccount}[]; column: {id: string}}) => {
+    Footer: ({data, column}: {data: {_original: BrokerageAccount}[]; column: {id: string}}) => {
+        const costBasis = data.reduce((acc, row) => acc + row._original.costBasis, 0);
+        const total = data.reduce((acc, row) => acc + row._original.total, 0);
+
         return (
             <>
-                <strong>Average: </strong>
-                <NumericValue
-                    colorize={true}
-                    value={financialNum(data.reduce((acc, row) => acc + row[column.id], 0) / data.length)}
-                    after="%"
-                />
+                <strong>Total: </strong>
+                <NumericValue colorize={true} value={financialNum(((total - costBasis) / costBasis) * 100)} after="%" />
             </>
         );
     },

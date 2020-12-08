@@ -5,7 +5,7 @@
         "no-unused-vars": "error",
         "prefer-const": "error",
         "one-var": ["error", "never"],
-        "no-underscore-dangle": ["error", {"allowAfterThis": true}],
+        "no-underscore-dangle": ["warn", {"allowAfterThis": true}],
         "max-statements-per-line": ["error", {"max": 1}],
         "camelcase": ["warn", {"properties": "never"}],
         "lines-around-directive": [
