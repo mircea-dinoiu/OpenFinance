@@ -28,12 +28,7 @@ import {TransactionStockFields} from 'components/transactions/TransactionStockFi
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {RepeatOptions} from 'defs/repeatOptions';
-import {
-    gridGap,
-    screenQuerySmall,
-    spacingLarge,
-    spacingSmall,
-} from 'defs/styles';
+import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
@@ -41,17 +36,10 @@ import {sortBy, groupBy, startCase} from 'lodash';
 
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {AccountStatus} from 'state/accounts';
+import {AccountStatus, AccountType} from 'state/accounts';
 import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
-import {
-    Accounts,
-    Bootstrap,
-    Categories,
-    CurrencyMap,
-    GlobalState,
-    User,
-} from 'types';
+import {Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User} from 'types';
 import {useEndDate} from 'utils/dates';
 
 const boxStyle = {
@@ -98,9 +86,7 @@ export const setChargedPersonValueFactory = (
     if (adjust) {
         let diffToMax;
 
-        while (
-            (diffToMax = PERC_MAX - sumArray(Object.values(nextChargedPersons)))
-        ) {
+        while ((diffToMax = PERC_MAX - sumArray(Object.values(nextChargedPersons)))) {
             for (const key in nextChargedPersons) {
                 if (key !== id) {
                     nextChargedPersons[key] += diffToMax > 0 ? step : -step;
@@ -128,10 +114,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
 
     setState<K extends keyof State>(
         state:
-            | ((
-                  prevState: Readonly<State>,
-                  props: Readonly<Props>,
-              ) => Pick<State, K> | State | null)
+            | ((prevState: Readonly<State>, props: Readonly<Props>) => Pick<State, K> | State | null)
             | (Pick<State, K> | State | null),
     ) {
         this.props.onFormChange({...this.state, ...state});
@@ -170,19 +153,11 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
 
                 <Select
                     native
-                    onChange={(e) =>
-                        this.setState({paymentMethod: e.target.value as number})
-                    }
+                    onChange={(e) => this.setState({paymentMethod: e.target.value as number})}
                     value={this.state.paymentMethod}
                 >
-                    {sortBy(
-                        Object.entries(
-                            groupBy(this.props.moneyLocations, 'status'),
-                        ),
-                        (e) =>
-                            Object.values(AccountStatus).indexOf(
-                                e[0] as AccountStatus,
-                            ),
+                    {sortBy(Object.entries(groupBy(this.props.moneyLocations, 'status')), (e) =>
+                        Object.values(AccountStatus).indexOf(e[0] as AccountStatus),
                     ).map(([status, accounts]) => {
                         return (
                             accounts.length > 0 && (
@@ -227,11 +202,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                     return (
                         <ListItem key={id} disableGutters={true}>
                             <ListItemAvatar>
-                                <Avatar
-                                    style={{margin: 0}}
-                                    alt={user.full_name}
-                                    src={user.avatar}
-                                />
+                                <Avatar style={{margin: 0}} alt={user.full_name} src={user.avatar} />
                             </ListItemAvatar>
 
                             <Slider
@@ -241,13 +212,9 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                                 marks={true}
                                 onChange={(event, value) =>
                                     this.setState(
-                                        setChargedPersonValueFactory(
-                                            id,
-                                            value as number,
-                                            {
-                                                userIdsStringified,
-                                            },
-                                        ),
+                                        setChargedPersonValueFactory(id, value as number, {
+                                            userIdsStringified,
+                                        }),
                                     )
                                 }
                                 valueLabelDisplay="on"
@@ -280,9 +247,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                         label="Repeat"
                         isNullable={true}
                         onChange={({value}) => this.setState({repeat: value})}
-                        value={options.find(
-                            (o) => o.value === this.state.repeat,
-                        )}
+                        value={options.find((o) => o.value === this.state.repeat)}
                         options={options}
                     />
                 </div>
@@ -312,8 +277,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                                               Ends on{' '}
                                               {advanceRepeatDate(
                                                   {
-                                                      created_at: this.state
-                                                          .date,
+                                                      created_at: this.state.date,
                                                       repeat: this.state.repeat,
                                                   },
                                                   this.state.repeatOccurrences,
@@ -344,9 +308,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                 <div style={boxStyle}>
                     <TransactionNameField
                         value={this.state.description}
-                        onChange={(description) =>
-                            this.setState({description: description})
-                        }
+                        onChange={(description) => this.setState({description: description})}
                     />
                 </div>
                 <div style={boxStyle}>
@@ -360,15 +322,18 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                 </div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
-                <div style={boxStyle}>
-                    <TransactionStockFields
-                        values={{
-                            stockUnits: this.state.stockUnits,
-                            stockId: this.state.stockId,
-                        }}
-                        onChange={(values) => this.setState({...values})}
-                    />
-                </div>
+                {this.props.moneyLocations.find((ml) => ml.id === this.state.paymentMethod)?.type ===
+                    AccountType.BROKERAGE && (
+                    <div style={boxStyle}>
+                        <TransactionStockFields
+                            values={{
+                                stockUnits: this.state.stockUnits,
+                                stockId: this.state.stockId,
+                            }}
+                            onChange={(values) => this.setState({...values})}
+                        />
+                    </div>
+                )}
                 <div style={boxStyle}>
                     <TextField
                         label="Weight (grams)"
@@ -384,9 +349,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                         }}
                         onChange={(event) =>
                             this.setState({
-                                weight: event.target.value
-                                    ? Number(event.target.value)
-                                    : null,
+                                weight: event.target.value ? Number(event.target.value) : null,
                             })
                         }
                     />
@@ -396,9 +359,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                     <TransactionCategoriesField
                         values={this.state.categories}
                         description={this.state.description}
-                        onChange={(categories) =>
-                            this.setState({categories: categories})
-                        }
+                        onChange={(categories) => this.setState({categories: categories})}
                     />
                 </div>
                 <div style={boxStyle}>{this.renderChargedPersons()}</div>
@@ -471,25 +432,16 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
 }
 
 export const ExpenseForm = (ownProps: TypeOwnProps) => {
-    const stateProps = useSelector(
-        ({currencies, categories, moneyLocations, user}: GlobalState) => ({
-            currencies,
-            categories,
-            moneyLocations,
-            user,
-        }),
-    );
+    const stateProps = useSelector(({currencies, categories, moneyLocations, user}: GlobalState) => ({
+        currencies,
+        categories,
+        moneyLocations,
+        user,
+    }));
     const [endDate] = useEndDate();
     const users = useSelectedProject().users;
 
-    return (
-        <ExpenseFormWrapped
-            {...ownProps}
-            {...stateProps}
-            endDate={endDate}
-            users={users}
-        />
-    );
+    return <ExpenseFormWrapped {...ownProps} {...stateProps} endDate={endDate} users={users} />;
 };
 
 const TypeStatusFlagsContainer = styled.div`
