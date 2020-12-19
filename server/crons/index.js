@@ -1,3 +1,5 @@
 const cron = require('node-cron');
+const updateStocks = require('./updateStocks');
 
-cron.schedule('0 0 */1 * * *', require('./updateStocks'));
+updateStocks();
+cron.schedule('0 0 */1 * * *', updateStocks);

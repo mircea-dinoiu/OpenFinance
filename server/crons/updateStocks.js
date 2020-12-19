@@ -13,9 +13,13 @@ module.exports = async () => {
             if (!error) {
                 const {c: price} = data;
 
-                if (model.price !== price && price !== 0) {
-                    logger.log('FINNHUB', `Updating ${model.symbol} price: ${model.price} → ${price}`);
-                    model.update({price});
+                if (model.price !== price) {
+                    if (price === 0) {
+                        logger.log('FINNHUB', `Unable to find ${model.symbol}`, data);
+                    } else {
+                        logger.log('FINNHUB', `Updating ${model.symbol} price: ${model.price} → ${price}`);
+                        model.update({price});
+                    }
                 }
             } else {
                 logger.error(error);
