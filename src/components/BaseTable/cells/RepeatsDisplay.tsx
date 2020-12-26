@@ -8,16 +8,19 @@ export const RepeatsDisplay = ({item}: {item: TransactionModel}) => {
 
     return repeatsText ? (
         <>
-            {repeatsText} ({item.repeat_occurrences}) until{' '}
-            {advanceRepeatDate(
-                {
-                    created_at: item.created_at,
-                    repeat: item.repeat,
-                },
-                item.repeat_occurrences,
-            )
-                .toDate()
-                .toLocaleDateString()}
+            {repeatsText} ({item.repeat_occurrences})
+            <div>
+                {'until ' +
+                    advanceRepeatDate(
+                        {
+                            created_at: item.created_at,
+                            repeat: item.repeat,
+                        },
+                        item.repeat_occurrences,
+                    )
+                        .toDate()
+                        .toLocaleDateString()}
+            </div>
         </>
     ) : null;
 };
