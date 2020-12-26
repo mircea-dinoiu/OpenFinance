@@ -296,6 +296,24 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
         );
     }
 
+    renderStockFields() {
+        const accountType = this.props.moneyLocations.find((ml) => ml.id === Number(this.state.paymentMethod))?.type;
+
+        return (
+            accountType === AccountType.BROKERAGE && (
+                <div style={boxStyle}>
+                    <TransactionStockFields
+                        values={{
+                            stockUnits: this.state.stockUnits,
+                            stockId: this.state.stockId,
+                        }}
+                        onChange={(values) => this.setState({...values})}
+                    />
+                </div>
+            )
+        );
+    }
+
     render() {
         return (
             <div
@@ -322,18 +340,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                 </div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
-                {this.props.moneyLocations.find((ml) => ml.id === this.state.paymentMethod)?.type ===
-                    AccountType.BROKERAGE && (
-                    <div style={boxStyle}>
-                        <TransactionStockFields
-                            values={{
-                                stockUnits: this.state.stockUnits,
-                                stockId: this.state.stockId,
-                            }}
-                            onChange={(values) => this.setState({...values})}
-                        />
-                    </div>
-                )}
+                {this.renderStockFields()}
                 <div style={boxStyle}>
                     <TextField
                         label="Weight (grams)"
