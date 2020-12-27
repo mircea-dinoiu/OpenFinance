@@ -18,6 +18,9 @@ const advanceRepeatDate = (model, rawRepeats) => {
         case RepeatOption.MONTHLY:
             date.add(repeats, 'month');
             break;
+        case RepeatOption.MONTHLY_TWICE:
+            date.add(repeats * 15.21, 'day');
+            break;
         case RepeatOption.MONTH_2:
             date.add(2 * repeats, 'month');
             break;

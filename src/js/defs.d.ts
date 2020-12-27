@@ -3,6 +3,7 @@ export enum RepeatOption {
     WEEKLY = 'w',
     WEEK_2 = '2w',
     MONTHLY = 'm',
+    MONTHLY_TWICE = 'm/2',
     MONTH_2 = '2m',
     MONTH_3 = '3m',
     YEARLY = 'y',
