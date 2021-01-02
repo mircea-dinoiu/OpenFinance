@@ -30,6 +30,7 @@ module.exports = class ExpenseController extends BaseController {
 
             repeat: ['sometimes', 'isRepeatValue'],
             repeat_occurrences: ['sometimes', 'isInt'],
+            repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
             stock_units: ['sometimes', 'isRequired', 'isFloat'],
             stock_id: ['sometimes', ['isId', Stock]],
@@ -51,6 +52,7 @@ module.exports = class ExpenseController extends BaseController {
 
             repeat: ['sometimes', 'isRepeatValue'],
             repeat_occurrences: ['sometimes', 'isInt'],
+            repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
             stock_units: ['sometimes', 'isRequired', 'isFloat'],
             stock_id: ['sometimes', ['isId', Stock]],

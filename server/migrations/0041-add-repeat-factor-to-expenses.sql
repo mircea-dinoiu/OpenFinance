@@ -1,0 +1,2 @@
+ALTER TABLE expenses
+    ADD COLUMN repeat_factor INT UNSIGNED NOT NULL DEFAULT 1;

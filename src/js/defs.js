@@ -1,12 +1,8 @@
 const RepeatOption = {
-    DAILY: 'd',
-    WEEKLY: 'w',
-    WEEK_2: '2w',
-    MONTHLY: 'm',
-    MONTHLY_TWICE: 'm/2',
-    MONTH_2: '2m',
-    MONTH_3: '3m',
-    YEARLY: 'y',
+    DAY: 'd',
+    WEEK: 'w',
+    MONTH: 'm',
+    YEAR: 'y',
 };
 
 module.exports = {

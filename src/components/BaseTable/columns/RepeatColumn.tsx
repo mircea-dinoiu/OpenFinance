@@ -12,5 +12,5 @@ export const RepeatColumn = {
     //
     headerStyle: style,
     style,
-    width: 130,
+    width: 170,
 };

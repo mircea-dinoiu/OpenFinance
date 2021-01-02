@@ -8,16 +8,11 @@ export const RepeatsDisplay = ({item}: {item: TransactionModel}) => {
 
     return repeatsText ? (
         <>
-            {repeatsText} ({item.repeat_occurrences})
+            Every {item.repeat_factor} {repeatsText}
             <div>
+                {item.repeat_occurrences} times{' '}
                 {'until ' +
-                    advanceRepeatDate(
-                        {
-                            created_at: item.created_at,
-                            repeat: item.repeat,
-                        },
-                        item.repeat_occurrences,
-                    )
+                    advanceRepeatDate(item, item.repeat_occurrences)
                         .toDate()
                         .toLocaleDateString()}
             </div>

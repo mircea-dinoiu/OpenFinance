@@ -243,8 +243,28 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
         return (
             <RepeatContainer>
                 <div>
+                    <TextField
+                        label="Frequency"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={this.state.repeatFactor}
+                        fullWidth={true}
+                        type="number"
+                        margin="none"
+                        style={{
+                            marginTop: '2px',
+                        }}
+                        onChange={(event) => {
+                            this.setState({
+                                repeatFactor: Number(event.target.value),
+                            });
+                        }}
+                    />
+                </div>
+                <div>
                     <MuiSelectNative<RepeatOption | null>
-                        label="Repeat"
+                        label=" "
                         isNullable={true}
                         onChange={({value}) => this.setState({repeat: value})}
                         value={options.find((o) => o.value === this.state.repeat)}
@@ -279,6 +299,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                                                   {
                                                       created_at: this.state.date,
                                                       repeat: this.state.repeat,
+                                                      repeat_factor: this.state.repeatFactor,
                                                   },
                                                   this.state.repeatOccurrences,
                                               )
@@ -466,5 +487,5 @@ const TypeStatusFlagsContainer = styled.div`
 const RepeatContainer = styled.div`
     display: grid;
     grid-gap: ${gridGap};
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
 `;

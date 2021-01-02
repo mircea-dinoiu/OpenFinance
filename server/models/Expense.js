@@ -21,6 +21,7 @@ module.exports = (sequelize, types) => {
 
             repeat: types.STRING,
             repeat_occurrences: types.INTEGER,
+            repeat_factor: types.INTEGER,
             repeat_link_id: types.INTEGER,
 
             stock_units: types.FLOAT,
@@ -29,10 +30,7 @@ module.exports = (sequelize, types) => {
             weight: types.INTEGER,
 
             sum_per_weight: {
-                type: types.VIRTUAL(
-                    types.FLOAT,
-                    '(`expenses`.sum / `expenses`.weight) as sum_per_weight',
-                ),
+                type: types.VIRTUAL(types.FLOAT, '(`expenses`.sum / `expenses`.weight) as sum_per_weight'),
             },
         },
         {
@@ -57,10 +55,7 @@ module.exports = (sequelize, types) => {
                                 'userBlameMap',
                             ],
                             ['GROUP_CONCAT(DISTINCT `users`.`id`)', 'userIds'],
-                            [
-                                'GROUP_CONCAT(DISTINCT `categories`.`id`)',
-                                'categoryIds',
-                            ],
+                            ['GROUP_CONCAT(DISTINCT `categories`.`id`)', 'categoryIds'],
                         ]),
                         include: [
                             {
@@ -85,10 +80,7 @@ module.exports = (sequelize, types) => {
                         values.users = extractUsersFromModel(this);
                     }
 
-                    values.categories = extractIdsFromModel(
-                        this,
-                        'categoryIds',
-                    );
+                    values.categories = extractIdsFromModel(this, 'categoryIds');
 
                     delete values.userIds;
                     delete values.userBlameMap;

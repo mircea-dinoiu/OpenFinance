@@ -3,32 +3,21 @@ const {RepeatOption} = require('../defs');
 
 const advanceRepeatDate = (model, rawRepeats) => {
     const date = moment(model.created_at);
+    const repeatFactor = model.repeat_factor || 1;
     const repeats = Number(rawRepeats) || 1;
 
     switch (model.repeat) {
-        case RepeatOption.DAILY:
-            date.add(repeats, 'day');
+        case RepeatOption.DAY:
+            date.add(repeatFactor * repeats, 'day');
             break;
-        case RepeatOption.WEEKLY:
-            date.add(repeats, 'week');
+        case RepeatOption.WEEK:
+            date.add(repeatFactor * repeats, 'week');
             break;
-        case RepeatOption.WEEK_2:
-            date.add(2 * repeats, 'week');
+        case RepeatOption.MONTH:
+            date.add(repeatFactor * repeats, 'month');
             break;
-        case RepeatOption.MONTHLY:
-            date.add(repeats, 'month');
-            break;
-        case RepeatOption.MONTHLY_TWICE:
-            date.add(repeats * 15.21, 'day');
-            break;
-        case RepeatOption.MONTH_2:
-            date.add(2 * repeats, 'month');
-            break;
-        case RepeatOption.MONTH_3:
-            date.add(3 * repeats, 'month');
-            break;
-        case RepeatOption.YEARLY:
-            date.add(repeats, 'year');
+        case RepeatOption.YEAR:
+            date.add(repeatFactor * repeats, 'year');
             break;
     }
 
