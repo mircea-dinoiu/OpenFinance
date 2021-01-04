@@ -159,6 +159,7 @@ module.exports = class ExpenseController extends BaseController {
             'created_at',
             'repeat',
             'repeat_occurrences',
+            'repeat_factor',
             'notes',
         ]);
 
@@ -173,8 +174,10 @@ module.exports = class ExpenseController extends BaseController {
          */
         if (values.repeat === null) {
             values.repeat_occurrences = 0;
+            values.repeat_factor = 1;
         } else if (values.repeat_occurrences === 0) {
             values.repeat = null;
+            values.repeat_factor = 1;
         }
 
         if (record.hasOwnProperty('stock_units') && !values.stock_units) {
