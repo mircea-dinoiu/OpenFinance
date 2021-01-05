@@ -256,7 +256,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return (
             <SummaryTotal
                 summaryItems={transactions.map((t) => ({
-                    cashValue: t.sum,
+                    cashValue: t.quantity * t.price,
                     currencyId: mlIdToCurrencyId[t.money_location_id],
                     reference: t.toString(),
                 }))}
@@ -406,7 +406,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         const selectedItems = this.selectedItems;
 
-        return selectedItems.length >= 1 && selectedItems.every((each) => Math.abs(each.sum) > Math.abs(amount));
+        return selectedItems.length >= 1 && selectedItems.every((each) => Math.abs(each.price) > Math.abs(amount));
     }
 
     parseSplitAmount(number: string) {
@@ -426,9 +426,9 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         await this.handleRequestCreate(
             selectedItems.map((each) => {
                 const res = this.copyItem(each);
-                const sign = res.sum < 0 ? -1 : 1;
+                const sign = res.price < 0 ? -1 : 1;
 
-                res.sum = sign * splitBy;
+                res.price = sign * splitBy;
 
                 return res;
             }),
@@ -436,8 +436,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         await this.handleRequestUpdate(
             selectedItems.map((each) => {
-                const sign = each.sum < 0 ? -1 : 1;
-                const splittedAmount = sign * (Math.abs(each.sum) - splitBy);
+                const sign = each.price < 0 ? -1 : 1;
+                const splittedAmount = sign * (Math.abs(each.price) - splitBy);
 
                 return {
                     ...each,

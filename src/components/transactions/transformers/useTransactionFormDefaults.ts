@@ -12,7 +12,8 @@ export const useTransactionFormDefaults = (): TransactionForm => {
         description: '',
         notes: '',
         status: TransactionStatus.pending,
-        sum: 0,
+        price: 0,
+        quantity: 1,
         paymentMethod: mls[0]?.id,
         chargedPersons: {[user.current.id]: 100},
         categories: [],
@@ -24,6 +25,5 @@ export const useTransactionFormDefaults = (): TransactionForm => {
         repeatOccurrences: 0,
         repeatFactor: 1,
         stockId: null,
-        stockUnits: null,
     };
 };

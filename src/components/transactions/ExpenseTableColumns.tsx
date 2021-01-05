@@ -19,16 +19,16 @@ import * as React from 'react';
 import {useStocksMap} from 'state/stocks';
 
 export const makeTransactionsColumns = ({updateRecords}: {updateRecords: UpdateRecords}) => [
+    QuantityCol,
+    PriceCol,
     AmountColumn,
     DescriptionColumn,
+    StockSymbolCol,
     DateTimeColumn,
     CategoriesColumn,
     AccountColumn,
     PersonsColumn,
     RepeatColumn,
-    StockSymbolCol,
-    StockUnitsCol,
-    StockPriceCol,
     {
         ...RatingColumn,
         getProps: () => ({updateRecords}),
@@ -115,24 +115,20 @@ const PricePerWeightColumn = {
     style: {textAlign: 'right'},
 };
 
-const StockUnitsCol = {
-    Header: 'Stock Units',
+const QuantityCol = {
+    Header: 'Quantity',
     sortable: true,
-    accessor: 'stock_units',
+    accessor: 'quantity',
     ...numericColumnStyles,
 };
 
-const StockPriceCol = {
-    Header: 'Stock Price',
+const PriceCol = {
+    Header: 'Price',
     sortable: false,
-    id: 'stock_price',
-    Cell: ({original: transaction}: {original: TransactionModel}) =>
-        transaction.stock_units ? (
-            <NumericValue
-                value={transaction.sum / transaction.stock_units}
-                currency={transaction.money_location.currency_id}
-            />
-        ) : null,
+    id: 'price',
+    Cell: ({original: transaction}: {original: TransactionModel}) => (
+        <NumericValue value={transaction.price} currency={transaction.money_location.currency_id} />
+    ),
     ...numericColumnStyles,
 };
 

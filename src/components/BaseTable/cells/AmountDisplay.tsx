@@ -7,7 +7,7 @@ import {useCurrenciesMap} from 'state/currencies';
 export const AmountDisplay = ({
     item,
 }: {
-    item: Pick<TransactionModel, 'sum' | 'money_location' | 'stock_units' | 'stock_id'>;
+    item: Pick<TransactionModel, 'price' | 'money_location' | 'quantity' | 'stock_id'>;
 }) => {
     const currencies = useCurrenciesMap();
     const currencyISOCode = getItemCurrencyISOCode({
@@ -15,5 +15,5 @@ export const AmountDisplay = ({
         currencies,
     });
 
-    return <NumericValue colorize={true} value={item.sum} currency={currencyISOCode} />;
+    return <NumericValue colorize={true} value={item.price * item.quantity} currency={currencyISOCode} />;
 };

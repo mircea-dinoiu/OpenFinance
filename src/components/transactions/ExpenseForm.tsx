@@ -126,9 +126,8 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
         return (
             <TransactionAmountFields
                 accountId={this.state.paymentMethod}
-                value={this.state.sum}
-                onChange={(value) => this.setState({sum: value})}
-                balanceOffset={this.props.initialValues.sum}
+                values={this.state}
+                onChange={(values) => this.setState(values)}
             />
         );
     }
@@ -325,7 +324,6 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                 <div style={boxStyle}>
                     <TransactionStockFields
                         values={{
-                            stockUnits: this.state.stockUnits,
                             stockId: this.state.stockId,
                         }}
                         onChange={(values) => this.setState({...values})}

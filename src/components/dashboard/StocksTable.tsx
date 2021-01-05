@@ -21,7 +21,7 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
     const accountOptions = _.uniqBy(
         _.sortBy(
             stockHoldings
-                .filter((sh) => sh.stock_units !== 0)
+                .filter((sh) => sh.quantity !== 0)
                 .map((sh) => ({
                     value: String(sh.money_location_id),
                     label: accounts.find((a) => a.id === sh.money_location_id)?.name ?? '',
@@ -47,7 +47,7 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
         }
 
         acc[sh.stock_id].accounts += 1;
-        acc[sh.stock_id].units += sh.stock_units;
+        acc[sh.stock_id].units += sh.quantity;
         acc[sh.stock_id].costBasis += sh.cost_basis;
 
         return acc;

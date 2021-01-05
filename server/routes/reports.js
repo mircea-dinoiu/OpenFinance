@@ -17,13 +17,13 @@ router.get('/summary', [validateAuth, validateProject], (req, res) => {
 router.get('/balance-by-location', [validateAuth, validateProject], async (req, res) => {
     const pullStart = Date.now();
     const cashWhere = makeWhere(req.query);
-    const marketWhere = makeWhere(req.query, ['stock_id IS NOT NULL', 'expenses.stock_units != 0']);
+    const marketWhere = makeWhere(req.query, ['stock_id IS NOT NULL', 'expenses.quantity != 0']);
 
     const [cash, stocks] = await Promise.all([
         sql.query(
             `SELECT 
                 money_location_id, 
-                SUM(sum) as \`sum\`
+                SUM(quantity * price) as \`sum\`
                 FROM expenses ${cashWhere.query} GROUP by money_location_id HAVING sum != 0`,
             {
                 replacements: cashWhere.replacements,
@@ -33,8 +33,8 @@ router.get('/balance-by-location', [validateAuth, validateProject], async (req, 
         sql.query(
             `SELECT 
                 money_location_id, 
-                SUM(expenses.sum) as cost_basis,
-                SUM(stock_units) as stock_units,
+                SUM(quantity * price) as cost_basis,
+                SUM(quantity) as quantity,
                 stock_id
                 FROM expenses ${marketWhere.query}
                 GROUP by money_location_id, stock_id`,

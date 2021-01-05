@@ -32,7 +32,7 @@ module.exports = class ExpenseController extends BaseController {
             repeat_occurrences: ['sometimes', 'isInt'],
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
-            stock_units: ['sometimes', 'isRequired', 'isFloat'],
+            quantity: ['sometimes', 'isRequired', 'isFloat'],
             stock_id: ['sometimes', ['isId', Stock]],
 
             weight: ['sometimes', 'isNotNegative', 'isInt'],
@@ -54,7 +54,7 @@ module.exports = class ExpenseController extends BaseController {
             repeat_occurrences: ['sometimes', 'isInt'],
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
-            stock_units: ['sometimes', 'isRequired', 'isFloat'],
+            quantity: ['sometimes', 'isRequired', 'isFloat'],
             stock_id: ['sometimes', ['isId', Stock]],
 
             weight: ['sometimes', 'isNotNegative', 'isInt'],
@@ -148,10 +148,10 @@ module.exports = class ExpenseController extends BaseController {
 
     sanitizeValues(record, req, res) {
         const values = pickOwnProperties(record, [
-            'sum',
+            'price',
             'money_location_id',
             'stock_id',
-            'stock_units',
+            'quantity',
             'weight',
             'fitid',
             'favorite',
@@ -180,11 +180,7 @@ module.exports = class ExpenseController extends BaseController {
             values.repeat_factor = 1;
         }
 
-        if (record.hasOwnProperty('stock_units') && !values.stock_units) {
-            values.stock_units = null;
-            values.stock_id = null;
-        } else if (record.hasOwnProperty('stock_id') && !values.stock_id) {
-            values.stock_units = null;
+        if (record.hasOwnProperty('stock_id') && !values.stock_id) {
             values.stock_id = null;
         }
 

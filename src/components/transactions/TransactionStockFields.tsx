@@ -1,4 +1,3 @@
-import {TextField} from '@material-ui/core';
 import {MuiSelectNative} from 'components/dropdowns';
 import {TransactionForm} from 'components/transactions/types';
 import {gridGap} from 'defs/styles';
@@ -7,11 +6,11 @@ import {useStocks} from 'state/stocks';
 import styled from 'styled-components';
 
 export const TransactionStockFields = ({
-    values: {stockUnits, stockId},
+    values: {stockId},
     onChange,
 }: {
-    values: Pick<TransactionForm, 'stockUnits' | 'stockId'>;
-    onChange: (values: Pick<TransactionForm, 'stockUnits' | 'stockId'>) => void;
+    values: Pick<TransactionForm, 'stockId'>;
+    onChange: (values: Pick<TransactionForm, 'stockId'>) => void;
 }) => {
     const stocks = useStocks();
     const stockOptions = stocks.map((s) => ({
@@ -21,22 +20,10 @@ export const TransactionStockFields = ({
 
     return (
         <Styled>
-            <TextField
-                label="Stock Units"
-                value={stockUnits}
-                fullWidth={true}
-                type="number"
-                onChange={(event) =>
-                    onChange({
-                        stockId,
-                        stockUnits: Number(event.target.value),
-                    })
-                }
-            />
             <MuiSelectNative<number | null>
                 label="Stock Symbol"
                 isNullable={true}
-                onChange={({value}) => onChange({stockId: value, stockUnits})}
+                onChange={({value}) => onChange({stockId: value})}
                 value={stockOptions.find((o) => o.value === stockId)}
                 options={stockOptions}
             />
@@ -47,6 +34,6 @@ export const TransactionStockFields = ({
 const Styled = styled.div`
     display: grid;
     grid-gap: ${gridGap};
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     align-items: center;
 `;

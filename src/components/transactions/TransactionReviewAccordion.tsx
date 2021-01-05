@@ -1,11 +1,4 @@
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Button,
-    Checkbox,
-    ListItemText,
-} from '@material-ui/core';
+import {Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, ListItemText} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {formatCurrency} from 'components/formatters';
 import {ExpenseForm} from 'components/transactions/ExpenseForm';
@@ -58,10 +51,7 @@ export const TransactionReviewAccordion = ({
                         <>
                             {new Date(transaction.created_at).toLocaleString()}
                             {' | '}
-                            {formatCurrency(
-                                transaction.sum,
-                                currencyCode as string,
-                            )}
+                            {formatCurrency(transaction.quantity * transaction.price, currencyCode as string)}
                         </>
                     }
                 />
@@ -75,12 +65,7 @@ export const TransactionReviewAccordion = ({
                             onSubmit={save}
                         />
                     )}
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        fullWidth={true}
-                        onClick={save}
-                    >
+                    <Button variant="contained" color="secondary" fullWidth={true} onClick={save}>
                         Save
                     </Button>
                 </div>

@@ -9,12 +9,10 @@ import {AccountStatus} from 'state/accounts';
 import {Accounts} from 'types';
 import {useQueryParamState} from 'utils/url';
 
-export const mergeItems = (
-    items: TransactionModel[],
-): Partial<TransactionModel> | null => {
+export const mergeItems = (items: TransactionModel[]): Partial<TransactionModel> | null => {
     const [, ...rest] = items;
 
-    if (!rest.length || uniqBy(items, 'money_location_id').length > 1) {
+    if (!rest.length || uniqBy(items, 'money_location_id').length > 1 || uniqBy(items, 'price').length > 1) {
         return null;
     }
 
@@ -22,7 +20,7 @@ export const mergeItems = (
         categories: uniq(flatten(map(items, 'categories'))),
         favorite: Math.max(...map(items, 'favorite')),
         item: uniq(map(items, 'item')).join(', '),
-        sum: sumArray(map(items, 'sum')),
+        quantity: sumArray(map(items, 'quantity')),
         weight: sumArray(map(items, 'weight')),
         users: mapValues(
             map(items, 'users').reduce((acc, users) => {
@@ -38,28 +36,17 @@ export const mergeItems = (
 };
 
 export const sortMoneyLocations = (items: Accounts) =>
-    sortBy(
-        items,
-        (item) =>
-            `${Object.values(AccountStatus).indexOf(item.status)}#${item.name}`,
-    );
+    sortBy(items, (item) => `${Object.values(AccountStatus).indexOf(item.status)}#${item.name}`);
 
 export const useIncludePending = (): [boolean, (v: boolean) => void] => {
-    const [value, setValue] = useQueryParamState(
-        QueryParam.includePending,
-        'false' as string,
-    );
+    const [value, setValue] = useQueryParamState(QueryParam.includePending, 'false' as string);
 
     return [value === 'true', (nextValue) => setValue(String(nextValue))];
 };
 
-export const useInclude = () =>
-    useQueryParamState<IncludeOption>(QueryParam.include, IncludeOption.all);
+export const useInclude = () => useQueryParamState<IncludeOption>(QueryParam.include, IncludeOption.all);
 
-export const getEndDateBasedOnIncludePreference = (
-    endDate: string,
-    include: IncludeOption,
-) => {
+export const getEndDateBasedOnIncludePreference = (endDate: string, include: IncludeOption) => {
     if (include === IncludeOption.previousYear) {
         return endOfDayToISOString(
             moment(endDate)

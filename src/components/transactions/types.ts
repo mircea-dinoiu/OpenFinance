@@ -10,7 +10,7 @@ type BalanceByLocationCash = {
 
 export type BalanceByLocationStock = {
     money_location_id: number;
-    stock_units: number;
+    quantity: number;
     cost_basis: number;
     stock_id: number;
     currency_id: number;
@@ -74,7 +74,8 @@ export type BalanceByLocation = {
 
 export type TransactionRepeat = $Values<typeof RepeatOption>;
 export type TransactionForm = {
-    sum: number;
+    price: number;
+    quantity: number;
     description: string;
     notes: string;
     favorite: number;
@@ -90,7 +91,6 @@ export type TransactionForm = {
     repeatFactor: number;
     repeat: TransactionRepeat | null;
     status: TransactionStatus;
-    stockUnits: number | null;
     stockId: number | null;
 };
 export type TransactionModel = {
@@ -100,7 +100,7 @@ export type TransactionModel = {
     favorite: number;
     item: string;
     notes: string;
-    sum: number;
+    price: number;
     weight: number | null;
     users: {
         [key: string]: number;
@@ -116,7 +116,7 @@ export type TransactionModel = {
     money_location_id: number;
     money_location: {currency_id: number};
     sum_per_weight: number | null;
-    stock_units: number | null;
+    quantity: number;
     stock_id: number | null;
 };
 export type UpdateRecords = (ids: number[], data: Partial<TransactionModel>) => Promise<void>;

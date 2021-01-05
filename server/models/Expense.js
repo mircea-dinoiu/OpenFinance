@@ -12,10 +12,13 @@ module.exports = (sequelize, types) => {
             item: types.STRING,
             notes: types.STRING,
             fitid: types.STRING,
-            money_location_id: types.INTEGER,
-            project_id: types.INTEGER,
+
             status: types.STRING,
-            sum: types.FLOAT,
+
+            price: types.FLOAT,
+            quantity: types.FLOAT,
+            weight: types.INTEGER,
+
             favorite: types.INTEGER,
             hidden: types.INTEGER,
 
@@ -24,13 +27,18 @@ module.exports = (sequelize, types) => {
             repeat_factor: types.INTEGER,
             repeat_link_id: types.INTEGER,
 
-            stock_units: types.FLOAT,
             stock_id: types.INTEGER,
-
-            weight: types.INTEGER,
+            money_location_id: types.INTEGER,
+            project_id: types.INTEGER,
 
             sum_per_weight: {
-                type: types.VIRTUAL(types.FLOAT, '(`expenses`.sum / `expenses`.weight) as sum_per_weight'),
+                type: types.VIRTUAL(
+                    types.FLOAT,
+                    '(`expenses`.price * `expenses`.quantity / `expenses`.weight) as sum_per_weight',
+                ),
+            },
+            sum: {
+                type: types.VIRTUAL(types.FLOAT, '(`expenses`.price * `expenses`.quantity) as `sum`'),
             },
         },
         {

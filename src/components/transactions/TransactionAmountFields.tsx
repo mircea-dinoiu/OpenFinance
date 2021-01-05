@@ -1,30 +1,23 @@
-import {InputAdornment, TextField} from '@material-ui/core';
+import {InputAdornment, TextField, TextFieldProps} from '@material-ui/core';
+import {TransactionForm} from 'components/transactions/types';
 import {gridGap} from 'defs/styles';
 import {findCurrencyById} from 'helpers/currency';
-import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {useAccounts} from 'state/accounts';
 import {useCurrenciesMap} from 'state/currencies';
-import {SummaryKey, useSummary} from 'state/summary';
 import styled from 'styled-components';
 
 export const TransactionAmountFields = ({
     accountId,
-    value,
+    values: {price, quantity},
     onChange,
-    balanceOffset,
 }: {
     accountId: number;
-    value: number;
-    onChange: (value: number) => void;
-    balanceOffset: number;
+    values: Pick<TransactionForm, 'price' | 'quantity'>;
+    onChange: (values: Pick<TransactionForm, 'price' | 'quantity'>) => void;
 }) => {
     const accounts = useAccounts();
     const currencies = useCurrenciesMap();
-    const balanceByAccount = useSummary(SummaryKey.BALANCE_BY_ACCOUNT);
-    const sumForSelectedAccount = balanceByAccount?.cash.find((c) => c.money_location_id === accountId);
-    const cashForSelectedAccount = balanceByAccount?.stocks.find((c) => c.money_location_id === accountId);
-    const balance = (sumForSelectedAccount?.sum ?? 0) - balanceOffset;
 
     const currencyId = accounts.find((each) => each.id == accountId)?.currency_id;
     const startAdornment = (
@@ -32,36 +25,51 @@ export const TransactionAmountFields = ({
             {accountId ? currencyId && findCurrencyById(currencyId, currencies).iso_code : ''}
         </InputAdornment>
     );
+    const fieldProps: TextFieldProps = {
+        fullWidth: true,
+        type: 'number',
+        margin: 'none',
+        style: {
+            marginTop: '2px',
+        },
+    };
 
     return (
-        <TransactionAmountFieldsStyled count={cashForSelectedAccount == null ? 2 : 1}>
+        <TransactionAmountFieldsStyled>
             <TextField
-                label="Amount"
+                {...fieldProps}
+                label="Price"
                 InputProps={{
                     startAdornment,
                 }}
-                value={value}
-                fullWidth={true}
-                type="number"
-                margin="none"
-                style={{
-                    marginTop: '2px',
-                }}
-                onChange={(event) => onChange((event.target.value as any) as number)}
+                value={price}
+                onChange={(event) =>
+                    onChange({
+                        quantity,
+                        price: (event.target.value as any) as number,
+                    })
+                }
             />
-            {cashForSelectedAccount == null && (
-                <TextField
-                    tabIndex={-1}
-                    InputProps={{
-                        startAdornment,
-                    }}
-                    label="Future Balance (Based on Summary)"
-                    value={financialNum(balance + Number(value || 0))}
-                    onChange={(event) => {
-                        onChange(financialNum(Number(event.target.value || 0) - balance));
-                    }}
-                />
-            )}
+            <TextField
+                {...fieldProps}
+                label="Quantity"
+                value={quantity}
+                onChange={(event) =>
+                    onChange({
+                        price,
+                        quantity: (event.target.value as any) as number,
+                    })
+                }
+            />
+            <TextField
+                {...fieldProps}
+                label="Total"
+                InputProps={{
+                    startAdornment,
+                }}
+                value={price * quantity}
+                disabled={true}
+            />
         </TransactionAmountFieldsStyled>
     );
 };
@@ -69,6 +77,6 @@ export const TransactionAmountFields = ({
 const TransactionAmountFieldsStyled = styled.div`
     display: grid;
     grid-gap: ${gridGap};
-    grid-template-columns: repeat(${(props: {count: number}) => props.count}, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     align-items: center;
 `;

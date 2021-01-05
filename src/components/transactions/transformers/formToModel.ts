@@ -18,7 +18,6 @@ export const formToModel = (
         money_location_id: form.paymentMethod,
         repeat_occurrences: form.repeatOccurrences,
         repeat_factor: form.repeatFactor,
-        stock_units: form.stockUnits,
         stock_id: form.stockId,
         users,
         status: form.status || TransactionStatus.pending,
