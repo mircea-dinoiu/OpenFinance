@@ -116,9 +116,10 @@ const PricePerWeightColumn = {
 };
 
 const QuantityCol = {
-    Header: 'Quantity',
+    Header: 'Qty',
     sortable: true,
     accessor: 'quantity',
+    width: 50,
     ...numericColumnStyles,
 };
 
@@ -129,6 +130,7 @@ const PriceCol = {
     Cell: ({original: transaction}: {original: TransactionModel}) => (
         <NumericValue value={transaction.price} currency={transaction.money_location.currency_id} />
     ),
+    width: 100,
     ...numericColumnStyles,
 };
 
