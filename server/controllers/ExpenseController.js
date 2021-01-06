@@ -17,7 +17,10 @@ module.exports = class ExpenseController extends BaseController {
         this.Service = Service;
         this.updateValidationRules = {
             id: ['isRequired', 'isTransactionId'],
-            sum: ['sometimes', 'isRequired', 'isFloat'],
+
+            price: ['sometimes', 'isRequired', 'isFloat'],
+            quantity: ['sometimes', 'isRequired', 'isFloat'],
+
             item: ['sometimes', 'isRequired', 'isString'],
             notes: ['sometimes', 'isString'],
             favorite: ['sometimes', 'isInt'],
@@ -32,13 +35,14 @@ module.exports = class ExpenseController extends BaseController {
             repeat_occurrences: ['sometimes', 'isInt'],
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
-            quantity: ['sometimes', 'isRequired', 'isFloat'],
             stock_id: ['sometimes', ['isId', Stock]],
 
             weight: ['sometimes', 'isNotNegative', 'isInt'],
         };
         this.createValidationRules = {
-            sum: ['isRequired', 'isFloat'],
+            price: ['isRequired', 'isFloat'],
+            quantity: ['isRequired', 'isFloat'],
+
             item: ['isRequired', 'isString'],
             notes: ['sometimes', 'isString'],
             favorite: ['sometimes', 'isInt'],
@@ -54,7 +58,6 @@ module.exports = class ExpenseController extends BaseController {
             repeat_occurrences: ['sometimes', 'isInt'],
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
-            quantity: ['sometimes', 'isRequired', 'isFloat'],
             stock_id: ['sometimes', ['isId', Stock]],
 
             weight: ['sometimes', 'isNotNegative', 'isInt'],
@@ -219,7 +222,7 @@ module.exports = class ExpenseController extends BaseController {
                     fitid: FITID,
                     item: NAME,
                     status: 'pending',
-                    sum: Number(TRNAMT),
+                    price: Number(TRNAMT),
                     created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
                         .parseZone()
                         .toISOString(),
