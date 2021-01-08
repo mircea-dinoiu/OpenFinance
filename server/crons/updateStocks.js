@@ -9,6 +9,10 @@ module.exports = async () => {
     const models = await Stock.findAll();
 
     models.forEach((model) => {
+        if (model.type === 'custom') {
+            return;
+        }
+
         finnhubClient.quote(model.symbol, (error, data, response) => {
             if (!error) {
                 const {c: price} = data;

@@ -4,6 +4,7 @@ module.exports = (sequelize, types) =>
         {
             id: {type: types.INTEGER, primaryKey: true},
             symbol: types.STRING,
+            type: types.STRING,
             price: types.FLOAT,
             currency_id: types.INTEGER,
         },
