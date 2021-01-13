@@ -1,11 +1,4 @@
-import {
-    Button,
-    FormControlLabel,
-    Menu,
-    Radio,
-    RadioGroup,
-    withStyles,
-} from '@material-ui/core';
+import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles} from '@material-ui/core';
 import {MuiReactSelect, MuiSelectNative} from 'components/dropdowns';
 import {spacingNormal, spacingSmall} from 'defs/styles';
 import * as React from 'react';
@@ -66,18 +59,14 @@ class SelectFilterWrapped extends React.PureComponent<
                 const selectOptions = this.props.items;
 
                 if (!this.props.multi) {
-                    const found = selectOptions.find(
-                        (option) => option.id === filter.value,
-                    );
+                    const found = selectOptions.find((option) => option.id === filter.value);
 
                     return found && found[this.props.nameKey];
                 }
 
                 return filter.value
                     .map((id: number) => {
-                        const found = selectOptions.find(
-                            (option) => option.id === id,
-                        );
+                        const found = selectOptions.find((option) => option.id === id);
 
                         return found && found[this.props.nameKey];
                     })
@@ -99,11 +88,7 @@ class SelectFilterWrapped extends React.PureComponent<
         this.setState({[mode]: value});
 
         if (this.state.radioValue === mode) {
-            if (
-                value &&
-                ((Array.isArray(value) && value.length) ||
-                    !Array.isArray(value))
-            ) {
+            if (value && ((Array.isArray(value) && value.length) || !Array.isArray(value))) {
                 this.triggerChange({mode, value});
             } else {
                 this.triggerChange('any');
@@ -202,7 +187,6 @@ class SelectFilterWrapped extends React.PureComponent<
                 <Button
                     size="small"
                     style={{
-                        background: 'white',
                         textTransform: 'none',
                         minHeight: '28px',
                         padding: '0 5px',
@@ -233,14 +217,10 @@ class SelectFilterWrapped extends React.PureComponent<
                             onChange={(event) => {
                                 const radioValue = event.target.value as Mode;
 
-                                if (
-                                    ['one-of', 'all', 'exclude'].includes(
-                                        radioValue,
-                                    )
-                                ) {
+                                if (['one-of', 'all', 'exclude'].includes(radioValue)) {
                                     if (this.state[radioValue]) {
                                         this.triggerChange({
-                                            mode: radioValue ,
+                                            mode: radioValue,
                                             value: this.state[radioValue],
                                         });
                                     }

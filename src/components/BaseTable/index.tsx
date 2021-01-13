@@ -1,5 +1,5 @@
 import {grey} from '@material-ui/core/colors';
-import {gridGap, spacingLarge, spacingSmall, stickyHeaderHeight} from 'defs/styles';
+import {colors, gridGap, spacingLarge, spacingSmall, stickyHeaderHeight} from 'defs/styles';
 import * as React from 'react';
 import ReactTable, {TableProps} from 'react-table-6';
 import 'react-table-6/react-table.css';
@@ -14,32 +14,48 @@ export const Classes = {
 };
 
 const ReactTableStyled = styled(ReactTable)`
-    &.ReactTable {
+    &.ReactTable.ReactTable {
         font-size: 1rem;
         border: 0 !important;
 
         .rt-tr:hover {
-            background: rgb(234, 239, 244);
+            background: ${colors.hover};
         }
 
-        .rt-td {
+        .rt-td,
+        .rt-th {
             line-height: 20px;
             padding-bottom: 2px;
+            border-right-color: ${colors.borderSecondary};
+        }
+
+        .rt-tr-group {
+            border-bottom-color: ${colors.borderSecondary};
+        }
+
+        .rt-thead.-filters {
+            border-bottom-color: ${colors.borderSecondary};
         }
 
         .rt-thead.-header {
             box-shadow: none;
             font-weight: 500;
-            border-bottom: 1px solid ${grey[400]};
+            border-bottom: 1px solid ${colors.borderPrimary};
         }
         .rt-tfoot {
             box-shadow: none;
-            border-top: 1px solid ${grey[200]};
-            background-color: ${grey[50]};
+            border-top: 1px solid ${colors.borderPrimary};
+            background-color: ${colors.tableFoot};
+        }
+
+        .rt-thead.-filters input {
+            background: transparent;
+            border-color: ${colors.borderPrimary};
+            color: inherit;
         }
 
         .${Classes.pendingRow} {
-            background: rgba(0, 0, 0, 0.075);
+            background: rgba(255, 255, 255, 0.075);
         }
 
         .${Classes.todayRow} {
@@ -47,7 +63,7 @@ const ReactTableStyled = styled(ReactTable)`
         }
 
         .${Classes.selectedRow}, .${Classes.selectedRow}:hover {
-            background: rgb(244, 228, 179);
+            background: rgb(244, 228, 179, 0.25);
         }
 
         .${Classes.hiddenRow} {
@@ -63,11 +79,11 @@ const ReactTableStyled = styled(ReactTable)`
 export const TableHeader = styled.div`
     padding: 0 ${spacingLarge} ${spacingSmall};
     font-size: 1rem;
-    border-bottom: 1px solid rgb(244, 244, 244);
+    border-bottom: 1px solid ${grey[700]};
     position: sticky;
     top: ${stickyHeaderHeight};
     z-index: 1;
-    background: white;
+    background: ${grey[800]};
     border-radius: 4px;
 `;
 

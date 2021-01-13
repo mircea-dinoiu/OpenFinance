@@ -1,4 +1,4 @@
-import {blue, blueGrey, grey, purple, yellow} from '@material-ui/core/colors';
+import {blue, blueGrey, purple, yellow} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';
 import IconUpload from '@material-ui/icons/CloudUpload';
 import IconDrafts from '@material-ui/icons/Drafts';
@@ -37,24 +37,15 @@ export const DraftFlag = () => (
 
 export const ImportFlag = () => (
     <span title="This transaction was imported">
-        <IconUpload style={ICON_STYLE} htmlColor={grey[900]} />
+        <IconUpload style={ICON_STYLE} />
     </span>
 );
 
-
-export const Flags = ({
-    item,
-    entity,
-}: {
-    item: TransactionModel;
-    entity: string;
-}) => (
+export const Flags = ({item, entity}: {item: TransactionModel; entity: string}) => (
     <>
         {item.fitid !== null && <ImportFlag />}
         {item.status === TransactionStatus.draft && <DraftFlag />}
-        {item.status === TransactionStatus.pending && (
-            <PendingReviewFlag entity={entity} />
-        )}
+        {item.status === TransactionStatus.pending && <PendingReviewFlag entity={entity} />}
         {item.repeat != null && <RecurrentFlag entity={entity} />}
         {item.repeat_link_id !== null && <GeneratedFlag entity={entity} />}
     </>

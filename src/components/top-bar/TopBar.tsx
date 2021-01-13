@@ -107,7 +107,7 @@ export const TopBar = (props: {onLogout: () => void}) => {
 
 const useStyles = makeStyles({
     toolbar: {
-        backgroundColor: grey[900],
+        backgroundColor: grey[800],
         paddingRight: spacingNormal,
         paddingLeft: spacingNormal,
         minHeight: stickyHeaderHeight,

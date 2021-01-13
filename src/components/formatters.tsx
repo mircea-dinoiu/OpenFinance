@@ -30,13 +30,13 @@ const useStyles = makeStyles({
         paddingRight: spacingSmall,
     },
     positive: {
-        background: green[50],
-        color: green[900],
+        background: green[900],
+        color: green[50],
         borderRadius: 5,
     },
     negative: {
-        background: red[50],
-        color: red[900],
+        background: red[900],
+        color: red[50],
         borderRadius: 5,
     },
     value: {

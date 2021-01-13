@@ -32,12 +32,16 @@ export enum ScreenQuery {
 export const theme = createMuiTheme({
     palette: {
         primary: blue,
-        // type: 'dark',
-        background: {
-            default: grey[300],
-        },
+        type: 'dark',
     },
 });
+
+export const colors = {
+    hover: grey[700],
+    borderSecondary: grey[700],
+    borderPrimary: grey[600],
+    tableFoot: grey[700],
+};
 
 export const numericColumnStyles: Column<any> = {
     headerStyle: {

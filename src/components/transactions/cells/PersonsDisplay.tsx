@@ -9,7 +9,7 @@ export const PersonAvatar = styled(Avatar)`
     height: 20px !important;
     border-radius: 0 !important;
     width: 100% !important;
-    background: ${grey[300]};
+    background: ${grey[700]};
     justify-content: left !important;
 
     img {
@@ -34,8 +34,7 @@ const PersonsDisplayStyled = styled.div`
 `;
 
 const TooltipStyled = styled.div`
-    flex-grow: ${(props: {index: number}) =>
-        props.index === 0 ? 1 : 'initial'};
+    flex-grow: ${(props: {index: number}) => (props.index === 0 ? 1 : 'initial')};
 `;
 
 export const PersonsDisplay = ({item}: {item: TransactionModel}) => {
@@ -46,16 +45,8 @@ export const PersonsDisplay = ({item}: {item: TransactionModel}) => {
             {userList
                 .filter((user) => item.users[user.id])
                 .map(({id, full_name: name, avatar}, index) => (
-                    <TooltipStyled
-                        key={index}
-                        title={`${name} ${item.users[id]}%`}
-                        index={index}
-                    >
-                        <PersonAvatar
-                            key={id}
-                            src={avatar}
-                            text={index === 0 ? `${item.users[id]}%` : ''}
-                        />
+                    <TooltipStyled key={index} title={`${name} ${item.users[id]}%`} index={index}>
+                        <PersonAvatar key={id} src={avatar} text={index === 0 ? `${item.users[id]}%` : ''} />
                     </TooltipStyled>
                 ))}
         </PersonsDisplayStyled>
