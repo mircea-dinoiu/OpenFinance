@@ -5,9 +5,7 @@ const {sql} = require('../models');
 const mapTextFilterToSQL = (ids, value) => {
     if (value && value.trim()) {
         return Sequelize.literal(
-            `MATCH(${ids.join()}) AGAINST(${sql.escape(
-                mapSearchToMatchAgainst(value),
-            )} IN BOOLEAN MODE)`,
+            `MATCH(${ids.join()}) AGAINST(${sql.escape(mapSearchToMatchAgainst(value))} IN BOOLEAN MODE)`,
         );
     }
 
@@ -37,14 +35,14 @@ const mapFlagsToSQL = (flags) => {
     switch (flags.Deposit) {
         case 'no':
             where.push({
-                sum: {
+                price: {
                     $lt: 0,
                 },
             });
             break;
         case 'only':
             where.push({
-                sum: {
+                price: {
                     $gt: 0,
                 },
             });
@@ -88,10 +86,7 @@ const mapFlagsToSQL = (flags) => {
     return where;
 };
 
-const mapSortersToSQL = (sorters) =>
-    sorters
-        .map((each) => `${each.id} ${each.desc ? 'DESC' : 'ASC'}`)
-        .join(', ');
+const mapSortersToSQL = (sorters) => sorters.map((each) => `${each.id} ${each.desc ? 'DESC' : 'ASC'}`).join(', ');
 
 const mapInputToLimitOpts = (input) => {
     if (input.page != null && input.limit != null) {
@@ -120,22 +115,13 @@ const mapGroupConcatToHavingSQL = (filter, groupConcatName, columnId) => {
 
         filter.value.forEach((eachId) => {
             conditions.push(
-                Sequelize.where(
-                    Sequelize.fn(
-                        'Find_In_Set',
-                        eachId,
-                        Sequelize.col(groupConcatName),
-                    ),
-                    {
-                        [filter.mode === 'exclude' ? '$eq' : '$gt']: 0,
-                    },
-                ),
+                Sequelize.where(Sequelize.fn('Find_In_Set', eachId, Sequelize.col(groupConcatName)), {
+                    [filter.mode === 'exclude' ? '$eq' : '$gt']: 0,
+                }),
             );
         });
 
-        return ['exclude', 'all'].includes(filter.mode)
-            ? Sequelize.and(...conditions)
-            : Sequelize.or(...conditions);
+        return ['exclude', 'all'].includes(filter.mode) ? Sequelize.and(...conditions) : Sequelize.or(...conditions);
     } else if (filter === 'none') {
         return Sequelize.where(Sequelize.col(columnId), {
             $is: Sequelize.literal('NULL'),
@@ -178,12 +164,9 @@ const exported = {
             }
 
             return Sequelize.or(
-                Sequelize.where(
-                    Sequelize.col(`${Model.tableName}.created_at`),
-                    {
-                        $gte: startDate,
-                    },
-                ),
+                Sequelize.where(Sequelize.col(`${Model.tableName}.created_at`), {
+                    $gte: startDate,
+                }),
                 Sequelize.where(Sequelize.col(`${Model.tableName}.repeat`), {
                     $ne: null,
                 }),
@@ -201,12 +184,9 @@ const exported = {
                 };
             }
 
-            return Sequelize.where(
-                Sequelize.col(`${Model.tableName}.created_at`),
-                {
-                    $lte: endDate,
-                },
-            );
+            return Sequelize.where(Sequelize.col(`${Model.tableName}.created_at`), {
+                $lte: endDate,
+            });
         }
 
         return null;

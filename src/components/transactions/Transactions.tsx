@@ -439,10 +439,12 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                 const sign = each.price < 0 ? -1 : 1;
                 const splittedAmount = sign * (Math.abs(each.price) - splitBy);
 
-                return {
+                const ret: TransactionModel = {
                     ...each,
-                    sum: Math.round(splittedAmount * 100) / 100,
+                    price: Math.round(splittedAmount * 100) / 100,
                 };
+
+                return ret;
             }),
         );
 

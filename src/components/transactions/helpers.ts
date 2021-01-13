@@ -12,15 +12,20 @@ import {useQueryParamState} from 'utils/url';
 export const mergeItems = (items: TransactionModel[]): Partial<TransactionModel> | null => {
     const [, ...rest] = items;
 
-    if (!rest.length || uniqBy(items, 'money_location_id').length > 1 || uniqBy(items, 'price').length > 1) {
+    // nothing to do for one transaction selected
+    if (!rest.length) {
         return null;
     }
 
-    return {
+    // cannot merge transactions from different accounts
+    if (uniqBy(items, 'money_location_id').length > 1) {
+        return null;
+    }
+
+    const base = {
         categories: uniq(flatten(map(items, 'categories'))),
         favorite: Math.max(...map(items, 'favorite')),
         item: uniq(map(items, 'item')).join(', '),
-        quantity: sumArray(map(items, 'quantity')),
         weight: sumArray(map(items, 'weight')),
         users: mapValues(
             map(items, 'users').reduce((acc, users) => {
@@ -33,6 +38,24 @@ export const mergeItems = (items: TransactionModel[]): Partial<TransactionModel>
             (value) => Math.round(value / items.length),
         ),
     };
+
+    // add up quantity when a single price exists
+    if (uniqBy(items, 'price').length === 1) {
+        return {
+            ...base,
+            quantity: sumArray(map(items, 'quantity')),
+        };
+    }
+
+    // add up price when a single quantity exists
+    if (uniqBy(items, 'quantity').length === 1) {
+        return {
+            ...base,
+            price: sumArray(map(items, 'price')),
+        };
+    }
+
+    return null;
 };
 
 export const sortMoneyLocations = (items: Accounts) =>
