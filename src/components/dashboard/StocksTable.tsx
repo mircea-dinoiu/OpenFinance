@@ -1,4 +1,4 @@
-import {FormControlLabel, Radio, RadioGroup} from '@material-ui/core';
+import {Checkbox, FormControlLabel, FormGroup} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
@@ -16,7 +16,7 @@ import {Stock} from 'types';
 type StockWithUnits = Stock & {units: number; accounts: number; costBasis: number};
 
 export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationStock[]}) => {
-    const [account, setAccount] = useState('');
+    const [filteredAccounts, setFilteredAccounts] = useState<number[]>([]);
     const accounts = useAccounts();
     const accountOptions = _.uniqBy(
         _.sortBy(
@@ -34,7 +34,9 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
     const cls = useStyles();
     const screenSize = useScreenSize();
 
-    const filteredStockHoldings = stockHoldings.filter((sh) => !account || sh.money_location_id === Number(account));
+    const filteredStockHoldings = stockHoldings.filter(
+        (sh) => filteredAccounts.length === 0 || filteredAccounts.includes(sh.money_location_id),
+    );
     const stocksMap = useStocksMap();
     const stockHoldingsById: Record<string, StockWithUnits> = filteredStockHoldings.reduce((acc, sh) => {
         if (acc[sh.stock_id] === undefined) {
@@ -55,12 +57,41 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
 
     return (
         <div className={cls.root}>
-            <RadioGroup value={account} onChange={(e) => setAccount(e.target.value)}>
-                <FormControlLabel value="" control={<Radio />} label="All Accounts" />
-                {accountOptions.map((o) => (
-                    <FormControlLabel value={o.value} control={<Radio />} label={o.label} />
-                ))}
-            </RadioGroup>
+            <FormGroup>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={filteredAccounts.length === 0}
+                            disabled={filteredAccounts.length === 0}
+                            onChange={() => setFilteredAccounts([])}
+                        />
+                    }
+                    label="All Accounts"
+                />
+                {accountOptions.map((o) => {
+                    const accountId = Number(o.value);
+
+                    return (
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={filteredAccounts.includes(accountId)}
+                                    onChange={(e) => {
+                                        setFilteredAccounts(
+                                            e.target.checked
+                                                ? filteredAccounts.concat(accountId)
+                                                : filteredAccounts.filter(
+                                                      (filteredAccountId) => filteredAccountId !== accountId,
+                                                  ),
+                                        );
+                                    }}
+                                />
+                            }
+                            label={o.label}
+                        />
+                    );
+                })}
+            </FormGroup>
             <div>
                 {Object.values(
                     _.groupBy(
