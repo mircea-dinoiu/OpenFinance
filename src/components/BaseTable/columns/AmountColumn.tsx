@@ -6,10 +6,7 @@ const style = {textAlign: 'right'};
 
 export const AmountColumn = {
     Header: 'Amount',
-    filterable: true,
-    Cell: ({original: item}: {original: TransactionModel}) => (
-        <AmountDisplay item={item} />
-    ),
+    Cell: ({original: item}: {original: TransactionModel}) => <AmountDisplay item={item} />,
     accessor: 'sum',
     //
     width: 100,
