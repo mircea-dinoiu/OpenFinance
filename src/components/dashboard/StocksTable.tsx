@@ -141,8 +141,8 @@ const ValueCol: Column<StockWithUnits> = {
     ...numericColumnStyles,
 };
 const makePercCol: (total: number) => Column<StockWithUnits> = _.memoize((total) => ({
-    Header: '% of Portfolio',
-    id: 'percPortfolio',
+    Header: 'Allocation',
+    id: 'allocation',
     accessor: (sh) => ((sh.units * sh.price) / total) * 100,
     Cell: ({value}) => {
         return <NumericValue colorize={false} value={financialNum(value)} after="%" />;
