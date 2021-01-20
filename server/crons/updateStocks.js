@@ -39,7 +39,7 @@ const inferStockPriceFromTransactions = async (stock) => {
     if (transaction) {
         const price = transaction.price;
 
-        if (price === stock.price) {
+        if (price <= stock.price) {
             return;
         }
 
