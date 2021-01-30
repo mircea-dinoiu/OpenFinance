@@ -1,39 +1,30 @@
-import {Checkbox, FormControlLabel, FormGroup} from '@material-ui/core';
+import {Checkbox, FormControlLabel, FormGroup, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
 import {BalanceByLocationStock} from 'components/transactions/types';
 import {firstColumnStyles, numericColumnStyles, ScreenQuery, spacingLarge, spacingNormal} from 'defs/styles';
 import {financialNum} from 'js/utils/numbers';
+import {locales} from 'locales';
 import _ from 'lodash';
 import React, {useState} from 'react';
 import {Column} from 'react-table-6';
-import {useAccounts} from 'state/accounts';
 import {useScreenSize} from 'state/hooks';
 import {useStocksMap} from 'state/stocks';
-import {Stock} from 'types';
+import {Account, Stock} from 'types';
 
 type StockWithUnits = Stock & {units: number; accounts: number; costBasis: number};
 
-export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationStock[]}) => {
+export const StocksTable = ({
+    stockHoldings,
+    accountOptions,
+}: {
+    stockHoldings: BalanceByLocationStock[];
+    accountOptions: Array<Account & {label: string; value: string}>;
+}) => {
     const [filteredAccounts, setFilteredAccounts] = useState<number[]>([]);
-    const accounts = useAccounts();
-    const accountOptions = _.uniqBy(
-        _.sortBy(
-            stockHoldings
-                .filter((sh) => sh.quantity !== 0)
-                .map((sh) => ({
-                    value: String(sh.money_location_id),
-                    label: accounts.find((a) => a.id === sh.money_location_id)?.name ?? '',
-                })),
-            'label',
-        ),
-        'value',
-    );
-
     const cls = useStyles();
     const screenSize = useScreenSize();
-
     const filteredStockHoldings = stockHoldings.filter(
         (sh) => filteredAccounts.length === 0 || filteredAccounts.includes(sh.money_location_id),
     );
@@ -54,6 +45,7 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
 
         return acc;
     }, {});
+    const tableRows = Object.values(stockHoldingsById).filter((sh) => sh.units > 0);
 
     return (
         <div className={cls.root}>
@@ -93,32 +85,30 @@ export const StocksTable = ({stockHoldings}: {stockHoldings: BalanceByLocationSt
                 })}
             </FormGroup>
             <div>
-                {Object.values(
-                    _.groupBy(
-                        Object.values(stockHoldingsById).filter((sh) => sh.units > 0),
-                        'currency_id',
-                    ),
-                ).map((data) => (
-                    <BaseTable
-                        data={data}
-                        className={cls.table}
-                        defaultSorted={[{id: 'value', desc: true}]}
-                        columns={
-                            screenSize.isSmall
-                                ? [SymbolCol, ValueCol]
-                                : [
-                                      SymbolCol,
-                                      UnitsCol,
-                                      ValueCol,
-                                      CostCol,
-                                      makePercCol(data.reduce((acc, r) => acc + r.units * r.price, 0)),
-                                      CostPerShareCol,
-                                      MarketPrice,
-                                      RoiCol,
-                                      RoiPercCol,
-                                  ]
-                        }
-                    />
+                {Object.entries(_.groupBy(tableRows, 'type')).map(([stockType, tableRowsOfType]) => (
+                    <>
+                        <Typography variant="h6">&nbsp;{locales.stockTypes[stockType]}</Typography>
+                        <BaseTable
+                            data={tableRowsOfType}
+                            className={cls.table}
+                            defaultSorted={[{id: 'value', desc: true}]}
+                            columns={
+                                screenSize.isSmall
+                                    ? [SymbolCol, MarketValueCol]
+                                    : [
+                                          SymbolCol,
+                                          UnitsCol,
+                                          MarketPriceCol,
+                                          MarketValueCol,
+                                          CostBasisCol,
+                                          CostPerShareCol,
+                                          RoiCol,
+                                          RoiPercCol,
+                                          makePercCol(tableRows.reduce((acc, r) => acc + r.units * r.price, 0)),
+                                      ]
+                            }
+                        />
+                    </>
                 ))}
             </div>
         </div>
@@ -131,8 +121,8 @@ const SymbolCol: Column<StockWithUnits> = {
     ...firstColumnStyles,
 };
 
-const ValueCol: Column<StockWithUnits> = {
-    Header: 'Value',
+const MarketValueCol: Column<StockWithUnits> = {
+    Header: 'Market Value',
     id: 'value',
     accessor: (sh) => sh.units * sh.price,
     Cell: ({value, original}) => {
@@ -160,8 +150,8 @@ const CostPerShareCol: Column<StockWithUnits> = {
     ...numericColumnStyles,
 };
 
-const CostCol: Column<StockWithUnits> = {
-    Header: 'Total Cost',
+const CostBasisCol: Column<StockWithUnits> = {
+    Header: 'Cost Basis',
     id: 'costTotal',
     accessor: (sh) => sh.costBasis,
     Cell: ({value, original}) => {
@@ -171,7 +161,7 @@ const CostCol: Column<StockWithUnits> = {
 };
 
 const RoiCol: Column<StockWithUnits> = {
-    Header: 'ROI',
+    Header: 'Gain / Loss $',
     id: 'roi',
     accessor: (sh) => sh.price * sh.units - sh.costBasis,
     Cell: ({value, original}) => {
@@ -181,7 +171,7 @@ const RoiCol: Column<StockWithUnits> = {
 };
 
 const RoiPercCol: Column<StockWithUnits> = {
-    Header: 'ROI%',
+    Header: 'Gain / Loss %',
     id: 'roiPerc',
     accessor: (sh) => {
         const marketPrice = sh.price * sh.units;
@@ -199,7 +189,7 @@ const UnitsCol: Column<StockWithUnits> = {
     ...numericColumnStyles,
 };
 
-const MarketPrice: Column<StockWithUnits> = {
+const MarketPriceCol: Column<StockWithUnits> = {
     Header: 'Market Price',
     accessor: 'price',
     Cell: ({value, original}) => {
