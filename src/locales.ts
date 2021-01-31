@@ -5,4 +5,5 @@ export const locales = {
         etf: 'ETFs & Closed End Funds',
         stock: 'Equities',
     },
+    mdash: '—',
 };

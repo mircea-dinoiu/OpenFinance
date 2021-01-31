@@ -45,7 +45,7 @@ export const StocksTable = ({
 
         return acc;
     }, {});
-    const tableRows = Object.values(stockHoldingsById).filter((sh) => sh.units > 0);
+    const tableRows = Object.values(stockHoldingsById).filter((sh) => sh.units > 0 || sh.costBasis !== 0);
 
     return (
         <div className={cls.root}>
@@ -107,6 +107,13 @@ export const StocksTable = ({
                                           makePercCol(tableRows.reduce((acc, r) => acc + r.units * r.price, 0)),
                                       ]
                             }
+                            getTrProps={(finalState: any, rowInfo: any) => {
+                                return {
+                                    style: {
+                                        opacity: rowInfo.original.units === 0 ? 0.5 : 1,
+                                    },
+                                };
+                            }}
                         />
                     </>
                 ))}
@@ -126,7 +133,11 @@ const MarketValueCol: Column<StockWithUnits> = {
     id: 'value',
     accessor: (sh) => sh.units * sh.price,
     Cell: ({value, original}) => {
-        return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+        return original.units === 0 ? (
+            locales.mdash
+        ) : (
+            <NumericValue currency={original.currency_id} value={value} colorize={false} />
+        );
     },
     ...numericColumnStyles,
 };
@@ -134,8 +145,12 @@ const makePercCol: (total: number) => Column<StockWithUnits> = _.memoize((total)
     Header: 'Allocation',
     id: 'allocation',
     accessor: (sh) => ((sh.units * sh.price) / total) * 100,
-    Cell: ({value}) => {
-        return <NumericValue colorize={false} value={financialNum(value)} after="%" />;
+    Cell: ({value, original}) => {
+        return original.units === 0 ? (
+            locales.mdash
+        ) : (
+            <NumericValue colorize={false} value={financialNum(value)} after="%" />
+        );
     },
     ...numericColumnStyles,
 }));
@@ -145,7 +160,11 @@ const CostPerShareCol: Column<StockWithUnits> = {
     id: 'costPerShare',
     accessor: (sh) => sh.costBasis / sh.units,
     Cell: ({value, original}) => {
-        return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+        return original.units === 0 ? (
+            locales.mdash
+        ) : (
+            <NumericValue currency={original.currency_id} value={value} colorize={false} />
+        );
     },
     ...numericColumnStyles,
 };
@@ -155,7 +174,11 @@ const CostBasisCol: Column<StockWithUnits> = {
     id: 'costTotal',
     accessor: (sh) => sh.costBasis,
     Cell: ({value, original}) => {
-        return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+        return original.units === 0 ? (
+            locales.mdash
+        ) : (
+            <NumericValue currency={original.currency_id} value={value} colorize={false} />
+        );
     },
     ...numericColumnStyles,
 };
@@ -178,14 +201,15 @@ const RoiPercCol: Column<StockWithUnits> = {
 
         return financialNum(((marketPrice - sh.costBasis) / sh.costBasis) * 100);
     },
-    Cell: ({value, original}) => <NumericValue colorize={true} value={value} after="%" />,
+    Cell: ({value, original}) =>
+        original.units === 0 ? locales.mdash : <NumericValue colorize={true} value={value} after="%" />,
     ...numericColumnStyles,
 };
 
 const UnitsCol: Column<StockWithUnits> = {
     Header: 'Quantity',
     accessor: 'units',
-    Cell: ({value, original}) => <NumericValue value={value} />,
+    Cell: ({value, original}) => (original.units === 0 ? locales.mdash : <NumericValue value={value} />),
     ...numericColumnStyles,
 };
 
