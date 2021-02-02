@@ -7,7 +7,7 @@ import {Alert, AlertTitle} from '@material-ui/lab';
 import {BaseTable} from 'components/BaseTable';
 import {CategoriesTab} from 'components/dashboard/CategoriesTab';
 import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'components/dashboard/columns';
-import {BalanceCol} from 'components/dashboard/Credit';
+import {BalanceCol, CreditAprCol} from 'components/dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
 import {getAccountOptions} from 'components/dashboard/getAccountOptions';
 import {StocksTable} from 'components/dashboard/StocksTable';
@@ -185,7 +185,7 @@ export const Dashboard = () => {
                                             defaultSorted={[{id: 'balance', desc: true}]}
                                             className={cls.table}
                                             data={data}
-                                            columns={[NameCol, BalanceCol]}
+                                            columns={[NameCol, CreditAprCol, BalanceCol]}
                                         />
                                     ))}
                                 </Paper>

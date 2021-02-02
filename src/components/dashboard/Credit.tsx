@@ -8,6 +8,18 @@ import React from 'react';
 import {Column} from 'react-table-6';
 import {AccountStatus, useAccounts} from 'state/accounts';
 
+export const CreditAprCol: Column<CashAccount> = {
+    Header: 'APR',
+    accessor: 'credit_apr',
+    Cell: ({original: a, value}: {original: CashAccount; value: number}) => {
+        return value ? value + '%' : null;
+    },
+    width: 60,
+    style: {
+        textAlign: 'right',
+    },
+};
+
 export const BalanceCol: Column<CashAccount> = {
     Header: 'Balance',
     accessor: (r) => -r.total,

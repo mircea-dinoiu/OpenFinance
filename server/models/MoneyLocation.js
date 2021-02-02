@@ -14,6 +14,7 @@ module.exports = (sequelize, types) =>
             status: types.STRING,
             project_id: types.INTEGER,
             credit_limit: types.INTEGER,
+            credit_apr: types.DECIMAL,
         },
         {
             timestamps: false,

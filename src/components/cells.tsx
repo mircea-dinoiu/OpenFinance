@@ -27,7 +27,32 @@ export const TextFieldCell: TableCellRenderer = ({original: row, columnProps, co
             onChange={(e) =>
                 setEditor({
                     ...editor,
-                    name: e.target.value,
+                    [column.id as string]: e.target.value,
+                })
+            }
+            fullWidth={true}
+        />
+    ) : (
+        row[column.id as string]
+    );
+};
+export const NumberFieldCell: TableCellRenderer = ({original: row, columnProps, column}) => {
+    const {editor, setEditor} = columnProps.rest;
+
+    return editor && editor.id === row.id ? (
+        <TextField
+            type="number"
+            value={editor[column.id as string]}
+            onChange={(e) =>
+                setEditor({
+                    ...editor,
+                    [column.id as string]: e.target.value,
+                })
+            }
+            onBlur={(e) =>
+                setEditor({
+                    ...editor,
+                    [column.id as string]: e.target.value ? Number(e.target.value) : null,
                 })
             }
             fullWidth={true}

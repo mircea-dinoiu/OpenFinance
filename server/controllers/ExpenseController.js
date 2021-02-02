@@ -223,6 +223,7 @@ module.exports = class ExpenseController extends BaseController {
                     item: NAME,
                     status: 'pending',
                     price: Number(TRNAMT),
+                    quantity: 1,
                     created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
                         .parseZone()
                         .toISOString(),
