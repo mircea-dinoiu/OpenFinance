@@ -15,8 +15,8 @@ module.exports = (sequelize, types) => {
 
             status: types.STRING,
 
-            price: types.FLOAT,
-            quantity: types.FLOAT,
+            price: types.DECIMAL,
+            quantity: types.DECIMAL,
             weight: types.INTEGER,
 
             favorite: types.INTEGER,
@@ -33,12 +33,12 @@ module.exports = (sequelize, types) => {
 
             sum_per_weight: {
                 type: types.VIRTUAL(
-                    types.FLOAT,
+                    types.DECIMAL,
                     '(`expenses`.price * `expenses`.quantity / `expenses`.weight) as sum_per_weight',
                 ),
             },
             sum: {
-                type: types.VIRTUAL(types.FLOAT, '(`expenses`.price * `expenses`.quantity) as `sum`'),
+                type: types.VIRTUAL(types.DECIMAL, '(`expenses`.price * `expenses`.quantity) as `sum`'),
             },
         },
         {
