@@ -1,30 +1,27 @@
 const {Stock, Expense} = require('../models');
-const finnhub = require('finnhub');
 const logger = require('../helpers/logger');
-
-finnhub.ApiClient.instance.authentications['api_key'].apiKey = process.env.FINNHUB_API_KEY;
-const finnhubClient = new finnhub.DefaultApi();
+const yf = require('yahoo-finance');
 
 module.exports = async () => {
     const models = await Stock.findAll();
 
     models.forEach(async (model) => {
-        finnhubClient.quote(model.symbol, async (error, data, response) => {
-            if (!error) {
-                const {c: price} = data;
+        let data;
 
-                if (model.price !== price) {
-                    if (price === 0) {
-                        inferStockPriceFromTransactions(model);
-                    } else {
-                        logger.log('FINNHUB', `Updating ${model.symbol} price: ${model.price} → ${price}`);
-                        model.update({price});
-                    }
-                }
-            } else {
-                logger.error(error);
-            }
-        });
+        try {
+            data = await yf.quote({symbol: model.symbol, modules: ['price']});
+        } catch (e) {
+            inferStockPriceFromTransactions(model);
+
+            return;
+        }
+
+        const {regularMarketPrice: price} = data.price;
+
+        if (model.price !== price) {
+            logger.log('YAHOO', `Updating ${model.symbol} price: ${model.price} → ${price}`);
+            model.update({price});
+        }
     });
 };
 

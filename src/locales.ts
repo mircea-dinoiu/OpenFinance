@@ -4,6 +4,7 @@ export const locales = {
         mf: 'Mutual Funds',
         etf: 'ETFs & Closed End Funds',
         stock: 'Equities',
+        crypto: 'Cryptocurrency',
     },
     mdash: '—',
 };
