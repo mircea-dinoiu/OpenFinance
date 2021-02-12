@@ -24,6 +24,7 @@ export const Accounts = () => {
                     'credit_limit',
                     'credit_apr',
                     'credit_minpay',
+                    'credit_dueday',
                 ]}
                 onRefresh={refresh}
                 allowDelete={false}
@@ -75,6 +76,11 @@ export const Accounts = () => {
                     {
                         accessor: 'credit_minpay',
                         Header: 'Credit Minimum Payment',
+                        Cell: NumberFieldCell,
+                    },
+                    {
+                        accessor: 'credit_dueday',
+                        Header: 'Credit Due Day',
                         Cell: NumberFieldCell,
                     },
                 ]}

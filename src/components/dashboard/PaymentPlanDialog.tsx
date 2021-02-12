@@ -14,12 +14,12 @@ import {
 import {CashAccount} from 'components/dashboard/defs';
 import {NumericValue} from 'components/formatters';
 import {cloneDeep, orderBy} from 'lodash';
-import moment from 'moment';
+import moment, {Moment} from 'moment';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {useEndDate} from 'utils/dates';
 
-type PaymentPlanPayment = CashAccount & {date: Date; paid: number};
+type PaymentPlanPayment = CashAccount & {date: Moment; paid: number};
 
 export const PaymentPlanDialog = ({
     open,
@@ -32,7 +32,8 @@ export const PaymentPlanDialog = ({
 }) => {
     const months: PaymentPlanPayment[][] = [];
     const [endDate] = useEndDate();
-    let date = new Date(endDate);
+    const startDate = moment.min([moment(endDate), moment()]);
+    let month = startDate.toDate();
     const creditWithTotalCopy = cloneDeep(orderBy(creditWithTotal, ['credit_apr'], ['desc']));
     const [budget, setBudget] = useState(0);
     const getAccountsWithBalance = () =>
@@ -42,17 +43,25 @@ export const PaymentPlanDialog = ({
     while (getAccountsWithBalance().length > 0) {
         const batch: Record<number, PaymentPlanPayment> = {};
         let totalPaid = 0;
+        let totalOwed = 0;
 
         getAccountsWithBalance().forEach((acc) => {
-            if (acc.credit_minpay) {
-                // redundant condition, this is always true
+            const date = moment(month);
+
+            date.set({date: acc.credit_dueday ?? 1});
+
+            // acc.credit_minpay is a redundant condition, this is always true
+            if (date.isAfter(startDate) && acc.credit_minpay) {
+                totalOwed += -acc.total;
+
                 const paid = Math.min(Math.abs(acc.total), acc.credit_minpay);
 
                 acc.total += paid;
+                totalOwed += paid;
 
                 batch[acc.id] = {
                     ...acc,
-                    date,
+                    date: date,
                     paid: paid,
                 };
 
@@ -60,25 +69,28 @@ export const PaymentPlanDialog = ({
             }
         });
 
-        while (budget > totalPaid && getAccountsWithBalance().length > 0) {
+        while (totalOwed > 0 && budget > totalPaid && getAccountsWithBalance().length > 0) {
             getAccountsWithBalance().forEach((acc) => {
-                const paid = Math.min(Math.abs(acc.total), budget - totalPaid);
+                if (batch[acc.id]) {
+                    const paid = Math.min(Math.abs(acc.total), budget - totalPaid);
 
-                acc.total += paid;
+                    acc.total += paid;
+                    totalOwed += paid;
 
-                batch[acc.id].total += paid;
-                batch[acc.id].paid += paid;
+                    batch[acc.id].total += paid;
+                    batch[acc.id].paid += paid;
 
-                totalPaid += paid;
+                    totalPaid += paid;
+                }
             });
         }
 
         maxPaidInAMonth = Math.max(maxPaidInAMonth, totalPaid);
 
-        months.push(orderBy(Object.values(batch), ['credit_apr'], ['desc']));
+        months.push(orderBy(Object.values(batch), ['date', 'credit_apr'], ['asc', 'desc']));
 
-        date = new Date(date);
-        date.setMonth(date.getMonth() + 1);
+        month = new Date(month);
+        month.setMonth(month.getMonth() + 1);
     }
 
     useEffect(() => {
@@ -116,7 +128,7 @@ export const PaymentPlanDialog = ({
                                         <TableRow key={i}>
                                             <TableCell>{p.name}</TableCell>
                                             <TableCell align="right">{p.credit_apr}%</TableCell>
-                                            <TableCell align="center">{moment(p.date).format('MMM YYYY')}</TableCell>
+                                            <TableCell align="center">{p.date.format('L')}</TableCell>
                                             <TableCell align="right">
                                                 <NumericValue value={p.paid} currency={p.currency_id} />
                                             </TableCell>

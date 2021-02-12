@@ -152,6 +152,7 @@ Object.assign(validator, {
     isNotZero: (value) => Number(value) !== 0,
     isPositive: (value) => Number(value) >= 0,
     isHigherThanZero: (value) => Number(value) > 0,
+    isDueDay: (value) => Number(value) >= 1 && Number(value) <= 31,
     isString: (value) => typeof value === 'string',
     isBool: (value) => typeof value === 'boolean',
     isRequired: (value) => {

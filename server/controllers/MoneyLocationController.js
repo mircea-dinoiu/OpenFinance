@@ -13,6 +13,7 @@ module.exports = class MoneyLocationController extends BaseController {
         credit_limit: ['sometimes', 'isRequired', 'isInt', 'isHigherThanZero'],
         credit_apr: ['sometimes', 'isRequired', 'isFloat', 'isPositive'],
         credit_minpay: ['sometimes', 'isRequired', 'isFloat', 'isHigherThanZero'],
+        credit_dueday: ['sometimes', 'isRequired', 'isDueDay'],
     };
     createValidationRules = {
         name: ['isRequired', 'isString'],
@@ -22,10 +23,20 @@ module.exports = class MoneyLocationController extends BaseController {
         credit_limit: ['sometimes', 'isRequired', 'isInt', 'isHigherThanZero'],
         credit_apr: ['sometimes', 'isRequired', 'isFloat', 'isPositive'],
         credit_minpay: ['sometimes', 'isRequired', 'isFloat', 'isHigherThanZero'],
+        credit_dueday: ['sometimes', 'isRequired', 'isDueDay'],
     };
 
     sanitizeUpdateValues(record) {
-        const values = pick(record, 'status', 'type', 'currency_id', 'credit_limit', 'credit_apr', 'credit_minpay');
+        const values = pick(
+            record,
+            'status',
+            'type',
+            'currency_id',
+            'credit_limit',
+            'credit_apr',
+            'credit_minpay',
+            'credit_dueday',
+        );
 
         if (record.hasOwnProperty('name')) {
             values.name = record.name.trim();
@@ -36,7 +47,16 @@ module.exports = class MoneyLocationController extends BaseController {
 
     sanitizeCreateValues(record) {
         return {
-            ...pick(record, 'status', 'type', 'currency_id', 'credit_limit', 'credit_apr', 'credit_minpay'),
+            ...pick(
+                record,
+                'status',
+                'type',
+                'currency_id',
+                'credit_limit',
+                'credit_apr',
+                'credit_minpay',
+                'credit_dueday',
+            ),
             name: record.name.trim(),
         };
     }

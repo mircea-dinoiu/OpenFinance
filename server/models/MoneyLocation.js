@@ -16,6 +16,7 @@ module.exports = (sequelize, types) =>
             credit_limit: types.INTEGER,
             credit_apr: types.DECIMAL,
             credit_minpay: types.DECIMAL,
+            credit_dueday: types.DECIMAL,
         },
         {
             timestamps: false,
