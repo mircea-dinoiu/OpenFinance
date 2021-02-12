@@ -51,7 +51,7 @@ export const PaymentPlanDialog = ({
             date.set({date: acc.credit_dueday ?? 1});
 
             // acc.credit_minpay is a redundant condition, this is always true
-            if (date.isAfter(startDate) && acc.credit_minpay) {
+            if (date.isSameOrAfter(startDate) && acc.credit_minpay) {
                 totalOwed += -acc.total;
 
                 const paid = Math.min(Math.abs(acc.total), acc.credit_minpay);
