@@ -46,7 +46,7 @@ export const PaymentPlanDialog = ({
         getAccountsWithBalance().forEach((acc) => {
             if (acc.credit_minpay) {
                 // redundant condition, this is always true
-                const paid = acc.credit_minpay;
+                const paid = Math.min(Math.abs(acc.total), acc.credit_minpay);
 
                 acc.total += paid;
 
@@ -60,7 +60,7 @@ export const PaymentPlanDialog = ({
             }
         });
 
-        while (totalPaid < budget && getAccountsWithBalance().length > 0) {
+        while (budget > totalPaid && getAccountsWithBalance().length > 0) {
             getAccountsWithBalance().forEach((acc) => {
                 const paid = Math.min(Math.abs(acc.total), budget - totalPaid);
 
@@ -120,7 +120,7 @@ export const PaymentPlanDialog = ({
                                                 <NumericValue value={p.paid} currency={p.currency_id} />
                                             </TableCell>
                                             <TableCell align="right">
-                                                <NumericValue value={-p.total} currency={p.currency_id} />
+                                                <NumericValue value={Math.abs(p.total)} currency={p.currency_id} />
                                             </TableCell>
                                         </TableRow>
                                     ))}
