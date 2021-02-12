@@ -3,16 +3,9 @@ import {QueryParam} from 'defs/url';
 
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
-import {useLocation, useHistory} from 'react-router-dom';
-import {mapUrlToFragment, useQueryParamState} from 'utils/url';
+import {useQueryParamState} from 'utils/url';
 
-export const getStartDate = ({
-    endDate,
-    include,
-}: {
-    endDate: string;
-    include: IncludeOption;
-}): string => {
+export const getStartDate = ({endDate, include}: {endDate: string; include: IncludeOption}): string => {
     let date: Date | null = moment(endDate).toDate();
 
     date.setHours(0, 0, 0, 0);
@@ -66,20 +59,12 @@ const getMomentArgsForDateShift = (option: ShiftDateOption, times = 1) => {
     throw new Error(`${option} is not specified in ShiftDateOptions`);
 };
 
-export const shiftDateForward = (
-    date: string | Date,
-    by: ShiftDateOption,
-    times?: number,
-) =>
+export const shiftDateForward = (date: string | Date, by: ShiftDateOption, times?: number) =>
     moment(date)
         .add(...getMomentArgsForDateShift(by, times))
         .toDate();
 
-export const shiftDateBack = (
-    date: string | Date,
-    by: ShiftDateOption,
-    times?: number,
-) =>
+export const shiftDateBack = (date: string | Date, by: ShiftDateOption, times?: number) =>
     moment(date)
         .subtract(...getMomentArgsForDateShift(by, times))
         .toDate();
@@ -87,18 +72,18 @@ export const shiftDateBack = (
 export const getInitialEndDate = (): string => {
     const date = new Date();
 
-    date.setDate(date.getDate() + 7);
+    date.setMonth(date.getMonth() + 1);
+    date.setDate(1);
 
     return endOfDayToISOString(date);
 };
 
-export const formatYMD = (date: Date | number = new Date()) =>
-    moment(date).format('YYYY-MM-DD');
+export const formatYMD = (date: Date | number = new Date()) => moment(date).format('YYYY-MM-DD');
 
 export const useEndDate = () => {
     return useQueryParamState(QueryParam.endDate, getInitialEndDate());
 };
 
 export const useEndDateIncrement = () => {
-    return useQueryParamState<ShiftDateOption>('endDateIncrement', ShiftDateOption.oneWeek);
+    return useQueryParamState<ShiftDateOption>('endDateIncrement', ShiftDateOption.oneMonth);
 };
