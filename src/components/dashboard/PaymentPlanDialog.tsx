@@ -66,6 +66,7 @@ export const PaymentPlanDialog = ({
 
                 acc.total += paid;
 
+                batch[acc.id].total += paid;
                 batch[acc.id].paid += paid;
 
                 totalPaid += paid;
