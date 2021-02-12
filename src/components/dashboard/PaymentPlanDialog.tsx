@@ -87,7 +87,7 @@ export const PaymentPlanDialog = ({
     }, [maxPaidInAMonth]);
 
     return (
-        <Dialog open={open} onClose={onClose} fullWidth={true}>
+        <Dialog open={open} onClose={onClose} maxWidth={false}>
             <DialogTitle>
                 <TextField
                     type="number"
@@ -103,8 +103,9 @@ export const PaymentPlanDialog = ({
                             <TableRow>
                                 <TableCell>Account</TableCell>
                                 <TableCell align="right">APR</TableCell>
-                                <TableCell align="right">Date</TableCell>
+                                <TableCell align="center">Date</TableCell>
                                 <TableCell align="right">Amount</TableCell>
+                                <TableCell align="right">Remaining</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -114,9 +115,12 @@ export const PaymentPlanDialog = ({
                                         <TableRow key={i}>
                                             <TableCell>{p.name}</TableCell>
                                             <TableCell align="right">{p.credit_apr}%</TableCell>
-                                            <TableCell align="right">{moment(p.date).format('MMMM YYYY')}</TableCell>
+                                            <TableCell align="center">{moment(p.date).format('MMM YYYY')}</TableCell>
                                             <TableCell align="right">
                                                 <NumericValue value={p.paid} currency={p.currency_id} />
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <NumericValue value={-p.total} currency={p.currency_id} />
                                             </TableCell>
                                         </TableRow>
                                     ))}
