@@ -16,7 +16,15 @@ export const Accounts = () => {
             <TableWithInlineEditing<Account>
                 data={rows}
                 api={routes.moneyLocations}
-                editableFields={['name', 'type', 'status', 'currency_id', 'credit_limit', 'credit_apr']}
+                editableFields={[
+                    'name',
+                    'type',
+                    'status',
+                    'currency_id',
+                    'credit_limit',
+                    'credit_apr',
+                    'credit_minpay',
+                ]}
                 onRefresh={refresh}
                 allowDelete={false}
                 defaultSorted={[
@@ -62,6 +70,11 @@ export const Accounts = () => {
                     {
                         accessor: 'credit_apr',
                         Header: 'Credit APR',
+                        Cell: NumberFieldCell,
+                    },
+                    {
+                        accessor: 'credit_minpay',
+                        Header: 'Credit Minimum Payment',
                         Cell: NumberFieldCell,
                     },
                 ]}

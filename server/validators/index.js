@@ -150,7 +150,8 @@ Object.assign(validator, {
     isAccountStatus: (value) => ['open', 'locked', 'closed'].includes(value),
     isAccountType: (value) => ['cash', 'credit', 'brokerage'].includes(value),
     isNotZero: (value) => Number(value) !== 0,
-    isNotNegative: (value) => Number(value) >= 0,
+    isPositive: (value) => Number(value) >= 0,
+    isHigherThanZero: (value) => Number(value) > 0,
     isString: (value) => typeof value === 'string',
     isBool: (value) => typeof value === 'boolean',
     isRequired: (value) => {

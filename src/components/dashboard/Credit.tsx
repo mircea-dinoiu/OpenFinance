@@ -11,8 +11,8 @@ import {AccountStatus, useAccounts} from 'state/accounts';
 export const CreditAprCol: Column<CashAccount> = {
     Header: 'APR',
     accessor: 'credit_apr',
-    Cell: ({original: a, value}: {original: CashAccount; value: number}) => {
-        return value ? value + '%' : null;
+    Cell: ({original: a, value}: {original: CashAccount; value: number | null}) => {
+        return typeof value === 'number' ? value + '%' : null;
     },
     width: 60,
     style: {

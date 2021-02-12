@@ -1,4 +1,4 @@
-import {CardHeader, Checkbox, Divider, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
+import {Button, CardHeader, Checkbox, Divider, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconCash from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
@@ -10,6 +10,7 @@ import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'components/da
 import {BalanceCol, CreditAprCol} from 'components/dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
 import {getAccountOptions} from 'components/dashboard/getAccountOptions';
+import {PaymentPlanDialog} from 'components/dashboard/PaymentPlanDialog';
 import {StocksTable} from 'components/dashboard/StocksTable';
 import {useDashboardQueryParams} from 'components/dashboard/useDashboardQueryParams';
 import {UsersTab} from 'components/dashboard/UsersTab';
@@ -49,6 +50,7 @@ export const Dashboard = () => {
     const [tab, setTab] = useState(0);
     const screenSize = useScreenSize();
     const currenciesMap = useCurrenciesMap();
+    const [paymentPlanDialogIsOpen, setPaymentPlanDialogIsOpen] = useState(false);
 
     React.useEffect(() => {
         createXHR<BalanceByLocation>({
@@ -176,10 +178,25 @@ export const Dashboard = () => {
                                         className={cls.cardHeader}
                                         title={
                                             <>
-                                                <IconCredit /> Credit
+                                                <IconCredit />
+                                                <span>Credit</span>
+                                                <Button
+                                                    size="small"
+                                                    variant="outlined"
+                                                    onClick={() => setPaymentPlanDialogIsOpen(true)}
+                                                >
+                                                    Payment Plan
+                                                </Button>
                                             </>
                                         }
                                     />
+                                    {paymentPlanDialogIsOpen && (
+                                        <PaymentPlanDialog
+                                            open={true}
+                                            creditWithTotal={creditWithTotal}
+                                            onClose={() => setPaymentPlanDialogIsOpen(false)}
+                                        />
+                                    )}
                                     {Object.values(groupBy(creditWithTotal, 'currency_id')).map((data) => (
                                         <BaseTable
                                             defaultSorted={[{id: 'balance', desc: true}]}
@@ -315,7 +332,7 @@ const useStyles = makeStyles({
             display: 'grid',
             alignItems: 'center',
             gridGap: spacingSmall,
-            gridTemplateColumns: 'auto 1fr',
+            gridTemplateColumns: 'auto 1fr auto',
         },
     },
     cashCreditGrid: {

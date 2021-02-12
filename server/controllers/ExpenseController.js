@@ -37,7 +37,7 @@ module.exports = class ExpenseController extends BaseController {
 
             stock_id: ['sometimes', ['isId', Stock]],
 
-            weight: ['sometimes', 'isNotNegative', 'isInt'],
+            weight: ['sometimes', 'isPositive', 'isInt'],
         };
         this.createValidationRules = {
             price: ['isRequired', 'isFloat'],
@@ -60,7 +60,7 @@ module.exports = class ExpenseController extends BaseController {
 
             stock_id: ['sometimes', ['isId', Stock]],
 
-            weight: ['sometimes', 'isNotNegative', 'isInt'],
+            weight: ['sometimes', 'isPositive', 'isInt'],
         };
     }
 

@@ -58,6 +58,7 @@ export type Account = {
     type: AccountType;
     credit_limit: number | null;
     credit_apr: number | null;
+    credit_minpay: number | null;
 };
 
 export type Accounts = Account[];
