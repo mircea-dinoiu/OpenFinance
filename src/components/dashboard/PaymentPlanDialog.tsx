@@ -17,6 +17,7 @@ import {cloneDeep, orderBy} from 'lodash';
 import moment from 'moment';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
+import {useEndDate} from 'utils/dates';
 
 type PaymentPlanPayment = CashAccount & {date: Date; paid: number};
 
@@ -30,7 +31,8 @@ export const PaymentPlanDialog = ({
     creditWithTotal: CashAccount[];
 }) => {
     const months: PaymentPlanPayment[][] = [];
-    let date = new Date();
+    const [endDate] = useEndDate();
+    let date = new Date(endDate);
     const creditWithTotalCopy = cloneDeep(orderBy(creditWithTotal, ['credit_apr'], ['desc']));
     const [budget, setBudget] = useState(0);
     const getAccountsWithBalance = () =>
