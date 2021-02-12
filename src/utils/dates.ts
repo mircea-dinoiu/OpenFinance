@@ -73,7 +73,7 @@ export const getInitialEndDate = (): string => {
     const date = new Date();
 
     date.setMonth(date.getMonth() + 1);
-    date.setDate(-1);
+    date.setDate(0);
 
     return endOfDayToISOString(date);
 };
