@@ -38,9 +38,6 @@ export const PaymentPlanDialog = ({
     let maxPaidInAMonth = 0;
 
     while (getAccountsWithBalance().length > 0) {
-        date = new Date(date);
-        date.setMonth(date.getMonth() + 1);
-
         const batch: Record<number, PaymentPlanPayment> = {};
         let totalPaid = 0;
 
@@ -76,6 +73,9 @@ export const PaymentPlanDialog = ({
         maxPaidInAMonth = Math.max(maxPaidInAMonth, totalPaid);
 
         months.push(orderBy(Object.values(batch), ['credit_apr'], ['desc']));
+
+        date = new Date(date);
+        date.setMonth(date.getMonth() + 1);
     }
 
     useEffect(() => {
