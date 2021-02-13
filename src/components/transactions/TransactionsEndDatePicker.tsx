@@ -21,10 +21,7 @@ export const TransactionsEndDatePicker = () => {
     const [endDate, setEndDate] = useEndDate();
     const [endDateIncrement, setEndDateIncrement] = useEndDateIncrement();
     const [showShiftMenu, setShowShiftMenu] = React.useState(false);
-    const [
-        shiftMenuAnchor,
-        setShiftMenuAnchor,
-    ] = React.useState<HTMLDivElement | null>(null);
+    const [shiftMenuAnchor, setShiftMenuAnchor] = React.useState<HTMLDivElement | null>(null);
     const user = useBootstrap();
     const cls = useStyles();
 
@@ -50,9 +47,7 @@ export const TransactionsEndDatePicker = () => {
             }}
         >
             <MuiSelectNative<ShiftDateOption>
-                value={ShiftDateOptions.find(
-                    (o) => o.value === endDateIncrement,
-                )}
+                value={ShiftDateOptions.find((o) => o.value === endDateIncrement)}
                 onChange={({value}) => {
                     setEndDateIncrement(value);
                 }}
@@ -96,43 +91,39 @@ export const TransactionsEndDatePicker = () => {
             <ShiftMenu>
                 <div>
                     <FormLabel component="legend">Previous</FormLabel>
-                    {getShiftBackOptions(endDate, endDateIncrement).map(
-                        (date) => {
-                            const formattedDate = moment(date).format('ll');
+                    {getShiftBackOptions(endDate, endDateIncrement).map((date) => {
+                        const formattedDate = moment(date).format('ll');
 
-                            return (
-                                <MenuItem2
-                                    key={formattedDate}
-                                    onClick={() => {
-                                        handleCloseShiftMenu();
-                                        setDate(date);
-                                    }}
-                                >
-                                    {formattedDate}
-                                </MenuItem2>
-                            );
-                        },
-                    )}
+                        return (
+                            <MenuItem2
+                                key={formattedDate}
+                                onClick={() => {
+                                    handleCloseShiftMenu();
+                                    setDate(date);
+                                }}
+                            >
+                                {formattedDate}
+                            </MenuItem2>
+                        );
+                    })}
                 </div>
                 <div>
                     <FormLabel component="legend">Next</FormLabel>
-                    {getShiftForwardOptions(endDate, endDateIncrement).map(
-                        (date) => {
-                            const formattedDate = moment(date).format('ll');
+                    {getShiftForwardOptions(endDate, endDateIncrement).map((date) => {
+                        const formattedDate = moment(date).format('ll');
 
-                            return (
-                                <MenuItem2
-                                    key={formattedDate}
-                                    onClick={() => {
-                                        handleCloseShiftMenu();
-                                        setDate(date);
-                                    }}
-                                >
-                                    {formattedDate}
-                                </MenuItem2>
-                            );
-                        },
-                    )}
+                        return (
+                            <MenuItem2
+                                key={formattedDate}
+                                onClick={() => {
+                                    handleCloseShiftMenu();
+                                    setDate(date);
+                                }}
+                            >
+                                {formattedDate}
+                            </MenuItem2>
+                        );
+                    })}
                 </div>
             </ShiftMenu>
         </Menu>
@@ -147,7 +138,7 @@ export const TransactionsEndDatePicker = () => {
                     style={{
                         width: '85px',
                     }}
-                    format={'YYYY-MM-DD'}
+                    format={'L'}
                     value={endDate ? moment(endDate).toDate() : null}
                     onChange={(date) => {
                         setEndDate(endOfDayToISOString(date as any));

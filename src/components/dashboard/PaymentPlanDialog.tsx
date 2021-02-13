@@ -11,6 +11,7 @@ import {
     TableRow,
     TextField,
 } from '@material-ui/core';
+import {DatePicker} from '@material-ui/pickers';
 import {CashAccount} from 'components/dashboard/defs';
 import {NumericValue} from 'components/formatters';
 import {cloneDeep, orderBy} from 'lodash';
@@ -32,7 +33,7 @@ export const PaymentPlanDialog = ({
 }) => {
     const months: PaymentPlanPayment[][] = [];
     const [endDate] = useEndDate();
-    const startDate = moment(endDate);
+    const [startDate, setStartDate] = useState(moment.min([moment(endDate), moment()]));
     let month = startDate.toDate();
     const creditWithTotalCopy = cloneDeep(orderBy(creditWithTotal, ['credit_apr'], ['desc']));
     const [budget, setBudget] = useState(0);
@@ -107,6 +108,13 @@ export const PaymentPlanDialog = ({
                     label="Monthly Budget"
                     value={budget}
                     onChange={(e) => setBudget(Number(e.target.value))}
+                />{' '}
+                <DatePicker
+                    variant="inline"
+                    value={startDate.toDate()}
+                    onChange={(date) => date && setStartDate(moment(date))}
+                    label="Start Date"
+                    format={'L'}
                 />
             </DialogTitle>
             <DialogContent>
