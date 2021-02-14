@@ -2,6 +2,8 @@ import {
     Dialog,
     DialogContent,
     DialogTitle,
+    IconButton,
+    InputAdornment,
     Paper,
     Table,
     TableBody,
@@ -11,13 +13,14 @@ import {
     TableRow,
     TextField,
 } from '@material-ui/core';
-import {DatePicker} from '@material-ui/pickers';
+import IconAddCircle from '@material-ui/icons/AddCircle';
+import IconRemoveCircle from '@material-ui/icons/RemoveCircle';
 import {CashAccount} from 'components/dashboard/defs';
 import {NumericValue} from 'components/formatters';
 import {cloneDeep, orderBy} from 'lodash';
 import moment, {Moment} from 'moment';
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useEndDate} from 'utils/dates';
 
 type PaymentPlanPayment = CashAccount & {date: Moment; paid: number};
@@ -31,74 +34,89 @@ export const PaymentPlanDialog = ({
     onClose: () => unknown;
     creditWithTotal: CashAccount[];
 }) => {
-    const months: PaymentPlanPayment[][] = [];
     const [endDate] = useEndDate();
-    const [startDate, setStartDate] = useState(moment.min([moment(endDate), moment()]));
-    let month = startDate.toDate();
-    const creditWithTotalCopy = cloneDeep(orderBy(creditWithTotal, ['credit_apr'], ['desc']));
+    const [offset, setOffset] = useState(0);
     const [budget, setBudget] = useState(0);
-    const getAccountsWithBalance = () =>
-        creditWithTotalCopy.filter((acc) => acc.total < 0 && acc.credit_minpay != null && acc.credit_minpay > 0);
-    let maxPaidInAMonth = 0;
 
-    while (getAccountsWithBalance().length > 0) {
-        const batch: Record<number, PaymentPlanPayment> = {};
-        let totalPaid = 0;
-        let totalOwed = 0;
+    const {maxPaidInAMonth, months} = useMemo(() => {
+        const months: PaymentPlanPayment[][] = [];
+        const startDate = moment.min([moment(endDate), moment()]);
+        let paymentIndex = 0;
+        let month = startDate.toDate();
+        const creditWithTotalCopy = cloneDeep(
+            orderBy(creditWithTotal, ['credit_dueday', 'credit_apr'], ['asc', 'desc']),
+        );
+        const getAccountsWithBalance = () =>
+            creditWithTotalCopy.filter((acc) => acc.total < 0 && acc.credit_minpay != null && acc.credit_minpay > 0);
+        let maxPaidInAMonth = 0;
 
-        getAccountsWithBalance().forEach((acc) => {
-            const date = moment(month);
+        while (getAccountsWithBalance().length > 0) {
+            const batch: Record<number, PaymentPlanPayment> = {};
+            let totalPaid = 0;
+            let totalOwed = 0;
 
-            date.set({date: acc.credit_dueday ?? 1});
-
-            // acc.credit_minpay is a redundant condition, this is always true
-            if (date.isSameOrAfter(startDate) && acc.credit_minpay) {
-                totalOwed += -acc.total;
-
-                const paid = Math.min(Math.abs(acc.total), acc.credit_minpay);
-
-                acc.total += paid;
-                totalOwed += paid;
-
-                batch[acc.id] = {
-                    ...acc,
-                    date: date,
-                    paid: paid,
-                };
-
-                totalPaid += paid;
-            }
-        });
-
-        while (totalOwed > 0 && budget > totalPaid && getAccountsWithBalance().length > 0) {
             getAccountsWithBalance().forEach((acc) => {
-                if (batch[acc.id]) {
-                    const paid = Math.min(Math.abs(acc.total), budget - totalPaid);
+                const date = moment(month);
+
+                date.set({date: acc.credit_dueday ?? 1});
+
+                // acc.credit_minpay is a redundant condition, this is always true
+                if (date.isSameOrAfter(startDate) && acc.credit_minpay) {
+                    paymentIndex++;
+
+                    if (offset > paymentIndex - 1) {
+                        return;
+                    }
+
+                    totalOwed += -acc.total;
+
+                    const paid = Math.min(Math.abs(acc.total), acc.credit_minpay);
 
                     acc.total += paid;
                     totalOwed += paid;
 
-                    batch[acc.id].total += paid;
-                    batch[acc.id].paid += paid;
+                    batch[acc.id] = {
+                        ...acc,
+                        date: date,
+                        paid: paid,
+                    };
 
                     totalPaid += paid;
                 }
             });
+
+            while (totalOwed > 0 && budget > totalPaid && getAccountsWithBalance().length > 0) {
+                orderBy(getAccountsWithBalance(), ['credit_apr'], ['desc']).forEach((acc) => {
+                    if (batch[acc.id]) {
+                        const paid = Math.min(Math.abs(acc.total), budget - totalPaid);
+
+                        acc.total += paid;
+                        totalOwed += paid;
+
+                        batch[acc.id].total += paid;
+                        batch[acc.id].paid += paid;
+
+                        totalPaid += paid;
+                    }
+                });
+            }
+
+            maxPaidInAMonth = Math.max(maxPaidInAMonth, totalPaid);
+
+            months.push(orderBy(Object.values(batch), ['date', 'credit_apr'], ['asc', 'desc']));
+
+            month = new Date(month);
+            month.setMonth(month.getMonth() + 1);
         }
 
-        maxPaidInAMonth = Math.max(maxPaidInAMonth, totalPaid);
-
-        months.push(orderBy(Object.values(batch), ['date', 'credit_apr'], ['asc', 'desc']));
-
-        month = new Date(month);
-        month.setMonth(month.getMonth() + 1);
-    }
+        return {months, maxPaidInAMonth};
+    }, [creditWithTotal, endDate, budget, offset]);
 
     useEffect(() => {
-        if (maxPaidInAMonth > budget) {
+        if (budget < maxPaidInAMonth) {
             setBudget(maxPaidInAMonth);
         }
-    }, [maxPaidInAMonth]);
+    }, [maxPaidInAMonth, budget]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth={false}>
@@ -109,12 +127,30 @@ export const PaymentPlanDialog = ({
                     value={budget}
                     onChange={(e) => setBudget(Number(e.target.value))}
                 />{' '}
-                <DatePicker
-                    variant="inline"
-                    value={startDate.toDate()}
-                    onChange={(date) => date && setStartDate(moment(date))}
-                    label="Start Date"
-                    format={'L'}
+                <TextField
+                    type="number"
+                    label="Skip Payments"
+                    value={offset}
+                    style={{
+                        width: '150px',
+                    }}
+                    InputProps={{
+                        readOnly: true,
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <IconButton disabled={offset === 0} onClick={() => setOffset(offset - 1)}>
+                                    <IconRemoveCircle />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={() => setOffset(offset + 1)}>
+                                    <IconAddCircle />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
                 />
             </DialogTitle>
             <DialogContent>
@@ -130,26 +166,32 @@ export const PaymentPlanDialog = ({
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {months.map((month, i) => (
-                                <>
-                                    {month.map((p) => (
-                                        <TableRow key={i}>
-                                            <TableCell>{p.name}</TableCell>
-                                            <TableCell align="right">{p.credit_apr}%</TableCell>
-                                            <TableCell align="center">{p.date.format('L')}</TableCell>
-                                            <TableCell align="right">
-                                                <NumericValue value={p.paid} currency={p.currency_id} />
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <NumericValue value={Math.abs(p.total)} currency={p.currency_id} />
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                    <TableRow>
-                                        <TableCell colSpan={4}>&nbsp;</TableCell>
-                                    </TableRow>
-                                </>
-                            ))}
+                            {months.map(
+                                (month, i) =>
+                                    month.length > 0 && (
+                                        <>
+                                            {month.map((p) => (
+                                                <TableRow key={i}>
+                                                    <TableCell>{p.name}</TableCell>
+                                                    <TableCell align="right">{p.credit_apr}%</TableCell>
+                                                    <TableCell align="center">{p.date.format('L')}</TableCell>
+                                                    <TableCell align="right">
+                                                        <NumericValue value={p.paid} currency={p.currency_id} />
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        <NumericValue
+                                                            value={Math.abs(p.total)}
+                                                            currency={p.currency_id}
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                            <TableRow>
+                                                <TableCell colSpan={4}>&nbsp;</TableCell>
+                                            </TableRow>
+                                        </>
+                                    ),
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
