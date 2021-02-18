@@ -12,8 +12,9 @@ import {Column} from 'react-table-6';
 import {useScreenSize} from 'state/hooks';
 import {useStocksMap} from 'state/stocks';
 import {Account, Stock} from 'types';
+import Decimal from 'decimal.js';
 
-type StockWithUnits = Stock & {units: number; accounts: number; costBasis: number};
+type StockWithUnits = Stock & {units: Decimal; accounts: number; costBasis: Decimal};
 
 export const StocksTable = ({
     stockHoldings,
@@ -34,18 +35,20 @@ export const StocksTable = ({
             acc[sh.stock_id] = {
                 ...stocksMap.get(sh.stock_id),
                 accounts: 0,
-                units: 0,
-                costBasis: 0,
+                units: new Decimal(0),
+                costBasis: new Decimal(0),
             };
         }
 
         acc[sh.stock_id].accounts += 1;
-        acc[sh.stock_id].units += sh.quantity;
-        acc[sh.stock_id].costBasis += sh.cost_basis;
+        acc[sh.stock_id].units = acc[sh.stock_id].units.plus(sh.quantity);
+        acc[sh.stock_id].costBasis = acc[sh.stock_id].costBasis.plus(sh.cost_basis);
 
         return acc;
     }, {});
-    const tableRows = Object.values(stockHoldingsById).filter((sh) => sh.units > 0 || sh.costBasis !== 0);
+    const tableRows = Object.values(stockHoldingsById).filter(
+        (sh) => sh.units.toNumber() > 0 || sh.costBasis.toNumber() !== 0,
+    );
 
     return (
         <div className={cls.root}>
@@ -94,23 +97,27 @@ export const StocksTable = ({
                             defaultSorted={[{id: 'value', desc: true}]}
                             columns={
                                 screenSize.isSmall
-                                    ? [SymbolCol, MarketValueCol]
+                                    ? [SymbolCol, ValueCol]
                                     : [
                                           SymbolCol,
                                           UnitsCol,
                                           MarketPriceCol,
-                                          MarketValueCol,
+                                          ValueCol,
                                           CostBasisCol,
                                           CostPerShareCol,
                                           RoiCol,
                                           RoiPercCol,
-                                          makePercCol(tableRows.reduce((acc, r) => acc + r.units * r.price, 0)),
+                                          makePercCol(
+                                              tableRows
+                                                  .reduce((acc, r) => acc.plus(r.units.mul(r.price)), new Decimal(0))
+                                                  .toNumber(),
+                                          ),
                                       ]
                             }
                             getTrProps={(finalState: any, rowInfo: any) => {
                                 return {
                                     style: {
-                                        opacity: rowInfo.original.units === 0 ? 0.5 : 1,
+                                        opacity: rowInfo.original.units.isZero() ? 0.5 : 1,
                                     },
                                 };
                             }}
@@ -128,12 +135,12 @@ const SymbolCol: Column<StockWithUnits> = {
     ...firstColumnStyles,
 };
 
-const MarketValueCol: Column<StockWithUnits> = {
-    Header: 'Market Value',
+const ValueCol: Column<StockWithUnits> = {
+    Header: 'Value',
     id: 'value',
-    accessor: (sh) => sh.units * sh.price,
+    accessor: (sh) => sh.units.mul(sh.price).toNumber(),
     Cell: ({value, original}) => {
-        return original.units === 0 ? (
+        return original.units.isZero() ? (
             locales.mdash
         ) : (
             <NumericValue currency={original.currency_id} value={value} colorize={false} />
@@ -144,9 +151,14 @@ const MarketValueCol: Column<StockWithUnits> = {
 const makePercCol: (total: number) => Column<StockWithUnits> = _.memoize((total) => ({
     Header: 'Allocation',
     id: 'allocation',
-    accessor: (sh) => ((sh.units * sh.price) / total) * 100,
+    accessor: (sh) =>
+        sh.units
+            .mul(sh.price)
+            .div(total)
+            .mul(100)
+            .toNumber(),
     Cell: ({value, original}) => {
-        return original.units === 0 ? (
+        return original.units.isZero() ? (
             locales.mdash
         ) : (
             <NumericValue colorize={false} value={financialNum(value)} after="%" />
@@ -158,9 +170,9 @@ const makePercCol: (total: number) => Column<StockWithUnits> = _.memoize((total)
 const CostPerShareCol: Column<StockWithUnits> = {
     Header: 'Cost Per Share',
     id: 'costPerShare',
-    accessor: (sh) => sh.costBasis / sh.units,
+    accessor: (sh) => sh.costBasis.div(sh.units).toNumber(),
     Cell: ({value, original}) => {
-        return original.units === 0 ? (
+        return original.units.isZero() ? (
             locales.mdash
         ) : (
             <NumericValue currency={original.currency_id} value={value} colorize={false} />
@@ -174,7 +186,7 @@ const CostBasisCol: Column<StockWithUnits> = {
     id: 'costTotal',
     accessor: (sh) => sh.costBasis,
     Cell: ({value, original}) => {
-        return original.units === 0 ? (
+        return original.units.isZero() ? (
             locales.mdash
         ) : (
             <NumericValue currency={original.currency_id} value={value} colorize={false} />
@@ -186,7 +198,11 @@ const CostBasisCol: Column<StockWithUnits> = {
 const RoiCol: Column<StockWithUnits> = {
     Header: 'Gain / Loss $',
     id: 'roi',
-    accessor: (sh) => sh.price * sh.units - sh.costBasis,
+    accessor: (sh) =>
+        sh.units
+            .times(sh.price)
+            .minus(sh.costBasis)
+            .toNumber(),
     Cell: ({value, original}) => {
         return <NumericValue colorize={true} currency={original.currency_id} value={value} />;
     },
@@ -197,19 +213,25 @@ const RoiPercCol: Column<StockWithUnits> = {
     Header: 'Gain / Loss %',
     id: 'roiPerc',
     accessor: (sh) => {
-        const marketPrice = sh.price * sh.units;
+        const value = sh.units.mul(sh.price);
 
-        return financialNum(((marketPrice - sh.costBasis) / sh.costBasis) * 100);
+        return financialNum(
+            value
+                .minus(sh.costBasis)
+                .div(sh.costBasis)
+                .times(100)
+                .toNumber(),
+        );
     },
     Cell: ({value, original}) =>
-        original.units === 0 ? locales.mdash : <NumericValue colorize={true} value={value} after="%" />,
+        original.units.isZero() ? locales.mdash : <NumericValue colorize={true} value={value} after="%" />,
     ...numericColumnStyles,
 };
 
 const UnitsCol: Column<StockWithUnits> = {
     Header: 'Quantity',
     accessor: 'units',
-    Cell: ({value, original}) => (original.units === 0 ? locales.mdash : <NumericValue value={value} />),
+    Cell: ({value, original}) => (original.units.isZero() ? locales.mdash : <NumericValue value={value.toNumber()} />),
     ...numericColumnStyles,
 };
 
