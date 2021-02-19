@@ -36,7 +36,7 @@ export const PaymentPlanDialog = ({
     creditWithTotal: CashAccount[];
 }) => {
     const [offset, setOffset] = useState(0);
-    const [budget, setBudget] = useState(0);
+    const [addlCashFlow, setAddlCashFlow] = useState(0);
 
     const {months} = useMemo(() => {
         const months: PaymentPlanPayment[][] = [];
@@ -81,6 +81,8 @@ export const PaymentPlanDialog = ({
                 }
             });
 
+            const budget = addlCashFlow + totalPaid;
+
             while (
                 totalOwed > 0 &&
                 budget > totalPaid &&
@@ -117,16 +119,35 @@ export const PaymentPlanDialog = ({
         }
 
         return {months};
-    }, [creditWithTotal, budget, offset]);
+    }, [creditWithTotal, addlCashFlow, offset]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth={false}>
             <DialogTitle>
                 <TextField
                     type="number"
-                    label="Monthly Budget"
-                    value={budget}
-                    onChange={(e) => setBudget(Number(e.target.value))}
+                    label="Add'l Monthly Cash Flow"
+                    value={addlCashFlow}
+                    onChange={(e) => setAddlCashFlow(Number(e.target.value))}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <IconButton
+                                    disabled={addlCashFlow === 0}
+                                    onClick={() => setAddlCashFlow(Math.max(addlCashFlow - 100, 0))}
+                                >
+                                    <IconRemoveCircle />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={() => setAddlCashFlow(addlCashFlow + 100)}>
+                                    <IconAddCircle />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
                 />{' '}
                 <TextField
                     type="number"
