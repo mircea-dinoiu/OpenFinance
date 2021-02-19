@@ -18,11 +18,15 @@ import IconClear from '@material-ui/icons/Clear';
 import IconRemoveCircle from '@material-ui/icons/RemoveCircle';
 import {CashAccount} from 'components/dashboard/defs';
 import {NumericValue} from 'components/formatters';
+import {StorageKey} from 'defs';
 import {locales} from 'locales';
 import {cloneDeep, orderBy} from 'lodash';
 import moment, {Moment} from 'moment';
 import * as React from 'react';
 import {useMemo, useState} from 'react';
+import createPersistedState from 'use-persisted-state';
+
+const useAddlCashFlowState = createPersistedState(StorageKey.paymentDialogAddlCashFlow);
 
 type PaymentPlanPayment = CashAccount & {date: Moment; paid: number; paidExtra: number};
 
@@ -36,7 +40,7 @@ export const PaymentPlanDialog = ({
     creditWithTotal: CashAccount[];
 }) => {
     const [offset, setOffset] = useState(0);
-    const [addlCashFlow, setAddlCashFlow] = useState(0);
+    const [addlCashFlow, setAddlCashFlow] = useAddlCashFlowState(0);
 
     const {months} = useMemo(() => {
         const months: PaymentPlanPayment[][] = [];

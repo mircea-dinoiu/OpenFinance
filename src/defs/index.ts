@@ -53,3 +53,8 @@ export enum IncludeOption {
 export const Timers = {
     SEARCH_DEBOUNCE: 250,
 };
+
+export enum StorageKey {
+    privacyToggle = 'privacyToggle',
+    paymentDialogAddlCashFlow = 'paymentDialogAddlCashFlow',
+}
