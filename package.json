@@ -2,7 +2,7 @@
   "name": "financial",
   "version": "1.0.0",
   "engines": {
-    "node": "12.18.1"
+    "node": "14"
   },
   "description": "This application is made to track down your monthly expenses and incomes in the family and help you understand better where your money are going and how can you be more careful what you're spending money on.",
   "repository": {
@@ -98,8 +98,9 @@
   "scripts": {
     "ci": "run-p --aggregate-output test-server test-all lint-all",
     "build": "rm -rf build && react-scripts build && mv build/index.html build/app.html",
-    "dev": "react-scripts start",
+    "dev": "PORT=3001 react-scripts start",
     "start": "node ./bin/www",
+    "start:dev": "run-p nodemon dev",
     "start:ts": "TS_NODE_PROJECT=tsconfig.server.json ts-node server/index.ts",
     "test": "react-scripts test",
     "test-related": "react-scripts test --findRelatedTests",
