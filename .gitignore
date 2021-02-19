@@ -11,7 +11,6 @@
 
 # testing
 /coverage
-*.sh
 
 # production
 /build
