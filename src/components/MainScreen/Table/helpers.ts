@@ -1,6 +1,5 @@
 import {Classes} from 'components/BaseTable';
 import {TransactionModel} from 'components/transactions/types';
-import {TransactionStatus} from 'defs';
 import {formatYMD} from 'utils/dates';
 
 const today = formatYMD(new Date());
@@ -14,12 +13,13 @@ export const getTrClassName = (
     },
 ): string => {
     const classes = [Classes.notSelectable];
+    const formattedDate = formatYMD(item.created_at);
 
-    if (formatYMD(item.created_at) === today) {
+    if (formattedDate === today) {
         classes.push(Classes.todayRow);
     }
 
-    if (item.status !== TransactionStatus.finished) {
+    if (formattedDate > today) {
         classes.push(Classes.pendingRow);
     }
 
@@ -42,11 +42,7 @@ export const getTrProps = ({
     item,
 }: {
     item: TransactionModel;
-    onChangeContextMenu: (props: {
-        display: boolean;
-        top?: number;
-        left?: number;
-    }) => void;
+    onChangeContextMenu: (props: {display: boolean; top?: number; left?: number}) => void;
     onReceiveSelectedIds: (ids: number[]) => void;
     onEdit: () => void;
     selectedIds: number[];
