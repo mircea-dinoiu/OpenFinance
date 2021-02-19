@@ -49,3 +49,9 @@ eb deploy
 - `SESSION_STORE=memory` uses memory session instead of DB
 - `SESSION_SECRET=keyboardcat` sets the secret key for session 
 - `FIXER_API_KEY=keyboardcat` sets the [fixer](https://fixer.io/) key 
+
+# Docker
+```
+docker build -t financial .
+docker run -d -p 8080:8080 -p 3000:3000 financial 
+```

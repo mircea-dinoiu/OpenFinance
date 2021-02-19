@@ -6,9 +6,8 @@ COPY package.json ./
 COPY yarn.lock ./
 
 RUN yarn install
-RUN yarn global add nodemon
 
 COPY . .
 
-EXPOSE 3000 3001
-CMD [ "yarn", "start:dev" ]
+EXPOSE 3000
+CMD [ "yarn", "dev" ]

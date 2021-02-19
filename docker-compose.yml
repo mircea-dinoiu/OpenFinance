@@ -1,0 +1,16 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    volumes:
+      - ./server/:/financial/server
+      - ./src/:/financial/src
+  src:
+    build:
+      context: .
+      dockerfile: src/Dockerfile
+    volumes:
+      - ./src/:/financial/src
+    ports:
+      - "3000:3000"
