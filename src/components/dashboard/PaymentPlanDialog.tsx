@@ -18,12 +18,13 @@ import IconClear from '@material-ui/icons/Clear';
 import IconRemoveCircle from '@material-ui/icons/RemoveCircle';
 import {CashAccount} from 'components/dashboard/defs';
 import {NumericValue} from 'components/formatters';
+import {locales} from 'locales';
 import {cloneDeep, orderBy} from 'lodash';
 import moment, {Moment} from 'moment';
 import * as React from 'react';
 import {useMemo, useState} from 'react';
 
-type PaymentPlanPayment = CashAccount & {date: Moment; paid: number};
+type PaymentPlanPayment = CashAccount & {date: Moment; paid: number; paidExtra: number};
 
 export const PaymentPlanDialog = ({
     open,
@@ -72,6 +73,7 @@ export const PaymentPlanDialog = ({
                         ...acc,
                         date: date,
                         paid: paid,
+                        paidExtra: 0,
                     };
 
                     totalPaid += paid;
@@ -96,6 +98,7 @@ export const PaymentPlanDialog = ({
 
                     batch[acc.id].total += paid;
                     batch[acc.id].paid += paid;
+                    batch[acc.id].paidExtra += paid;
 
                     totalPaid += paid;
                 });
@@ -159,7 +162,9 @@ export const PaymentPlanDialog = ({
                                 <TableCell>Account</TableCell>
                                 <TableCell align="right">APR</TableCell>
                                 <TableCell align="center">Date</TableCell>
-                                <TableCell align="right">Payment</TableCell>
+                                <TableCell align="right">Min Payment</TableCell>
+                                <TableCell align="right">Add'l Payment</TableCell>
+                                <TableCell align="right">Total Payment</TableCell>
                                 <TableCell align="right">Balance</TableCell>
                             </TableRow>
                         </TableHead>
@@ -173,6 +178,24 @@ export const PaymentPlanDialog = ({
                                                     <TableCell>{p.name}</TableCell>
                                                     <TableCell align="right">{p.credit_apr}%</TableCell>
                                                     <TableCell align="center">{p.date.format('L')}</TableCell>
+                                                    <TableCell align="right">
+                                                        <NumericValue
+                                                            value={p.paid - p.paidExtra}
+                                                            currency={p.currency_id}
+                                                            colorize={true}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        {p.paidExtra > 0 ? (
+                                                            <NumericValue
+                                                                value={p.paidExtra}
+                                                                currency={p.currency_id}
+                                                                colorize={true}
+                                                            />
+                                                        ) : (
+                                                            locales.mdash
+                                                        )}
+                                                    </TableCell>
                                                     <TableCell align="right">
                                                         <NumericValue
                                                             value={p.paid}
