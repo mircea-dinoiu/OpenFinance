@@ -1,4 +1,4 @@
-import {Checkbox, FormControlLabel, FormGroup, Typography} from '@material-ui/core';
+import {Checkbox, Divider, FormControlLabel, FormGroup, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
@@ -46,13 +46,29 @@ export const StocksTable = ({
 
         return acc;
     }, {});
+    const [soldStocksAreVisible, setSoldStocksAreVisible] = useState(false);
     const tableRows = Object.values(stockHoldingsById).filter(
-        (sh) => sh.units.toNumber() > 0 || sh.costBasis.toNumber() !== 0,
+        (sh) => (sh.units.toNumber() > 0 || soldStocksAreVisible) && sh.costBasis.toNumber() !== 0,
     );
 
     return (
         <div className={cls.root}>
             <FormGroup>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={soldStocksAreVisible}
+                            onChange={(e) => setSoldStocksAreVisible(e.target.checked)}
+                        />
+                    }
+                    label="Display Sold Investments"
+                />
+
+                <Divider />
+
+                <br />
+
+                <Typography variant="h6">Account</Typography>
                 <FormControlLabel
                     control={
                         <Checkbox
@@ -94,13 +110,13 @@ export const StocksTable = ({
                         <BaseTable
                             data={tableRowsOfType}
                             className={cls.table}
-                            defaultSorted={[{id: 'value', desc: true}]}
+                            defaultSorted={[{id: 'symbol', desc: false}]}
                             columns={
                                 screenSize.isSmall
                                     ? [SymbolCol, ValueCol]
                                     : [
                                           SymbolCol,
-                                          UnitsCol,
+                                          StocksQuantityCol,
                                           MarketPriceCol,
                                           ValueCol,
                                           CostBasisCol,
@@ -228,7 +244,7 @@ const RoiPercCol: Column<StockWithUnits> = {
     ...numericColumnStyles,
 };
 
-const UnitsCol: Column<StockWithUnits> = {
+const StocksQuantityCol: Column<StockWithUnits> = {
     Header: 'Quantity',
     accessor: 'units',
     Cell: ({value, original}) => (original.units.isZero() ? locales.mdash : <NumericValue value={value.toNumber()} />),

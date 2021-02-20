@@ -199,7 +199,7 @@ export const Dashboard = () => {
                                     )}
                                     {Object.values(groupBy(creditWithTotal, 'currency_id')).map((data) => (
                                         <BaseTable
-                                            defaultSorted={[{id: 'balance', desc: true}]}
+                                            defaultSorted={[{id: 'name', desc: false}]}
                                             className={cls.table}
                                             data={data}
                                             columns={
@@ -232,7 +232,7 @@ export const Dashboard = () => {
                                     />
                                     {Object.values(groupBy(brokerageWithTotal, 'currency_id')).map((data) => (
                                         <BaseTable<BrokerageAccount>
-                                            defaultSorted={[{id: 'value', desc: true}]}
+                                            defaultSorted={[{id: 'name', desc: false}]}
                                             className={cls.table}
                                             data={data}
                                             columns={
