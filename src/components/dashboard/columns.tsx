@@ -4,26 +4,7 @@ import {firstColumnStyles, numericColumnStyles} from 'defs/styles';
 import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {Column} from 'react-table-6';
-
-export const makeTotalFooter = ({colorize}: {colorize?: boolean} = {}) => ({
-    data,
-    column,
-}: {
-    data: {_original: CashAccount}[];
-    column: {id: string};
-}) => {
-    return data[0] ? (
-        <>
-            <strong>Total: </strong>
-            <NumericValue
-                colorize={colorize}
-                // eslint-disable-next-line no-underscore-dangle
-                currency={Number(data[0]._original.currency_id)}
-                value={data.reduce((acc, row) => acc + row[column.id], 0)}
-            />
-        </>
-    ) : null;
-};
+import {makeTotalFooter} from './makeTotalFooter';
 
 export const NameCol: Column<CashAccount> = {
     accessor: 'name',

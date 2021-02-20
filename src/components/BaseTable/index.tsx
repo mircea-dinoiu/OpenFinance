@@ -25,7 +25,7 @@ const ReactTableStyled = styled(ReactTable)`
         .rt-td,
         .rt-th {
             line-height: 20px;
-            padding-bottom: 2px;
+            padding: 5px;
             border-right-color: ${colors.borderSecondary};
         }
 

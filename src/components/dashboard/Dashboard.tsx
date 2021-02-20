@@ -7,7 +7,7 @@ import {Alert, AlertTitle} from '@material-ui/lab';
 import {BaseTable} from 'components/BaseTable';
 import {CategoriesTab} from 'components/dashboard/CategoriesTab';
 import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'components/dashboard/columns';
-import {BalanceCol, CreditAprCol} from 'components/dashboard/Credit';
+import {CreditAprCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'components/dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
 import {getAccountOptions} from 'components/dashboard/getAccountOptions';
 import {PaymentPlanDialog} from 'components/dashboard/PaymentPlanDialog';
@@ -59,7 +59,7 @@ export const Dashboard = () => {
             dispatch(summaryAssign(SummaryKey.BALANCE_BY_ACCOUNT, response.data as any));
             setData(response.data);
         });
-    }, [refreshWidgets, url]);
+    }, [dispatch, refreshWidgets, url]);
 
     if (!data) {
         return <BigLoader />;
@@ -150,7 +150,7 @@ export const Dashboard = () => {
                 </Paper>
                 {tab === 0 && (
                     <>
-                        <div className={cls.cashCreditGrid}>
+                        <>
                             {cashWithTotal.length > 0 && (
                                 <Paper className={cls.paper}>
                                     <CardHeader
@@ -202,12 +202,22 @@ export const Dashboard = () => {
                                             defaultSorted={[{id: 'balance', desc: true}]}
                                             className={cls.table}
                                             data={data}
-                                            columns={[NameCol, CreditAprCol, BalanceCol]}
+                                            columns={
+                                                screenSize.isSmall
+                                                    ? [NameCol, CreditBalanceCol, CreditUsageCol]
+                                                    : [
+                                                          NameCol,
+                                                          CreditAprCol,
+                                                          CreditBalanceCol,
+                                                          CreditUsageCol,
+                                                          CreditLimitCol,
+                                                      ]
+                                            }
                                         />
                                     ))}
                                 </Paper>
                             )}
-                        </div>
+                        </>
 
                         {brokerageWithTotal.length > 0 && (
                             <>
