@@ -34,6 +34,7 @@ export enum AccountStatus {
 export enum AccountType {
     CASH = 'cash',
     CREDIT = 'credit',
+    LOAN = 'loan',
     BROKERAGE = 'brokerage',
 }
 

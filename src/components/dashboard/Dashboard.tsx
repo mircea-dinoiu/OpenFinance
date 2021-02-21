@@ -1,6 +1,7 @@
 import {Button, CardHeader, Checkbox, Divider, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import IconCash from '@material-ui/icons/AccountBalance';
+import IconCash from '@material-ui/icons/LocalAtm';
+import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
 import IconStock from '@material-ui/icons/TrendingUp';
 import {Alert, AlertTitle} from '@material-ui/lab';
@@ -84,6 +85,13 @@ export const Dashboard = () => {
         }))
         .filter((a) => a.total !== 0);
     const creditTotals = getTotals(creditWithTotal);
+
+    const loanWithTotal = (accountsByType[AccountType.LOAN] ?? [])
+        .map((a) => ({
+            ...a,
+            total: getCostBasis(data.cash, a),
+        }))
+        .filter((a) => a.total !== 0);
 
     const brokerageWithTotal = (accountsByType[AccountType.BROKERAGE] ?? [])
         .map((a) => {
@@ -172,49 +180,56 @@ export const Dashboard = () => {
                                 </Paper>
                             )}
 
-                            {creditWithTotal.length > 0 && (
+                            {creditWithTotal.concat(loanWithTotal).length > 0 && (
                                 <Paper className={cls.paper}>
-                                    <CardHeader
-                                        className={cls.cardHeader}
-                                        title={
-                                            <>
-                                                <IconCredit />
-                                                <span>Credit</span>
-                                                <Button
-                                                    size="small"
-                                                    variant="outlined"
-                                                    onClick={() => setPaymentPlanDialogIsOpen(true)}
-                                                >
-                                                    Payment Plan
-                                                </Button>
-                                            </>
-                                        }
-                                    />
                                     {paymentPlanDialogIsOpen && (
                                         <PaymentPlanDialog
                                             open={true}
-                                            creditWithTotal={creditWithTotal}
+                                            creditWithTotal={creditWithTotal.concat(loanWithTotal)}
                                             onClose={() => setPaymentPlanDialogIsOpen(false)}
                                         />
                                     )}
-                                    {Object.values(groupBy(creditWithTotal, 'currency_id')).map((data) => (
-                                        <BaseTable
-                                            defaultSorted={[{id: 'name', desc: false}]}
-                                            className={cls.table}
-                                            data={data}
-                                            columns={
-                                                screenSize.isSmall
-                                                    ? [NameCol, CreditBalanceCol, CreditUsageCol]
-                                                    : [
-                                                          NameCol,
-                                                          CreditBalanceCol,
-                                                          CreditLimitCol,
-                                                          CreditUsageCol,
-                                                          CreditAprCol,
-                                                      ]
-                                            }
-                                        />
-                                    ))}
+                                    {[
+                                        {
+                                            items: loanWithTotal,
+                                            title: 'Loans',
+                                            Icon: IconLoan,
+                                        },
+                                        {items: creditWithTotal, title: 'Credit Cards', Icon: IconCredit},
+                                    ].map((group) =>
+                                        Object.values(groupBy(group.items, 'currency_id')).map((data) => (
+                                            <>
+                                                <CardHeader
+                                                    className={cls.cardHeader}
+                                                    title={
+                                                        <>
+                                                            {React.createElement(group.Icon)}
+                                                            <span>{group.title}</span>
+                                                        </>
+                                                    }
+                                                />
+                                                <BaseTable
+                                                    defaultSorted={[{id: 'name', desc: false}]}
+                                                    className={cls.table}
+                                                    data={data}
+                                                    columns={
+                                                        screenSize.isSmall
+                                                            ? [NameCol, CreditBalanceCol, CreditUsageCol]
+                                                            : [
+                                                                  NameCol,
+                                                                  CreditBalanceCol,
+                                                                  CreditLimitCol,
+                                                                  CreditUsageCol,
+                                                                  CreditAprCol,
+                                                              ]
+                                                    }
+                                                />
+                                            </>
+                                        )),
+                                    )}
+                                    <Button variant="contained" onClick={() => setPaymentPlanDialogIsOpen(true)}>
+                                        Payment Plan for Loans and Credit Cards
+                                    </Button>
                                 </Paper>
                             )}
                         </>
@@ -344,7 +359,7 @@ const useStyles = makeStyles({
             display: 'grid',
             alignItems: 'center',
             gridGap: spacingSmall,
-            gridTemplateColumns: 'auto 1fr auto',
+            gridTemplateColumns: 'auto 1fr',
         },
     },
     cashCreditGrid: {
