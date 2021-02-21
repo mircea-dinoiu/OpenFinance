@@ -126,7 +126,7 @@ export const Dashboard = () => {
                 />
 
                 <HeaderWithTotals
-                    title="Holdings"
+                    title="Net Worth"
                     totals={getTotals([...cashWithTotal, ...creditWithTotal, ...brokerageWithTotal])}
                 />
 
