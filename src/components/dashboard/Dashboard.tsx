@@ -138,7 +138,7 @@ export const Dashboard = () => {
                     const sum = cashTotals[currencyId] + total;
 
                     return sum < 0 ? (
-                        <Alert severity="warning">
+                        <Alert severity="warning" variant="outlined">
                             <AlertTitle>Overdraft</AlertTitle>
                             <span>
                                 You have an overdraft of{' '}
