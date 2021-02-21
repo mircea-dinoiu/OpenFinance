@@ -1,8 +1,4 @@
-import {
-    convertCurrency,
-    findCurrencyById,
-    getCurrencyByISOCode,
-} from './currency';
+import {findCurrencyById, getCurrencyByISOCode} from './currency';
 
 const RON = {
     id: 2,
@@ -44,9 +40,7 @@ describe('#findCurrencyById()', () => {
     });
 
     it('should work with numbers', () => {
-        expect(findCurrencyById('2', currencies)).toEqual(
-            findCurrencyById(2, currencies),
-        );
+        expect(findCurrencyById('2', currencies)).toEqual(findCurrencyById(2, currencies));
     });
 });
 
@@ -54,67 +48,5 @@ describe('#getCurrencyByISOCode()', () => {
     it('should return the matching currency for iso code', () => {
         expect(getCurrencyByISOCode('USD', currencies)).toEqual(USD);
         expect(getCurrencyByISOCode('RON', currencies)).toEqual(RON);
-    });
-});
-
-describe('#convertCurrency()', () => {
-    describe('When from/to are strings, but not numeric', () => {
-        it('should treat them as iso codes', () => {
-            expect(
-                convertCurrency({
-                    value: 34,
-                    from: 'USD',
-                    to: 'RON',
-                    currencies,
-                }),
-            ).toEqual(135.4016);
-        });
-    });
-
-    describe('When from/to are numeric', () => {
-        it('should treat them as IDs', () => {
-            expect(
-                convertCurrency({
-                    value: 34,
-                    from: '1',
-                    to: '2',
-                    currencies,
-                }),
-            ).toEqual(135.4016);
-            expect(
-                convertCurrency({
-                    value: 34,
-                    from: 1,
-                    to: 2,
-                    currencies,
-                }),
-            ).toEqual(135.4016);
-        });
-    });
-
-    describe('When from/to are currency entities', () => {
-        it('should treat them as entities', () => {
-            expect(
-                convertCurrency({
-                    value: 34,
-                    from: USD,
-                    to: RON,
-                    currencies,
-                }),
-            ).toEqual(135.4016);
-        });
-    });
-
-    describe('When from=to', () => {
-        it('should return the same value', () => {
-            expect(
-                convertCurrency({
-                    value: 34,
-                    from: USD,
-                    to: USD,
-                    currencies,
-                }),
-            ).toEqual(34);
-        });
     });
 });

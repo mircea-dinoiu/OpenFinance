@@ -30,7 +30,7 @@ export const TopBar = (props: {onLogout: () => void}) => {
     const user = useBootstrap();
     const history = useHistory();
     const location = useLocation();
-    const tabs = [paths.dashboard, paths.transactions, paths.categories, paths.accounts, paths.currencies];
+    const tabs = [paths.dashboard, paths.transactions, paths.categories, paths.accounts];
     const screenSize = useScreenSize();
     const projects = useProjects();
     const selectedProject = useSelectedProject();
@@ -79,7 +79,6 @@ export const TopBar = (props: {onLogout: () => void}) => {
                                 <Tab label="Transactions" />
                                 <Tab label="Categories" />
                                 <Tab label="Accounts" />
-                                <Tab label="Currencies" />
                             </Tabs>
                         </Paper>
                     )}

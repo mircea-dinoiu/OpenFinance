@@ -5,7 +5,7 @@ describe('#sanitizeCreateValues()', () => {
         expect(
             ExpenseController.prototype.sanitizeCreateValues(
                 {
-                    sum: 300,
+                    price: 300,
                     repeat: 'm',
                     money_location_id: 3,
                     unknown_prop: 44,
@@ -16,10 +16,10 @@ describe('#sanitizeCreateValues()', () => {
         ).toMatchInlineSnapshot(`
             Object {
               "money_location_id": 3,
+              "price": 300,
               "project_id": 1,
               "repeat": "m",
               "repeat_occurrences": 30,
-              "sum": 300,
             }
         `);
     });
@@ -30,7 +30,7 @@ describe('#sanitizeUpdateValues()', () => {
         expect(
             ExpenseController.prototype.sanitizeUpdateValues(
                 {
-                    sum: 300,
+                    price: 300,
                     money_location_id: 4,
                     repeat_occurrences: 5,
                 },
@@ -39,9 +39,9 @@ describe('#sanitizeUpdateValues()', () => {
         ).toMatchInlineSnapshot(`
             Object {
               "money_location_id": 4,
+              "price": 300,
               "project_id": 1,
               "repeat_occurrences": 5,
-              "sum": 300,
             }
         `);
     });
@@ -61,7 +61,8 @@ describe('#sanitizeUpdateValues()', () => {
                 Object {
                   "project_id": 1,
                   "repeat": null,
-                  "repeat_occurrences": 0,
+                  "repeat_factor": 1,
+                  "repeat_occurrences": null,
                 }
             `);
         });

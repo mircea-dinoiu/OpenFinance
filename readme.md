@@ -24,7 +24,6 @@ TIMEZONE=+00:00
 DATABASE_URL=string
 USE_CSRF=false
 SESSION_SECRET=string
-FIXER_API_KEY=string
 ```
 
 # Deploy:
@@ -48,7 +47,6 @@ eb deploy
 - `TIMEZONE=+00:00` sets timezone
 - `SESSION_STORE=memory` uses memory session instead of DB
 - `SESSION_SECRET=keyboardcat` sets the secret key for session 
-- `FIXER_API_KEY=keyboardcat` sets the [fixer](https://fixer.io/) key 
 
 # Docker
 ```

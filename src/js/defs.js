@@ -20,7 +20,6 @@ module.exports = {
         accounts: '/accounts',
         accountTypes: '/account-types',
         login: '/login',
-        currencies: '/currencies',
     },
     apis: {},
 };

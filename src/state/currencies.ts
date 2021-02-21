@@ -12,7 +12,6 @@ export enum CurrenciesAction {
 
 export const currencies = createReducer<Currencies>(
     {
-        date: '',
         map: {},
     },
     {
@@ -27,19 +26,15 @@ export const currencies = createReducer<Currencies>(
     },
 );
 
-export const receiveCurrencies = createAction<CurrencyMap>(
-    CurrenciesAction.received,
-);
-export const fetchCurrencies = (
-    params: {update?: boolean} = Object.freeze({}),
-) => async (dispatch: Dispatch<{type: string; payload: unknown}>) => {
+export const receiveCurrencies = createAction<CurrencyMap>(CurrenciesAction.received);
+export const fetchCurrencies = (params: {update?: boolean} = Object.freeze({})) => async (
+    dispatch: Dispatch<{type: string; payload: unknown}>,
+) => {
     const currenciesResponse = await createXHR<CurrencyMap>({
         url: makeUrl(routes.currencies, params),
     });
 
     dispatch(receiveCurrencies(currenciesResponse.data));
 };
-export const useCurrenciesMap = (): CurrencyMap =>
-    useSelector((s: GlobalState) => s.currencies.map);
-export const useCurrencies = (): Currencies =>
-    useSelector((s: GlobalState) => s.currencies);
+export const useCurrenciesMap = (): CurrencyMap => useSelector((s: GlobalState) => s.currencies.map);
+export const useCurrencies = (): Currencies => useSelector((s: GlobalState) => s.currencies);

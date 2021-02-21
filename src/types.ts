@@ -13,16 +13,14 @@ export type ScreenQueries = {
 export type Currency = {
     id: number;
     iso_code: string;
-    rates: {
-        [key: string]: number;
-    };
+};
+
+export type CurrencyMap = {
+    [key: number]: Currency;
 };
 
 export type Currencies = {
-    date: string;
-    map: {
-        [key: string]: Currency;
-    };
+    map: CurrencyMap;
 };
 
 export enum StockType {
@@ -34,12 +32,6 @@ export enum StockType {
 }
 
 export type Stock = {id: number; price: number; symbol: string; currency_id: number; type: StockType};
-
-export type CurrencyMap = {
-    [key: number]: Currency;
-};
-
-export type CurrencyIdentifier = string | number | Currency;
 
 export type Category = {
     id: number;

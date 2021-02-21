@@ -12,7 +12,6 @@ export const paths: {
     login: string;
     categories: string;
     accounts: string;
-    currencies: string;
 };
 
 export const PERC_MAX: number;

@@ -3,7 +3,6 @@ import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {Accounts} from 'components/accounts/Accounts';
 import {Categories} from 'components/categories/Categories';
-import {Currencies} from 'components/currencies/Currencies';
 import {Dashboard} from 'components/dashboard/Dashboard';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
@@ -87,13 +86,13 @@ const AppWrapped = () => {
 
     React.useEffect(() => {
         fetchUser();
-    }, []);
+    }, [fetchUser]);
 
     React.useEffect(() => {
         if (users) {
             fetchRequirements();
         }
-    }, [users]);
+    }, [fetchRequirements, users]);
 
     const onLogout = async () => {
         try {
@@ -153,7 +152,6 @@ const AppInner = ({location, match}: RouteComponentProps) => {
                 <Route path={paths.transactions} component={Transactions} />
                 <Route path={paths.categories} component={Categories} />
                 <Route path={paths.accounts} component={Accounts} />
-                <Route path={paths.currencies} component={Currencies} />
             </div>
         );
     }
