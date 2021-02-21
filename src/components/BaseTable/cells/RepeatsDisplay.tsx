@@ -6,7 +6,11 @@ import * as React from 'react';
 export const RepeatsDisplay = ({item}: {item: TransactionModel}) => {
     const repeatsText = item.repeat ? RepeatOptions.filter((each) => each[0] === item.repeat)[0][1] : '';
 
-    return repeatsText ? (
+    if (!repeatsText) {
+        return null;
+    }
+
+    return (item.repeat_occurrences as number) > 1 ? (
         <>
             Every {item.repeat_factor} {repeatsText}
             <div>
@@ -17,5 +21,7 @@ export const RepeatsDisplay = ({item}: {item: TransactionModel}) => {
                         .toLocaleDateString()}
             </div>
         </>
-    ) : null;
+    ) : (
+        <>Final Transaction</>
+    );
 };

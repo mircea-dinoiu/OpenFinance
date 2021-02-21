@@ -14,7 +14,7 @@ module.exports = {
             promises.push(
                 prevHead.update({
                     repeat: null,
-                    repeat_occurrences: 0,
+                    repeat_occurrences: null,
                 }),
             );
             promises.push(moveToNextHead(prevHead));
@@ -53,6 +53,7 @@ const moveToNextHead = async (prevHead) => {
 
     const nextHeadUpdate = nextHead.update({
         repeat_link_id: null,
+        ...(nextHead.repeat_occurrences === 1 ? {repeat_occurrences: null, repeat_factor: 1, repeat: null} : {}),
     });
 
     const nextLinkedUpdate = Model.update(

@@ -1,9 +1,4 @@
-import {
-    Button,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from '@material-ui/core';
+import {Button, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
@@ -26,10 +21,7 @@ type TypeProps = {
     }>;
     items: TransactionModel[];
     modelToForm: (model: TransactionModel) => TransactionForm;
-    formToModel: (
-        form: TransactionForm,
-        detail: {user: Bootstrap},
-    ) => TransactionModel;
+    formToModel: (form: TransactionForm, detail: {user: Bootstrap}) => TransactionModel;
     entityName: string;
     formComponent: React.ComponentType<{
         initialValues: TransactionForm;
@@ -42,26 +34,26 @@ type TypeProps = {
 };
 
 export const MainScreenEditDialog = (props: TypeProps) => {
-    const [saving, setSaving] = useState(false);
+    const [saving, setSaving] = useState(true);
     const [error, setError] = useState<ReactNode>(null);
     const formData = useRef(props.items.map(props.modelToForm));
     const initialData = useRef(props.items.map(props.modelToForm));
     const formDefaults = useTransactionFormDefaults();
 
     useEffect(() => {
-        setSaving(false);
-        setError(null);
-        formData.current = props.items.map(props.modelToForm);
-        initialData.current = props.items.map(props.modelToForm);
-    }, [props.items]);
+        if (props.open) {
+            setSaving(false);
+            setError(null);
+            formData.current = props.items.map(props.modelToForm);
+            initialData.current = props.items.map(props.modelToForm);
+        }
+    }, [props.items, props.modelToForm, props.open]);
 
     const getUpdates = () => {
         const updates = {};
 
         for (const key in initialData.current[0]) {
-            if (
-                !isEqual(initialData.current[0][key], formData.current[0][key])
-            ) {
+            if (!isEqual(initialData.current[0][key], formData.current[0][key])) {
                 updates[key] = formData.current[0][key];
             }
         }
@@ -106,19 +98,12 @@ export const MainScreenEditDialog = (props: TypeProps) => {
     const Form = props.formComponent;
 
     return (
-        <SmartDrawer
-            open={props.open}
-            onClose={saving ? undefined : props.onCancel}
-        >
-            <DialogTitle>{`Edit ${props.entityName}${
-                props.items.length === 1 ? '' : 's'
-            }`}</DialogTitle>
+        <SmartDrawer open={props.open} onClose={saving ? undefined : props.onCancel}>
+            <DialogTitle>{`Edit ${props.entityName}${props.items.length === 1 ? '' : 's'}`}</DialogTitle>
 
             <DialogContent dividers={true}>
                 <Form
-                    onFormChange={(nextFormData) =>
-                        (formData.current[0] = nextFormData)
-                    }
+                    onFormChange={(nextFormData) => (formData.current[0] = nextFormData)}
                     initialValues={formData.current[0] ?? formDefaults}
                     onSubmit={save}
                 />
@@ -126,28 +111,11 @@ export const MainScreenEditDialog = (props: TypeProps) => {
             </DialogContent>
 
             <DialogActions>
-                <Button
-                    variant="contained"
-                    disabled={saving}
-                    onClick={props.onCancel}
-                    fullWidth={true}
-                >
+                <Button variant="contained" disabled={saving} onClick={props.onCancel} fullWidth={true}>
                     Cancel
                 </Button>
-                <Button
-                    variant="contained"
-                    disabled={saving}
-                    color="primary"
-                    onClick={save}
-                    fullWidth={true}
-                >
-                    {saving ? (
-                        <ButtonProgress />
-                    ) : props.items.length === 1 ? (
-                        'Update'
-                    ) : (
-                        'Update Multiple'
-                    )}
+                <Button variant="contained" disabled={saving} color="primary" onClick={save} fullWidth={true}>
+                    {saving ? <ButtonProgress /> : props.items.length === 1 ? 'Update' : 'Update Multiple'}
                 </Button>
             </DialogActions>
         </SmartDrawer>

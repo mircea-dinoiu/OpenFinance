@@ -285,7 +285,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                         }}
                         onChange={(event) => {
                             this.setState({
-                                repeatOccurrences: Number(event.target.value),
+                                repeatOccurrences: Math.max(Number(event.target.value), 2),
                             });
                         }}
                         InputProps={

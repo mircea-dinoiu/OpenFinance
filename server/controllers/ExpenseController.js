@@ -124,7 +124,7 @@ module.exports = class ExpenseController extends BaseController {
         }
 
         if (model.repeat && model.repeat_occurrences) {
-            while (occurrences > 0) {
+            while (occurrences > 1) {
                 const {id, ...record} = model.dataValues;
                 const repeatOccurrences = occurrences - 1;
                 const payload = {
@@ -173,12 +173,13 @@ module.exports = class ExpenseController extends BaseController {
         /**
          * repeat and repeat_occurrences need to be in sync
          * when repeat is falsy, repeat_occurrences needs to be 0
-         * when repeat_occurrences is 0, repeat needs to be null
+         * when repeat_occurrences is <2, repeat needs to be null
          */
         if (values.repeat === null) {
-            values.repeat_occurrences = 0;
+            values.repeat_occurrences = null;
             values.repeat_factor = 1;
-        } else if (values.repeat_occurrences === 0) {
+        } else if (values.repeat_occurrences < 2) {
+            values.repeat_occurrences = null;
             values.repeat = null;
             values.repeat_factor = 1;
         }

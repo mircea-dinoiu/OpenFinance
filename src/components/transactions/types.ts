@@ -86,7 +86,7 @@ export type TransactionForm = {
         [key: string]: number;
     };
     categories: number[];
-    repeatOccurrences: number;
+    repeatOccurrences: number | null;
     repeatFactor: number;
     repeat: TransactionRepeat | null;
     status: TransactionStatus;
@@ -104,7 +104,7 @@ export type TransactionModel = {
     users: {
         [key: string]: number;
     };
-    repeat_occurrences: number;
+    repeat_occurrences: number | null;
     repeat_factor: number;
     repeat_link_id: number | null;
     repeat: null | TransactionRepeat;

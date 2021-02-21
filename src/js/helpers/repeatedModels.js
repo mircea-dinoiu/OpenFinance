@@ -4,7 +4,7 @@ const {RepeatOption} = require('../defs');
 const advanceRepeatDate = (model, rawRepeats) => {
     const date = moment(model.created_at);
     const repeatFactor = model.repeat_factor || 1;
-    const repeats = Number(rawRepeats) || 1;
+    const repeats = Number(rawRepeats - 1) || 1;
 
     switch (model.repeat) {
         case RepeatOption.DAY:
