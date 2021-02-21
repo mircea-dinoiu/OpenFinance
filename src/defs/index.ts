@@ -57,4 +57,5 @@ export const Timers = {
 export enum StorageKey {
     privacyToggle = 'privacyToggle',
     paymentDialogAddlCashFlow = 'paymentDialogAddlCashFlow',
+    paymentDialogSkipPayments = 'paymentDialogSkipPayments',
 }

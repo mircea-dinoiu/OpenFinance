@@ -23,10 +23,11 @@ import {locales} from 'locales';
 import {cloneDeep, orderBy} from 'lodash';
 import moment, {Moment} from 'moment';
 import * as React from 'react';
-import {useMemo, useState} from 'react';
+import {useMemo} from 'react';
 import createPersistedState from 'use-persisted-state';
 
 const useAddlCashFlowState = createPersistedState(StorageKey.paymentDialogAddlCashFlow);
+const useSkipPayments = createPersistedState(StorageKey.paymentDialogSkipPayments);
 
 type PaymentPlanPayment = CashAccount & {date: Moment; paid: number; paidExtra: number};
 
@@ -39,7 +40,7 @@ export const PaymentPlanDialog = ({
     onClose: () => unknown;
     creditWithTotal: CashAccount[];
 }) => {
-    const [offset, setOffset] = useState(0);
+    const [offset, setOffset] = useSkipPayments(0);
     const [addlCashFlow, setAddlCashFlow] = useAddlCashFlowState(0);
 
     const {months} = useMemo(() => {
