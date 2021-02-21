@@ -8,7 +8,7 @@ import {Column} from 'react-table-6';
 import {makeTotalFooter} from './makeTotalFooter';
 
 export const CreditAprCol: Column<CashAccount> = {
-    Header: 'APR',
+    Header: 'APR%',
     accessor: 'credit_apr',
     Cell: ({original: a, value}: {original: CashAccount; value: number | null}) => {
         return typeof value === 'number' ? value + '%' : null;

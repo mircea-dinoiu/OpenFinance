@@ -207,10 +207,10 @@ export const Dashboard = () => {
                                                     ? [NameCol, CreditBalanceCol, CreditUsageCol]
                                                     : [
                                                           NameCol,
-                                                          CreditAprCol,
                                                           CreditBalanceCol,
-                                                          CreditUsageCol,
                                                           CreditLimitCol,
+                                                          CreditUsageCol,
+                                                          CreditAprCol,
                                                       ]
                                             }
                                         />
