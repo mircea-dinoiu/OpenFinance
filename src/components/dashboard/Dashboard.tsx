@@ -337,7 +337,9 @@ const useStyles = makeStyles({
         marginBottom: spacingSmall,
     },
     cardHeader: {
+        paddingTop: 0,
         paddingLeft: 0,
+        paddingRight: 0,
         '& .MuiCardHeader-title': {
             display: 'grid',
             alignItems: 'center',
