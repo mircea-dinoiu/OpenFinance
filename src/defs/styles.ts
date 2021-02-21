@@ -1,4 +1,4 @@
-import {blue, grey} from '@material-ui/core/colors';
+import {blueGrey, grey, green} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
 import {Column} from 'react-table-6';
 
@@ -29,19 +29,20 @@ export enum ScreenQuery {
     LARGE = '@media (min-width: 1025px)',
 }
 
-export const theme = createMuiTheme({
-    palette: {
-        primary: blue,
-        type: 'dark',
-    },
-});
-
 export const colors = {
     hover: grey[700],
     borderSecondary: grey[700],
     borderPrimary: grey[600],
     tableFoot: grey[700],
+    positiveNumberBg: green[900],
 };
+
+export const theme = createMuiTheme({
+    palette: {
+        primary: blueGrey,
+        type: 'dark',
+    },
+});
 
 export const numericColumnStyles: Column<any> = {
     headerStyle: {

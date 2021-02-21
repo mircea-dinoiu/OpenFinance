@@ -227,7 +227,11 @@ export const Dashboard = () => {
                                             </>
                                         )),
                                     )}
-                                    <Button variant="contained" onClick={() => setPaymentPlanDialogIsOpen(true)}>
+                                    <Button
+                                        color="primary"
+                                        variant="contained"
+                                        onClick={() => setPaymentPlanDialogIsOpen(true)}
+                                    >
                                         Payment Plan for Loans and Credit Cards
                                     </Button>
                                 </Paper>

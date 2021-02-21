@@ -2,7 +2,7 @@ import {green, grey, red} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {Tooltip} from 'components/Tooltip';
-import {spacingNormal, spacingSmall, theme} from 'defs/styles';
+import {colors, spacingNormal, spacingSmall, theme} from 'defs/styles';
 import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
@@ -30,7 +30,7 @@ const useStyles = makeStyles({
         paddingRight: spacingSmall,
     },
     positive: {
-        background: green[900],
+        background: colors.positiveNumberBg,
         color: green[50],
         borderRadius: 5,
     },
