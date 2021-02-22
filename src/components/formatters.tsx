@@ -41,6 +41,7 @@ const useStyles = makeStyles({
     },
     value: {
         cursor: 'grabbing',
+        fontWeight: 500,
     },
     tooltipParts: {
         display: 'grid',
@@ -87,7 +88,7 @@ export const NumericValue = ({
                     : undefined
             }
         >
-            <strong
+            <span
                 className={cls.value}
                 onClick={(e) => {
                     e.stopPropagation();
@@ -103,7 +104,7 @@ export const NumericValue = ({
                         {after}
                     </>
                 )}
-            </strong>
+            </span>
         </span>
     );
 
