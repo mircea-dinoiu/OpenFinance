@@ -25,6 +25,8 @@ import moment, {Moment} from 'moment';
 import * as React from 'react';
 import {useMemo} from 'react';
 import createPersistedState from 'use-persisted-state';
+import {makeStyles} from '@material-ui/core/styles';
+import {spacingNormal} from 'defs/styles';
 
 const useAddlCashFlowState = createPersistedState(StorageKey.paymentDialogAddlCashFlow);
 const useSkipPayments = createPersistedState(StorageKey.paymentDialogSkipPayments);
@@ -42,6 +44,7 @@ export const PaymentPlanDialog = ({
 }) => {
     const [offset, setOffset] = useSkipPayments(0);
     const [addlCashFlow, setAddlCashFlow] = useAddlCashFlowState(0);
+    const cls = useStyles();
 
     const {months} = useMemo(() => {
         const months: PaymentPlanPayment[][] = [];
@@ -129,56 +132,58 @@ export const PaymentPlanDialog = ({
     return (
         <Dialog open={open} onClose={onClose} maxWidth={false}>
             <DialogTitle>
-                <TextField
-                    type="number"
-                    label="Add'l Monthly Cash Flow"
-                    value={addlCashFlow}
-                    onChange={(e) => setAddlCashFlow(Number(e.target.value))}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <IconButton
-                                    disabled={addlCashFlow === 0}
-                                    onClick={() => setAddlCashFlow(Math.max(addlCashFlow - 100, 0))}
-                                >
-                                    <IconRemoveCircle />
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={() => setAddlCashFlow(addlCashFlow + 100)}>
-                                    <IconAddCircle />
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />{' '}
-                <TextField
-                    type="number"
-                    label="Skip Payments"
-                    value={offset}
-                    InputProps={{
-                        readOnly: true,
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <IconButton disabled={offset === 0} onClick={() => setOffset(offset - 1)}>
-                                    <IconRemoveCircle />
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={() => setOffset(offset + 1)}>
-                                    <IconAddCircle />
-                                </IconButton>
-                                <IconButton onClick={() => setOffset(0)}>
-                                    <IconClear />
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
+                <div className={cls.header}>
+                    <TextField
+                        type="number"
+                        label="Add'l Monthly Cash Flow"
+                        value={addlCashFlow}
+                        onChange={(e) => setAddlCashFlow(Number(e.target.value))}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton
+                                        disabled={addlCashFlow === 0}
+                                        onClick={() => setAddlCashFlow(Math.max(addlCashFlow - 100, 0))}
+                                    >
+                                        <IconRemoveCircle />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => setAddlCashFlow(addlCashFlow + 100)}>
+                                        <IconAddCircle />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        type="number"
+                        label="Skip Payments"
+                        value={offset}
+                        InputProps={{
+                            readOnly: true,
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton disabled={offset === 0} onClick={() => setOffset(offset - 1)}>
+                                        <IconRemoveCircle />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => setOffset(offset + 1)}>
+                                        <IconAddCircle />
+                                    </IconButton>
+                                    <IconButton onClick={() => setOffset(0)}>
+                                        <IconClear />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </div>
             </DialogTitle>
             <DialogContent>
                 <TableContainer component={Paper}>
@@ -251,3 +256,11 @@ export const PaymentPlanDialog = ({
         </Dialog>
     );
 };
+
+const useStyles = makeStyles({
+    header: {
+        display: 'grid',
+        gridGap: spacingNormal,
+        gridTemplateColumns: '1fr 1fr 1fr',
+    },
+});
