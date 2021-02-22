@@ -6,11 +6,15 @@ services:
     volumes:
       - ./server/:/financial/server
       - ./src/:/financial/src
+      - ./package.json:/financial/package.json
+      - ./yarn.lock:/financial/yarn.lock
   src:
     build:
       context: .
       dockerfile: src/Dockerfile
     volumes:
       - ./src/:/financial/src
+      - ./package.json:/financial/package.json
+      - ./yarn.lock:/financial/yarn.lock
     ports:
       - "3000:3000"
