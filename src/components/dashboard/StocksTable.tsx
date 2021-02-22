@@ -1,29 +1,30 @@
-import {Checkbox, Divider, FormControlLabel, FormGroup, Typography} from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
 import {BalanceByLocationStock} from 'components/transactions/types';
-import {firstColumnStyles, numericColumnStyles, ScreenQuery, spacingLarge, spacingNormal} from 'defs/styles';
+import {firstColumnStyles, numericColumnStyles, spacingLarge} from 'defs/styles';
 import {financialNum} from 'js/utils/numbers';
 import {locales} from 'locales';
 import _ from 'lodash';
-import React, {useState} from 'react';
+import React from 'react';
 import {Column} from 'react-table-6';
 import {useScreenSize} from 'state/hooks';
 import {useStocksMap} from 'state/stocks';
-import {Account, Stock} from 'types';
+import {Stock} from 'types';
 import Decimal from 'decimal.js';
 
 type StockWithUnits = Stock & {units: Decimal; accounts: number; costBasis: Decimal};
 
 export const StocksTable = ({
     stockHoldings,
-    accountOptions,
+    soldStocksAreVisible,
+    filteredAccounts,
 }: {
     stockHoldings: BalanceByLocationStock[];
-    accountOptions: Array<Account & {label: string; value: string}>;
+    soldStocksAreVisible: boolean;
+    filteredAccounts: number[];
 }) => {
-    const [filteredAccounts, setFilteredAccounts] = useState<number[]>([]);
     const cls = useStyles();
     const screenSize = useScreenSize();
     const filteredStockHoldings = stockHoldings.filter(
@@ -46,63 +47,12 @@ export const StocksTable = ({
 
         return acc;
     }, {});
-    const [soldStocksAreVisible, setSoldStocksAreVisible] = useState(false);
     const tableRows = Object.values(stockHoldingsById).filter(
         (sh) => (sh.units.toNumber() > 0 || soldStocksAreVisible) && sh.costBasis.toNumber() !== 0,
     );
 
     return (
-        <div className={cls.root}>
-            <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={soldStocksAreVisible}
-                            onChange={(e) => setSoldStocksAreVisible(e.target.checked)}
-                        />
-                    }
-                    label="Display Sold Investments"
-                />
-
-                <Divider />
-
-                <br />
-
-                <Typography variant="h6">Account</Typography>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={filteredAccounts.length === 0}
-                            disabled={filteredAccounts.length === 0}
-                            onChange={() => setFilteredAccounts([])}
-                        />
-                    }
-                    label="All Accounts"
-                />
-                {accountOptions.map((o) => {
-                    const accountId = Number(o.value);
-
-                    return (
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={filteredAccounts.includes(accountId)}
-                                    onChange={(e) => {
-                                        setFilteredAccounts(
-                                            e.target.checked
-                                                ? filteredAccounts.concat(accountId)
-                                                : filteredAccounts.filter(
-                                                      (filteredAccountId) => filteredAccountId !== accountId,
-                                                  ),
-                                        );
-                                    }}
-                                />
-                            }
-                            label={o.label}
-                        />
-                    );
-                })}
-            </FormGroup>
+        <>
             <div>
                 {Object.entries(_.groupBy(tableRows, 'type')).map(([stockType, tableRowsOfType]) => (
                     <>
@@ -141,7 +91,7 @@ export const StocksTable = ({
                     </>
                 ))}
             </div>
-        </div>
+        </>
     );
 };
 
@@ -261,14 +211,6 @@ const MarketPriceCol: Column<StockWithUnits> = {
 };
 
 const useStyles = makeStyles({
-    root: {
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gridGap: spacingNormal,
-        [ScreenQuery.SMALL]: {
-            gridTemplateColumns: '1fr',
-        },
-    },
     table: {
         '&:not(:last-child)': {
             marginBottom: spacingLarge,

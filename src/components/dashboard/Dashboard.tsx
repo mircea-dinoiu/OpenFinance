@@ -12,7 +12,6 @@ import {CreditAprCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'co
 import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
 import {getAccountOptions} from 'components/dashboard/getAccountOptions';
 import {PaymentPlanDialog} from 'components/dashboard/PaymentPlanDialog';
-import {StocksTable} from 'components/dashboard/StocksTable';
 import {useDashboardQueryParams} from 'components/dashboard/useDashboardQueryParams';
 import {UsersTab} from 'components/dashboard/UsersTab';
 import {getStockValue} from 'components/dashboard/useStockValue';
@@ -28,13 +27,13 @@ import _, {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {AccountType, useAccounts} from 'state/accounts';
-import {useCurrenciesMap} from 'state/currencies';
 import {useRefreshWidgets, useScreenSize} from 'state/hooks';
 import {useStockPrices} from 'state/stocks';
 import {summaryAssign, SummaryKey} from 'state/summary';
 import {Account} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
+import {StocksPaper} from 'components/dashboard/StocksPaper';
 
 export const Dashboard = () => {
     const cls = useStyles();
@@ -50,7 +49,6 @@ export const Dashboard = () => {
     const stockPrices = useStockPrices();
     const [tab, setTab] = useState(0);
     const screenSize = useScreenSize();
-    const currenciesMap = useCurrenciesMap();
     const [paymentPlanDialogIsOpen, setPaymentPlanDialogIsOpen] = useState(false);
 
     React.useEffect(() => {
@@ -245,7 +243,7 @@ export const Dashboard = () => {
                                         className={cls.cardHeader}
                                         title={
                                             <>
-                                                <IconStock /> Investments
+                                                <IconStock /> Investment Accounts
                                             </>
                                         }
                                     />
@@ -263,35 +261,7 @@ export const Dashboard = () => {
                                     ))}
                                 </Paper>
 
-                                {Object.entries(_.groupBy(accountOptions, 'currency_id')).map(
-                                    ([currencyIdStr, accountOptionsOfCurrency]) => {
-                                        return (
-                                            <Paper className={cls.paper}>
-                                                <CardHeader
-                                                    className={cls.cardHeader}
-                                                    title={
-                                                        <>
-                                                            <IconStock /> Stocks (
-                                                            {currenciesMap[currencyIdStr].iso_code})
-                                                        </>
-                                                    }
-                                                />
-                                                <StocksTable
-                                                    stockHoldings={data.stocks.filter((s) => {
-                                                        return (
-                                                            String(
-                                                                accounts.find((a) => {
-                                                                    return a.id === s.money_location_id;
-                                                                })?.currency_id,
-                                                            ) === currencyIdStr
-                                                        );
-                                                    })}
-                                                    accountOptions={accountOptionsOfCurrency}
-                                                />
-                                            </Paper>
-                                        );
-                                    },
-                                )}
+                                <StocksPaper classes={cls} accountOptions={accountOptions} stocks={data.stocks} />
                             </>
                         )}
                     </>
