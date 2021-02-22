@@ -8,6 +8,7 @@ export const routes = {
         descriptions: '/api/transactions/suggestions/descriptions',
     },
     categories: '/api/categories',
+    inventories: '/api/inventories',
     moneyLocations: '/api/money-locations',
     reports: {
         summary: '/api/reports/summary',

@@ -2,6 +2,7 @@ module.exports = {
     '/api/transactions': require('./transactions'),
     '/api/reports': require('./reports'),
     '/api/currencies': require('./currencies'),
+    '/api/inventories': require('./inventories'),
     '/api/stocks': require('./stocks'),
     '/api/categories': require('./categories'),
     '/api/users': require('./users'),

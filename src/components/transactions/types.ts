@@ -32,15 +32,6 @@ type ByUser = {
     currencyId: string;
 };
 
-type ByML = {
-    cashValue: number;
-    description: string;
-    reference: number;
-    group: number;
-    currencyId: number;
-    index: number;
-};
-
 type ExpensesByCategory = {
     cashValue: number;
     description: string;
@@ -57,13 +48,6 @@ type RemainingData = {
 export type SummaryResults = {
     expensesByCategory: ExpensesByCategory[];
     remainingData: RemainingData;
-};
-
-export type SummarySubCategoryModel = {
-    description: string;
-    reference: string;
-    currencyId: number;
-    cashValue: number;
 };
 
 export type BalanceByLocation = {
@@ -91,6 +75,7 @@ export type TransactionForm = {
     repeat: TransactionRepeat | null;
     status: TransactionStatus;
     stockId: number | null;
+    inventoryId: number | null;
 };
 export type TransactionModel = {
     id: number;
@@ -117,5 +102,6 @@ export type TransactionModel = {
     sum_per_weight: number | null;
     quantity: number;
     stock_id: number | null;
+    inventory_id: number | null;
 };
 export type UpdateRecords = (ids: number[], data: Partial<TransactionModel>) => Promise<void>;

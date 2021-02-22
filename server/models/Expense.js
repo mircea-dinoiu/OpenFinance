@@ -30,6 +30,7 @@ module.exports = (sequelize, types) => {
             stock_id: types.INTEGER,
             money_location_id: types.INTEGER,
             project_id: types.INTEGER,
+            inventory_id: types.INTEGER,
 
             sum_per_weight: {
                 type: types.VIRTUAL(

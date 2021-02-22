@@ -13,4 +13,5 @@ export const modelToForm = (model: TransactionModel): TransactionForm => ({
     chargedPersons: model.users,
     status: model.status || TransactionStatus.pending,
     stockId: model.stock_id,
+    inventoryId: model.inventory_id,
 });

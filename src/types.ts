@@ -3,6 +3,7 @@ import * as React from 'react';
 import {AccountStatus, AccountType} from 'state/accounts';
 import {Project} from 'state/projects';
 import {Summary} from 'state/summary';
+import {Inventory} from 'state/inventories';
 
 export type ScreenQueries = {
     isSmall: boolean;
@@ -90,4 +91,5 @@ export type GlobalState = {
     snackbars: Snackbar[];
     summary: Summary;
     stocks: Stock[];
+    inventories: Inventory[];
 };

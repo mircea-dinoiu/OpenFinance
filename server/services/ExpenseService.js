@@ -54,10 +54,9 @@ module.exports = {
                         having.push(mapGroupConcatToHavingSQL(value, 'userIds', 'users.expense_user.user_id'));
                         break;
                     case 'money_location_id':
-                        where.push(mapEntityFilterToWhereSQL(value, 'money_location_id'));
-                        break;
                     case 'stock_id':
-                        where.push(mapEntityFilterToWhereSQL(value, 'stock_id'));
+                    case 'inventory_id':
+                        where.push(mapEntityFilterToWhereSQL(value, id));
                         break;
                     default:
                         where.push({

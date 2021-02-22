@@ -1,4 +1,4 @@
-const {Expense: Model, User, Stock, MoneyLocation, Category} = require('../models');
+const {Expense: Model, User, Stock, MoneyLocation, Category, Inventory} = require('../models');
 const BaseController = require('./BaseController');
 const Service = require('../services/ExpenseService');
 const {pickOwnProperties} = require('../helpers');
@@ -36,6 +36,7 @@ module.exports = class ExpenseController extends BaseController {
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
             stock_id: ['sometimes', ['isId', Stock]],
+            inventory_id: ['sometimes', ['isId', Inventory]],
 
             weight: ['sometimes', 'isPositive', 'isInt'],
         };
@@ -59,6 +60,7 @@ module.exports = class ExpenseController extends BaseController {
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
             stock_id: ['sometimes', ['isId', Stock]],
+            inventory_id: ['sometimes', ['isId', Inventory]],
 
             weight: ['sometimes', 'isPositive', 'isInt'],
         };
@@ -154,6 +156,7 @@ module.exports = class ExpenseController extends BaseController {
             'price',
             'money_location_id',
             'stock_id',
+            'inventory_id',
             'quantity',
             'weight',
             'fitid',

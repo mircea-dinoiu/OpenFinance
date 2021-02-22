@@ -41,13 +41,11 @@ export const MainScreenEditDialog = (props: TypeProps) => {
     const formDefaults = useTransactionFormDefaults();
 
     useEffect(() => {
-        if (props.open) {
-            setSaving(false);
-            setError(null);
-            formData.current = props.items.map(props.modelToForm);
-            initialData.current = props.items.map(props.modelToForm);
-        }
-    }, [props.items, props.modelToForm, props.open]);
+        setSaving(false);
+        setError(null);
+        formData.current = props.items.map(props.modelToForm);
+        initialData.current = props.items.map(props.modelToForm);
+    }, [props.items.map((i) => i.id).join()]);
 
     const getUpdates = () => {
         const updates = {};

@@ -8,6 +8,7 @@ import {summaryReducer} from 'state/summary';
 import {bindToUpdateState} from 'state/utils';
 import {ScreenQueries, Snackbar, User} from 'types';
 import {getScreenQueries} from 'utils/getScreenQueries';
+import {inventoriesReducer} from 'state/inventories';
 
 const screen = (
     state = getScreenQueries(),
@@ -63,4 +64,5 @@ export const combinedReducers = combineReducers({
     snackbars,
     privacyToggle,
     summary: summaryReducer,
+    inventories: inventoriesReducer,
 });

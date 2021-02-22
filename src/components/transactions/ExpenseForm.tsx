@@ -41,6 +41,8 @@ import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
 import {Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User} from 'types';
 import {useEndDate} from 'utils/dates';
+import {Inventory} from 'state/inventories';
+import {Autocomplete} from '@material-ui/lab';
 
 const boxStyle = {
     padding: '10px 0',
@@ -58,6 +60,7 @@ type Props = TypeOwnProps & {
     endDate: string;
     user: Bootstrap;
     categories: Categories;
+    inventories: Inventory[];
     users: User[];
 };
 
@@ -171,6 +174,20 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                         );
                     })}
                 </Select>
+            </FormControl>
+        );
+    }
+
+    renderInventory() {
+        return (
+            <FormControl fullWidth={true}>
+                <Autocomplete<Inventory>
+                    options={this.props.inventories}
+                    getOptionLabel={(o) => o.name}
+                    onChange={(e: unknown, value: Inventory | null) => this.setState({inventoryId: value?.id ?? null})}
+                    defaultValue={this.props.inventories.find((inv) => inv.id === this.state.inventoryId)}
+                    renderInput={(params) => <TextField {...params} label="Inventory" />}
+                />
             </FormControl>
         );
     }
@@ -358,6 +375,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                     />
                 </div>
                 <div style={boxStyle}>{this.renderAccount()}</div>
+                <div style={boxStyle}>{this.renderInventory()}</div>
                 <div style={boxStyle}>{this.renderSum()}</div>
                 {this.renderStockFields()}
                 <div style={boxStyle}>
@@ -458,10 +476,11 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
 }
 
 export const ExpenseForm = (ownProps: TypeOwnProps) => {
-    const stateProps = useSelector(({currencies, categories, moneyLocations, user}: GlobalState) => ({
+    const stateProps = useSelector(({currencies, categories, moneyLocations, inventories, user}: GlobalState) => ({
         currencies,
         categories,
         moneyLocations,
+        inventories,
         user,
     }));
     const [endDate] = useEndDate();

@@ -19,6 +19,7 @@ export const formToModel = (
         repeat_occurrences: form.repeatOccurrences,
         repeat_factor: form.repeatFactor,
         stock_id: form.stockId,
+        inventory_id: form.inventoryId,
         users,
         status: form.status || TransactionStatus.pending,
     };

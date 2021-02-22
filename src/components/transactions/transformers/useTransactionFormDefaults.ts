@@ -25,5 +25,6 @@ export const useTransactionFormDefaults = (): TransactionForm => {
         repeatOccurrences: null,
         repeatFactor: 1,
         stockId: null,
+        inventoryId: null,
     };
 };
