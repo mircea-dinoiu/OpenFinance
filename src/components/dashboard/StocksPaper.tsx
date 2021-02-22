@@ -138,7 +138,6 @@ export const StocksPaper = ({
                         );
                     })}
                     soldStocksAreVisible={soldStocksAreVisible}
-                    accountOptions={accountOptionsOfCurrency}
                 />
             </div>
         </Paper>
