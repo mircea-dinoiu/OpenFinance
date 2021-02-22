@@ -6,9 +6,10 @@ import {numericColumnStyles, spacingSmall} from 'defs/styles';
 import React from 'react';
 import {Column} from 'react-table-6';
 import {makeTotalFooter} from './makeTotalFooter';
+import {locales} from 'locales';
 
 export const CreditAprCol: Column<CashAccount> = {
-    Header: 'APR%',
+    Header: locales.apr,
     accessor: 'credit_apr',
     Cell: ({original: a, value}: {original: CashAccount; value: number | null}) => {
         return typeof value === 'number' ? value + '%' : null;

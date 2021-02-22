@@ -30,6 +30,7 @@ import {spacingNormal} from 'defs/styles';
 
 const useAddlCashFlowState = createPersistedState(StorageKey.paymentDialogAddlCashFlow);
 const useSkipPayments = createPersistedState(StorageKey.paymentDialogSkipPayments);
+const useAprThreshold = createPersistedState(StorageKey.paymentDialogAprThreshold);
 
 type PaymentPlanPayment = CashAccount & {date: Moment; paid: number; paidExtra: number};
 
@@ -44,6 +45,7 @@ export const PaymentPlanDialog = ({
 }) => {
     const [offset, setOffset] = useSkipPayments(0);
     const [addlCashFlow, setAddlCashFlow] = useAddlCashFlowState(0);
+    const [aprThreshold, setAprThreshold] = useAprThreshold(0);
     const cls = useStyles();
 
     const {months} = useMemo(() => {
@@ -97,7 +99,12 @@ export const PaymentPlanDialog = ({
                 (accountsWithBalance = getAccountsWithBalance().filter((acc) => {
                     const batchEntry = batch[acc.id];
 
-                    return batchEntry != null && batchEntry.paid > 0 && acc.total < 0;
+                    return (
+                        batchEntry != null &&
+                        batchEntry.paid > 0 &&
+                        acc.total < 0 &&
+                        (acc.credit_apr ?? 0) > aprThreshold
+                    );
                 })).length > 0
             ) {
                 orderBy(accountsWithBalance, ['credit_apr'], ['desc']).forEach((acc) => {
@@ -127,7 +134,7 @@ export const PaymentPlanDialog = ({
         }
 
         return {months};
-    }, [creditWithTotal, addlCashFlow, offset]);
+    }, [creditWithTotal, addlCashFlow, offset, aprThreshold]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth={false}>
@@ -183,6 +190,12 @@ export const PaymentPlanDialog = ({
                             ),
                         }}
                     />
+                    <TextField
+                        type="number"
+                        label={locales.aprThreshold}
+                        value={aprThreshold}
+                        onChange={(e) => setAprThreshold(Math.max(0, Number(e.target.value)))}
+                    />
                 </div>
             </DialogTitle>
             <DialogContent>
@@ -191,7 +204,7 @@ export const PaymentPlanDialog = ({
                         <TableHead>
                             <TableRow>
                                 <TableCell>Account</TableCell>
-                                <TableCell align="right">APR</TableCell>
+                                <TableCell align="right">{locales.apr}</TableCell>
                                 <TableCell align="center">Date</TableCell>
                                 <TableCell align="right">Min Payment</TableCell>
                                 <TableCell align="right">Add'l Payment</TableCell>

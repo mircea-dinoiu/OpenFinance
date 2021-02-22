@@ -7,4 +7,6 @@ export const locales = {
         crypto: 'Cryptocurrency',
     },
     mdash: '—',
+    apr: 'APR',
+    aprThreshold: 'APR Threshold for Early Payments',
 };
