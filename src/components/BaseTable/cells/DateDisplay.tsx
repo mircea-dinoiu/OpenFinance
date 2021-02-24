@@ -1,8 +1,8 @@
-import {grey} from '@material-ui/core/colors';
 import {TransactionModel} from 'components/transactions/types';
 import moment from 'moment';
 import * as React from 'react';
 import {useScreenSize} from 'state/hooks';
+import {theme} from 'defs/styles';
 
 export const DateDisplay = ({item}: {item: TransactionModel}) => {
     const screen = useScreenSize();
@@ -11,7 +11,7 @@ export const DateDisplay = ({item}: {item: TransactionModel}) => {
         <span
             style={{
                 fontSize: '1rem',
-                color: screen.isLarge ? 'inherit' : grey[500],
+                color: screen.isLarge ? 'inherit' : theme.palette.text.secondary,
             }}
             title={`Last updated: ${moment(item.updated_at).format('lll')}`}
         >

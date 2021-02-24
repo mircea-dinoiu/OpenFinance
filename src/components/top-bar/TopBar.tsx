@@ -1,13 +1,11 @@
-import {AppBar, IconButton, Paper, Tab, Tabs, Toolbar, Typography} from '@material-ui/core';
-import {grey} from '@material-ui/core/colors';
+import {AppBar, IconButton, Tab, Tabs, Toolbar, Typography, Select, MenuItem} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconExitToApp from '@material-ui/icons/ExitToApp';
 import IconVisibility from '@material-ui/icons/Visibility';
 import IconVisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconHome from '@material-ui/icons/Home';
-import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftDateOption} from 'defs';
-import {spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
+import {spacingNormal, stickyHeaderHeight} from 'defs/styles';
 import {paths} from 'js/defs';
 import React from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -42,31 +40,26 @@ export const TopBar = (props: {onLogout: () => void}) => {
                 <Toolbar className={cls.toolbar} disableGutters={true}>
                     <Typography variant="h6" color="inherit">
                         {projects.length ? (
-                            <Paper className={cls.paper}>
-                                <MuiSelectNative
-                                    onChange={(o) => {
-                                        const url = new URL(window.location.href);
+                            <Select
+                                onChange={(e) => {
+                                    const url = new URL(window.location.href);
 
-                                        url.searchParams.set('projectId', o.value.toString());
+                                    url.searchParams.set('projectId', e.target.value as string);
 
-                                        window.location.href = mapUrlToFragment(url);
-                                    }}
-                                    options={projects.map((p) => ({
-                                        label: p.name,
-                                        value: p.id,
-                                    }))}
-                                    value={{
-                                        value: selectedProject.id,
-                                    }}
-                                    valueType="number"
-                                />
-                            </Paper>
+                                    window.location.href = mapUrlToFragment(url);
+                                }}
+                                value={selectedProject.id}
+                            >
+                                {projects.map((p) => (
+                                    <MenuItem value={p.id}>{p.name}</MenuItem>
+                                ))}
+                            </Select>
                         ) : (
                             document.title
                         )}
                     </Typography>
                     {user && screenSize.isLarge && (
-                        <Paper className={cls.tabs}>
+                        <div className={cls.tabs}>
                             <Tabs
                                 value={tabs.indexOf(location.pathname)}
                                 onChange={(event, index) => {
@@ -80,7 +73,7 @@ export const TopBar = (props: {onLogout: () => void}) => {
                                 <Tab label="Categories" />
                                 <Tab label="Accounts" />
                             </Tabs>
-                        </Paper>
+                        </div>
                     )}
                     {user && (
                         <div
@@ -106,17 +99,12 @@ export const TopBar = (props: {onLogout: () => void}) => {
 
 const useStyles = makeStyles({
     toolbar: {
-        backgroundColor: grey[800],
         paddingRight: spacingNormal,
         paddingLeft: spacingNormal,
         minHeight: stickyHeaderHeight,
     },
-    paper: {
-        padding: `${spacingSmall} ${spacingNormal}`,
-    },
     tabs: {
         backgroundColor: 'transparent',
-        color: grey[100],
         left: '50%',
         position: 'absolute',
         transform: 'translateX(-50%)',
