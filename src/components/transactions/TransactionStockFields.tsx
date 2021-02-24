@@ -1,9 +1,9 @@
-import {MuiSelectNative} from 'components/dropdowns';
 import {TransactionForm} from 'components/transactions/types';
-import {gridGap} from 'defs/styles';
 import React from 'react';
 import {useStocks} from 'state/stocks';
-import styled from 'styled-components';
+import {TextField} from '@material-ui/core';
+import {Autocomplete} from '@material-ui/lab';
+import {Stock} from 'types';
 
 export const TransactionStockFields = ({
     values: {stockId},
@@ -13,27 +13,14 @@ export const TransactionStockFields = ({
     onChange: (values: Pick<TransactionForm, 'stockId'>) => void;
 }) => {
     const stocks = useStocks();
-    const stockOptions = stocks.map((s) => ({
-        value: s.id,
-        label: s.symbol,
-    }));
 
     return (
-        <Styled>
-            <MuiSelectNative<number | null>
-                label="Stock Symbol"
-                isNullable={true}
-                onChange={({value}) => onChange({stockId: value})}
-                value={stockOptions.find((o) => o.value === stockId)}
-                options={stockOptions}
-            />
-        </Styled>
+        <Autocomplete<Stock>
+            options={stocks}
+            getOptionLabel={(o) => o.symbol}
+            onChange={(e: unknown, value: Stock | null) => onChange({stockId: value?.id ?? null})}
+            value={stocks.find((s) => s.id === stockId)}
+            renderInput={(params) => <TextField {...params} label="Stock Symbol" InputLabelProps={{shrink: true}} />}
+        />
     );
 };
-
-const Styled = styled.div`
-    display: grid;
-    grid-gap: ${gridGap};
-    grid-template-columns: 1fr;
-    align-items: center;
-`;

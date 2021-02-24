@@ -1,8 +1,9 @@
-import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles} from '@material-ui/core';
-import {MuiReactSelect, MuiSelectNative} from 'components/dropdowns';
+import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles, TextField} from '@material-ui/core';
+import {MuiReactSelect} from 'components/dropdowns';
 import {spacingNormal, spacingSmall} from 'defs/styles';
 import * as React from 'react';
 import {Filter} from 'react-table-6';
+import {Autocomplete} from '@material-ui/lab';
 
 const styles = {
     paper: {
@@ -168,13 +169,14 @@ class SelectFilterWrapped extends React.PureComponent<
         }
 
         return (
-            <MuiSelectNative
+            <Autocomplete<typeof options[0]>
                 value={options.find((o) => value === o.value)}
                 onOpen={onOpen}
+                getOptionLabel={(o) => o.label}
                 options={options}
-                valueType="number"
-                // @ts-ignore
-                onChange={({value}: {value: unknown}) => handleChange(value)}
+                disableClearable={true}
+                onChange={(e: unknown, o: typeof options[0] | null) => handleChange(o?.value as any)}
+                renderInput={(params) => <TextField {...params} InputLabelProps={{shrink: true}} />}
             />
         );
     }

@@ -1,7 +1,7 @@
-import {MuiSelectNative} from 'components/dropdowns';
 import {IncludeOption} from 'defs';
 import * as React from 'react';
 import {useEndDate} from 'utils/dates';
+import {Select, MenuItem} from '@material-ui/core';
 
 const getIncludeOptions = ({endDate}: {endDate: string}) => {
     const currentYear = new Date(endDate).getFullYear();
@@ -63,18 +63,21 @@ export const IncludeDropdown = ({
     value,
 }: {
     value: IncludeOption;
-    onChange: (value: {value: IncludeOption}) => void;
+    onChange: (value: IncludeOption) => void;
 }) => {
     const [endDate] = useEndDate();
     const options = getIncludeOptions({endDate});
 
     return (
-        <MuiSelectNative
+        <Select
             label="Include results"
-            value={options.find((o) => o.value === value)}
-            onChange={onChange}
+            value={value}
+            onChange={(e) => onChange(e.target.value as IncludeOption)}
             fullWidth={true}
-            options={options}
-        />
+        >
+            {options.map((o) => (
+                <MenuItem value={o.value}>{o.label}</MenuItem>
+            ))}
+        </Select>
     );
 };

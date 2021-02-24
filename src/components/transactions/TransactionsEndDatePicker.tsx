@@ -1,9 +1,8 @@
-import {FormLabel, IconButton, Menu, MenuItem as MenuItem2} from '@material-ui/core';
+import {FormLabel, IconButton, Menu, MenuItem as MenuItem2, Select, MenuItem} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconArrowBack from '@material-ui/icons/ArrowBack';
 import IconArrowForward from '@material-ui/icons/ArrowForward';
 import {DatePicker} from '@material-ui/pickers';
-import {MuiSelectNative} from 'components/dropdowns';
 import {ShiftMenu} from 'components/top-bar/ShiftMenu';
 import {getShiftBackOptions, getShiftForwardOptions} from 'components/top-bar/TopBar';
 import {ShiftDateOption, ShiftDateOptions} from 'defs';
@@ -46,13 +45,16 @@ export const TransactionsEndDatePicker = () => {
                 marginRight: 12,
             }}
         >
-            <MuiSelectNative<ShiftDateOption>
-                value={ShiftDateOptions.find((o) => o.value === endDateIncrement)}
-                onChange={({value}) => {
-                    setEndDateIncrement(value);
+            <Select
+                value={endDateIncrement}
+                onChange={(e) => {
+                    setEndDateIncrement(e.target.value as ShiftDateOption);
                 }}
-                options={ShiftDateOptions}
-            />
+            >
+                {ShiftDateOptions.map((sdo) => (
+                    <MenuItem value={sdo.value}>{sdo.label}</MenuItem>
+                ))}
+            </Select>
         </div>
     );
 

@@ -19,15 +19,12 @@ import {
 } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import {DateTimePicker} from '@material-ui/pickers';
-// @ts-ignore
-import {MuiSelectNative} from 'components/dropdowns';
 import {TransactionAmountFields} from 'components/transactions/TransactionAmountFields';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
 import {TransactionNameField} from 'components/transactions/TransactionNameField';
 import {TransactionStockFields} from 'components/transactions/TransactionStockFields';
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
-import {RepeatOptions} from 'defs/repeatOptions';
 import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
@@ -43,6 +40,7 @@ import {Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User} from 't
 import {useEndDate} from 'utils/dates';
 import {Inventory} from 'state/inventories';
 import {Autocomplete} from '@material-ui/lab';
+import {locales} from 'locales';
 
 const boxStyle = {
     padding: '10px 0',
@@ -185,8 +183,10 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                     options={this.props.inventories}
                     getOptionLabel={(o) => o.name}
                     onChange={(e: unknown, value: Inventory | null) => this.setState({inventoryId: value?.id ?? null})}
-                    defaultValue={this.props.inventories.find((inv) => inv.id === this.state.inventoryId)}
-                    renderInput={(params) => <TextField {...params} label="Inventory" />}
+                    value={this.props.inventories.find((inv) => inv.id === this.state.inventoryId)}
+                    renderInput={(params) => (
+                        <TextField {...params} label="Inventory" InputLabelProps={{shrink: true}} />
+                    )}
                 />
             </FormControl>
         );
@@ -251,9 +251,9 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
     }
 
     renderRepeat() {
-        const options = RepeatOptions.map((arr) => ({
-            value: arr[0],
-            label: arr[1],
+        const options = Object.values(RepeatOption).map((value) => ({
+            value: value,
+            label: locales.repeatOptions[value],
         }));
 
         return (
@@ -279,12 +279,16 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                     />
                 </div>
                 <div>
-                    <MuiSelectNative<RepeatOption | null>
-                        label=" "
-                        isNullable={true}
-                        onChange={({value}) => this.setState({repeat: value})}
+                    <Autocomplete<typeof options[0]>
+                        renderInput={(params) => (
+                            <TextField {...params} label="Time Unit" InputLabelProps={{shrink: true}} />
+                        )}
+                        onChange={(e: unknown, o: typeof options[0] | null) =>
+                            this.setState({repeat: o?.value ?? null})
+                        }
                         value={options.find((o) => o.value === this.state.repeat)}
                         options={options}
+                        getOptionLabel={(o) => o.label}
                     />
                 </div>
                 <div>

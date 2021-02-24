@@ -112,8 +112,8 @@ export const Dashboard = () => {
 
                 <IncludeDropdown
                     value={include}
-                    onChange={(option) => {
-                        setInclude(option.value);
+                    onChange={(value) => {
+                        setInclude(value);
                     }}
                 />
                 <FormControlLabel

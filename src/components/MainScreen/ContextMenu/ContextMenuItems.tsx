@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-    Divider,
-    MenuItem,
-    ListItemIcon,
-    ListItemText,
-    SvgIconTypeMap,
-} from '@material-ui/core';
+import {Divider, MenuItem, ListItemIcon, ListItemText, SvgIconTypeMap} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 import DuplicateIcon from '@material-ui/icons/FileCopy';

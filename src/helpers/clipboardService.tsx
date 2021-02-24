@@ -1,6 +1,6 @@
 import {useTemporarySnackbar} from 'components/snackbars';
-import {useCallback} from 'react';
 import * as React from 'react';
+import {useCallback} from 'react';
 
 export const copyText = (value: string | number) => {
     const textarea = document.createElement('textarea');

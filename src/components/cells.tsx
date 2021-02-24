@@ -1,7 +1,6 @@
-import {TextField} from '@material-ui/core';
-import {MuiSelectNative} from 'components/dropdowns';
+import {TextField, Select, MenuItem} from '@material-ui/core';
 import {theme} from 'defs/styles';
-import _ from 'lodash';
+import _, {sortBy} from 'lodash';
 import startCase from 'lodash/startCase';
 import React from 'react';
 import {TableCellRenderer} from 'react-table-6';
@@ -67,22 +66,22 @@ export const CurrencyCell: TableCellRenderer = ({original: row, columnProps}) =>
     const {editor, setEditor} = columnProps.rest;
 
     if (editor && editor.id === row.id) {
-        const options = Object.values(currencies).map((t) => ({
-            value: t.id,
-            label: t.iso_code,
-        }));
+        const options = sortBy(Object.values(currencies), 'iso_code');
 
         return (
-            <MuiSelectNative<number>
-                value={options.find((o) => o.value === editor.currency_id)}
-                options={options}
-                onChange={(o) =>
+            <Select
+                value={editor.currency_id}
+                onChange={(e) =>
                     setEditor({
                         ...editor,
-                        currency_id: Number(o.value),
+                        currency_id: Number(e.target.value),
                     })
                 }
-            />
+            >
+                {options.map((o) => (
+                    <MenuItem value={o.id}>{o.iso_code}</MenuItem>
+                ))}
+            </Select>
         );
     }
 
@@ -103,16 +102,19 @@ export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
     }));
 
     return editor && editor.id === row.id ? (
-        <MuiSelectNative
-            options={options}
-            value={options.find((o) => o.value === editor.status)}
-            onChange={(o) =>
+        <Select
+            value={editor.status}
+            onChange={(e) =>
                 setEditor({
                     ...editor,
-                    status: o.value,
+                    status: e.target.value,
                 })
             }
-        />
+        >
+            {options.map((o) => (
+                <MenuItem value={o.value}>{o.label}</MenuItem>
+            ))}
+        </Select>
     ) : (
         <div
             style={{
@@ -137,16 +139,19 @@ export const AccountTypeCell: TableCellRenderer = ({original: row, columnProps})
         }));
 
         return (
-            <MuiSelectNative<string>
-                value={options.find((o) => o.value === editor.type)}
-                options={options}
-                onChange={(o) =>
+            <Select
+                value={editor.type}
+                onChange={(e) =>
                     setEditor({
                         ...editor,
-                        type: o.value,
+                        type: e.target.value,
                     })
                 }
-            />
+            >
+                {options.map((o) => (
+                    <MenuItem value={o.value}>{o.label}</MenuItem>
+                ))}
+            </Select>
         );
     }
 

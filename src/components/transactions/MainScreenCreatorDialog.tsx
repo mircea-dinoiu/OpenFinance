@@ -1,9 +1,4 @@
-import {
-    Button,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from '@material-ui/core';
+import {Button, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {SmartDrawer} from 'components/drawers';
 import {ButtonProgress} from 'components/loaders';
 
@@ -33,9 +28,7 @@ export const MainScreenCreatorDialog = (props: TypeProps) => {
     const [error, setError] = React.useState<React.ReactNode>(null);
     const user = useBootstrap();
     const formDefaults = useTransactionFormDefaults();
-    const [formData, setFormData] = React.useState(
-        useTransactionFormDefaults(),
-    );
+    const [formData, setFormData] = React.useState(useTransactionFormDefaults());
 
     const save = async () => {
         const data = formData;
@@ -67,10 +60,7 @@ export const MainScreenCreatorDialog = (props: TypeProps) => {
     const Form = props.formComponent;
 
     return (
-        <SmartDrawer
-            open={props.open}
-            onClose={saving ? undefined : props.onCancel}
-        >
+        <SmartDrawer open={props.open} onClose={saving ? undefined : props.onCancel}>
             <DialogTitle>{`Create ${props.entityName}`}</DialogTitle>
 
             <DialogContent dividers={true}>
@@ -83,21 +73,10 @@ export const MainScreenCreatorDialog = (props: TypeProps) => {
             </DialogContent>
 
             <DialogActions>
-                <Button
-                    variant="contained"
-                    disabled={saving}
-                    onClick={props.onCancel}
-                    fullWidth={true}
-                >
+                <Button variant="contained" disabled={saving} onClick={props.onCancel} fullWidth={true}>
                     Cancel
                 </Button>
-                <Button
-                    variant="contained"
-                    disabled={saving}
-                    color="primary"
-                    onClick={save}
-                    fullWidth={true}
-                >
+                <Button variant="contained" disabled={saving} color="primary" onClick={save} fullWidth={true}>
                     {saving ? <ButtonProgress /> : 'Create'}
                 </Button>
             </DialogActions>

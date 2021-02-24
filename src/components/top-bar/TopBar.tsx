@@ -41,7 +41,7 @@ export const TopBar = (props: {onLogout: () => void}) => {
                     <Typography variant="h6" color="inherit">
                         {projects.length ? (
                             <Select
-                                onChange={(e) => {
+                                onChange={(e, value) => {
                                     const url = new URL(window.location.href);
 
                                     url.searchParams.set('projectId', e.target.value as string);

@@ -12,13 +12,7 @@ type DescriptionSuggestion = {
     usages: number;
 };
 
-export const TransactionNameField = ({
-    value,
-    onChange,
-}: {
-    value: string;
-    onChange: (v: string) => void;
-}) => {
+export const TransactionNameField = ({value, onChange}: {value: string; onChange: (v: string) => void}) => {
     const project = useSelectedProject();
     const {response: suggestionsResponse} = useReader<{
         suggestions: DescriptionSuggestion[];
@@ -48,12 +42,11 @@ export const TransactionNameField = ({
                     {...params}
                     onChange={(e) => onChange(e.target.value)}
                     label="Name"
+                    InputLabelProps={{shrink: true}}
                 />
             )}
             defaultValue={{item: value, usages: 0}}
-            onChange={(event: any, v: DescriptionSuggestion | null) =>
-                v && onChange(v.item)
-            }
+            onChange={(event: any, v: DescriptionSuggestion | null) => v && onChange(v.item)}
         />
     );
 };

@@ -1,10 +1,4 @@
-import {
-    FormControlLabel,
-    IconButton,
-    Menu,
-    Radio,
-    RadioGroup,
-} from '@material-ui/core';
+import {FormControlLabel, IconButton, Menu, Radio, RadioGroup} from '@material-ui/core';
 import IconFilterList from '@material-ui/icons/FilterList';
 import {gridGap, spacingLarge} from 'defs/styles';
 import * as React from 'react';
@@ -35,17 +29,11 @@ const Subfilter = ({
             name={name}
             value={(filter && filter.value && filter.value[name]) || YES}
             style={{margin: '10px 0 0'}}
-            onChange={(event: SyntheticEvent<HTMLInputElement>) =>
-                onChange(name, event.currentTarget.value)
-            }
+            onChange={(event: SyntheticEvent<HTMLInputElement>) => onChange(name, event.currentTarget.value)}
         >
             <FormControlLabel value={YES} label="Yes" control={<Radio />} />
             <FormControlLabel value={NO} label="No" control={<Radio />} />
-            <FormControlLabel
-                value={ONLY}
-                label="Exclusive"
-                control={<Radio />}
-            />
+            <FormControlLabel value={ONLY} label="Exclusive" control={<Radio />} />
         </RadioGroup>
     </div>
 );
@@ -58,13 +46,7 @@ const SubfilterGrid = styled.div`
     padding: 0 ${spacingLarge};
 `;
 
-export const DescriptionFilter = ({
-    onChange,
-    filter,
-}: {
-    onChange: (filter: Filter) => void;
-    filter: Filter;
-}) => {
+export const DescriptionFilter = ({onChange, filter}: {onChange: (filter: Filter) => void; filter: Filter}) => {
     const handleChange = (name: string, value: string) => {
         const newFilter = {...(filter && filter.value)};
 
@@ -90,26 +72,10 @@ export const DescriptionFilter = ({
             </IconButton>
             <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleClose}>
                 <SubfilterGrid>
-                    <Subfilter
-                        onChange={handleChange}
-                        name={DEPOSIT}
-                        filter={filter}
-                    />
-                    <Subfilter
-                        onChange={handleChange}
-                        name={PENDING}
-                        filter={filter}
-                    />
-                    <Subfilter
-                        onChange={handleChange}
-                        name={RECURRENT}
-                        filter={filter}
-                    />
-                    <Subfilter
-                        onChange={handleChange}
-                        name={GENERATED}
-                        filter={filter}
-                    />
+                    <Subfilter onChange={handleChange} name={DEPOSIT} filter={filter} />
+                    <Subfilter onChange={handleChange} name={PENDING} filter={filter} />
+                    <Subfilter onChange={handleChange} name={RECURRENT} filter={filter} />
+                    <Subfilter onChange={handleChange} name={GENERATED} filter={filter} />
                 </SubfilterGrid>
             </Menu>
 

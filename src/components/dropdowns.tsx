@@ -1,17 +1,13 @@
-import {FormControl, InputLabel, SelectProps} from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-import MuiSelect from '@material-ui/core/Select';
 import {withStyles} from '@material-ui/core/styles';
 import {emphasize} from '@material-ui/core/styles/colorManipulator';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CancelIcon from '@material-ui/icons/Cancel';
 import clsx from 'clsx';
-import {uniqueId} from 'lodash';
 import * as React from 'react';
-import {ChangeEvent, useRef} from 'react';
 import Select from 'react-select';
 
 const styles = (theme: any) => ({
@@ -35,9 +31,7 @@ const styles = (theme: any) => ({
     },
     chipFocused: {
         backgroundColor: emphasize(
-            theme.palette.type === 'light'
-                ? theme.palette.grey[300]
-                : theme.palette.grey[700],
+            theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
             0.08,
         ),
     },
@@ -62,18 +56,12 @@ const styles = (theme: any) => ({
 });
 
 const NoOptionsMessage = (props: any) => (
-    <Typography
-        color="textSecondary"
-        className={props.selectProps.classes.noOptionsMessage}
-        {...props.innerProps}
-    >
+    <Typography color="textSecondary" className={props.selectProps.classes.noOptionsMessage} {...props.innerProps}>
         {props.children}
     </Typography>
 );
 
-const inputComponent = ({inputRef, ...props}: any) => (
-    <div ref={inputRef} {...props} />
-);
+const inputComponent = ({inputRef, ...props}: any) => <div ref={inputRef} {...props} />;
 
 const Control = (props: any) => (
     <TextField
@@ -106,29 +94,18 @@ const Option = (props: any) => (
 );
 
 const Placeholder = (props: any) => (
-    <Typography
-        color="textSecondary"
-        className={props.selectProps.classes.placeholder}
-        {...props.innerProps}
-    >
+    <Typography color="textSecondary" className={props.selectProps.classes.placeholder} {...props.innerProps}>
         {props.children}
     </Typography>
 );
 
 const SingleValue = (props: any) => (
-    <Typography
-        className={props.selectProps.classes.singleValue}
-        {...props.innerProps}
-    >
+    <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
         {props.children}
     </Typography>
 );
 
-const ValueContainer = (props: any) => (
-    <div className={props.selectProps.classes.valueContainer}>
-        {props.children}
-    </div>
-);
+const ValueContainer = (props: any) => <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
 
 const MultiValue = (props: any) => (
     <Chip
@@ -143,11 +120,7 @@ const MultiValue = (props: any) => (
 );
 
 const Menu = (props: any) => (
-    <Paper
-        square
-        className={props.selectProps.classes.paper}
-        {...props.innerProps}
-    >
+    <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
         {props.children}
     </Paper>
 );
@@ -172,67 +145,6 @@ const selectStyles = (theme: any) => ({
         },
     }),
 });
-
-export const MuiSelectNative = <V extends string | number | null>({
-    value,
-    label,
-    options,
-    onChange,
-    isNullable,
-    valueType,
-    ...props
-}: {
-    value: {value: V} | undefined;
-    label?: SelectProps['label'];
-    options: Array<{value: V; label: string}>;
-    onChange: (value: {value: V}) => void;
-    isNullable?: boolean;
-    valueType?: 'string' | 'number';
-} & Omit<SelectProps, 'value' | 'onChange'>) => {
-    const labelId = useRef(uniqueId());
-    const {current: noneValue} = useRef(uniqueId('none'));
-
-    return (
-        <FormControl fullWidth={true}>
-            {label && (
-                <InputLabel htmlFor={labelId.current}>{label}</InputLabel>
-            )}
-            <MuiSelect
-                labelId={labelId.current}
-                value={value && value.value}
-                // @ts-ignore
-                onChange={(e: ChangeEvent<{value: V}>) => {
-                    const nextValue = e.target.value;
-
-                    if (nextValue === noneValue) {
-                        // @ts-ignore supporting null
-                        onChange({value: null});
-                    } else
-                        onChange({
-                            // @ts-ignore just ensuring value type stays consistent
-                            value:
-                                valueType === 'number'
-                                    ? Number(nextValue)
-                                    : nextValue,
-                        });
-                }}
-                native
-                inputProps={{
-                    id: labelId.current,
-                }}
-                {...props}
-            >
-                {isNullable && <option aria-label="None" value={noneValue} />}
-                {options.map((o, i) => (
-                    // @ts-ignore
-                    <option key={i} value={o.value}>
-                        {o.label}
-                    </option>
-                ))}
-            </MuiSelect>
-        </FormControl>
-    );
-};
 
 const addMaterialStyles = (Component: typeof Select) =>
     // @ts-ignore

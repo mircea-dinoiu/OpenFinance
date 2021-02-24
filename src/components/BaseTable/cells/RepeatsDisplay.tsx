@@ -1,10 +1,10 @@
 import {TransactionModel} from 'components/transactions/types';
-import {RepeatOptions} from 'defs/repeatOptions';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import * as React from 'react';
+import {locales} from 'locales';
 
 export const RepeatsDisplay = ({item}: {item: TransactionModel}) => {
-    const repeatsText = item.repeat ? RepeatOptions.filter((each) => each[0] === item.repeat)[0][1] : '';
+    const repeatsText = item.repeat ? locales.repeatOptions[item.repeat] : '';
 
     if (!repeatsText) {
         return null;
