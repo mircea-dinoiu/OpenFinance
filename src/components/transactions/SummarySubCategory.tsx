@@ -1,12 +1,11 @@
 import {CardHeader, Checkbox} from '@material-ui/core';
-import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {NumericValue} from 'components/formatters';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {SummaryModel} from 'components/transactions/types';
-import {spacingNormal, spacingSmall, theme} from 'defs/styles';
+import {spacingNormal, spacingSmall, theme, colors} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React, {ReactNode} from 'react';
 import {CurrencyMap} from 'types';
@@ -95,15 +94,15 @@ const useStyles = makeStyles({
         display: 'grid',
         gridTemplateColumns: '1fr auto auto',
         gridGap: spacingSmall,
-        borderBottom: `1px solid ${grey[200]}`,
+        borderBottom: `1px solid ${colors.borderSecondary}`,
         padding: `${spacingSmall} 0`,
         alignItems: 'center',
         '&:hover': {
-            backgroundColor: grey[100],
+            backgroundColor: colors.hover,
         },
     },
     listItemTotal: {
-        backgroundColor: grey[100],
+        backgroundColor: colors.tableFoot,
         fontWeight: 500,
     },
 });

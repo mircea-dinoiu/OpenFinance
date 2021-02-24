@@ -9,6 +9,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import clsx from 'clsx';
 import * as React from 'react';
 import Select from 'react-select';
+import {blueGrey} from '@material-ui/core/colors';
 
 const styles = (theme: any) => ({
     root: {
@@ -30,10 +31,7 @@ const styles = (theme: any) => ({
         margin: theme.spacing(0.5, 0.25),
     },
     chipFocused: {
-        backgroundColor: emphasize(
-            theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
-            0.08,
-        ),
+        backgroundColor: emphasize(theme.palette.type === 'light' ? blueGrey[300] : blueGrey[700], 0.08),
     },
     noOptionsMessage: {
         padding: theme.spacing(1, 2),

@@ -19,10 +19,9 @@ export const CategoriesDisplay = ({item}: {item: TransactionModel}) => {
                 item.categories.includes(each.id) ? (
                     <Chip
                         key={each.id}
+                        color="primary"
                         style={{
-                            margin: `${
-                                screen.isLarge ? 0 : spacingSmall
-                            } ${spacingSmall} 0 0`,
+                            margin: `${screen.isLarge ? 0 : spacingSmall} ${spacingSmall} 0 0`,
                             ...(screen.isLarge
                                 ? {
                                       height: 'auto',

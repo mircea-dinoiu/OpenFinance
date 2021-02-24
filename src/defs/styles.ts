@@ -1,4 +1,4 @@
-import {blueGrey, grey} from '@material-ui/core/colors';
+import {blueGrey} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
 import {Column} from 'react-table-6';
 
@@ -30,15 +30,23 @@ export enum ScreenQuery {
 }
 
 export const colors = {
-    hover: grey[700],
-    borderSecondary: grey[700],
-    borderPrimary: grey[600],
-    tableFoot: grey[700],
+    hover: blueGrey[700],
+    borderSecondary: blueGrey[700],
+    borderPrimary: blueGrey[600],
+    tableFoot: blueGrey[700],
+    tableHeaderBorder: blueGrey[700],
+    tableHeaderBg: blueGrey[800],
+    personAvatarBg: blueGrey[700],
+    tooltipBg: blueGrey[800],
 };
 
 export const theme = createMuiTheme({
     palette: {
         primary: blueGrey,
+        background: {
+            paper: blueGrey[800],
+            default: blueGrey[900],
+        },
         contrastThreshold: 0,
         type: 'dark',
     },

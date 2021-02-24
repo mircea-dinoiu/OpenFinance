@@ -1,8 +1,7 @@
-import {grey} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {Tooltip} from 'components/Tooltip';
-import {spacingNormal, spacingSmall, theme} from 'defs/styles';
+import {spacingNormal, spacingSmall, theme, colors} from 'defs/styles';
 import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
@@ -52,7 +51,7 @@ const useStyles = makeStyles({
         listStyleType: 'none',
     },
     tooltipPart: {
-        backgroundColor: grey[800],
+        backgroundColor: colors.tooltipBg,
         margin: 0,
         padding: spacingSmall,
         borderRadius: theme.shape.borderRadius,

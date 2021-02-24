@@ -1,15 +1,15 @@
 import {Avatar} from '@material-ui/core';
-import {grey} from '@material-ui/core/colors';
 import {TransactionModel} from 'components/transactions/types';
 import * as React from 'react';
 import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
+import {colors} from 'defs/styles';
 
 export const PersonAvatar = styled(Avatar)`
     height: 20px !important;
     border-radius: 0 !important;
     width: 100% !important;
-    background: ${grey[700]};
+    background: ${colors.personAvatarBg};
     justify-content: left !important;
 
     img {
