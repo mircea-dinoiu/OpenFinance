@@ -1,6 +1,6 @@
 import {TextField} from '@material-ui/core';
-import {green, orange, red} from '@material-ui/core/colors';
 import {MuiSelectNative} from 'components/dropdowns';
+import {theme} from 'defs/styles';
 import _ from 'lodash';
 import startCase from 'lodash/startCase';
 import React from 'react';
@@ -90,9 +90,9 @@ export const CurrencyCell: TableCellRenderer = ({original: row, columnProps}) =>
 };
 
 const ColorByStatus: Record<AccountStatus, string> = {
-    [AccountStatus.OPEN]: green[500],
-    [AccountStatus.CLOSED]: red[500],
-    [AccountStatus.LOCKED]: orange[500],
+    [AccountStatus.OPEN]: theme.palette.success.main,
+    [AccountStatus.CLOSED]: theme.palette.error.main,
+    [AccountStatus.LOCKED]: theme.palette.warning.main,
 };
 
 export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {

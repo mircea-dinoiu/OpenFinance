@@ -1,4 +1,3 @@
-import {blue, blueGrey, purple, yellow} from '@material-ui/core/colors';
 import Cached from '@material-ui/icons/Cached';
 import IconUpload from '@material-ui/icons/CloudUpload';
 import IconDrafts from '@material-ui/icons/Drafts';
@@ -6,6 +5,7 @@ import TrendingUp from '@material-ui/icons/TrendingUp';
 import Warning from '@material-ui/icons/Warning';
 import {TransactionModel} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
+import {theme} from 'defs/styles';
 import startCase from 'lodash/startCase';
 import * as React from 'react';
 
@@ -13,25 +13,25 @@ const ICON_STYLE = {height: 20, width: 20};
 
 export const PendingReviewFlag = ({entity = 'Item'}) => (
     <span title={`${startCase(entity)} is pending`}>
-        <Warning style={ICON_STYLE} htmlColor={yellow.A700} />
+        <Warning style={ICON_STYLE} htmlColor={theme.palette.warning.main} />
     </span>
 );
 
 export const RecurrentFlag = ({entity = 'Item'}) => (
     <span title={`Recurrent ${entity}`}>
-        <Cached style={ICON_STYLE} htmlColor={blue[500]} />
+        <Cached style={ICON_STYLE} htmlColor={theme.palette.info.main} />
     </span>
 );
 
 export const GeneratedFlag = ({entity = 'Item'}) => (
     <span title={`Generated ${entity}`}>
-        <TrendingUp style={ICON_STYLE} htmlColor={purple[500]} />
+        <TrendingUp style={ICON_STYLE} htmlColor={theme.palette.secondary.main} />
     </span>
 );
 
 export const DraftFlag = () => (
     <span title="Draft">
-        <IconDrafts style={ICON_STYLE} htmlColor={blueGrey[500]} />
+        <IconDrafts style={ICON_STYLE} htmlColor={theme.palette.primary.main} />
     </span>
 );
 

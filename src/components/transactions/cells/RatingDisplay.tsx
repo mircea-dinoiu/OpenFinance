@@ -1,7 +1,7 @@
-import {blue} from '@material-ui/core/colors';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {TransactionModel} from 'components/transactions/types';
+import {theme} from 'defs/styles';
 import {range} from 'lodash';
 import * as React from 'react';
 import styled from 'styled-components';
@@ -34,16 +34,13 @@ export class RatingDisplay extends React.PureComponent<{
             <span title="Hold CTRL/CMD to remove rating">
                 {range(1, 6).map((rating) => (
                     <Star key={rating} onClick={this.handleClick(rating)}>
-                        {React.createElement(
-                            rating <= value ? IconStar : IconStarBorder,
-                            {
-                                style: {
-                                    height: 20,
-                                    width: 20,
-                                },
-                                htmlColor: blue[500],
+                        {React.createElement(rating <= value ? IconStar : IconStarBorder, {
+                            style: {
+                                height: 20,
+                                width: 20,
                             },
-                        )}
+                            htmlColor: theme.palette.primary.main,
+                        })}
                     </Star>
                 ))}
             </span>

@@ -1,5 +1,4 @@
 import {CardHeader} from '@material-ui/core';
-import {green} from '@material-ui/core/colors';
 import {useSummaryResults} from 'components/dashboard/useSummaryResults';
 import {BigLoader} from 'components/loaders';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
@@ -16,13 +15,9 @@ export const UsersTab = ({reportQueryParams}: {reportQueryParams: string}) => {
             <CardHeader title="Users" />
             {results ? (
                 <SummaryCategory<User>
-                    {...{
-                        backgroundColor: green[500],
-                        title: 'Balance by Person',
-                        summaryObject: results.remainingData.byUser,
-                        entities: users,
-                        entityNameField: 'full_name',
-                    }}
+                    summaryObject={results.remainingData.byUser}
+                    entities={users}
+                    entityNameField="full_name"
                 />
             ) : (
                 <BigLoader />
