@@ -1,4 +1,4 @@
-import {blueGrey} from '@material-ui/core/colors';
+import {blueGrey, lightGreen, red, yellow} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
 import {Column} from 'react-table-6';
 
@@ -46,6 +46,15 @@ export const theme = createMuiTheme({
         background: {
             paper: blueGrey[800],
             default: blueGrey[900],
+        },
+        success: {
+            main: lightGreen[900],
+        },
+        error: {
+            main: red[900],
+        },
+        warning: {
+            main: yellow[600],
         },
         contrastThreshold: 0,
         type: 'dark',
