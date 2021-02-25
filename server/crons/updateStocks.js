@@ -3,7 +3,9 @@ const logger = require('../helpers/logger');
 const yf = require('yahoo-finance');
 
 module.exports = async () => {
-    const models = await Stock.findAll();
+    const models = await Stock.findAll({
+        manual_pricing: false,
+    });
 
     models.forEach(async (model) => {
         let data;
@@ -36,7 +38,7 @@ const inferStockPriceFromTransactions = async (stock) => {
     if (transaction) {
         const price = transaction.price;
 
-        if (price <= stock.price) {
+        if (price === stock.price) {
             return;
         }
 
