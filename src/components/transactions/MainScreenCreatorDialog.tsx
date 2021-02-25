@@ -73,7 +73,7 @@ export const MainScreenCreatorDialog = (props: TypeProps) => {
             </DialogContent>
 
             <DialogActions>
-                <Button variant="contained" disabled={saving} onClick={props.onCancel} fullWidth={true}>
+                <Button variant="outlined" disabled={saving} onClick={props.onCancel} fullWidth={true}>
                     Cancel
                 </Button>
                 <Button variant="contained" disabled={saving} color="primary" onClick={save} fullWidth={true}>
