@@ -4,7 +4,9 @@ const yf = require('yahoo-finance');
 
 module.exports = async () => {
     const models = await Stock.findAll({
-        manual_pricing: false,
+        where: {
+            manual_pricing: false,
+        },
     });
 
     models.forEach(async (model) => {
