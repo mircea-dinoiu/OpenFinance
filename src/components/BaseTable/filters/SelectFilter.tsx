@@ -1,5 +1,4 @@
 import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles, TextField} from '@material-ui/core';
-import {MuiReactSelect} from 'components/dropdowns';
 import {spacingNormal, spacingSmall} from 'defs/styles';
 import * as React from 'react';
 import {Filter} from 'react-table-6';
@@ -153,16 +152,19 @@ class SelectFilterWrapped extends React.PureComponent<
 
         if (this.props.multi) {
             return (
-                // @ts-ignore
-                <MuiReactSelect
-                    isMulti={true}
+                <Autocomplete<typeof options[0]>
+                    renderInput={(params) => <TextField {...params} InputLabelProps={{shrink: true}} />}
+                    ChipProps={{
+                        color: 'primary',
+                    }}
+                    multiple={true}
+                    getOptionLabel={(option) => option.label}
+                    options={options}
                     value={options.filter((o) => value.includes(o.value))}
                     onOpen={onOpen}
-                    options={options}
-                    // @ts-ignore
-                    onChange={(values: Array<{value: string}>) =>
+                    onChange={(e, selectedOptions) =>
                         // @ts-ignore
-                        handleChange(values.map((v) => v.value))
+                        handleChange(selectedOptions.map((v) => v.value))
                     }
                 />
             );
