@@ -45,7 +45,9 @@ export const colors = {
 export const theme = createMuiTheme({
     palette: {
         primary: blueGrey,
-        secondary: amber,
+        secondary: {
+            main: blueGrey['50'],
+        },
         background: {
             paper: blueGrey[800],
             default: blueGrey[900],
