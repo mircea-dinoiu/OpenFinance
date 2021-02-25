@@ -6,7 +6,6 @@ import styled from 'styled-components';
 
 export const Classes = {
     todayRow: 'todayRow',
-    pendingRow: 'pendingRow',
     selectedRow: 'selectedRow',
     hiddenRow: 'hiddenRow',
     notSelectable: 'notSelectable',
@@ -16,6 +15,10 @@ const ReactTableStyled = styled(ReactTable)`
     &.ReactTable.ReactTable {
         font-size: 1rem;
         border: 0 !important;
+
+        .rt-tr {
+            transition: all 0.25s ease;
+        }
 
         .rt-tr:hover {
             background: ${colors.hover};
@@ -53,16 +56,13 @@ const ReactTableStyled = styled(ReactTable)`
             color: inherit;
         }
 
-        .${Classes.pendingRow} {
-            background: rgba(255, 255, 255, 0.075);
-        }
-
         .${Classes.todayRow} {
-            font-weight: 500;
+            background: ${colors.todayRow};
         }
 
         .${Classes.selectedRow}, .${Classes.selectedRow}:hover {
-            background: rgb(244, 228, 179, 0.25);
+            background: ${colors.tableHighlight};
+            font-weight: 500;
         }
 
         .${Classes.hiddenRow} {

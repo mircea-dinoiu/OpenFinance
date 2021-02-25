@@ -19,10 +19,6 @@ export const getTrClassName = (
         classes.push(Classes.todayRow);
     }
 
-    if (formattedDate > today) {
-        classes.push(Classes.pendingRow);
-    }
-
     if (item.hidden) {
         classes.push(Classes.hiddenRow);
     }

@@ -40,11 +40,20 @@ export const MainScreenEditDialog = (props: TypeProps) => {
     const initialData = useRef(props.items.map(props.modelToForm));
     const formDefaults = useTransactionFormDefaults();
 
-    useEffect(() => {
+    const resetForm = () => {
         setSaving(false);
         setError(null);
         formData.current = props.items.map(props.modelToForm);
         initialData.current = props.items.map(props.modelToForm);
+    };
+
+    const handleCancel = () => {
+        props.onCancel();
+        resetForm();
+    };
+
+    useEffect(() => {
+        resetForm();
     }, [props.items.map((i) => i.id).join()]);
 
     const getUpdates = () => {
@@ -96,7 +105,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
     const Form = props.formComponent;
 
     return (
-        <SmartDrawer open={props.open} onClose={saving ? undefined : props.onCancel}>
+        <SmartDrawer open={props.open} onClose={saving ? undefined : handleCancel}>
             <DialogTitle>{`Edit ${props.entityName}${props.items.length === 1 ? '' : 's'}`}</DialogTitle>
 
             <DialogContent dividers={true}>
@@ -109,7 +118,15 @@ export const MainScreenEditDialog = (props: TypeProps) => {
             </DialogContent>
 
             <DialogActions>
-                <Button variant="contained" disabled={saving} onClick={props.onCancel} fullWidth={true}>
+                <Button
+                    variant="outlined"
+                    disabled={saving}
+                    onClick={() => {
+                        handleCancel();
+                        resetForm();
+                    }}
+                    fullWidth={true}
+                >
                     Cancel
                 </Button>
                 <Button variant="contained" disabled={saving} color="primary" onClick={save} fullWidth={true}>
