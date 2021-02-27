@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Divider, MenuItem, ListItemIcon, ListItemText, SvgIconTypeMap} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
+import FingerprintIcon from '@material-ui/icons/Fingerprint';
 import DuplicateIcon from '@material-ui/icons/FileCopy';
 import DetachIcon from '@material-ui/icons/ViewAgenda';
 import IconSkip from '@material-ui/icons/SkipNext';
@@ -12,6 +13,7 @@ import UnlockIcon from '@material-ui/icons/LockOpen';
 
 import IconArchive from '@material-ui/icons/Archive';
 import IconUnarchive from '@material-ui/icons/Unarchive';
+import {copyText} from 'helpers/clipboardService';
 
 type TypeOnClick = () => any;
 
@@ -53,6 +55,7 @@ export function ContextMenuItems({
     const selectedIdsLength = Object.values(selectedIds).filter(Boolean).length;
     const disabledForZero = selectedIdsLength === 0;
     const disabledForLessThanTwo = selectedIdsLength < 2;
+    const disabledForAllButOne = selectedIdsLength > 1;
 
     return (
         <>
@@ -74,6 +77,14 @@ export function ContextMenuItems({
                     disabled: disabledForZero,
                     icon: DeleteIcon,
                     text: 'Delete',
+                },
+                {
+                    onClick: () => {
+                        copyText(selectedIds[0]);
+                    },
+                    disabled: disabledForAllButOne,
+                    icon: FingerprintIcon,
+                    text: 'Copy ID',
                 },
                 <Divider />,
                 {

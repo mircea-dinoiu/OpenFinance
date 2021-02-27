@@ -321,7 +321,9 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                                                       repeat: this.state.repeat,
                                                       repeat_factor: this.state.repeatFactor,
                                                   },
-                                                  this.state.repeatOccurrences,
+                                                  this.state.repeatOccurrences
+                                                      ? this.state.repeatOccurrences - 1
+                                                      : null,
                                               )
                                                   .toDate()
                                                   .toLocaleDateString()}

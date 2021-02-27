@@ -15,6 +15,8 @@ export const copyText = (value: string | number) => {
 
     document.body.removeChild(textarea);
 
+    console.log('[copy]', value);
+
     return ok;
 };
 

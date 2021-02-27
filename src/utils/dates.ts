@@ -72,8 +72,7 @@ export const shiftDateBack = (date: string | Date, by: ShiftDateOption, times?: 
 export const getInitialEndDate = (): string => {
     const date = new Date();
 
-    date.setMonth(date.getMonth() + 1);
-    date.setDate(0);
+    date.setDate(date.getDate() + 7);
 
     return endOfDayToISOString(date);
 };
@@ -85,5 +84,5 @@ export const useEndDate = () => {
 };
 
 export const useEndDateIncrement = () => {
-    return useQueryParamState<ShiftDateOption>('endDateIncrement', ShiftDateOption.oneMonth);
+    return useQueryParamState<ShiftDateOption>('endDateIncrement', ShiftDateOption.oneWeek);
 };

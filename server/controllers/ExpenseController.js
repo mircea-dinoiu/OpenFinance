@@ -116,8 +116,6 @@ module.exports = class ExpenseController extends BaseController {
 
     async withRepeatedModels({model, cleanup = false}) {
         const promises = [Promise.resolve(model)];
-        let occurrences = model.repeat_occurrences;
-        let repeats = 1;
 
         if (cleanup) {
             await sql.query('DELETE FROM expenses WHERE repeat_link_id = ?', {
@@ -126,6 +124,9 @@ module.exports = class ExpenseController extends BaseController {
         }
 
         if (model.repeat && model.repeat_occurrences) {
+            let occurrences = model.repeat_occurrences;
+            let repeats = 1;
+
             while (occurrences > 1) {
                 const {id, ...record} = model.dataValues;
                 const repeatOccurrences = occurrences - 1;
