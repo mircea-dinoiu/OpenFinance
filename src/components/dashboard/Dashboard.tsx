@@ -1,17 +1,18 @@
 import {Button, CardHeader, Checkbox, Divider, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import IconCash from '@material-ui/icons/LocalAtm';
 import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
-import IconStock from '@material-ui/icons/TrendingUp';
+import IconCash from '@material-ui/icons/LocalAtm';
 import {Alert, AlertTitle} from '@material-ui/lab';
 import {BaseTable} from 'components/BaseTable';
+import {BrokeragePaper} from 'components/dashboard/BrokeragePaper';
 import {CategoriesTab} from 'components/dashboard/CategoriesTab';
-import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'components/dashboard/columns';
+import {NameCol, ValueCol} from 'components/dashboard/columns';
 import {CreditAprCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'components/dashboard/Credit';
-import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
+import {CashAccount} from 'components/dashboard/defs';
 import {getAccountOptions} from 'components/dashboard/getAccountOptions';
 import {PaymentPlanDialog} from 'components/dashboard/PaymentPlanDialog';
+import {StocksPaper} from 'components/dashboard/StocksPaper';
 import {useDashboardQueryParams} from 'components/dashboard/useDashboardQueryParams';
 import {UsersTab} from 'components/dashboard/UsersTab';
 import {getStockValue} from 'components/dashboard/useStockValue';
@@ -33,7 +34,6 @@ import {summaryAssign, SummaryKey} from 'state/summary';
 import {Account} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
-import {StocksPaper} from 'components/dashboard/StocksPaper';
 
 export const Dashboard = () => {
     const cls = useStyles();
@@ -238,28 +238,7 @@ export const Dashboard = () => {
 
                         {brokerageWithTotal.length > 0 && (
                             <>
-                                <Paper className={cls.paper}>
-                                    <CardHeader
-                                        className={cls.cardHeader}
-                                        title={
-                                            <>
-                                                <IconStock /> Investment Accounts
-                                            </>
-                                        }
-                                    />
-                                    {Object.values(groupBy(brokerageWithTotal, 'currency_id')).map((data) => (
-                                        <BaseTable<BrokerageAccount>
-                                            defaultSorted={[{id: 'name', desc: false}]}
-                                            className={cls.table}
-                                            data={data}
-                                            columns={
-                                                screenSize.isSmall
-                                                    ? [NameCol, ValueCol]
-                                                    : [NameCol, ValueCol, CostBasisCol, RoiCol, RoiPercCol]
-                                            }
-                                        />
-                                    ))}
-                                </Paper>
+                                <BrokeragePaper classes={cls} brokerageWithTotal={brokerageWithTotal} />
 
                                 <StocksPaper classes={cls} accountOptions={accountOptions} stocks={data.stocks} />
                             </>
