@@ -18,7 +18,7 @@ module.exports = class ExpenseController extends BaseController {
         this.updateValidationRules = {
             id: ['isRequired', 'isTransactionId'],
 
-            price: ['sometimes', 'isRequired', 'isFloat'],
+            price: ['sometimes', 'isRequired', 'isFloat', 'isPositive'],
             quantity: ['sometimes', 'isRequired', 'isFloat'],
 
             item: ['sometimes', 'isRequired', 'isString'],
@@ -41,7 +41,7 @@ module.exports = class ExpenseController extends BaseController {
             weight: ['sometimes', 'isPositive', 'isInt'],
         };
         this.createValidationRules = {
-            price: ['isRequired', 'isFloat'],
+            price: ['isRequired', 'isFloat', 'isPositive'],
             quantity: ['isRequired', 'isFloat'],
 
             item: ['isRequired', 'isString'],
