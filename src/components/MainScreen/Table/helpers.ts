@@ -15,8 +15,8 @@ export const getTrClassName = (
     const classes = [Classes.notSelectable];
     const formattedDate = formatYMD(item.created_at);
 
-    if (formattedDate === today) {
-        classes.push(Classes.todayRow);
+    if (formattedDate <= today) {
+        classes.push(Classes.pastRow);
     }
 
     if (item.hidden) {
