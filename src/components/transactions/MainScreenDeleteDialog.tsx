@@ -13,28 +13,21 @@ const MainScreenDeleteDialogWrapped = ({
     classes,
     ...props
 }: {
-    open: boolean,
-    entityName: string,
-    onYes: () => void,
-    onNo: () => void,
-    count?: number,
-    classes: ClassNameMap
+    open: boolean;
+    entityName: string;
+    onYes: () => void;
+    onNo: () => void;
+    count?: number;
+    classes: ClassNameMap;
 }) => (
     <Dialog open={open} classes={classes} {...props}>
-        <DialogTitle>
-            {`Delete ${entityName}${count === 1 ? '' : 's'}?`}
-        </DialogTitle>
+        <DialogTitle>{`Delete ${entityName}${count === 1 ? '' : 's'}?`}</DialogTitle>
         <DialogContent>
-            Are you sure you want to delete {count === 1 ? 'this' : 'these'}{' '}
-            {entityName}
+            Are you sure you want to delete {count === 1 ? 'this' : 'these'} {entityName}
             {count !== 1 && 's'}?
         </DialogContent>
         <DialogActions>
-            <Button
-                variant="contained"
-                onClick={onYes}
-                style={{marginRight: 5}}
-            >
+            <Button variant="outlined" onClick={onYes} style={{marginRight: 5}}>
                 Yes
             </Button>
             <Button variant="contained" color="primary" onClick={onNo}>
@@ -44,6 +37,4 @@ const MainScreenDeleteDialogWrapped = ({
     </Dialog>
 );
 
-export const MainScreenDeleteDialog = withStyles(dialog)(
-    MainScreenDeleteDialogWrapped,
-);
+export const MainScreenDeleteDialog = withStyles(dialog)(MainScreenDeleteDialogWrapped);
