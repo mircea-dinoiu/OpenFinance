@@ -25,7 +25,7 @@ export const RecurrentFlag = ({entity = 'Item'}) => (
 
 export const GeneratedFlag = ({entity = 'Item'}) => (
     <span title={`Generated ${entity}`}>
-        <TrendingUp style={ICON_STYLE} htmlColor={theme.palette.secondary.main} />
+        <TrendingUp style={ICON_STYLE} htmlColor={theme.palette.error.main} />
     </span>
 );
 
