@@ -34,6 +34,7 @@ import {Account} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 import {StocksPaper} from 'components/dashboard/StocksPaper';
+import {PropertiesPaper} from 'components/dashboard/PropertiesPaper';
 
 export const Dashboard = () => {
     const cls = useStyles();
@@ -264,6 +265,8 @@ export const Dashboard = () => {
                                 <StocksPaper classes={cls} accountOptions={accountOptions} stocks={data.stocks} />
                             </>
                         )}
+
+                        <PropertiesPaper classes={cls} />
                     </>
                 )}
 

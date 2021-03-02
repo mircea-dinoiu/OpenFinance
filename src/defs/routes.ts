@@ -15,6 +15,7 @@ export const routes = {
         balanceByLocation: '/api/reports/balance-by-location',
     },
     currencies: '/api/currencies',
+    properties: '/api/properties',
     stocks: '/api/stocks',
     user: {
         list: '/api/users',

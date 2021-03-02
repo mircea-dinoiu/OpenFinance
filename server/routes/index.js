@@ -3,6 +3,7 @@ module.exports = {
     '/api/reports': require('./reports'),
     '/api/currencies': require('./currencies'),
     '/api/inventories': require('./inventories'),
+    '/api/properties': require('./properties'),
     '/api/stocks': require('./stocks'),
     '/api/categories': require('./categories'),
     '/api/users': require('./users'),
