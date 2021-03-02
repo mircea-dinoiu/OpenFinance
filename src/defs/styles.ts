@@ -31,7 +31,7 @@ export enum ScreenQuery {
 
 export const colors = {
     hover: blueGrey[700],
-    todayRow: blueGrey[900],
+    pastRow: blueGrey[900],
     tableHighlight: blueGrey[600],
     borderSecondary: blueGrey[700],
     borderPrimary: blueGrey[600],

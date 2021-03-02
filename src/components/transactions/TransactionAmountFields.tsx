@@ -46,7 +46,7 @@ export const TransactionAmountFields = ({
                 onChange={(event) =>
                     onChange({
                         quantity,
-                        price: (event.target.value as any) as number,
+                        price: (event.target.value.replace('-', '') as any) as number,
                     })
                 }
             />

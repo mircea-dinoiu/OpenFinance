@@ -4,6 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AddIcon from '@material-ui/icons/Add';
 import IconSplit from '@material-ui/icons/CallSplitRounded';
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {BaseTable, TableHeader, TableHeaderTop} from 'components/BaseTable';
@@ -293,7 +294,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     <>
                         <SplitAmountField
                             error={isNaN(this.parseSplitAmount(this.state.splitAmount))}
-                            placeholder="Split"
+                            placeholder="Split or Reduce"
                             value={this.state.splitAmount}
                             onChange={(event) => {
                                 this.setState({
@@ -309,10 +310,18 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                 endAdornment: (
                                     <InputAdornment position="end">
                                         <IconButton
-                                            onClick={this.handleClickSplit}
+                                            title="Split into two transactions"
+                                            onClick={() => this.handleClickSplitReduce(true)}
                                             disabled={!this.isSplitAmountValid()}
                                         >
                                             <IconSplit />
+                                        </IconButton>
+                                        <IconButton
+                                            title="Reduce"
+                                            onClick={() => this.handleClickSplitReduce(false)}
+                                            disabled={!this.isSplitAmountValid()}
+                                        >
+                                            <IndeterminateCheckBoxIcon />
                                         </IconButton>
                                     </InputAdornment>
                                 ),
@@ -419,20 +428,22 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         return Number(working);
     }
 
-    handleClickSplit = async () => {
+    handleClickSplitReduce = async (isSplit: boolean) => {
         const selectedItems = this.selectedItems;
         const splitBy = this.parseSplitAmount(this.state.splitAmount);
 
-        await this.handleRequestCreate(
-            selectedItems.map((each) => {
-                const res = this.copyItem(each);
-                const sign = res.price < 0 ? -1 : 1;
+        if (isSplit) {
+            await this.handleRequestCreate(
+                selectedItems.map((each) => {
+                    const res = this.copyItem(each);
+                    const sign = res.price < 0 ? -1 : 1;
 
-                res.price = sign * splitBy;
+                    res.price = sign * splitBy;
 
-                return res;
-            }),
-        );
+                    return res;
+                }),
+            );
+        }
 
         await this.handleRequestUpdate(
             selectedItems.map((each) => {

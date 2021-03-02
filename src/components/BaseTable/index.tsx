@@ -5,7 +5,7 @@ import 'react-table-6/react-table.css';
 import styled from 'styled-components';
 
 export const Classes = {
-    todayRow: 'todayRow',
+    pastRow: 'pastRow',
     selectedRow: 'selectedRow',
     hiddenRow: 'hiddenRow',
     notSelectable: 'notSelectable',
@@ -56,8 +56,8 @@ const ReactTableStyled = styled(ReactTable)`
             color: inherit;
         }
 
-        .${Classes.todayRow} {
-            background: ${colors.todayRow};
+        .${Classes.pastRow} {
+            background: ${colors.pastRow};
         }
 
         .${Classes.selectedRow}, .${Classes.selectedRow}:hover {
