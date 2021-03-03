@@ -1,4 +1,15 @@
-import {Button, CardHeader, Checkbox, Divider, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
+import {
+    Button,
+    CardHeader,
+    Checkbox,
+    Divider,
+    FormControlLabel,
+    Paper,
+    Tab,
+    Tabs,
+    CardContent,
+    Card,
+} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
@@ -23,7 +34,7 @@ import {useInclude, useIncludePending} from 'components/transactions/helpers';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {BalanceByLocation} from 'components/transactions/types';
 import {routes} from 'defs/routes';
-import {ScreenQuery, spacingLarge, spacingNormal, spacingSmall} from 'defs/styles';
+import {ScreenQuery, spacingLarge, spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
 import _, {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
@@ -35,6 +46,15 @@ import {Account} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 import {PropertiesPaper} from 'components/dashboard/PropertiesPaper';
+import {locales} from 'locales';
+
+enum DashboardTab {
+    banking,
+    investing,
+    properties,
+    userReports,
+    categoryReports,
+}
 
 export const Dashboard = () => {
     const cls = useStyles();
@@ -148,14 +168,14 @@ export const Dashboard = () => {
                 })}
             </Paper>
             <div>
-                <Paper className={cls.paperNoPadding}>
+                <Paper className={cls.tabsPaper} elevation={5}>
                     <Tabs value={tab} onChange={(e, t) => setTab(t)}>
-                        <Tab label="Accounts" />
-                        <Tab label="Users" />
-                        <Tab label="Categories" />
+                        {locales.dashboardTabs.map((label) => (
+                            <Tab key={label} label={label} />
+                        ))}
                     </Tabs>
                 </Paper>
-                {tab === 0 && (
+                {tab === DashboardTab.banking && (
                     <>
                         <>
                             {cashWithTotal.length > 0 && (
@@ -236,25 +256,33 @@ export const Dashboard = () => {
                                 </Paper>
                             )}
                         </>
+                    </>
+                )}
 
-                        {brokerageWithTotal.length > 0 && (
+                {tab === DashboardTab.investing && (
+                    <>
+                        {brokerageWithTotal.length > 0 ? (
                             <>
                                 <BrokeragePaper classes={cls} brokerageWithTotal={brokerageWithTotal} />
 
                                 <StocksPaper classes={cls} accountOptions={accountOptions} stocks={data.stocks} />
                             </>
+                        ) : (
+                            <Card>
+                                <CardContent>{locales.nothingToSeeHereYet}</CardContent>
+                            </Card>
                         )}
-
-                        <PropertiesPaper classes={cls} />
                     </>
                 )}
 
-                {tab === 1 && (
+                {tab === DashboardTab.properties && <PropertiesPaper classes={cls} />}
+
+                {tab === DashboardTab.userReports && (
                     <Paper className={cls.paper}>
                         <UsersTab reportQueryParams={reportQueryParams} />
                     </Paper>
                 )}
-                {tab === 2 && (
+                {tab === DashboardTab.categoryReports && (
                     <Paper className={cls.paper}>
                         <CategoriesTab reportQueryParams={reportQueryParams} />
                     </Paper>
@@ -300,8 +328,11 @@ const useStyles = makeStyles({
             gridTemplateColumns: '1fr',
         },
     },
-    paperNoPadding: {
+    tabsPaper: {
+        position: 'sticky',
+        top: stickyHeaderHeight,
         marginBottom: spacingSmall,
+        zIndex: 1,
     },
     paper: {
         padding: spacingNormal,

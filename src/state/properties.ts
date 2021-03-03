@@ -13,7 +13,7 @@ export type Property = {
 
 export const useProperties = () => {
     const project = useSelectedProject();
-    const [data, setData] = useState<Property[]>([]);
+    const [data, setData] = useState<Property[] | null>(null);
 
     useEffect(() => {
         createXHR<Property[]>({
