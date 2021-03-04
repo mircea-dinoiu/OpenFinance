@@ -6,7 +6,6 @@ import {
     FormGroup,
     FormLabel,
     InputAdornment,
-    InputLabel,
     List,
     ListItem,
     ListItemAvatar,
@@ -17,7 +16,6 @@ import {
     Slider,
     TextField,
 } from '@material-ui/core';
-import Select from '@material-ui/core/Select';
 import {DateTimePicker} from '@material-ui/pickers';
 import {TransactionAmountFields} from 'components/transactions/TransactionAmountFields';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
@@ -29,14 +27,14 @@ import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
-import {sortBy, groupBy, startCase} from 'lodash';
+import {sortBy} from 'lodash';
 
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {AccountStatus, AccountType} from 'state/accounts';
+import {AccountType} from 'state/accounts';
 import {useSelectedProject} from 'state/projects';
 import styled from 'styled-components';
-import {Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User} from 'types';
+import {Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User, Account} from 'types';
 import {useEndDate} from 'utils/dates';
 import {Inventory} from 'state/inventories';
 import {Autocomplete} from '@material-ui/lab';
@@ -149,29 +147,16 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
     renderAccount() {
         return (
             <FormControl fullWidth={true}>
-                <InputLabel>Account</InputLabel>
-
-                <Select
-                    native
-                    onChange={(e) => this.setState({paymentMethod: e.target.value as number})}
-                    value={this.state.paymentMethod}
-                >
-                    {sortBy(Object.entries(groupBy(this.props.moneyLocations, 'status')), (e) =>
-                        Object.values(AccountStatus).indexOf(e[0] as AccountStatus),
-                    ).map(([status, accounts]) => {
-                        return (
-                            accounts.length > 0 && (
-                                <optgroup label={startCase(status)}>
-                                    {accounts.map((a) => (
-                                        <option key={a.id} value={a.id}>
-                                            {a.name}
-                                        </option>
-                                    ))}
-                                </optgroup>
-                            )
-                        );
-                    })}
-                </Select>
+                <Autocomplete<Account>
+                    options={this.props.moneyLocations}
+                    getOptionLabel={(o) => o.name}
+                    disableClearable={true}
+                    groupBy={(option) => option.status.toLocaleUpperCase()}
+                    // @ts-ignore
+                    onChange={(e: unknown, value: Account) => this.setState({paymentMethod: value.id as number})}
+                    value={this.props.moneyLocations.find((inv) => inv.id === this.state.paymentMethod)}
+                    renderInput={(params) => <TextField {...params} label="Account" InputLabelProps={{shrink: true}} />}
+                />
             </FormControl>
         );
     }
