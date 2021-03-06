@@ -1,8 +1,8 @@
 import MomentUtils from '@date-io/moment';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {Accounts} from 'components/accounts/Accounts';
-import {Categories} from 'components/categories/Categories';
+import {AccountsDialog} from 'components/accounts/AccountsDialog';
+import {CategoriesDialog} from 'components/categories/CategoriesDialog';
 import {Dashboard} from 'components/dashboard/Dashboard';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
@@ -153,8 +153,8 @@ const AppInner = ({location, match}: RouteComponentProps) => {
             <div style={{margin: screenSize.isLarge ? spacingSmall : 0}}>
                 <Route path={paths.dashboard} component={Dashboard} />
                 <Route path={paths.transactions} component={Transactions} />
-                <Route path={paths.categories} component={Categories} />
-                <Route path={paths.accounts} component={Accounts} />
+                <Route path={paths.categories} component={CategoriesDialog} />
+                <Route path={paths.accounts} component={AccountsDialog} />
             </div>
         );
     }

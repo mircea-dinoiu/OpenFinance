@@ -1,19 +1,16 @@
-import {AppBar, IconButton, Tab, Tabs, Toolbar, Typography, Select, MenuItem} from '@material-ui/core';
+import {AppBar, Tab, Tabs, Toolbar, Typography, Select, MenuItem} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import IconExitToApp from '@material-ui/icons/ExitToApp';
-import IconVisibility from '@material-ui/icons/Visibility';
-import IconVisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconHome from '@material-ui/icons/Home';
 import {ShiftDateOption} from 'defs';
 import {spacingNormal, stickyHeaderHeight} from 'defs/styles';
 import {paths} from 'js/defs';
 import React from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
-import {usePrivacyToggle} from 'state/privacyToggle';
 import {useProjects, useSelectedProject} from 'state/projects';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import {makeUrl, mapUrlToFragment} from 'utils/url';
-import {useBootstrap, useScreenSize} from '../../state/hooks';
+import {useBootstrap} from '../../state/hooks';
+import {TopBarMoreMenu} from 'components/top-bar/TopBarMoreMenu';
 
 const MAX_TIMES = 10;
 
@@ -24,12 +21,10 @@ export const getShiftForwardOptions = (date: string, by: ShiftDateOption): Date[
     new Array(MAX_TIMES).fill(null).map((each, index) => shiftDateForward(date, by, index + 1));
 
 export const TopBar = (props: {onLogout: () => void}) => {
-    const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
     const user = useBootstrap();
     const history = useHistory();
     const location = useLocation();
-    const tabs = [paths.dashboard, paths.transactions, paths.categories, paths.accounts];
-    const screenSize = useScreenSize();
+    const tabs = [paths.dashboard, paths.transactions];
     const projects = useProjects();
     const selectedProject = useSelectedProject();
     const cls = useStyles();
@@ -58,20 +53,20 @@ export const TopBar = (props: {onLogout: () => void}) => {
                             document.title
                         )}
                     </Typography>
-                    {user && screenSize.isLarge && (
+                    {user && (
                         <div className={cls.tabs}>
                             <Tabs
                                 value={tabs.indexOf(location.pathname)}
                                 onChange={(event, index) => {
                                     history.push(
-                                        makeUrl(tabs[index], Object.fromEntries(new URLSearchParams(location.search))),
+                                        makeUrl(tabs[index], {
+                                            projectId: selectedProject.id,
+                                        }),
                                     );
                                 }}
                             >
                                 <Tab label={<IconHome />} />
                                 <Tab label="Transactions" />
-                                <Tab label="Categories" />
-                                <Tab label="Accounts" />
                             </Tabs>
                         </div>
                     )}
@@ -82,12 +77,7 @@ export const TopBar = (props: {onLogout: () => void}) => {
                             }}
                         >
                             <div style={{float: 'right', display: 'flex'}}>
-                                <IconButton color="inherit" onClick={() => setPrivacyToggle(!privacyToggle)}>
-                                    {privacyToggle ? <IconVisibilityOff /> : <IconVisibility />}
-                                </IconButton>
-                                <IconButton color="inherit" onClick={props.onLogout}>
-                                    <IconExitToApp />
-                                </IconButton>
+                                <TopBarMoreMenu onLogout={props.onLogout} />
                             </div>
                         </div>
                     )}
