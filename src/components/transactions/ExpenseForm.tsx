@@ -16,7 +16,7 @@ import {
     Slider,
     TextField,
 } from '@material-ui/core';
-import {DateTimePicker} from '@material-ui/pickers';
+import {KeyboardDateTimePicker} from '@material-ui/pickers';
 import {TransactionAmountFields} from 'components/transactions/TransactionAmountFields';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
 import {TransactionNameField} from 'components/transactions/TransactionNameField';
@@ -133,13 +133,14 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
 
     renderDateTime() {
         return (
-            <DateTimePicker
+            <KeyboardDateTimePicker
                 label="Date & Time"
                 value={this.state.date}
                 onChange={(value) => this.setState({date: value})}
                 showTodayButton
                 style={{width: '100%'}}
                 ampm={false}
+                format="YYYY-MM-DD HH:mm"
             />
         );
     }
