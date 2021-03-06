@@ -4,7 +4,7 @@ import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 import {Card, CardContent} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {spacingSmall, theme} from 'defs/styles';
+import {spacingSmall, theme, spacingLarge} from 'defs/styles';
 
 export function DescriptionDisplay({
     item,
@@ -50,6 +50,10 @@ const useStyles = makeStyles({
             padding: spacingSmall,
         },
         '& p': {
+            margin: 0,
+        },
+        '& ul': {
+            paddingLeft: spacingLarge,
             margin: 0,
         },
         '& a:link, a:visited': {
