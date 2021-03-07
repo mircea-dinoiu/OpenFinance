@@ -8,9 +8,10 @@ import React from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {useProjects, useSelectedProject} from 'state/projects';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
-import {makeUrl, mapUrlToFragment} from 'utils/url';
+import {makeUrl} from 'utils/url';
 import {useBootstrap} from '../../state/hooks';
 import {TopBarMoreMenu} from 'components/top-bar/TopBarMoreMenu';
+import _ from 'lodash';
 
 const MAX_TIMES = 10;
 
@@ -36,12 +37,10 @@ export const TopBar = (props: {onLogout: () => void}) => {
                     <Typography variant="h6" color="inherit">
                         {projects.length ? (
                             <Select
-                                onChange={(e, value) => {
-                                    const url = new URL(window.location.href);
-
-                                    url.searchParams.set('projectId', e.target.value as string);
-
-                                    window.location.href = mapUrlToFragment(url);
+                                onChange={(e) => {
+                                    window.location.href = makeUrl(paths.dashboard, {
+                                        projectId: e.target.value,
+                                    });
                                 }}
                                 value={selectedProject.id}
                             >
@@ -58,10 +57,20 @@ export const TopBar = (props: {onLogout: () => void}) => {
                             <Tabs
                                 value={tabs.indexOf(location.pathname)}
                                 onChange={(event, index) => {
+                                    const url = new URL(window.location.href);
+
                                     history.push(
-                                        makeUrl(tabs[index], {
-                                            projectId: selectedProject.id,
-                                        }),
+                                        makeUrl(
+                                            tabs[index],
+                                            _.pickBy(
+                                                {
+                                                    projectId: selectedProject.id,
+                                                    endDate: url.searchParams.get('endDate'),
+                                                    endDateIncrement: url.searchParams.get('endDateIncrement'),
+                                                },
+                                                _.identity,
+                                            ),
+                                        ),
                                     );
                                 }}
                             >
