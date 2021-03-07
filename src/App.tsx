@@ -32,7 +32,6 @@ import {createXHR} from 'utils/fetch';
 import {getScreenQueries} from 'utils/getScreenQueries';
 import {makeUrl} from 'utils/url';
 import {Bootstrap} from './types';
-import {useInventoriesReader} from 'state/inventories';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
     html, body {
@@ -62,7 +61,6 @@ const AppWrapped = () => {
     const [snackbar] = useSnackbars();
     const [ready, setReady] = useState(false);
     const readCategories = useCategoriesReader();
-    const readInventories = useInventoriesReader();
     const readAccounts = useAccountsReader();
 
     const fetchUser = async () => {
@@ -84,7 +82,6 @@ const AppWrapped = () => {
 
         readCategories();
         readAccounts();
-        readInventories();
     };
 
     React.useEffect(() => {

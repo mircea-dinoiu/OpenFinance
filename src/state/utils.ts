@@ -39,7 +39,17 @@ export const bindToUpdateState = <T extends object>(prop: string, defaultValue: 
     };
 };
 
-export const makeCrudReducer = <T>({initialState, name, route}: {initialState: T; name: string; route: string}) => {
+export const makeCrudReducer = <T>({
+    initialState,
+    name,
+    route,
+    parse,
+}: {
+    initialState: T;
+    name: string;
+    route: string;
+    parse?: (a: T) => T;
+}) => {
     const Action = {
         set: `${name}/set`,
     };
@@ -81,7 +91,7 @@ export const makeCrudReducer = <T>({initialState, name, route}: {initialState: T
 
             dispatch(
                 actionSet({
-                    data: r.data,
+                    data: parse ? parse(r.data) : r.data,
                     isLoaded: true,
                     isLoading: false,
                 }),
