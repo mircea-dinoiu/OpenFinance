@@ -4,11 +4,11 @@ import {TransactionModel} from 'components/transactions/types';
 import {theme} from 'defs/styles';
 import {range} from 'lodash';
 import * as React from 'react';
-import styled from 'styled-components';
+import {styled} from '@material-ui/core/styles';
 
-const Star = styled.span`
-    cursor: pointer;
-`;
+const Star = styled('span')({
+    cursor: 'pointer',
+});
 
 export class RatingDisplay extends React.PureComponent<{
     item: TransactionModel;

@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    TextField,
-    Checkbox,
-    FormControlLabel,
-    Card,
-    CardHeader,
-    Divider,
-} from '@material-ui/core';
+import {Button, TextField, Checkbox, FormControlLabel, Card, CardHeader, Divider} from '@material-ui/core';
 import {ButtonProgress} from 'components/loaders';
 import {routes} from 'defs/routes';
 import {createXHR} from 'utils/fetch';
@@ -17,10 +9,9 @@ import {setUsers} from 'state/actionCreators';
 import {useBootstrap} from 'state/hooks';
 import {Redirect} from 'react-router-dom';
 import {paths} from 'js/defs';
-import styled from 'styled-components';
+import {styled, makeStyles} from '@material-ui/core/styles';
 import {screenQueryLarge, screenQueryMedium, screenQuerySmall, spacingLarge} from 'defs/styles';
 import {Bootstrap} from 'types';
-import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
     rememberMe: {
@@ -112,9 +103,7 @@ export const Login = () => {
                         control={
                             <Checkbox
                                 checked={rememberMe}
-                                onChange={(event, checked) =>
-                                    setRememberMe(checked)
-                                }
+                                onChange={(event, checked) => setRememberMe(checked)}
                                 color="primary"
                                 disabled={loading}
                             />
@@ -137,25 +126,22 @@ export const Login = () => {
     );
 };
 
-const LoginStyled = styled.div`
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    margin-top: ${spacingLarge};
-
-    > div {
-        @media ${screenQuerySmall} {
-            grid-column-start: 2;
-            grid-column-end: 12;
-        }
-
-        @media ${screenQueryMedium} {
-            grid-column-start: 4;
-            grid-column-end: 10;
-        }
-
-        @media ${screenQueryLarge} {
-            grid-column-start: 5;
-            grid-column-end: 9;
-        }
-    }
-`;
+const LoginStyled = styled('div')({
+    display: 'grid',
+    gridTemplateColumns: 'repeat(12, 1fr)',
+    marginTop: spacingLarge,
+    '& > div': {
+        [`@media ${screenQuerySmall}`]: {
+            gridColumnStart: 2,
+            gridColumnEnd: 12,
+        },
+        [`@media ${screenQueryMedium}`]: {
+            gridColumnStart: 4,
+            gridColumnEnd: 10,
+        },
+        [`@media ${screenQueryLarge}`]: {
+            gridColumnStart: 5,
+            gridColumnEnd: 9,
+        },
+    },
+});

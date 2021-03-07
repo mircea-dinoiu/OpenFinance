@@ -33,7 +33,7 @@ import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {AccountType} from 'state/accounts';
 import {useSelectedProject} from 'state/projects';
-import styled from 'styled-components';
+import {styled} from '@material-ui/core/styles';
 import {Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User, Account} from 'types';
 import {useEndDate} from 'utils/dates';
 import {Inventory} from 'state/inventories';
@@ -100,9 +100,9 @@ export const setChargedPersonValueFactory = (
     };
 };
 
-const FormControlLabelInline = styled(FormControlLabel)`
-    display: inline-block;
-`;
+const FormControlLabelInline = styled(FormControlLabel)({
+    display: 'inline-block',
+});
 
 type State = TransactionForm;
 
@@ -481,20 +481,20 @@ export const ExpenseForm = (ownProps: TypeOwnProps) => {
     return <ExpenseFormWrapped {...ownProps} {...stateProps} endDate={endDate} users={users} />;
 };
 
-const TypeStatusFlagsContainer = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: ${spacingLarge};
+const TypeStatusFlagsContainer = styled('div')({
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gridGap: spacingLarge,
 
-    @media ${screenQuerySmall} {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
-        grid-gap: ${spacingSmall};
-    }
-`;
+    [`@media ${screenQuerySmall}`]: {
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: '1fr 1fr',
+        gridGap: spacingSmall,
+    },
+});
 
-const RepeatContainer = styled.div`
-    display: grid;
-    grid-gap: ${gridGap};
-    grid-template-columns: 1fr 1fr 1fr;
-`;
+const RepeatContainer = styled('div')({
+    display: 'grid',
+    gridGap: gridGap,
+    gridTemplateColumns: '1fr 1fr 1fr',
+});

@@ -1,6 +1,6 @@
 import {TextField} from '@material-ui/core';
-import styled from 'styled-components';
+import {styled} from '@material-ui/core/styles';
 
-export const SplitAmountField = styled(TextField)`
-    margin-top: 10px !important;
-`;
+export const SplitAmountField = styled(TextField)({
+    marginTop: '10px !important',
+});

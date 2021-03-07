@@ -2,40 +2,34 @@ import {Avatar} from '@material-ui/core';
 import {TransactionModel} from 'components/transactions/types';
 import * as React from 'react';
 import {useSelectedProject} from 'state/projects';
-import styled from 'styled-components';
 import {colors} from 'defs/styles';
+import {styled} from '@material-ui/core/styles';
 
-export const PersonAvatar = styled(Avatar)`
-    height: 20px !important;
-    border-radius: 0 !important;
-    width: 100% !important;
-    background: ${colors.personAvatarBg};
-    justify-content: left !important;
+export const PersonAvatar = styled(Avatar)({
+    height: '20px !important',
+    borderRadius: '0 !important',
+    width: '100% !important',
+    background: colors.personAvatarBg,
+    justifyContent: 'left !important',
+    '& img': {
+        width: 'auto !important',
+    },
+    // @ts-ignore
+    '&:after': {
+        display: 'block',
+        content: (props: {text: string}) => `"${props.text}"`,
+        fontSize: '12px',
+        padding: (props: {text: string}) => (props.text ? '0 5px' : 0),
+        flex: 1,
+        textAlign: 'center',
+    },
+});
 
-    img {
-        width: auto !important;
-        
-    }
-    
-    &:after {
-      display: block;
-      content: "${(props: {text: string}) => props.text}";
-      font-size: 12px;
-      padding: ${(props) => (props.text ? '0 5px' : 0)};
-      flex: 1;
-      text-align: center;
-    }
-`;
-
-const PersonsDisplayStyled = styled.div`
-    display: flex;
-    border-radius: 5px;
-    overflow: hidden;
-`;
-
-const TooltipStyled = styled.div`
-    flex-grow: ${(props: {index: number}) => (props.index === 0 ? 1 : 'initial')};
-`;
+const PersonsDisplayStyled = styled('div')({
+    display: 'flex',
+    borderRadius: '5px',
+    overflow: 'hidden',
+});
 
 export const PersonsDisplay = ({item}: {item: TransactionModel}) => {
     const userList = useSelectedProject().users;
@@ -45,9 +39,15 @@ export const PersonsDisplay = ({item}: {item: TransactionModel}) => {
             {userList
                 .filter((user) => item.users[user.id])
                 .map(({id, full_name: name, avatar}, index) => (
-                    <TooltipStyled key={index} title={`${name} ${item.users[id]}%`} index={index}>
+                    <div
+                        key={index}
+                        title={`${name} ${item.users[id]}%`}
+                        style={{
+                            flexGrow: index === 0 ? 1 : 'initial',
+                        }}
+                    >
                         <PersonAvatar key={id} src={avatar} text={index === 0 ? `${item.users[id]}%` : ''} />
-                    </TooltipStyled>
+                    </div>
                 ))}
         </PersonsDisplayStyled>
     );

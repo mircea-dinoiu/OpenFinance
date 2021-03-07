@@ -5,7 +5,7 @@ import * as React from 'react';
 import {SyntheticEvent} from 'react';
 import {DebounceInput} from 'react-debounce-input';
 import {Filter} from 'react-table-6';
-import styled from 'styled-components';
+import {styled} from '@material-ui/core/styles';
 
 const PENDING = 'Pending';
 const RECURRENT = 'Recurrent';
@@ -38,13 +38,13 @@ const Subfilter = ({
     </div>
 );
 
-const SubfilterGrid = styled.div`
-    display: grid;
-    grid-gap: ${gridGap};
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    padding: 0 ${spacingLarge};
-`;
+const SubfilterGrid = styled('div')({
+    display: 'grid',
+    gridGap: gridGap,
+    gridTemplateColumns: '1fr 1fr',
+    gridTemplateRows: '1fr 1fr',
+    padding: `0 ${spacingLarge}`,
+});
 
 export const DescriptionFilter = ({onChange, filter}: {onChange: (filter: Filter) => void; filter: Filter}) => {
     const handleChange = (name: string, value: string) => {

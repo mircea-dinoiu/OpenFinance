@@ -5,7 +5,7 @@ import {findCurrencyById} from 'helpers/currency';
 import React from 'react';
 import {useAccounts} from 'state/accounts';
 import {useCurrenciesMap} from 'state/currencies';
-import styled from 'styled-components';
+import {styled} from '@material-ui/core/styles';
 
 export const TransactionAmountFields = ({
     accountId,
@@ -74,9 +74,9 @@ export const TransactionAmountFields = ({
     );
 };
 
-const TransactionAmountFieldsStyled = styled.div`
-    display: grid;
-    grid-gap: ${gridGap};
-    grid-template-columns: repeat(3, 1fr);
-    align-items: center;
-`;
+const TransactionAmountFieldsStyled = styled('div')({
+    display: 'grid',
+    gridGap: gridGap,
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    alignItems: 'center',
+});

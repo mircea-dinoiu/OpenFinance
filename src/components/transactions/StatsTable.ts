@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import {styled} from '@material-ui/core/styles';
 
-export const StatsTable = styled.table`
-    margin-left: auto;
-    margin-right: auto;
-`;
+export const StatsTable = styled('table')({
+    marginLeft: 'auto',
+    marginRight: 'auto',
+});
