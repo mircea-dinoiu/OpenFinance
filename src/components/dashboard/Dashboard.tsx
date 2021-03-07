@@ -1,15 +1,4 @@
-import {
-    Button,
-    CardHeader,
-    Checkbox,
-    Divider,
-    FormControlLabel,
-    Paper,
-    Tab,
-    Tabs,
-    CardContent,
-    Card,
-} from '@material-ui/core';
+import {Button, CardHeader, Checkbox, FormControlLabel, Paper, Tab, Tabs, CardContent, Card} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
@@ -20,7 +9,6 @@ import {BrokeragePaper} from 'components/dashboard/BrokeragePaper';
 import {CategoriesTab} from 'components/dashboard/CategoriesTab';
 import {NameCol, ValueCol} from 'components/dashboard/columns';
 import {CreditAprCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'components/dashboard/Credit';
-import {CashAccount} from 'components/dashboard/defs';
 import {getAccountOptions} from 'components/dashboard/getAccountOptions';
 import {PaymentPlanDialog} from 'components/dashboard/PaymentPlanDialog';
 import {StocksPaper} from 'components/dashboard/StocksPaper';
@@ -47,6 +35,7 @@ import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 import {PropertiesPaper} from 'components/dashboard/PropertiesPaper';
 import {locales} from 'locales';
+import {NetWorthPapers} from 'components/dashboard/NetWorthPapers';
 
 enum DashboardTab {
     banking,
@@ -128,45 +117,51 @@ export const Dashboard = () => {
 
     return (
         <div className={cls.root}>
-            <Paper className={cls.paper}>
-                <TransactionsEndDatePicker />
+            <div>
+                <Paper className={cls.paper}>
+                    <TransactionsEndDatePicker />
 
-                <IncludeDropdown
-                    value={include}
-                    onChange={(value) => {
-                        setInclude(value);
-                    }}
+                    <IncludeDropdown
+                        value={include}
+                        onChange={(value) => {
+                            setInclude(value);
+                        }}
+                    />
+                    <FormControlLabel
+                        control={
+                            <Checkbox checked={includePending} onChange={handleToggleIncludePending} color="default" />
+                        }
+                        label="Include pending transactions"
+                    />
+                </Paper>
+
+                <NetWorthPapers
+                    className={cls.paper}
+                    cashByCurrencyId={getTotals(cashWithTotal)}
+                    investmentsByCurrencyId={getTotals(brokerageWithTotal)}
+                    debtByCurrencyId={getTotals([...creditWithTotal, ...loanWithTotal])}
                 />
-                <FormControlLabel
-                    control={
-                        <Checkbox checked={includePending} onChange={handleToggleIncludePending} color="default" />
-                    }
-                    label="Include pending transactions"
-                />
-
-                <HeaderWithTotals
-                    title="Net Worth"
-                    totals={getTotals([...cashWithTotal, ...creditWithTotal, ...brokerageWithTotal])}
-                />
-
-                <Divider />
-
-                <br />
 
                 {Object.entries(creditTotals).map(([currencyId, total]) => {
                     const sum = cashTotals[currencyId] + total;
 
                     return sum < 0 ? (
-                        <Alert severity="warning" variant="outlined">
-                            <AlertTitle>Overdraft</AlertTitle>
-                            <span>
-                                You have an overdraft of{' '}
-                                <NumericValue colorize={false} currency={Number(currencyId)} value={Math.abs(sum)} />
-                            </span>
-                        </Alert>
+                        <Paper>
+                            <Alert severity="warning" variant="outlined">
+                                <AlertTitle>Overdraft</AlertTitle>
+                                <span>
+                                    You have an overdraft of{' '}
+                                    <NumericValue
+                                        colorize={false}
+                                        currency={Number(currencyId)}
+                                        value={Math.abs(sum)}
+                                    />
+                                </span>
+                            </Alert>
+                        </Paper>
                     ) : null;
                 })}
-            </Paper>
+            </div>
             <div>
                 <Paper className={cls.tabsPaper} elevation={5}>
                     <Tabs value={tab} onChange={(e, t) => setTab(t)}>
@@ -292,7 +287,12 @@ export const Dashboard = () => {
     );
 };
 
-const getTotals = (accounts: CashAccount[]): Record<string, number> => {
+const getTotals = (
+    accounts: Array<{
+        currency_id: number;
+        total: number;
+    }>,
+): Record<string, number> => {
     const totals = {};
 
     for (const [currencyId, accs] of Object.entries(_.groupBy(accounts, 'currency_id'))) {
@@ -305,18 +305,6 @@ const getTotals = (accounts: CashAccount[]): Record<string, number> => {
 const getCostBasis = (cash: BalanceByLocation['cash'], account: Account) => {
     return cash.find((c) => c.money_location_id === account.id)?.sum ?? 0;
 };
-
-const HeaderWithTotals = ({title, totals}: {title: string; totals: Record<string, number>}) => (
-    <CardHeader
-        title={title}
-        style={{paddingLeft: 0}}
-        subheader={Object.entries(totals).map(([currencyId, total]) => (
-            <div style={{fontSize: 24}}>
-                <NumericValue currency={Number(currencyId)} value={total} />{' '}
-            </div>
-        ))}
-    />
-);
 
 const useStyles = makeStyles({
     root: {

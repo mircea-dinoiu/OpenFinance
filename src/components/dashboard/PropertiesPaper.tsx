@@ -19,9 +19,9 @@ export const PropertiesPaper = ({
         paper: string;
     };
 }) => {
-    const properties = useProperties();
+    const {data: properties, isLoaded} = useProperties();
 
-    if (!properties) {
+    if (!isLoaded) {
         return <BigLoader />;
     }
 

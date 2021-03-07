@@ -4,6 +4,8 @@ import {AccountStatus, AccountType} from 'state/accounts';
 import {Project} from 'state/projects';
 import {Summary} from 'state/summary';
 import {Inventory} from 'state/inventories';
+import {Property} from 'state/properties';
+import {LazyLoadedState} from 'state/defs';
 
 export type ScreenQueries = {
     isSmall: boolean;
@@ -92,4 +94,5 @@ export type GlobalState = {
     summary: Summary;
     stocks: Stock[];
     inventories: Inventory[];
+    properties: LazyLoadedState<Property[]>;
 };
