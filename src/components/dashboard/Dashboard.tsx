@@ -164,7 +164,7 @@ export const Dashboard = () => {
             </div>
             <div>
                 <Paper className={cls.tabsPaper} elevation={5}>
-                    <Tabs value={tab} onChange={(e, t) => setTab(t)}>
+                    <Tabs value={tab} onChange={(e, t) => setTab(t)} variant="scrollable" scrollButtons="on">
                         {locales.dashboardTabs.map((label) => (
                             <Tab key={label} label={label} />
                         ))}
@@ -317,6 +317,7 @@ const useStyles = makeStyles({
         },
     },
     tabsPaper: {
+        maxWidth: '100vw',
         position: 'sticky',
         top: stickyHeaderHeight,
         marginBottom: spacingSmall,
