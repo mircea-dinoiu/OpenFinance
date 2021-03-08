@@ -1,5 +1,6 @@
 import {Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper} from '@material-ui/core';
 import {NumericValue} from 'components/formatters';
+import {BalanceByLocationInventory} from 'components/transactions/types';
 import React from 'react';
 import {useProperties} from 'state/properties';
 import {useCurrenciesMap} from 'state/currencies';
@@ -7,11 +8,13 @@ import _ from 'lodash';
 
 export const NetWorthPapers = ({
     cashByCurrencyId,
+    inventoriesByCurrencyId,
     investmentsByCurrencyId,
     debtByCurrencyId,
     className,
 }: {
     cashByCurrencyId: Record<string, number>;
+    inventoriesByCurrencyId: Record<string, BalanceByLocationInventory[]>;
     investmentsByCurrencyId: Record<string, number>;
     debtByCurrencyId: Record<string, number>;
     className: string;
@@ -38,7 +41,8 @@ export const NetWorthPapers = ({
                 const valueCash = cashByCurrencyId[currencyId] ?? 0;
                 const valueInvestments = investmentsByCurrencyId[currencyId] ?? 0;
                 const valueDebt = debtByCurrencyId[currencyId] ?? 0;
-                const total = valueCash + valueInvestments + valueProperties + valueDebt;
+                const inventories = inventoriesByCurrencyId[currencyId] ?? [];
+                const total = valueCash + valueInvestments + valueProperties + valueDebt + _.sumBy(inventories, 'sum');
 
                 return (
                     total > 0 && (
@@ -70,6 +74,13 @@ export const NetWorthPapers = ({
                                         value={valueProperties}
                                         currencyId={currencyId}
                                     />
+                                    {inventories.map((inv) => (
+                                        <NetWorthTableRow
+                                            label={`Inventory: ${inv.name}`}
+                                            value={inv.sum}
+                                            currencyId={currencyId}
+                                        />
+                                    ))}
                                     <NetWorthTableRow label={'Debt'} value={valueDebt} currencyId={currencyId} />
                                 </TableBody>
                             </Table>

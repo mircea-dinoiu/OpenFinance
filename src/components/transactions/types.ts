@@ -15,6 +15,13 @@ export type BalanceByLocationStock = {
     stock_id: number;
 };
 
+export type BalanceByLocationInventory = {
+    inventory_id: number;
+    currency_id: number;
+    sum: number;
+    name: string;
+};
+
 export type SummaryModel = {
     currencyId: number | string;
     description: string;
@@ -53,6 +60,7 @@ export type SummaryResults = {
 export type BalanceByLocation = {
     cash: BalanceByLocationCash[];
     stocks: BalanceByLocationStock[];
+    inventories: BalanceByLocationInventory[];
 };
 
 export type TransactionRepeat = $Values<typeof RepeatOption>;

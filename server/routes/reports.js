@@ -18,8 +18,9 @@ router.get('/balance-by-location', [validateAuth, validateProject], async (req, 
     const pullStart = Date.now();
     const cashWhere = makeWhere(req.query);
     const marketWhere = makeWhere(req.query, ['stock_id IS NOT NULL', 'expenses.quantity != 0']);
+    const inventoryWhere = makeWhere(req.query, ['inventory_id IS NOT NULL']);
 
-    const [cash, stocks] = await Promise.all([
+    const [cash, stocks, inventories] = await Promise.all([
         sql.query(
             `SELECT 
                 money_location_id, 
@@ -43,10 +44,23 @@ router.get('/balance-by-location', [validateAuth, validateProject], async (req, 
                 type: QueryTypes.SELECT,
             },
         ),
+        sql.query(
+            `SELECT inventory_id, 
+                ABS(SUM(quantity * price)) as \`sum\`, 
+                (SELECT currency_id FROM money_locations WHERE id = money_location_id) as currency_id,
+                (SELECT name FROM inventories WHERE id = inventory_id) as name
+                FROM expenses
+                ${inventoryWhere.query} 
+                GROUP by inventory_id, currency_id`,
+            {
+                replacements: inventoryWhere.replacements,
+                type: QueryTypes.SELECT,
+            },
+        ),
     ]);
 
     logger.log(req.path, 'Pulling took', Date.now() - pullStart, 'millis');
-    res.json({cash, stocks});
+    res.json({cash, stocks, inventories});
 });
 
 const makeWhere = (queryParams, extra = []) => {

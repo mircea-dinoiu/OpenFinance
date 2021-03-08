@@ -137,6 +137,7 @@ export const Dashboard = () => {
 
                 <NetWorthPapers
                     className={cls.paper}
+                    inventoriesByCurrencyId={_.groupBy(data.inventories, 'currency_id')}
                     cashByCurrencyId={getTotals(cashWithTotal)}
                     investmentsByCurrencyId={getTotals(brokerageWithTotal)}
                     debtByCurrencyId={getTotals([...creditWithTotal, ...loanWithTotal])}
