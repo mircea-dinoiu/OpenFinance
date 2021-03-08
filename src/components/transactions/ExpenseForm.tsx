@@ -36,7 +36,7 @@ import {useSelectedProject} from 'state/projects';
 import {styled} from '@material-ui/core/styles';
 import {Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User, Account} from 'types';
 import {useEndDate} from 'utils/dates';
-import {Inventory} from 'state/inventories';
+import {Inventory, useInventories} from 'state/inventories';
 import {Autocomplete} from '@material-ui/lab';
 import {locales} from 'locales';
 
@@ -472,13 +472,15 @@ export const ExpenseForm = (ownProps: TypeOwnProps) => {
         currencies,
         categories,
         moneyLocations,
-        inventories,
         user,
     }));
     const [endDate] = useEndDate();
     const users = useSelectedProject().users;
+    const inventories = useInventories().data;
 
-    return <ExpenseFormWrapped {...ownProps} {...stateProps} endDate={endDate} users={users} />;
+    return (
+        <ExpenseFormWrapped {...ownProps} {...stateProps} inventories={inventories} endDate={endDate} users={users} />
+    );
 };
 
 const TypeStatusFlagsContainer = styled('div')({
