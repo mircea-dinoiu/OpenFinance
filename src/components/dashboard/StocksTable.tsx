@@ -48,7 +48,7 @@ export const StocksTable = ({
         return acc;
     }, {});
     const tableRows = Object.values(stockHoldingsById).filter(
-        (sh) => (sh.units.toNumber() > 0 || soldStocksAreVisible) && sh.costBasis.toNumber() !== 0,
+        (sh) => (sh.units.toNumber() !== 0 || soldStocksAreVisible) && sh.costBasis.toNumber() !== 0,
     );
 
     return (
