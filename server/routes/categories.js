@@ -1,11 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/CategoryController');
-const {
-    validateAuth,
-    validateProject,
-    validatePayload,
-} = require('../middlewares');
+const {validateAuth, validateProject, validatePayload} = require('../middlewares');
 const {Category: Model} = require('../models');
 
 const c = new Controller();

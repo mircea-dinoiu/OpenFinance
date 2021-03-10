@@ -6,9 +6,7 @@ const style = {textAlign: 'center'};
 
 export const DateTimeColumn = {
     Header: 'Date & Time',
-    Cell: ({original: item}: {original: TransactionModel}) => (
-        <DateDisplay item={item} />
-    ),
+    Cell: ({original: item}: {original: TransactionModel}) => <DateDisplay item={item} />,
     accessor: 'created_at',
     defaultSortDesc: true,
     //

@@ -13,10 +13,7 @@ export const PricePerGDisplay = ({item}: {item: TransactionModel}) => {
 
     return item.sum_per_weight != null ? (
         <React.Fragment>
-            <NumericValue
-                value={Math.abs(item.sum_per_weight)}
-                currency={currencyISOCode}
-            />
+            <NumericValue value={Math.abs(item.sum_per_weight)} currency={currencyISOCode} />
             /g
         </React.Fragment>
     ) : (

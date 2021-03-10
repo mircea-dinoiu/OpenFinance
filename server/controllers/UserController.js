@@ -21,21 +21,16 @@ module.exports = class UserController {
             // TODO remove current
             current: req.user,
             user: req.user,
-            projects: Object.values(_.groupBy(results, 'project_id')).map(
-                (projectsWithUsers) => ({
-                    id: projectsWithUsers[0].project_id,
-                    name: projectsWithUsers[0].name,
-                    default_currency_id:
-                        projectsWithUsers[0].default_currency_id,
-                    users: projectsWithUsers.map((u) => ({
-                        id: u.user_id,
-                        avatar: `https://www.gravatar.com/avatar/${md5(
-                            u.email.trim().toLowerCase(),
-                        )}`,
-                        full_name: `${u.first_name} ${u.last_name}`,
-                    })),
-                }),
-            ),
+            projects: Object.values(_.groupBy(results, 'project_id')).map((projectsWithUsers) => ({
+                id: projectsWithUsers[0].project_id,
+                name: projectsWithUsers[0].name,
+                default_currency_id: projectsWithUsers[0].default_currency_id,
+                users: projectsWithUsers.map((u) => ({
+                    id: u.user_id,
+                    avatar: `https://www.gravatar.com/avatar/${md5(u.email.trim().toLowerCase())}`,
+                    full_name: `${u.first_name} ${u.last_name}`,
+                })),
+            })),
         });
     }
 

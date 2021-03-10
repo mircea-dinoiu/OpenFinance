@@ -12,9 +12,7 @@ const getMetas = () => {
         const name = meta.getAttribute('name');
 
         if ('string' === typeof name && name.startsWith(metaPrefix)) {
-            metas[name.substr(metaPrefix.length)] = meta.getAttribute(
-                'content',
-            );
+            metas[name.substr(metaPrefix.length)] = meta.getAttribute('content');
         }
     });
 

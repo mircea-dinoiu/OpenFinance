@@ -41,11 +41,7 @@ enum ImportStep {
     LAST = REVIEW,
 }
 
-export const ImportTransactions = ({
-    onSubmit,
-}: {
-    onSubmit: (transactions: TransactionModel[]) => void;
-}) => {
+export const ImportTransactions = ({onSubmit}: {onSubmit: (transactions: TransactionModel[]) => void}) => {
     const currencies = useCurrenciesMap();
     const accounts = useAccountsOpen();
     const project = useSelectedProject();
@@ -62,14 +58,8 @@ export const ImportTransactions = ({
         transactions: TransactionModel[];
     }> | null>(null);
     const currencyCode = account && currencies[account.currency_id].iso_code;
-    const [excludedTransactions, setExcludedTransactions] = useState<
-        Set<TransactionModel['fitid']>
-    >(new Set([]));
-    const steps = [
-        'Select Target Account',
-        'Upload Transactions',
-        'Review Transactions',
-    ];
+    const [excludedTransactions, setExcludedTransactions] = useState<Set<TransactionModel['fitid']>>(new Set([]));
+    const steps = ['Select Target Account', 'Upload Transactions', 'Review Transactions'];
     const activeStep = (() => {
         if (accountId === null) {
             return ImportStep.ACCOUNT;
@@ -126,9 +116,7 @@ export const ImportTransactions = ({
     };
 
     const importTransactions = () => {
-        onSubmit(
-            transactions.filter((t) => !excludedTransactions.has(t.fitid)),
-        );
+        onSubmit(transactions.filter((t) => !excludedTransactions.has(t.fitid)));
         handleClose();
     };
 
@@ -140,18 +128,10 @@ export const ImportTransactions = ({
 
     return (
         <>
-            <Fab
-                variant="extended"
-                color="primary"
-                onClick={() => setDialogIsOpen(true)}
-                size="small"
-            >
+            <Fab variant="extended" color="primary" onClick={() => setDialogIsOpen(true)} size="small">
                 <IconUpload />
             </Fab>
-            <Dialog
-                open={dialogIsOpen}
-                onClose={isUploading ? undefined : handleClose}
-            >
+            <Dialog open={dialogIsOpen} onClose={isUploading ? undefined : handleClose}>
                 <DialogTitle>Import Transactions</DialogTitle>
                 <DialogContent className={cls.dialogContent}>
                     <Stepper activeStep={activeStep} alternativeLabel>
@@ -164,12 +144,7 @@ export const ImportTransactions = ({
                     {activeStep === ImportStep.ACCOUNT && (
                         <List>
                             {accounts.map((a) => (
-                                <ListItem
-                                    key={a.id}
-                                    dense
-                                    button
-                                    onClick={() => setAccountId(a.id)}
-                                >
+                                <ListItem key={a.id} dense button onClick={() => setAccountId(a.id)}>
                                     <ListItemIcon>
                                         <Radio checked={accountId === a.id} />
                                     </ListItemIcon>
@@ -197,28 +172,13 @@ export const ImportTransactions = ({
                     {activeStep === ImportStep.REVIEW && (
                         <>
                             <div className={cls.reviewTitleGrid}>
-                                <Typography variant="h6">
-                                    Select the transactions to import
-                                </Typography>
-                                <Button
-                                    color="secondary"
-                                    onClick={() =>
-                                        setExcludedTransactions(new Set())
-                                    }
-                                >
+                                <Typography variant="h6">Select the transactions to import</Typography>
+                                <Button color="secondary" onClick={() => setExcludedTransactions(new Set())}>
                                     All
                                 </Button>
                                 <Button
                                     color="secondary"
-                                    onClick={() =>
-                                        setExcludedTransactions(
-                                            new Set(
-                                                transactions.map(
-                                                    (t) => t.fitid,
-                                                ),
-                                            ),
-                                        )
-                                    }
+                                    onClick={() => setExcludedTransactions(new Set(transactions.map((t) => t.fitid)))}
                                 >
                                     None
                                 </Button>
@@ -228,13 +188,9 @@ export const ImportTransactions = ({
                                     <TransactionReviewAccordion
                                         key={transaction.fitid as string}
                                         transaction={transaction}
-                                        excluded={excludedTransactions.has(
-                                            transaction.fitid,
-                                        )}
+                                        excluded={excludedTransactions.has(transaction.fitid)}
                                         onExcludedChange={(excluded) => {
-                                            const next = new Set(
-                                                excludedTransactions,
-                                            );
+                                            const next = new Set(excludedTransactions);
 
                                             if (excluded) {
                                                 next.add(transaction.fitid);
@@ -245,15 +201,10 @@ export const ImportTransactions = ({
                                             setExcludedTransactions(next);
                                         }}
                                         currencyCode={currencyCode as string}
-                                        onTransactionChange={(
-                                            nextTransaction,
-                                        ) => {
+                                        onTransactionChange={(nextTransaction) => {
                                             setTransactions(
                                                 transactions.map((t) =>
-                                                    t.fitid ===
-                                                    nextTransaction.fitid
-                                                        ? nextTransaction
-                                                        : t,
+                                                    t.fitid === nextTransaction.fitid ? nextTransaction : t,
                                                 ),
                                             );
                                         }}
@@ -281,11 +232,7 @@ export const ImportTransactions = ({
                         </Button>
                     )}
                     {isLastStep && (
-                        <Button
-                            onClick={importTransactions}
-                            color="primary"
-                            variant="contained"
-                        >
+                        <Button onClick={importTransactions} color="primary" variant="contained">
                             Submit
                         </Button>
                     )}

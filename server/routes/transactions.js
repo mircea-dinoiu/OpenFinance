@@ -1,11 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/ExpenseController');
-const {
-    validateAuth,
-    validateProject,
-    validatePayload,
-} = require('../middlewares');
+const {validateAuth, validateProject, validatePayload} = require('../middlewares');
 const fileupload = require('express-fileupload');
 
 const c = new Controller();
@@ -66,13 +62,9 @@ router.post(
     },
 );
 
-router.post(
-    '/upload',
-    [validateAuth, validateProject, fileupload()],
-    async (req, res) => {
-        c.upload({req, res});
-    },
-);
+router.post('/upload', [validateAuth, validateProject, fileupload()], async (req, res) => {
+    c.upload({req, res});
+});
 
 router.get(
     '/suggestions/categories',

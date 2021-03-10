@@ -1,7 +1,6 @@
 import {useHistory, useLocation} from 'react-router-dom';
 
-export const mapUrlToFragment = (url: URL) =>
-    url.pathname + url.search + url.hash;
+export const mapUrlToFragment = (url: URL) => url.pathname + url.search + url.hash;
 
 export const makeUrl = (path: string, params: {} = {}): string => {
     const urlObj = new URL(path, window.location.origin);
@@ -11,10 +10,7 @@ export const makeUrl = (path: string, params: {} = {}): string => {
     return mapUrlToFragment(urlObj);
 };
 
-export const useQueryParamState = <T extends string>(
-    key: string,
-    defaultValue: T,
-): [T, (v: T) => void] => {
+export const useQueryParamState = <T extends string>(key: string, defaultValue: T): [T, (v: T) => void] => {
     const location = useLocation();
     const history = useHistory();
 
