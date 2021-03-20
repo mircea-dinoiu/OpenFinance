@@ -1,12 +1,4 @@
-import {
-    Card,
-    CardContent,
-    useTheme,
-    Radio,
-    FormControlLabel,
-    Checkbox,
-    FormControl,
-} from '@material-ui/core';
+import {Card, CardContent, useTheme, FormControlLabel, Checkbox} from '@material-ui/core';
 import {DatePicker} from '@material-ui/pickers';
 import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
@@ -19,21 +11,8 @@ import {useCategories} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
-import {sortBy, sumBy, random, omit} from 'lodash';
-import {
-    BarChart,
-    Bar,
-    Cell,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend,
-    ReferenceLine,
-    ResponsiveContainer,
-    PieChart,
-    Pie,
-} from 'recharts';
+import {sortBy, sumBy, omit} from 'lodash';
+import {Cell, ResponsiveContainer, PieChart, Pie} from 'recharts';
 import * as allColors from '@material-ui/core/colors';
 import {green} from '@material-ui/core/colors';
 
