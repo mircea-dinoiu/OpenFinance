@@ -9,9 +9,7 @@ export const AccountColumn = {
     Header: 'Account',
     filterable: true,
     Filter: AccountFilter,
-    Cell: ({original: item}: {original: TransactionModel}) => (
-        <AccountDisplayById id={item.money_location_id} />
-    ),
+    Cell: ({original: item}: {original: TransactionModel}) => <AccountDisplayById id={item.money_location_id} />,
     accessor: 'money_location_id',
     sortable: true,
     //

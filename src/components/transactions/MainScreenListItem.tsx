@@ -1,10 +1,7 @@
 import {Card, Container, Divider} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {SmartDrawer} from 'components/drawers';
-import {
-    ContextMenuItems,
-    TypeContextMenuItemsProps,
-} from 'components/MainScreen/ContextMenu/ContextMenuItems';
+import {ContextMenuItems, TypeContextMenuItemsProps} from 'components/MainScreen/ContextMenu/ContextMenuItems';
 import {spacingNormal, spacingSmall} from 'defs/styles';
 import React, {useState} from 'react';
 
@@ -61,18 +58,12 @@ export const MainScreenListItem = <
             >
                 <ListItemContent item={item} />
             </Card>
-            <SmartDrawer
-                onClose={handleCloseDrawer}
-                open={isDrawerOpen}
-            >
+            <SmartDrawer onClose={handleCloseDrawer} open={isDrawerOpen}>
                 <Container className={cls.container}>
                     <ListItemContent item={item} expanded={true} />
                 </Container>
                 <Divider />
-                <ContextMenuItems
-                    {...props.contextMenuItemsProps}
-                    onCloseContextMenu={handleCloseDrawer}
-                />
+                <ContextMenuItems {...props.contextMenuItemsProps} onCloseContextMenu={handleCloseDrawer} />
             </SmartDrawer>
         </>
     );

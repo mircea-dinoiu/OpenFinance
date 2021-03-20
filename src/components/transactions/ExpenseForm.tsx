@@ -106,6 +106,8 @@ const FormControlLabelInline = styled(FormControlLabel)({
 
 type State = TransactionForm;
 
+const MIN_REPEAT_OCCURRENCES = 2;
+
 class ExpenseFormWrapped extends PureComponent<Props, State> {
     state: State = {
         ...this.props.initialValues,
@@ -292,11 +294,21 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                         }}
                         onChange={(event) => {
                             this.setState({
-                                repeatOccurrences: Math.max(Number(event.target.value), 2),
+                                repeatOccurrences: event.target.value.trim() === '' ? null : Number(event.target.value),
                             });
                         }}
+                        onBlur={() => {
+                            this.setState((state) => ({
+                                repeatOccurrences:
+                                    state.repeatOccurrences === null
+                                        ? null
+                                        : Math.max(state.repeatOccurrences, MIN_REPEAT_OCCURRENCES),
+                            }));
+                        }}
                         InputProps={
-                            this.state.repeat
+                            this.state.repeat &&
+                            this.state.repeatOccurrences !== null &&
+                            this.state.repeatOccurrences >= MIN_REPEAT_OCCURRENCES
                                 ? {
                                       endAdornment: (
                                           <InputAdornment position="end">
@@ -307,9 +319,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                                                       repeat: this.state.repeat,
                                                       repeat_factor: this.state.repeatFactor,
                                                   },
-                                                  this.state.repeatOccurrences
-                                                      ? this.state.repeatOccurrences - 1
-                                                      : null,
+                                                  this.state.repeatOccurrences - 1,
                                               )
                                                   .toDate()
                                                   .toLocaleDateString()}

@@ -37,9 +37,7 @@ module.exports = class CategoryController extends BaseController {
 
     async list(req, res) {
         const categories = await Model.findAll({
-            attributes: Object.keys(Model.rawAttributes).concat([
-                ['COUNT(expenses.id)', 'expenseCount'],
-            ]),
+            attributes: Object.keys(Model.rawAttributes).concat([['COUNT(expenses.id)', 'expenseCount']]),
             include: [{model: Expense, attributes: []}],
             group: ['id'],
             where: {

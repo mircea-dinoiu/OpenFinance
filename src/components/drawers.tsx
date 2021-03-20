@@ -16,11 +16,7 @@ export const SmartDrawer = ({
     const cls = useSmartDrawerStyles();
 
     return (
-        <Drawer
-            classes={cls}
-            anchor={screenSize.isSmall ? 'bottom' : 'right'}
-            {...props}
-        >
+        <Drawer classes={cls} anchor={screenSize.isSmall ? 'bottom' : 'right'} {...props}>
             {children}
         </Drawer>
     );

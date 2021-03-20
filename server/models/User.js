@@ -17,20 +17,14 @@ module.exports = (sequelize, types) =>
             underscored: true,
             getterMethods: {
                 full_name() {
-                    return `${this.getDataValue(
-                        'first_name',
-                    )} ${this.getDataValue('last_name')}`;
+                    return `${this.getDataValue('first_name')} ${this.getDataValue('last_name')}`;
                 },
             },
             instanceMethods: {
                 toJSON() {
-                    return Object.assign(
-                        {},
-                        omit(this.dataValues, 'email', 'password'),
-                        {
-                            full_name: this.full_name,
-                        },
-                    );
+                    return Object.assign({}, omit(this.dataValues, 'email', 'password'), {
+                        full_name: this.full_name,
+                    });
                 },
             },
         },

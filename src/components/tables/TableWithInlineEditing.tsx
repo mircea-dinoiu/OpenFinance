@@ -73,10 +73,7 @@ export const TableWithInlineEditing = <D extends {id: number}>({
                             <div className={cls.actions}>
                                 {row.id === editor?.id ? (
                                     <>
-                                        <IconCancel
-                                            className={cls.icon}
-                                            onClick={() => setEditor(null)}
-                                        />
+                                        <IconCancel className={cls.icon} onClick={() => setEditor(null)} />
                                         <IconSave
                                             className={cls.icon}
                                             onClick={async () => {
@@ -88,13 +85,7 @@ export const TableWithInlineEditing = <D extends {id: number}>({
                                                     }),
                                                     method: 'PUT',
                                                     data: {
-                                                        data: [
-                                                            pick(
-                                                                editor,
-                                                                'id',
-                                                                ...editableFields,
-                                                            ),
-                                                        ],
+                                                        data: [pick(editor, 'id', ...editableFields)],
                                                     },
                                                 });
 
@@ -108,17 +99,9 @@ export const TableWithInlineEditing = <D extends {id: number}>({
                                 ) : (
                                     <>
                                         {allowDelete && (
-                                            <IconDelete
-                                                className={cls.icon}
-                                                onClick={() =>
-                                                    setDeletingId(row.id)
-                                                }
-                                            />
+                                            <IconDelete className={cls.icon} onClick={() => setDeletingId(row.id)} />
                                         )}
-                                        <IconEdit
-                                            className={cls.icon}
-                                            onClick={() => setEditor(row)}
-                                        />
+                                        <IconEdit className={cls.icon} onClick={() => setEditor(row)} />
                                     </>
                                 )}
                             </div>
@@ -135,19 +118,11 @@ export const TableWithInlineEditing = <D extends {id: number}>({
                     severity="info"
                     message={
                         <div className={cls.confirmation}>
-                            <div>
-                                Do you want to delete entry #{deletingId}?
-                            </div>
-                            <Button
-                                className={cls.confirmationBtn}
-                                onClick={deleteSelected}
-                            >
+                            <div>Do you want to delete entry #{deletingId}?</div>
+                            <Button className={cls.confirmationBtn} onClick={deleteSelected}>
                                 Yes
                             </Button>
-                            <Button
-                                className={cls.confirmationBtn}
-                                onClick={() => setDeletingId(null)}
-                            >
+                            <Button className={cls.confirmationBtn} onClick={() => setDeletingId(null)}>
                                 No
                             </Button>
                         </div>

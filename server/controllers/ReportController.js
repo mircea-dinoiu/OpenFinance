@@ -7,13 +7,7 @@ module.exports = class ReportController {
     async getSummary(req, res) {
         const pullStart = Date.now();
 
-        const [
-            expenseRecords,
-            userRecords,
-            mlRecords,
-            categoryRecords,
-            currencyRecords,
-        ] = await Promise.all([
+        const [expenseRecords, userRecords, mlRecords, categoryRecords, currencyRecords] = await Promise.all([
             ExpenseService.list(req),
             User.findAll(),
             MoneyLocation.findAll(),
@@ -21,12 +15,7 @@ module.exports = class ReportController {
             Currency.findAll(),
         ]);
 
-        logger.log(
-            'ReportController.getSummary',
-            'Pulling took',
-            Date.now() - pullStart,
-            'millis',
-        );
+        logger.log('ReportController.getSummary', 'Pulling took', Date.now() - pullStart, 'millis');
 
         if (expenseRecords.error) {
             res.status(400);

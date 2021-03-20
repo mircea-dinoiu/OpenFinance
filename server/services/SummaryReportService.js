@@ -14,17 +14,11 @@ module.exports = {
          * Remaining present
          */
         mls.forEach((id) => {
-            totalRemainingByML[id] = SummaryReportHelper.getRemainingSum(
-                expenses.byML,
-                id,
-            );
+            totalRemainingByML[id] = SummaryReportHelper.getRemainingSum(expenses.byML, id);
         });
 
         users.forEach((id) => {
-            totalRemainingByUser[id] = SummaryReportHelper.getRemainingSum(
-                expenses.byUser,
-                id,
-            );
+            totalRemainingByUser[id] = SummaryReportHelper.getRemainingSum(expenses.byUser, id);
         });
 
         /**
@@ -49,14 +43,7 @@ module.exports = {
         };
     },
 
-    getTransactions({
-        expenseRecords,
-        userRecords,
-        mlRecords,
-        currencyIdToISOCode,
-        mlIdToCurrencyId,
-        html,
-    }) {
+    getTransactions({expenseRecords, userRecords, mlRecords, currencyIdToISOCode, mlIdToCurrencyId, html}) {
         const users = {};
         const mls = {};
 
@@ -106,13 +93,7 @@ module.exports = {
         return data;
     },
 
-    getExpensesByCategory({
-        expenseRecords,
-        categoryRecords,
-        mlIdToCurrencyId,
-        currencyIdToISOCode,
-        userIdToFullName,
-    }) {
+    getExpensesByCategory({expenseRecords, categoryRecords, mlIdToCurrencyId, currencyIdToISOCode, userIdToFullName}) {
         const categories = {};
         const data = [];
         const categoryIdToRecord = categoryRecords.reduce((acc, each) => {
@@ -134,12 +115,9 @@ module.exports = {
                 }
 
                 Object.entries(users).forEach(([id, perc]) => {
-                    categories[categoryId].users[id] =
-                        categories[categoryId].users[id] || {};
-                    categories[categoryId].users[id][currencyId] =
-                        categories[categoryId].users[id][currencyId] || 0;
-                    categories[categoryId].users[id][currencyId] +=
-                        (rawCatSum * perc) / 100;
+                    categories[categoryId].users[id] = categories[categoryId].users[id] || {};
+                    categories[categoryId].users[id][currencyId] = categories[categoryId].users[id][currencyId] || 0;
+                    categories[categoryId].users[id][currencyId] += (rawCatSum * perc) / 100;
                 });
             };
 
@@ -171,26 +149,22 @@ module.exports = {
                 return 1;
             }
 
-            return categoryIdToRecord[id1].name > categoryIdToRecord[id2].name
-                ? 1
-                : -1;
+            return categoryIdToRecord[id1].name > categoryIdToRecord[id2].name ? 1 : -1;
         });
 
         categoryIds.forEach((categoryId, index) => {
-            Object.entries(categories[categoryId].users).forEach(
-                ([userId, currencies]) => {
-                    Object.entries(currencies).forEach(([currencyId, sum]) => {
-                        data.push({
-                            cashValue: sum,
-                            description: `${userIdToFullName[userId]} (${currencyIdToISOCode[currencyId]})`,
-                            reference: `${categoryId}:${userId}:${currencyId}`,
-                            group: categoryId,
-                            currencyId: Number(currencyId),
-                            index,
-                        });
+            Object.entries(categories[categoryId].users).forEach(([userId, currencies]) => {
+                Object.entries(currencies).forEach(([currencyId, sum]) => {
+                    data.push({
+                        cashValue: sum,
+                        description: `${userIdToFullName[userId]} (${currencyIdToISOCode[currencyId]})`,
+                        reference: `${categoryId}:${userId}:${currencyId}`,
+                        group: categoryId,
+                        currencyId: Number(currencyId),
+                        index,
                     });
-                },
-            );
+                });
+            });
         });
 
         return data;

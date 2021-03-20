@@ -8,8 +8,7 @@ export type Project = {
     users: User[];
 };
 
-export const useProjects = (): Project[] =>
-    useSelector((s: GlobalState) => s.user?.projects ?? []);
+export const useProjects = (): Project[] => useSelector((s: GlobalState) => s.user?.projects ?? []);
 
 export const useSelectedProject = (): Project => {
     const id = new URLSearchParams(window.location.search).get('projectId');

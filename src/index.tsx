@@ -14,10 +14,7 @@ const store = createStore(
     combinedReducers,
     {},
     /* eslint no-underscore-dangle: 0 */
-    compose(
-        applyMiddleware(thunk),
-        reduxExtension ? reduxExtension() : (noop: any) => noop,
-    ),
+    compose(applyMiddleware(thunk), reduxExtension ? reduxExtension() : (noop: any) => noop),
 );
 
 const root = document.getElementById('root');

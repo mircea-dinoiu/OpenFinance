@@ -1,10 +1,4 @@
-import axios, {
-    AxiosPromise,
-    AxiosRequestConfig,
-    AxiosResponse,
-    CancelToken,
-    CancelTokenSource,
-} from 'axios';
+import axios, {AxiosPromise, AxiosRequestConfig, AxiosResponse, CancelToken, CancelTokenSource} from 'axios';
 import merge from 'lodash/merge';
 import {useEffect, useRef, useState} from 'react';
 import 'whatwg-fetch';
@@ -25,16 +19,12 @@ const parseOpts = (opts: AxiosRequestConfig) =>
 export const createXHR = <T>(opts: AxiosRequestConfig): AxiosPromise<T> => {
     const parsedOpts = parseOpts(opts);
 
-    if (
-        parsedOpts.hasOwnProperty('data') &&
-        !parsedOpts.headers.hasOwnProperty('Content-Type')
-    ) {
+    if (parsedOpts.hasOwnProperty('data') && !parsedOpts.headers.hasOwnProperty('Content-Type')) {
         if ('object' === typeof parsedOpts.data) {
             parsedOpts.data = JSON.stringify(parsedOpts.data);
             parsedOpts.headers['Content-Type'] = 'application/json';
         } else if ('string' === typeof parsedOpts.data) {
-            parsedOpts.headers['Content-Type'] =
-                'application/x-www-form-urlencoded; charset=UTF-8';
+            parsedOpts.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
         }
     }
 
