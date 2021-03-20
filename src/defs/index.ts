@@ -33,16 +33,9 @@ export enum TransactionStatus {
 export enum IncludeOption {
     all = 'all',
 
-    lastYear = 'lastYear',
-    currentYear = 'currentYear',
-    previousYear = 'previousYear',
-    nextYear = 'nextYear',
-
-    lastMonth = 'lastMonth',
-
-    lastWeek = 'lastWeek',
-
-    lastDay = 'lastDay',
+    weekToDate = 'weekToDate',
+    monthToDate = 'monthToDate',
+    yearToDate = 'yearToDate',
 
     untilToday = 'untilToday',
     untilTomorrow = 'untilTomorrow',

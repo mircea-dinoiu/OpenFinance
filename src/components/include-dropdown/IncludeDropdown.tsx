@@ -1,11 +1,8 @@
+import {MenuItem, Select} from '@material-ui/core';
 import {IncludeOption} from 'defs';
 import * as React from 'react';
-import {useEndDate} from 'utils/dates';
-import {Select, MenuItem} from '@material-ui/core';
 
-const getIncludeOptions = ({endDate}: {endDate: string}) => {
-    const currentYear = new Date(endDate).getFullYear();
-
+const getIncludeOptions = () => {
     return [
         {
             value: IncludeOption.all,
@@ -28,32 +25,16 @@ const getIncludeOptions = ({endDate}: {endDate: string}) => {
             label: 'Until yesterday',
         },
         {
-            value: IncludeOption.lastDay,
-            label: '1 day before',
+            value: IncludeOption.weekToDate,
+            label: 'Week to Date',
         },
         {
-            value: IncludeOption.lastWeek,
-            label: '1 week before',
+            value: IncludeOption.monthToDate,
+            label: 'Month to Date',
         },
         {
-            value: IncludeOption.lastMonth,
-            label: '1 month before',
-        },
-        {
-            value: IncludeOption.lastYear,
-            label: '1 year before',
-        },
-        {
-            value: IncludeOption.previousYear,
-            label: `Throughout ${currentYear - 1}`,
-        },
-        {
-            value: IncludeOption.currentYear,
-            label: `Throughout ${currentYear}`,
-        },
-        {
-            value: IncludeOption.nextYear,
-            label: `Throughout ${currentYear + 1}`,
+            value: IncludeOption.yearToDate,
+            label: 'Year to Date',
         },
     ];
 };
@@ -65,8 +46,7 @@ export const IncludeDropdown = ({
     value: IncludeOption;
     onChange: (value: IncludeOption) => void;
 }) => {
-    const [endDate] = useEndDate();
-    const options = getIncludeOptions({endDate});
+    const options = getIncludeOptions();
 
     return (
         <Select

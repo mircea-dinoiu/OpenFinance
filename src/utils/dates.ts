@@ -11,26 +11,14 @@ export const getStartDate = ({endDate, include}: {endDate: string; include: Incl
     date.setHours(0, 0, 0, 0);
 
     switch (include) {
-        case IncludeOption.lastYear:
-            date.setFullYear(date.getFullYear() - 1);
+        case IncludeOption.monthToDate:
+            date.setDate(1);
             break;
-        case IncludeOption.currentYear:
+        case IncludeOption.weekToDate:
+            date.setDate(date.getDate() - date.getDay() + 1);
+            break;
+        case IncludeOption.yearToDate:
             date = new Date(date.getFullYear(), 0, 1);
-            break;
-        case IncludeOption.previousYear:
-            date = new Date(date.getFullYear() - 1, 0, 1);
-            break;
-        case IncludeOption.nextYear:
-            date = new Date(date.getFullYear() + 1, 0, 1);
-            break;
-        case IncludeOption.lastMonth:
-            date.setMonth(date.getMonth() - 1);
-            break;
-        case IncludeOption.lastWeek:
-            date.setDate(date.getDate() - 7);
-            break;
-        case IncludeOption.lastDay:
-            date.setDate(date.getDate() - 1);
             break;
         default:
             date = null;

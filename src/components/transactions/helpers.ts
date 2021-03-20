@@ -70,38 +70,6 @@ export const useIncludePending = (): [boolean, (v: boolean) => void] => {
 export const useInclude = () => useQueryParamState<IncludeOption>(QueryParam.include, IncludeOption.all);
 
 export const getEndDateBasedOnIncludePreference = (endDate: string, include: IncludeOption) => {
-    if (include === IncludeOption.previousYear) {
-        return endOfDayToISOString(
-            moment(endDate)
-                .month(0)
-                .date(1)
-                .subtract(1, 'day')
-                .toDate(),
-        );
-    }
-
-    if (include === IncludeOption.nextYear) {
-        return endOfDayToISOString(
-            moment(endDate)
-                .month(0)
-                .date(1)
-                .add(2, 'year')
-                .subtract(1, 'day')
-                .toDate(),
-        );
-    }
-
-    if (include === IncludeOption.currentYear) {
-        return endOfDayToISOString(
-            moment(endDate)
-                .month(0)
-                .date(1)
-                .add(1, 'year')
-                .subtract(1, 'day')
-                .toDate(),
-        );
-    }
-
     if (include === IncludeOption.untilToday) {
         return endOfDayToISOString();
     }
