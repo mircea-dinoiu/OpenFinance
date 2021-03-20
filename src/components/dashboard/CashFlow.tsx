@@ -67,7 +67,7 @@ export const CashFlow = () => {
     const dataIncome = dataForCurrency.filter((d) => d.isIncome);
     let dataExpense = dataForCurrency.filter((d) => !d.isIncome);
     const dataIncomeSum = sumBy(dataIncome, 'value');
-    const dataExpenseSum = sumBy(dataExpense, 'value');
+    let dataExpenseSum = sumBy(dataExpense, 'value');
     const savedIncome = dataIncomeSum - dataExpenseSum;
 
     const url = makeUrl(routes.reports.cashFlow, {
@@ -85,13 +85,15 @@ export const CashFlow = () => {
         dataExpense = [
             ...dataExpense,
             {
-                label: '(Savings): ' + formatCurrency(savedIncome, currenciesMap[currencyId].iso_code),
-                name: '(Savings)',
+                label: 'Savings: ' + formatCurrency(savedIncome, currenciesMap[currencyId].iso_code),
+                name: 'Savings',
                 value: savedIncome,
                 isIncome: true,
             },
         ];
     }
+
+    dataExpenseSum = sumBy(dataExpense, 'value');
 
     React.useEffect(() => {
         createXHR<CashFlowResponse>({
@@ -170,7 +172,7 @@ export const CashFlow = () => {
                                     <PieChart>
                                         <Pie
                                             data={dataExpense}
-                                            label={({index}) => dataExpense[index].label}
+                                            label={({index}) => dataExpense[index].label + ' | ' + Math.ceil(dataExpense[index].value / dataExpenseSum * 100)  +'%'}
                                             dataKey="value"
                                             stroke={theme.palette.background.default}
                                         >
