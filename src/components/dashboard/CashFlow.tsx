@@ -77,7 +77,7 @@ export const CashFlow = () => {
     });
 
     if (savedIncome > 0 && displaySavings) {
-        dataExpense = [...dataExpense, {label: '(Saved): ' + formatCurrency(savedIncome, currenciesMap[currencyId].iso_code), name: '(Saved)', value: savedIncome, isIncome: true}]
+        dataExpense = [...dataExpense, {label: '(Savings): ' + formatCurrency(savedIncome, currenciesMap[currencyId].iso_code), name: '(Savings)', value: savedIncome, isIncome: true}]
     }
 
     React.useEffect(() => {
