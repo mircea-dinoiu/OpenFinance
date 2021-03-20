@@ -1,4 +1,4 @@
-import {Card, CardContent, useTheme, FormControlLabel, Checkbox} from '@material-ui/core';
+import {Card, CardContent, useTheme, FormControlLabel, Checkbox, Divider} from '@material-ui/core';
 import {DatePicker} from '@material-ui/pickers';
 import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
@@ -40,6 +40,7 @@ export const CashFlow = () => {
     const currencyId = currencyIdOverride || currencyIds[0];
     const currenciesMap = useCurrenciesMap();
     const [allYear, setAllYear] = useState(false);
+    const [displaySavings, setDisplaySavings] = useState(true);
 
     const dataForCurrency: Array<{
         name: string,
@@ -75,7 +76,7 @@ export const CashFlow = () => {
         include_pending: true,
     });
 
-    if (savedIncome > 0) {
+    if (savedIncome > 0 && displaySavings) {
         dataExpense = [...dataExpense, {label: '(Saved): ' + formatCurrency(savedIncome, currenciesMap[currencyId].iso_code), name: '(Saved)', value: savedIncome, isIncome: true}]
     }
 
@@ -102,7 +103,7 @@ export const CashFlow = () => {
                                 onChange={(d) => setDate(d as any)}
                             />
 
-                            <br />
+                            <Divider />
 
                             <FormControlLabel
                                 style={{margin: 0}}
@@ -115,7 +116,20 @@ export const CashFlow = () => {
                                 label="All Year"
                             />
 
-                            <br />
+                            <Divider />
+
+                            <FormControlLabel
+                                style={{margin: 0}}
+                                control={
+                                    <Checkbox
+                                        checked={displaySavings}
+                                        onChange={() => setDisplaySavings(!displaySavings)}
+                                    />
+                                }
+                                label="Display Savings"
+                            />
+
+                            <Divider />
 
                             <CurrencyFilter ids={currencyIds} selected={currencyId}
                                             onChange={setCurrencyIdOverride} />
