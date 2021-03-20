@@ -11,6 +11,7 @@ export const routes = {
     inventories: '/api/inventories',
     moneyLocations: '/api/money-locations',
     reports: {
+        cashFlow: '/api/reports/cash-flow',
         summary: '/api/reports/summary',
         balanceByLocation: '/api/reports/balance-by-location',
     },

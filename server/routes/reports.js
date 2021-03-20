@@ -3,7 +3,7 @@ const router = express.Router();
 const Controller = require('../controllers/ReportController');
 const {validateAuth, validateProject} = require('../middlewares');
 const {mapStartDateToSQL, mapEndDateToSQL} = require('../helpers/sql');
-const {flatten} = require('lodash');
+const {flatten, groupBy} = require('lodash');
 const {QueryTypes} = require('sequelize');
 const {Expense, sql} = require('../models');
 const logger = require('../helpers/logger');
@@ -12,6 +12,24 @@ const c = new Controller();
 
 router.get('/summary', [validateAuth, validateProject], (req, res) => {
     c.getSummary(req, res);
+});
+
+router.get('/cash-flow', [validateAuth, validateProject], async (req, res) => {
+    const pullStart = Date.now();
+    const where = makeWhere(req.query);
+
+    const data = await sql.query(`
+        SELECT currency_id, category_id, SUM(quantity * price) as \`sum\` FROM expenses 
+        JOIN category_expense ON category_expense.expense_id = expenses.id 
+        JOIN money_locations ON expenses.money_location_id = money_locations.id 
+        ${where.query} GROUP BY currency_id, category_id HAVING sum != 0;
+    `, {
+        replacements: where.replacements,
+        type: QueryTypes.SELECT,
+    });
+
+    logger.log(req.path, 'Pulling took', Date.now() - pullStart, 'millis');
+    res.json({data: groupBy(data, 'currency_id')});
 });
 
 router.get('/balance-by-location', [validateAuth, validateProject], async (req, res) => {
@@ -71,9 +89,9 @@ const makeWhere = (queryParams, extra = []) => {
     ].filter(Boolean);
 
     if (queryParams.include_pending === 'false') {
-        where.push(`\`status\` = 'finished'`);
+        where.push(`expenses.\`status\` = 'finished'`);
     } else {
-        where.push(`\`status\` != 'draft'`);
+        where.push(`expenses.\`status\` != 'draft'`);
     }
 
     return where.length

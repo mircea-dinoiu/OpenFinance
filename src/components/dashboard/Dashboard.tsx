@@ -6,6 +6,7 @@ import IconCash from '@material-ui/icons/LocalAtm';
 import {Alert, AlertTitle} from '@material-ui/lab';
 import {BaseTable} from 'components/BaseTable';
 import {BrokeragePaper} from 'components/dashboard/BrokeragePaper';
+import {CashFlow} from 'components/dashboard/CashFlow';
 import {CategoriesTab} from 'components/dashboard/CategoriesTab';
 import {NameCol, ValueCol} from 'components/dashboard/columns';
 import {CreditAprCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'components/dashboard/Credit';
@@ -38,6 +39,7 @@ import {locales} from 'locales';
 import {NetWorthPapers} from 'components/dashboard/NetWorthPapers';
 
 enum DashboardTab {
+    cashFlow,
     banking,
     investing,
     properties,
@@ -171,6 +173,7 @@ export const Dashboard = () => {
                         ))}
                     </Tabs>
                 </Paper>
+                {tab === DashboardTab.cashFlow && <CashFlow />}
                 {tab === DashboardTab.banking && (
                     <>
                         <>
