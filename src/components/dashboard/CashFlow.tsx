@@ -1,4 +1,4 @@
-import {Card, CardContent, useTheme, FormControlLabel, Checkbox, Divider} from '@material-ui/core';
+import {Card, CardContent, useTheme, FormControlLabel, Checkbox, Divider, FormGroup} from '@material-ui/core';
 import {DatePicker} from '@material-ui/pickers';
 import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
@@ -16,7 +16,9 @@ import {Cell, ResponsiveContainer, PieChart, Pie} from 'recharts';
 import * as allColors from '@material-ui/core/colors';
 import {green} from '@material-ui/core/colors';
 
-const colors = Object.values(omit(allColors, 'brown',  'green','common')).map(color => color[300]).flat();
+const colors = Object.values(omit(allColors, 'brown', 'green', 'common'))
+    .map((color) => color[300])
+    .flat();
 
 type CashFlowEntry = {
     currency_id: number;
@@ -41,26 +43,29 @@ export const CashFlow = () => {
     const currenciesMap = useCurrenciesMap();
     const [allYear, setAllYear] = useState(false);
     const [displaySavings, setDisplaySavings] = useState(true);
+    const [excludedCategoryIds, setExcludedCategoryIds] = useState<Record<number, boolean>>({});
 
     const dataForCurrency: Array<{
-        name: string,
-        value: number,
-        label: string,
-        isIncome: boolean
+        name: string;
+        value: number;
+        id?: number;
+        label: string;
+        isIncome: boolean;
     }> = (response ? response.data[currencyId] : []).map((entry: CashFlowEntry) => {
         const categoryName = categoriesById[entry.category_id]?.name ?? '(Uncategorized)';
-        const value = Math.abs(entry.sum);
+        const value =  excludedCategoryIds[entry.category_id] === true ? 0 : Math.abs(entry.sum);
         const formattedValue = formatCurrency(value, currenciesMap[entry.currency_id].iso_code);
 
         return {
+            id: entry.category_id,
             label: categoryName ? `${categoryName}: ${formattedValue}` : formattedValue,
             name: categoryName,
             value,
             isIncome: entry.sum > 0,
         };
     });
-    const dataIncome = dataForCurrency.filter(d => d.isIncome);
-    let dataExpense = dataForCurrency.filter(d => !d.isIncome);
+    const dataIncome = dataForCurrency.filter((d) => d.isIncome);
+    let dataExpense = dataForCurrency.filter((d) => !d.isIncome);
     const dataIncomeSum = sumBy(dataIncome, 'value');
     const dataExpenseSum = sumBy(dataExpense, 'value');
     const savedIncome = dataIncomeSum - dataExpenseSum;
@@ -77,7 +82,15 @@ export const CashFlow = () => {
     });
 
     if (savedIncome > 0 && displaySavings) {
-        dataExpense = [...dataExpense, {label: '(Savings): ' + formatCurrency(savedIncome, currenciesMap[currencyId].iso_code), name: '(Savings)', value: savedIncome, isIncome: true}]
+        dataExpense = [
+            ...dataExpense,
+            {
+                label: '(Savings): ' + formatCurrency(savedIncome, currenciesMap[currencyId].iso_code),
+                name: '(Savings)',
+                value: savedIncome,
+                isIncome: true,
+            },
+        ];
     }
 
     React.useEffect(() => {
@@ -95,9 +108,9 @@ export const CashFlow = () => {
                     sidebar={
                         <>
                             <DatePicker
-                                variant='static'
-                                openTo='month'
-                                label='Month/Year'
+                                variant="inline"
+                                openTo="month"
+                                label="Month/Year"
                                 views={['month', 'year']}
                                 value={date}
                                 onChange={(d) => setDate(d as any)}
@@ -107,52 +120,67 @@ export const CashFlow = () => {
 
                             <FormControlLabel
                                 style={{margin: 0}}
-                                control={
-                                    <Checkbox
-                                        checked={allYear}
-                                        onChange={() => setAllYear(!allYear)}
-                                    />
-                                }
+                                control={<Checkbox checked={allYear} onChange={() => setAllYear(!allYear)} />}
                                 label="All Year"
                             />
 
                             <Divider />
 
-                            <FormControlLabel
-                                style={{margin: 0}}
-                                control={
-                                    <Checkbox
-                                        checked={displaySavings}
-                                        onChange={() => setDisplaySavings(!displaySavings)}
-                                    />
-                                }
-                                label="Display Savings"
-                            />
-
-                            <Divider />
-
-                            <CurrencyFilter ids={currencyIds} selected={currencyId}
-                                            onChange={setCurrencyIdOverride} />
+                            <CurrencyFilter ids={currencyIds} selected={currencyId} onChange={setCurrencyIdOverride} />
                         </>
                     }
                 >
                     {response && (
                         <Card style={{backgroundColor: theme.palette.background.default}}>
-                            <ResponsiveContainer height={500} width="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={dataExpense}
-                                        label={({index}) => dataExpense[index].label}
-                                        dataKey="value"
-                                        stroke={theme.palette.background.default}
-                                    >
-                                        {dataExpense.map((entry, index) => (
-                                            <Cell key={index} fill={entry.isIncome ? green[300] : colors[index]} />
-                                        ))}
-                                    </Pie>
-                                </PieChart>
-                            </ResponsiveContainer>
+                            <CardContent style={{display: 'grid', gridTemplateColumns: 'auto 1fr'}}>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={displaySavings}
+                                                onChange={() => setDisplaySavings(!displaySavings)}
+                                            />
+                                        }
+                                        label="Savings"
+                                    />
 
+                                    <Divider />
+
+                                    {dataExpense.map(
+                                        (entry) =>
+                                            entry.id && (
+                                                <FormControlLabel
+                                                    control={
+                                                        <Checkbox
+                                                            checked={excludedCategoryIds[entry.id] !== true}
+                                                            onChange={(event) =>
+                                                                setExcludedCategoryIds({
+                                                                    ...excludedCategoryIds,
+                                                                    [String(entry.id)]: !event.target.checked,
+                                                                })
+                                                            }
+                                                        />
+                                                    }
+                                                    label={entry.name}
+                                                />
+                                            ),
+                                    )}
+                                </FormGroup>
+                                <ResponsiveContainer height="100%" width="100%">
+                                    <PieChart>
+                                        <Pie
+                                            data={dataExpense}
+                                            label={({index}) => dataExpense[index].label}
+                                            dataKey="value"
+                                            stroke={theme.palette.background.default}
+                                        >
+                                            {dataExpense.map((entry, index) => (
+                                                <Cell key={index} fill={entry.isIncome ? green[300] : colors[index]} />
+                                            ))}
+                                        </Pie>
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </CardContent>
                         </Card>
                     )}
                 </DashboardGridWithSidebar>
