@@ -10,7 +10,6 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemSecondaryAction,
 } from '@material-ui/core';
 import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
@@ -29,7 +28,6 @@ import * as allColors from '@material-ui/core/colors';
 import {green} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
 import {theme} from 'defs/styles';
-import {Done as IconDone} from '@material-ui/icons';
 
 const colors = Object.values(omit(allColors, 'brown', 'green', 'common'))
     .map((color) => color[300])
@@ -254,8 +252,6 @@ const DateSelector = <Value,>({
                     }}
                 >
                     <ListItemText primary={o.label} />
-                    <ListItemSecondaryAction>{isSelected &&
-                    <IconDone />}</ListItemSecondaryAction>
                 </ListItem>
             );
         })}
