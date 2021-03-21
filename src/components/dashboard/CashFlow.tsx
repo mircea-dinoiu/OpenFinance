@@ -67,7 +67,7 @@ export const CashFlow = () => {
         id?: number;
         label: string;
         isIncome: boolean;
-    }> = (response ? response.data[currencyId] : []).map((entry: CashFlowEntry) => {
+    }> = ( response?.data[currencyId] ?? []).map((entry: CashFlowEntry) => {
         const categoryName = categoriesById[entry.category_id]?.name ?? '(Uncategorized)';
         const value = excludedCategoryIds[entry.category_id] === true ? 0 : Math.abs(entry.sum);
         const formattedValue = formatCurrency(value, currenciesMap[entry.currency_id].iso_code);
