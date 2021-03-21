@@ -237,21 +237,27 @@ const DateSelector = <Value,>({
     isClearable?: boolean;
 }) => (
     <List dense={true}>
-        {options.map((o) => (
-            <ListItem
-                button
-                onClick={() => {
-                    if (isClearable && value === o.value) {
-                        // @ts-ignore
-                        onChange(undefined);
-                    } else {
-                        onChange(o.value);
-                    }
-                }}
-            >
-                <ListItemText primary={o.label} />
-                <ListItemSecondaryAction>{o.value === value && <IconDone />}</ListItemSecondaryAction>
-            </ListItem>
-        ))}
+        {options.map((o) => {
+            const isSelected = o.value === value;
+
+            return (
+                <ListItem
+                    button
+                    selected={isSelected}
+                    onClick={() => {
+                        if (isClearable && value === o.value) {
+                            // @ts-ignore
+                            onChange(undefined);
+                        } else {
+                            onChange(o.value);
+                        }
+                    }}
+                >
+                    <ListItemText primary={o.label} />
+                    <ListItemSecondaryAction>{isSelected &&
+                    <IconDone />}</ListItemSecondaryAction>
+                </ListItem>
+            );
+        })}
     </List>
 );
