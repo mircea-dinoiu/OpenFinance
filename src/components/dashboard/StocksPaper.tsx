@@ -1,4 +1,13 @@
-import {CardHeader, Checkbox, Divider, FormControl, FormControlLabel, FormLabel, Paper} from '@material-ui/core';
+import {
+    CardHeader,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Paper,
+    CardContent,
+    Card,
+} from '@material-ui/core';
 import IconStock from '@material-ui/icons/TrendingUp';
 import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
@@ -53,62 +62,64 @@ export const StocksPaper = ({
                             onChange={(id) => setCurrencyId(id)}
                         />
 
-                        <Divider />
-                        <br />
-
-                        <FormControl>
-                            <FormLabel>Sold Investments</FormLabel>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={soldStocksAreVisible}
-                                        onChange={(e) => setSoldStocksAreVisible(e.target.checked)}
-                                    />
-                                }
-                                label="Display"
-                            />
-                        </FormControl>
-
-                        <Divider />
-                        <br />
-
-                        <FormControl>
-                            <FormLabel>Account</FormLabel>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={filteredAccounts.length === 0}
-                                        disabled={filteredAccounts.length === 0}
-                                        onChange={() => setFilteredAccounts([])}
-                                    />
-                                }
-                                label="All Accounts"
-                            />
-                            {accountOptionsOfCurrency.map((o) => {
-                                const accountId = Number(o.value);
-
-                                return (
+                        <Card variant="outlined">
+                            <CardContent>
+                                <FormControl>
+                                    <FormLabel>Sold Investments</FormLabel>
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={filteredAccounts.includes(accountId)}
-                                                onChange={(e) => {
-                                                    setFilteredAccounts(
-                                                        e.target.checked
-                                                            ? filteredAccounts.concat(accountId)
-                                                            : filteredAccounts.filter(
-                                                                  (filteredAccountId) =>
-                                                                      filteredAccountId !== accountId,
-                                                              ),
-                                                    );
-                                                }}
+                                                checked={soldStocksAreVisible}
+                                                onChange={(e) => setSoldStocksAreVisible(e.target.checked)}
                                             />
                                         }
-                                        label={o.label}
+                                        label="Display"
                                     />
-                                );
-                            })}
-                        </FormControl>
+                                </FormControl>
+                            </CardContent>
+                        </Card>
+
+                        <Card variant="outlined">
+                            <CardContent>
+                                <FormControl>
+                                    <FormLabel>Account</FormLabel>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={filteredAccounts.length === 0}
+                                                disabled={filteredAccounts.length === 0}
+                                                onChange={() => setFilteredAccounts([])}
+                                            />
+                                        }
+                                        label="All Accounts"
+                                    />
+                                    {accountOptionsOfCurrency.map((o) => {
+                                        const accountId = Number(o.value);
+
+                                        return (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={filteredAccounts.includes(accountId)}
+                                                        onChange={(e) => {
+                                                            setFilteredAccounts(
+                                                                e.target.checked
+                                                                    ? filteredAccounts.concat(accountId)
+                                                                    : filteredAccounts.filter(
+                                                                          (filteredAccountId) =>
+                                                                              filteredAccountId !== accountId,
+                                                                      ),
+                                                            );
+                                                        }}
+                                                    />
+                                                }
+                                                label={o.label}
+                                            />
+                                        );
+                                    })}
+                                </FormControl>
+                            </CardContent>
+                        </Card>
                     </>
                 }
             >

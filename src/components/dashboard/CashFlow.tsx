@@ -1,5 +1,17 @@
-import {Card, CardContent, useTheme, FormControlLabel, Checkbox, Divider, FormGroup} from '@material-ui/core';
-import {DatePicker} from '@material-ui/pickers';
+import {
+    Card,
+    CardContent,
+    useTheme,
+    FormControlLabel,
+    Checkbox,
+    Divider,
+    FormGroup,
+    Paper,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemSecondaryAction,
+} from '@material-ui/core';
 import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
 import {formatCurrency} from 'components/formatters';
@@ -11,10 +23,13 @@ import {useCategories} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
-import {sortBy, sumBy, omit} from 'lodash';
+import _, {sortBy, sumBy, omit} from 'lodash';
 import {Cell, ResponsiveContainer, PieChart, Pie} from 'recharts';
 import * as allColors from '@material-ui/core/colors';
 import {green} from '@material-ui/core/colors';
+import {makeStyles} from '@material-ui/core/styles';
+import {theme} from 'defs/styles';
+import {Done as IconDone} from '@material-ui/icons';
 
 const colors = Object.values(omit(allColors, 'brown', 'green', 'common'))
     .map((color) => color[300])
@@ -31,8 +46,10 @@ type CashFlowResponse = {
 };
 
 export const CashFlow = () => {
+    const cls = useStyles();
     const theme = useTheme();
-    const [date, setDate] = useState(new Date());
+    const [dateYear, setDateYear] = useState(new Date().getFullYear());
+    const [dateMonth, setDateMonth] = useState(new Date().getMonth());
     const [response, setResponse] = useState<CashFlowResponse | undefined>();
     const project = useSelectedProject();
     const categories = sortBy(useCategories(), 'name');
@@ -41,7 +58,6 @@ export const CashFlow = () => {
     const [currencyIdOverride, setCurrencyIdOverride] = useState('');
     const currencyId = currencyIdOverride || currencyIds[0];
     const currenciesMap = useCurrenciesMap();
-    const [allYear, setAllYear] = useState(false);
     const [displaySavings, setDisplaySavings] = useState(true);
     const [excludedCategoryIds, setExcludedCategoryIds] = useState<Record<number, boolean>>({});
 
@@ -53,7 +69,7 @@ export const CashFlow = () => {
         isIncome: boolean;
     }> = (response ? response.data[currencyId] : []).map((entry: CashFlowEntry) => {
         const categoryName = categoriesById[entry.category_id]?.name ?? '(Uncategorized)';
-        const value =  excludedCategoryIds[entry.category_id] === true ? 0 : Math.abs(entry.sum);
+        const value = excludedCategoryIds[entry.category_id] === true ? 0 : Math.abs(entry.sum);
         const formattedValue = formatCurrency(value, currenciesMap[entry.currency_id].iso_code);
 
         return {
@@ -71,11 +87,11 @@ export const CashFlow = () => {
     const savedIncome = dataIncomeSum - dataExpenseSum;
 
     const url = makeUrl(routes.reports.cashFlow, {
-        end_date: moment(date)
-            .endOf(allYear ? 'year' : 'month')
+        end_date: moment(new Date(dateYear, dateMonth ?? 0))
+            .endOf(dateMonth === undefined ? 'year' : 'month')
             .toISOString(),
-        start_date: moment(date)
-            .startOf(allYear ? 'year' : 'month')
+        start_date: moment(new Date(dateYear, dateMonth ?? 0))
+            .startOf(dateMonth === undefined ? 'year' : 'month')
             .toISOString(),
         projectId: project.id,
         include_pending: true,
@@ -109,26 +125,31 @@ export const CashFlow = () => {
                 <DashboardGridWithSidebar
                     sidebar={
                         <>
-                            <DatePicker
-                                variant="inline"
-                                openTo="month"
-                                label="Month/Year"
-                                views={['month', 'year']}
-                                value={date}
-                                onChange={(d) => setDate(d as any)}
-                            />
-
-                            <Divider />
-
-                            <FormControlLabel
-                                style={{margin: 0}}
-                                control={<Checkbox checked={allYear} onChange={() => setAllYear(!allYear)} />}
-                                label="All Year"
-                            />
-
-                            <Divider />
-
                             <CurrencyFilter ids={currencyIds} selected={currencyId} onChange={setCurrencyIdOverride} />
+
+                            <div className={cls.dateContainer}>
+                                <Paper variant="outlined">
+                                    <DateSelector
+                                        options={_.range(dateYear - 5, dateYear + 7).map((y) => ({
+                                            label: y.toString(),
+                                            value: y,
+                                        }))}
+                                        value={dateYear}
+                                        onChange={setDateYear}
+                                    />
+                                </Paper>
+                                <Paper variant="outlined">
+                                    <DateSelector
+                                        isClearable={true}
+                                        options={moment.monthsShort().map((m, i) => ({
+                                            label: m,
+                                            value: i,
+                                        }))}
+                                        value={dateMonth}
+                                        onChange={setDateMonth}
+                                    />
+                                </Paper>
+                            </div>
                         </>
                     }
                 >
@@ -172,7 +193,12 @@ export const CashFlow = () => {
                                     <PieChart>
                                         <Pie
                                             data={dataExpense}
-                                            label={({index}) => dataExpense[index].label + ' | ' + Math.ceil(dataExpense[index].value / dataExpenseSum * 100)  +'%'}
+                                            label={({index}) =>
+                                                dataExpense[index].label +
+                                                ' | ' +
+                                                Math.ceil((dataExpense[index].value / dataExpenseSum) * 100) +
+                                                '%'
+                                            }
                                             dataKey="value"
                                             stroke={theme.palette.background.default}
                                         >
@@ -190,3 +216,42 @@ export const CashFlow = () => {
         </Card>
     );
 };
+
+const useStyles = makeStyles({
+    dateContainer: {
+        display: 'grid',
+        gridGap: theme.spacing(1),
+        gridTemplateColumns: '1fr 1fr',
+    },
+});
+
+const DateSelector = <Value,>({
+    options,
+    value,
+    onChange,
+    isClearable,
+}: {
+    options: {value: Value; label: string}[];
+    value: Value;
+    onChange: (value: Value) => void;
+    isClearable?: boolean;
+}) => (
+    <List dense={true}>
+        {options.map((o) => (
+            <ListItem
+                button
+                onClick={() => {
+                    if (isClearable && value === o.value) {
+                        // @ts-ignore
+                        onChange(undefined);
+                    } else {
+                        onChange(o.value);
+                    }
+                }}
+            >
+                <ListItemText primary={o.label} />
+                <ListItemSecondaryAction>{o.value === value && <IconDone />}</ListItemSecondaryAction>
+            </ListItem>
+        ))}
+    </List>
+);
