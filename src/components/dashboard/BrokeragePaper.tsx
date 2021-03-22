@@ -1,4 +1,4 @@
-import {CardHeader, Paper, CardContent, Card} from '@material-ui/core';
+import {CardHeader, Paper} from '@material-ui/core';
 import IconStock from '@material-ui/icons/TrendingUp';
 import {BaseTable} from 'components/BaseTable';
 import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'components/dashboard/columns';
@@ -38,15 +38,11 @@ export const BrokeragePaper = ({
             <DashboardGridWithSidebar
                 sidebar={
                     <>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <CurrencyFilter
-                                    ids={currencyIds}
-                                    selected={currencyId}
-                                    onChange={(id) => setCurrencyId(id)}
-                                />
-                            </CardContent>
-                        </Card>
+                        <CurrencyFilter
+                            ids={currencyIds}
+                            selected={currencyId}
+                            onChange={(id) => setCurrencyId(id)}
+                        />
                     </>
                 }
             >
