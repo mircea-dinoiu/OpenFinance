@@ -54,7 +54,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
 
     useEffect(() => {
         resetForm();
-    }, [props.items.map((i) => i.id).join()]);
+    }, [JSON.stringify(props.items)]);
 
     const getUpdates = () => {
         const updates = {};
