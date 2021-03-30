@@ -28,6 +28,17 @@ export const CreditBalanceCol: Column<CashAccount> = {
     ...numericColumnStyles,
 };
 
+export const CreditAvailableCol: Column<CashAccount> = {
+    Header: 'Available',
+    accessor: (r) => (r.credit_limit ?? 0) + r.total,
+    id: 'available',
+    Cell: ({original, value}: {original: CashAccount; value: number}) => {
+        return <NumericValue currency={original.currency_id} value={value} />;
+    },
+    Footer: makeTotalFooter(),
+    ...numericColumnStyles,
+};
+
 export const CreditUsageCol: Column<CashAccount> = {
     Header: 'Usage',
     accessor: (r) => Math.round((-r.total / (r.credit_limit ?? 0)) * 100),

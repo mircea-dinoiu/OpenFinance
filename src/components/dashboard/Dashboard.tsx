@@ -9,7 +9,13 @@ import {BrokeragePaper} from 'components/dashboard/BrokeragePaper';
 import {CashFlow} from 'components/dashboard/CashFlow';
 import {CategoriesTab} from 'components/dashboard/CategoriesTab';
 import {NameCol, ValueCol} from 'components/dashboard/columns';
-import {CreditAprCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'components/dashboard/Credit';
+import {
+    CreditAprCol,
+    CreditBalanceCol,
+    CreditLimitCol,
+    CreditUsageCol,
+    CreditAvailableCol,
+} from 'components/dashboard/Credit';
 import {getAccountOptions} from 'components/dashboard/getAccountOptions';
 import {PaymentPlanDialog} from 'components/dashboard/PaymentPlanDialog';
 import {StocksPaper} from 'components/dashboard/StocksPaper';
@@ -39,8 +45,8 @@ import {locales} from 'locales';
 import {NetWorthPapers} from 'components/dashboard/NetWorthPapers';
 
 enum DashboardTab {
-    cashFlow,
     banking,
+    cashFlow,
     investing,
     properties,
     userReports,
@@ -236,6 +242,7 @@ export const Dashboard = () => {
                                                             : [
                                                                   NameCol,
                                                                   CreditBalanceCol,
+                                                                 CreditAvailableCol,
                                                                   CreditLimitCol,
                                                                   CreditUsageCol,
                                                                   CreditAprCol,
