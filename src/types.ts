@@ -1,5 +1,6 @@
 import {AlertProps} from '@material-ui/lab';
 import {AccountStatus, AccountType} from 'domain/accounts/defs';
+import {Categories} from 'domain/categories/defs';
 import {Currencies} from 'domain/currencies/defs';
 import * as React from 'react';
 import {LazyLoadedState} from 'state/defs';
@@ -17,15 +18,6 @@ export enum StockType {
 }
 
 export type Stock = {id: number; price: number; symbol: string; currency_id: number; type: StockType};
-
-export type Category = {
-    id: number;
-    name: string;
-    color: string;
-    expenses: number;
-};
-
-export type Categories = Category[];
 
 export type Account = {
     currency_id: number;

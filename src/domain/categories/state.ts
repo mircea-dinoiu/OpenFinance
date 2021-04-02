@@ -1,8 +1,8 @@
 import {Api} from 'defs/Api';
+import {Categories} from 'domain/categories/defs';
 import {useDispatch} from 'react-redux';
 import {updateState} from 'state/actionCreators';
 import {useSelectedProject} from 'state/projects';
-import {Categories} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 

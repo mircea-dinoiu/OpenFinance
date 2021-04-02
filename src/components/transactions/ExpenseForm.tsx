@@ -26,6 +26,7 @@ import {TransactionStockFields} from 'components/transactions/TransactionStockFi
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {AccountType} from 'domain/accounts/defs';
+import {Categories} from 'domain/categories/defs';
 import {CurrencyMap} from 'domain/currencies/defs';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
@@ -37,7 +38,7 @@ import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {Inventory, useInventories} from 'state/inventories';
 import {useSelectedProject} from 'state/projects';
-import {Account, Accounts, Bootstrap, Categories, GlobalState, User} from 'types';
+import {Account, Accounts, Bootstrap, GlobalState, User} from 'types';
 import {useEndDate} from 'utils/dates';
 
 const boxStyle = {

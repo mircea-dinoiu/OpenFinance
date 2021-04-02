@@ -2,10 +2,10 @@ import {Dialog, DialogContent} from '@material-ui/core';
 import {TextFieldCell} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {Api} from 'defs/Api';
+import {Category} from 'domain/categories/defs';
 import React from 'react';
-import {useCategoriesReader} from 'state/categories';
+import {useCategoriesReader} from 'domain/categories/state';
 import {useCategories} from 'state/hooks';
-import {Category} from 'types';
 
 export const CategoriesDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) => {
     const rows = useCategories();
