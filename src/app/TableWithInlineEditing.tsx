@@ -9,7 +9,7 @@ import {FloatingSnackbar} from 'components/snackbars';
 import {pick} from 'lodash';
 import React, {useState} from 'react';
 import {RowInfo, TableProps} from 'react-table-6';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {createXHR} from 'app/fetch';
 import {makeUrl} from 'app/url';
 

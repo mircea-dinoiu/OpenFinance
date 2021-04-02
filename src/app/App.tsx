@@ -21,7 +21,7 @@ import {Login} from 'users/Login';
 import {useAccountsReader} from 'accounts/state';
 import {useCategoriesReader} from 'categories/state';
 import {fetchCurrencies} from 'currencies/state';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {fetchStocks} from 'stocks/state';
 import {createTheme} from 'app/styles/createTheme';
 

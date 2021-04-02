@@ -1,13 +1,6 @@
-import {User} from 'users/defs';
-import {useSelector} from 'react-redux';
 import {GlobalState} from 'app/state/defs';
-
-export type Project = {
-    id: number;
-    default_currency_id: number;
-    name: string;
-    users: User[];
-};
+import {Project} from 'projects/defs';
+import {useSelector} from 'react-redux';
 
 export const useProjects = (): Project[] => useSelector((s: GlobalState) => s.user?.projects ?? []);
 

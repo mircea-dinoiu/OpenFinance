@@ -1,4 +1,4 @@
-import {Project} from 'app/state/projects';
+import {Project} from 'projects/defs';
 
 export type User = {
     avatar: string;

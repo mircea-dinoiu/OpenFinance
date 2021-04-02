@@ -39,7 +39,7 @@ import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {useInventories} from 'inventories/state';
 import {GlobalState} from 'app/state/defs';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {useEndDate} from 'app/dates/helpers';
 
 const boxStyle = {

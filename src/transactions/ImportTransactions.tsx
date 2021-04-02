@@ -27,7 +27,7 @@ import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
 import {useOpenAccounts} from 'accounts/state';
 import {useCurrenciesMap} from 'currencies/state';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {createXHR} from 'app/fetch';
 import {makeUrl} from 'app/url';
 

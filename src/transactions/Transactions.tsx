@@ -21,6 +21,7 @@ import IconStarBorder from '@material-ui/icons/StarBorder';
 import {BaseTable, TableHeader, TableHeaderTop} from 'app/BaseTable';
 
 import {BigLoader} from 'components/loaders';
+import {Project} from 'projects/defs';
 import {ContextMenuItems} from 'transactions/ContextMenuItems';
 import {Tooltip} from 'components/Tooltip';
 import {WeightDisplay} from 'transactions/cells/WeightDisplay';
@@ -59,7 +60,7 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'app/state/actionCreators';
 import {GlobalState} from 'app/state/defs';
-import {Project, useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {useEndDate} from 'app/dates/helpers';
 
 import {createXHR, HttpMethod} from 'app/fetch';

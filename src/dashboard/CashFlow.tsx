@@ -19,7 +19,7 @@ import {Api} from 'app/Api';
 import moment from 'moment';
 import React, {useState} from 'react';
 import {useCurrenciesMap} from 'currencies/state';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {createXHR} from 'app/fetch';
 import {makeUrl} from 'app/url';
 import _, {sortBy, sumBy, omit} from 'lodash';

@@ -6,7 +6,7 @@ import {
 import {TransactionStatus} from 'transactions/defs';
 import identity from 'lodash/identity';
 import pickBy from 'lodash/pickBy';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {getStartDate, useEndDate} from 'app/dates/helpers';
 
 export const useDashboardQueryParams = () => {

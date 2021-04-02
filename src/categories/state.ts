@@ -3,7 +3,7 @@ import {Categories} from 'categories/defs';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateState} from 'app/state/actionCreators';
 import {GlobalState} from 'app/state/defs';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {createXHR} from 'app/fetch';
 import {makeUrl} from 'app/url';
 

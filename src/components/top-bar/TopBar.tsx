@@ -8,7 +8,7 @@ import {paths} from 'js/defs';
 import _ from 'lodash';
 import React from 'react';
 import {generatePath, useLocation, useRouteMatch} from 'react-router-dom';
-import {useProjects, useSelectedProject} from 'app/state/projects';
+import {useProjects, useSelectedProject} from 'projects/state';
 import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
 import {shiftDateBack, shiftDateForward} from 'app/dates/helpers';
 import {makeUrl} from 'app/url';

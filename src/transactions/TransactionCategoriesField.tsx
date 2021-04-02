@@ -5,7 +5,7 @@ import {Api} from 'app/Api';
 import {useCategories} from 'categories/state';
 import {sortBy} from 'lodash';
 import React from 'react';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {useReader} from 'app/fetch';
 import {makeUrl} from 'app/url';
 

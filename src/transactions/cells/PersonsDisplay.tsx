@@ -1,7 +1,7 @@
 import {Avatar} from '@material-ui/core';
 import {TransactionModel} from 'transactions/defs';
 import * as React from 'react';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {styled} from '@material-ui/core/styles';
 import {colors} from 'app/styles/colors';
 

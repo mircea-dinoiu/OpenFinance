@@ -53,7 +53,7 @@ import {useDispatch} from 'react-redux';
 import {generatePath, useParams} from 'react-router-dom';
 import {useAccounts} from 'accounts/state';
 import {useRefreshWidgets} from 'app/state/hooks';
-import {useSelectedProject} from 'app/state/projects';
+import {useSelectedProject} from 'projects/state';
 import {useStockPrices} from 'stocks/state';
 import {summaryAssign, SummaryKey} from 'app/state/summary';
 import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
