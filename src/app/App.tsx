@@ -6,7 +6,7 @@ import {Dashboard} from 'domain/dashboard/Dashboard';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
 import {Transactions} from 'components/transactions/Transactions';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {useSnackbars} from 'domain/snackbars/state';
 import {Bootstrap} from 'domain/users/defs';
 import {useBootstrap, useUsersWithActions} from 'domain/users/state';
@@ -21,11 +21,11 @@ import {Login} from 'domain/users/Login';
 import {useAccountsReader} from 'domain/accounts/state';
 import {useCategoriesReader} from 'domain/categories/state';
 import {fetchCurrencies} from 'domain/currencies/state';
-import {useSelectedProject} from 'state/projects';
+import {useSelectedProject} from 'app/state/projects';
 import {fetchStocks} from 'domain/stocks/state';
-import {createTheme} from 'styles/createTheme';
+import {createTheme} from 'app/styles/createTheme';
 
-import {createXHR} from 'utils/fetch';
+import {createXHR} from 'app/utils/fetch';
 
 const AppWrapped = () => {
     const dispatch = useDispatch();

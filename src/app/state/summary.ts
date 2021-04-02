@@ -1,7 +1,7 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {BalanceByLocation} from 'components/transactions/types';
 import {useSelector} from 'react-redux';
-import {Action, GlobalState} from 'state/defs';
+import {Action, GlobalState} from 'app/state/defs';
 
 export enum SummaryKey {
     BALANCE_BY_ACCOUNT,

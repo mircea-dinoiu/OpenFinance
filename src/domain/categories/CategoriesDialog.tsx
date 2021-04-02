@@ -1,7 +1,7 @@
 import {Dialog, DialogContent} from '@material-ui/core';
 import {TextFieldCell} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {Category} from 'domain/categories/defs';
 import React from 'react';
 import {useCategories, useCategoriesReader} from 'domain/categories/state';

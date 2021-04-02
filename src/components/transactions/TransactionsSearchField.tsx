@@ -1,9 +1,9 @@
 import {debounce, TextField} from '@material-ui/core';
-import {Timers} from 'defs';
-import {QueryParam} from 'defs/url';
+import {Timers} from 'app/defs';
+import {QueryParam} from 'app/url';
 import React, {useEffect, useMemo, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {mapUrlToFragment} from 'utils/url';
+import {mapUrlToFragment} from 'app/utils/url';
 
 export const TransactionsSearchField = () => {
     const history = useHistory();

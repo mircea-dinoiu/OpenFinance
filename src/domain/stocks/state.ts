@@ -1,11 +1,11 @@
 import {createAction, createReducer} from '@reduxjs/toolkit';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {Stock} from 'domain/stocks/defs';
 import {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
-import {GlobalState} from 'state/defs';
-import {createXHR} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
+import {GlobalState} from 'app/state/defs';
+import {createXHR} from 'app/utils/fetch';
+import {makeUrl} from 'app/utils/url';
 
 enum Action {
     received = 'stocks/received',

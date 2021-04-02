@@ -1,4 +1,4 @@
-import {scrollIsAt, scrollReachedBottom} from './scroll';
+import {scrollIsAt, scrollReachedBottom} from 'app/utils/scroll';
 
 describe('#scrollIsAt()', () => {
     it('should work properly', () => {

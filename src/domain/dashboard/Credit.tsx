@@ -5,7 +5,7 @@ import {NumericValue} from 'components/formatters';
 import {locales} from 'locales';
 import React from 'react';
 import {Column} from 'react-table-6';
-import {numericColumnStyles} from 'styles/column';
+import {numericColumnStyles} from 'app/styles/column';
 import {makeTotalFooter} from 'domain/dashboard/makeTotalFooter';
 
 export const CreditAprCol: Column<CashAccount> = {

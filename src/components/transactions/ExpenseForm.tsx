@@ -24,7 +24,6 @@ import {TransactionCategoriesField} from 'components/transactions/TransactionCat
 import {TransactionNameField} from 'components/transactions/TransactionNameField';
 import {TransactionStockFields} from 'components/transactions/TransactionStockFields';
 import {TransactionForm} from 'components/transactions/types';
-import {TransactionStatus} from 'defs';
 import {Account, Accounts, AccountType} from 'domain/accounts/defs';
 import {Categories} from 'domain/categories/defs';
 import {CurrencyMap} from 'domain/currencies/defs';
@@ -39,9 +38,10 @@ import {sortBy} from 'lodash';
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {useInventories} from 'domain/inventories/state';
-import {GlobalState} from 'state/defs';
-import {useSelectedProject} from 'state/projects';
-import {useEndDate} from 'utils/dates';
+import {GlobalState} from 'app/state/defs';
+import {useSelectedProject} from 'app/state/projects';
+import {useEndDate} from 'app/dates/helpers';
+import {TransactionStatus} from 'transactions/defs';
 
 const boxStyle = {
     padding: '10px 0',

@@ -1,7 +1,7 @@
 import {List, ListSubheader} from '@material-ui/core';
 import {MainScreenListItem, MainScreenListItemProps} from 'components/transactions/MainScreenListItem';
 import {TransactionModel} from 'components/transactions/types';
-import {CalendarWithoutTime} from 'defs/formats';
+import {CalendarWithoutTime} from 'app/dates/defs';
 import moment from 'moment';
 import * as React from 'react';
 

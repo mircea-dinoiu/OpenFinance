@@ -1,7 +1,7 @@
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {Property} from 'domain/properties/defs';
 import _ from 'lodash';
-import {makeCrudReducer} from 'state/utils';
+import {makeCrudReducer} from 'app/state/utils';
 
 const {reducer: propertiesReducer, hook: useProperties} = makeCrudReducer<Property[]>({
     initialState: [],

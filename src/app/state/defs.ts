@@ -6,7 +6,7 @@ import {Property} from 'domain/properties/defs';
 import {Snackbar} from 'domain/snackbars/defs';
 import {Stock} from 'domain/stocks/defs';
 import {Bootstrap} from 'domain/users/defs';
-import {Summary} from 'state/summary';
+import {Summary} from 'app/state/summary';
 
 export enum Action {
     UPDATE_STATE = 'UPDATE_STATE',

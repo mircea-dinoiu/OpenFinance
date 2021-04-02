@@ -1,11 +1,11 @@
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {Categories} from 'domain/categories/defs';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateState} from 'state/actionCreators';
-import {GlobalState} from 'state/defs';
-import {useSelectedProject} from 'state/projects';
-import {createXHR} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
+import {updateState} from 'app/state/actionCreators';
+import {GlobalState} from 'app/state/defs';
+import {useSelectedProject} from 'app/state/projects';
+import {createXHR} from 'app/utils/fetch';
+import {makeUrl} from 'app/utils/url';
 
 export const useCategoriesReader = () => {
     const dispatch = useDispatch();

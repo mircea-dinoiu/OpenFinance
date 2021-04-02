@@ -2,15 +2,15 @@ import {Box, Button, Card, CardHeader, Checkbox, Divider, FormControlLabel, Text
 import {styled} from '@material-ui/core/styles';
 import {ButtonProgress} from 'components/loaders';
 import {ErrorSnackbar} from 'components/snackbars';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {Bootstrap} from 'domain/users/defs';
 import {useBootstrap} from 'domain/users/state';
 import {paths} from 'js/defs';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import {setUsers} from 'state/actionCreators';
-import {createXHR} from 'utils/fetch';
+import {setUsers} from 'app/state/actionCreators';
+import {createXHR} from 'app/utils/fetch';
 
 export const Login = () => {
     const [email, setEmail] = React.useState('');

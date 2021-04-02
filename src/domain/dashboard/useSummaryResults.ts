@@ -1,9 +1,9 @@
 import {SummaryResults} from 'components/transactions/types';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import * as React from 'react';
-import {useRefreshWidgets} from 'state/hooks';
-import {createXHR} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
+import {useRefreshWidgets} from 'app/state/hooks';
+import {createXHR} from 'app/utils/fetch';
+import {makeUrl} from 'app/utils/url';
 
 export const useSummaryResults = ({reportQueryParams}: {reportQueryParams: string}) => {
     const [results, setResults] = React.useState<SummaryResults | null>(null);

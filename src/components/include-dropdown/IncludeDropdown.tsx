@@ -1,5 +1,5 @@
 import {MenuItem, Select} from '@material-ui/core';
-import {IncludeOption} from 'defs';
+import {IncludeOption} from 'app/defs';
 import * as React from 'react';
 
 const getIncludeOptions = () => {

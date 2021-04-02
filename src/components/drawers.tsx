@@ -1,7 +1,7 @@
 import {Drawer, Theme, useMediaQuery} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {ReactNode} from 'react';
-import {stickyHeaderHeight} from 'styles/stickyHeaderHeight';
+import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
 
 export const SmartDrawer = ({
     children,

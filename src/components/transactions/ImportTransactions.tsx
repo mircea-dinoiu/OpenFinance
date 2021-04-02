@@ -21,15 +21,15 @@ import {AxiosResponse} from 'axios';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TransactionReviewAccordion} from 'components/transactions/TransactionReviewAccordion';
 import {TransactionModel} from 'components/transactions/types';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {useBootstrap} from 'domain/users/state';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
 import {useOpenAccounts} from 'domain/accounts/state';
 import {useCurrenciesMap} from 'domain/currencies/state';
-import {useSelectedProject} from 'state/projects';
-import {createXHR} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
+import {useSelectedProject} from 'app/state/projects';
+import {createXHR} from 'app/utils/fetch';
+import {makeUrl} from 'app/utils/url';
 
 enum ImportStep {
     ACCOUNT,

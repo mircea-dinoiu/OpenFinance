@@ -1,11 +1,11 @@
 import {Chip, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import React from 'react';
-import {useSelectedProject} from 'state/projects';
-import {useReader} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
+import {useSelectedProject} from 'app/state/projects';
+import {useReader} from 'app/utils/fetch';
+import {makeUrl} from 'app/utils/url';
 
 type DescriptionSuggestion = {
     item: string;

@@ -1,13 +1,13 @@
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {Tooltip} from 'components/Tooltip';
-import {useCopyTextWithConfirmation} from 'utils/clipboardService';
+import {useCopyTextWithConfirmation} from 'app/utils/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
 import {HTMLAttributes, ReactNode} from 'react';
 import {useCurrenciesMap} from 'domain/currencies/state';
 import {usePrivacyToggle} from 'domain/privacyToggle/state';
-import {colors} from 'styles/colors';
+import {colors} from 'app/styles/colors';
 
 const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => <span {...props}>▒▒▒▒</span>;
 

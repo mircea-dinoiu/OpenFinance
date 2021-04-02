@@ -9,9 +9,9 @@ import {FloatingSnackbar} from 'components/snackbars';
 import {pick} from 'lodash';
 import React, {useState} from 'react';
 import {RowInfo, TableProps} from 'react-table-6';
-import {useSelectedProject} from 'state/projects';
-import {createXHR} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
+import {useSelectedProject} from 'app/state/projects';
+import {createXHR} from 'app/utils/fetch';
+import {makeUrl} from 'app/utils/url';
 
 export const TableWithInlineEditing = <D extends {id: number}>({
     columns,

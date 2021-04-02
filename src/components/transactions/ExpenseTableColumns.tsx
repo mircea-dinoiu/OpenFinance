@@ -17,7 +17,7 @@ import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import * as React from 'react';
 import {useStocksMap} from 'domain/stocks/state';
 import {InventoryColumn} from 'components/BaseTable/columns/InventoryColumn';
-import {numericColumnStyles} from 'styles/column';
+import {numericColumnStyles} from 'app/styles/column';
 
 export const makeTransactionsColumns = ({updateRecords}: {updateRecords: UpdateRecords}) => [
     QuantityCol,

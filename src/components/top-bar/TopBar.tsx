@@ -1,17 +1,17 @@
 import {AppBar, MenuItem, Select, Tab, Tabs, Toolbar, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconHome from '@material-ui/icons/Home';
+import {ShiftDateOption} from 'app/dates/defs';
 import {TabLink} from 'components/TabLink';
 import {TopBarMoreMenu} from 'components/top-bar/TopBarMoreMenu';
-import {ShiftDateOption} from 'defs';
 import {paths} from 'js/defs';
 import _ from 'lodash';
 import React from 'react';
 import {generatePath, useLocation, useRouteMatch} from 'react-router-dom';
-import {useProjects, useSelectedProject} from 'state/projects';
-import {stickyHeaderHeight} from 'styles/stickyHeaderHeight';
-import {shiftDateBack, shiftDateForward} from 'utils/dates';
-import {makeUrl} from 'utils/url';
+import {useProjects, useSelectedProject} from 'app/state/projects';
+import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
+import {shiftDateBack, shiftDateForward} from 'app/dates/helpers';
+import {makeUrl} from 'app/utils/url';
 
 const MAX_TIMES = 10;
 

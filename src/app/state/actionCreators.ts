@@ -1,6 +1,6 @@
 import {Snackbar} from 'domain/snackbars/defs';
 import {Bootstrap} from 'domain/users/defs';
-import {Action, GlobalState} from 'state/defs';
+import {Action, GlobalState} from 'app/state/defs';
 
 export const updateState = (state: Partial<GlobalState>) => ({
     type: Action.UPDATE_STATE,

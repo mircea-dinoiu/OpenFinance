@@ -8,7 +8,7 @@ import {SummaryModel} from 'components/transactions/types';
 import {CurrencyMap} from 'domain/currencies/defs';
 import {sortBy} from 'lodash';
 import React, {ReactNode} from 'react';
-import {colors} from 'styles/colors';
+import {colors} from 'app/styles/colors';
 
 export const SummarySubCategory = <Ent,>(props: {
     excluded: {};

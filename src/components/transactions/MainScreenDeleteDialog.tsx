@@ -2,7 +2,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@materi
 import {withStyles} from '@material-ui/core/styles';
 import {ClassNameMap} from '@material-ui/core/styles/withStyles';
 import * as React from 'react';
-import {dialog} from 'styles/dialog';
+import {dialog} from 'app/styles/dialog';
 
 const MainScreenDeleteDialogWrapped = ({
     open,

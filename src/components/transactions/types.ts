@@ -1,6 +1,6 @@
 import {MaterialUiPickersDate} from '@material-ui/pickers/typings/date';
-import {TransactionStatus} from 'defs';
 import {RepeatOption} from 'js/defs';
+import {TransactionStatus} from 'transactions/defs';
 import {$Values} from 'utility-types';
 
 type BalanceByLocationCash = {

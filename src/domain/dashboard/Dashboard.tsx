@@ -43,7 +43,7 @@ import {TabLink} from 'components/TabLink';
 import {useInclude, useIncludePending} from 'components/transactions/helpers';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {BalanceByLocation} from 'components/transactions/types';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {Account, AccountType} from 'domain/accounts/defs';
 import {paths} from 'js/defs';
 import {locales} from 'locales';
@@ -52,13 +52,13 @@ import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {generatePath, useParams} from 'react-router-dom';
 import {useAccounts} from 'domain/accounts/state';
-import {useRefreshWidgets} from 'state/hooks';
-import {useSelectedProject} from 'state/projects';
+import {useRefreshWidgets} from 'app/state/hooks';
+import {useSelectedProject} from 'app/state/projects';
 import {useStockPrices} from 'domain/stocks/state';
-import {summaryAssign, SummaryKey} from 'state/summary';
-import {stickyHeaderHeight} from 'styles/stickyHeaderHeight';
-import {createXHR} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
+import {summaryAssign, SummaryKey} from 'app/state/summary';
+import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
+import {createXHR} from 'app/utils/fetch';
+import {makeUrl} from 'app/utils/url';
 
 enum DashboardTab {
     banking = 'banking',

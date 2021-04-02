@@ -1,12 +1,12 @@
 import {MoreVert as MoreVertIcon} from '@material-ui/icons';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {useUsersWithActions} from 'domain/users/state';
 import React, {useState} from 'react';
 import {IconButton, MenuItem, Menu, Checkbox} from '@material-ui/core';
 import {usePrivacyToggle} from 'domain/privacyToggle/state';
 import {CategoriesDialog} from 'domain/categories/CategoriesDialog';
 import {AccountsDialog} from 'domain/accounts/AccountsDialog';
-import {createXHR} from 'utils/fetch';
+import {createXHR} from 'app/utils/fetch';
 
 export const TopBarMoreMenu = () => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);

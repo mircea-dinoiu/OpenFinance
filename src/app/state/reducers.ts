@@ -3,13 +3,13 @@ import {User} from 'domain/users/defs';
 import uniqueId from 'lodash/uniqueId';
 import {combineReducers} from 'redux';
 import {currenciesReducer} from 'domain/currencies/state';
-import {Action} from 'state/defs';
+import {Action} from 'app/state/defs';
 import {inventoriesReducer} from 'domain/inventories/state';
 import {privacyToggleReducer} from 'domain/privacyToggle/state';
 import {propertiesReducer} from 'domain/properties/state';
 import {stocksReducer} from 'domain/stocks/state';
-import {summaryReducer} from 'state/summary';
-import {bindToUpdateState} from 'state/utils';
+import {summaryReducer} from 'app/state/summary';
+import {bindToUpdateState} from 'app/state/utils';
 
 const refreshWidgets = (
     state = uniqueId(),

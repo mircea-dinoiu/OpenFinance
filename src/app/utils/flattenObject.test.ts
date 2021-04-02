@@ -1,4 +1,4 @@
-import {flattenObject} from './flattenObject';
+import {flattenObject} from 'app/utils/flattenObject';
 
 describe('#flattenObject()', () => {
     it('should work', () => {

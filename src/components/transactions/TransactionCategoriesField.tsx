@@ -1,13 +1,13 @@
 import {Chip, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {useCategories} from 'domain/categories/state';
 import {sortBy} from 'lodash';
 import React from 'react';
-import {useSelectedProject} from 'state/projects';
-import {useReader} from 'utils/fetch';
-import {makeUrl} from 'utils/url';
+import {useSelectedProject} from 'app/state/projects';
+import {useReader} from 'app/utils/fetch';
+import {makeUrl} from 'app/utils/url';
 
 export const TransactionCategoriesField = ({
     values,

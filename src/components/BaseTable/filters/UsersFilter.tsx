@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useSelectedProject} from 'state/projects';
+import {useSelectedProject} from 'app/state/projects';
 import {SelectFilter, SelectFilterProps} from './SelectFilter';
 
 export const UsersFilter = ({onChange, filter}: Pick<SelectFilterProps, 'onChange' | 'filter'>) => (

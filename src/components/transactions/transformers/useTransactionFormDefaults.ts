@@ -1,8 +1,8 @@
 import {TransactionForm} from 'components/transactions/types';
-import {TransactionStatus} from 'defs';
 import {useBootstrap} from 'domain/users/state';
 import moment from 'moment';
 import {useAccounts} from 'domain/accounts/state';
+import {TransactionStatus} from 'transactions/defs';
 
 export const useTransactionFormDefaults = (): TransactionForm => {
     const user = useBootstrap();

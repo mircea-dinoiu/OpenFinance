@@ -42,9 +42,8 @@ import {TransactionsMobileHeader} from 'components/transactions/TransactionsMobi
 import {formToModel} from 'components/transactions/transformers/formToModel';
 import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
-import {TransactionStatus} from 'defs';
-import {Api} from 'defs/Api';
-import {QueryParam} from 'defs/url';
+import {Api} from 'app/Api';
+import {QueryParam} from 'app/url';
 import {Accounts} from 'domain/accounts/defs';
 import {CurrencyMap} from 'domain/currencies/defs';
 import {Bootstrap} from 'domain/users/defs';
@@ -58,14 +57,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
-import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
-import {GlobalState} from 'state/defs';
-import {Project, useSelectedProject} from 'state/projects';
-import {useEndDate} from 'utils/dates';
+import {refreshWidgets as onRefreshWidgets} from 'app/state/actionCreators';
+import {GlobalState} from 'app/state/defs';
+import {Project, useSelectedProject} from 'app/state/projects';
+import {useEndDate} from 'app/dates/helpers';
+import {TransactionStatus} from 'transactions/defs';
 
-import {createXHR, HttpMethod} from 'utils/fetch';
-import {scrollReachedBottom} from 'utils/scroll';
-import {makeUrl, mapUrlToFragment} from 'utils/url';
+import {createXHR, HttpMethod} from 'app/utils/fetch';
+import {scrollReachedBottom} from 'app/utils/scroll';
+import {makeUrl, mapUrlToFragment} from 'app/utils/url';
 
 type TypeOwnProps = {};
 

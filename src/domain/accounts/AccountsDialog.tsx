@@ -1,7 +1,7 @@
 import {Dialog, DialogContent} from '@material-ui/core';
 import {AccountTypeCell, CurrencyCell, NumberFieldCell, StatusCell, TextFieldCell, UrlCell} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
-import {Api} from 'defs/Api';
+import {Api} from 'app/Api';
 import {Account} from 'domain/accounts/defs';
 import React from 'react';
 import {useAccounts, useAccountsReader} from 'domain/accounts/state';

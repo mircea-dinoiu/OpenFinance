@@ -10,7 +10,7 @@ import {financialNum} from 'js/utils/numbers';
 import Decimal from 'decimal.js';
 import {locales} from 'locales';
 import {BigLoader} from 'components/loaders';
-import {firstColumnStyles, numericColumnStyles} from 'styles/column';
+import {firstColumnStyles, numericColumnStyles} from 'app/styles/column';
 
 export const PropertiesPaper = ({
     classes,

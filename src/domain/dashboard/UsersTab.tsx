@@ -4,7 +4,7 @@ import {BigLoader} from 'components/loaders';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {User} from 'domain/users/defs';
 import * as React from 'react';
-import {useSelectedProject} from 'state/projects';
+import {useSelectedProject} from 'app/state/projects';
 
 export const UsersTab = ({reportQueryParams}: {reportQueryParams: string}) => {
     const users = useSelectedProject().users;

@@ -11,7 +11,7 @@ import _ from 'lodash';
 import React from 'react';
 import {Column} from 'react-table-6';
 import {useStocksMap} from 'domain/stocks/state';
-import {firstColumnStyles, numericColumnStyles} from 'styles/column';
+import {firstColumnStyles, numericColumnStyles} from 'app/styles/column';
 
 type StockWithUnits = Stock & {units: Decimal; accounts: number; costBasis: Decimal};
 
