@@ -1,8 +1,9 @@
 import {createAction, createReducer} from '@reduxjs/toolkit';
 import {Api} from 'defs/Api';
+import {Currencies, CurrencyMap} from 'domain/currencies/defs';
 import {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
-import {CurrencyMap, Currencies, GlobalState} from 'types';
+import {GlobalState} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
@@ -10,7 +11,7 @@ export enum CurrenciesAction {
     received = 'currencies/received',
 }
 
-export const currencies = createReducer<Currencies>(
+export const currenciesReducer = createReducer<Currencies>(
     {
         map: {},
     },

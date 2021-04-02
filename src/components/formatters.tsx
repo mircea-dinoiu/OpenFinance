@@ -1,11 +1,11 @@
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {Tooltip} from 'components/Tooltip';
-import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
+import {useCopyTextWithConfirmation} from 'utils/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
 import {HTMLAttributes, ReactNode} from 'react';
-import {useCurrenciesMap} from 'state/currencies';
+import {useCurrenciesMap} from 'domain/currencies/state';
 import {usePrivacyToggle} from 'state/privacyToggle';
 import {colors} from 'styles/colors';
 

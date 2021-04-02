@@ -1,4 +1,4 @@
-import {findCurrencyById, getCurrencyByISOCode} from './currency';
+import {findCurrencyById, getCurrencyByISOCode} from 'domain/currencies/helpers';
 
 const RON = {
     id: 2,

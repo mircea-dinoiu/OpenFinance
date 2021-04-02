@@ -25,7 +25,7 @@ import {Api} from 'defs/Api';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
 import {useAccountsOpen} from 'state/accounts';
-import {useCurrenciesMap} from 'state/currencies';
+import {useCurrenciesMap} from 'domain/currencies/state';
 import {useBootstrap} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';

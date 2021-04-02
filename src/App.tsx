@@ -17,7 +17,7 @@ import {BrowserRouter, generatePath, Redirect, Route, Switch} from 'react-router
 import {Login} from 'routes/Login';
 import {useAccountsReader} from 'state/accounts';
 import {useCategoriesReader} from 'state/categories';
-import {fetchCurrencies} from 'state/currencies';
+import {fetchCurrencies} from 'domain/currencies/state';
 import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {fetchStocks} from 'state/stocks';

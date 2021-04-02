@@ -1,24 +1,12 @@
 import {AlertProps} from '@material-ui/lab';
+import {Currencies} from 'domain/currencies/defs';
 import * as React from 'react';
 import {AccountStatus, AccountType} from 'state/accounts';
-import {Project} from 'state/projects';
-import {Summary} from 'state/summary';
-import {Inventory} from 'state/inventories';
-import {Property} from 'state/properties';
 import {LazyLoadedState} from 'state/defs';
-
-export type Currency = {
-    id: number;
-    iso_code: string;
-};
-
-export type CurrencyMap = {
-    [key: number]: Currency;
-};
-
-export type Currencies = {
-    map: CurrencyMap;
-};
+import {Inventory} from 'state/inventories';
+import {Project} from 'state/projects';
+import {Property} from 'state/properties';
+import {Summary} from 'state/summary';
 
 export enum StockType {
     CUSTOM = 'custom',

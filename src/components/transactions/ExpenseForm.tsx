@@ -25,6 +25,7 @@ import {TransactionNameField} from 'components/transactions/TransactionNameField
 import {TransactionStockFields} from 'components/transactions/TransactionStockFields';
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
+import {CurrencyMap} from 'domain/currencies/defs';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
@@ -36,7 +37,7 @@ import {useSelector} from 'react-redux';
 import {AccountType} from 'state/accounts';
 import {Inventory, useInventories} from 'state/inventories';
 import {useSelectedProject} from 'state/projects';
-import {Account, Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User} from 'types';
+import {Account, Accounts, Bootstrap, Categories, GlobalState, User} from 'types';
 import {useEndDate} from 'utils/dates';
 
 const boxStyle = {

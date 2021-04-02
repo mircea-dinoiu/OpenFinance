@@ -17,7 +17,7 @@ import {formatCurrency} from 'components/formatters';
 import {Api} from 'defs/Api';
 import moment from 'moment';
 import React, {useState} from 'react';
-import {useCurrenciesMap} from 'state/currencies';
+import {useCurrenciesMap} from 'domain/currencies/state';
 import {useCategories} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';

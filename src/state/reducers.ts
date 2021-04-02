@@ -1,6 +1,6 @@
 import uniqueId from 'lodash/uniqueId';
 import {combineReducers} from 'redux';
-import {currencies} from 'state/currencies';
+import {currenciesReducer} from 'domain/currencies/state';
 import {Action} from 'state/defs';
 import {inventoriesReducer} from 'state/inventories';
 import {privacyToggle} from 'state/privacyToggle';
@@ -36,7 +36,7 @@ const categories = bindToUpdateState('categories', []);
 const moneyLocations = bindToUpdateState('moneyLocations', []);
 
 export const combinedReducers = combineReducers({
-    currencies,
+    currencies: currenciesReducer,
 
     refreshWidgets,
     user,

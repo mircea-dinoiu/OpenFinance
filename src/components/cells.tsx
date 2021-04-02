@@ -4,7 +4,7 @@ import startCase from 'lodash/startCase';
 import React from 'react';
 import {TableCellRenderer} from 'react-table-6';
 import {AccountStatus, AccountType} from 'state/accounts';
-import {useCurrenciesMap} from 'state/currencies';
+import {useCurrenciesMap} from 'domain/currencies/state';
 
 export const UrlCell: TableCellRenderer = ({original: row, column}) => {
     const url = row[column.id as string];

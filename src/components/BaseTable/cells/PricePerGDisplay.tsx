@@ -1,8 +1,8 @@
 import {NumericValue} from 'components/formatters';
 import {TransactionModel} from 'components/transactions/types';
-import {getItemCurrencyISOCode} from 'helpers';
+import {getItemCurrencyISOCode} from 'domain/currencies/helpers';
 import * as React from 'react';
-import {useCurrenciesMap} from 'state/currencies';
+import {useCurrenciesMap} from 'domain/currencies/state';
 
 export const PricePerGDisplay = ({item}: {item: TransactionModel}) => {
     const currencies = useCurrenciesMap();

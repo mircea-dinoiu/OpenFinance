@@ -45,6 +45,7 @@ import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {Api} from 'defs/Api';
 import {QueryParam} from 'defs/url';
+import {CurrencyMap} from 'domain/currencies/defs';
 import * as H from 'history';
 import _, {isEqual, range} from 'lodash';
 import groupBy from 'lodash/groupBy';
@@ -57,7 +58,7 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
-import {Accounts, Bootstrap, CurrencyMap, GlobalState} from 'types';
+import {Accounts, Bootstrap, GlobalState} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';

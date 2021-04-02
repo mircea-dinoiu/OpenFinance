@@ -1,6 +1,6 @@
 import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Card, CardContent} from '@material-ui/core';
 import React from 'react';
-import {useCurrenciesMap} from 'state/currencies';
+import {useCurrenciesMap} from 'domain/currencies/state';
 import {sortBy} from 'lodash';
 
 export const CurrencyFilter = <Id extends number | string>({

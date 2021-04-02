@@ -1,9 +1,9 @@
 import {InputAdornment, TextField, TextFieldProps} from '@material-ui/core';
 import {TransactionForm} from 'components/transactions/types';
-import {findCurrencyById} from 'helpers/currency';
+import {findCurrencyById} from 'domain/currencies/helpers';
 import React from 'react';
 import {useAccounts} from 'state/accounts';
-import {useCurrenciesMap} from 'state/currencies';
+import {useCurrenciesMap} from 'domain/currencies/state';
 import {styled} from '@material-ui/core/styles';
 
 export const TransactionAmountFields = ({

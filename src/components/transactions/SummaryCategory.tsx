@@ -5,7 +5,7 @@ import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 
 import React, {ReactNode} from 'react';
-import {useCurrenciesMap} from 'state/currencies';
+import {useCurrenciesMap} from 'domain/currencies/state';
 
 const useStyles = makeStyles((theme) => ({
     expandable: {

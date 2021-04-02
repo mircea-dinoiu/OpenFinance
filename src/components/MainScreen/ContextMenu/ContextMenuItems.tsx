@@ -13,7 +13,7 @@ import UnlockIcon from '@material-ui/icons/LockOpen';
 
 import IconArchive from '@material-ui/icons/Archive';
 import IconUnarchive from '@material-ui/icons/Unarchive';
-import {copyText} from 'helpers/clipboardService';
+import {copyText} from 'utils/clipboardService';
 
 type TypeOnClick = () => any;
 
