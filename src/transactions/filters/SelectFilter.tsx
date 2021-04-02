@@ -151,7 +151,7 @@ class SelectFilterWrapped extends React.PureComponent<
 
         if (this.props.multi) {
             return (
-                <Autocomplete<typeof options[0]>
+                <Autocomplete<typeof options[0], true>
                     renderInput={(params) => <TextField {...params} InputLabelProps={{shrink: true}} />}
                     ChipProps={{
                         color: 'primary',
@@ -170,7 +170,7 @@ class SelectFilterWrapped extends React.PureComponent<
         }
 
         return (
-            <Autocomplete<typeof options[0]>
+            <Autocomplete<typeof options[0], false, true>
                 value={options.find((o) => value === o.value)}
                 onOpen={onOpen}
                 getOptionLabel={(o) => o.label}

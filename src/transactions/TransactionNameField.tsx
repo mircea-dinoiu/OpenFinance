@@ -26,7 +26,7 @@ export const TransactionNameField = ({value, onChange}: {value: string; onChange
     const cls = useStyles();
 
     return (
-        <Autocomplete<DescriptionSuggestion>
+        <Autocomplete<DescriptionSuggestion, false, true, true>
             freeSolo={true}
             options={suggestions}
             getOptionLabel={(o) => o.item}
@@ -46,7 +46,7 @@ export const TransactionNameField = ({value, onChange}: {value: string; onChange
                 />
             )}
             defaultValue={{item: value, usages: 0}}
-            onChange={(event: any, v: DescriptionSuggestion | null) => v && onChange(v.item)}
+            onChange={(event: any, v) => 'string' !== typeof v && onChange(v.item)}
         />
     );
 };

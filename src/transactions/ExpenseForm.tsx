@@ -152,7 +152,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
     renderAccount() {
         return (
             <FormControl fullWidth={true}>
-                <Autocomplete<Account>
+                <Autocomplete<Account, false, true>
                     options={this.props.moneyLocations}
                     getOptionLabel={(o) => o.name}
                     disableClearable={true}

@@ -13,6 +13,8 @@ import {
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {FiberManualRecord} from '@material-ui/icons';
+import SortIcon from '@material-ui/icons/Sort';
+import {ToggleButton, ToggleButtonGroup} from '@material-ui/lab';
 import {Api} from 'app/Api';
 import {createXHR} from 'app/fetch';
 import {formatCurrency} from 'app/formatters';
@@ -40,6 +42,11 @@ type CashFlowResponse = {
     data: Record<number, CashFlowEntry[]>;
 };
 
+enum ChartDirection {
+    ASC = 'asc',
+    DESC = 'desc',
+}
+
 export const CashFlow = () => {
     const cls = useStyles();
     const theme = useTheme();
@@ -55,6 +62,7 @@ export const CashFlow = () => {
     const currenciesMap = useCurrenciesMap();
     const [displaySavings, setDisplaySavings] = useState(false);
     const [excludedCategoryIds, setExcludedCategoryIds] = useState<Record<number, boolean>>({});
+    const [chartDirection, setChartDirection] = useState(ChartDirection.DESC);
 
     const dataForCurrency: Array<{
         name: string;
@@ -109,6 +117,7 @@ export const CashFlow = () => {
         .filter((d) => d.value > 0)
         .map((d, i) => ({
             ...d,
+            value: chartDirection === ChartDirection.DESC ? d.value : dataExpenseSum - d.value,
             color: colors[i],
             name: `${d.label} (${Math.ceil((d.value / dataExpenseSum) * 100)}%)`,
         }));
@@ -158,7 +167,11 @@ export const CashFlow = () => {
                     {response && (
                         <Card style={{backgroundColor: theme.palette.background.default}}>
                             <CardContent
-                                style={{display: 'grid', gridTemplateColumns: 'auto 1fr', gridGap: theme.spacing(2)}}
+                                style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'auto auto 1fr',
+                                    gridGap: theme.spacing(2),
+                                }}
                             >
                                 <FormGroup>
                                     <FormControlLabel
@@ -206,6 +219,25 @@ export const CashFlow = () => {
                                             )
                                         );
                                     })}
+                                </FormGroup>
+                                <FormGroup>
+                                    <ToggleButtonGroup
+                                        orientation="vertical"
+                                        value={chartDirection}
+                                        exclusive
+                                        onChange={(e, dir) => dir && setChartDirection(dir)}
+                                    >
+                                        <ToggleButton value={ChartDirection.DESC}>
+                                            <SortIcon />
+                                        </ToggleButton>
+                                        <ToggleButton value={ChartDirection.ASC}>
+                                            <SortIcon
+                                                style={{
+                                                    transform: 'scaleY(-1)',
+                                                }}
+                                            />
+                                        </ToggleButton>
+                                    </ToggleButtonGroup>
                                 </FormGroup>
                                 <div
                                     style={{

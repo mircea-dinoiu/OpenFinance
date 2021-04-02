@@ -36,7 +36,7 @@ export const TransactionCategoriesField = ({
 
     return (
         <>
-            <Autocomplete<typeof options[0]>
+            <Autocomplete<typeof options[0], true>
                 renderInput={(params) => <TextField {...params} label="Categories" InputLabelProps={{shrink: true}} />}
                 ChipProps={{
                     color: 'primary',
