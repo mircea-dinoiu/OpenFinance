@@ -1,4 +1,5 @@
-import {useProperties, Property} from 'state/properties';
+import {Property} from 'domain/properties/defs';
+import {useProperties} from 'domain/properties/state';
 import React from 'react';
 import {CardHeader, Paper, CardContent, Card} from '@material-ui/core';
 import HouseIcon from '@material-ui/icons/House';

@@ -3,11 +3,11 @@ import {Accounts} from 'domain/accounts/defs';
 import {Categories} from 'domain/categories/defs';
 import {Currencies} from 'domain/currencies/defs';
 import {Inventory} from 'domain/inventories/defs';
+import {Property} from 'domain/properties/defs';
 import {Stock} from 'domain/stocks/defs';
 import {Bootstrap} from 'domain/users/defs';
 import * as React from 'react';
 import {LazyLoadedState} from 'state/defs';
-import {Property} from 'state/properties';
 import {Summary} from 'state/summary';
 
 export type SnackbarProps = {

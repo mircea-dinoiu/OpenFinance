@@ -5,7 +5,7 @@ import {currenciesReducer} from 'domain/currencies/state';
 import {Action} from 'state/defs';
 import {inventoriesReducer} from 'domain/inventories/state';
 import {privacyToggleReducer} from 'domain/privacyToggle/state';
-import {propertiesReducer} from 'state/properties';
+import {propertiesReducer} from 'domain/properties/state';
 import {stocksReducer} from 'domain/stocks/state';
 import {summaryReducer} from 'state/summary';
 import {bindToUpdateState} from 'state/utils';

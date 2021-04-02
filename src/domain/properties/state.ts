@@ -1,14 +1,7 @@
 import {Api} from 'defs/Api';
-import {makeCrudReducer} from 'state/utils';
+import {Property} from 'domain/properties/defs';
 import _ from 'lodash';
-
-export type Property = {
-    id: number;
-    name: string;
-    cost: number;
-    market_value: number;
-    currency_id: number;
-};
+import {makeCrudReducer} from 'state/utils';
 
 const {reducer: propertiesReducer, hook: useProperties} = makeCrudReducer<Property[]>({
     initialState: [],

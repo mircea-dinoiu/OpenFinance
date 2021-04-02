@@ -2,7 +2,7 @@ import {Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper} fro
 import {NumericValue} from 'components/formatters';
 import {BalanceByLocationInventory} from 'components/transactions/types';
 import React from 'react';
-import {useProperties} from 'state/properties';
+import {useProperties} from 'domain/properties/state';
 import {useCurrenciesMap} from 'domain/currencies/state';
 import _ from 'lodash';
 
