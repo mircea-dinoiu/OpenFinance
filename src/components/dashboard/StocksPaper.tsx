@@ -13,10 +13,10 @@ import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSi
 import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
 import {StocksTable} from 'components/dashboard/StocksTable';
 import {BalanceByLocationStock} from 'components/transactions/types';
+import {Account} from 'domain/accounts/defs';
 import {groupBy} from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {useAccounts} from 'domain/accounts/state';
-import {Account} from 'types';
 
 export const StocksPaper = ({
     classes,

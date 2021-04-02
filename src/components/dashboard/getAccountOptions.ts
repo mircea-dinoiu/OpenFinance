@@ -1,6 +1,6 @@
 import {BalanceByLocationStock} from 'components/transactions/types';
+import {Account, Accounts} from 'domain/accounts/defs';
 import _ from 'lodash';
-import {Account, Accounts} from 'types';
 
 export const getAccountOptions = ({stocks, accounts}: {stocks: BalanceByLocationStock[]; accounts: Accounts}) => {
     return _.uniqBy(

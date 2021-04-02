@@ -25,7 +25,7 @@ import {TransactionNameField} from 'components/transactions/TransactionNameField
 import {TransactionStockFields} from 'components/transactions/TransactionStockFields';
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
-import {AccountType} from 'domain/accounts/defs';
+import {Account, Accounts, AccountType} from 'domain/accounts/defs';
 import {Categories} from 'domain/categories/defs';
 import {CurrencyMap} from 'domain/currencies/defs';
 import {Bootstrap, User} from 'domain/users/defs';
@@ -39,7 +39,7 @@ import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {Inventory, useInventories} from 'state/inventories';
 import {useSelectedProject} from 'state/projects';
-import {Account, Accounts, GlobalState} from 'types';
+import {GlobalState} from 'types';
 import {useEndDate} from 'utils/dates';
 
 const boxStyle = {

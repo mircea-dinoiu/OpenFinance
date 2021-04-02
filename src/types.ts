@@ -1,5 +1,5 @@
 import {AlertProps} from '@material-ui/lab';
-import {AccountStatus, AccountType} from 'domain/accounts/defs';
+import {Accounts} from 'domain/accounts/defs';
 import {Categories} from 'domain/categories/defs';
 import {Currencies} from 'domain/currencies/defs';
 import {Bootstrap} from 'domain/users/defs';
@@ -18,20 +18,6 @@ export enum StockType {
 }
 
 export type Stock = {id: number; price: number; symbol: string; currency_id: number; type: StockType};
-
-export type Account = {
-    currency_id: number;
-    id: number;
-    name: string;
-    status: AccountStatus;
-    type: AccountType;
-    credit_limit: number | null;
-    credit_apr: number | null;
-    credit_minpay: number | null;
-    credit_dueday: number | null;
-};
-
-export type Accounts = Account[];
 
 export type SnackbarProps = {
     message: React.ReactNode;

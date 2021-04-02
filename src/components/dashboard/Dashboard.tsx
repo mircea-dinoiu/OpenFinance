@@ -44,7 +44,7 @@ import {useInclude, useIncludePending} from 'components/transactions/helpers';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {BalanceByLocation} from 'components/transactions/types';
 import {Api} from 'defs/Api';
-import {AccountType} from 'domain/accounts/defs';
+import {Account, AccountType} from 'domain/accounts/defs';
 import {paths} from 'js/defs';
 import {locales} from 'locales';
 import _, {groupBy} from 'lodash';
@@ -57,7 +57,6 @@ import {useSelectedProject} from 'state/projects';
 import {useStockPrices} from 'state/stocks';
 import {summaryAssign, SummaryKey} from 'state/summary';
 import {stickyHeaderHeight} from 'styles/stickyHeaderHeight';
-import {Account} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 

@@ -1,10 +1,10 @@
 import {Api} from 'defs/Api';
-import {AccountStatus} from 'domain/accounts/defs';
+import {Account, AccountStatus} from 'domain/accounts/defs';
 import {sortBy} from 'lodash';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateState} from 'state/actionCreators';
 import {useSelectedProject} from 'state/projects';
-import {Account, GlobalState} from 'types';
+import {GlobalState} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
