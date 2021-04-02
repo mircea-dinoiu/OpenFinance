@@ -4,7 +4,7 @@ import {combineReducers} from 'redux';
 import {currenciesReducer} from 'domain/currencies/state';
 import {Action} from 'state/defs';
 import {inventoriesReducer} from 'domain/inventories/state';
-import {privacyToggle} from 'state/privacyToggle';
+import {privacyToggleReducer} from 'domain/privacyToggle/state';
 import {propertiesReducer} from 'state/properties';
 import {stocks} from 'state/stocks';
 import {summaryReducer} from 'state/summary';
@@ -45,7 +45,7 @@ export const combinedReducers = combineReducers({
     stocks,
     moneyLocations,
     snackbars,
-    privacyToggle,
+    privacyToggle: privacyToggleReducer,
     summary: summaryReducer,
     inventories: inventoriesReducer,
     properties: propertiesReducer,

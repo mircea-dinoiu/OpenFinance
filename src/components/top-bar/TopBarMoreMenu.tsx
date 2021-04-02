@@ -3,7 +3,7 @@ import {Api} from 'defs/Api';
 import React, {useState} from 'react';
 import {IconButton, MenuItem, Menu, Checkbox} from '@material-ui/core';
 import {useUsersWithActions} from 'state/hooks';
-import {usePrivacyToggle} from 'state/privacyToggle';
+import {usePrivacyToggle} from 'domain/privacyToggle/state';
 import {CategoriesDialog} from 'domain/categories/CategoriesDialog';
 import {AccountsDialog} from 'domain/accounts/AccountsDialog';
 import {createXHR} from 'utils/fetch';

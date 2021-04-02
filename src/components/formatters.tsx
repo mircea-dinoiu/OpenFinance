@@ -6,7 +6,7 @@ import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
 import {HTMLAttributes, ReactNode} from 'react';
 import {useCurrenciesMap} from 'domain/currencies/state';
-import {usePrivacyToggle} from 'state/privacyToggle';
+import {usePrivacyToggle} from 'domain/privacyToggle/state';
 import {colors} from 'styles/colors';
 
 const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => <span {...props}>▒▒▒▒</span>;
