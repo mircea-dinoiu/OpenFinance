@@ -10,7 +10,7 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import {setUsers} from 'app/state/actionCreators';
-import {createXHR} from 'app/utils/fetch';
+import {createXHR} from 'app/fetch';
 
 export const Login = () => {
     const [email, setEmail] = React.useState('');

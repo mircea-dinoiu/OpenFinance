@@ -43,7 +43,7 @@ import {formToModel} from 'transactions/formToModel';
 import {modelToForm} from 'transactions/modelToForm';
 import {TransactionModel, TransactionStatus, UpdateRecords} from 'transactions/defs';
 import {Api} from 'app/Api';
-import {QueryParam} from 'app/url';
+import {QueryParam} from 'app/QueryParam';
 import {Accounts} from 'accounts/defs';
 import {CurrencyMap} from 'currencies/defs';
 import {Bootstrap} from 'users/defs';
@@ -62,9 +62,9 @@ import {GlobalState} from 'app/state/defs';
 import {Project, useSelectedProject} from 'app/state/projects';
 import {useEndDate} from 'app/dates/helpers';
 
-import {createXHR, HttpMethod} from 'app/utils/fetch';
-import {scrollReachedBottom} from 'app/utils/scroll';
-import {makeUrl, mapUrlToFragment} from 'app/utils/url';
+import {createXHR, HttpMethod} from 'app/fetch';
+import {scrollReachedBottom} from 'app/scroll';
+import {makeUrl, mapUrlToFragment} from 'app/url';
 
 type TypeOwnProps = {};
 

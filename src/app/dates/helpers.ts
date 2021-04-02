@@ -1,10 +1,10 @@
 import {ShiftDateOption} from 'app/dates/defs';
-import {QueryParam} from 'app/url';
+import {QueryParam} from 'app/QueryParam';
 import {IncludeOption} from 'includeDropdown/defs';
 
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
-import {useQueryParamState} from 'app/utils/url';
+import {useQueryParamState} from 'app/url';
 
 export const getStartDate = ({endDate, include}: {endDate: string; include: IncludeOption}): string => {
     let date: Date | null = moment(endDate).toDate();

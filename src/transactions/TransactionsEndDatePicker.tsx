@@ -19,7 +19,7 @@ import moment from 'moment';
 import * as React from 'react';
 import {useHistory} from 'react-router-dom';
 import {shiftDateBack, shiftDateForward, useEndDate, useEndDateIncrement} from 'app/dates/helpers';
-import {mapUrlToFragment} from 'app/utils/url';
+import {mapUrlToFragment} from 'app/url';
 
 export const TransactionsEndDatePicker = () => {
     const history = useHistory();

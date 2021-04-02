@@ -11,7 +11,7 @@ import {generatePath, useLocation, useRouteMatch} from 'react-router-dom';
 import {useProjects, useSelectedProject} from 'app/state/projects';
 import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
 import {shiftDateBack, shiftDateForward} from 'app/dates/helpers';
-import {makeUrl} from 'app/utils/url';
+import {makeUrl} from 'app/url';
 
 const MAX_TIMES = 10;
 

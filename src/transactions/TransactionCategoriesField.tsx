@@ -6,8 +6,8 @@ import {useCategories} from 'categories/state';
 import {sortBy} from 'lodash';
 import React from 'react';
 import {useSelectedProject} from 'app/state/projects';
-import {useReader} from 'app/utils/fetch';
-import {makeUrl} from 'app/utils/url';
+import {useReader} from 'app/fetch';
+import {makeUrl} from 'app/url';
 
 export const TransactionCategoriesField = ({
     values,

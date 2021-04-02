@@ -4,8 +4,8 @@ import {Stock} from 'stocks/defs';
 import {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
 import {GlobalState} from 'app/state/defs';
-import {createXHR} from 'app/utils/fetch';
-import {makeUrl} from 'app/utils/url';
+import {createXHR} from 'app/fetch';
+import {makeUrl} from 'app/url';
 
 enum Action {
     received = 'stocks/received',

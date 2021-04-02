@@ -25,7 +25,7 @@ import {useSelectedProject} from 'app/state/projects';
 import {fetchStocks} from 'stocks/state';
 import {createTheme} from 'app/styles/createTheme';
 
-import {createXHR} from 'app/utils/fetch';
+import {createXHR} from 'app/fetch';
 
 const AppWrapped = () => {
     const dispatch = useDispatch();

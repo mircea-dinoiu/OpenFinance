@@ -1,12 +1,12 @@
 import {IncludeOption} from 'includeDropdown/defs';
 import {TransactionModel} from 'transactions/defs';
-import {QueryParam} from 'app/url';
+import {QueryParam} from 'app/QueryParam';
 import {Accounts, AccountStatus} from 'accounts/defs';
 import {endOfDayToISOString} from 'js/utils/dates';
 import {sumArray} from 'js/utils/numbers';
 import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import moment from 'moment';
-import {useQueryParamState} from 'app/utils/url';
+import {useQueryParamState} from 'app/url';
 
 export const mergeItems = (items: TransactionModel[]): Partial<TransactionModel> | null => {
     const [, ...rest] = items;

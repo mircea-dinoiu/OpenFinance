@@ -57,8 +57,8 @@ import {useSelectedProject} from 'app/state/projects';
 import {useStockPrices} from 'stocks/state';
 import {summaryAssign, SummaryKey} from 'app/state/summary';
 import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
-import {createXHR} from 'app/utils/fetch';
-import {makeUrl} from 'app/utils/url';
+import {createXHR} from 'app/fetch';
+import {makeUrl} from 'app/url';
 
 enum DashboardTab {
     banking = 'banking',

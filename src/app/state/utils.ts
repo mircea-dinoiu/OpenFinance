@@ -2,8 +2,8 @@ import {Action, GlobalState, LazyLoadedState, LazyLoadedStateWithFetch} from 'ap
 import {createAction, createReducer} from '@reduxjs/toolkit';
 import {useSelector, useDispatch} from 'react-redux';
 import {useSelectedProject} from 'app/state/projects';
-import {createXHR} from 'app/utils/fetch';
-import {makeUrl} from 'app/utils/url';
+import {createXHR} from 'app/fetch';
+import {makeUrl} from 'app/url';
 import {useEffect} from 'react';
 
 const stateKeysWithoutReducers: string[] = [];

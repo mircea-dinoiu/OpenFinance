@@ -6,7 +6,7 @@ import {IconButton, MenuItem, Menu, Checkbox} from '@material-ui/core';
 import {usePrivacyToggle} from 'privacyToggle/state';
 import {CategoriesDialog} from 'categories/CategoriesDialog';
 import {AccountsDialog} from 'accounts/AccountsDialog';
-import {createXHR} from 'app/utils/fetch';
+import {createXHR} from 'app/fetch';
 
 export const TopBarMoreMenu = () => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);

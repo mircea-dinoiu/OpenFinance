@@ -28,8 +28,8 @@ import React, {useEffect, useState} from 'react';
 import {useOpenAccounts} from 'accounts/state';
 import {useCurrenciesMap} from 'currencies/state';
 import {useSelectedProject} from 'app/state/projects';
-import {createXHR} from 'app/utils/fetch';
-import {makeUrl} from 'app/utils/url';
+import {createXHR} from 'app/fetch';
+import {makeUrl} from 'app/url';
 
 enum ImportStep {
     ACCOUNT,

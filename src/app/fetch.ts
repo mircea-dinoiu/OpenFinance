@@ -2,7 +2,7 @@ import axios, {AxiosPromise, AxiosRequestConfig, AxiosResponse, CancelToken, Can
 import merge from 'lodash/merge';
 import {useEffect, useRef, useState} from 'react';
 import 'whatwg-fetch';
-import {config} from 'app/utils/config';
+import {config} from 'app/config';
 
 const parseOpts = (opts: AxiosRequestConfig) =>
     merge(

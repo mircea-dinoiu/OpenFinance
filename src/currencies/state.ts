@@ -4,8 +4,8 @@ import {Currencies, CurrencyMap} from 'currencies/defs';
 import {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
 import {GlobalState} from 'app/state/defs';
-import {createXHR} from 'app/utils/fetch';
-import {makeUrl} from 'app/utils/url';
+import {createXHR} from 'app/fetch';
+import {makeUrl} from 'app/url';
 
 export enum CurrenciesAction {
     received = 'currencies/received',
