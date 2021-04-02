@@ -1,5 +1,5 @@
 import {debounce, TextField} from '@material-ui/core';
-import {Timers} from 'app/defs';
+import {Timers} from 'app/timers';
 import {QueryParam} from 'app/url';
 import React, {useEffect, useMemo, useState} from 'react';
 import {useHistory} from 'react-router-dom';

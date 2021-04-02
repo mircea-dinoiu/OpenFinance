@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {StorageKey} from 'app/defs';
+import {StorageKey} from 'app/storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {Action, GlobalState} from 'app/state/defs';
 

@@ -37,7 +37,7 @@ import {useDashboardQueryParams} from 'dashboard/useDashboardQueryParams';
 import {UsersTab} from 'dashboard/UsersTab';
 import {getStockValue} from 'dashboard/useStockValue';
 import {NumericValue} from 'components/formatters';
-import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
+import {IncludeDropdown} from 'includeDropdown/IncludeDropdown';
 import {BigLoader} from 'components/loaders';
 import {TabLink} from 'components/TabLink';
 import {useInclude, useIncludePending} from 'transactions/helpers';
