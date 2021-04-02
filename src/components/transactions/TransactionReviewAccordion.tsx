@@ -5,7 +5,7 @@ import {ExpenseForm} from 'components/transactions/ExpenseForm';
 import {formToModel} from 'components/transactions/transformers/formToModel';
 import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel} from 'components/transactions/types';
-import {Bootstrap} from 'domain/users/defs';
+import {Bootstrap} from 'users/defs';
 import React, {useRef, useState} from 'react';
 
 export const TransactionReviewAccordion = ({

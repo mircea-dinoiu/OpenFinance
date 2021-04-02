@@ -1,7 +1,7 @@
 import {TransactionModel} from 'components/transactions/types';
 import * as React from 'react';
 import {SelectFilterProps, SelectFilter} from 'components/BaseTable/filters/SelectFilter';
-import {useInventories} from 'domain/inventories/state';
+import {useInventories} from 'inventories/state';
 
 const style = {textAlign: 'center'};
 

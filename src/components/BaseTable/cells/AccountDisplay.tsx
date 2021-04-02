@@ -1,6 +1,6 @@
 import IconBlock from '@material-ui/icons/Block';
 import IconLock from '@material-ui/icons/Lock';
-import {Account, AccountStatus} from 'domain/accounts/defs';
+import {Account, AccountStatus} from 'accounts/defs';
 import * as React from 'react';
 
 export const AccountDisplay = (moneyLocation: Account) => {

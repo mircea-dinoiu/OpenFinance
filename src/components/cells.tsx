@@ -1,10 +1,10 @@
 import {TextField, Select, MenuItem, Theme, useTheme} from '@material-ui/core';
-import {AccountStatus, AccountType} from 'domain/accounts/defs';
+import {AccountStatus, AccountType} from 'accounts/defs';
 import _, {sortBy} from 'lodash';
 import startCase from 'lodash/startCase';
 import React from 'react';
 import {TableCellRenderer} from 'react-table-6';
-import {useCurrenciesMap} from 'domain/currencies/state';
+import {useCurrenciesMap} from 'currencies/state';
 
 export const UrlCell: TableCellRenderer = ({original: row, column}) => {
     const url = row[column.id as string];

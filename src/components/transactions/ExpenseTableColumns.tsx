@@ -15,7 +15,7 @@ import {RatingDisplay} from 'components/transactions/cells/RatingDisplay';
 import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import * as React from 'react';
-import {useStocksMap} from 'domain/stocks/state';
+import {useStocksMap} from 'stocks/state';
 import {InventoryColumn} from 'components/BaseTable/columns/InventoryColumn';
 import {numericColumnStyles} from 'app/styles/column';
 

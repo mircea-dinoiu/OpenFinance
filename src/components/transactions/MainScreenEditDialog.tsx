@@ -5,7 +5,7 @@ import {ButtonProgress} from 'components/loaders';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useTransactionFormDefaults} from 'components/transactions/transformers/useTransactionFormDefaults';
 import {TransactionForm, TransactionModel} from 'components/transactions/types';
-import {Bootstrap} from 'domain/users/defs';
+import {Bootstrap} from 'users/defs';
 import {isEqual} from 'lodash';
 
 import {parseCrudError} from 'app/parseCrudError';

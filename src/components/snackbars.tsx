@@ -1,6 +1,6 @@
 import {Snackbar} from '@material-ui/core';
 import {Alert, AlertProps} from '@material-ui/lab';
-import {SnackbarProps} from 'domain/snackbars/defs';
+import {SnackbarProps} from 'snackbars/defs';
 import {uniqueId} from 'lodash';
 import * as React from 'react';
 import {ReactNode, useCallback, useEffect} from 'react';

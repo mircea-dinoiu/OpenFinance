@@ -1,4 +1,4 @@
-import {useCategories} from 'domain/categories/state';
+import {useCategories} from 'categories/state';
 import * as React from 'react';
 import {SelectFilter, SelectFilterProps} from './SelectFilter';
 

@@ -5,7 +5,7 @@ import {ButtonProgress} from 'components/loaders';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useTransactionFormDefaults} from 'components/transactions/transformers/useTransactionFormDefaults';
 import {TransactionForm} from 'components/transactions/types';
-import {useBootstrap} from 'domain/users/state';
+import {useBootstrap} from 'users/state';
 import {parseCrudError} from 'app/parseCrudError';
 import * as React from 'react';
 

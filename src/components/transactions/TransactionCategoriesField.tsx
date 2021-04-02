@@ -2,7 +2,7 @@ import {Chip, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
 import {Api} from 'app/Api';
-import {useCategories} from 'domain/categories/state';
+import {useCategories} from 'categories/state';
 import {sortBy} from 'lodash';
 import React from 'react';
 import {useSelectedProject} from 'app/state/projects';

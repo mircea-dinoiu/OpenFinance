@@ -13,7 +13,7 @@ import {DatePicker} from '@material-ui/pickers';
 import {ShiftDateOption, ShiftDateOptions} from 'app/dates/defs';
 import {ShiftMenu} from 'components/top-bar/ShiftMenu';
 import {getShiftBackOptions, getShiftForwardOptions} from 'components/top-bar/TopBar';
-import {useBootstrap} from 'domain/users/state';
+import {useBootstrap} from 'users/state';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import * as React from 'react';

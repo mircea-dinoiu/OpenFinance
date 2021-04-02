@@ -1,7 +1,7 @@
 import {TransactionModel} from 'components/transactions/types';
 import {IncludeOption} from 'app/defs';
 import {QueryParam} from 'app/url';
-import {Accounts, AccountStatus} from 'domain/accounts/defs';
+import {Accounts, AccountStatus} from 'accounts/defs';
 import {endOfDayToISOString} from 'js/utils/dates';
 import {sumArray} from 'js/utils/numbers';
 import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';

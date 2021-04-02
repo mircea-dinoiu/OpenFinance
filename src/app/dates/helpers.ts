@@ -1,5 +1,5 @@
 import {ShiftDateOption} from 'app/dates/defs';
-import {IncludeOption} from 'defs';
+import {IncludeOption} from 'app/defs';
 import {QueryParam} from 'app/url';
 
 import {endOfDayToISOString} from 'js/utils/dates';

@@ -5,8 +5,8 @@ import {useCopyTextWithConfirmation} from 'app/utils/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
 import {HTMLAttributes, ReactNode} from 'react';
-import {useCurrenciesMap} from 'domain/currencies/state';
-import {usePrivacyToggle} from 'domain/privacyToggle/state';
+import {useCurrenciesMap} from 'currencies/state';
+import {usePrivacyToggle} from 'privacyToggle/state';
 import {colors} from 'app/styles/colors';
 
 const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => <span {...props}>▒▒▒▒</span>;

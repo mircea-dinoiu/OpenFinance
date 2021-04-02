@@ -1,7 +1,7 @@
 import {TransactionForm} from 'components/transactions/types';
-import {Stock} from 'domain/stocks/defs';
+import {Stock} from 'stocks/defs';
 import React from 'react';
-import {useStocks} from 'domain/stocks/state';
+import {useStocks} from 'stocks/state';
 import {TextField} from '@material-ui/core';
 import {Autocomplete} from '@material-ui/lab';
 

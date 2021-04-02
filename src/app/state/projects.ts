@@ -1,4 +1,4 @@
-import {User} from 'domain/users/defs';
+import {User} from 'users/defs';
 import {useSelector} from 'react-redux';
 import {GlobalState} from 'app/state/defs';
 

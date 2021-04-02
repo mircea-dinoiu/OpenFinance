@@ -5,7 +5,7 @@ import {NumericValue} from 'components/formatters';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {SummaryModel} from 'components/transactions/types';
-import {CurrencyMap} from 'domain/currencies/defs';
+import {CurrencyMap} from 'currencies/defs';
 import {sortBy} from 'lodash';
 import React, {ReactNode} from 'react';
 import {colors} from 'app/styles/colors';
