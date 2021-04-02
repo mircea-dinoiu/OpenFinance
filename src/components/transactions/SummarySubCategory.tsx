@@ -1,11 +1,11 @@
-import {Box, CardHeader, Checkbox} from '@material-ui/core';
+import {Box, CardHeader, Checkbox, useTheme} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {NumericValue} from 'components/formatters';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {SummaryModel} from 'components/transactions/types';
-import {colors, theme} from 'defs/styles';
+import {colors} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React, {ReactNode} from 'react';
 import {CurrencyMap} from 'types';
@@ -27,6 +27,7 @@ export const SummarySubCategory = <Ent,>(props: {
 
     const items = sortBy(itemsFromProps, (item) => item.description);
     const cls = useStyles();
+    const theme = useTheme();
 
     return (
         <Box paddingX={1} marginBottom={2}>

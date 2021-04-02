@@ -7,10 +7,9 @@ import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
 import {Transactions} from 'components/transactions/Transactions';
 import {Api} from 'defs/Api';
-import {theme} from 'defs/styles';
 import {paths} from 'js/defs';
 import 'normalize.css';
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
 import {BrowserRouter, generatePath, Redirect, Route, Switch} from 'react-router-dom';
@@ -22,6 +21,7 @@ import {fetchCurrencies} from 'state/currencies';
 import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {fetchStocks} from 'state/stocks';
+import {createTheme} from 'styles/createTheme';
 
 import {createXHR} from 'utils/fetch';
 
@@ -34,6 +34,7 @@ const AppWrapped = () => {
     const [ready, setReady] = useState(false);
     const readCategories = useCategoriesReader();
     const readAccounts = useAccountsReader();
+    const theme = useMemo(() => createTheme(), []);
 
     const fetchUser = async () => {
         try {

@@ -27,7 +27,6 @@ import {Cell, ResponsiveContainer, PieChart, Pie} from 'recharts';
 import * as allColors from '@material-ui/core/colors';
 import {green} from '@material-ui/core/colors';
 import {makeStyles} from '@material-ui/core/styles';
-import {theme} from 'defs/styles';
 
 const colors = Object.values(omit(allColors, 'brown', 'green', 'common'))
     .map((color) => color[300])
@@ -215,13 +214,13 @@ export const CashFlow = () => {
     );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     dateContainer: {
         display: 'grid',
         gridGap: theme.spacing(1),
         gridTemplateColumns: '1fr 1fr',
     },
-});
+}));
 
 const DateSelector = <Value,>({
     options,

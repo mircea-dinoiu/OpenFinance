@@ -1,5 +1,4 @@
-import {TextField, Select, MenuItem} from '@material-ui/core';
-import {theme} from 'defs/styles';
+import {TextField, Select, MenuItem, Theme, useTheme} from '@material-ui/core';
 import _, {sortBy} from 'lodash';
 import startCase from 'lodash/startCase';
 import React from 'react';
@@ -88,10 +87,10 @@ export const CurrencyCell: TableCellRenderer = ({original: row, columnProps}) =>
     return Object.values(currencies).find((c) => c.id === row.currency_id)?.iso_code;
 };
 
-const ColorByStatus: Record<AccountStatus, string> = {
-    [AccountStatus.OPEN]: theme.palette.success.main,
-    [AccountStatus.CLOSED]: theme.palette.error.main,
-    [AccountStatus.LOCKED]: theme.palette.warning.main,
+const ColorByStatus: Record<AccountStatus, (theme: Theme) => string> = {
+    [AccountStatus.OPEN]: (theme) => theme.palette.success.main,
+    [AccountStatus.CLOSED]: (theme) => theme.palette.error.main,
+    [AccountStatus.LOCKED]: (theme) => theme.palette.warning.main,
 };
 
 export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
@@ -100,6 +99,7 @@ export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
         value: value,
         label: startCase(value),
     }));
+    const theme = useTheme();
 
     return editor && editor.id === row.id ? (
         <Select
@@ -119,7 +119,7 @@ export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
         <div
             style={{
                 textAlign: 'center',
-                color: ColorByStatus[row.status],
+                color: ColorByStatus[row.status](theme),
                 fontWeight: 500,
             }}
         >

@@ -2,7 +2,6 @@ import {Card, CardContent} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Flags} from 'components/transactions/MainScreenFlags';
 import {TransactionModel} from 'components/transactions/types';
-import {theme} from 'defs/styles';
 import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -35,7 +34,7 @@ export function DescriptionDisplay({
     );
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     grid: {
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',
@@ -61,4 +60,4 @@ const useStyles = makeStyles({
         },
         whiteSpace: 'break-spaces',
     },
-});
+}));

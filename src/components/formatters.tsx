@@ -1,7 +1,7 @@
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {Tooltip} from 'components/Tooltip';
-import {colors, theme} from 'defs/styles';
+import {colors} from 'defs/styles';
 import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
@@ -22,7 +22,7 @@ export const formatCurrency = (value: number, currency: string) => {
     }).format(value);
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         borderRadius: 5,
         paddingLeft: theme.spacing(1),
@@ -56,7 +56,7 @@ const useStyles = makeStyles({
         padding: theme.spacing(1),
         borderRadius: theme.shape.borderRadius,
     },
-});
+}));
 
 export const NumericValue = ({
     currency: currencyFromProps,
