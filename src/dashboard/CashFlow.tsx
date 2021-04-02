@@ -231,18 +231,6 @@ export const CashFlow = () => {
                                         </Treemap>
                                     </ResponsiveContainer>
                                 </div>
-                                {/*<Treemap
-                                        data={dataExpense}
-                                        label={({index}) =>
-
-                                        }
-                                        dataKey="value"
-                                        stroke={theme.palette.background.default}
-                                    >
-                                        {dataExpense.map((entry, index) => (
-                                            <Cell key={index} fill={entry.isIncome ? green[300] : colors[index]} />
-                                        ))}
-                                    </Treemap>*/}
                             </CardContent>
                         </Card>
                     )}
