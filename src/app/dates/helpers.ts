@@ -1,6 +1,6 @@
 import {ShiftDateOption} from 'app/dates/defs';
 import {QueryParam} from 'app/QueryParam';
-import {IncludeOption} from 'includeDropdown/defs';
+import {IncludeOption} from 'include/defs';
 
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';

@@ -1,5 +1,5 @@
 import {MenuItem, Select} from '@material-ui/core';
-import {IncludeOption, IncludeOptions} from 'includeDropdown/defs';
+import {IncludeOption, IncludeOptions} from 'include/defs';
 import * as React from 'react';
 
 export const IncludeDropdown = ({

@@ -22,13 +22,13 @@ import {BaseTable, TableHeader, TableHeaderTop} from 'app/BaseTable';
 
 import {BigLoader} from 'components/loaders';
 import {ContextMenuItems} from 'transactions/ContextMenuItems';
-import {getTrProps} from 'components/MainScreen/Table/helpers';
 import {Tooltip} from 'components/Tooltip';
 import {WeightDisplay} from 'transactions/cells/WeightDisplay';
 import {ExpenseForm} from 'transactions/ExpenseForm';
 import {ExpenseListItemContent} from 'transactions/ExpenseListItemContent';
 import {makeTransactionsColumns} from 'transactions/ExpenseTableColumns';
-import {mergeItems} from 'transactions/helpers';
+import {getTrProps} from 'transactions/helpers/getTrProps';
+import {mergeTransactions} from 'transactions/helpers/mergeTransactions';
 import {ImportTransactions} from 'transactions/ImportTransactions';
 import {MainScreenCreatorDialog} from 'transactions/MainScreenCreatorDialog';
 import {MainScreenDeleteDialog} from 'transactions/MainScreenDeleteDialog';
@@ -603,7 +603,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     handleMerge = async () => {
         const items = this.selectedItems;
         const [first, ...rest] = items;
-        const merged = mergeItems(items);
+        const merged = mergeTransactions(items);
 
         if (merged) {
             await this.handleRequestUpdate([{id: first.id, ...merged}]);

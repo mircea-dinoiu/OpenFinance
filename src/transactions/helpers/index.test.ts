@@ -1,23 +1,23 @@
-import {mergeItems} from 'transactions/helpers';
+import {mergeTransactions} from 'transactions/helpers/mergeTransactions';
 
 describe('#mergeItems()', () => {
     describe('When there are not enough items', () => {
         it('Should return null', () => {
-            expect(mergeItems([{}])).toEqual(null);
+            expect(mergeTransactions([{}])).toEqual(null);
         });
     });
 
     describe('When there are enough items', () => {
         describe('When money_location_id does not match', () => {
             it('Should return null', () => {
-                expect(mergeItems([{money_location_id: 1}, {money_location_id: 2}])).toEqual(null);
+                expect(mergeTransactions([{money_location_id: 1}, {money_location_id: 2}])).toEqual(null);
             });
         });
 
         describe('When money_location_id matches', () => {
             it('Should return the merged object', () => {
                 expect(
-                    mergeItems([
+                    mergeTransactions([
                         {
                             money_location_id: 1,
                             categories: [1, 2],
