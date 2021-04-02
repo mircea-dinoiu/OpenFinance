@@ -42,7 +42,7 @@ const SubfilterGrid = styled('div')(({theme}) => ({
     gridGap: theme.spacing(2),
     gridTemplateColumns: '1fr 1fr',
     gridTemplateRows: '1fr 1fr',
-    padding: `0 ${theme.spacing(3)}`,
+    padding: theme.spacing(0, 3),
 }));
 
 export const DescriptionFilter = ({onChange, filter}: {onChange: (filter: Filter) => void; filter: Filter}) => {

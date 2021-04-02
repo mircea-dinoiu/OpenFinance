@@ -3,7 +3,6 @@ import {colors, stickyHeaderHeight} from 'defs/styles';
 import * as React from 'react';
 import ReactTable, {TableProps} from 'react-table-6';
 import 'react-table-6/react-table.css';
-import styledComponent from 'styled-components';
 
 export const Classes = {
     pastRow: 'pastRow',
@@ -12,72 +11,72 @@ export const Classes = {
     notSelectable: 'notSelectable',
 };
 
-const ReactTableStyled = styledComponent(ReactTable)`
-    &.ReactTable.ReactTable {
-        font-size: 1rem;
-        border: 0 !important;
+const ReactTableStyled = styled(ReactTable)((props) => ({
+    '&.ReactTable.ReactTable': {
+        fontSize: '1rem',
+        border: '0 !important',
 
-        .rt-tr {
-            transition: all 0.25s ease;
-        }
+        '& .rt-tr': {
+            transition: 'all 0.25s ease',
+        },
 
-        .rt-tr:hover {
-            background: ${colors.hover};
-        }
+        '& .rt-tr:hover': {
+            background: colors.hover,
+        },
 
-        .rt-td,
-        .rt-th {
-            line-height: 20px;
-            padding: 5px;
-            border-right-color: ${colors.borderSecondary};
-        }
+        '& .rt-td, & .rt-th': {
+            lineHeight: '20px',
+            padding: props.theme.spacing(1),
+            borderRightColor: colors.borderSecondary,
+        },
 
-        .rt-tr-group {
-            border-bottom-color: ${colors.borderSecondary};
-        }
+        '& .rt-tr-group': {
+            borderBottomColor: colors.borderSecondary,
+        },
 
-        .rt-thead.-filters {
-            border-bottom-color: ${colors.borderSecondary};
-        }
+        '& .rt-thead.-filters': {
+            borderBottomColor: colors.borderSecondary,
+        },
 
-        .rt-thead.-header {
-            box-shadow: none;
-            font-weight: 500;
-            border-bottom: 1px solid ${colors.borderPrimary};
-        }
-        .rt-tfoot {
-            box-shadow: none;
-            border-top: 1px solid ${colors.borderPrimary};
-            background-color: ${colors.tableFoot};
-        }
+        '& .rt-thead.-header': {
+            boxShadow: 'none',
+            fontWeight: props.theme.typography.fontWeightMedium,
+            borderBottom: `1px solid ${colors.borderPrimary}`,
+        },
 
-        .rt-thead.-filters input {
-            background: transparent;
-            border-color: ${colors.borderPrimary};
-            color: inherit;
-        }
+        '& .rt-tfoot': {
+            boxShadow: 'none',
+            borderTop: `1px solid ${colors.borderPrimary}`,
+            backgroundColor: colors.tableFoot,
+        },
 
-        .${Classes.pastRow} {
-            background: ${colors.pastRow};
-        }
+        '& .rt-thead.-filters input': {
+            background: 'transparent',
+            borderColor: colors.borderPrimary,
+            color: 'inherit',
+        },
 
-        .${Classes.selectedRow}, .${Classes.selectedRow}:hover {
-            background: ${colors.tableHighlight};
-            font-weight: 500;
-        }
+        [`& .${Classes.pastRow}`]: {
+            background: colors.pastRow,
+        },
 
-        .${Classes.hiddenRow} {
-            opacity: 0.5;
-        }
+        [`& .${Classes.selectedRow}, & .${Classes.selectedRow}:hover`]: {
+            background: colors.tableHighlight,
+            fontWeight: props.theme.typography.fontWeightMedium,
+        },
 
-        .${Classes.notSelectable} {
-            user-select: none;
-        }
-    }
-`;
+        [`& .${Classes.hiddenRow}`]: {
+            opacity: 0.5,
+        },
+
+        [`& .${Classes.notSelectable}`]: {
+            userSelect: 'none',
+        },
+    },
+}));
 
 export const TableHeader = styled('div')((props) => ({
-    padding: `0 ${props.theme.spacing(3)} ${props.theme.spacing(1)}`,
+    padding: props.theme.spacing(0, 1, 1),
     fontSize: '1rem',
     borderBottom: `1px solid ${colors.tableHeaderBorder}`,
     position: 'sticky',

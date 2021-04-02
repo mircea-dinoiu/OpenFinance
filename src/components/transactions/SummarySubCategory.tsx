@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
         gridTemplateColumns: '1fr auto auto',
         gridGap: theme.spacing(1),
         borderBottom: `1px solid ${colors.borderSecondary}`,
-        padding: `${theme.spacing(1)} 0`,
+        padding: theme.spacing(1, 0),
         alignItems: 'center',
         '&:hover': {
             backgroundColor: colors.hover,

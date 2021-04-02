@@ -60,7 +60,6 @@
     "recursive-readdir": "^2.2.2",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
-    "styled-components": "^4.3.2",
     "typescript": "^3.8.3",
     "use-persisted-state": "^0.3.3",
     "utility-types": "^3.8.0"

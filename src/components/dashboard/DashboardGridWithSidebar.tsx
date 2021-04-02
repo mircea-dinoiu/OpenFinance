@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
     sidebar: {
         '& > *:not(:last-child)': {
-            marginBottom: theme.spacing(1),
+            marginBottom: theme.spacing(2),
         },
     },
 }));

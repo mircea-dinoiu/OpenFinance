@@ -22,10 +22,10 @@ export const CategoriesDisplay = ({item}: {item: TransactionModel}) => {
     );
 };
 
-const StyledChip = styled(Chip)((props) => ({
-    margin: `${props.theme.spacing(1)} ${props.theme.spacing(1)} 0 0`,
+const StyledChip = styled(Chip)(({theme}) => ({
+    margin: theme.spacing(1, 1, 0, 0),
 
-    [props.theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.up('lg')]: {
         marginTop: 0,
         height: 'auto',
     },

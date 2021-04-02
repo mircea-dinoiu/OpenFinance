@@ -212,7 +212,7 @@ const MarketPriceCol: Column<StockWithUnits> = {
 const useStyles = makeStyles((theme) => ({
     table: {
         '&:not(:last-child)': {
-            marginBottom: theme.spacing(3),
+            marginBottom: theme.spacing(2),
         },
     },
 }));
