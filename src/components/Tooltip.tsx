@@ -1,7 +1,6 @@
-import {Tooltip as MaterialUITooltip} from '@material-ui/core';
+import {Tooltip as MaterialUITooltip, styled} from '@material-ui/core';
 import * as React from 'react';
 import {ReactNode} from 'react';
-import styled from 'styled-components';
 
 export const Tooltip = ({
     children,
