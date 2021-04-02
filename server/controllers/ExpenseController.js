@@ -221,14 +221,16 @@ module.exports = class ExpenseController extends BaseController {
 
         const transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN.map(
             ({DTPOSTED, TRNAMT, FITID, NAME}) => {
+                const sum = Number(TRNAMT);
+
                 return {
                     money_location_id: Number(req.query.accountId),
                     project_id: req.projectId,
                     fitid: FITID,
                     item: NAME,
                     status: 'pending',
-                    price: Number(TRNAMT),
-                    quantity: 1,
+                    price: Math.abs(sum),
+                    quantity: sum < 0 ? -1 : 1,
                     created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
                         .parseZone()
                         .toISOString(),
