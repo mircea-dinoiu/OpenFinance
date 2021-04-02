@@ -32,7 +32,7 @@ import {Bootstrap, User} from 'users/defs';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
-import {locales} from 'locales';
+import {locales} from 'app/locales';
 import {sortBy} from 'lodash';
 
 import React, {PureComponent} from 'react';

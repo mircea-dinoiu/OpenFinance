@@ -47,7 +47,7 @@ import {BalanceByLocation} from 'transactions/defs';
 import {Api} from 'app/Api';
 import {Account, AccountType} from 'accounts/defs';
 import {paths} from 'js/defs';
-import {locales} from 'locales';
+import {locales} from 'app/locales';
 import _, {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';

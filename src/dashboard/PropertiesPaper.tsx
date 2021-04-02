@@ -8,7 +8,7 @@ import {Column} from 'react-table-6';
 import {NumericValue} from 'app/formatters';
 import {financialNum} from 'js/utils/numbers';
 import Decimal from 'decimal.js';
-import {locales} from 'locales';
+import {locales} from 'app/locales';
 import {BigLoader} from 'app/loaders';
 import {firstColumnStyles, numericColumnStyles} from 'app/styles/column';
 

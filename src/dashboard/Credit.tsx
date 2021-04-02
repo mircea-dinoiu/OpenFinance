@@ -2,7 +2,7 @@ import {LinearProgress} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {CashAccount} from 'dashboard/defs';
 import {NumericValue} from 'app/formatters';
-import {locales} from 'locales';
+import {locales} from 'app/locales';
 import React from 'react';
 import {Column} from 'react-table-6';
 import {numericColumnStyles} from 'app/styles/column';

@@ -20,7 +20,7 @@ import IconRemoveCircle from '@material-ui/icons/RemoveCircle';
 import {StorageKey} from 'app/storage';
 import {CashAccount} from 'dashboard/defs';
 import {NumericValue} from 'app/formatters';
-import {locales} from 'locales';
+import {locales} from 'app/locales';
 import {cloneDeep, orderBy} from 'lodash';
 import moment, {Moment} from 'moment';
 import * as React from 'react';

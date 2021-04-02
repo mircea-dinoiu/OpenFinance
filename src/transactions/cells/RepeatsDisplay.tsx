@@ -1,7 +1,7 @@
 import {TransactionModel} from 'transactions/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import * as React from 'react';
-import {locales} from 'locales';
+import {locales} from 'app/locales';
 
 export const RepeatsDisplay = ({item}: {item: TransactionModel}) => {
     const repeatsText = item.repeat ? locales.repeatOptions[item.repeat] : '';

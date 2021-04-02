@@ -6,7 +6,7 @@ import {BalanceByLocationStock} from 'transactions/defs';
 import Decimal from 'decimal.js';
 import {Stock} from 'stocks/defs';
 import {financialNum} from 'js/utils/numbers';
-import {locales} from 'locales';
+import {locales} from 'app/locales';
 import _ from 'lodash';
 import React from 'react';
 import {Column} from 'react-table-6';
