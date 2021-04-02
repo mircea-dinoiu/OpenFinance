@@ -2,6 +2,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {Tooltip} from 'components/Tooltip';
 import {useCopyTextWithConfirmation} from 'app/clipboardService';
+import Decimal from 'decimal.js';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
 import {HTMLAttributes, ReactNode} from 'react';
@@ -15,11 +16,13 @@ export const formatNumber = (value: number) =>
     new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(financialNum(value));
 
 export const formatCurrency = (value: number, currency: string) => {
+    const decimal = new Decimal(value);
+
     return new Intl.NumberFormat(undefined, {
         style: 'currency',
         currency,
         minimumFractionDigits: 2,
-    }).format(value);
+    }).format(decimal.mul(100).floor().div(100).toNumber());
 };
 
 const useStyles = makeStyles((theme) => ({
