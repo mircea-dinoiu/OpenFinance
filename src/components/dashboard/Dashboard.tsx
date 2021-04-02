@@ -44,7 +44,7 @@ import {useInclude, useIncludePending} from 'components/transactions/helpers';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {BalanceByLocation} from 'components/transactions/types';
 import {Api} from 'defs/Api';
-import {spacingLarge, spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
+import {stickyHeaderHeight} from 'defs/styles';
 import {paths} from 'js/defs';
 import {locales} from 'locales';
 import _, {groupBy} from 'lodash';
@@ -350,7 +350,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
 
         [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: '1fr',
@@ -360,12 +360,12 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '100vw',
         position: 'sticky',
         top: stickyHeaderHeight,
-        marginBottom: spacingSmall,
+        marginBottom: theme.spacing(1),
         zIndex: 1,
     },
     paper: {
-        padding: spacingNormal,
-        marginBottom: spacingSmall,
+        padding: theme.spacing(2),
+        marginBottom: theme.spacing(1),
     },
     cardHeader: {
         paddingTop: 0,
@@ -374,14 +374,14 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiCardHeader-title': {
             display: 'grid',
             alignItems: 'center',
-            gridGap: spacingSmall,
+            gridGap: theme.spacing(1),
             gridTemplateColumns: 'auto 1fr',
         },
     },
     cashCreditGrid: {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
 
         [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: '1fr',
@@ -389,7 +389,7 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         '&:not(:last-child)': {
-            marginBottom: spacingLarge,
+            marginBottom: theme.spacing(3),
         },
     },
 }));

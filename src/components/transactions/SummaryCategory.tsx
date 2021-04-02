@@ -1,18 +1,17 @@
 import {makeStyles} from '@material-ui/core/styles';
 import {SummarySubCategory} from 'components/transactions/SummarySubCategory';
 import {SummaryModel} from 'components/transactions/types';
-import {spacingSmall} from 'defs/styles';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 
 import React, {ReactNode} from 'react';
 import {useCurrenciesMap} from 'state/currencies';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     expandable: {
-        padding: spacingSmall,
+        padding: theme.spacing(1),
     },
-});
+}));
 
 export type SummaryCategoryProps<Ent> = {
     summaryObject: SummaryModel[];

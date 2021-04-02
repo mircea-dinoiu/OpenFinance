@@ -2,7 +2,6 @@ import {Card, Container, Divider} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {SmartDrawer} from 'components/drawers';
 import {ContextMenuItems, TypeContextMenuItemsProps} from 'components/MainScreen/ContextMenu/ContextMenuItems';
-import {spacingNormal, spacingSmall} from 'defs/styles';
 import React, {useState} from 'react';
 
 export type MainScreenListItemProps<
@@ -18,15 +17,15 @@ export type MainScreenListItemProps<
     item: Item;
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
-        padding: spacingNormal,
-        marginBottom: spacingSmall,
+        padding: theme.spacing(2),
+        marginBottom: theme.spacing(1),
     },
     moreIcon: {
         padding: 0,
     },
-});
+}));
 
 export const MainScreenListItem = <
     Item extends {

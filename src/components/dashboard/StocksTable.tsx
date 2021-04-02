@@ -4,7 +4,7 @@ import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
 import {BalanceByLocationStock} from 'components/transactions/types';
 import Decimal from 'decimal.js';
-import {firstColumnStyles, numericColumnStyles, spacingLarge} from 'defs/styles';
+import {firstColumnStyles, numericColumnStyles} from 'defs/styles';
 import {financialNum} from 'js/utils/numbers';
 import {locales} from 'locales';
 import _ from 'lodash';
@@ -209,10 +209,10 @@ const MarketPriceCol: Column<StockWithUnits> = {
     ...numericColumnStyles,
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     table: {
         '&:not(:last-child)': {
-            marginBottom: spacingLarge,
+            marginBottom: theme.spacing(3),
         },
     },
-});
+}));

@@ -13,6 +13,7 @@ import {
     TableRow,
     TextField,
 } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import IconAddCircle from '@material-ui/icons/AddCircle';
 import IconClear from '@material-ui/icons/Clear';
 import IconRemoveCircle from '@material-ui/icons/RemoveCircle';
@@ -25,8 +26,6 @@ import moment, {Moment} from 'moment';
 import * as React from 'react';
 import {useMemo} from 'react';
 import createPersistedState from 'use-persisted-state';
-import {makeStyles} from '@material-ui/core/styles';
-import {spacingNormal} from 'defs/styles';
 
 const useAddlCashFlowState = createPersistedState(StorageKey.paymentDialogAddlCashFlow);
 const useSkipPayments = createPersistedState(StorageKey.paymentDialogSkipPayments);
@@ -270,10 +269,10 @@ export const PaymentPlanDialog = ({
     );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     header: {
         display: 'grid',
-        gridGap: spacingNormal,
+        gridGap: theme.spacing(2),
         gridTemplateColumns: '1fr 1fr 1fr',
     },
-});
+}));

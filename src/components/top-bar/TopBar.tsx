@@ -1,11 +1,11 @@
 import {AppBar, MenuItem, Select, Tab, Tabs, Toolbar, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconHome from '@material-ui/icons/Home';
+import {TabLink} from 'components/TabLink';
 import {TopBarMoreMenu} from 'components/top-bar/TopBarMoreMenu';
 import {ShiftDateOption} from 'defs';
-import {spacingNormal, stickyHeaderHeight} from 'defs/styles';
+import {stickyHeaderHeight} from 'defs/styles';
 import {paths} from 'js/defs';
-import {TabLink} from 'components/TabLink';
 import _ from 'lodash';
 import React from 'react';
 import {generatePath, useLocation, useRouteMatch} from 'react-router-dom';
@@ -62,18 +62,12 @@ export const TopBar = () => {
                     <div className={cls.tabs}>
                         <Tabs value={tabs.indexOf(match.path)}>
                             <TabLink
-                                to={makeUrl(
-                                    generatePath(tabs[0], {id: selectedProject.id}),
-                                    persistentSearchParams,
-                                )}
+                                to={makeUrl(generatePath(tabs[0], {id: selectedProject.id}), persistentSearchParams)}
                             >
                                 <Tab label={<IconHome />} />
                             </TabLink>
                             <TabLink
-                                to={makeUrl(
-                                    generatePath(tabs[1], {id: selectedProject.id}),
-                                    persistentSearchParams,
-                                )}
+                                to={makeUrl(generatePath(tabs[1], {id: selectedProject.id}), persistentSearchParams)}
                             >
                                 <Tab label="Transactions" />
                             </TabLink>
@@ -94,10 +88,10 @@ export const TopBar = () => {
     );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     toolbar: {
-        paddingRight: spacingNormal,
-        paddingLeft: spacingNormal,
+        paddingRight: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
         minHeight: stickyHeaderHeight,
     },
     tabs: {
@@ -106,4 +100,4 @@ const useStyles = makeStyles({
         position: 'absolute',
         transform: 'translateX(-50%)',
     },
-});
+}));

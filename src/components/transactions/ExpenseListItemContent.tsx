@@ -1,20 +1,19 @@
 import {makeStyles, styled} from '@material-ui/core/styles';
 import clsx from 'clsx';
+import {AccountDisplayById} from 'components/BaseTable/cells/AccountDisplayById';
 import {AmountDisplay} from 'components/BaseTable/cells/AmountDisplay';
 import {DateDisplay} from 'components/BaseTable/cells/DateDisplay';
-import {AccountDisplayById} from 'components/BaseTable/cells/AccountDisplayById';
 import {RepeatsDisplay} from 'components/BaseTable/cells/RepeatsDisplay';
 import {CategoriesDisplay} from 'components/transactions/cells/CategoriesDisplay';
 import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import {Flags} from 'components/transactions/MainScreenFlags';
 import {TransactionModel} from 'components/transactions/types';
-import {spacingNormal, spacingSmall} from 'defs/styles';
 import * as React from 'react';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     expenseListItemContent: {
         display: 'grid',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
         alignItems: 'center',
         gridTemplateAreas: `
         'description description persons'
@@ -29,7 +28,7 @@ const useStyles = makeStyles({
         'categories categories categories'
 `,
     },
-});
+}));
 
 const DescriptionContainer = styled('div')({gridArea: 'description'});
 
@@ -43,9 +42,9 @@ const AmountContainer = styled('div')({
     flexDirection: 'row',
 });
 
-const FlagsContainer = styled('div')({
-    marginLeft: spacingNormal,
-});
+const FlagsContainer = styled('div')(({theme}) => ({
+    marginLeft: theme.spacing(2),
+}));
 
 const MlContainer = styled('div')({textAlign: 'right', gridArea: 'ml'});
 

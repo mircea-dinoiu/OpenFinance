@@ -1,5 +1,4 @@
-import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles, TextField} from '@material-ui/core';
-import {spacingNormal, spacingSmall} from 'defs/styles';
+import {Button, FormControlLabel, Menu, Radio, RadioGroup, withStyles, TextField, Box} from '@material-ui/core';
 import * as React from 'react';
 import {Filter} from 'react-table-6';
 import {Autocomplete} from '@material-ui/lab';
@@ -210,12 +209,7 @@ class SelectFilterWrapped extends React.PureComponent<
                     onClose={this.handleClose}
                     classes={this.props.classes}
                 >
-                    <div
-                        style={{
-                            padding: `${spacingSmall} ${spacingNormal}`,
-                            width: 200,
-                        }}
-                    >
+                    <Box paddingY={1} paddingX={2} width={200}>
                         <RadioGroup
                             value={this.state.radioValue}
                             onChange={(event) => {
@@ -261,7 +255,7 @@ class SelectFilterWrapped extends React.PureComponent<
                             })}
                             {this.renderSelect('exclude')}
                         </RadioGroup>
-                    </div>
+                    </Box>
                 </Menu>
             </>
         );

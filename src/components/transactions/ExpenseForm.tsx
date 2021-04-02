@@ -25,7 +25,6 @@ import {TransactionNameField} from 'components/transactions/TransactionNameField
 import {TransactionStockFields} from 'components/transactions/TransactionStockFields';
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
-import {gridGap, spacingLarge, spacingSmall} from 'defs/styles';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
@@ -493,20 +492,20 @@ export const ExpenseForm = (ownProps: TypeOwnProps) => {
     );
 };
 
-const TypeStatusFlagsContainer = styled('div')(props => ({
+const TypeStatusFlagsContainer = styled('div')(({theme}) => ({
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gridGap: spacingLarge,
+    gridGap: theme.spacing(3),
 
-    [props.theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('sm')]: {
         gridTemplateColumns: '1fr',
         gridTemplateRows: '1fr 1fr',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
     },
 }));
 
-const RepeatContainer = styled('div')({
+const RepeatContainer = styled('div')(({theme}) => ({
     display: 'grid',
-    gridGap: gridGap,
+    gridGap: theme.spacing(2),
     gridTemplateColumns: '1fr 1fr 1fr',
-});
+}));

@@ -1,7 +1,7 @@
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {Tooltip} from 'components/Tooltip';
-import {spacingNormal, spacingSmall, theme, colors} from 'defs/styles';
+import {colors, theme} from 'defs/styles';
 import {useCopyTextWithConfirmation} from 'helpers/clipboardService';
 import {financialNum} from 'js/utils/numbers';
 import * as React from 'react';
@@ -25,8 +25,8 @@ export const formatCurrency = (value: number, currency: string) => {
 const useStyles = makeStyles({
     container: {
         borderRadius: 5,
-        paddingLeft: spacingSmall,
-        paddingRight: spacingSmall,
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
     },
     positive: {
         background: theme.palette.success.main,
@@ -44,7 +44,7 @@ const useStyles = makeStyles({
     },
     tooltipParts: {
         display: 'grid',
-        gridGap: spacingNormal,
+        gridGap: theme.spacing(2),
         gridTemplateColumns: '1fr',
         margin: 0,
         padding: 0,
@@ -53,7 +53,7 @@ const useStyles = makeStyles({
     tooltipPart: {
         backgroundColor: colors.tooltipBg,
         margin: 0,
-        padding: spacingSmall,
+        padding: theme.spacing(1),
         borderRadius: theme.shape.borderRadius,
     },
 });

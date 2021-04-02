@@ -2,11 +2,11 @@ import {LinearProgress} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {CashAccount} from 'components/dashboard/defs';
 import {NumericValue} from 'components/formatters';
-import {numericColumnStyles, spacingSmall} from 'defs/styles';
+import {numericColumnStyles} from 'defs/styles';
+import {locales} from 'locales';
 import React from 'react';
 import {Column} from 'react-table-6';
 import {makeTotalFooter} from './makeTotalFooter';
-import {locales} from 'locales';
 
 export const CreditAprCol: Column<CashAccount> = {
     Header: locales.apr,
@@ -85,11 +85,11 @@ const BalanceProgress = ({progress}: {progress: number}) => {
     );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     values: {
         display: 'grid',
         gridTemplateColumns: '1fr auto',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
         textAlign: 'left',
         alignItems: 'center',
     },
@@ -107,4 +107,4 @@ const useStyles = makeStyles({
         top: 0,
         left: 0,
     },
-});
+}));

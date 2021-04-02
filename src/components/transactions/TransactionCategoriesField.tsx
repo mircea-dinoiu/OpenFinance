@@ -1,14 +1,13 @@
 import {Chip, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
+import {Autocomplete} from '@material-ui/lab';
 import {Api} from 'defs/Api';
-import {spacingNormal, spacingSmall} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React from 'react';
 import {useCategories} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {useReader} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
-import {Autocomplete} from '@material-ui/lab';
 
 export const TransactionCategoriesField = ({
     values,
@@ -66,12 +65,12 @@ export const TransactionCategoriesField = ({
     );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     suggestions: {
-        marginTop: spacingNormal,
+        marginTop: theme.spacing(2),
     },
     chip: {
-        marginTop: spacingSmall,
-        marginLeft: spacingSmall,
+        marginTop: theme.spacing(1),
+        marginLeft: theme.spacing(1),
     },
-});
+}));

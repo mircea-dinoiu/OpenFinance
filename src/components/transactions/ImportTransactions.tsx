@@ -22,7 +22,6 @@ import {FloatingSnackbar} from 'components/snackbars';
 import {TransactionReviewAccordion} from 'components/transactions/TransactionReviewAccordion';
 import {TransactionModel} from 'components/transactions/types';
 import {Api} from 'defs/Api';
-import {spacingLarge, spacingSmall} from 'defs/styles';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
 import {useAccountsOpen} from 'state/accounts';
@@ -242,12 +241,12 @@ export const ImportTransactions = ({onSubmit}: {onSubmit: (transactions: Transac
     );
 };
 
-const useDropzoneStyles = makeStyles({
+const useDropzoneStyles = makeStyles((theme) => ({
     root: {
-        padding: spacingLarge,
-        marginTop: spacingSmall,
+        padding: theme.spacing(3),
+        marginTop: theme.spacing(1),
     },
-});
+}));
 
 const useStyles = makeStyles({
     dialogContent: {

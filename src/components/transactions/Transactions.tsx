@@ -1,11 +1,13 @@
 import {
+    Box,
     Button,
     Checkbox,
     Fab,
     FormControlLabel,
     LinearProgress,
     Menu,
-    Paper, Theme,
+    Paper,
+    Theme,
     useMediaQuery,
 } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
@@ -42,7 +44,6 @@ import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
 import {Api} from 'defs/Api';
-import {spacingSmall} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import * as H from 'history';
 import _, {isEqual, range} from 'lodash';
@@ -387,7 +388,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     ).slice(0, 12);
 
                     return (
-                        <div style={{marginTop: spacingSmall}}>
+                        <Box marginTop={1}>
                             {byYear.map(([year, transactions]) => this.renderStats(year, transactions))}
                             {byMonth.map(([dateString, transactions]) => {
                                 const date = moment(dateString);
@@ -399,7 +400,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                                     transactions,
                                 );
                             })}
-                        </div>
+                        </Box>
                     );
                 })()}
             </TableHeader>
@@ -556,7 +557,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     );
     handleRequestDelete = (ids: number[]) => this.handleRequest({ids}, Api.transactions, 'DELETE');
     handleRequestUpdate = (data: Partial<TransactionModel>[]) => this.handleRequest({data}, Api.transactions, 'PUT');
-    handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) => this.handleRequest({data}, Api.transactions, 'POST');
+    handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) =>
+        this.handleRequest({data}, Api.transactions, 'POST');
 
     sanitizeItem = (item: TransactionModel) =>
         crudProps.formToModel(crudProps.modelToForm(item), {
@@ -798,7 +800,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 }
 
 export const Transactions = (ownProps: TypeOwnProps) => {
-    const stateProps = useSelector(({ refreshWidgets, currencies, moneyLocations, user}: GlobalState) => ({
+    const stateProps = useSelector(({refreshWidgets, currencies, moneyLocations, user}: GlobalState) => ({
         refreshWidgets,
         currencies,
         moneyLocations,

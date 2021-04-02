@@ -1,11 +1,11 @@
-import {CardHeader, Checkbox} from '@material-ui/core';
+import {Box, CardHeader, Checkbox} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {NumericValue} from 'components/formatters';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {SummaryModel} from 'components/transactions/types';
-import {spacingNormal, spacingSmall, theme, colors} from 'defs/styles';
+import {colors, theme} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React, {ReactNode} from 'react';
 import {CurrencyMap} from 'types';
@@ -29,7 +29,7 @@ export const SummarySubCategory = <Ent,>(props: {
     const cls = useStyles();
 
     return (
-        <div style={{padding: '0 5px', marginBottom: spacingNormal}}>
+        <Box paddingX={1} marginBottom={2}>
             {shouldGroup && (
                 <CardHeader
                     classes={cardHeaderClasses}
@@ -78,11 +78,11 @@ export const SummarySubCategory = <Ent,>(props: {
                     </div>
                 </li>
             </ul>
-        </div>
+        </Box>
     );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     checkbox: {
         padding: 0,
     },
@@ -93,9 +93,9 @@ const useStyles = makeStyles({
     listItem: {
         display: 'grid',
         gridTemplateColumns: '1fr auto auto',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
         borderBottom: `1px solid ${colors.borderSecondary}`,
-        padding: `${spacingSmall} 0`,
+        padding: `${theme.spacing(1)} 0`,
         alignItems: 'center',
         '&:hover': {
             backgroundColor: colors.hover,
@@ -105,4 +105,4 @@ const useStyles = makeStyles({
         backgroundColor: colors.tableFoot,
         fontWeight: 500,
     },
-});
+}));

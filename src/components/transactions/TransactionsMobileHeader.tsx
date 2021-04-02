@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {TransactionsSearchField} from 'components/transactions/TransactionsSearchField';
-import { spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
+import {stickyHeaderHeight} from 'defs/styles';
 import React from 'react';
 
 export const TransactionsMobileHeader = ({onTransactionAdd}: {onTransactionAdd: () => void}) => {
@@ -24,14 +24,14 @@ export const TransactionsMobileHeader = ({onTransactionAdd}: {onTransactionAdd: 
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        padding: spacingNormal,
+        padding: theme.spacing(2),
         position: 'sticky',
         top: stickyHeaderHeight,
         zIndex: 2,
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         alignItems: 'end',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
         [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: '1fr',
             gridTemplateRows: 'auto auto',
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     searchGrid: {
         display: 'grid',
         gridTemplateColumns: '1fr auto auto',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
         alignItems: 'end',
     },
 }));

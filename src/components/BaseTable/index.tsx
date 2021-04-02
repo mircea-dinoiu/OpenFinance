@@ -1,8 +1,9 @@
-import {colors, gridGap, spacingLarge, spacingSmall, stickyHeaderHeight} from 'defs/styles';
+import {styled, Theme} from '@material-ui/core';
+import {colors, stickyHeaderHeight} from 'defs/styles';
 import * as React from 'react';
 import ReactTable, {TableProps} from 'react-table-6';
 import 'react-table-6/react-table.css';
-import styled from 'styled-components';
+import styledComponent from 'styled-components';
 
 export const Classes = {
     pastRow: 'pastRow',
@@ -11,7 +12,7 @@ export const Classes = {
     notSelectable: 'notSelectable',
 };
 
-const ReactTableStyled = styled(ReactTable)`
+const ReactTableStyled = styledComponent(ReactTable)`
     &.ReactTable.ReactTable {
         font-size: 1rem;
         border: 0 !important;
@@ -75,23 +76,23 @@ const ReactTableStyled = styled(ReactTable)`
     }
 `;
 
-export const TableHeader = styled.div`
-    padding: 0 ${spacingLarge} ${spacingSmall};
-    font-size: 1rem;
-    border-bottom: 1px solid ${colors.tableHeaderBorder};
-    position: sticky;
-    top: ${stickyHeaderHeight};
-    z-index: 1;
-    background: ${colors.tableHeaderBg};
-    border-radius: 4px;
-`;
+export const TableHeader = styled('div')((props) => ({
+    padding: `0 ${props.theme.spacing(3)} ${props.theme.spacing(1)}`,
+    fontSize: '1rem',
+    borderBottom: `1px solid ${colors.tableHeaderBorder}`,
+    position: 'sticky',
+    top: stickyHeaderHeight,
+    zIndex: 1,
+    background: colors.tableHeaderBg,
+    borderRadius: '4px',
+}));
 
-export const TableHeaderTop = styled.div`
-    display: grid;
-    grid-gap: ${gridGap};
-    grid-template-columns: repeat(${(props: {columnCount: number}) => props.columnCount}, max-content);
-    align-items: center;
-`;
+export const TableHeaderTop = styled('div')((props: {columnCount: number; theme: Theme}) => ({
+    display: 'grid',
+    gridGap: props.theme.spacing(2),
+    gridTemplateColumns: `repeat(${props.columnCount}, max-content)`,
+    alignItems: 'center',
+}));
 
 export function BaseTable<D>(props: Partial<TableProps<D>>) {
     return (

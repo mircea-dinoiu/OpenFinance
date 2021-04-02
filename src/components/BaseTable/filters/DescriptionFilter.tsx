@@ -1,6 +1,5 @@
 import {FormControlLabel, IconButton, Menu, Radio, RadioGroup} from '@material-ui/core';
 import IconFilterList from '@material-ui/icons/FilterList';
-import {gridGap, spacingLarge} from 'defs/styles';
 import * as React from 'react';
 import {SyntheticEvent} from 'react';
 import {DebounceInput} from 'react-debounce-input';
@@ -38,13 +37,13 @@ const Subfilter = ({
     </div>
 );
 
-const SubfilterGrid = styled('div')({
+const SubfilterGrid = styled('div')(({theme}) => ({
     display: 'grid',
-    gridGap: gridGap,
+    gridGap: theme.spacing(2),
     gridTemplateColumns: '1fr 1fr',
     gridTemplateRows: '1fr 1fr',
-    padding: `0 ${spacingLarge}`,
-});
+    padding: `0 ${theme.spacing(3)}`,
+}));
 
 export const DescriptionFilter = ({onChange, filter}: {onChange: (filter: Filter) => void; filter: Filter}) => {
     const handleChange = (name: string, value: string) => {

@@ -6,7 +6,6 @@ import IconEdit from '@material-ui/icons/Edit';
 import IconSave from '@material-ui/icons/Save';
 import {BaseTable} from 'components/BaseTable';
 import {FloatingSnackbar} from 'components/snackbars';
-import {spacingSmall} from 'defs/styles';
 import {pick} from 'lodash';
 import React, {useState} from 'react';
 import {RowInfo, TableProps} from 'react-table-6';
@@ -133,15 +132,15 @@ export const TableWithInlineEditing = <D extends {id: number}>({
     );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     actions: {
         display: 'grid',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
         gridTemplateColumns: '1fr 1fr',
     },
     confirmation: {
         display: 'grid',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
         gridTemplateColumns: '1fr auto auto',
         alignItems: 'center',
     },
@@ -151,4 +150,4 @@ const useStyles = makeStyles({
     icon: {
         cursor: 'pointer',
     },
-});
+}));

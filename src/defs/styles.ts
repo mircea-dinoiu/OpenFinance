@@ -1,4 +1,4 @@
-import {blueGrey, lightGreen, red, amber} from '@material-ui/core/colors';
+import {amber, blueGrey, lightGreen, red} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
 import {Column} from 'react-table-6';
 
@@ -12,13 +12,7 @@ export const dialog = {
     },
 };
 
-export const spacingSmall = '5px';
-export const spacingNormal = '10px';
-export const spacingLarge = '20px';
-
 export const stickyHeaderHeight = '48px';
-
-export const gridGap = spacingNormal;
 
 export const colors = {
     hover: blueGrey[700],

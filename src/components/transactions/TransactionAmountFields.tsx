@@ -1,6 +1,5 @@
 import {InputAdornment, TextField, TextFieldProps} from '@material-ui/core';
 import {TransactionForm} from 'components/transactions/types';
-import {gridGap} from 'defs/styles';
 import {findCurrencyById} from 'helpers/currency';
 import React from 'react';
 import {useAccounts} from 'state/accounts';
@@ -74,9 +73,9 @@ export const TransactionAmountFields = ({
     );
 };
 
-const TransactionAmountFieldsStyled = styled('div')({
+const TransactionAmountFieldsStyled = styled('div')((props) => ({
     display: 'grid',
-    gridGap: gridGap,
+    gridGap: props.theme.spacing(2),
     gridTemplateColumns: 'repeat(3, 1fr)',
     alignItems: 'center',
-});
+}));

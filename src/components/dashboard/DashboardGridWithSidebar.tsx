@@ -1,5 +1,4 @@
 import {makeStyles} from '@material-ui/core/styles';
-import {spacingNormal} from 'defs/styles';
 import React, {ReactNode} from 'react';
 
 export const DashboardGridWithSidebar = ({sidebar, children}: {sidebar: ReactNode; children: ReactNode}) => {
@@ -17,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',
-        gridGap: spacingNormal,
+        gridGap: theme.spacing(2),
         [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: '1fr',
         },

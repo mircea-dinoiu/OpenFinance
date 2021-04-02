@@ -1,10 +1,10 @@
-import {Flags} from 'components/transactions/MainScreenFlags';
-import {TransactionModel} from 'components/transactions/types';
-import * as React from 'react';
-import ReactMarkdown from 'react-markdown';
 import {Card, CardContent} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {spacingSmall, theme, spacingLarge} from 'defs/styles';
+import {Flags} from 'components/transactions/MainScreenFlags';
+import {TransactionModel} from 'components/transactions/types';
+import {theme} from 'defs/styles';
+import * as React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 export function DescriptionDisplay({
     item,
@@ -39,21 +39,21 @@ const useStyles = makeStyles({
     grid: {
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',
-        gridGap: spacingSmall,
+        gridGap: theme.spacing(1),
         whiteSpace: 'nowrap',
     },
     card: {
-        marginTop: spacingSmall,
+        marginTop: theme.spacing(1),
     },
     cardContent: {
         '&, &:last-child': {
-            padding: spacingSmall,
+            padding: theme.spacing(1),
         },
         '& p': {
             margin: 0,
         },
         '& ul': {
-            paddingLeft: spacingLarge,
+            paddingLeft: theme.spacing(3),
             margin: 0,
         },
         '& a:link, a:visited': {
