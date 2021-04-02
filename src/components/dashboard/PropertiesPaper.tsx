@@ -4,12 +4,12 @@ import {CardHeader, Paper, CardContent, Card} from '@material-ui/core';
 import HouseIcon from '@material-ui/icons/House';
 import {BaseTable} from 'components/BaseTable';
 import {Column} from 'react-table-6';
-import {firstColumnStyles, numericColumnStyles} from 'defs/styles';
 import {NumericValue} from 'components/formatters';
 import {financialNum} from 'js/utils/numbers';
 import Decimal from 'decimal.js';
 import {locales} from 'locales';
 import {BigLoader} from 'components/loaders';
+import {firstColumnStyles, numericColumnStyles} from 'styles/column';
 
 export const PropertiesPaper = ({
     classes,

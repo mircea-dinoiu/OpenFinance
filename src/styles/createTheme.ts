@@ -22,7 +22,7 @@ export const createTheme = () => {
         contrastThreshold: 0,
         type: 'dark',
     };
-    
+
     const theme = createMuiTheme({
         palette,
         overrides: {

@@ -1,8 +1,9 @@
 import {styled, Theme} from '@material-ui/core';
-import {colors, stickyHeaderHeight} from 'defs/styles';
 import * as React from 'react';
 import ReactTable, {TableProps} from 'react-table-6';
 import 'react-table-6/react-table.css';
+import {colors} from 'styles/colors';
+import {stickyHeaderHeight} from 'styles/stickyHeaderHeight';
 
 export const Classes = {
     pastRow: 'pastRow',

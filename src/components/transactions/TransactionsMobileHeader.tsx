@@ -3,8 +3,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {TransactionsSearchField} from 'components/transactions/TransactionsSearchField';
-import {stickyHeaderHeight} from 'defs/styles';
 import React from 'react';
+import {stickyHeaderHeight} from 'styles/stickyHeaderHeight';
 
 export const TransactionsMobileHeader = ({onTransactionAdd}: {onTransactionAdd: () => void}) => {
     const cls = useStyles();

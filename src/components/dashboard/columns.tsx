@@ -1,9 +1,9 @@
 import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
 import {NumericValue} from 'components/formatters';
-import {firstColumnStyles, numericColumnStyles} from 'defs/styles';
 import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {Column} from 'react-table-6';
+import {firstColumnStyles, numericColumnStyles} from 'styles/column';
 import {makeTotalFooter} from './makeTotalFooter';
 
 export const NameCol: Column<CashAccount> = {

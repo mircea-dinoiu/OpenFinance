@@ -14,10 +14,10 @@ import {PersonsDisplay} from 'components/transactions/cells/PersonsDisplay';
 import {RatingDisplay} from 'components/transactions/cells/RatingDisplay';
 import {WeightDisplay} from 'components/transactions/cells/WeightDisplay';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
-import {numericColumnStyles} from 'defs/styles';
 import * as React from 'react';
 import {useStocksMap} from 'state/stocks';
 import {InventoryColumn} from 'components/BaseTable/columns/InventoryColumn';
+import {numericColumnStyles} from 'styles/column';
 
 export const makeTransactionsColumns = ({updateRecords}: {updateRecords: UpdateRecords}) => [
     QuantityCol,

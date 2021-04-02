@@ -5,9 +5,9 @@ import {NumericValue} from 'components/formatters';
 import {useCardHeaderStyles} from 'components/transactions/styles';
 import {SummaryTotal} from 'components/transactions/SummaryTotal';
 import {SummaryModel} from 'components/transactions/types';
-import {colors} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React, {ReactNode} from 'react';
+import {colors} from 'styles/colors';
 import {CurrencyMap} from 'types';
 
 export const SummarySubCategory = <Ent,>(props: {

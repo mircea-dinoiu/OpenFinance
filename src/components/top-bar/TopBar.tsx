@@ -4,12 +4,12 @@ import IconHome from '@material-ui/icons/Home';
 import {TabLink} from 'components/TabLink';
 import {TopBarMoreMenu} from 'components/top-bar/TopBarMoreMenu';
 import {ShiftDateOption} from 'defs';
-import {stickyHeaderHeight} from 'defs/styles';
 import {paths} from 'js/defs';
 import _ from 'lodash';
 import React from 'react';
 import {generatePath, useLocation, useRouteMatch} from 'react-router-dom';
 import {useProjects, useSelectedProject} from 'state/projects';
+import {stickyHeaderHeight} from 'styles/stickyHeaderHeight';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import {makeUrl} from 'utils/url';
 
