@@ -1,5 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import {Box} from '@material-ui/core';
+import {Box, CssBaseline} from '@material-ui/core';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {Dashboard} from 'components/dashboard/Dashboard';
@@ -22,34 +22,11 @@ import {fetchCurrencies} from 'state/currencies';
 import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {fetchStocks} from 'state/stocks';
-import {createGlobalStyle} from 'styled-components';
 
 import {createXHR} from 'utils/fetch';
 
 import {Bootstrap} from './types';
 
-const ResponsiveGlobalStyle = createGlobalStyle`
-    html, body, #root {
-        height: 100%;
-        font-size: 14px;
-    }
-    
-    body {
-        font-family: Roboto, sans-serif;
-        font-weight: 300;
-        background: ${theme.palette.background.default};
-        -webkit-font-smoothing: antialiased;
-        overflow-y: scroll;
-    }
-
-    * {
-        outline: none !important;
-    }
-    
-    .MuiSlider-valueLabel.MuiSlider-valueLabel {
-        z-index: auto;
-    }
-`;
 
 const AppWrapped = () => {
     const dispatch = useDispatch();
@@ -93,23 +70,21 @@ const AppWrapped = () => {
     return (
         <MuiPickersUtilsProvider utils={MomentUtils}>
             <MuiThemeProvider theme={theme}>
-                <>
-                    <ResponsiveGlobalStyle />
-                    <BrowserRouter>
-                        {ready && (
-                            <Switch>
-                                <Route exact={true} strict={false} path={paths.login} component={Login} />
-                                <Route
-                                    exact={true}
-                                    strict={false}
-                                    path={[paths.home, paths.dashboard, paths.transactions]}
-                                    component={AppInner}
-                                />
-                            </Switch>
-                        )}
-                        <FloatingSnackbar {...snackbar} open={snackbar != null} />
-                    </BrowserRouter>
-                </>
+                <CssBaseline />
+                <BrowserRouter>
+                    {ready && (
+                        <Switch>
+                            <Route exact={true} strict={false} path={paths.login} component={Login} />
+                            <Route
+                                exact={true}
+                                strict={false}
+                                path={[paths.home, paths.dashboard, paths.transactions]}
+                                component={AppInner}
+                            />
+                        </Switch>
+                    )}
+                    <FloatingSnackbar {...snackbar} open={snackbar != null} />
+                </BrowserRouter>
             </MuiThemeProvider>
         </MuiPickersUtilsProvider>
     );

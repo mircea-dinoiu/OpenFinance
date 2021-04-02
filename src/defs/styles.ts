@@ -47,6 +47,31 @@ export const theme = createMuiTheme({
         contrastThreshold: 0,
         type: 'dark',
     },
+    overrides: {
+        MuiCssBaseline: {
+            '@global': {
+                'html, body, #root': {
+                    height: '100%',
+                    fontSize: '14px',
+                },
+                body: {
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 300,
+                    background: blueGrey[900],
+                    '-webkit-font-smoothing': 'antialiased',
+                    overflowY: 'scroll',
+                },
+                '*': {
+                    outline: 'none !important',
+                },
+            },
+        },
+        MuiSlider: {
+            valueLabel: {
+                zIndex: 'auto',
+            },
+        },
+    },
 });
 
 if (process.env.NODE_ENV !== 'production') {
