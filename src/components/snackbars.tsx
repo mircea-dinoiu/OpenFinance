@@ -1,11 +1,11 @@
 import {Snackbar} from '@material-ui/core';
 import {Alert, AlertProps} from '@material-ui/lab';
+import {SnackbarProps} from 'domain/snackbars/defs';
 import {uniqueId} from 'lodash';
 import * as React from 'react';
 import {ReactNode, useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {hideSnackbar, showSnackbar} from 'state/actionCreators';
-import {SnackbarProps} from 'types';
 
 export const FloatingSnackbar = ({
     open = true,

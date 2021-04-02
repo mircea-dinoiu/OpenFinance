@@ -8,7 +8,7 @@ import {TransactionForm, TransactionModel} from 'components/transactions/types';
 import {Bootstrap} from 'domain/users/defs';
 import {isEqual} from 'lodash';
 
-import {parseCRUDError} from 'parsers';
+import {parseCrudError} from 'app/parseCrudError';
 import * as React from 'react';
 import {ReactNode, useEffect, useRef, useState} from 'react';
 
@@ -93,7 +93,7 @@ export const MainScreenEditDialog = (props: TypeProps) => {
             props.onSave();
         } catch (e) {
             if (e.response) {
-                setError(parseCRUDError(e.response.data));
+                setError(parseCrudError(e.response.data));
             } else {
                 setError(e.message);
             }

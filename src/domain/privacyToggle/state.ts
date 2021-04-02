@@ -1,8 +1,7 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {StorageKey} from 'defs';
 import {useDispatch, useSelector} from 'react-redux';
-import {Action} from 'state/defs';
-import {GlobalState} from 'types';
+import {Action, GlobalState} from 'state/defs';
 
 const key = StorageKey.privacyToggle;
 

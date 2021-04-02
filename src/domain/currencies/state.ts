@@ -3,7 +3,7 @@ import {Api} from 'defs/Api';
 import {Currencies, CurrencyMap} from 'domain/currencies/defs';
 import {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
-import {GlobalState} from 'types';
+import {GlobalState} from 'state/defs';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 

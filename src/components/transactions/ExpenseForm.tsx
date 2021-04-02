@@ -39,8 +39,8 @@ import {sortBy} from 'lodash';
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {useInventories} from 'domain/inventories/state';
+import {GlobalState} from 'state/defs';
 import {useSelectedProject} from 'state/projects';
-import {GlobalState} from 'types';
 import {useEndDate} from 'utils/dates';
 
 const boxStyle = {

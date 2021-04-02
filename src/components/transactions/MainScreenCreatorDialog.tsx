@@ -6,7 +6,7 @@ import {ErrorSnackbar} from 'components/snackbars';
 import {useTransactionFormDefaults} from 'components/transactions/transformers/useTransactionFormDefaults';
 import {TransactionForm} from 'components/transactions/types';
 import {useBootstrap} from 'domain/users/state';
-import {parseCRUDError} from 'parsers';
+import {parseCrudError} from 'app/parseCrudError';
 import * as React from 'react';
 
 type TypeProps = {
@@ -48,7 +48,7 @@ export const MainScreenCreatorDialog = (props: TypeProps) => {
             props.onSave();
         } catch (e) {
             if (e.response) {
-                setError(parseCRUDError(e.response.data));
+                setError(parseCrudError(e.response.data));
                 setSaving(false);
             } else {
                 setError(e.message);

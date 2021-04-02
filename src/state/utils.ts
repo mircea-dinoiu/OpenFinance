@@ -1,7 +1,6 @@
-import {Action, LazyLoadedState, LazyLoadedStateWithFetch} from 'state/defs';
+import {Action, GlobalState, LazyLoadedState, LazyLoadedStateWithFetch} from 'state/defs';
 import {createAction, createReducer} from '@reduxjs/toolkit';
 import {useSelector, useDispatch} from 'react-redux';
-import {GlobalState} from 'types';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';

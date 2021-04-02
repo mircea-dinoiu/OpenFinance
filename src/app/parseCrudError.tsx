@@ -1,7 +1,7 @@
 import {startCase} from 'lodash';
 import React from 'react';
 
-export const parseCRUDError = (
+export const parseCrudError = (
     json: {
         [key: string]: string[];
     }[],

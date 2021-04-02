@@ -59,8 +59,8 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
+import {GlobalState} from 'state/defs';
 import {Project, useSelectedProject} from 'state/projects';
-import {GlobalState} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';

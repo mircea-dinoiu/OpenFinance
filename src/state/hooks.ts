@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {GlobalState} from 'types';
+import {GlobalState} from 'state/defs';
 
 export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();

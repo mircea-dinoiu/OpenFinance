@@ -1,6 +1,6 @@
 import {User} from 'domain/users/defs';
 import {useSelector} from 'react-redux';
-import {GlobalState} from 'types';
+import {GlobalState} from 'state/defs';
 
 export type Project = {
     id: number;
