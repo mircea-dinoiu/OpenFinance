@@ -1,6 +1,6 @@
 import {CardHeader, Paper, Theme, useMediaQuery} from '@material-ui/core';
 import IconStock from '@material-ui/icons/TrendingUp';
-import {BaseTable} from 'components/BaseTable';
+import {BaseTable} from 'app/BaseTable';
 import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'dashboard/columns';
 import {DashboardGridWithSidebar} from 'dashboard/DashboardGridWithSidebar';
 import {BrokerageAccount} from 'dashboard/defs';

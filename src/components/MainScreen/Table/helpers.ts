@@ -1,5 +1,5 @@
-import {Classes} from 'components/BaseTable';
-import {TransactionModel} from 'components/transactions/types';
+import {Classes} from 'app/BaseTable';
+import {TransactionModel} from 'transactions/defs';
 import {formatYMD} from 'app/dates/helpers';
 
 const today = formatYMD(new Date());

@@ -3,7 +3,7 @@ import {useProperties} from 'properties/state';
 import React from 'react';
 import {CardHeader, Paper, CardContent, Card} from '@material-ui/core';
 import HouseIcon from '@material-ui/icons/House';
-import {BaseTable} from 'components/BaseTable';
+import {BaseTable} from 'app/BaseTable';
 import {Column} from 'react-table-6';
 import {NumericValue} from 'components/formatters';
 import {financialNum} from 'js/utils/numbers';

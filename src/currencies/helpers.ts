@@ -1,4 +1,4 @@
-import {TransactionModel} from 'components/transactions/types';
+import {TransactionModel} from 'transactions/defs';
 import {Currency, CurrencyMap} from 'currencies/defs';
 
 export const findCurrencyById = (id: number, currencies: CurrencyMap): Currency => currencies[String(id)];

@@ -1,4 +1,4 @@
-import {BalanceByLocationStock} from 'components/transactions/types';
+import {BalanceByLocationStock} from 'transactions/defs';
 import {Account, Accounts} from 'accounts/defs';
 import _ from 'lodash';
 

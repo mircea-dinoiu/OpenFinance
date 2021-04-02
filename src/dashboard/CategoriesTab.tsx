@@ -2,7 +2,7 @@ import {CardHeader} from '@material-ui/core';
 import {useCategories} from 'categories/state';
 import {useSummaryResults} from 'dashboard/useSummaryResults';
 import {BigLoader} from 'components/loaders';
-import {SummaryCategory} from 'components/transactions/SummaryCategory';
+import {SummaryCategory} from 'transactions/SummaryCategory';
 import * as React from 'react';
 
 export const CategoriesTab = ({reportQueryParams}: {reportQueryParams: string}) => {

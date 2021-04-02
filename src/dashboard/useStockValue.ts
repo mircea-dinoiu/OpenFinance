@@ -1,4 +1,4 @@
-import {BalanceByLocationStock} from 'components/transactions/types';
+import {BalanceByLocationStock} from 'transactions/defs';
 import {useStockPrices} from 'stocks/state';
 
 export const useStockValue = (stocks: Omit<BalanceByLocationStock, 'money_location_id'>[]) => {

@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {BalanceByLocation} from 'components/transactions/types';
+import {BalanceByLocation} from 'transactions/defs';
 import {useSelector} from 'react-redux';
 import {Action, GlobalState} from 'app/state/defs';
 

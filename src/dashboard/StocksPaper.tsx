@@ -12,7 +12,7 @@ import IconStock from '@material-ui/icons/TrendingUp';
 import {DashboardGridWithSidebar} from 'dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'dashboard/filters/CurrencyFilter';
 import {StocksTable} from 'dashboard/StocksTable';
-import {BalanceByLocationStock} from 'components/transactions/types';
+import {BalanceByLocationStock} from 'transactions/defs';
 import {Account} from 'accounts/defs';
 import {groupBy} from 'lodash';
 import React, {useEffect, useState} from 'react';

@@ -1,7 +1,7 @@
 import {CardHeader} from '@material-ui/core';
 import {useSummaryResults} from 'dashboard/useSummaryResults';
 import {BigLoader} from 'components/loaders';
-import {SummaryCategory} from 'components/transactions/SummaryCategory';
+import {SummaryCategory} from 'transactions/SummaryCategory';
 import {User} from 'users/defs';
 import * as React from 'react';
 import {useSelectedProject} from 'app/state/projects';

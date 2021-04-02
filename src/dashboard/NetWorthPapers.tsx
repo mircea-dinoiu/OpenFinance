@@ -1,6 +1,6 @@
 import {Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper} from '@material-ui/core';
 import {NumericValue} from 'components/formatters';
-import {BalanceByLocationInventory} from 'components/transactions/types';
+import {BalanceByLocationInventory} from 'transactions/defs';
 import React from 'react';
 import {useProperties} from 'properties/state';
 import {useCurrenciesMap} from 'currencies/state';

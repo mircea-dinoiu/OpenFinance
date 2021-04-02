@@ -1,4 +1,4 @@
-import {SummaryResults} from 'components/transactions/types';
+import {SummaryResults} from 'transactions/defs';
 import {Api} from 'app/Api';
 import * as React from 'react';
 import {useRefreshWidgets} from 'app/state/hooks';

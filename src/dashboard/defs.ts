@@ -1,4 +1,4 @@
-import {BalanceByLocationStock} from 'components/transactions/types';
+import {BalanceByLocationStock} from 'transactions/defs';
 import {Account} from 'accounts/defs';
 
 export type CashAccount = Account & {total: number};

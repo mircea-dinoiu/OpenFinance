@@ -5,7 +5,7 @@ import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {Dashboard} from 'dashboard/Dashboard';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
-import {Transactions} from 'components/transactions/Transactions';
+import {Transactions} from 'transactions/Transactions';
 import {Api} from 'app/Api';
 import {useSnackbars} from 'snackbars/state';
 import {Bootstrap} from 'users/defs';

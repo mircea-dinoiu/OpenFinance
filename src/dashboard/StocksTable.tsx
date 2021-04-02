@@ -1,8 +1,8 @@
 import {Theme, Typography, useMediaQuery} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {BaseTable} from 'components/BaseTable';
+import {BaseTable} from 'app/BaseTable';
 import {NumericValue} from 'components/formatters';
-import {BalanceByLocationStock} from 'components/transactions/types';
+import {BalanceByLocationStock} from 'transactions/defs';
 import Decimal from 'decimal.js';
 import {Stock} from 'stocks/defs';
 import {financialNum} from 'js/utils/numbers';
