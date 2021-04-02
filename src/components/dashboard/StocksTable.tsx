@@ -4,14 +4,14 @@ import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
 import {BalanceByLocationStock} from 'components/transactions/types';
 import Decimal from 'decimal.js';
+import {Stock} from 'domain/stocks/defs';
 import {financialNum} from 'js/utils/numbers';
 import {locales} from 'locales';
 import _ from 'lodash';
 import React from 'react';
 import {Column} from 'react-table-6';
-import {useStocksMap} from 'state/stocks';
+import {useStocksMap} from 'domain/stocks/state';
 import {firstColumnStyles, numericColumnStyles} from 'styles/column';
-import {Stock} from 'types';
 
 type StockWithUnits = Stock & {units: Decimal; accounts: number; costBasis: Decimal};
 

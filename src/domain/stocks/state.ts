@@ -1,8 +1,9 @@
 import {createAction, createReducer} from '@reduxjs/toolkit';
 import {Api} from 'defs/Api';
+import {Stock} from 'domain/stocks/defs';
 import {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
-import {GlobalState, Stock} from 'types';
+import {GlobalState} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
 
@@ -10,7 +11,7 @@ enum Action {
     received = 'stocks/received',
 }
 
-export const stocks = createReducer<Stock[]>([], {
+export const stocksReducer = createReducer<Stock[]>([], {
     [Action.received]: (
         state,
         {

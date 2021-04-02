@@ -21,7 +21,7 @@ import {useCategoriesReader} from 'domain/categories/state';
 import {fetchCurrencies} from 'domain/currencies/state';
 import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
-import {fetchStocks} from 'state/stocks';
+import {fetchStocks} from 'domain/stocks/state';
 import {createTheme} from 'styles/createTheme';
 
 import {createXHR} from 'utils/fetch';

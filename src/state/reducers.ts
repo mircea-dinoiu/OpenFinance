@@ -6,7 +6,7 @@ import {Action} from 'state/defs';
 import {inventoriesReducer} from 'domain/inventories/state';
 import {privacyToggleReducer} from 'domain/privacyToggle/state';
 import {propertiesReducer} from 'state/properties';
-import {stocks} from 'state/stocks';
+import {stocksReducer} from 'domain/stocks/state';
 import {summaryReducer} from 'state/summary';
 import {bindToUpdateState} from 'state/utils';
 import {Snackbar} from 'types';
@@ -42,7 +42,7 @@ export const combinedReducers = combineReducers({
     refreshWidgets,
     user,
     categories,
-    stocks,
+    stocks: stocksReducer,
     moneyLocations,
     snackbars,
     privacyToggle: privacyToggleReducer,

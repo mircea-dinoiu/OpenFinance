@@ -1,9 +1,9 @@
 import {TransactionForm} from 'components/transactions/types';
+import {Stock} from 'domain/stocks/defs';
 import React from 'react';
-import {useStocks} from 'state/stocks';
+import {useStocks} from 'domain/stocks/state';
 import {TextField} from '@material-ui/core';
 import {Autocomplete} from '@material-ui/lab';
-import {Stock} from 'types';
 
 export const TransactionStockFields = ({
     values: {stockId},

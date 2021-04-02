@@ -54,7 +54,7 @@ import {generatePath, useParams} from 'react-router-dom';
 import {useAccounts} from 'domain/accounts/state';
 import {useRefreshWidgets} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
-import {useStockPrices} from 'state/stocks';
+import {useStockPrices} from 'domain/stocks/state';
 import {summaryAssign, SummaryKey} from 'state/summary';
 import {stickyHeaderHeight} from 'styles/stickyHeaderHeight';
 import {createXHR} from 'utils/fetch';
