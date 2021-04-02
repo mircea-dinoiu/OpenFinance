@@ -1,8 +1,8 @@
 import {Box, Button, Card, CardHeader, Checkbox, Divider, FormControlLabel, TextField} from '@material-ui/core';
 import {styled} from '@material-ui/core/styles';
 import {setUsers} from 'app/users/state';
-import {ButtonProgress} from 'components/loaders';
-import {ErrorSnackbar} from 'components/snackbars';
+import {ButtonProgress} from 'app/loaders';
+import {ErrorSnackbar} from 'app/snackbars';
 import {Api} from 'app/Api';
 import {Bootstrap} from 'users/defs';
 import {useBootstrap} from 'users/state';

@@ -14,7 +14,7 @@ import {
 import {useCategories} from 'categories/state';
 import {DashboardGridWithSidebar} from 'dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'dashboard/filters/CurrencyFilter';
-import {formatCurrency} from 'components/formatters';
+import {formatCurrency} from 'app/formatters';
 import {Api} from 'app/Api';
 import moment from 'moment';
 import React, {useState} from 'react';

@@ -1,4 +1,4 @@
-import {NumericValue} from 'components/formatters';
+import {NumericValue} from 'app/formatters';
 import {TransactionModel} from 'transactions/defs';
 import {getItemCurrencyISOCode} from 'currencies/helpers';
 import React from 'react';

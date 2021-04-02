@@ -1,4 +1,4 @@
-import {useTemporarySnackbar} from 'components/snackbars';
+import {useTemporarySnackbar} from 'app/snackbars';
 import * as React from 'react';
 import {useCallback} from 'react';
 

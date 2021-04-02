@@ -5,7 +5,7 @@ import IconDelete from '@material-ui/icons/Delete';
 import IconEdit from '@material-ui/icons/Edit';
 import IconSave from '@material-ui/icons/Save';
 import {BaseTable} from 'app/BaseTable';
-import {FloatingSnackbar} from 'components/snackbars';
+import {FloatingSnackbar} from 'app/snackbars';
 import {pick} from 'lodash';
 import React, {useState} from 'react';
 import {RowInfo, TableProps} from 'react-table-6';

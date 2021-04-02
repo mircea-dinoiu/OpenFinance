@@ -8,7 +8,7 @@ import {CategoriesFilter} from 'transactions/filters/CategoriesFilter';
 import {DescriptionFilter} from 'transactions/filters/DescriptionFilter';
 import {StockSymbolFilter} from 'transactions/filters/StockSymbolFilter';
 import {UsersFilter} from 'transactions/filters/UsersFilter';
-import {NumericValue} from 'components/formatters';
+import {NumericValue} from 'app/formatters';
 import {CategoriesDisplay} from 'transactions/cells/CategoriesDisplay';
 import {PersonsDisplay} from 'transactions/cells/PersonsDisplay';
 import {RatingDisplay} from 'transactions/cells/RatingDisplay';

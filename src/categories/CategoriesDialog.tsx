@@ -1,5 +1,5 @@
 import {Dialog, DialogContent} from '@material-ui/core';
-import {TextFieldCell} from 'components/cells';
+import {TextFieldCell} from 'app/cells';
 import {TableWithInlineEditing} from 'app/TableWithInlineEditing';
 import {Api} from 'app/Api';
 import {Category} from 'categories/defs';

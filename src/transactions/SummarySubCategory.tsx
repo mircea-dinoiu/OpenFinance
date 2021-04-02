@@ -1,7 +1,7 @@
 import {Box, CardHeader, Checkbox, useTheme} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
-import {NumericValue} from 'components/formatters';
+import {NumericValue} from 'app/formatters';
 import {useCardHeaderStyles} from 'transactions/styles';
 import {SummaryTotal} from 'transactions/SummaryTotal';
 import {SummaryModel} from 'transactions/defs';

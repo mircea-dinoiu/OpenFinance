@@ -19,7 +19,7 @@ import IconClear from '@material-ui/icons/Clear';
 import IconRemoveCircle from '@material-ui/icons/RemoveCircle';
 import {StorageKey} from 'app/storage';
 import {CashAccount} from 'dashboard/defs';
-import {NumericValue} from 'components/formatters';
+import {NumericValue} from 'app/formatters';
 import {locales} from 'locales';
 import {cloneDeep, orderBy} from 'lodash';
 import moment, {Moment} from 'moment';

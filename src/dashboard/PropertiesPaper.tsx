@@ -5,11 +5,11 @@ import {CardHeader, Paper, CardContent, Card} from '@material-ui/core';
 import HouseIcon from '@material-ui/icons/House';
 import {BaseTable} from 'app/BaseTable';
 import {Column} from 'react-table-6';
-import {NumericValue} from 'components/formatters';
+import {NumericValue} from 'app/formatters';
 import {financialNum} from 'js/utils/numbers';
 import Decimal from 'decimal.js';
 import {locales} from 'locales';
-import {BigLoader} from 'components/loaders';
+import {BigLoader} from 'app/loaders';
 import {firstColumnStyles, numericColumnStyles} from 'app/styles/column';
 
 export const PropertiesPaper = ({

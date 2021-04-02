@@ -1,4 +1,4 @@
-import {NumericValue} from 'components/formatters';
+import {NumericValue} from 'app/formatters';
 import {SummaryModel} from 'transactions/defs';
 import {financialNum} from 'js/utils/numbers';
 import groupBy from 'lodash/groupBy';

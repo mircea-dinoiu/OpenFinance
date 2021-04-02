@@ -2,8 +2,8 @@ import {AppBar, MenuItem, Select, Tab, Tabs, Toolbar, Typography} from '@materia
 import {makeStyles} from '@material-ui/core/styles';
 import IconHome from '@material-ui/icons/Home';
 import {ShiftDateOption} from 'app/dates/defs';
-import {TabLink} from 'components/TabLink';
-import {TopBarMoreMenu} from 'components/top-bar/TopBarMoreMenu';
+import {TabLink} from 'app/TabLink';
+import {TopBarMoreMenu} from 'app/topBar/TopBarMoreMenu';
 import {paths} from 'js/defs';
 import _ from 'lodash';
 import React from 'react';

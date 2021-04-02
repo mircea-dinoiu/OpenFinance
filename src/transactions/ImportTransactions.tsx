@@ -18,7 +18,7 @@ import {
 import {makeStyles} from '@material-ui/core/styles';
 import IconUpload from '@material-ui/icons/CloudUpload';
 import {AxiosResponse} from 'axios';
-import {FloatingSnackbar} from 'components/snackbars';
+import {FloatingSnackbar} from 'app/snackbars';
 import {TransactionReviewAccordion} from 'transactions/TransactionReviewAccordion';
 import {TransactionModel} from 'transactions/defs';
 import {Api} from 'app/Api';

@@ -1,6 +1,6 @@
 import {Card, Container, Divider} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {SmartDrawer} from 'components/drawers';
+import {SmartDrawer} from 'app/drawers';
 import {ContextMenuItems, TypeContextMenuItemsProps} from 'transactions/ContextMenuItems';
 import React, {useState} from 'react';
 

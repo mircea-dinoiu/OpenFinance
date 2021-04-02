@@ -1,6 +1,6 @@
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
-import {Tooltip} from 'components/Tooltip';
+import {Tooltip} from 'app/Tooltip';
 import {useCopyTextWithConfirmation} from 'app/clipboardService';
 import Decimal from 'decimal.js';
 import {financialNum} from 'js/utils/numbers';

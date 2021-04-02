@@ -1,4 +1,4 @@
-import {formatCurrency} from 'components/formatters';
+import {formatCurrency} from 'app/formatters';
 
 describe('#formatCurrency()', () => {
     it('Should work', () => {

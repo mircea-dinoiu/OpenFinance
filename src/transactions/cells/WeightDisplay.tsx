@@ -1,4 +1,4 @@
-import {formatNumber} from 'components/formatters';
+import {formatNumber} from 'app/formatters';
 import {TransactionModel} from 'transactions/defs';
 import React from 'react';
 

@@ -1,5 +1,5 @@
 import {Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper} from '@material-ui/core';
-import {NumericValue} from 'components/formatters';
+import {NumericValue} from 'app/formatters';
 import {BalanceByLocationInventory} from 'transactions/defs';
 import React from 'react';
 import {useProperties} from 'properties/state';

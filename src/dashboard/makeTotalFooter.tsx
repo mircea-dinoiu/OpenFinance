@@ -1,4 +1,4 @@
-import {NumericValue} from 'components/formatters';
+import {NumericValue} from 'app/formatters';
 import React from 'react';
 import {CashAccount} from 'dashboard/defs';
 

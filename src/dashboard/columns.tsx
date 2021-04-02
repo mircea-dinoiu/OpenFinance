@@ -1,5 +1,5 @@
 import {BrokerageAccount, CashAccount} from 'dashboard/defs';
-import {NumericValue} from 'components/formatters';
+import {NumericValue} from 'app/formatters';
 import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {Column} from 'react-table-6';

@@ -1,8 +1,8 @@
 import {Button, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
-import {SmartDrawer} from 'components/drawers';
-import {ButtonProgress} from 'components/loaders';
+import {SmartDrawer} from 'app/drawers';
+import {ButtonProgress} from 'app/loaders';
 
-import {ErrorSnackbar} from 'components/snackbars';
+import {ErrorSnackbar} from 'app/snackbars';
 import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
 import {TransactionForm} from 'transactions/defs';
 import {useBootstrap} from 'users/state';

@@ -1,6 +1,6 @@
 import {Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, ListItemText} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {formatCurrency} from 'components/formatters';
+import {formatCurrency} from 'app/formatters';
 import {ExpenseForm} from 'transactions/ExpenseForm';
 import {formToModel} from 'transactions/formToModel';
 import {modelToForm} from 'transactions/modelToForm';

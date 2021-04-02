@@ -21,10 +21,10 @@ import IconStarBorder from '@material-ui/icons/StarBorder';
 import {BaseTable, TableHeader, TableHeaderTop} from 'app/BaseTable';
 import {refreshWidgets as onRefreshWidgets} from 'refreshWidgets/state';
 
-import {BigLoader} from 'components/loaders';
+import {BigLoader} from 'app/loaders';
 import {Project} from 'projects/defs';
 import {ContextMenuItems} from 'transactions/ContextMenuItems';
-import {Tooltip} from 'components/Tooltip';
+import {Tooltip} from 'app/Tooltip';
 import {WeightDisplay} from 'transactions/cells/WeightDisplay';
 import {ExpenseForm} from 'transactions/ExpenseForm';
 import {ExpenseListItemContent} from 'transactions/ExpenseListItemContent';
