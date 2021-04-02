@@ -11,6 +11,7 @@ import {
     ListItem,
     ListItemText,
 } from '@material-ui/core';
+import {useCategories} from 'domain/categories/state';
 import {DashboardGridWithSidebar} from 'domain/dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'domain/dashboard/filters/CurrencyFilter';
 import {formatCurrency} from 'components/formatters';
@@ -18,7 +19,6 @@ import {Api} from 'defs/Api';
 import moment from 'moment';
 import React, {useState} from 'react';
 import {useCurrenciesMap} from 'domain/currencies/state';
-import {useCategories} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';

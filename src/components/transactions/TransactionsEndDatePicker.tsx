@@ -13,11 +13,11 @@ import {DatePicker} from '@material-ui/pickers';
 import {ShiftMenu} from 'components/top-bar/ShiftMenu';
 import {getShiftBackOptions, getShiftForwardOptions} from 'components/top-bar/TopBar';
 import {ShiftDateOption, ShiftDateOptions} from 'defs';
+import {useBootstrap} from 'domain/users/state';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import * as React from 'react';
 import {useHistory} from 'react-router-dom';
-import {useBootstrap} from 'state/hooks';
 import {shiftDateBack, shiftDateForward, useEndDate, useEndDateIncrement} from 'utils/dates';
 import {mapUrlToFragment} from 'utils/url';
 

@@ -4,12 +4,12 @@ import {ButtonProgress} from 'components/loaders';
 import {ErrorSnackbar} from 'components/snackbars';
 import {Api} from 'defs/Api';
 import {Bootstrap} from 'domain/users/defs';
+import {useBootstrap} from 'domain/users/state';
 import {paths} from 'js/defs';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import {setUsers} from 'state/actionCreators';
-import {useBootstrap} from 'state/hooks';
 import {createXHR} from 'utils/fetch';
 
 export const Login = () => {

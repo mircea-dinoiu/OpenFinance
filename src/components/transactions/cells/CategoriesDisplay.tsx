@@ -1,7 +1,7 @@
 import {Chip, styled} from '@material-ui/core';
 import {TransactionModel} from 'components/transactions/types';
+import {useCategories} from 'domain/categories/state';
 import * as React from 'react';
-import {useCategories} from 'state/hooks';
 
 export const CategoriesDisplay = ({item}: {item: TransactionModel}) => {
     const categories = useCategories();

@@ -4,8 +4,7 @@ import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {Api} from 'defs/Api';
 import {Category} from 'domain/categories/defs';
 import React from 'react';
-import {useCategoriesReader} from 'domain/categories/state';
-import {useCategories} from 'state/hooks';
+import {useCategories, useCategoriesReader} from 'domain/categories/state';
 
 export const CategoriesDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) => {
     const rows = useCategories();
