@@ -1,36 +1,34 @@
 import {
     Card,
     CardContent,
-    useTheme,
-    FormControlLabel,
     Checkbox,
     Divider,
+    FormControlLabel,
     FormGroup,
-    Paper,
     List,
     ListItem,
     ListItemText,
+    Paper,
+    useTheme,
 } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import {FiberManualRecord} from '@material-ui/icons';
+import {Api} from 'app/Api';
+import {createXHR} from 'app/fetch';
+import {formatCurrency} from 'app/formatters';
+import {makeUrl} from 'app/url';
 import {useCategories} from 'categories/state';
+import {useCurrenciesMap} from 'currencies/state';
 import {DashboardGridWithSidebar} from 'dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'dashboard/filters/CurrencyFilter';
-import {formatCurrency} from 'app/formatters';
-import {Api} from 'app/Api';
+import _, {sortBy, sumBy} from 'lodash';
 import moment from 'moment';
-import React, {useState} from 'react';
-import {useCurrenciesMap} from 'currencies/state';
 import {useSelectedProject} from 'projects/state';
-import {createXHR} from 'app/fetch';
-import {makeUrl} from 'app/url';
-import _, {sortBy, sumBy, omit} from 'lodash';
-import {Cell, ResponsiveContainer, PieChart, Pie} from 'recharts';
-import * as allColors from '@material-ui/core/colors';
-import {green} from '@material-ui/core/colors';
-import {makeStyles} from '@material-ui/core/styles';
+import React, {useState} from 'react';
+import {ResponsiveContainer, Tooltip, Treemap} from 'recharts';
+import {COLOR_PANEL} from 'recharts/src/util/Constants';
 
-const colors = Object.values(omit(allColors, 'brown', 'green', 'common'))
-    .map((color) => color[300])
-    .flat();
+const colors = COLOR_PANEL;
 
 type CashFlowEntry = {
     currency_id: number;
@@ -55,13 +53,13 @@ export const CashFlow = () => {
     const [currencyIdOverride, setCurrencyIdOverride] = useState('');
     const currencyId = currencyIdOverride || currencyIds[0];
     const currenciesMap = useCurrenciesMap();
-    const [displaySavings, setDisplaySavings] = useState(true);
+    const [displaySavings, setDisplaySavings] = useState(false);
     const [excludedCategoryIds, setExcludedCategoryIds] = useState<Record<number, boolean>>({});
 
     const dataForCurrency: Array<{
         name: string;
         value: number;
-        id?: number;
+        id?: number | string;
         label: string;
         isIncome: boolean;
     }> = (response?.data[currencyId] ?? []).map((entry: CashFlowEntry) => {
@@ -107,6 +105,13 @@ export const CashFlow = () => {
     }
 
     dataExpenseSum = sumBy(dataExpense, 'value');
+    const chartData = dataExpense
+        .filter((d) => d.value > 0)
+        .map((d, i) => ({
+            ...d,
+            color: colors[i],
+            name: `${d.label} (${Math.ceil((d.value / dataExpenseSum) * 100)}%)`,
+        }));
 
     React.useEffect(() => {
         createXHR<CashFlowResponse>({
@@ -152,7 +157,9 @@ export const CashFlow = () => {
                 >
                     {response && (
                         <Card style={{backgroundColor: theme.palette.background.default}}>
-                            <CardContent style={{display: 'grid', gridTemplateColumns: 'auto 1fr'}}>
+                            <CardContent
+                                style={{display: 'grid', gridTemplateColumns: 'auto 1fr', gridGap: theme.spacing(2)}}
+                            >
                                 <FormGroup>
                                     <FormControlLabel
                                         control={
@@ -166,13 +173,16 @@ export const CashFlow = () => {
 
                                     <Divider />
 
-                                    {dataExpense.map(
-                                        (entry) =>
-                                            entry.id && (
+                                    {dataExpense.map((entry) => {
+                                        const {id} = entry;
+                                        const chartItem = chartData.find((d) => d.id === id);
+
+                                        return (
+                                            id && (
                                                 <FormControlLabel
                                                     control={
                                                         <Checkbox
-                                                            checked={excludedCategoryIds[entry.id] !== true}
+                                                            checked={excludedCategoryIds[id] !== true}
                                                             onChange={(event) =>
                                                                 setExcludedCategoryIds({
                                                                     ...excludedCategoryIds,
@@ -181,30 +191,58 @@ export const CashFlow = () => {
                                                             }
                                                         />
                                                     }
-                                                    label={entry.name}
+                                                    label={
+                                                        <span style={{display: 'flex', alignItems: 'center'}}>
+                                                            {entry.name}{' '}
+                                                            {chartItem && (
+                                                                <FiberManualRecord
+                                                                    fontSize="inherit"
+                                                                    htmlColor={chartItem.color}
+                                                                />
+                                                            )}
+                                                        </span>
+                                                    }
                                                 />
-                                            ),
-                                    )}
+                                            )
+                                        );
+                                    })}
                                 </FormGroup>
-                                <ResponsiveContainer minHeight="500px" height="100%" width="100%">
-                                    <PieChart>
-                                        <Pie
-                                            data={dataExpense}
-                                            label={({index}) =>
-                                                dataExpense[index].label +
-                                                ' | ' +
-                                                Math.ceil((dataExpense[index].value / dataExpenseSum) * 100) +
-                                                '%'
-                                            }
+                                <div
+                                    style={{
+                                        borderRadius: theme.shape.borderRadius,
+                                        overflow: 'hidden',
+                                    }}
+                                >
+                                    <ResponsiveContainer width="100%" minHeight={500}>
+                                        <Treemap
+                                            colorPanel={chartData.map((d) => d.color) as []}
+                                            data={chartData}
                                             dataKey="value"
-                                            stroke={theme.palette.background.default}
+                                            isAnimationActive={false}
+                                            stroke={theme.palette.background.paper}
+                                            type="flat"
                                         >
-                                            {dataExpense.map((entry, index) => (
-                                                <Cell key={index} fill={entry.isIncome ? green[300] : colors[index]} />
-                                            ))}
-                                        </Pie>
-                                    </PieChart>
-                                </ResponsiveContainer>
+                                            <Tooltip
+                                                separator=""
+                                                formatter={(value: string, name: string, props: any) =>
+                                                    props.payload.name
+                                                }
+                                            />
+                                        </Treemap>
+                                    </ResponsiveContainer>
+                                </div>
+                                {/*<Treemap
+                                        data={dataExpense}
+                                        label={({index}) =>
+
+                                        }
+                                        dataKey="value"
+                                        stroke={theme.palette.background.default}
+                                    >
+                                        {dataExpense.map((entry, index) => (
+                                            <Cell key={index} fill={entry.isIncome ? green[300] : colors[index]} />
+                                        ))}
+                                    </Treemap>*/}
                             </CardContent>
                         </Card>
                     )}
