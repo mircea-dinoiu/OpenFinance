@@ -3,7 +3,7 @@ import uniqueId from 'lodash/uniqueId';
 import {combineReducers} from 'redux';
 import {currenciesReducer} from 'domain/currencies/state';
 import {Action} from 'state/defs';
-import {inventoriesReducer} from 'state/inventories';
+import {inventoriesReducer} from 'domain/inventories/state';
 import {privacyToggle} from 'state/privacyToggle';
 import {propertiesReducer} from 'state/properties';
 import {stocks} from 'state/stocks';

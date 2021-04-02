@@ -28,6 +28,7 @@ import {TransactionStatus} from 'defs';
 import {Account, Accounts, AccountType} from 'domain/accounts/defs';
 import {Categories} from 'domain/categories/defs';
 import {CurrencyMap} from 'domain/currencies/defs';
+import {Inventory} from 'domain/inventories/defs';
 import {Bootstrap, User} from 'domain/users/defs';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
@@ -37,7 +38,7 @@ import {sortBy} from 'lodash';
 
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Inventory, useInventories} from 'state/inventories';
+import {useInventories} from 'domain/inventories/state';
 import {useSelectedProject} from 'state/projects';
 import {GlobalState} from 'types';
 import {useEndDate} from 'utils/dates';

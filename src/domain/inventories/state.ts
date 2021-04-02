@@ -1,8 +1,7 @@
 import {Api} from 'defs/Api';
+import {Inventory} from 'domain/inventories/defs';
 import _ from 'lodash';
 import {makeCrudReducer} from 'state/utils';
-
-export type Inventory = {id: number; name: string; project_id: number};
 
 const {reducer: inventoriesReducer, hook: useInventories} = makeCrudReducer<Inventory[]>({
     initialState: [],

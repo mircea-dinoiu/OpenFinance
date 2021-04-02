@@ -2,10 +2,10 @@ import {AlertProps} from '@material-ui/lab';
 import {Accounts} from 'domain/accounts/defs';
 import {Categories} from 'domain/categories/defs';
 import {Currencies} from 'domain/currencies/defs';
+import {Inventory} from 'domain/inventories/defs';
 import {Bootstrap} from 'domain/users/defs';
 import * as React from 'react';
 import {LazyLoadedState} from 'state/defs';
-import {Inventory} from 'state/inventories';
 import {Property} from 'state/properties';
 import {Summary} from 'state/summary';
 
