@@ -1,9 +1,9 @@
 import {TextField, Select, MenuItem, Theme, useTheme} from '@material-ui/core';
+import {AccountStatus, AccountType} from 'domain/accounts/defs';
 import _, {sortBy} from 'lodash';
 import startCase from 'lodash/startCase';
 import React from 'react';
 import {TableCellRenderer} from 'react-table-6';
-import {AccountStatus, AccountType} from 'state/accounts';
 import {useCurrenciesMap} from 'domain/currencies/state';
 
 export const UrlCell: TableCellRenderer = ({original: row, column}) => {

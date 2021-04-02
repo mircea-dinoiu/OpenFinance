@@ -3,7 +3,7 @@ import {AccountTypeCell, CurrencyCell, NumberFieldCell, StatusCell, TextFieldCel
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
 import {Api} from 'defs/Api';
 import React from 'react';
-import {useAccounts, useAccountsReader} from 'state/accounts';
+import {useAccounts, useAccountsReader} from 'domain/accounts/state';
 import {Account} from 'types';
 
 export const AccountsDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) => {

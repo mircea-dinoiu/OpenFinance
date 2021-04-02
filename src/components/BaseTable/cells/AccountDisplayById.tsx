@@ -1,6 +1,6 @@
 import {AccountDisplay} from 'components/BaseTable/cells/AccountDisplay';
 import * as React from 'react';
-import {useAccounts} from 'state/accounts';
+import {useAccounts} from 'domain/accounts/state';
 
 export const AccountDisplayById = ({id}: {id: number | string}) => {
     const moneyLocations = useAccounts();

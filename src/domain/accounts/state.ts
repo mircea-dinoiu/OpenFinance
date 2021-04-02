@@ -1,4 +1,5 @@
 import {Api} from 'defs/Api';
+import {AccountStatus} from 'domain/accounts/defs';
 import {sortBy} from 'lodash';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateState} from 'state/actionCreators';
@@ -25,20 +26,7 @@ export const useAccountsReader = () => {
     };
 };
 
-export enum AccountStatus {
-    OPEN = 'open',
-    LOCKED = 'locked',
-    CLOSED = 'closed',
-}
-
-export enum AccountType {
-    CASH = 'cash',
-    CREDIT = 'credit',
-    LOAN = 'loan',
-    BROKERAGE = 'brokerage',
-}
-
 export const useAccounts = () => useSelector((s: GlobalState) => s.moneyLocations);
 
-export const useAccountsOpen = () =>
+export const useOpenAccounts = () =>
     useSelector((s: GlobalState) => s.moneyLocations.filter((a) => a.status === AccountStatus.OPEN));

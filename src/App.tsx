@@ -15,7 +15,7 @@ import {useDispatch} from 'react-redux';
 import {BrowserRouter, generatePath, Redirect, Route, Switch} from 'react-router-dom';
 
 import {Login} from 'routes/Login';
-import {useAccountsReader} from 'state/accounts';
+import {useAccountsReader} from 'domain/accounts/state';
 import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies} from 'domain/currencies/state';
 import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';

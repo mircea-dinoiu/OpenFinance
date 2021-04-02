@@ -24,7 +24,7 @@ import {TransactionModel} from 'components/transactions/types';
 import {Api} from 'defs/Api';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
-import {useAccountsOpen} from 'state/accounts';
+import {useOpenAccounts} from 'domain/accounts/state';
 import {useCurrenciesMap} from 'domain/currencies/state';
 import {useBootstrap} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
@@ -42,7 +42,7 @@ enum ImportStep {
 
 export const ImportTransactions = ({onSubmit}: {onSubmit: (transactions: TransactionModel[]) => void}) => {
     const currencies = useCurrenciesMap();
-    const accounts = useAccountsOpen();
+    const accounts = useOpenAccounts();
     const project = useSelectedProject();
     const bootstrap = useBootstrap();
 

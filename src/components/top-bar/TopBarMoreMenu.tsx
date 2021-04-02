@@ -5,7 +5,7 @@ import {IconButton, MenuItem, Menu, Checkbox} from '@material-ui/core';
 import {useUsersWithActions} from 'state/hooks';
 import {usePrivacyToggle} from 'state/privacyToggle';
 import {CategoriesDialog} from 'components/categories/CategoriesDialog';
-import {AccountsDialog} from 'components/accounts/AccountsDialog';
+import {AccountsDialog} from 'domain/accounts/AccountsDialog';
 import {createXHR} from 'utils/fetch';
 
 export const TopBarMoreMenu = () => {

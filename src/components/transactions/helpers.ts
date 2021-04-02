@@ -1,11 +1,11 @@
 import {TransactionModel} from 'components/transactions/types';
 import {IncludeOption} from 'defs';
 import {QueryParam} from 'defs/url';
+import {AccountStatus} from 'domain/accounts/defs';
 import {endOfDayToISOString} from 'js/utils/dates';
 import {sumArray} from 'js/utils/numbers';
 import {flatten, map, mapValues, sortBy, uniq, uniqBy} from 'lodash';
 import moment from 'moment';
-import {AccountStatus} from 'state/accounts';
 import {Accounts} from 'types';
 import {useQueryParamState} from 'utils/url';
 

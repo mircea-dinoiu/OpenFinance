@@ -1,7 +1,7 @@
 import {AlertProps} from '@material-ui/lab';
+import {AccountStatus, AccountType} from 'domain/accounts/defs';
 import {Currencies} from 'domain/currencies/defs';
 import * as React from 'react';
-import {AccountStatus, AccountType} from 'state/accounts';
 import {LazyLoadedState} from 'state/defs';
 import {Inventory} from 'state/inventories';
 import {Project} from 'state/projects';

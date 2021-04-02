@@ -2,7 +2,7 @@ import {InputAdornment, TextField, TextFieldProps} from '@material-ui/core';
 import {TransactionForm} from 'components/transactions/types';
 import {findCurrencyById} from 'domain/currencies/helpers';
 import React from 'react';
-import {useAccounts} from 'state/accounts';
+import {useAccounts} from 'domain/accounts/state';
 import {useCurrenciesMap} from 'domain/currencies/state';
 import {styled} from '@material-ui/core/styles';
 
