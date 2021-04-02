@@ -1,7 +1,7 @@
 import {Api} from 'app/Api';
+import {makeCrudReducer} from 'app/state/makeCrudReducer';
 import {Inventory} from 'inventories/defs';
 import _ from 'lodash';
-import {makeCrudReducer} from 'app/state/utils';
 
 const {reducer: inventoriesReducer, hook: useInventories} = makeCrudReducer<Inventory[]>({
     initialState: [],

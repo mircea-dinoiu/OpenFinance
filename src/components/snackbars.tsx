@@ -5,7 +5,7 @@ import {uniqueId} from 'lodash';
 import * as React from 'react';
 import {ReactNode, useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {hideSnackbar, showSnackbar} from 'app/state/actionCreators';
+import {hideSnackbar, showSnackbar} from 'snackbars/state';
 
 export const FloatingSnackbar = ({
     open = true,

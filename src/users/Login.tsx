@@ -1,5 +1,6 @@
 import {Box, Button, Card, CardHeader, Checkbox, Divider, FormControlLabel, TextField} from '@material-ui/core';
 import {styled} from '@material-ui/core/styles';
+import {setUsers} from 'app/users/state';
 import {ButtonProgress} from 'components/loaders';
 import {ErrorSnackbar} from 'components/snackbars';
 import {Api} from 'app/Api';
@@ -9,7 +10,6 @@ import {paths} from 'js/defs';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import {setUsers} from 'app/state/actionCreators';
 import {createXHR} from 'app/fetch';
 
 export const Login = () => {

@@ -1,8 +1,8 @@
-import {Bootstrap} from 'users/defs';
+import {Action, GlobalState} from 'app/state/defs';
+import {useActions} from 'app/state/useActions';
+import {setUsers} from 'app/users/state';
 import {useSelector} from 'react-redux';
-import {setUsers} from 'app/state/actionCreators';
-import {GlobalState} from 'app/state/defs';
-import {useActions} from 'app/state/hooks';
+import {Bootstrap, User} from 'users/defs';
 
 export const useBootstrap = (): Bootstrap => useSelector((s: GlobalState) => s.user);
 export const useUsersWithActions = (): [
@@ -16,3 +16,5 @@ export const useUsersWithActions = (): [
         setUsers,
     }),
 ];
+export const userReducer = (state: User | null = null, action: {type: Action; value: User}) =>
+    action.type === Action.SET_USERS ? action.value : state;

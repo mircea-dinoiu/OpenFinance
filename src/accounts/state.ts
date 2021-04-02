@@ -1,12 +1,13 @@
-import {Api} from 'app/Api';
 import {Account, AccountStatus} from 'accounts/defs';
-import {sortBy} from 'lodash';
-import {useDispatch, useSelector} from 'react-redux';
-import {updateState} from 'app/state/actionCreators';
-import {GlobalState} from 'app/state/defs';
-import {useSelectedProject} from 'projects/state';
+import {Api} from 'app/Api';
 import {createXHR} from 'app/fetch';
+import {bindToUpdateState} from 'app/state/bindToUpdateState';
+import {GlobalState} from 'app/state/defs';
+import {updateState} from 'app/state/updateState';
 import {makeUrl} from 'app/url';
+import {sortBy} from 'lodash';
+import {useSelectedProject} from 'projects/state';
+import {useDispatch, useSelector} from 'react-redux';
 
 export const useAccountsReader = () => {
     const dispatch = useDispatch();
@@ -30,3 +31,4 @@ export const useAccounts = () => useSelector((s: GlobalState) => s.moneyLocation
 
 export const useOpenAccounts = () =>
     useSelector((s: GlobalState) => s.moneyLocations.filter((a) => a.status === AccountStatus.OPEN));
+export const accountsReducer = bindToUpdateState('moneyLocations', []);

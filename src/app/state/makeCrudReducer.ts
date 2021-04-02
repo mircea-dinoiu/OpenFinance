@@ -1,49 +1,17 @@
-import {Action, GlobalState, LazyLoadedState, LazyLoadedStateWithFetch} from 'app/state/defs';
 import {createAction, createReducer} from '@reduxjs/toolkit';
-import {useSelector, useDispatch} from 'react-redux';
-import {useSelectedProject} from 'projects/state';
 import {createXHR} from 'app/fetch';
+import {GlobalState, LazyLoadedState, LazyLoadedStateWithFetch} from 'app/state/defs';
 import {makeUrl} from 'app/url';
+import {useSelectedProject} from 'projects/state';
 import {useEffect} from 'react';
-
-const stateKeysWithoutReducers: string[] = [];
-
-export const bindToUpdateState = <T extends object>(prop: string, defaultValue: T) => {
-    stateKeysWithoutReducers.push(prop);
-
-    return (
-        state = defaultValue,
-        action: {
-            type: Action;
-            state: T;
-        },
-    ) => {
-        if (action.type === Action.UPDATE_STATE) {
-            Object.keys(action.state).forEach((key) => {
-                if (!stateKeysWithoutReducers.includes(key)) {
-                    throw new Error(
-                        `${key} has its own reducer. Please use action ${
-                            Action.UPDATE_STATE
-                        } only for ${stateKeysWithoutReducers.join(', ')}`,
-                    );
-                }
-            });
-
-            if (action.state.hasOwnProperty(prop)) {
-                return action.state[prop];
-            }
-        }
-
-        return state;
-    };
-};
+import {useDispatch, useSelector} from 'react-redux';
 
 export const makeCrudReducer = <T>({
-    initialState,
-    name,
-    route,
-    parse,
-}: {
+                                       initialState,
+                                       name,
+                                       route,
+                                       parse,
+                                   }: {
     initialState: T;
     name: string;
     route: string;

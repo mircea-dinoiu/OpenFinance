@@ -19,6 +19,7 @@ import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox'
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {BaseTable, TableHeader, TableHeaderTop} from 'app/BaseTable';
+import {refreshWidgets as onRefreshWidgets} from 'refreshWidgets/state';
 
 import {BigLoader} from 'components/loaders';
 import {Project} from 'projects/defs';
@@ -58,7 +59,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
-import {refreshWidgets as onRefreshWidgets} from 'app/state/actionCreators';
 import {GlobalState} from 'app/state/defs';
 import {useSelectedProject} from 'projects/state';
 import {useEndDate} from 'app/dates/helpers';

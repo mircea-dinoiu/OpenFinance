@@ -1,7 +1,7 @@
+import {useRefreshWidgets} from 'refreshWidgets/state';
 import {SummaryResults} from 'transactions/defs';
 import {Api} from 'app/Api';
 import * as React from 'react';
-import {useRefreshWidgets} from 'app/state/hooks';
 import {createXHR} from 'app/fetch';
 import {makeUrl} from 'app/url';
 
