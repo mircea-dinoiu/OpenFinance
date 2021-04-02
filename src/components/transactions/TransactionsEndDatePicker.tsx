@@ -1,4 +1,11 @@
-import {FormLabel, IconButton, Menu, MenuItem as MenuItem2, Select, MenuItem} from '@material-ui/core';
+import {
+    FormLabel,
+    IconButton,
+    Menu,
+    MenuItem as MenuItem2,
+    MenuItem,
+    Select,
+} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconArrowBack from '@material-ui/icons/ArrowBack';
 import IconArrowForward from '@material-ui/icons/ArrowForward';
@@ -6,7 +13,6 @@ import {DatePicker} from '@material-ui/pickers';
 import {ShiftMenu} from 'components/top-bar/ShiftMenu';
 import {getShiftBackOptions, getShiftForwardOptions} from 'components/top-bar/TopBar';
 import {ShiftDateOption, ShiftDateOptions} from 'defs';
-import {ScreenQuery} from 'defs/styles';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import * as React from 'react';
@@ -161,17 +167,17 @@ export const TransactionsEndDatePicker = () => {
     );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     button: {
-        [ScreenQuery.SMALL]: {paddingTop: 0, paddingBottom: 0},
-        [ScreenQuery.MEDIUM]: {paddingTop: 0, paddingBottom: 0},
+        [theme.breakpoints.down('sm')]: {paddingTop: 0, paddingBottom: 0},
+        [theme.breakpoints.only('md')]: {paddingTop: 0, paddingBottom: 0},
     },
     root: {
         display: 'grid',
         gridTemplateColumns: 'auto 1fr auto 1fr',
         justifyItems: 'center',
-        [ScreenQuery.LARGE]: {
+        [theme.breakpoints.up('lg')]: {
             alignItems: 'center',
         },
     },
-});
+}));

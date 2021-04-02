@@ -16,6 +16,8 @@ import {
     Slider,
     TextField,
 } from '@material-ui/core';
+import {styled} from '@material-ui/core/styles';
+import {Autocomplete} from '@material-ui/lab';
 import {KeyboardDateTimePicker} from '@material-ui/pickers';
 import {TransactionAmountFields} from 'components/transactions/TransactionAmountFields';
 import {TransactionCategoriesField} from 'components/transactions/TransactionCategoriesField';
@@ -23,22 +25,20 @@ import {TransactionNameField} from 'components/transactions/TransactionNameField
 import {TransactionStockFields} from 'components/transactions/TransactionStockFields';
 import {TransactionForm} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
-import {gridGap, screenQuerySmall, spacingLarge, spacingSmall} from 'defs/styles';
+import {gridGap, spacingLarge, spacingSmall} from 'defs/styles';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
+import {locales} from 'locales';
 import {sortBy} from 'lodash';
 
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {AccountType} from 'state/accounts';
-import {useSelectedProject} from 'state/projects';
-import {styled} from '@material-ui/core/styles';
-import {Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User, Account} from 'types';
-import {useEndDate} from 'utils/dates';
 import {Inventory, useInventories} from 'state/inventories';
-import {Autocomplete} from '@material-ui/lab';
-import {locales} from 'locales';
+import {useSelectedProject} from 'state/projects';
+import {Account, Accounts, Bootstrap, Categories, CurrencyMap, GlobalState, User} from 'types';
+import {useEndDate} from 'utils/dates';
 
 const boxStyle = {
     padding: '10px 0',
@@ -493,17 +493,17 @@ export const ExpenseForm = (ownProps: TypeOwnProps) => {
     );
 };
 
-const TypeStatusFlagsContainer = styled('div')({
+const TypeStatusFlagsContainer = styled('div')(props => ({
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gridGap: spacingLarge,
 
-    [`@media ${screenQuerySmall}`]: {
+    [props.theme.breakpoints.down('sm')]: {
         gridTemplateColumns: '1fr',
         gridTemplateRows: '1fr 1fr',
         gridGap: spacingSmall,
     },
-});
+}));
 
 const RepeatContainer = styled('div')({
     display: 'grid',

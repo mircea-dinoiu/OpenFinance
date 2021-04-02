@@ -2,29 +2,14 @@ import uniqueId from 'lodash/uniqueId';
 import {combineReducers} from 'redux';
 import {currencies} from 'state/currencies';
 import {Action} from 'state/defs';
+import {inventoriesReducer} from 'state/inventories';
 import {privacyToggle} from 'state/privacyToggle';
+import {propertiesReducer} from 'state/properties';
 import {stocks} from 'state/stocks';
 import {summaryReducer} from 'state/summary';
 import {bindToUpdateState} from 'state/utils';
-import {ScreenQueries, Snackbar, User} from 'types';
-import {getScreenQueries} from 'utils/getScreenQueries';
-import {inventoriesReducer} from 'state/inventories';
-import {propertiesReducer} from 'state/properties';
+import {Snackbar, User} from 'types';
 
-const screen = (
-    state = getScreenQueries(),
-    action: {
-        type: Action;
-        value: ScreenQueries;
-    },
-) => (action.type === Action.SET_SCREEN ? action.value : state);
-const screenSize = (
-    state = getScreenQueries(),
-    action: {
-        type: Action;
-        value: ScreenQueries;
-    },
-) => (action.type === Action.SET_SCREEN ? action.value : state);
 const refreshWidgets = (
     state = uniqueId(),
     action: {
@@ -51,10 +36,6 @@ const categories = bindToUpdateState('categories', []);
 const moneyLocations = bindToUpdateState('moneyLocations', []);
 
 export const combinedReducers = combineReducers({
-    // @deprecated screen is a global in Window, use screenSize instead
-    screen,
-    screenSize,
-
     currencies,
 
     refreshWidgets,

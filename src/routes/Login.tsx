@@ -1,23 +1,16 @@
-import React from 'react';
-import {Button, TextField, Checkbox, FormControlLabel, Card, CardHeader, Divider} from '@material-ui/core';
+import {Box, Button, Card, CardHeader, Checkbox, Divider, FormControlLabel, TextField} from '@material-ui/core';
+import {styled} from '@material-ui/core/styles';
 import {ButtonProgress} from 'components/loaders';
-import {Api} from 'defs/Api';
-import {createXHR} from 'utils/fetch';
 import {ErrorSnackbar} from 'components/snackbars';
+import {Api} from 'defs/Api';
+import {paths} from 'js/defs';
+import React from 'react';
 import {useDispatch} from 'react-redux';
+import {Redirect} from 'react-router-dom';
 import {setUsers} from 'state/actionCreators';
 import {useBootstrap} from 'state/hooks';
-import {Redirect} from 'react-router-dom';
-import {paths} from 'js/defs';
-import {styled, makeStyles} from '@material-ui/core/styles';
-import {screenQueryLarge, screenQueryMedium, screenQuerySmall, spacingLarge} from 'defs/styles';
 import {Bootstrap} from 'types';
-
-const useStyles = makeStyles({
-    rememberMe: {
-        marginTop: spacingLarge,
-    },
-});
+import {createXHR} from 'utils/fetch';
 
 export const Login = () => {
     const [email, setEmail] = React.useState('');
@@ -27,7 +20,6 @@ export const Login = () => {
     const [error, setError] = React.useState(null);
     const dispatch = useDispatch();
     const user = useBootstrap();
-    const cls = useStyles();
 
     if (user) {
         return <Redirect to={paths.home} />;
@@ -68,80 +60,86 @@ export const Login = () => {
     };
 
     return (
-        <LoginStyled>
-            <Card>
-                <CardHeader title="Please Login" />
+        <LoginContainer>
+            <LoginGrid>
+                <Card>
+                    <CardHeader title="Please Login" />
 
-                <Divider />
+                    <Divider />
 
-                <div
-                    style={{
-                        padding: spacingLarge,
-                    }}
-                >
-                    <TextField
-                        helperText="Type in your e-mail"
-                        label="E-mail"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        disabled={loading}
-                        fullWidth={true}
-                        onKeyDown={handleTextFieldKeyDown}
-                    />
-                    <TextField
-                        helperText="Type in your password"
-                        label="Password"
-                        type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        disabled={loading}
-                        fullWidth={true}
-                        onKeyDown={handleTextFieldKeyDown}
-                    />
-                    <FormControlLabel
-                        className={cls.rememberMe}
-                        control={
-                            <Checkbox
-                                checked={rememberMe}
-                                onChange={(event, checked) => setRememberMe(checked)}
-                                color="primary"
-                                disabled={loading}
-                            />
-                        }
-                        label="Remember me"
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        style={{margin: '20px 0 0'}}
-                        onClick={submit}
-                        disabled={loading}
-                    >
-                        {loading ? <ButtonProgress /> : 'Login'}
-                    </Button>
-                    {error != null && <ErrorSnackbar message={error} />}
-                </div>
-            </Card>
-        </LoginStyled>
+                    <Box p={3}>
+                        <TextField
+                            helperText="Type in your e-mail"
+                            label="E-mail"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                            disabled={loading}
+                            fullWidth={true}
+                            onKeyDown={handleTextFieldKeyDown}
+                        />
+                        <TextField
+                            helperText="Type in your password"
+                            label="Password"
+                            type="password"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            disabled={loading}
+                            fullWidth={true}
+                            onKeyDown={handleTextFieldKeyDown}
+                        />
+                        <RememberMeLabel
+                            control={
+                                <Checkbox
+                                    checked={rememberMe}
+                                    onChange={(event, checked) => setRememberMe(checked)}
+                                    color="primary"
+                                    disabled={loading}
+                                />
+                            }
+                            label="Remember me"
+                        />
+                        <LoginButton variant="contained" color="primary" onClick={submit} disabled={loading}>
+                            {loading ? <ButtonProgress /> : 'Login'}
+                        </LoginButton>
+                        {error != null && <ErrorSnackbar message={error} />}
+                    </Box>
+                </Card>
+            </LoginGrid>
+        </LoginContainer>
     );
 };
 
-const LoginStyled = styled('div')({
+const LoginButton = styled(Button)((props) => ({
+    marginTop: props.theme.spacing(3),
+}));
+
+const RememberMeLabel = styled(FormControlLabel)((props) => ({
+    marginTop: props.theme.spacing(3),
+}));
+
+const LoginGrid = styled('div')((props) => ({
     display: 'grid',
     gridTemplateColumns: 'repeat(12, 1fr)',
-    marginTop: spacingLarge,
+    marginTop: props.theme.spacing(3),
     '& > div': {
-        [`@media ${screenQuerySmall}`]: {
+        [props.theme.breakpoints.down('sm')]: {
             gridColumnStart: 2,
             gridColumnEnd: 12,
         },
-        [`@media ${screenQueryMedium}`]: {
+        [props.theme.breakpoints.only('md')]: {
             gridColumnStart: 4,
             gridColumnEnd: 10,
         },
-        [`@media ${screenQueryLarge}`]: {
+        [props.theme.breakpoints.up('lg')]: {
             gridColumnStart: 5,
             gridColumnEnd: 9,
         },
     },
-});
+}));
+
+const LoginContainer = styled('div')(() => ({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: '100%',
+}));

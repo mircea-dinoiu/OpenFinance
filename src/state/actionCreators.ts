@@ -1,5 +1,5 @@
 import {Action} from 'state/defs';
-import {GlobalState, ScreenQueries, Snackbar, Bootstrap} from 'types';
+import {Bootstrap, GlobalState, Snackbar} from 'types';
 
 export const updateState = (state: Partial<GlobalState>) => ({
     type: Action.UPDATE_STATE,
@@ -11,10 +11,6 @@ export const setUsers = (users: null | Bootstrap) => ({
     value: users,
 });
 
-export const setScreen = (value: ScreenQueries) => ({
-    type: Action.SET_SCREEN,
-    value,
-});
 export const refreshWidgets = () => ({type: Action.REFRESH_WIDGETS});
 
 export const showSnackbar = (value: Snackbar) => ({

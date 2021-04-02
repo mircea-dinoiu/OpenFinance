@@ -1,18 +1,17 @@
-import {Typography} from '@material-ui/core';
+import {Theme, Typography, useMediaQuery} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {BaseTable} from 'components/BaseTable';
 import {NumericValue} from 'components/formatters';
 import {BalanceByLocationStock} from 'components/transactions/types';
+import Decimal from 'decimal.js';
 import {firstColumnStyles, numericColumnStyles, spacingLarge} from 'defs/styles';
 import {financialNum} from 'js/utils/numbers';
 import {locales} from 'locales';
 import _ from 'lodash';
 import React from 'react';
 import {Column} from 'react-table-6';
-import {useScreenSize} from 'state/hooks';
 import {useStocksMap} from 'state/stocks';
 import {Stock} from 'types';
-import Decimal from 'decimal.js';
 
 type StockWithUnits = Stock & {units: Decimal; accounts: number; costBasis: Decimal};
 
@@ -25,8 +24,8 @@ export const StocksTable = ({
     soldStocksAreVisible: boolean;
     filteredAccounts: number[];
 }) => {
+    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const cls = useStyles();
-    const screenSize = useScreenSize();
     const filteredStockHoldings = stockHoldings.filter(
         (sh) => filteredAccounts.length === 0 || filteredAccounts.includes(sh.money_location_id),
     );
@@ -62,7 +61,7 @@ export const StocksTable = ({
                             className={cls.table}
                             defaultSorted={[{id: 'symbol', desc: false}]}
                             columns={
-                                screenSize.isSmall
+                                isSmall
                                     ? [SymbolCol, ValueCol]
                                     : [
                                           SymbolCol,

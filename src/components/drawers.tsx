@@ -1,8 +1,7 @@
-import {Drawer} from '@material-ui/core';
+import {Drawer, Theme, useMediaQuery} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {ScreenQuery, stickyHeaderHeight} from 'defs/styles';
+import {stickyHeaderHeight} from 'defs/styles';
 import React, {ReactNode} from 'react';
-import {useScreenSize} from 'state/hooks';
 
 export const SmartDrawer = ({
     children,
@@ -12,20 +11,20 @@ export const SmartDrawer = ({
     open: boolean;
     children: ReactNode;
 }) => {
-    const screenSize = useScreenSize();
+    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const cls = useSmartDrawerStyles();
 
     return (
-        <Drawer classes={cls} anchor={screenSize.isSmall ? 'bottom' : 'right'} {...props}>
+        <Drawer classes={cls} anchor={isSmall ? 'bottom' : 'right'} {...props}>
             {children}
         </Drawer>
     );
 };
 
-const useSmartDrawerStyles = makeStyles({
+const useSmartDrawerStyles = makeStyles((theme) => ({
     paper: {
-        [ScreenQuery.SMALL]: {
+        [theme.breakpoints.down('sm')]: {
             top: stickyHeaderHeight,
         },
     },
-});
+}));

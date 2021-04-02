@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {refreshWidgets, setUsers} from 'state/actionCreators';
-import {Bootstrap, GlobalState, ScreenQueries, Snackbar} from 'types';
+import {Bootstrap, GlobalState, Snackbar} from 'types';
 
 export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();
@@ -10,7 +10,6 @@ export const useActions = <T>(actions: T): T => {
     // @ts-ignore
     return React.useMemo(() => bindActionCreators(actions, dispatch), [actions, dispatch]);
 };
-export const useScreenSize = (): ScreenQueries => useSelector((s: GlobalState) => s.screenSize);
 export const useBootstrap = (): Bootstrap => useSelector((s: GlobalState) => s.user);
 
 export const useUsersWithActions = (): [

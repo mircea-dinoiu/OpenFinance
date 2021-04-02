@@ -1,12 +1,12 @@
-import {Chip} from '@material-ui/core';
+import {Chip, Theme, useMediaQuery} from '@material-ui/core';
 import {TransactionModel} from 'components/transactions/types';
 import {spacingSmall} from 'defs/styles';
 import * as React from 'react';
-import {useCategories, useScreenSize} from 'state/hooks';
+import {useCategories} from 'state/hooks';
 
 export const CategoriesDisplay = ({item}: {item: TransactionModel}) => {
     const categories = useCategories();
-    const screen = useScreenSize();
+    const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
     return (
         <div
@@ -21,12 +21,10 @@ export const CategoriesDisplay = ({item}: {item: TransactionModel}) => {
                         key={each.id}
                         color="primary"
                         style={{
-                            margin: `${screen.isLarge ? 0 : spacingSmall} ${spacingSmall} 0 0`,
-                            ...(screen.isLarge
-                                ? {
-                                      height: 'auto',
-                                  }
-                                : {}),
+                            margin: `${(isLarge ? 0 : spacingSmall)} ${spacingSmall} 0 0`,
+                            ...(isLarge ? {
+                                height: 'auto',
+                            } : {}),
                         }}
                         label={each.name}
                     />

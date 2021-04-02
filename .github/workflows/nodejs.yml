@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [13.11.0]
+        node-version: [14]
 
     steps:
     - uses: actions/checkout@v2
@@ -27,7 +27,10 @@ jobs:
     - name: Install node modules
       run: |
         yarn --frozen-lockfile
-        yarn check --integrity    
-    - run: yarn ci
-      env:
-        CI: true
+        yarn check --integrity
+    - name: Server Tests
+      run: yarn test-server
+    - name: Client Tests
+      run: yarn test-client
+    - name: Code Linters
+      run: yarn lint-all

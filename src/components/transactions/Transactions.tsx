@@ -1,4 +1,13 @@
-import {Button, Checkbox, Fab, FormControlLabel, LinearProgress, Menu, Paper} from '@material-ui/core';
+import {
+    Button,
+    Checkbox,
+    Fab,
+    FormControlLabel,
+    LinearProgress,
+    Menu,
+    Paper, Theme,
+    useMediaQuery,
+} from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -47,7 +56,7 @@ import {Filter, SortingRule} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {refreshWidgets as onRefreshWidgets} from 'state/actionCreators';
 import {Project, useSelectedProject} from 'state/projects';
-import {Accounts, Bootstrap, CurrencyMap, GlobalState, ScreenQueries} from 'types';
+import {Accounts, Bootstrap, CurrencyMap, GlobalState} from 'types';
 import {useEndDate} from 'utils/dates';
 
 import {createXHR, HttpMethod} from 'utils/fetch';
@@ -65,7 +74,7 @@ type TypeProps = {
         filters: Filter[];
     };
     endDate: string;
-    screen: ScreenQueries;
+    isDesktop: boolean;
     currencies: CurrencyMap;
     refreshWidgets: string;
     dispatch: Dispatch;
@@ -218,10 +227,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             pageSize: this.props.params.page * this.props.params.pageSize,
         });
     };
-
-    isDesktop() {
-        return this.props.screen.isLarge;
-    }
 
     handleReceivedSelectedIds = (selectedIds: number[]) => this.setState({selectedIds});
     handleChangeContextMenu = ({display, top = 0, left = 0}: {display: boolean; top?: number; left?: number}) =>
@@ -662,7 +667,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     renderContent() {
         const params = this.props.params;
 
-        if (this.isDesktop()) {
+        if (this.props.isDesktop) {
             const results = this.getSortedResults();
             const count = results.length;
 
@@ -767,7 +772,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     render() {
-        if (!this.isDesktop() && this.state.firstLoad) {
+        if (!this.props.isDesktop && this.state.firstLoad) {
             return <BigLoader />;
         }
 
@@ -793,8 +798,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 }
 
 export const Transactions = (ownProps: TypeOwnProps) => {
-    const stateProps = useSelector(({screen, refreshWidgets, currencies, moneyLocations, user}: GlobalState) => ({
-        screen,
+    const stateProps = useSelector(({ refreshWidgets, currencies, moneyLocations, user}: GlobalState) => ({
         refreshWidgets,
         currencies,
         moneyLocations,
@@ -805,6 +809,7 @@ export const Transactions = (ownProps: TypeOwnProps) => {
     const history = useHistory();
     const location = useLocation();
     const project = useSelectedProject();
+    const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
     const params = useMemo(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -826,6 +831,7 @@ export const Transactions = (ownProps: TypeOwnProps) => {
             dispatch={dispatch}
             params={params}
             project={project}
+            isDesktop={isLarge}
         />
     );
 };

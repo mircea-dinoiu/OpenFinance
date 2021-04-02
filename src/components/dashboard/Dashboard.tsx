@@ -1,10 +1,21 @@
-import {Button, Card, CardContent, CardHeader, Checkbox, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
+import {
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    Checkbox,
+    FormControlLabel,
+    Paper,
+    Tab,
+    Tabs,
+    Theme,
+    useMediaQuery,
+} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
 import IconCash from '@material-ui/icons/LocalAtm';
 import {Alert, AlertTitle} from '@material-ui/lab';
-import {Api} from 'defs/Api';
 import {BaseTable} from 'components/BaseTable';
 import {BrokeragePaper} from 'components/dashboard/BrokeragePaper';
 import {CashFlow} from 'components/dashboard/CashFlow';
@@ -28,19 +39,20 @@ import {getStockValue} from 'components/dashboard/useStockValue';
 import {NumericValue} from 'components/formatters';
 import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
 import {BigLoader} from 'components/loaders';
+import {TabLink} from 'components/TabLink';
 import {useInclude, useIncludePending} from 'components/transactions/helpers';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {BalanceByLocation} from 'components/transactions/types';
-import {ScreenQuery, spacingLarge, spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
+import {Api} from 'defs/Api';
+import {spacingLarge, spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
 import {paths} from 'js/defs';
-import {TabLink} from 'components/TabLink';
 import {locales} from 'locales';
 import _, {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {generatePath, Link, useParams} from 'react-router-dom';
+import {generatePath, useParams} from 'react-router-dom';
 import {AccountType, useAccounts} from 'state/accounts';
-import {useRefreshWidgets, useScreenSize} from 'state/hooks';
+import {useRefreshWidgets} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {useStockPrices} from 'state/stocks';
 import {summaryAssign, SummaryKey} from 'state/summary';
@@ -74,7 +86,8 @@ export const Dashboard = () => {
     const {tab = Object.values(DashboardTab)[0]} = useParams();
     const tabIndex = Object.values(DashboardTab).indexOf(tab as DashboardTab);
 
-    const screenSize = useScreenSize();
+    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
     const [paymentPlanDialogIsOpen, setPaymentPlanDialogIsOpen] = useState(false);
 
     React.useEffect(() => {
@@ -184,12 +197,13 @@ export const Dashboard = () => {
                     <Tabs value={tabIndex} variant="scrollable" scrollButtons="on">
                         {Object.values(DashboardTab).map((tab, index) => (
                             <TabLink
+                                key={tab}
                                 to={generatePath(paths.dashboard, {
                                     id: selectedProject.id,
                                     tab,
                                 })}
                             >
-                                <Tab key={tab} label={locales.dashboardTabs[index]} />
+                                <Tab label={locales.dashboardTabs[index]} />
                             </TabLink>
                         ))}
                     </Tabs>
@@ -252,7 +266,7 @@ export const Dashboard = () => {
                                                     className={cls.table}
                                                     data={data}
                                                     columns={
-                                                        screenSize.isSmall
+                                                        isSmall
                                                             ? [NameCol, CreditBalanceCol, CreditUsageCol]
                                                             : [
                                                                   NameCol,
@@ -332,13 +346,13 @@ const getCostBasis = (cash: BalanceByLocation['cash'], account: Account) => {
     return cash.find((c) => c.money_location_id === account.id)?.sum ?? 0;
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',
         gridGap: spacingSmall,
 
-        [ScreenQuery.SMALL]: {
+        [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: '1fr',
         },
     },
@@ -369,7 +383,7 @@ const useStyles = makeStyles({
         gridTemplateColumns: '1fr 1fr',
         gridGap: spacingSmall,
 
-        [ScreenQuery.SMALL]: {
+        [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: '1fr',
         },
     },
@@ -378,4 +392,4 @@ const useStyles = makeStyles({
             marginBottom: spacingLarge,
         },
     },
-});
+}));

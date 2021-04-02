@@ -1,17 +1,17 @@
+import {Theme, useMediaQuery} from '@material-ui/core';
 import {TransactionModel} from 'components/transactions/types';
+import {theme} from 'defs/styles';
 import moment from 'moment';
 import * as React from 'react';
-import {useScreenSize} from 'state/hooks';
-import {theme} from 'defs/styles';
 
 export const DateDisplay = ({item}: {item: TransactionModel}) => {
-    const screen = useScreenSize();
+    const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
     return (
         <span
             style={{
                 fontSize: '1rem',
-                color: screen.isLarge ? 'inherit' : theme.palette.text.secondary,
+                color: isLarge ? 'inherit' : theme.palette.text.secondary,
             }}
             title={`Last updated: ${moment(item.updated_at).format('lll')}`}
         >

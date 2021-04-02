@@ -11,14 +11,12 @@ import {theme} from 'defs/styles';
 import {paths} from 'js/defs';
 import 'normalize.css';
 import React, {useState} from 'react';
-import EventListener from 'react-event-listener';
 import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
 import {BrowserRouter, generatePath, Redirect, Route, Switch} from 'react-router-dom';
 
 import {Login} from 'routes/Login';
 import {useAccountsReader} from 'state/accounts';
-import {setScreen} from 'state/actionCreators';
 import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies} from 'state/currencies';
 import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';
@@ -28,11 +26,11 @@ import {createGlobalStyle} from 'styled-components';
 
 import {createXHR} from 'utils/fetch';
 
-import {getScreenQueries} from 'utils/getScreenQueries';
 import {Bootstrap} from './types';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
-    html, body {
+    html, body, #root {
+        height: 100%;
         font-size: 14px;
     }
     
@@ -49,7 +47,7 @@ const ResponsiveGlobalStyle = createGlobalStyle`
     }
     
     .MuiSlider-valueLabel.MuiSlider-valueLabel {
-        z-index: auto
+        z-index: auto;
     }
 `;
 
@@ -92,17 +90,12 @@ const AppWrapped = () => {
         }
     }, [users]);
 
-    const onWindowResize = () => {
-        dispatch(setScreen(getScreenQueries()));
-    };
-
     return (
         <MuiPickersUtilsProvider utils={MomentUtils}>
             <MuiThemeProvider theme={theme}>
                 <>
                     <ResponsiveGlobalStyle />
                     <BrowserRouter>
-                        <EventListener target="window" onResize={onWindowResize} />
                         {ready && (
                             <Switch>
                                 <Route exact={true} strict={false} path={paths.login} component={Login} />

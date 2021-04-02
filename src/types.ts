@@ -7,12 +7,6 @@ import {Inventory} from 'state/inventories';
 import {Property} from 'state/properties';
 import {LazyLoadedState} from 'state/defs';
 
-export type ScreenQueries = {
-    isSmall: boolean;
-    isMedium: boolean;
-    isLarge: boolean;
-};
-
 export type Currency = {
     id: number;
     iso_code: string;
@@ -86,8 +80,6 @@ export type GlobalState = {
 
     categories: Categories;
     moneyLocations: Accounts;
-    screen: ScreenQueries;
-    screenSize: ScreenQueries;
     refreshWidgets: string;
     user: Bootstrap;
     snackbars: Snackbar[];

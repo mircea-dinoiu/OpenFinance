@@ -1,5 +1,5 @@
 import {makeStyles} from '@material-ui/core/styles';
-import {ScreenQuery, spacingNormal, theme} from 'defs/styles';
+import {spacingNormal} from 'defs/styles';
 import React, {ReactNode} from 'react';
 
 export const DashboardGridWithSidebar = ({sidebar, children}: {sidebar: ReactNode; children: ReactNode}) => {
@@ -13,12 +13,12 @@ export const DashboardGridWithSidebar = ({sidebar, children}: {sidebar: ReactNod
     );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',
         gridGap: spacingNormal,
-        [ScreenQuery.SMALL]: {
+        [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: '1fr',
         },
     },
@@ -27,4 +27,4 @@ const useStyles = makeStyles({
             marginBottom: theme.spacing(1),
         },
     },
-});
+}));
