@@ -17,7 +17,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import IconAddCircle from '@material-ui/icons/AddCircle';
 import IconClear from '@material-ui/icons/Clear';
 import IconRemoveCircle from '@material-ui/icons/RemoveCircle';
-import {CashAccount} from 'components/dashboard/defs';
+import {CashAccount} from 'domain/dashboard/defs';
 import {NumericValue} from 'components/formatters';
 import {StorageKey} from 'defs';
 import {locales} from 'locales';

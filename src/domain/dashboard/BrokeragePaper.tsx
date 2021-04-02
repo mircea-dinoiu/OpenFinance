@@ -1,10 +1,10 @@
 import {CardHeader, Paper, Theme, useMediaQuery} from '@material-ui/core';
 import IconStock from '@material-ui/icons/TrendingUp';
 import {BaseTable} from 'components/BaseTable';
-import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'components/dashboard/columns';
-import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
-import {BrokerageAccount} from 'components/dashboard/defs';
-import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
+import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'domain/dashboard/columns';
+import {DashboardGridWithSidebar} from 'domain/dashboard/DashboardGridWithSidebar';
+import {BrokerageAccount} from 'domain/dashboard/defs';
+import {CurrencyFilter} from 'domain/dashboard/filters/CurrencyFilter';
 import {groupBy} from 'lodash';
 import React, {useState} from 'react';
 

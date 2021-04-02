@@ -1,5 +1,5 @@
 import {CardHeader} from '@material-ui/core';
-import {useSummaryResults} from 'components/dashboard/useSummaryResults';
+import {useSummaryResults} from 'domain/dashboard/useSummaryResults';
 import {BigLoader} from 'components/loaders';
 import {SummaryCategory} from 'components/transactions/SummaryCategory';
 import {User} from 'domain/users/defs';

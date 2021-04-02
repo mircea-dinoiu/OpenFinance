@@ -1,6 +1,6 @@
 import {NumericValue} from 'components/formatters';
 import React from 'react';
-import {CashAccount} from './defs';
+import {CashAccount} from 'domain/dashboard/defs';
 
 export const makeTotalFooter = ({colorize}: {colorize?: boolean} = {}) => ({
     data,

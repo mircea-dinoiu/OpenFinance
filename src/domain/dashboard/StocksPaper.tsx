@@ -9,9 +9,9 @@ import {
     Card,
 } from '@material-ui/core';
 import IconStock from '@material-ui/icons/TrendingUp';
-import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
-import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
-import {StocksTable} from 'components/dashboard/StocksTable';
+import {DashboardGridWithSidebar} from 'domain/dashboard/DashboardGridWithSidebar';
+import {CurrencyFilter} from 'domain/dashboard/filters/CurrencyFilter';
+import {StocksTable} from 'domain/dashboard/StocksTable';
 import {BalanceByLocationStock} from 'components/transactions/types';
 import {Account} from 'domain/accounts/defs';
 import {groupBy} from 'lodash';

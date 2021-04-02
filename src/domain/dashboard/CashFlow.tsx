@@ -11,8 +11,8 @@ import {
     ListItem,
     ListItemText,
 } from '@material-ui/core';
-import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
-import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
+import {DashboardGridWithSidebar} from 'domain/dashboard/DashboardGridWithSidebar';
+import {CurrencyFilter} from 'domain/dashboard/filters/CurrencyFilter';
 import {formatCurrency} from 'components/formatters';
 import {Api} from 'defs/Api';
 import moment from 'moment';

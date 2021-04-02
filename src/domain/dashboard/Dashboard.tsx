@@ -17,25 +17,25 @@ import IconCredit from '@material-ui/icons/CreditCard';
 import IconCash from '@material-ui/icons/LocalAtm';
 import {Alert, AlertTitle} from '@material-ui/lab';
 import {BaseTable} from 'components/BaseTable';
-import {BrokeragePaper} from 'components/dashboard/BrokeragePaper';
-import {CashFlow} from 'components/dashboard/CashFlow';
-import {CategoriesTab} from 'components/dashboard/CategoriesTab';
-import {NameCol, ValueCol} from 'components/dashboard/columns';
+import {BrokeragePaper} from 'domain/dashboard/BrokeragePaper';
+import {CashFlow} from 'domain/dashboard/CashFlow';
+import {CategoriesTab} from 'domain/dashboard/CategoriesTab';
+import {NameCol, ValueCol} from 'domain/dashboard/columns';
 import {
     CreditAprCol,
     CreditAvailableCol,
     CreditBalanceCol,
     CreditLimitCol,
     CreditUsageCol,
-} from 'components/dashboard/Credit';
-import {getAccountOptions} from 'components/dashboard/getAccountOptions';
-import {NetWorthPapers} from 'components/dashboard/NetWorthPapers';
-import {PaymentPlanDialog} from 'components/dashboard/PaymentPlanDialog';
-import {PropertiesPaper} from 'components/dashboard/PropertiesPaper';
-import {StocksPaper} from 'components/dashboard/StocksPaper';
-import {useDashboardQueryParams} from 'components/dashboard/useDashboardQueryParams';
-import {UsersTab} from 'components/dashboard/UsersTab';
-import {getStockValue} from 'components/dashboard/useStockValue';
+} from 'domain/dashboard/Credit';
+import {getAccountOptions} from 'domain/dashboard/getAccountOptions';
+import {NetWorthPapers} from 'domain/dashboard/NetWorthPapers';
+import {PaymentPlanDialog} from 'domain/dashboard/PaymentPlanDialog';
+import {PropertiesPaper} from 'domain/dashboard/PropertiesPaper';
+import {StocksPaper} from 'domain/dashboard/StocksPaper';
+import {useDashboardQueryParams} from 'domain/dashboard/useDashboardQueryParams';
+import {UsersTab} from 'domain/dashboard/UsersTab';
+import {getStockValue} from 'domain/dashboard/useStockValue';
 import {NumericValue} from 'components/formatters';
 import {IncludeDropdown} from 'components/include-dropdown/IncludeDropdown';
 import {BigLoader} from 'components/loaders';

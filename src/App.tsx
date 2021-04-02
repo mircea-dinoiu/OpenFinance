@@ -2,7 +2,7 @@ import MomentUtils from '@date-io/moment';
 import {Box, CssBaseline} from '@material-ui/core';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {Dashboard} from 'components/dashboard/Dashboard';
+import {Dashboard} from 'domain/dashboard/Dashboard';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
 import {Transactions} from 'components/transactions/Transactions';

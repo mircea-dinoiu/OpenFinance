@@ -1,10 +1,10 @@
-import {BrokerageAccount, CashAccount} from 'components/dashboard/defs';
+import {BrokerageAccount, CashAccount} from 'domain/dashboard/defs';
 import {NumericValue} from 'components/formatters';
 import {financialNum} from 'js/utils/numbers';
 import React from 'react';
 import {Column} from 'react-table-6';
 import {firstColumnStyles, numericColumnStyles} from 'styles/column';
-import {makeTotalFooter} from './makeTotalFooter';
+import {makeTotalFooter} from 'domain/dashboard/makeTotalFooter';
 
 export const NameCol: Column<CashAccount> = {
     accessor: 'name',
