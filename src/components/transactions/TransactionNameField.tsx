@@ -1,7 +1,7 @@
 import {Chip, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import React from 'react';
 import {useSelectedProject} from 'state/projects';
 import {useReader} from 'utils/fetch';
@@ -17,7 +17,7 @@ export const TransactionNameField = ({value, onChange}: {value: string; onChange
     const {response: suggestionsResponse} = useReader<{
         suggestions: DescriptionSuggestion[];
     }>({
-        url: makeUrl(routes.transactionsSuggestions.descriptions, {
+        url: makeUrl(Api.transactionsSuggestions.descriptions, {
             search: value,
             projectId: project.id,
         }),

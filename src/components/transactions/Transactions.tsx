@@ -32,7 +32,7 @@ import {formToModel} from 'components/transactions/transformers/formToModel';
 import {modelToForm} from 'components/transactions/transformers/modelToForm';
 import {TransactionModel, UpdateRecords} from 'components/transactions/types';
 import {TransactionStatus} from 'defs';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import {spacingSmall} from 'defs/styles';
 import {QueryParam} from 'defs/url';
 import * as H from 'history';
@@ -91,7 +91,6 @@ type TypeState = {
     contextMenuTop: number;
 };
 
-const api = routes.transactions;
 const entityName = 'transaction';
 const crudProps = {
     modelToForm,
@@ -173,7 +172,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.setState((state) => ({loading: state.loading + 1}));
 
         const response = await createXHR<TransactionModel[]>({
-            url: makeUrl(api, {
+            url: makeUrl(Api.transactions, {
                 end_date: this.props.endDate,
                 page,
                 limit: pageSize,
@@ -550,9 +549,9 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             data,
         }),
     );
-    handleRequestDelete = (ids: number[]) => this.handleRequest({ids}, api, 'DELETE');
-    handleRequestUpdate = (data: Partial<TransactionModel>[]) => this.handleRequest({data}, api, 'PUT');
-    handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) => this.handleRequest({data}, api, 'POST');
+    handleRequestDelete = (ids: number[]) => this.handleRequest({ids}, Api.transactions, 'DELETE');
+    handleRequestUpdate = (data: Partial<TransactionModel>[]) => this.handleRequest({data}, Api.transactions, 'PUT');
+    handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) => this.handleRequest({data}, Api.transactions, 'POST');
 
     sanitizeItem = (item: TransactionModel) =>
         crudProps.formToModel(crudProps.modelToForm(item), {
@@ -619,8 +618,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             this.props.dispatch(onRefreshWidgets());
         }
     };
-    handleDetach = () => this.handleTransactionRepeat(routes.transactionsDetach);
-    handleSkip = () => this.handleTransactionRepeat(routes.transactionsSkip);
+    handleDetach = () => this.handleTransactionRepeat(Api.transactionsDetach);
+    handleSkip = () => this.handleTransactionRepeat(Api.transactionsSkip);
 
     getContextMenuItemsProps() {
         return {

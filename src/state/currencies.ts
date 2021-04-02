@@ -1,5 +1,5 @@
 import {createAction, createReducer} from '@reduxjs/toolkit';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
 import {CurrencyMap, Currencies, GlobalState} from 'types';
@@ -31,7 +31,7 @@ export const fetchCurrencies = (params: {update?: boolean} = Object.freeze({})) 
     dispatch: Dispatch<{type: string; payload: unknown}>,
 ) => {
     const currenciesResponse = await createXHR<CurrencyMap>({
-        url: makeUrl(routes.currencies, params),
+        url: makeUrl(Api.currencies, params),
     });
 
     dispatch(receiveCurrencies(currenciesResponse.data));

@@ -1,5 +1,5 @@
 import {createAction, createReducer} from '@reduxjs/toolkit';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
 import {GlobalState, Stock} from 'types';
@@ -27,7 +27,7 @@ export const fetchStocks = (params: {update?: boolean} = Object.freeze({})) => a
     dispatch: Dispatch<{type: string; payload: unknown}>,
 ) => {
     const response = await createXHR<Stock[]>({
-        url: makeUrl(routes.stocks, params),
+        url: makeUrl(Api.stocks, params),
     });
 
     dispatch(receiveStocks(response.data));

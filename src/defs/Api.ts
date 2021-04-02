@@ -1,4 +1,4 @@
-export const routes = {
+export const Api = {
     transactions: '/api/transactions',
     transactionsDetach: '/api/transactions/detach',
     transactionsSkip: '/api/transactions/skip',

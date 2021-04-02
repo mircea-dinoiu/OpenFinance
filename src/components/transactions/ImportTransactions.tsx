@@ -21,7 +21,7 @@ import {AxiosResponse} from 'axios';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TransactionReviewAccordion} from 'components/transactions/TransactionReviewAccordion';
 import {TransactionModel} from 'components/transactions/types';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import {spacingLarge, spacingSmall} from 'defs/styles';
 import {DropzoneArea} from 'material-ui-dropzone';
 import React, {useEffect, useState} from 'react';
@@ -95,7 +95,7 @@ export const ImportTransactions = ({onSubmit}: {onSubmit: (transactions: Transac
         setUploadResp(null);
 
         const resp = await createXHR<{transactions: TransactionModel[]}>({
-            url: makeUrl(routes.transactionsUpload, {
+            url: makeUrl(Api.transactionsUpload, {
                 projectId: project.id,
                 accountId,
             }),

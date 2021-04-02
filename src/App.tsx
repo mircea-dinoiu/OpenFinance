@@ -1,28 +1,27 @@
 import MomentUtils from '@date-io/moment';
+import {Box} from '@material-ui/core';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {AccountsDialog} from 'components/accounts/AccountsDialog';
-import {CategoriesDialog} from 'components/categories/CategoriesDialog';
 import {Dashboard} from 'components/dashboard/Dashboard';
 import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
 import {Transactions} from 'components/transactions/Transactions';
-import {routes} from 'defs/routes';
-import {spacingSmall, theme} from 'defs/styles';
+import {Api} from 'defs/Api';
+import {theme} from 'defs/styles';
 import {paths} from 'js/defs';
 import 'normalize.css';
 import React, {useState} from 'react';
 import EventListener from 'react-event-listener';
 import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
-import {BrowserRouter, Redirect, Route, RouteComponentProps, Switch} from 'react-router-dom';
+import {BrowserRouter, generatePath, Redirect, Route, Switch} from 'react-router-dom';
 
 import {Login} from 'routes/Login';
 import {useAccountsReader} from 'state/accounts';
 import {setScreen} from 'state/actionCreators';
 import {useCategoriesReader} from 'state/categories';
 import {fetchCurrencies} from 'state/currencies';
-import {useBootstrap, useScreenSize, useSnackbars, useUsersWithActions} from 'state/hooks';
+import {useBootstrap, useSnackbars, useUsersWithActions} from 'state/hooks';
 import {useSelectedProject} from 'state/projects';
 import {fetchStocks} from 'state/stocks';
 import {createGlobalStyle} from 'styled-components';
@@ -30,7 +29,6 @@ import {createGlobalStyle} from 'styled-components';
 import {createXHR} from 'utils/fetch';
 
 import {getScreenQueries} from 'utils/getScreenQueries';
-import {makeUrl} from 'utils/url';
 import {Bootstrap} from './types';
 
 const ResponsiveGlobalStyle = createGlobalStyle`
@@ -66,7 +64,7 @@ const AppWrapped = () => {
     const fetchUser = async () => {
         try {
             const response = await createXHR<Bootstrap>({
-                url: routes.user.list,
+                url: Api.user.list,
             });
 
             dispatch(setUsers(response.data));
@@ -94,16 +92,6 @@ const AppWrapped = () => {
         }
     }, [users]);
 
-    const onLogout = async () => {
-        try {
-            await createXHR({url: routes.user.logout, method: 'POST'});
-
-            setUsers(null);
-        } catch (e) {
-            window.location.reload();
-        }
-    };
-
     const onWindowResize = () => {
         dispatch(setScreen(getScreenQueries()));
     };
@@ -115,11 +103,15 @@ const AppWrapped = () => {
                     <ResponsiveGlobalStyle />
                     <BrowserRouter>
                         <EventListener target="window" onResize={onWindowResize} />
-                        <TopBar onLogout={onLogout} />
                         {ready && (
                             <Switch>
                                 <Route exact={true} strict={false} path={paths.login} component={Login} />
-                                <Route component={AppInner} />
+                                <Route
+                                    exact={true}
+                                    strict={false}
+                                    path={[paths.home, paths.dashboard, paths.transactions]}
+                                    component={AppInner}
+                                />
                             </Switch>
                         )}
                         <FloatingSnackbar {...snackbar} open={snackbar != null} />
@@ -130,29 +122,29 @@ const AppWrapped = () => {
     );
 };
 
-const AppInner = ({location, match}: RouteComponentProps) => {
+const AppInner = () => {
     const users = useBootstrap();
     const project = useSelectedProject();
-    const screenSize = useScreenSize();
 
     if (users) {
-        if (location.pathname === paths.home) {
-            return (
-                <Redirect
-                    to={makeUrl(paths.dashboard, {
-                        projectId: project.id,
-                    })}
-                />
-            );
-        }
-
         return (
-            <div style={{margin: screenSize.isLarge ? spacingSmall : 0}}>
-                <Route path={paths.dashboard} component={Dashboard} />
-                <Route path={paths.transactions} component={Transactions} />
-                <Route path={paths.categories} component={CategoriesDialog} />
-                <Route path={paths.accounts} component={AccountsDialog} />
-            </div>
+            <>
+                <TopBar />
+                <Box
+                    margin={{
+                        lg: 1,
+                    }}
+                >
+                    <Redirect
+                        from={paths.home}
+                        to={generatePath(paths.dashboard, {
+                            id: project.id,
+                        })}
+                    />
+                    <Route path={paths.dashboard} component={Dashboard} />
+                    <Route path={paths.transactions} component={Transactions} />
+                </Box>
+            </>
         );
     }
 

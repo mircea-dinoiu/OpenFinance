@@ -1,7 +1,7 @@
 import {Dialog, DialogContent} from '@material-ui/core';
 import {AccountTypeCell, CurrencyCell, NumberFieldCell, StatusCell, TextFieldCell, UrlCell} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import React from 'react';
 import {useAccounts, useAccountsReader} from 'state/accounts';
 import {Account} from 'types';
@@ -15,7 +15,7 @@ export const AccountsDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () 
             <DialogContent>
                 <TableWithInlineEditing<Account>
                     data={rows}
-                    api={routes.moneyLocations}
+                    api={Api.moneyLocations}
                     editableFields={[
                         'name',
                         'type',

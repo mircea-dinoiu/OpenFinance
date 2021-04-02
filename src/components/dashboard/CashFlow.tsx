@@ -14,7 +14,7 @@ import {
 import {DashboardGridWithSidebar} from 'components/dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'components/dashboard/filters/CurrencyFilter';
 import {formatCurrency} from 'components/formatters';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import moment from 'moment';
 import React, {useState} from 'react';
 import {useCurrenciesMap} from 'state/currencies';
@@ -84,7 +84,7 @@ export const CashFlow = () => {
     let dataExpenseSum = sumBy(dataExpense, 'value');
     const savedIncome = dataIncomeSum - dataExpenseSum;
 
-    const url = makeUrl(routes.reports.cashFlow, {
+    const url = makeUrl(Api.reports.cashFlow, {
         end_date: moment(new Date(dateYear, dateMonth ?? 0))
             .endOf(dateMonth === undefined ? 'year' : 'month')
             .toISOString(),

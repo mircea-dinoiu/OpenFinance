@@ -1,17 +1,17 @@
-import {AppBar, Tab, Tabs, Toolbar, Typography, Select, MenuItem} from '@material-ui/core';
+import {AppBar, MenuItem, Select, Tab, Tabs, Toolbar, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconHome from '@material-ui/icons/Home';
+import {TopBarMoreMenu} from 'components/top-bar/TopBarMoreMenu';
 import {ShiftDateOption} from 'defs';
 import {spacingNormal, stickyHeaderHeight} from 'defs/styles';
 import {paths} from 'js/defs';
+import {TabLink} from 'components/TabLink';
+import _ from 'lodash';
 import React from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
+import {generatePath, useLocation, useRouteMatch} from 'react-router-dom';
 import {useProjects, useSelectedProject} from 'state/projects';
 import {shiftDateBack, shiftDateForward} from 'utils/dates';
 import {makeUrl} from 'utils/url';
-import {useBootstrap} from '../../state/hooks';
-import {TopBarMoreMenu} from 'components/top-bar/TopBarMoreMenu';
-import _ from 'lodash';
 
 const MAX_TIMES = 10;
 
@@ -21,14 +21,21 @@ export const getShiftBackOptions = (date: string, by: ShiftDateOption): Date[] =
 export const getShiftForwardOptions = (date: string, by: ShiftDateOption): Date[] =>
     new Array(MAX_TIMES).fill(null).map((each, index) => shiftDateForward(date, by, index + 1));
 
-export const TopBar = (props: {onLogout: () => void}) => {
-    const user = useBootstrap();
-    const history = useHistory();
+export const TopBar = () => {
     const location = useLocation();
+    const selectedProject = useSelectedProject();
+    const match = useRouteMatch();
     const tabs = [paths.dashboard, paths.transactions];
     const projects = useProjects();
-    const selectedProject = useSelectedProject();
     const cls = useStyles();
+    const searchParams = new URLSearchParams(location.search);
+    const persistentSearchParams = _.pickBy(
+        {
+            endDate: searchParams.get('endDate'),
+            endDateIncrement: searchParams.get('endDateIncrement'),
+        },
+        _.identity,
+    );
 
     return (
         <>
@@ -38,8 +45,8 @@ export const TopBar = (props: {onLogout: () => void}) => {
                         {projects.length ? (
                             <Select
                                 onChange={(e) => {
-                                    window.location.href = makeUrl(paths.dashboard, {
-                                        projectId: e.target.value,
+                                    window.location.href = generatePath(paths.dashboard, {
+                                        id: String(e.target.value),
                                     });
                                 }}
                                 value={selectedProject.id}
@@ -52,44 +59,35 @@ export const TopBar = (props: {onLogout: () => void}) => {
                             document.title
                         )}
                     </Typography>
-                    {user && (
-                        <div className={cls.tabs}>
-                            <Tabs
-                                value={tabs.indexOf(location.pathname)}
-                                onChange={(event, index) => {
-                                    const url = new URL(window.location.href);
-
-                                    history.push(
-                                        makeUrl(
-                                            tabs[index],
-                                            _.pickBy(
-                                                {
-                                                    projectId: selectedProject.id,
-                                                    endDate: url.searchParams.get('endDate'),
-                                                    endDateIncrement: url.searchParams.get('endDateIncrement'),
-                                                },
-                                                _.identity,
-                                            ),
-                                        ),
-                                    );
-                                }}
+                    <div className={cls.tabs}>
+                        <Tabs value={tabs.indexOf(match.path)}>
+                            <TabLink
+                                to={makeUrl(
+                                    generatePath(tabs[0], {id: selectedProject.id}),
+                                    persistentSearchParams,
+                                )}
                             >
                                 <Tab label={<IconHome />} />
+                            </TabLink>
+                            <TabLink
+                                to={makeUrl(
+                                    generatePath(tabs[1], {id: selectedProject.id}),
+                                    persistentSearchParams,
+                                )}
+                            >
                                 <Tab label="Transactions" />
-                            </Tabs>
+                            </TabLink>
+                        </Tabs>
+                    </div>
+                    <div
+                        style={{
+                            flex: 1,
+                        }}
+                    >
+                        <div style={{float: 'right', display: 'flex'}}>
+                            <TopBarMoreMenu />
                         </div>
-                    )}
-                    {user && (
-                        <div
-                            style={{
-                                flex: 1,
-                            }}
-                        >
-                            <div style={{float: 'right', display: 'flex'}}>
-                                <TopBarMoreMenu onLogout={props.onLogout} />
-                            </div>
-                        </div>
-                    )}
+                    </div>
                 </Toolbar>
             </AppBar>
         </>

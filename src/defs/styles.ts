@@ -64,6 +64,11 @@ export const theme = createMuiTheme({
     },
 });
 
+if (process.env.NODE_ENV !== 'production') {
+    // @ts-ignore
+    window.theme = theme;
+}
+
 export const numericColumnStyles: Column<any> = {
     headerStyle: {
         textAlign: 'right',

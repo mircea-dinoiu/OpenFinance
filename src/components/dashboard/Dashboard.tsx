@@ -1,9 +1,10 @@
-import {Button, CardHeader, Checkbox, FormControlLabel, Paper, Tab, Tabs, CardContent, Card} from '@material-ui/core';
+import {Button, Card, CardContent, CardHeader, Checkbox, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
 import IconCash from '@material-ui/icons/LocalAtm';
 import {Alert, AlertTitle} from '@material-ui/lab';
+import {Api} from 'defs/Api';
 import {BaseTable} from 'components/BaseTable';
 import {BrokeragePaper} from 'components/dashboard/BrokeragePaper';
 import {CashFlow} from 'components/dashboard/CashFlow';
@@ -11,13 +12,15 @@ import {CategoriesTab} from 'components/dashboard/CategoriesTab';
 import {NameCol, ValueCol} from 'components/dashboard/columns';
 import {
     CreditAprCol,
+    CreditAvailableCol,
     CreditBalanceCol,
     CreditLimitCol,
     CreditUsageCol,
-    CreditAvailableCol,
 } from 'components/dashboard/Credit';
 import {getAccountOptions} from 'components/dashboard/getAccountOptions';
+import {NetWorthPapers} from 'components/dashboard/NetWorthPapers';
 import {PaymentPlanDialog} from 'components/dashboard/PaymentPlanDialog';
+import {PropertiesPaper} from 'components/dashboard/PropertiesPaper';
 import {StocksPaper} from 'components/dashboard/StocksPaper';
 import {useDashboardQueryParams} from 'components/dashboard/useDashboardQueryParams';
 import {UsersTab} from 'components/dashboard/UsersTab';
@@ -28,29 +31,30 @@ import {BigLoader} from 'components/loaders';
 import {useInclude, useIncludePending} from 'components/transactions/helpers';
 import {TransactionsEndDatePicker} from 'components/transactions/TransactionsEndDatePicker';
 import {BalanceByLocation} from 'components/transactions/types';
-import {routes} from 'defs/routes';
 import {ScreenQuery, spacingLarge, spacingNormal, spacingSmall, stickyHeaderHeight} from 'defs/styles';
+import {paths} from 'js/defs';
+import {TabLink} from 'components/TabLink';
+import {locales} from 'locales';
 import _, {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
+import {generatePath, Link, useParams} from 'react-router-dom';
 import {AccountType, useAccounts} from 'state/accounts';
 import {useRefreshWidgets, useScreenSize} from 'state/hooks';
+import {useSelectedProject} from 'state/projects';
 import {useStockPrices} from 'state/stocks';
 import {summaryAssign, SummaryKey} from 'state/summary';
 import {Account} from 'types';
 import {createXHR} from 'utils/fetch';
 import {makeUrl} from 'utils/url';
-import {PropertiesPaper} from 'components/dashboard/PropertiesPaper';
-import {locales} from 'locales';
-import {NetWorthPapers} from 'components/dashboard/NetWorthPapers';
 
 enum DashboardTab {
-    banking,
-    cashFlow,
-    investing,
-    properties,
-    userReports,
-    categoryReports,
+    banking = 'banking',
+    cashFlow = 'cash-flow',
+    investing = 'investing',
+    properties = 'properties',
+    userReports = 'user-reports',
+    categoryReports = 'category-reports',
 }
 
 export const Dashboard = () => {
@@ -63,9 +67,13 @@ export const Dashboard = () => {
     const [includePending, setIncludePending] = useIncludePending();
     const [include, setInclude] = useInclude();
     const reportQueryParams = useDashboardQueryParams();
-    const url = makeUrl(routes.reports.balanceByLocation, reportQueryParams);
+    const selectedProject = useSelectedProject();
+    const url = makeUrl(Api.reports.balanceByLocation, reportQueryParams);
     const stockPrices = useStockPrices();
-    const [tab, setTab] = useState(0);
+
+    const {tab = Object.values(DashboardTab)[0]} = useParams();
+    const tabIndex = Object.values(DashboardTab).indexOf(tab as DashboardTab);
+
     const screenSize = useScreenSize();
     const [paymentPlanDialogIsOpen, setPaymentPlanDialogIsOpen] = useState(false);
 
@@ -173,9 +181,16 @@ export const Dashboard = () => {
             </div>
             <div>
                 <Paper className={cls.tabsPaper} elevation={5}>
-                    <Tabs value={tab} onChange={(e, t) => setTab(t)} variant="scrollable" scrollButtons="on">
-                        {locales.dashboardTabs.map((label) => (
-                            <Tab key={label} label={label} />
+                    <Tabs value={tabIndex} variant="scrollable" scrollButtons="on">
+                        {Object.values(DashboardTab).map((tab, index) => (
+                            <TabLink
+                                to={generatePath(paths.dashboard, {
+                                    id: selectedProject.id,
+                                    tab,
+                                })}
+                            >
+                                <Tab key={tab} label={locales.dashboardTabs[index]} />
+                            </TabLink>
                         ))}
                     </Tabs>
                 </Paper>
@@ -242,7 +257,7 @@ export const Dashboard = () => {
                                                             : [
                                                                   NameCol,
                                                                   CreditBalanceCol,
-                                                                 CreditAvailableCol,
+                                                                  CreditAvailableCol,
                                                                   CreditLimitCol,
                                                                   CreditUsageCol,
                                                                   CreditAprCol,

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, TextField, Checkbox, FormControlLabel, Card, CardHeader, Divider} from '@material-ui/core';
 import {ButtonProgress} from 'components/loaders';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import {createXHR} from 'utils/fetch';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useDispatch} from 'react-redux';
@@ -39,7 +39,7 @@ export const Login = () => {
 
         try {
             const response = await createXHR<Bootstrap>({
-                url: routes.user.login,
+                url: Api.user.login,
                 method: 'POST',
                 data: new URLSearchParams({
                     remember_me: rememberMe ? 'true' : 'false',

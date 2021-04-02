@@ -1,7 +1,7 @@
 import {Dialog, DialogContent} from '@material-ui/core';
 import {TextFieldCell} from 'components/cells';
 import {TableWithInlineEditing} from 'components/tables/TableWithInlineEditing';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import React from 'react';
 import {useCategoriesReader} from 'state/categories';
 import {useCategories} from 'state/hooks';
@@ -16,7 +16,7 @@ export const CategoriesDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: (
             <DialogContent>
                 <TableWithInlineEditing<Category>
                     data={rows}
-                    api={routes.categories}
+                    api={Api.categories}
                     editableFields={['name']}
                     onRefresh={refresh}
                     defaultSorted={[{id: 'name', desc: false}]}

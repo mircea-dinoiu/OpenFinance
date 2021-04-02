@@ -1,4 +1,4 @@
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import {sortBy} from 'lodash';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateState} from 'state/actionCreators';
@@ -13,7 +13,7 @@ export const useAccountsReader = () => {
 
     return async () => {
         const r = await createXHR<Account>({
-            url: makeUrl(routes.moneyLocations, {projectId: project.id}),
+            url: makeUrl(Api.moneyLocations, {projectId: project.id}),
         });
 
         dispatch(

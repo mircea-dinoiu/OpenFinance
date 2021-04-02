@@ -1,6 +1,6 @@
 import {Chip, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import {spacingNormal, spacingSmall} from 'defs/styles';
 import {sortBy} from 'lodash';
 import React from 'react';
@@ -26,7 +26,7 @@ export const TransactionCategoriesField = ({
     }));
     const project = useSelectedProject();
     const {response: suggestionsResponse} = useReader<{suggestions: number[]}>({
-        url: makeUrl(routes.transactionsSuggestions.categories, {
+        url: makeUrl(Api.transactionsSuggestions.categories, {
             search: description,
             projectId: project.id,
         }),

@@ -10,8 +10,6 @@ export const paths: {
     dashboard: string;
     transactions: string;
     login: string;
-    categories: string;
-    accounts: string;
 };
 
 export const PERC_MAX: number;

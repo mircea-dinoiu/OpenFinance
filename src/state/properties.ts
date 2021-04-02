@@ -1,4 +1,4 @@
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import {makeCrudReducer} from 'state/utils';
 import _ from 'lodash';
 
@@ -13,7 +13,7 @@ export type Property = {
 const {reducer: propertiesReducer, hook: useProperties} = makeCrudReducer<Property[]>({
     initialState: [],
     name: 'properties',
-    route: routes.properties,
+    route: Api.properties,
     parse: (properties) => _.sortBy(properties, 'name'),
 });
 

@@ -1,4 +1,4 @@
-import {routes} from 'defs/routes';
+import {Api} from 'defs/Api';
 import {useDispatch} from 'react-redux';
 import {updateState} from 'state/actionCreators';
 import {useSelectedProject} from 'state/projects';
@@ -12,7 +12,7 @@ export const useCategoriesReader = () => {
 
     return async () => {
         const r = await createXHR<Categories>({
-            url: makeUrl(routes.categories, {projectId: project.id}),
+            url: makeUrl(Api.categories, {projectId: project.id}),
         });
 
         dispatch(
