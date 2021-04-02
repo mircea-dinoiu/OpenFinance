@@ -55,7 +55,7 @@ import {useAccounts} from 'accounts/state';
 import {useRefreshWidgets} from 'app/state/hooks';
 import {useSelectedProject} from 'projects/state';
 import {useStockPrices} from 'stocks/state';
-import {summaryAssign, SummaryKey} from 'app/state/summary';
+import {summaryAssign, SummaryKey} from 'summary/state';
 import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
 import {createXHR} from 'app/fetch';
 import {makeUrl} from 'app/url';

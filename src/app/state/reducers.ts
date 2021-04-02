@@ -8,7 +8,7 @@ import {inventoriesReducer} from 'inventories/state';
 import {privacyToggleReducer} from 'privacyToggle/state';
 import {propertiesReducer} from 'properties/state';
 import {stocksReducer} from 'stocks/state';
-import {summaryReducer} from 'app/state/summary';
+import {summaryReducer} from 'summary/state';
 import {bindToUpdateState} from 'app/state/utils';
 
 const refreshWidgets = (
