@@ -5,12 +5,12 @@ import {ButtonProgress} from 'components/loaders';
 import {ErrorSnackbar} from 'components/snackbars';
 import {useTransactionFormDefaults} from 'components/transactions/transformers/useTransactionFormDefaults';
 import {TransactionForm, TransactionModel} from 'components/transactions/types';
+import {Bootstrap} from 'domain/users/defs';
 import {isEqual} from 'lodash';
 
 import {parseCRUDError} from 'parsers';
 import * as React from 'react';
 import {ReactNode, useEffect, useRef, useState} from 'react';
-import {Bootstrap} from 'types';
 
 type TypeProps = {
     user: Bootstrap;

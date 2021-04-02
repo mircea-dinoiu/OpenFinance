@@ -1,8 +1,9 @@
+import {Bootstrap} from 'domain/users/defs';
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {refreshWidgets, setUsers} from 'state/actionCreators';
-import {Bootstrap, GlobalState, Snackbar} from 'types';
+import {GlobalState, Snackbar} from 'types';
 
 export const useActions = <T>(actions: T): T => {
     const dispatch = useDispatch();

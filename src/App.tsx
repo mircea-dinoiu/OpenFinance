@@ -7,6 +7,7 @@ import {FloatingSnackbar} from 'components/snackbars';
 import {TopBar} from 'components/top-bar/TopBar';
 import {Transactions} from 'components/transactions/Transactions';
 import {Api} from 'defs/Api';
+import {Bootstrap} from 'domain/users/defs';
 import {paths} from 'js/defs';
 import 'normalize.css';
 import React, {useMemo, useState} from 'react';
@@ -14,7 +15,7 @@ import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
 import {BrowserRouter, generatePath, Redirect, Route, Switch} from 'react-router-dom';
 
-import {Login} from 'routes/Login';
+import {Login} from 'domain/users/Login';
 import {useAccountsReader} from 'domain/accounts/state';
 import {useCategoriesReader} from 'domain/categories/state';
 import {fetchCurrencies} from 'domain/currencies/state';
@@ -24,8 +25,6 @@ import {fetchStocks} from 'state/stocks';
 import {createTheme} from 'styles/createTheme';
 
 import {createXHR} from 'utils/fetch';
-
-import {Bootstrap} from './types';
 
 const AppWrapped = () => {
     const dispatch = useDispatch();

@@ -1,3 +1,4 @@
+import {User} from 'domain/users/defs';
 import uniqueId from 'lodash/uniqueId';
 import {combineReducers} from 'redux';
 import {currenciesReducer} from 'domain/currencies/state';
@@ -8,7 +9,7 @@ import {propertiesReducer} from 'state/properties';
 import {stocks} from 'state/stocks';
 import {summaryReducer} from 'state/summary';
 import {bindToUpdateState} from 'state/utils';
-import {Snackbar, User} from 'types';
+import {Snackbar} from 'types';
 
 const refreshWidgets = (
     state = uniqueId(),

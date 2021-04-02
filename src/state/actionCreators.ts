@@ -1,5 +1,6 @@
+import {Bootstrap} from 'domain/users/defs';
 import {Action} from 'state/defs';
-import {Bootstrap, GlobalState, Snackbar} from 'types';
+import {GlobalState, Snackbar} from 'types';
 
 export const updateState = (state: Partial<GlobalState>) => ({
     type: Action.UPDATE_STATE,

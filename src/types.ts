@@ -2,10 +2,10 @@ import {AlertProps} from '@material-ui/lab';
 import {AccountStatus, AccountType} from 'domain/accounts/defs';
 import {Categories} from 'domain/categories/defs';
 import {Currencies} from 'domain/currencies/defs';
+import {Bootstrap} from 'domain/users/defs';
 import * as React from 'react';
 import {LazyLoadedState} from 'state/defs';
 import {Inventory} from 'state/inventories';
-import {Project} from 'state/projects';
 import {Property} from 'state/properties';
 import {Summary} from 'state/summary';
 
@@ -32,18 +32,6 @@ export type Account = {
 };
 
 export type Accounts = Account[];
-
-export type User = {
-    avatar: string;
-    full_name: string;
-    id: number;
-};
-
-export type Bootstrap = {
-    current: User;
-    user: User;
-    projects: Project[];
-};
 
 export type SnackbarProps = {
     message: React.ReactNode;
