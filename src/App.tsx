@@ -27,7 +27,6 @@ import {createXHR} from 'utils/fetch';
 
 import {Bootstrap} from './types';
 
-
 const AppWrapped = () => {
     const dispatch = useDispatch();
     const [users, {setUsers}] = useUsersWithActions();
@@ -103,14 +102,17 @@ const AppInner = () => {
                         lg: 1,
                     }}
                 >
-                    <Redirect
-                        from={paths.home}
-                        to={generatePath(paths.dashboard, {
-                            id: project.id,
-                        })}
-                    />
-                    <Route path={paths.dashboard} component={Dashboard} />
-                    <Route path={paths.transactions} component={Transactions} />
+                    <Switch>
+                        <Route path={paths.dashboard} component={Dashboard} />
+                        <Route path={paths.transactions} component={Transactions} />
+                        <Redirect
+                            exact={true}
+                            from={paths.home}
+                            to={generatePath(paths.dashboard, {
+                                id: project.id,
+                            })}
+                        />
+                    </Switch>
                 </Box>
             </>
         );
