@@ -19,7 +19,7 @@ import {Alert, AlertTitle} from '@material-ui/lab';
 import {BaseTable} from 'app/BaseTable';
 import {useRefreshWidgets} from 'refreshWidgets/state';
 import {BrokeragePaper} from 'dashboard/BrokeragePaper';
-import {CashFlow} from 'dashboard/CashFlow';
+import {CashFlow} from 'dashboard/cashFlow/CashFlow';
 import {CategoriesTab} from 'dashboard/CategoriesTab';
 import {NameCol, ValueCol} from 'dashboard/columns';
 import {

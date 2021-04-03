@@ -21,6 +21,7 @@ import {formatCurrency} from 'app/formatters';
 import {makeUrl} from 'app/url';
 import {useCategories} from 'categories/state';
 import {useCurrenciesMap} from 'currencies/state';
+import {CategoryFilterLabelText} from 'dashboard/cashFlow/CategoryFilterLabelText';
 import {DashboardGridWithSidebar} from 'dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'dashboard/filters/CurrencyFilter';
 import _, {sortBy, sumBy} from 'lodash';
@@ -205,7 +206,7 @@ export const CashFlow = () => {
                                                         />
                                                     }
                                                     label={
-                                                        <span style={{display: 'flex', alignItems: 'center'}}>
+                                                        <CategoryFilterLabelText>
                                                             {entry.name}{' '}
                                                             {chartItem && (
                                                                 <FiberManualRecord
@@ -213,7 +214,7 @@ export const CashFlow = () => {
                                                                     htmlColor={chartItem.color}
                                                                 />
                                                             )}
-                                                        </span>
+                                                        </CategoryFilterLabelText>
                                                     }
                                                 />
                                             )
