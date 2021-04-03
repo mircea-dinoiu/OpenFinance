@@ -153,7 +153,7 @@ export const CashFlow = () => {
                                     value={dateYear}
                                     onChange={setDateYear}
                                 />
-                                <Divider style={{height: '100%'}} />
+                                <Divider orientation="vertical" />
                                 <DateSelector
                                     isClearable={true}
                                     options={moment.monthsShort().map((m, i) => ({
@@ -271,7 +271,7 @@ export const CashFlow = () => {
 const useStyles = makeStyles((theme) => ({
     dateContainer: {
         display: 'grid',
-        gridTemplateColumns: '1fr 1px 1fr',
+        gridTemplateColumns: '1fr auto 1fr',
         height: '100%',
     },
     treemap: {
