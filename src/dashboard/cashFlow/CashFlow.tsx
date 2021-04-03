@@ -272,7 +272,6 @@ const useStyles = makeStyles((theme) => ({
     dateContainer: {
         display: 'grid',
         gridTemplateColumns: '1fr auto 1fr',
-        height: '100%',
     },
     treemap: {
         '& path': {
