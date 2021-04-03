@@ -25,6 +25,7 @@ import {DashboardGridWithSidebar} from 'dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'dashboard/filters/CurrencyFilter';
 import _, {sortBy, sumBy} from 'lodash';
 import moment from 'moment';
+import {usePrivacyToggle} from 'privacyToggle/state';
 import {useSelectedProject} from 'projects/state';
 import React, {useState} from 'react';
 import {ResponsiveContainer, Tooltip, Treemap} from 'recharts';
@@ -67,6 +68,7 @@ export const CashFlow = () => {
     const [displaySavings, setDisplaySavings] = useState(false);
     const [excludedCategoryIds, setExcludedCategoryIds] = useState<Record<number, boolean>>({});
     const [chartDirection, setChartDirection] = useState(ChartDirection.DESC);
+    const [privacyToggle] = usePrivacyToggle();
 
     const dataForCurrency: Array<{
         name: string;
@@ -125,7 +127,7 @@ export const CashFlow = () => {
             color: d.isIncome
                 ? theme.palette.background.default
                 : colors[dataExpense.findIndex((de) => de.id === d.id)],
-            name: `${d.label} (${Math.ceil((d.value / dataExpenseSum) * 100)}%)`,
+            name: privacyToggle ? d.name : `${d.label} (${Math.ceil((d.value / dataExpenseSum) * 100)}%)`,
         }));
 
     React.useEffect(() => {
@@ -270,6 +272,7 @@ export const CashFlow = () => {
 
 const useStyles = makeStyles((theme) => ({
     dateContainer: {
+        flexGrow: 1,
         display: 'grid',
         gridTemplateColumns: '1fr auto 1fr',
     },
