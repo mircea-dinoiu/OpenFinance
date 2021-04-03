@@ -12,7 +12,6 @@ import {
     useTheme,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {FiberManualRecord} from '@material-ui/icons';
 import SortIcon from '@material-ui/icons/Sort';
 import {ToggleButton, ToggleButtonGroup} from '@material-ui/lab';
 import {Api} from 'app/Api';
@@ -119,7 +118,7 @@ export const CashFlow = () => {
         .map((d, i) => ({
             ...d,
             value: chartDirection === ChartDirection.DESC ? d.value : dataExpenseSum - d.value,
-            color: colors[i],
+            color: d.isIncome ? theme.palette.common.white : colors[dataExpense.findIndex((de) => de.id === d.id)],
             name: `${d.label} (${Math.ceil((d.value / dataExpenseSum) * 100)}%)`,
         }));
 
@@ -182,7 +181,13 @@ export const CashFlow = () => {
                                                 onChange={() => setDisplaySavings(!displaySavings)}
                                             />
                                         }
-                                        label="Savings"
+                                        label={
+                                            <CategoryFilterLabelText
+                                                indicatorColor={chartData.find((d) => d.isIncome)?.color}
+                                            >
+                                                Savings
+                                            </CategoryFilterLabelText>
+                                        }
                                     />
 
                                     <Divider />
@@ -206,14 +211,8 @@ export const CashFlow = () => {
                                                         />
                                                     }
                                                     label={
-                                                        <CategoryFilterLabelText>
-                                                            {entry.name}{' '}
-                                                            {chartItem && (
-                                                                <FiberManualRecord
-                                                                    fontSize="inherit"
-                                                                    htmlColor={chartItem.color}
-                                                                />
-                                                            )}
+                                                        <CategoryFilterLabelText indicatorColor={chartItem?.color}>
+                                                            {entry.name}
                                                         </CategoryFilterLabelText>
                                                     }
                                                 />
@@ -251,9 +250,9 @@ export const CashFlow = () => {
                                             colorPanel={chartData.map((d) => d.color) as []}
                                             data={chartData}
                                             dataKey="value"
-                                            isAnimationActive={false}
                                             stroke={theme.palette.background.paper}
                                             type="flat"
+                                            animationDuration={250}
                                         >
                                             <Tooltip
                                                 separator=""
