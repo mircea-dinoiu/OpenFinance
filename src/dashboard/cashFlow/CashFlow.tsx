@@ -30,7 +30,11 @@ import React, {useState} from 'react';
 import {ResponsiveContainer, Tooltip, Treemap} from 'recharts';
 import {COLOR_PANEL} from 'recharts/src/util/Constants';
 
-const colors = COLOR_PANEL;
+const colors = COLOR_PANEL.map((c, i) => {
+    const color = i % 2 === 0 ? c : [...COLOR_PANEL].reverse()[i];
+
+    return color + '99';
+});
 
 type CashFlowEntry = {
     currency_id: number;
@@ -118,7 +122,7 @@ export const CashFlow = () => {
         .map((d, i) => ({
             ...d,
             value: chartDirection === ChartDirection.DESC ? d.value : dataExpenseSum - d.value,
-            color: d.isIncome ? theme.palette.common.white : colors[dataExpense.findIndex((de) => de.id === d.id)],
+            color: d.isIncome ? theme.palette.background.paper : colors[dataExpense.findIndex((de) => de.id === d.id)],
             name: `${d.label} (${Math.ceil((d.value / dataExpenseSum) * 100)}%)`,
         }));
 
@@ -250,9 +254,10 @@ export const CashFlow = () => {
                                             colorPanel={chartData.map((d) => d.color) as []}
                                             data={chartData}
                                             dataKey="value"
-                                            stroke={theme.palette.background.paper}
+                                            stroke={theme.palette.text.primary}
                                             type="flat"
                                             animationDuration={250}
+                                            className={cls.treemap}
                                         >
                                             <Tooltip
                                                 separator=""
@@ -278,6 +283,11 @@ const useStyles = makeStyles((theme) => ({
         gridGap: theme.spacing(1),
         gridTemplateColumns: '1fr 1fr',
         height: '100%',
+    },
+    treemap: {
+        '& path': {
+            stroke: 'none',
+        },
     },
 }));
 
