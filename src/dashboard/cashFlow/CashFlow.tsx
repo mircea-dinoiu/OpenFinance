@@ -165,81 +165,77 @@ export const CashFlow = () => {
                                 />
                             </Paper>
                         </>,
-                        response && (
-                            <Card variant="outlined" style={{height: '100%'}}>
-                                <CardContent>
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={displaySavings}
-                                                    onChange={() => setDisplaySavings(!displaySavings)}
+                        <Card variant="outlined" style={{height: '100%'}}>
+                            <CardContent>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={displaySavings}
+                                                onChange={() => setDisplaySavings(!displaySavings)}
+                                            />
+                                        }
+                                        label={
+                                            <CategoryFilterLabelText
+                                                indicatorColor={chartData.find((d) => d.isIncome)?.color}
+                                            >
+                                                Savings
+                                            </CategoryFilterLabelText>
+                                        }
+                                    />
+
+                                    <Divider />
+
+                                    {dataExpense.map((entry) => {
+                                        const {id} = entry;
+                                        const chartItem = chartData.find((d) => d.id === id);
+
+                                        return (
+                                            id && (
+                                                <FormControlLabel
+                                                    control={
+                                                        <Checkbox
+                                                            checked={excludedCategoryIds[id] !== true}
+                                                            onChange={(event) =>
+                                                                setExcludedCategoryIds({
+                                                                    ...excludedCategoryIds,
+                                                                    [String(entry.id)]: !event.target.checked,
+                                                                })
+                                                            }
+                                                        />
+                                                    }
+                                                    label={
+                                                        <CategoryFilterLabelText indicatorColor={chartItem?.color}>
+                                                            {entry.name}
+                                                        </CategoryFilterLabelText>
+                                                    }
                                                 />
-                                            }
-                                            label={
-                                                <CategoryFilterLabelText
-                                                    indicatorColor={chartData.find((d) => d.isIncome)?.color}
-                                                >
-                                                    Savings
-                                                </CategoryFilterLabelText>
-                                            }
-                                        />
-
-                                        <Divider />
-
-                                        {dataExpense.map((entry) => {
-                                            const {id} = entry;
-                                            const chartItem = chartData.find((d) => d.id === id);
-
-                                            return (
-                                                id && (
-                                                    <FormControlLabel
-                                                        control={
-                                                            <Checkbox
-                                                                checked={excludedCategoryIds[id] !== true}
-                                                                onChange={(event) =>
-                                                                    setExcludedCategoryIds({
-                                                                        ...excludedCategoryIds,
-                                                                        [String(entry.id)]: !event.target.checked,
-                                                                    })
-                                                                }
-                                                            />
-                                                        }
-                                                        label={
-                                                            <CategoryFilterLabelText indicatorColor={chartItem?.color}>
-                                                                {entry.name}
-                                                            </CategoryFilterLabelText>
-                                                        }
-                                                    />
-                                                )
-                                            );
-                                        })}
-                                    </FormGroup>
-                                </CardContent>
-                            </Card>
-                        ),
-                        response && (
-                            <FormGroup>
-                                <ToggleButtonGroup
-                                    orientation="vertical"
-                                    value={chartDirection}
-                                    exclusive
-                                    onChange={(e, dir) => dir && setChartDirection(dir)}
-                                >
-                                    <ToggleButton value={ChartDirection.DESC}>
-                                        <SortIcon />
-                                    </ToggleButton>
-                                    <ToggleButton value={ChartDirection.ASC}>
-                                        <SortIcon
-                                            style={{
-                                                transform: 'scaleY(-1)',
-                                            }}
-                                        />
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </FormGroup>
-                        ),
-                    ].filter(Boolean)}
+                                            )
+                                        );
+                                    })}
+                                </FormGroup>
+                            </CardContent>
+                        </Card>,
+                        <FormGroup>
+                            <ToggleButtonGroup
+                                orientation="vertical"
+                                value={chartDirection}
+                                exclusive
+                                onChange={(e, dir) => dir && setChartDirection(dir)}
+                            >
+                                <ToggleButton value={ChartDirection.DESC}>
+                                    <SortIcon />
+                                </ToggleButton>
+                                <ToggleButton value={ChartDirection.ASC}>
+                                    <SortIcon
+                                        style={{
+                                            transform: 'scaleY(-1)',
+                                        }}
+                                    />
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                        </FormGroup>,
+                    ]}
                 >
                     {response && (
                         <div
@@ -248,7 +244,7 @@ export const CashFlow = () => {
                                 overflow: 'hidden',
                             }}
                         >
-                            <ResponsiveContainer width="100%" minHeight={500}>
+                            <ResponsiveContainer minHeight={500}>
                                 <Treemap
                                     colorPanel={chartData.map((d) => d.color) as []}
                                     data={chartData}
