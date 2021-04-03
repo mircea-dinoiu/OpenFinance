@@ -4,6 +4,7 @@ export const CategoryFilterLabelText = styled('span')((props: {indicatorColor?: 
     display: 'flex',
     alignItems: 'center',
     gap: props.theme.spacing(1),
+    whiteSpace: 'nowrap',
     position: 'relative',
     '&:after': {
         content: '""',
