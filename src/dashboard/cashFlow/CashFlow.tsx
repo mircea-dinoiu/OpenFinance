@@ -142,8 +142,6 @@ export const CashFlow = () => {
                 <DashboardGridWithSidebar
                     sidebar={[
                         <>
-                            <CurrencyFilter ids={currencyIds} selected={currencyId} onChange={setCurrencyIdOverride} />
-
                             <Paper className={cls.dateContainer} variant="outlined">
                                 <DateSelector
                                     options={_.range(dateYear - 5, dateYear + 7).map((y) => ({
@@ -164,6 +162,8 @@ export const CashFlow = () => {
                                     onChange={setDateMonth}
                                 />
                             </Paper>
+
+                            <CurrencyFilter ids={currencyIds} selected={currencyId} onChange={setCurrencyIdOverride} />
                         </>,
                         <Card variant="outlined" style={{height: '100%'}}>
                             <CardContent>
