@@ -144,29 +144,26 @@ export const CashFlow = () => {
                         <>
                             <CurrencyFilter ids={currencyIds} selected={currencyId} onChange={setCurrencyIdOverride} />
 
-                            <div className={cls.dateContainer}>
-                                <Paper variant="outlined">
-                                    <DateSelector
-                                        options={_.range(dateYear - 5, dateYear + 7).map((y) => ({
-                                            label: y.toString(),
-                                            value: y,
-                                        }))}
-                                        value={dateYear}
-                                        onChange={setDateYear}
-                                    />
-                                </Paper>
-                                <Paper variant="outlined">
-                                    <DateSelector
-                                        isClearable={true}
-                                        options={moment.monthsShort().map((m, i) => ({
-                                            label: m,
-                                            value: i,
-                                        }))}
-                                        value={dateMonth}
-                                        onChange={setDateMonth}
-                                    />
-                                </Paper>
-                            </div>
+                            <Paper className={cls.dateContainer} variant="outlined">
+                                <DateSelector
+                                    options={_.range(dateYear - 5, dateYear + 7).map((y) => ({
+                                        label: y.toString(),
+                                        value: y,
+                                    }))}
+                                    value={dateYear}
+                                    onChange={setDateYear}
+                                />
+                                <Divider style={{height: '100%'}} />
+                                <DateSelector
+                                    isClearable={true}
+                                    options={moment.monthsShort().map((m, i) => ({
+                                        label: m,
+                                        value: i,
+                                    }))}
+                                    value={dateMonth}
+                                    onChange={setDateMonth}
+                                />
+                            </Paper>
                         </>,
                         response && (
                             <Card variant="outlined" style={{height: '100%'}}>
@@ -278,8 +275,7 @@ export const CashFlow = () => {
 const useStyles = makeStyles((theme) => ({
     dateContainer: {
         display: 'grid',
-        gridGap: theme.spacing(1),
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: '1fr 1px 1fr',
         height: '100%',
     },
     treemap: {
