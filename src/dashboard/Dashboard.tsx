@@ -1,64 +1,40 @@
-import {
-    Button,
-    Card,
-    CardContent,
-    CardHeader,
-    Checkbox,
-    FormControlLabel,
-    Paper,
-    Tab,
-    Tabs,
-    Theme,
-    useMediaQuery,
-} from '@material-ui/core';
+import {Card, CardContent, Checkbox, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import IconLoan from '@material-ui/icons/AccountBalance';
-import IconCredit from '@material-ui/icons/CreditCard';
-import IconCash from '@material-ui/icons/LocalAtm';
 import {Alert, AlertTitle} from '@material-ui/lab';
-import {BaseTable} from 'app/BaseTable';
-import {useRefreshWidgets} from 'refreshWidgets/state';
+import {Account, AccountType} from 'accounts/defs';
+import {useAccounts} from 'accounts/state';
+import {Api} from 'app/Api';
+import {createXHR} from 'app/fetch';
+import {NumericValue} from 'app/formatters';
+import {BigLoader} from 'app/loaders';
+import {locales} from 'app/locales';
+import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
+import {TabLink} from 'app/TabLink';
+import {makeUrl} from 'app/url';
+import {Banking} from 'dashboard/banking/Banking';
 import {BrokeragePaper} from 'dashboard/BrokeragePaper';
 import {CashFlow} from 'dashboard/cashFlow/CashFlow';
 import {CategoriesTab} from 'dashboard/CategoriesTab';
-import {NameCol, ValueCol} from 'dashboard/columns';
-import {
-    CreditAprCol,
-    CreditAvailableCol,
-    CreditBalanceCol,
-    CreditLimitCol,
-    CreditUsageCol,
-} from 'dashboard/Credit';
 import {getAccountOptions} from 'dashboard/getAccountOptions';
 import {NetWorthPapers} from 'dashboard/NetWorthPapers';
-import {PaymentPlanDialog} from 'dashboard/PaymentPlanDialog';
 import {PropertiesPaper} from 'dashboard/PropertiesPaper';
 import {StocksPaper} from 'dashboard/StocksPaper';
 import {useDashboardQueryParams} from 'dashboard/useDashboardQueryParams';
 import {UsersTab} from 'dashboard/UsersTab';
 import {getStockValue} from 'dashboard/useStockValue';
-import {NumericValue} from 'app/formatters';
 import {useInclude, useIncludePending} from 'include/helpers';
 import {IncludeDropdown} from 'include/IncludeDropdown';
-import {BigLoader} from 'app/loaders';
-import {TabLink} from 'app/TabLink';
-import {TransactionsEndDatePicker} from 'transactions/TransactionsEndDatePicker';
-import {BalanceByLocation} from 'transactions/defs';
-import {Api} from 'app/Api';
-import {Account, AccountType} from 'accounts/defs';
 import {paths} from 'js/defs';
-import {locales} from 'app/locales';
-import _, {groupBy} from 'lodash';
-import React, {useState} from 'react';
+import _ from 'lodash';
+import {useSelectedProject} from 'projects/state';
+import React from 'react';
 import {useDispatch} from 'react-redux';
 import {generatePath, useParams} from 'react-router-dom';
-import {useAccounts} from 'accounts/state';
-import {useSelectedProject} from 'projects/state';
+import {useRefreshWidgets} from 'refreshWidgets/state';
 import {useStockPrices} from 'stocks/state';
 import {summaryAssign, SummaryKey} from 'summary/state';
-import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
-import {createXHR} from 'app/fetch';
-import {makeUrl} from 'app/url';
+import {BalanceByLocation} from 'transactions/defs';
+import {TransactionsEndDatePicker} from 'transactions/TransactionsEndDatePicker';
 
 enum DashboardTab {
     banking = 'banking',
@@ -85,10 +61,6 @@ export const Dashboard = () => {
 
     const {tab = Object.values(DashboardTab)[0]} = useParams();
     const tabIndex = Object.values(DashboardTab).indexOf(tab as DashboardTab);
-
-    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-
-    const [paymentPlanDialogIsOpen, setPaymentPlanDialogIsOpen] = useState(false);
 
     React.useEffect(() => {
         createXHR<BalanceByLocation>({
@@ -210,88 +182,12 @@ export const Dashboard = () => {
                 </Paper>
                 {tab === DashboardTab.cashFlow && <CashFlow />}
                 {tab === DashboardTab.banking && (
-                    <>
-                        <>
-                            {cashWithTotal.length > 0 && (
-                                <Paper className={cls.paper}>
-                                    <CardHeader
-                                        className={cls.cardHeader}
-                                        title={
-                                            <>
-                                                <IconCash /> Cash
-                                            </>
-                                        }
-                                    />
-                                    {Object.values(groupBy(cashWithTotal, 'currency_id')).map((data) => (
-                                        <BaseTable
-                                            defaultSorted={[{id: 'value', desc: true}]}
-                                            className={cls.table}
-                                            data={data}
-                                            columns={[NameCol, ValueCol]}
-                                        />
-                                    ))}
-                                </Paper>
-                            )}
-
-                            {creditWithTotal.concat(loanWithTotal).length > 0 && (
-                                <Paper className={cls.paper}>
-                                    {paymentPlanDialogIsOpen && (
-                                        <PaymentPlanDialog
-                                            open={true}
-                                            creditWithTotal={creditWithTotal.concat(loanWithTotal)}
-                                            onClose={() => setPaymentPlanDialogIsOpen(false)}
-                                        />
-                                    )}
-                                    {[
-                                        {
-                                            items: loanWithTotal,
-                                            title: 'Loans',
-                                            Icon: IconLoan,
-                                        },
-                                        {items: creditWithTotal, title: 'Credit Cards', Icon: IconCredit},
-                                    ].map((group) =>
-                                        Object.values(groupBy(group.items, 'currency_id')).map((data) => (
-                                            <>
-                                                <CardHeader
-                                                    className={cls.cardHeader}
-                                                    title={
-                                                        <>
-                                                            {React.createElement(group.Icon)}
-                                                            <span>{group.title}</span>
-                                                        </>
-                                                    }
-                                                />
-                                                <BaseTable
-                                                    defaultSorted={[{id: 'name', desc: false}]}
-                                                    className={cls.table}
-                                                    data={data}
-                                                    columns={
-                                                        isSmall
-                                                            ? [NameCol, CreditBalanceCol, CreditUsageCol]
-                                                            : [
-                                                                  NameCol,
-                                                                  CreditBalanceCol,
-                                                                  CreditAvailableCol,
-                                                                  CreditLimitCol,
-                                                                  CreditUsageCol,
-                                                                  CreditAprCol,
-                                                              ]
-                                                    }
-                                                />
-                                            </>
-                                        )),
-                                    )}
-                                    <Button
-                                        color="primary"
-                                        variant="contained"
-                                        onClick={() => setPaymentPlanDialogIsOpen(true)}
-                                    >
-                                        Payment Plan for Loans and Credit Cards
-                                    </Button>
-                                </Paper>
-                            )}
-                        </>
-                    </>
+                    <Banking
+                        classes={cls}
+                        cashWithTotal={cashWithTotal}
+                        creditWithTotal={creditWithTotal}
+                        loanWithTotal={loanWithTotal}
+                    />
                 )}
 
                 {tab === DashboardTab.investing && (
