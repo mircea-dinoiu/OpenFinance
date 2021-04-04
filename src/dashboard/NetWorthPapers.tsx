@@ -76,6 +76,7 @@ export const NetWorthPapers = ({
                                         value={valueProperties}
                                         currencyId={currencyId}
                                     />
+                                    <NetWorthTableRow label={'Debt'} value={valueDebt} currencyId={currencyId} />
                                     {inventories.map((inv) => (
                                         <NetWorthTableRow
                                             label={
@@ -90,7 +91,6 @@ export const NetWorthPapers = ({
                                             currencyId={currencyId}
                                         />
                                     ))}
-                                    <NetWorthTableRow label={'Debt'} value={valueDebt} currencyId={currencyId} />
                                 </TableBody>
                             </Table>
                         </Paper>
