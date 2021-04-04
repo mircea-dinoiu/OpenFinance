@@ -1,10 +1,12 @@
-import {Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper} from '@material-ui/core';
+import {Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper, Tooltip} from '@material-ui/core';
+import {styled} from '@material-ui/core/styles';
 import {NumericValue} from 'app/formatters';
 import {BalanceByLocationInventory} from 'transactions/defs';
 import React from 'react';
 import {useProperties} from 'properties/state';
 import {useCurrenciesMap} from 'currencies/state';
 import _ from 'lodash';
+import {Info as IconInfo} from '@material-ui/icons';
 
 export const NetWorthPapers = ({
     cashByCurrencyId,
@@ -42,7 +44,7 @@ export const NetWorthPapers = ({
                 const valueInvestments = investmentsByCurrencyId[currencyId] ?? 0;
                 const valueDebt = debtByCurrencyId[currencyId] ?? 0;
                 const inventories = inventoriesByCurrencyId[currencyId] ?? [];
-                const total = valueCash + valueInvestments + valueProperties + valueDebt + _.sumBy(inventories, 'sum');
+                const total = valueCash + valueInvestments + valueProperties + valueDebt;
 
                 return (
                     total > 0 && (
@@ -76,7 +78,14 @@ export const NetWorthPapers = ({
                                     />
                                     {inventories.map((inv) => (
                                         <NetWorthTableRow
-                                            label={`Inventory: ${inv.name}`}
+                                            label={
+                                                <InventoryLabel>
+                                                    <span>Inventory: {inv.name}</span>
+                                                    <Tooltip title="Not Included in Worth" placement="top">
+                                                        <IconInfo fontSize="inherit" />
+                                                    </Tooltip>
+                                                </InventoryLabel>
+                                            }
                                             value={inv.sum}
                                             currencyId={currencyId}
                                         />
@@ -92,7 +101,21 @@ export const NetWorthPapers = ({
     );
 };
 
-const NetWorthTableRow = ({label, value, currencyId}: {label: string; value: number; currencyId: number}) => {
+const InventoryLabel = styled('span')((props) => ({
+    display: 'flex',
+    gridGap: props.theme.spacing(1),
+    alignItems: 'center',
+}));
+
+const NetWorthTableRow = ({
+    label,
+    value,
+    currencyId,
+}: {
+    label: string | JSX.Element;
+    value: number;
+    currencyId: number;
+}) => {
     return (
         <>
             {value !== 0 && (
