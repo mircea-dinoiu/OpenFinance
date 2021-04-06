@@ -5,13 +5,7 @@ import IconCash from '@material-ui/icons/LocalAtm';
 import {BaseTable} from 'app/BaseTable';
 import {BrokeragePaper} from 'dashboard/BrokeragePaper';
 import {NameCol, ValueCol} from 'dashboard/columns';
-import {
-    CreditAprCol,
-    CreditAvailableCol,
-    CreditBalanceCol,
-    CreditLimitCol,
-    CreditUsageCol,
-} from 'dashboard/Credit';
+import {CreditAprCol, CreditAvailableCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'dashboard/defs';
 import {PaymentPlanDialog} from 'dashboard/PaymentPlanDialog';
 import {groupBy} from 'lodash';
@@ -70,10 +64,25 @@ export const Banking = ({
                         {[
                             {
                                 items: loanWithTotal,
-                                title: 'Loans',
+                                getTitle: () => 'Loans',
                                 Icon: IconLoan,
                             },
-                            {items: creditWithTotal, title: 'Credit Cards', Icon: IconCredit},
+                            {
+                                items: creditWithTotal,
+                                getTitle: () => (
+                                    <div style={{display: 'flex'}}>
+                                        <span style={{flexGrow: 1}}>Credit Cards</span>
+                                        <Button
+                                            color="primary"
+                                            variant="contained"
+                                            onClick={() => setPaymentPlanDialogIsOpen(true)}
+                                        >
+                                            Payment Plan for Loans and Credit Cards
+                                        </Button>
+                                    </div>
+                                ),
+                                Icon: IconCredit,
+                            },
                         ].map((group) =>
                             Object.values(groupBy(group.items, 'currency_id')).map((data) => (
                                 <>
@@ -82,7 +91,7 @@ export const Banking = ({
                                         title={
                                             <>
                                                 {React.createElement(group.Icon)}
-                                                <span>{group.title}</span>
+                                                <span>{group.getTitle()}</span>
                                             </>
                                         }
                                     />
@@ -106,9 +115,6 @@ export const Banking = ({
                                 </>
                             )),
                         )}
-                        <Button color="primary" variant="contained" onClick={() => setPaymentPlanDialogIsOpen(true)}>
-                            Payment Plan for Loans and Credit Cards
-                        </Button>
                     </Paper>
                 )}
 
