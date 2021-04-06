@@ -17,6 +17,6 @@ export const locales = {
         [RepeatOption.MONTH]: 'Month(s)',
         [RepeatOption.YEAR]: 'Year(s)',
     },
-    dashboardTabs: ['Banking', 'Cash Flow', 'Investing', 'Properties', 'User Reports', 'Category Reports'],
+    dashboardTabs: ['Accounts', 'Cash Flow', 'Investing', 'Properties', 'User Reports', 'Category Reports'],
     nothingToSeeHereYet: 'Nothing to see here yet.',
 };

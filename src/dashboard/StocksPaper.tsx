@@ -1,22 +1,12 @@
-import {
-    CardHeader,
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    FormLabel,
-    Paper,
-    CardContent,
-    Card,
-} from '@material-ui/core';
-import IconStock from '@material-ui/icons/TrendingUp';
+import {Card, CardContent, Checkbox, FormControl, FormControlLabel, FormLabel, Paper} from '@material-ui/core';
+import {Account} from 'accounts/defs';
+import {useAccounts} from 'accounts/state';
 import {DashboardGridWithSidebar} from 'dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'dashboard/filters/CurrencyFilter';
 import {StocksTable} from 'dashboard/StocksTable';
-import {BalanceByLocationStock} from 'transactions/defs';
-import {Account} from 'accounts/defs';
 import {groupBy} from 'lodash';
 import React, {useEffect, useState} from 'react';
-import {useAccounts} from 'accounts/state';
+import {BalanceByLocationStock} from 'transactions/defs';
 
 export const StocksPaper = ({
     classes,
@@ -45,14 +35,6 @@ export const StocksPaper = ({
 
     return (
         <Paper className={classes.paper}>
-            <CardHeader
-                className={classes.cardHeader}
-                title={
-                    <>
-                        <IconStock /> Stocks
-                    </>
-                }
-            />
             <DashboardGridWithSidebar
                 sidebar={
                     <>

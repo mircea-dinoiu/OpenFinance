@@ -3,9 +3,16 @@ import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
 import IconCash from '@material-ui/icons/LocalAtm';
 import {BaseTable} from 'app/BaseTable';
+import {BrokeragePaper} from 'dashboard/BrokeragePaper';
 import {NameCol, ValueCol} from 'dashboard/columns';
-import {CreditAprCol, CreditAvailableCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'dashboard/Credit';
-import {CashAccount} from 'dashboard/defs';
+import {
+    CreditAprCol,
+    CreditAvailableCol,
+    CreditBalanceCol,
+    CreditLimitCol,
+    CreditUsageCol,
+} from 'dashboard/Credit';
+import {BrokerageAccount, CashAccount} from 'dashboard/defs';
 import {PaymentPlanDialog} from 'dashboard/PaymentPlanDialog';
 import {groupBy} from 'lodash';
 import React, {useState} from 'react';
@@ -15,11 +22,13 @@ export const Banking = ({
     cashWithTotal,
     creditWithTotal,
     loanWithTotal,
+    brokerageWithTotal,
 }: {
     classes: Record<string, string>;
     cashWithTotal: CashAccount[];
     creditWithTotal: CashAccount[];
     loanWithTotal: CashAccount[];
+    brokerageWithTotal: BrokerageAccount[];
 }) => {
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
@@ -101,6 +110,10 @@ export const Banking = ({
                             Payment Plan for Loans and Credit Cards
                         </Button>
                     </Paper>
+                )}
+
+                {brokerageWithTotal.length > 0 && (
+                    <BrokeragePaper classes={cls} brokerageWithTotal={brokerageWithTotal} />
                 )}
             </>
         </>

@@ -13,11 +13,7 @@ export const BrokeragePaper = ({
     brokerageWithTotal,
 }: {
     brokerageWithTotal: BrokerageAccount[];
-    classes: {
-        paper: string;
-        cardHeader: string;
-        table: string;
-    };
+    classes: Record<string, string>;
 }) => {
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const brokerageWithTotalGroupedByCurrencyId = groupBy(brokerageWithTotal, 'currency_id');

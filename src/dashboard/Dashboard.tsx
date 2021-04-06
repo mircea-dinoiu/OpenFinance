@@ -37,7 +37,7 @@ import {BalanceByLocation} from 'transactions/defs';
 import {TransactionsEndDatePicker} from 'transactions/TransactionsEndDatePicker';
 
 enum DashboardTab {
-    banking = 'banking',
+    accounts = 'accounts',
     cashFlow = 'cash-flow',
     investing = 'investing',
     properties = 'properties',
@@ -181,23 +181,20 @@ export const Dashboard = () => {
                     </Tabs>
                 </Paper>
                 {tab === DashboardTab.cashFlow && <CashFlow />}
-                {tab === DashboardTab.banking && (
+                {tab === DashboardTab.accounts && (
                     <Banking
                         classes={cls}
                         cashWithTotal={cashWithTotal}
                         creditWithTotal={creditWithTotal}
                         loanWithTotal={loanWithTotal}
+                        brokerageWithTotal={brokerageWithTotal}
                     />
                 )}
 
                 {tab === DashboardTab.investing && (
                     <>
                         {brokerageWithTotal.length > 0 ? (
-                            <>
-                                <BrokeragePaper classes={cls} brokerageWithTotal={brokerageWithTotal} />
-
-                                <StocksPaper classes={cls} accountOptions={accountOptions} stocks={data.stocks} />
-                            </>
+                            <StocksPaper classes={cls} accountOptions={accountOptions} stocks={data.stocks} />
                         ) : (
                             <Card>
                                 <CardContent>{locales.nothingToSeeHereYet}</CardContent>
