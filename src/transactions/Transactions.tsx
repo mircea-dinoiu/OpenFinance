@@ -565,7 +565,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
     sanitizeItem = (item: TransactionModel) =>
         crudProps.formToModel(crudProps.modelToForm(item), {
-            user: this.props.user,
+            user: this.props.user.user,
         });
 
     copyItem = (item: TransactionModel): Omit<TransactionModel, 'id'> => {
@@ -769,7 +769,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     }}
                     entityName={entityName}
                     onRequestUpdate={this.handleRequestUpdate}
-                    user={this.props.user}
+                    user={this.props.user.user}
                     {...crudProps}
                 />
             </>

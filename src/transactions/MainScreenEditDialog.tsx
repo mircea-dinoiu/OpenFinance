@@ -2,18 +2,18 @@ import {Button, DialogActions, DialogContent, DialogTitle} from '@material-ui/co
 import {SmartDrawer} from 'app/drawers';
 import {ButtonProgress} from 'app/loaders';
 
-import {ErrorSnackbar} from 'app/snackbars';
-import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
-import {TransactionForm, TransactionModel} from 'transactions/defs';
-import {Bootstrap} from 'users/defs';
-import {isEqual} from 'lodash';
-
 import {parseCrudError} from 'app/parseCrudError';
+
+import {ErrorSnackbar} from 'app/snackbars';
+import {isEqual} from 'lodash';
 import * as React from 'react';
 import {ReactNode, useEffect, useRef, useState} from 'react';
+import {TransactionForm, TransactionModel} from 'transactions/defs';
+import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
+import {Bootstrap, User} from 'users/defs';
 
 type TypeProps = {
-    user: Bootstrap;
+    user: User;
     onRequestUpdate: (
         data: TransactionModel[],
     ) => Promise<{
@@ -21,7 +21,7 @@ type TypeProps = {
     }>;
     items: TransactionModel[];
     modelToForm: (model: TransactionModel) => TransactionForm;
-    formToModel: (form: TransactionForm, detail: {user: Bootstrap}) => TransactionModel;
+    formToModel: (form: TransactionForm, detail: {user: User}) => TransactionModel;
     entityName: string;
     formComponent: React.ComponentType<{
         initialValues: TransactionForm;
