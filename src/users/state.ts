@@ -16,5 +16,6 @@ export const useUsersWithActions = (): [
         setUsers,
     }),
 ];
+export const useUser = () => useSelector((s: GlobalState) => s.user.user);
 export const userReducer = (state: User | null = null, action: {type: Action; value: User}) =>
     action.type === Action.SET_USERS ? action.value : state;

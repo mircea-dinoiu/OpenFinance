@@ -1,10 +1,10 @@
-import {TransactionForm, TransactionStatus} from 'transactions/defs';
-import {useBootstrap} from 'users/state';
-import moment from 'moment';
 import {useAccounts} from 'accounts/state';
+import moment from 'moment';
+import {TransactionForm, TransactionStatus} from 'transactions/defs';
+import {useUser} from 'users/state';
 
 export const useTransactionFormDefaults = (): TransactionForm => {
-    const user = useBootstrap();
+    const user = useUser();
     const mls = useAccounts();
 
     return {
@@ -14,7 +14,7 @@ export const useTransactionFormDefaults = (): TransactionForm => {
         price: 0,
         quantity: 1,
         paymentMethod: mls[0]?.id,
-        chargedPersons: {[user.current.id]: 100},
+        chargedPersons: {[user.id]: 100},
         categories: [],
         repeat: null,
         date: moment(),

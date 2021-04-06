@@ -28,7 +28,7 @@ export const TransactionReviewAccordion = ({
     const save = () => {
         onTransactionChange(
             formToModel(formValues.current, {
-                user: bootstrap,
+                user: bootstrap.user,
             }),
         );
         setExpanded(false);
