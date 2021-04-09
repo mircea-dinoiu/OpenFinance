@@ -1,22 +1,24 @@
 import {debounce, TextField} from '@material-ui/core';
-import {Timers} from 'app/timers';
 import {QueryParam} from 'app/QueryParam';
+import {Timers} from 'app/timers';
 import React, {useEffect, useMemo, useState} from 'react';
-import {useHistory} from 'react-router-dom';
-import {mapUrlToFragment} from 'app/url';
+import {useHistory, useLocation} from 'react-router-dom';
 
 export const TransactionsSearchField = () => {
     const history = useHistory();
+    const location = useLocation();
     const [value, setValue] = useState('');
     const navigate = useMemo(() => debounce(history.replace, Timers.SEARCH_DEBOUNCE), [history.replace]);
 
     useEffect(() => {
-        const url = new URL(window.location.href);
+        const searchParams = new URLSearchParams();
 
-        url.search = '';
-        url.searchParams.set(QueryParam.filters, JSON.stringify([{id: 'item', value: {text: value}}]));
+        searchParams.set(QueryParam.filters, JSON.stringify([{id: 'item', value: {text: value}}]));
 
-        navigate(mapUrlToFragment(url));
+        navigate({
+            ...location,
+            search: searchParams.toString(),
+        });
     }, [value]);
 
     return (

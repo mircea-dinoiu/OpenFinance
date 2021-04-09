@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-const defs = require('../../src/js/defs');
 
-router.get(Object.values(defs.paths), (req, res) => {
+router.get('/', (req, res) => {
     const csrfToken = req.csrfToken ? req.csrfToken() : '';
 
     fs.readFile('build/app.html', (err, contents) => {

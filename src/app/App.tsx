@@ -2,30 +2,30 @@ import MomentUtils from '@date-io/moment';
 import {Box, CssBaseline} from '@material-ui/core';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {Dashboard} from 'dashboard/Dashboard';
-import {FloatingSnackbar} from 'app/snackbars';
-import {TopBar} from 'app/topBar/TopBar';
-import {Transactions} from 'transactions/Transactions';
-import {Api} from 'app/Api';
-import {useSnackbars} from 'snackbars/state';
-import {Bootstrap} from 'users/defs';
-import {useBootstrap, useUsersWithActions} from 'users/state';
-import {paths} from 'js/defs';
-import 'normalize.css';
-import React, {useMemo, useState} from 'react';
-import {hot} from 'react-hot-loader/root';
-import {useDispatch} from 'react-redux';
-import {BrowserRouter, generatePath, Redirect, Route, Switch} from 'react-router-dom';
-
-import {Login} from 'users/Login';
 import {useAccountsReader} from 'accounts/state';
-import {useCategoriesReader} from 'categories/state';
-import {fetchCurrencies} from 'currencies/state';
-import {useSelectedProject} from 'projects/state';
-import {fetchStocks} from 'stocks/state';
-import {createTheme} from 'app/styles/createTheme';
+import {Api} from 'app/Api';
 
 import {createXHR} from 'app/fetch';
+import {FloatingSnackbar} from 'app/snackbars';
+import {createTheme} from 'app/styles/createTheme';
+import {TopBar} from 'app/topBar/TopBar';
+import {useCategoriesReader} from 'categories/state';
+import {fetchCurrencies} from 'currencies/state';
+import {Dashboard} from 'dashboard/Dashboard';
+import {paths} from 'app/paths';
+import 'normalize.css';
+import {useSelectedProject} from 'projects/state';
+import React, {ReactNode, useMemo, useState} from 'react';
+import {hot} from 'react-hot-loader/root';
+import {useDispatch} from 'react-redux';
+import {generatePath, HashRouter, Redirect, Route, Switch} from 'react-router-dom';
+import {useSnackbars} from 'snackbars/state';
+import {fetchStocks} from 'stocks/state';
+import {Transactions} from 'transactions/Transactions';
+import {Bootstrap} from 'users/defs';
+
+import {Login} from 'users/Login';
+import {useBootstrap, useUsersWithActions} from 'users/state';
 
 const AppWrapped = () => {
     const dispatch = useDispatch();
@@ -34,7 +34,7 @@ const AppWrapped = () => {
     const [ready, setReady] = useState(false);
     const readCategories = useCategoriesReader();
     const readAccounts = useAccountsReader();
-    const theme = useMemo(() => createTheme(), []);
+    const selectedProject = useSelectedProject();
 
     const fetchUser = async () => {
         try {
@@ -65,32 +65,42 @@ const AppWrapped = () => {
         if (users) {
             fetchRequirements();
         }
-    }, [users]);
+    }, [users, selectedProject?.id]);
+
+    return (
+        <>
+            {ready && (
+                <Switch>
+                    <Route exact={true} strict={false} path={paths.login} component={Login} />
+                    <Route
+                        exact={true}
+                        strict={false}
+                        path={[paths.home, paths.dashboard, paths.transactions]}
+                        component={AppLoggedIn}
+                    />
+                </Switch>
+            )}
+            <FloatingSnackbar {...snackbar} open={snackbar != null} />
+        </>
+    );
+};
+
+const AppInner = () => {
+    const theme = useMemo(() => createTheme(), []);
 
     return (
         <MuiPickersUtilsProvider utils={MomentUtils}>
             <MuiThemeProvider theme={theme}>
                 <CssBaseline />
-                <BrowserRouter>
-                    {ready && (
-                        <Switch>
-                            <Route exact={true} strict={false} path={paths.login} component={Login} />
-                            <Route
-                                exact={true}
-                                strict={false}
-                                path={[paths.home, paths.dashboard, paths.transactions]}
-                                component={AppInner}
-                            />
-                        </Switch>
-                    )}
-                    <FloatingSnackbar {...snackbar} open={snackbar != null} />
-                </BrowserRouter>
+                <HashRouter>
+                    <AppWrapped />
+                </HashRouter>
             </MuiThemeProvider>
         </MuiPickersUtilsProvider>
     );
 };
 
-const AppInner = () => {
+const AppLoggedIn = () => {
     const users = useBootstrap();
     const project = useSelectedProject();
 
@@ -122,4 +132,4 @@ const AppInner = () => {
     return <Redirect to={paths.login} />;
 };
 
-export const App = hot(AppWrapped);
+export const App = hot(AppInner);

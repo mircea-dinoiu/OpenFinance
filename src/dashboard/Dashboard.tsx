@@ -24,7 +24,7 @@ import {UsersTab} from 'dashboard/UsersTab';
 import {getStockValue} from 'dashboard/useStockValue';
 import {useInclude, useIncludePending} from 'include/helpers';
 import {IncludeDropdown} from 'include/IncludeDropdown';
-import {paths} from 'js/defs';
+import {paths} from 'app/paths';
 import _ from 'lodash';
 import {useSelectedProject} from 'projects/state';
 import React from 'react';

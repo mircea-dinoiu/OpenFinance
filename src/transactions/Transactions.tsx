@@ -652,17 +652,22 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     setParam(param: QueryParam, value: string | null) {
-        const url = new URL(window.location.href);
+        const {history} = this.props;
+        const {location} = history;
+        const searchParams = new URLSearchParams(location.search);
 
-        url.searchParams.delete(QueryParam.page);
+        searchParams.delete(QueryParam.page);
 
         if (value !== null) {
-            url.searchParams.set(param, value);
+            searchParams.set(param, value);
         } else {
-            url.searchParams.delete(param);
+            searchParams.delete(param);
         }
 
-        this.props.history.push(mapUrlToFragment(url));
+        history.push({
+            ...location,
+            search: searchParams.toString(),
+        });
     }
 
     columns = makeTransactionsColumns({
@@ -794,10 +799,15 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
     handleWindowScroll = () => {
         if (!this.state.loading && scrollReachedBottom(document.scrollingElement as HTMLElement)) {
-            const url = new URL(window.location.href);
+            const {history} = this.props;
+            const {location} = history;
+            const searchParams = new URLSearchParams(location.search);
 
-            url.searchParams.set(QueryParam.page, String(this.props.params.page + 1));
-            this.props.history.replace(mapUrlToFragment(url));
+            searchParams.set(QueryParam.page, String(this.props.params.page + 1));
+            this.props.history.replace({
+                ...location,
+                search: searchParams.toString(),
+            });
         }
     };
 }

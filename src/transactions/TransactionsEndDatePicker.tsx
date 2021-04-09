@@ -1,28 +1,21 @@
-import {
-    FormLabel,
-    IconButton,
-    Menu,
-    MenuItem as MenuItem2,
-    MenuItem,
-    Select,
-} from '@material-ui/core';
+import {FormLabel, IconButton, Menu, MenuItem as MenuItem2, MenuItem, Select} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconArrowBack from '@material-ui/icons/ArrowBack';
 import IconArrowForward from '@material-ui/icons/ArrowForward';
 import {DatePicker} from '@material-ui/pickers';
 import {ShiftDateOption, ShiftDateOptions} from 'app/dates/defs';
+import {shiftDateBack, shiftDateForward, useEndDate, useEndDateIncrement} from 'app/dates/helpers';
 import {ShiftMenu} from 'app/topBar/ShiftMenu';
 import {getShiftBackOptions, getShiftForwardOptions} from 'app/topBar/TopBar';
-import {useBootstrap} from 'users/state';
 import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import * as React from 'react';
-import {useHistory} from 'react-router-dom';
-import {shiftDateBack, shiftDateForward, useEndDate, useEndDateIncrement} from 'app/dates/helpers';
-import {mapUrlToFragment} from 'app/url';
+import {useHistory, useLocation} from 'react-router-dom';
+import {useBootstrap} from 'users/state';
 
 export const TransactionsEndDatePicker = () => {
     const history = useHistory();
+    const location = useLocation();
     const [endDate, setEndDate] = useEndDate();
     const [endDateIncrement, setEndDateIncrement] = useEndDateIncrement();
     const [showShiftMenu, setShowShiftMenu] = React.useState(false);
@@ -31,11 +24,14 @@ export const TransactionsEndDatePicker = () => {
     const cls = useStyles();
 
     const setDate = (date: Date) => {
-        const url = new URL(window.location.href);
+        const searchParams = new URLSearchParams(location.search);
 
-        url.searchParams.set('endDate', endOfDayToISOString(date));
+        searchParams.set('endDate', endOfDayToISOString(date));
 
-        history.push(mapUrlToFragment(url));
+        history.push({
+            ...location,
+            search: searchParams.toString(),
+        });
     };
 
     const handleShiftBack = () => {

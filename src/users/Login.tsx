@@ -6,7 +6,7 @@ import {ErrorSnackbar} from 'app/snackbars';
 import {Api} from 'app/Api';
 import {Bootstrap} from 'users/defs';
 import {useBootstrap} from 'users/state';
-import {paths} from 'js/defs';
+import {paths} from 'app/paths';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';

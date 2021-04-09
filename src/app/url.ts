@@ -17,11 +17,14 @@ export const useQueryParamState = <T extends string>(key: string, defaultValue: 
     return [
         (new URLSearchParams(location.search).get(key) ?? defaultValue) as T,
         (value) => {
-            const url = new URL(window.location.href);
+            const searchParams = new URLSearchParams(location.search);
 
-            url.searchParams.set(key, value);
+            searchParams.set(key, value);
 
-            history.push(mapUrlToFragment(url));
+            history.push({
+                ...location,
+                search: searchParams.toString(),
+            });
         },
     ];
 };

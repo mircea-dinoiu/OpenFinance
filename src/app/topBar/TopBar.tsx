@@ -4,10 +4,10 @@ import IconHome from '@material-ui/icons/Home';
 import {ShiftDateOption} from 'app/dates/defs';
 import {TabLink} from 'app/TabLink';
 import {TopBarMoreMenu} from 'app/topBar/TopBarMoreMenu';
-import {paths} from 'js/defs';
+import {paths} from 'app/paths';
 import _ from 'lodash';
 import React from 'react';
-import {generatePath, useLocation, useRouteMatch} from 'react-router-dom';
+import {generatePath, useHistory, useLocation, useRouteMatch} from 'react-router-dom';
 import {useProjects, useSelectedProject} from 'projects/state';
 import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
 import {shiftDateBack, shiftDateForward} from 'app/dates/helpers';
@@ -22,6 +22,7 @@ export const getShiftForwardOptions = (date: string, by: ShiftDateOption): Date[
     new Array(MAX_TIMES).fill(null).map((each, index) => shiftDateForward(date, by, index + 1));
 
 export const TopBar = () => {
+    const history = useHistory();
     const location = useLocation();
     const selectedProject = useSelectedProject();
     const match = useRouteMatch();
@@ -45,9 +46,11 @@ export const TopBar = () => {
                         {projects.length ? (
                             <Select
                                 onChange={(e) => {
-                                    window.location.href = generatePath(paths.dashboard, {
-                                        id: String(e.target.value),
-                                    });
+                                    history.push(
+                                        generatePath(paths.dashboard, {
+                                            id: String(e.target.value),
+                                        }),
+                                    );
                                 }}
                                 value={selectedProject.id}
                             >
