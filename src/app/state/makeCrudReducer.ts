@@ -7,11 +7,11 @@ import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 export const makeCrudReducer = <T>({
-                                       initialState,
-                                       name,
-                                       route,
-                                       parse,
-                                   }: {
+    initialState,
+    name,
+    route,
+    parse,
+}: {
     initialState: T;
     name: string;
     route: string;
@@ -66,7 +66,7 @@ export const makeCrudReducer = <T>({
         };
 
         useEffect(() => {
-            if (!isLoaded && !isLoading) {
+            if (!isLoading) {
                 fetch();
             }
         }, [project.id, isLoading, isLoaded]);
