@@ -65,7 +65,7 @@ import {useEndDate} from 'app/dates/helpers';
 
 import {createXHR, HttpMethod} from 'app/fetch';
 import {scrollReachedBottom} from 'app/scroll';
-import {makeUrl, mapUrlToFragment} from 'app/url';
+import {makeUrl} from 'app/url';
 
 type TypeOwnProps = {};
 

@@ -12,7 +12,6 @@ import {stickyHeaderHeight} from 'app/styles/stickyHeaderHeight';
 import {TabLink} from 'app/TabLink';
 import {makeUrl} from 'app/url';
 import {Banking} from 'dashboard/banking/Banking';
-import {BrokeragePaper} from 'dashboard/BrokeragePaper';
 import {CashFlow} from 'dashboard/cashFlow/CashFlow';
 import {CategoriesTab} from 'dashboard/CategoriesTab';
 import {getAccountOptions} from 'dashboard/getAccountOptions';
