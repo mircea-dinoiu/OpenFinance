@@ -122,7 +122,7 @@ const QuantityCol = {
     sortable: true,
     filterable: true,
     accessor: 'quantity',
-    width: 50,
+    width: 100,
     ...numericColumnStyles,
 };
 
