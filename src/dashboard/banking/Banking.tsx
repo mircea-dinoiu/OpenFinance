@@ -5,7 +5,13 @@ import IconCash from '@material-ui/icons/LocalAtm';
 import {BaseTable} from 'app/BaseTable';
 import {BrokeragePaper} from 'dashboard/BrokeragePaper';
 import {NameCol, ValueCol} from 'dashboard/columns';
-import {CreditAprCol, CreditAvailableCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'dashboard/Credit';
+import {
+    CreditAprCol,
+    CreditAvailableCol,
+    CreditBalanceCol,
+    CreditLimitCol,
+    CreditUsageCol,
+} from 'dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'dashboard/defs';
 import {PaymentPlanDialog} from 'dashboard/PaymentPlanDialog';
 import {groupBy} from 'lodash';
@@ -24,15 +30,13 @@ export const Banking = ({
     loanWithTotal: CashAccount[];
     brokerageWithTotal: BrokerageAccount[];
 }) => {
-    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-
     const [paymentPlanDialogIsOpen, setPaymentPlanDialogIsOpen] = useState(false);
 
     return (
         <>
             <>
                 {cashWithTotal.length > 0 && (
-                    <Paper className={cls.paper}>
+                    <Paper className={cls.paper} data-testid="cash">
                         <CardHeader
                             className={cls.cardHeader}
                             title={
@@ -53,7 +57,7 @@ export const Banking = ({
                 )}
 
                 {creditWithTotal.concat(loanWithTotal).length > 0 && (
-                    <Paper className={cls.paper}>
+                    <Paper className={cls.paper} data-testid="credit">
                         {paymentPlanDialogIsOpen && (
                             <PaymentPlanDialog
                                 open={true}
@@ -99,18 +103,14 @@ export const Banking = ({
                                         defaultSorted={[{id: 'name', desc: false}]}
                                         className={cls.table}
                                         data={data}
-                                        columns={
-                                            isSmall
-                                                ? [NameCol, CreditBalanceCol, CreditUsageCol]
-                                                : [
-                                                      NameCol,
-                                                      CreditBalanceCol,
-                                                      CreditAvailableCol,
-                                                      CreditLimitCol,
-                                                      CreditUsageCol,
-                                                      CreditAprCol,
-                                                  ]
-                                        }
+                                        columns={[
+                                            NameCol,
+                                            CreditBalanceCol,
+                                            CreditAvailableCol,
+                                            CreditLimitCol,
+                                            CreditUsageCol,
+                                            CreditAprCol,
+                                        ]}
                                     />
                                 </>
                             )),

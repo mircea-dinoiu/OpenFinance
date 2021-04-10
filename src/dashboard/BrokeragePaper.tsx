@@ -1,4 +1,4 @@
-import {CardHeader, Paper, Theme, useMediaQuery} from '@material-ui/core';
+import {CardHeader, Paper} from '@material-ui/core';
 import IconStock from '@material-ui/icons/TrendingUp';
 import {BaseTable} from 'app/BaseTable';
 import {CostBasisCol, NameCol, RoiCol, RoiPercCol, ValueCol} from 'dashboard/columns';
@@ -15,13 +15,12 @@ export const BrokeragePaper = ({
     brokerageWithTotal: BrokerageAccount[];
     classes: Record<string, string>;
 }) => {
-    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const brokerageWithTotalGroupedByCurrencyId = groupBy(brokerageWithTotal, 'currency_id');
     const currencyIds = Object.keys(brokerageWithTotalGroupedByCurrencyId);
     const [currencyId, setCurrencyId] = useState(currencyIds[0]);
 
     return (
-        <Paper className={classes.paper}>
+        <Paper className={classes.paper} data-testid="brokerage">
             <CardHeader
                 className={classes.cardHeader}
                 title={
@@ -41,7 +40,7 @@ export const BrokeragePaper = ({
                     defaultSorted={[{id: 'name', desc: false}]}
                     className={classes.table}
                     data={brokerageWithTotalGroupedByCurrencyId[currencyId]}
-                    columns={isSmall ? [NameCol, ValueCol] : [NameCol, ValueCol, CostBasisCol, RoiCol, RoiPercCol]}
+                    columns={ [NameCol, ValueCol, CostBasisCol, RoiCol, RoiPercCol]}
                 />
             </DashboardGridWithSidebar>
         </Paper>

@@ -12,10 +12,12 @@ export const Classes = {
     notSelectable: 'notSelectable',
 };
 
-const ReactTableStyled = styled(ReactTable)((props) => ({
+const ReactTableStyled = styled(ReactTable)((props: {theme: Theme; isScrollable: boolean}) => ({
     '&.ReactTable.ReactTable': {
         fontSize: '1rem',
         border: '0 !important',
+        overflowX: 'auto',
+        width: '100%',
 
         '& .rt-tr': {
             transition: 'all 0.25s ease',

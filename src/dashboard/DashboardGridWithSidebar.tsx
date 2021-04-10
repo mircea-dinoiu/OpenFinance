@@ -19,7 +19,8 @@ const Root = styled('div')(({theme, sidebarCount}: {sidebarCount: number; theme:
     gridTemplateColumns: `repeat(${sidebarCount}, auto) 1fr`,
     gridGap: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
-        gridTemplateColumns: '1fr',
+        display: 'flex',
+        flexDirection: 'column',
     },
 }));
 
