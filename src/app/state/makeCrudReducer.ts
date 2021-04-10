@@ -25,6 +25,7 @@ export const makeCrudReducer = <T>({
         {
             data: initialState,
             isLoaded: false,
+            projectId: NaN,
             isLoading: false,
         },
         {
@@ -38,16 +39,18 @@ export const makeCrudReducer = <T>({
             ) => payload,
         },
     );
-    const actionSet = createAction<T>(Action.set);
+    const actionSet = createAction<LazyLoadedState<T>>(Action.set);
     const useIt = (): LazyLoadedStateWithFetch<T> => {
-        const {data, isLoaded, isLoading} = useSelector((s: GlobalState) => s[name]);
+        const {data, isLoaded, isLoading, projectId: projectIdLoaded} = useSelector((s: GlobalState) => s[name]);
         const dispatch = useDispatch();
         const project = useSelectedProject();
+        const projectId = project.id;
         const fetch = async () => {
             dispatch(
                 actionSet({
                     data,
                     isLoaded,
+                    projectId,
                     isLoading: true,
                 }),
             );
@@ -60,22 +63,26 @@ export const makeCrudReducer = <T>({
                 actionSet({
                     data: parse ? parse(r.data) : r.data,
                     isLoaded: true,
+                    projectId,
                     isLoading: false,
                 }),
             );
         };
 
         useEffect(() => {
-            if (!isLoading) {
-                fetch();
+            if (!isLoaded || projectId !== projectIdLoaded) {
+                if (!isLoading) {
+                    fetch();
+                }
             }
-        }, [project.id, isLoading, isLoaded]);
+        }, [projectId, projectIdLoaded, isLoading, isLoaded]);
 
         return {
             fetch,
             data,
             isLoaded,
             isLoading,
+            projectId,
         };
     };
 

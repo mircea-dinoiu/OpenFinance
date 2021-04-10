@@ -23,6 +23,7 @@ export enum Action {
 export type LazyLoadedState<D> = {
     isLoaded: boolean;
     isLoading: boolean;
+    projectId: number;
     data: D;
 };
 
