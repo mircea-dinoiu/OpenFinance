@@ -33,7 +33,7 @@ import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
 import {locales} from 'app/locales';
-import {sortBy} from 'lodash';
+import {sortBy, orderBy} from 'lodash';
 
 import React, {PureComponent} from 'react';
 import {useSelector} from 'react-redux';
@@ -153,7 +153,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
         return (
             <FormControl fullWidth={true}>
                 <Autocomplete<Account, false, true>
-                    options={this.props.moneyLocations}
+                    options={orderBy(this.props.moneyLocations, ['status', 'name'], ['desc', 'asc'])}
                     getOptionLabel={(o) => o.name}
                     disableClearable={true}
                     groupBy={(option) => option.status.toLocaleUpperCase()}
