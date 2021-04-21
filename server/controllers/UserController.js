@@ -18,8 +18,6 @@ module.exports = class UserController {
         );
 
         res.json({
-            // TODO remove current
-            current: req.user,
             user: req.user,
             projects: Object.values(_.groupBy(results, 'project_id')).map((projectsWithUsers) => ({
                 id: projectsWithUsers[0].project_id,

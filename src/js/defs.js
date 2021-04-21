@@ -12,14 +12,4 @@ module.exports = {
     PERC_MIN: 0,
     PERC_MAX: 100,
     RepeatOption,
-    paths: {
-        home: '/',
-        dashboard: '/dashboard',
-        transactions: '/transactions',
-        categories: '/categories',
-        accounts: '/accounts',
-        accountTypes: '/account-types',
-        login: '/login',
-    },
-    apis: {},
 };
