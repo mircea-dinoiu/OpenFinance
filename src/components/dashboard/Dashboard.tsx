@@ -33,7 +33,7 @@ import {ScreenQuery, spacingLarge, spacingNormal, spacingSmall, stickyHeaderHeig
 import _, {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {AccountType, useAccounts} from 'state/accounts';
+import {AccountType, useAccounts, AccountStatus} from 'state/accounts';
 import {useRefreshWidgets, useScreenSize} from 'state/hooks';
 import {useStockPrices} from 'state/stocks';
 import {summaryAssign, SummaryKey} from 'state/summary';
@@ -99,7 +99,7 @@ export const Dashboard = () => {
             ...a,
             total: getCostBasis(data.cash, a),
         }))
-        .filter((a) => a.total !== 0);
+        .filter((a) => a.total !== 0 || a.status !== AccountStatus.CLOSED);
     const creditTotals = getTotals(creditWithTotal);
 
     const loanWithTotal = (accountsByType[AccountType.LOAN] ?? [])
@@ -233,7 +233,7 @@ export const Dashboard = () => {
                                                     }
                                                 />
                                                 <BaseTable
-                                                    defaultSorted={[{id: 'name', desc: false}]}
+                                                    defaultSorted={[{id: 'balance', desc: true}]}
                                                     className={cls.table}
                                                     data={data}
                                                     columns={

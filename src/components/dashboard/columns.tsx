@@ -16,7 +16,7 @@ export const ValueCol: Column<CashAccount> = {
     Header: 'Value',
     id: 'value',
     accessor: 'total',
-    Cell: ({original: a}: {original: CashAccount}) => <NumericValue currency={a.currency_id} value={a.total} />,
+    Cell: ({original: a}: {original: CashAccount}) => <NumericValue currency={a.currency_id} value={a.total} colorize={a.total === 0} />,
     Footer: makeTotalFooter(),
     ...numericColumnStyles,
 };

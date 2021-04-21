@@ -83,7 +83,7 @@ export const NumericValue = ({
         <span
             className={
                 colorize && !privacyToggle
-                    ? clsx(cls.container, value > 0 && cls.positive, value < 0 && cls.negative)
+                    ? clsx(cls.container, value > 0 && cls.positive, value <= 0 && cls.negative)
                     : undefined
             }
         >

@@ -19,7 +19,7 @@ export const CreditAprCol: Column<CashAccount> = {
 
 export const CreditBalanceCol: Column<CashAccount> = {
     Header: 'Balance',
-    accessor: (r) => -r.total,
+    accessor: (r) => r.total ? -r.total: 0,
     id: 'balance',
     Cell: ({original, value}: {original: CashAccount; value: number}) => {
         return <NumericValue currency={original.currency_id} value={value} />;
