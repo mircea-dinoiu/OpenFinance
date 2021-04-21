@@ -100,7 +100,7 @@ export const Banking = ({
                                         }
                                     />
                                     <BaseTable
-                                        defaultSorted={[{id: 'name', desc: false}]}
+                                        defaultSorted={[{id: 'balance', desc: true}]}
                                         className={cls.table}
                                         data={data}
                                         columns={[

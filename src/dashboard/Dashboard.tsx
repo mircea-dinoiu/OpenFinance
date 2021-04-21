@@ -1,7 +1,7 @@
 import {Card, CardContent, Checkbox, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Alert, AlertTitle} from '@material-ui/lab';
-import {Account, AccountType} from 'accounts/defs';
+import {Account, AccountType, AccountStatus} from 'accounts/defs';
 import {useAccounts} from 'accounts/state';
 import {Api} from 'app/Api';
 import {createXHR} from 'app/fetch';
@@ -91,7 +91,7 @@ export const Dashboard = () => {
             ...a,
             total: getCostBasis(data.cash, a),
         }))
-        .filter((a) => a.total !== 0);
+        .filter((a) => a.total !== 0 || a.status !== AccountStatus.CLOSED);
     const creditTotals = getTotals(creditWithTotal);
 
     const loanWithTotal = (accountsByType[AccountType.LOAN] ?? [])
