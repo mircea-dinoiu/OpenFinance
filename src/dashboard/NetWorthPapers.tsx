@@ -9,13 +9,13 @@ import _ from 'lodash';
 import {Info as IconInfo} from '@material-ui/icons';
 
 export const NetWorthPapers = ({
-    cashByCurrencyId,
+    liquidByCurrencyId,
     inventoriesByCurrencyId,
     investmentsByCurrencyId,
     debtByCurrencyId,
     className,
 }: {
-    cashByCurrencyId: Record<string, number>;
+    liquidByCurrencyId: Record<string, number>;
     inventoriesByCurrencyId: Record<string, BalanceByLocationInventory[]>;
     investmentsByCurrencyId: Record<string, number>;
     debtByCurrencyId: Record<string, number>;
@@ -28,7 +28,7 @@ export const NetWorthPapers = ({
         _.sortBy(
             [
                 ...Object.keys(propertiesByCurrencyId).map(Number),
-                ...Object.keys(cashByCurrencyId).map(Number),
+                ...Object.keys(liquidByCurrencyId).map(Number),
                 ...Object.keys(investmentsByCurrencyId).map(Number),
                 ...Object.keys(debtByCurrencyId).map(Number),
             ],
@@ -40,11 +40,11 @@ export const NetWorthPapers = ({
         <>
             {currencies.map((currencyId) => {
                 const valueProperties = _.sumBy(propertiesByCurrencyId[currencyId], 'market_value');
-                const valueCash = cashByCurrencyId[currencyId] ?? 0;
+                const valueLiquid = liquidByCurrencyId[currencyId] ?? 0;
                 const valueInvestments = investmentsByCurrencyId[currencyId] ?? 0;
                 const valueDebt = debtByCurrencyId[currencyId] ?? 0;
                 const inventories = inventoriesByCurrencyId[currencyId] ?? [];
-                const total = valueCash + valueInvestments + valueProperties + valueDebt;
+                const total = valueLiquid + valueInvestments + valueProperties + valueDebt;
 
                 return (
                     total > 0 && (
@@ -65,7 +65,7 @@ export const NetWorthPapers = ({
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    <NetWorthTableRow label={'Cash'} value={valueCash} currencyId={currencyId} />
+                                    <NetWorthTableRow label={'Cash'} value={valueLiquid} currencyId={currencyId} />
                                     <NetWorthTableRow
                                         label={'Investments'}
                                         value={valueInvestments}

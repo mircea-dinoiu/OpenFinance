@@ -9,6 +9,8 @@ export enum AccountType {
     CREDIT = 'credit',
     LOAN = 'loan',
     BROKERAGE = 'brokerage',
+    CHECKING = 'checking',
+    SAVINGS = 'savings'
 }
 
 export type Account = {

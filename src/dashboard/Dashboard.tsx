@@ -34,6 +34,7 @@ import {useStockPrices} from 'stocks/state';
 import {summaryAssign, SummaryKey} from 'summary/state';
 import {BalanceByLocation} from 'transactions/defs';
 import {TransactionsEndDatePicker} from 'transactions/TransactionsEndDatePicker';
+import {CashAccount} from 'dashboard/defs';
 
 enum DashboardTab {
     accounts = 'accounts',
@@ -77,29 +78,30 @@ export const Dashboard = () => {
     const handleToggleIncludePending = () => {
         setIncludePending(!includePending);
     };
+    const getLiquidAccountsOfType = (type: AccountType) => {
+        return (accountsByType[type] ?? [])
+            .map((a) => ({
+                ...a,
+                total: getCostBasis(data.cash, a),
+            }))
+            .filter((a) => a.total !== 0 || a.status !== AccountStatus.CLOSED);
+    };
+    const getAccountsWithTotal = (
+        type: AccountType,
+    ): [ReturnType<typeof getLiquidAccountsOfType>, ReturnType<typeof getTotals>] => {
+        const accountsOfType = getLiquidAccountsOfType(type);
+        const totals = getTotals(accountsOfType);
 
-    const cashWithTotal = (accountsByType[AccountType.CASH] ?? [])
-        .map((a) => ({
-            ...a,
-            total: getCostBasis(data.cash, a),
-        }))
-        .filter((a) => a.total !== 0);
-    const cashTotals = getTotals(cashWithTotal);
+        return [accountsOfType, totals];
+    };
 
-    const creditWithTotal = (accountsByType[AccountType.CREDIT] ?? [])
-        .map((a) => ({
-            ...a,
-            total: getCostBasis(data.cash, a),
-        }))
-        .filter((a) => a.total !== 0 || a.status !== AccountStatus.CLOSED);
-    const creditTotals = getTotals(creditWithTotal);
+    const [cashWithTotal, cashTotals] = getAccountsWithTotal(AccountType.CASH);
+    const [checkingWithTotal] = getAccountsWithTotal(AccountType.CHECKING);
+    const [savingsWithTotal] = getAccountsWithTotal(AccountType.SAVINGS);
+    const liquidWithTotal = [...cashWithTotal, ...checkingWithTotal, ...savingsWithTotal];
 
-    const loanWithTotal = (accountsByType[AccountType.LOAN] ?? [])
-        .map((a) => ({
-            ...a,
-            total: getCostBasis(data.cash, a),
-        }))
-        .filter((a) => a.total !== 0);
+    const [creditWithTotal, creditTotals] = getAccountsWithTotal(AccountType.CREDIT);
+    const [loanWithTotal] = getAccountsWithTotal(AccountType.LOAN);
 
     const brokerageWithTotal = (accountsByType[AccountType.BROKERAGE] ?? [])
         .map((a) => {
@@ -138,7 +140,7 @@ export const Dashboard = () => {
                 <NetWorthPapers
                     className={cls.paper}
                     inventoriesByCurrencyId={_.groupBy(data.inventories, 'currency_id')}
-                    cashByCurrencyId={getTotals(cashWithTotal)}
+                    liquidByCurrencyId={getTotals(liquidWithTotal)}
                     investmentsByCurrencyId={getTotals(brokerageWithTotal)}
                     debtByCurrencyId={getTotals([...creditWithTotal, ...loanWithTotal])}
                 />
@@ -183,7 +185,7 @@ export const Dashboard = () => {
                 {tab === DashboardTab.accounts && (
                     <Banking
                         classes={cls}
-                        cashWithTotal={cashWithTotal}
+                        liquidWithTotal={liquidWithTotal}
                         creditWithTotal={creditWithTotal}
                         loanWithTotal={loanWithTotal}
                         brokerageWithTotal={brokerageWithTotal}
