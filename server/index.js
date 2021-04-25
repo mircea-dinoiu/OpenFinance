@@ -7,9 +7,9 @@ require('dotenv').config();
 
 const app = require('../server');
 const http = require('http');
-const {sql} = require('../server/models');
+const {sql} = require('./models');
 
-require('../server/crons');
+require('./crons');
 
 /**
  * Get port from environment and store in Express.
