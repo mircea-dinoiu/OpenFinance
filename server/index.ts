@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-require('dotenv').config();
-const {App} = require('./App');
-const http = require('http');
+import http from 'http';
+import dotenv from 'dotenv';
+
+dotenv.config();
 const {sql} = require('./models');
-const crons = require('./crons');
+const {setupCrons} = require('./crons');
+const {RequestListener} = require('./RequestListener');
 
 function main() {
-    crons();
+    setupCrons();
 
-    const app = App();
+    const app = RequestListener();
 
     /**
      * Get port from environment and store in Express.

@@ -2,7 +2,7 @@ const {Stock, Expense} = require('../models');
 const logger = require('../helpers/logger');
 const yf = require('yahoo-finance');
 
-module.exports = async () => {
+export const updateStocks = async () => {
     const models = await Stock.findAll({
         where: {
             manual_pricing: false,
@@ -21,6 +21,12 @@ module.exports = async () => {
         }
 
         const {regularMarketPrice: price} = data.price;
+
+        if (price == null) {
+            logger.error('Incorrect Price (', price, ') for', model.symbol);
+
+            return;
+        }
 
         if (model.price !== price) {
             logger.log('YAHOO', `Updating ${model.symbol} price: ${model.price} → ${price}`);

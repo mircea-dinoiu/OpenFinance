@@ -12,7 +12,7 @@ import includeSession from './includeSession';
 /**
  * Export the app
  */
-export const App = () => {
+export const RequestListener = () => {
     require('express-async-errors');
     const app = express();
 
