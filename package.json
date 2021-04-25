@@ -27,7 +27,6 @@
     "@types/express": "4",
     "@types/jest": "^24.0.19",
     "@types/lodash": "^4.14.149",
-    "@types/node": "^12.11.1",
     "@types/react": "^16.9.9",
     "@types/react-dom": "^16.9.5",
     "@types/react-event-listener": "^0.4.9",
@@ -65,6 +64,7 @@
     "utility-types": "^3.8.0"
   },
   "dependencies": {
+    "@types/node": "^14.14.41",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "chalk": "^2.4.1",
@@ -99,8 +99,7 @@
     "ci": "run-p --aggregate-output test-server test-client lint-all",
     "build": "rm -rf build && react-scripts build && mv build/index.html build/app.html",
     "dev": "react-scripts start",
-    "start": "node server/index.js",
-    "start:ts": "TS_NODE_PROJECT=tsconfig.server.json ts-node server/index.ts",
+    "start": "TS_NODE_PROJECT=tsconfig.server.json ts-node server/index.ts",
     "test": "react-scripts test",
     "test-related": "react-scripts test --findRelatedTests",
     "test-client": "react-scripts test --watchAll=false",
@@ -110,7 +109,7 @@
     "lint-all": "yarn lint server src",
     "format": "prettier-eslint --write",
     "format-all": "yarn run format \"server/**/*.js\" \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" \"*.js\"",
-    "nodemon": "nodemon --ignore 'sources/**/*.ts' --ignore 'sources/**/*.tsx' --ignore '*.test.js*' --ignore storage/"
+    "nodemon": "nodemon --config nodemon.json"
   },
   "husky": {
     "hooks": {

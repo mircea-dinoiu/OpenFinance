@@ -1,0 +1,9 @@
+{
+  "ext": "*",
+  "ignore": [
+    "sources/**/*.ts",
+    "sources/**/*.tsx",
+    "*.test.js*",
+    "storage/"
+  ]
+}

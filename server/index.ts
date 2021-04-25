@@ -4,14 +4,14 @@
  * Module dependencies.
  */
 require('dotenv').config();
-const App = require('./app');
+const {App} = require('./App');
 const http = require('http');
 const {sql} = require('./models');
 const crons = require('./crons');
 
 function main() {
     crons();
-    
+
     const app = App();
 
     /**
@@ -24,7 +24,6 @@ function main() {
     /**
      * Create HTTP server.
      */
-
     const server = http.createServer(app);
 
     /**
@@ -34,11 +33,10 @@ function main() {
     sql.sync().then(() => {
         server.listen(port);
         server.on(
-            'error'
+            'error',
             /**
              * Event listener for HTTP server "error" event.
-             */,
-            function onError(error) {
+             */ function onError(error: {syscall: string; code: string}) {
                 if (error.syscall !== 'listen') {
                     throw error;
                 }
@@ -66,7 +64,7 @@ function main() {
              * Event listener for HTTP server "listening" event.
              */ function onListening() {
                 const addr = server.address();
-                const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+                const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr?.port;
 
                 console.log('------------ FINANCIAL ------------');
                 console.log('Listening on ' + bind);

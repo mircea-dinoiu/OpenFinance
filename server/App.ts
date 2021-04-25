@@ -1,18 +1,18 @@
-const express = require('express');
-const path = require('path');
-const favicon = require('serve-favicon');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const includeAuth = require('./includeAuth');
-const includeCsrf = require('./includeCsrf');
-const includeRoutes = require('./includeRoutes');
-const includeSession = require('./includeSession');
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import includeAuth from './includeAuth';
+import includeCsrf from './includeCsrf';
+import includeRoutes from './includeRoutes';
+import includeSession from './includeSession';
 
 /**
  * Export the app
  */
-module.exports = () => {
+export const App = () => {
     require('express-async-errors');
     const app = express();
 
@@ -68,7 +68,7 @@ module.exports = () => {
     /**
      * ROUTES
      */
-    includeRoutes(app)
+    includeRoutes(app);
 
     return app;
 };

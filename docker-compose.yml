@@ -8,6 +8,8 @@ services:
       - ./src/:/financial/src
       - ./package.json:/financial/package.json
       - ./yarn.lock:/financial/yarn.lock
+      - ./nodemon.json:/financial/nodemon.json
+      - ./tsconfig.server.json:/financial/tsconfig.server.json
   src:
     build:
       context: .
