@@ -35,7 +35,6 @@ if (process.env.NODE_ENV !== 'test') {
     });
 
     db.sql = sql;
-    db.Sequelize = Sequelize;
 
     module.exports = db;
 }
