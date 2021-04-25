@@ -59,7 +59,7 @@ app.use(
             process.env.SESSION_STORE === 'mode'
                 ? new session.MemoryStore()
                 : new SequelizeStore({
-                      db: require('./server/models').sql,
+                      db: require('./models').sql,
                   }),
     }),
 );
@@ -77,7 +77,7 @@ passport.use(
             usernameField: 'email',
         },
         (email, pass, cb) => {
-            const {User} = require('./server/models');
+            const {User} = require('./models');
 
             User.findOne({
                 where: {
@@ -111,7 +111,7 @@ passport.serializeUser((user, cb) => {
 });
 
 passport.deserializeUser((id, cb) => {
-    const {User} = require('./server/models');
+    const {User} = require('./models');
 
     User.findById(id).then((user) => {
         cb(null, user);
@@ -142,7 +142,7 @@ if (process.env.USE_CSRF === 'true') {
 /**
  * ROUTES
  */
-Object.entries(require('./server/routes')).forEach(([route, handler]) => {
+Object.entries(require('./routes')).forEach(([route, handler]) => {
     app.use(route, handler);
 });
 
