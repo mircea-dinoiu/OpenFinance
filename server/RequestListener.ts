@@ -25,7 +25,7 @@ export const RequestListener = () => {
     /*
      * Serve static assets (before anything else!). We don't need session or filters when serving these.
      */
-    app.use(express.static(path.join(__dirname, 'build')));
+    app.use(express.static(path.join(__dirname, '..', 'build')));
 
     /*
      * Cookie parser
