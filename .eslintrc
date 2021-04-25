@@ -1,4 +1,5 @@
 {
+    "plugins": ["node"],
     "extends": ["eslint:recommended", "react-app", "prettier"],
     "rules": {
         "no-prototype-builtins": "off",
@@ -8,10 +9,7 @@
         "no-underscore-dangle": ["warn", {"allowAfterThis": true}],
         "max-statements-per-line": ["error", {"max": 1}],
         "camelcase": ["warn", {"properties": "never"}],
-        "lines-around-directive": [
-            "error",
-            {"before": "never", "after": "always"}
-        ],
+        "lines-around-directive": ["error", {"before": "never", "after": "always"}],
         "padding-line-between-statements": [
             "error",
             {"blankLine": "always", "prev": "*", "next": "return"},
@@ -28,6 +26,7 @@
         ],
         "import/no-default-export": "warn",
         // turning this to warn/error will loop requests triggered by App.tsx
-        "react-hooks/exhaustive-deps": "off"
+        "react-hooks/exhaustive-deps": "off",
+        "node/global-require": "warn"
     }
 }

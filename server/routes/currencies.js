@@ -1,12 +1,14 @@
 const express = require('express');
-const router = express.Router();
 const Controller = require('../controllers/CurrencyController');
 const {validateAuth} = require('../middlewares');
 
-const c = new Controller();
+module.exports = () => {
+    const router = express.Router();
+    const c = new Controller();
 
-router.get('/', validateAuth, async (req, res) => {
-    c.list(req, res);
-});
+    router.get('/', validateAuth, async (req, res) => {
+        c.list(req, res);
+    });
 
-module.exports = router;
+    return router;
+};

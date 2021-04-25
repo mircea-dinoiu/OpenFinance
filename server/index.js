@@ -4,35 +4,76 @@
  * Module dependencies.
  */
 require('dotenv').config();
-
-const app = require('../server');
+const App = require('./app');
 const http = require('http');
 const {sql} = require('./models');
+const crons = require('./crons');
 
-require('./crons');
+function main() {
+    crons();
+    
+    const app = App();
 
-/**
- * Get port from environment and store in Express.
- */
-const port = normalizePort(process.env.PORT || '8080');
+    /**
+     * Get port from environment and store in Express.
+     */
+    const port = normalizePort(process.env.PORT || '8080');
 
-app.set('port', port);
+    app.set('port', port);
 
-/**
- * Create HTTP server.
- */
+    /**
+     * Create HTTP server.
+     */
 
-const server = http.createServer(app);
+    const server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
 
-sql.sync().then(() => {
-    server.listen(port);
-    server.on('error', onError);
-    server.on('listening', onListening);
-});
+    sql.sync().then(() => {
+        server.listen(port);
+        server.on(
+            'error'
+            /**
+             * Event listener for HTTP server "error" event.
+             */,
+            function onError(error) {
+                if (error.syscall !== 'listen') {
+                    throw error;
+                }
+
+                const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+
+                // handle specific listen errors with friendly messages
+                switch (error.code) {
+                    case 'EACCES':
+                        console.error(bind + ' requires elevated privileges');
+                        process.exit(1);
+                        break;
+                    case 'EADDRINUSE':
+                        console.error(bind + ' is already in use');
+                        process.exit(1);
+                        break;
+                    default:
+                        throw error;
+                }
+            },
+        );
+        server.on(
+            'listening',
+            /**
+             * Event listener for HTTP server "listening" event.
+             */ function onListening() {
+                const addr = server.address();
+                const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+
+                console.log('------------ FINANCIAL ------------');
+                console.log('Listening on ' + bind);
+            },
+        );
+    });
+}
 
 /**
  * Normalize a port into a number, string, or false.
@@ -53,39 +94,6 @@ function normalizePort(val) {
     return false;
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
-function onError(error) {
-    if (error.syscall !== 'listen') {
-        throw error;
-    }
-
-    const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
-
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-        case 'EACCES':
-            console.error(bind + ' requires elevated privileges');
-            process.exit(1);
-            break;
-        case 'EADDRINUSE':
-            console.error(bind + ' is already in use');
-            process.exit(1);
-            break;
-        default:
-            throw error;
-    }
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-function onListening() {
-    const addr = server.address();
-    const bind =
-        typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-
-    console.log('------------ FINANCIAL ------------');
-    console.log('Listening on ' + bind);
+if (require.main === module) {
+    main();
 }
