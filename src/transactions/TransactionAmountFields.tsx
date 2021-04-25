@@ -72,7 +72,12 @@ export const TransactionAmountFields = ({
 
     return (
         <TransactionAmountFieldsStyled>
-            <ToggleButtonGroupStyled size="small" value={sign} exclusive onChange={(e, m) => onChangeQuantity(m)}>
+            <ToggleButtonGroupStyled
+                size="small"
+                value={sign}
+                exclusive
+                onChange={(e, m) => typeof m === 'number' && onChangeQuantity(m)}
+            >
                 <ToggleButton value={-1}>Withdraw</ToggleButton>
                 <ToggleButton value={1}>Deposit</ToggleButton>
             </ToggleButtonGroupStyled>
