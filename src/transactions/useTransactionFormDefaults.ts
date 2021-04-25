@@ -12,7 +12,7 @@ export const useTransactionFormDefaults = (): TransactionForm => {
         notes: '',
         status: TransactionStatus.pending,
         price: 0,
-        quantity: 1,
+        quantity: -1,
         paymentMethod: mls[0]?.id,
         chargedPersons: {[user.id]: 100},
         categories: [],

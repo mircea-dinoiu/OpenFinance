@@ -130,7 +130,8 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
             <TransactionAmountFields
                 accountId={this.state.paymentMethod}
                 values={this.state}
-                onChange={(values) => this.setState(values)}
+                onChangeQuantity={(quantity) => this.setState({quantity})}
+                onChangePrice={(price) => this.setState({price})}
             />
         );
     }
