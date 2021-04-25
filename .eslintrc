@@ -1,5 +1,4 @@
 {
-    "plugins": ["node"],
     "extends": ["eslint:recommended", "react-app", "prettier"],
     "rules": {
         "no-prototype-builtins": "off",
@@ -26,7 +25,6 @@
         ],
         "import/no-default-export": "warn",
         // turning this to warn/error will loop requests triggered by App.tsx
-        "react-hooks/exhaustive-deps": "off",
-        "node/global-require": "warn"
+        "react-hooks/exhaustive-deps": "off"
     }
 }

@@ -37,7 +37,6 @@
     "axios": "^0.18.0",
     "clsx": "^1.1.0",
     "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-node": "^11.1.0",
     "husky": "^5.1.3",
     "lint-staged": "^10.5.4",
     "material-ui-dropzone": "^3.3.1",
