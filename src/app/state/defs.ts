@@ -5,7 +5,7 @@ import {Inventory} from 'inventories/defs';
 import {Property} from 'properties/defs';
 import {Snackbar} from 'snackbars/defs';
 import {Stock} from 'stocks/defs';
-import {Bootstrap} from 'users/defs';
+import {TBootstrap} from 'users/defs';
 import {Summary} from 'summary/state';
 
 export enum Action {
@@ -37,7 +37,7 @@ export type GlobalState = {
     categories: Categories;
     moneyLocations: Accounts;
     refreshWidgets: string;
-    user: Bootstrap;
+    user: TBootstrap;
     snackbars: Snackbar[];
     summary: Summary;
     stocks: Stock[];

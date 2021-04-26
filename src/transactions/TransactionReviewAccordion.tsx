@@ -5,7 +5,7 @@ import {ExpenseForm} from 'transactions/ExpenseForm';
 import {formToModel} from 'transactions/formToModel';
 import {modelToForm} from 'transactions/modelToForm';
 import {TransactionModel} from 'transactions/defs';
-import {Bootstrap} from 'users/defs';
+import {TBootstrap} from 'users/defs';
 import React, {useRef, useState} from 'react';
 
 export const TransactionReviewAccordion = ({
@@ -21,7 +21,7 @@ export const TransactionReviewAccordion = ({
     onExcludedChange: (excluded: boolean) => void;
     onTransactionChange: (transaction: TransactionModel) => void;
     currencyCode: string;
-    bootstrap: Bootstrap;
+    bootstrap: TBootstrap;
 }) => {
     const [expanded, setExpanded] = useState(false);
     const formValues = useRef(modelToForm(transaction));

@@ -28,7 +28,7 @@ import {Account, Accounts, AccountType} from 'accounts/defs';
 import {Categories} from 'categories/defs';
 import {CurrencyMap} from 'currencies/defs';
 import {Inventory} from 'inventories/defs';
-import {Bootstrap, User} from 'users/defs';
+import {TBootstrap, TUser} from 'users/defs';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
 import {sumArray} from 'js/utils/numbers';
@@ -56,10 +56,10 @@ type Props = TypeOwnProps & {
     moneyLocations: Accounts;
     currencies: CurrencyMap;
     endDate: string;
-    user: Bootstrap;
+    user: TBootstrap;
     categories: Categories;
     inventories: Inventory[];
-    users: User[];
+    users: TUser[];
 };
 
 export const setChargedPersonValueFactory = (

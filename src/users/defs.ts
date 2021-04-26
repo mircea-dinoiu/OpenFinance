@@ -1,12 +1,12 @@
-import {Project} from 'projects/defs';
+import {TProject} from 'projects/defs';
 
-export type User = {
+export type TUser = {
     avatar: string;
     full_name: string;
     id: number;
 };
-export type Bootstrap = {
-    current: User;
-    user: User;
-    projects: Project[];
+export type TBootstrap = {
+    current: TUser;
+    user: TUser;
+    projects: TProject[];
 };

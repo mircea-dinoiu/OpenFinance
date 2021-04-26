@@ -22,7 +22,7 @@ import {BaseTable, TableHeader, TableHeaderTop} from 'app/BaseTable';
 import {refreshWidgets as onRefreshWidgets} from 'refreshWidgets/state';
 
 import {BigLoader} from 'app/loaders';
-import {Project} from 'projects/defs';
+import {TProject} from 'projects/defs';
 import {ContextMenuItems} from 'transactions/ContextMenuItems';
 import {Tooltip} from 'app/Tooltip';
 import {WeightDisplay} from 'transactions/cells/WeightDisplay';
@@ -48,7 +48,7 @@ import {Api} from 'app/Api';
 import {QueryParam} from 'app/QueryParam';
 import {Accounts} from 'accounts/defs';
 import {CurrencyMap} from 'currencies/defs';
-import {Bootstrap} from 'users/defs';
+import {TBootstrap} from 'users/defs';
 import * as H from 'history';
 import _, {isEqual, range} from 'lodash';
 import groupBy from 'lodash/groupBy';
@@ -83,8 +83,8 @@ type TypeProps = {
     refreshWidgets: string;
     dispatch: Dispatch;
     moneyLocations: Accounts;
-    user: Bootstrap;
-    project: Project;
+    user: TBootstrap;
+    project: TProject;
 } & TypeOwnProps;
 
 type TypeState = {

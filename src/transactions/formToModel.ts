@@ -1,10 +1,10 @@
 import {TransactionForm, TransactionModel, TransactionStatus} from 'transactions/defs';
-import {Bootstrap, User} from 'users/defs';
+import {TBootstrap, TUser} from 'users/defs';
 
 export const formToModel = (
     form: TransactionForm,
     props: {
-        user: User;
+        user: TUser;
     },
 ): TransactionModel => {
     const users = Object.keys(form.chargedPersons).length > 0 ? form.chargedPersons : {[props.user.id]: 100};

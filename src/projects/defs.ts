@@ -1,8 +1,8 @@
-import {User} from 'users/defs';
+import {TUser} from 'users/defs';
 
-export type Project = {
+export type TProject = {
     id: number;
     default_currency_id: number;
     name: string;
-    users: User[];
+    users: TUser[];
 };

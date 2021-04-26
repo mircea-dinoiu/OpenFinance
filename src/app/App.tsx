@@ -22,7 +22,7 @@ import {generatePath, HashRouter, Redirect, Route, Switch} from 'react-router-do
 import {useSnackbars} from 'snackbars/state';
 import {fetchStocks} from 'stocks/state';
 import {Transactions} from 'transactions/Transactions';
-import {Bootstrap} from 'users/defs';
+import {TBootstrap} from 'users/defs';
 
 import {Login} from 'users/Login';
 import {useBootstrap, useUsersWithActions} from 'users/state';
@@ -38,7 +38,7 @@ const AppWrapped = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await createXHR<Bootstrap>({
+            const response = await createXHR<TBootstrap>({
                 url: Api.user.list,
             });
 

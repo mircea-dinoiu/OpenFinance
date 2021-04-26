@@ -1,7 +1,7 @@
 import {Action} from 'app/state/defs';
-import {Bootstrap} from 'users/defs';
+import {TBootstrap} from 'users/defs';
 
-export const setUsers = (users: null | Bootstrap) => ({
+export const setUsers = (users: null | TBootstrap) => ({
     type: Action.SET_USERS,
     value: users,
 });

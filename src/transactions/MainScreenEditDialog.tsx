@@ -10,10 +10,10 @@ import * as React from 'react';
 import {ReactNode, useEffect, useRef, useState} from 'react';
 import {TransactionForm, TransactionModel} from 'transactions/defs';
 import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
-import {User} from 'users/defs';
+import {TUser} from 'users/defs';
 
 type TypeProps = {
-    user: User;
+    user: TUser;
     onRequestUpdate: (
         data: TransactionModel[],
     ) => Promise<{
@@ -21,7 +21,7 @@ type TypeProps = {
     }>;
     items: TransactionModel[];
     modelToForm: (model: TransactionModel) => TransactionForm;
-    formToModel: (form: TransactionForm, detail: {user: User}) => TransactionModel;
+    formToModel: (form: TransactionForm, detail: {user: TUser}) => TransactionModel;
     entityName: string;
     formComponent: React.ComponentType<{
         initialValues: TransactionForm;

@@ -2,7 +2,7 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import bcrypt from 'bcrypt';
 import {getUserModel} from './models';
-import {User} from '../src/users/defs';
+import {TUser} from '../src/users/defs';
 
 export const includeAuth = (app) => {
     const UserModel = getUserModel();
@@ -40,11 +40,11 @@ export const includeAuth = (app) => {
         ),
     );
 
-    passport.serializeUser<User, User['id']>((user, done) => {
+    passport.serializeUser<TUser, TUser['id']>((user, done) => {
         done(null, user.id);
     });
 
-    passport.deserializeUser<User, User['id']>((id: number, cb) => {
+    passport.deserializeUser<TUser, TUser['id']>((id: number, cb) => {
         UserModel.findById(id).then((user) => {
             cb(null, user);
         });

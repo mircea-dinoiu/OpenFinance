@@ -4,7 +4,7 @@ import {setUsers} from 'app/users/state';
 import {ButtonProgress} from 'app/loaders';
 import {ErrorSnackbar} from 'app/snackbars';
 import {Api} from 'app/Api';
-import {Bootstrap} from 'users/defs';
+import {TBootstrap} from 'users/defs';
 import {useBootstrap} from 'users/state';
 import {paths} from 'app/paths';
 import React from 'react';
@@ -30,7 +30,7 @@ export const Login = () => {
         setError(null);
 
         try {
-            const response = await createXHR<Bootstrap>({
+            const response = await createXHR<TBootstrap>({
                 url: Api.user.login,
                 method: 'POST',
                 data: new URLSearchParams({
