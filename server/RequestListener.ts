@@ -4,10 +4,10 @@ import favicon from 'serve-favicon';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import includeAuth from './includeAuth';
-import includeCsrf from './includeCsrf';
-import includeRoutes from './includeRoutes';
-import includeSession from './includeSession';
+import {includeAuth} from './includeAuth';
+import {includeCsrf} from './includeCsrf';
+import {includeRoutes} from './includeRoutes';
+import {includeSession} from './includeSession';
 
 /**
  * Export the app

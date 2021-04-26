@@ -2,13 +2,15 @@
 
 import http from 'http';
 import dotenv from 'dotenv';
-
-dotenv.config();
-const {sql} = require('./models');
-const {setupCrons} = require('./crons');
-const {RequestListener} = require('./RequestListener');
+import {getDb} from './getDb';
+import {setupCrons} from './crons';
+import {RequestListener} from './RequestListener';
 
 function main() {
+    dotenv.config();
+
+    const sql = getDb();
+
     setupCrons();
 
     const app = RequestListener();

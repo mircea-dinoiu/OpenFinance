@@ -1,9 +1,9 @@
-const {Stock, Expense} = require('../models');
-const logger = require('../helpers/logger');
-const yf = require('yahoo-finance');
+import {getStockModel, getExpenseModel} from '../models';
+import logger from '../helpers/logger';
+import yf from 'yahoo-finance';
 
 export const updateStocks = async () => {
-    const models = await Stock.findAll({
+    const models = await getStockModel().findAll({
         where: {
             manual_pricing: false,
         },
@@ -36,7 +36,7 @@ export const updateStocks = async () => {
 };
 
 const inferStockPriceFromTransactions = async (stock) => {
-    const transaction = await Expense.findOne({
+    const transaction = await getExpenseModel().findOne({
         where: {
             stock_id: stock.id,
         },

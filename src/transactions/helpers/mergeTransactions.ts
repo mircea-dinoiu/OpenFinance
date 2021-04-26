@@ -19,7 +19,7 @@ export const mergeTransactions = (items: TransactionModel[]): Partial<Transactio
         categories: uniq(flatten(map(items, 'categories'))),
         favorite: Math.max(...map(items, 'favorite')),
         item: uniq(map(items, 'item')).join(', '),
-        weight: sumArray(map(items, 'weight')),
+        weight: sumArray(map(items, 'weight') as number[]),
         users: mapValues(
             map(items, 'users').reduce((acc, users) => {
                 for (const id in users) {

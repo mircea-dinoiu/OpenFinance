@@ -7,7 +7,5 @@
     "suppressImplicitAnyIndexErrors": true,
     "checkJs": false,
     "esModuleInterop": true // allows importing of CJS modules
-  },
-  "include": ["server"],
-  "exclude": ["server/**/*.test.ts"]
+  }
 }
