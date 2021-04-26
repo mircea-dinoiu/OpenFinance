@@ -44,7 +44,7 @@ export const createUsersRouter = () => {
     });
 
     router.post('/logout', validateAuth, (req, res) => {
-        req.session.destroy();
+        req.session.destroy(() => {});
 
         if (req.xhr) {
             res.send({});

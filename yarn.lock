@@ -1821,12 +1821,11 @@
   dependencies:
     "@types/node" "*"
 
-"@types/csurf@^1.9.36":
-  version "1.9.36"
-  resolved "https://registry.yarnpkg.com/@types/csurf/-/csurf-1.9.36.tgz#f0139ef24f4d2a1a59674e2fcd7a13d86cff626a"
-  integrity sha512-arAJD++ZGT9eZVR+BQa1eaT7Id5pZ9nt4/x2Emxg8OEo6WAQV0ztVXS7A8n0RDd4KAaw2YYcwZUdjUvqg2k9tw==
+"@types/csurf@^1.9.0":
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/@types/csurf/-/csurf-1.11.1.tgz#ebdf5fa09a6cfe0258957e0826d3831e464d2697"
+  integrity sha512-GIdkIfC6/2k+NJdyALSSJ3ek01SPosqMmSdDvWkYY2x7ZR4dgN3G8Xcn+W36l+wiTNM+VHdwdyigXpbetiMC0A==
   dependencies:
-    "@types/express" "*"
     "@types/express-serve-static-core" "*"
 
 "@types/d3-path@^1":
@@ -1989,10 +1988,10 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/passport@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.6.tgz#72343e49d65efa98cb328163cff5f127981947d7"
-  integrity sha512-9oKfrJXuAxvyxdrtMCxKkHgmd6DMO8NDOLvMJ1LvIWd6/xP+i81PAkpTaEca7VhJX9S009RciwZL/j6dsLsHrA==
+"@types/passport@^0.4.0":
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-0.4.7.tgz#2b7f29bf61df91cf77023b3777e940b613d4b4d8"
+  integrity sha512-EePlxNYx5tf3n0yjdPXX0/zDOv0UCwjMyQo4UkWGlhHteNDItAj7TfDdLttSThVMKQz3uCW7lsGzMuml0f8g9Q==
   dependencies:
     "@types/express" "*"
 

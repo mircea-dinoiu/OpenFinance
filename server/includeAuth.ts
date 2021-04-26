@@ -39,8 +39,9 @@ export const includeAuth = (app) => {
         ),
     );
 
-    passport.serializeUser((user, cb) => {
-        cb(null, user.id);
+    // @ts-ignore
+    passport.serializeUser<{id: number}>((user, done) => {
+        done(null, user.id);
     });
 
     passport.deserializeUser((id, cb) => {
