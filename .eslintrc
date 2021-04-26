@@ -2,7 +2,7 @@
     "extends": ["eslint:recommended", "react-app", "prettier"],
     "rules": {
         "no-prototype-builtins": "off",
-        "no-unused-vars": "error",
+        "no-unused-vars": "off",
         "prefer-const": "error",
         "one-var": ["error", "never"],
         "no-underscore-dangle": ["warn", {"allowAfterThis": true}],

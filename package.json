@@ -52,7 +52,7 @@
     "react-markdown": "^5.0.3",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0",
+    "react-scripts": "^4.0.3",
     "react-table-6": "npm:react-table@6.10.0",
     "recharts": "^2.0.8",
     "recursive-readdir": "^2.2.2",
