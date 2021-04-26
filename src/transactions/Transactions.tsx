@@ -570,6 +570,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     copyItem = (item: TransactionModel): Omit<TransactionModel, 'id'> => {
         const copy = this.sanitizeItem(item);
 
+        // @ts-ignore
         delete copy.id;
 
         return copy;

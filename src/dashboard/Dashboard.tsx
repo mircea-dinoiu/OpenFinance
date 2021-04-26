@@ -59,7 +59,7 @@ export const Dashboard = () => {
     const url = makeUrl(Api.reports.balanceByLocation, reportQueryParams);
     const stockPrices = useStockPrices();
 
-    const {tab = Object.values(DashboardTab)[0]} = useParams();
+    const {tab = Object.values(DashboardTab)[0]} = useParams<{tab: DashboardTab}>();
     const tabIndex = Object.values(DashboardTab).indexOf(tab as DashboardTab);
 
     React.useEffect(() => {
