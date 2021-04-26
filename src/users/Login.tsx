@@ -1,11 +1,10 @@
 import {Box, Button, Card, CardHeader, Checkbox, Divider, FormControlLabel, TextField} from '@material-ui/core';
 import {styled} from '@material-ui/core/styles';
-import {setUsers} from 'app/users/state';
 import {ButtonProgress} from 'app/loaders';
 import {ErrorSnackbar} from 'app/snackbars';
 import {Api} from 'app/Api';
 import {TBootstrap} from 'users/defs';
-import {useBootstrap} from 'users/state';
+import {useBootstrap, setUsers} from 'users/state';
 import {paths} from 'app/paths';
 import React from 'react';
 import {useDispatch} from 'react-redux';
