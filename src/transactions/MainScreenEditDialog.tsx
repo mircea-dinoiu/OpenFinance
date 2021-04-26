@@ -10,7 +10,7 @@ import * as React from 'react';
 import {ReactNode, useEffect, useRef, useState} from 'react';
 import {TransactionForm, TransactionModel} from 'transactions/defs';
 import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
-import {Bootstrap, User} from 'users/defs';
+import {User} from 'users/defs';
 
 type TypeProps = {
     user: User;

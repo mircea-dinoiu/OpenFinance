@@ -15,7 +15,7 @@ import {Dashboard} from 'dashboard/Dashboard';
 import {paths} from 'app/paths';
 import 'normalize.css';
 import {useSelectedProject} from 'projects/state';
-import React, {ReactNode, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
 import {generatePath, HashRouter, Redirect, Route, Switch} from 'react-router-dom';

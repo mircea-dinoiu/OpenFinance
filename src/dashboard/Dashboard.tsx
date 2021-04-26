@@ -34,7 +34,6 @@ import {useStockPrices} from 'stocks/state';
 import {summaryAssign, SummaryKey} from 'summary/state';
 import {BalanceByLocation} from 'transactions/defs';
 import {TransactionsEndDatePicker} from 'transactions/TransactionsEndDatePicker';
-import {CashAccount} from 'dashboard/defs';
 
 enum DashboardTab {
     accounts = 'accounts',
