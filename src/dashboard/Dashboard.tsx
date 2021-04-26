@@ -28,7 +28,7 @@ import _ from 'lodash';
 import {useSelectedProject} from 'projects/state';
 import React from 'react';
 import {useDispatch} from 'react-redux';
-import {generatePath, useParams} from 'react-router-dom';
+import {generatePath, useParams, useLocation} from 'react-router-dom';
 import {useRefreshWidgets} from 'refreshWidgets/state';
 import {useStockPrices} from 'stocks/state';
 import {summaryAssign, SummaryKey} from 'summary/state';
@@ -45,6 +45,7 @@ enum DashboardTab {
 }
 
 export const Dashboard = () => {
+    const location = useLocation();
     const cls = useStyles();
     const accounts = useAccounts();
     const accountsByType = _.groupBy(accounts, 'type');
@@ -170,10 +171,13 @@ export const Dashboard = () => {
                         {Object.values(DashboardTab).map((tab, index) => (
                             <TabLink
                                 key={tab}
-                                to={generatePath(paths.dashboard, {
-                                    id: selectedProject.id,
-                                    tab,
-                                })}
+                                to={{
+                                    ...location,
+                                    pathname: generatePath(paths.dashboard, {
+                                        id: selectedProject.id,
+                                        tab,
+                                    }),
+                                }}
                             >
                                 <Tab label={locales.dashboardTabs[index]} />
                             </TabLink>
