@@ -2,9 +2,10 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import bcrypt from 'bcrypt';
 import {getUserModel} from './models';
+import {User} from '../src/users/defs';
 
 export const includeAuth = (app) => {
-    const User = getUserModel();
+    const UserModel = getUserModel();
 
     passport.use(
         new LocalStrategy(
@@ -12,7 +13,7 @@ export const includeAuth = (app) => {
                 usernameField: 'email',
             },
             (email, pass, cb) => {
-                User.findOne({
+                UserModel.findOne({
                     where: {
                         email,
                     },
@@ -39,13 +40,12 @@ export const includeAuth = (app) => {
         ),
     );
 
-    // @ts-ignore
-    passport.serializeUser<{id: number}>((user, done) => {
+    passport.serializeUser<User, User['id']>((user, done) => {
         done(null, user.id);
     });
 
-    passport.deserializeUser((id, cb) => {
-        User.findById(id).then((user) => {
+    passport.deserializeUser<User, User['id']>((id: number, cb) => {
+        UserModel.findById(id).then((user) => {
             cb(null, user);
         });
     });
