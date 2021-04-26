@@ -2,6 +2,7 @@ import {TransactionModel, TransactionStatus} from 'transactions/defs';
 import {TUser} from 'users/defs';
 import {MaterialUiPickersDate} from '@material-ui/pickers/typings/date';
 import {RepeatOption} from '../js/defs';
+import moment from 'moment';
 
 export type TransactionForm = {
     price: number;
@@ -46,3 +47,16 @@ export const formToModel = (
         status: form.status || TransactionStatus.pending,
     };
 };
+export const modelToForm = (model: TransactionModel): TransactionForm => ({
+    ...model,
+    description: model.item,
+    date: moment(model.created_at),
+    categories: model.categories ?? [],
+    paymentMethod: model.money_location_id,
+    repeatOccurrences: model.repeat_occurrences,
+    repeatFactor: model.repeat_factor,
+    chargedPersons: model.users,
+    status: model.status || TransactionStatus.pending,
+    stockId: model.stock_id,
+    inventoryId: model.inventory_id,
+});
