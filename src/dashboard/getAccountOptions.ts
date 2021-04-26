@@ -1,5 +1,5 @@
 import {BalanceByLocationStock} from 'transactions/defs';
-import {Account, Accounts} from 'accounts/defs';
+import {TAccount, Accounts} from 'accounts/defs';
 import _ from 'lodash';
 
 export const getAccountOptions = ({stocks, accounts}: {stocks: BalanceByLocationStock[]; accounts: Accounts}) => {
@@ -8,7 +8,7 @@ export const getAccountOptions = ({stocks, accounts}: {stocks: BalanceByLocation
             stocks
                 .filter((sh) => sh.quantity !== 0)
                 .map((sh) => {
-                    const account = accounts.find((a) => a.id === sh.money_location_id) as Account;
+                    const account = accounts.find((a) => a.id === sh.money_location_id) as TAccount;
 
                     return {
                         ...account,

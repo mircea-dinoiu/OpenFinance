@@ -1,10 +1,10 @@
-export type Currency = {
+export type TCurrency = {
     id: number;
     iso_code: string;
 };
-export type CurrencyMap = {
-    [key: number]: Currency;
+export type TCurrencyMap = {
+    [key: number]: TCurrency;
 };
-export type Currencies = {
-    map: CurrencyMap;
+export type TCurrencies = {
+    map: TCurrencyMap;
 };

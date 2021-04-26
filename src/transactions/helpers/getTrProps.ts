@@ -2,12 +2,12 @@ import {TransactionModel} from 'transactions/defs';
 import {getTrClassName} from 'transactions/helpers/getTrClassName';
 
 export const getTrProps = ({
-                               onReceiveSelectedIds,
-                               onEdit,
-                               selectedIds,
-                               onChangeContextMenu,
-                               item,
-                           }: {
+    onReceiveSelectedIds,
+    onEdit,
+    selectedIds,
+    onChangeContextMenu,
+    item,
+}: {
     item: TransactionModel;
     onChangeContextMenu: (props: {display: boolean; top?: number; left?: number}) => void;
     onReceiveSelectedIds: (ids: number[]) => void;

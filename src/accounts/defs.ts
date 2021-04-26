@@ -10,10 +10,10 @@ export enum AccountType {
     LOAN = 'loan',
     BROKERAGE = 'brokerage',
     CHECKING = 'checking',
-    SAVINGS = 'savings'
+    SAVINGS = 'savings',
 }
 
-export type Account = {
+export type TAccount = {
     currency_id: number;
     id: number;
     name: string;
@@ -24,4 +24,4 @@ export type Account = {
     credit_minpay: number | null;
     credit_dueday: number | null;
 };
-export type Accounts = Account[];
+export type Accounts = TAccount[];

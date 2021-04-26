@@ -1,9 +1,9 @@
 import IconBlock from '@material-ui/icons/Block';
 import IconLock from '@material-ui/icons/Lock';
-import {Account, AccountStatus} from 'accounts/defs';
+import {TAccount, AccountStatus} from 'accounts/defs';
 import * as React from 'react';
 
-export const AccountDisplay = (moneyLocation: Account) => {
+export const AccountDisplay = (moneyLocation: TAccount) => {
     const IconComponent = StatusToIconComponent[moneyLocation.status];
 
     return (

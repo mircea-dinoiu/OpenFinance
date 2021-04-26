@@ -3,6 +3,14 @@ import fs from 'fs';
 import path from 'path';
 import {getDb} from '../getDb';
 import Sequelize from 'sequelize';
+import {TUser} from '../../src/users/defs';
+import {TCategory} from '../../src/categories/defs';
+import {TCurrency} from '../../src/currencies/defs';
+import {TransactionModel} from '../../src/transactions/defs';
+import {TStock} from '../../src/stocks/defs';
+import {TProperty} from '../../src/properties/defs';
+import {TAccount} from '../../src/accounts/defs';
+import {TInventory} from '../../src/inventories/defs';
 
 type ModelType = Sequelize.Model<any, any> & {
     tableName: string;
@@ -33,11 +41,11 @@ const getModels = memoize(() => {
     return models;
 });
 
-export const getCategoryModel = () => getModels().Category;
-export const getCurrencyModel = () => getModels().Currency;
-export const getExpenseModel = () => getModels().Expense;
-export const getInventoryModel = () => getModels().Inventory;
-export const getAccountModel = () => getModels().MoneyLocation;
-export const getPropertyModel = () => getModels().Property;
-export const getStockModel = () => getModels().Stock;
-export const getUserModel = () => getModels().User;
+export const getCategoryModel = (): Sequelize.Model<TCategory, unknown> => getModels().Category;
+export const getCurrencyModel = (): Sequelize.Model<TCurrency, unknown> => getModels().Currency;
+export const getExpenseModel = (): Sequelize.Model<TransactionModel, unknown> => getModels().Expense;
+export const getInventoryModel = (): Sequelize.Model<TInventory, unknown> => getModels().Inventory;
+export const getAccountModel = (): Sequelize.Model<TAccount, unknown> => getModels().MoneyLocation;
+export const getPropertyModel = (): Sequelize.Model<TProperty, unknown> => getModels().Property;
+export const getStockModel = (): Sequelize.Model<TStock, unknown> => getModels().Stock;
+export const getUserModel = (): Sequelize.Model<TUser, unknown> => getModels().User;

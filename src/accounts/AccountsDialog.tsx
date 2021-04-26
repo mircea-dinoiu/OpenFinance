@@ -2,7 +2,7 @@ import {Dialog, DialogContent} from '@material-ui/core';
 import {AccountTypeCell, CurrencyCell, NumberFieldCell, StatusCell, TextFieldCell, UrlCell} from 'app/cells';
 import {TableWithInlineEditing} from 'app/TableWithInlineEditing';
 import {Api} from 'app/Api';
-import {Account} from 'accounts/defs';
+import {TAccount} from 'accounts/defs';
 import React from 'react';
 import {useAccounts, useAccountsReader} from 'accounts/state';
 
@@ -13,7 +13,7 @@ export const AccountsDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () 
     return (
         <Dialog open={isOpen} onClose={onClose} fullWidth={true} maxWidth={false}>
             <DialogContent>
-                <TableWithInlineEditing<Account>
+                <TableWithInlineEditing<TAccount>
                     data={rows}
                     api={Api.moneyLocations}
                     editableFields={[

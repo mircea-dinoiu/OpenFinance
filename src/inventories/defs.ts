@@ -1,1 +1,1 @@
-export type Inventory = {id: number; name: string; project_id: number};
+export type TInventory = {id: number; name: string; project_id: number};

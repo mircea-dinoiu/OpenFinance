@@ -34,7 +34,7 @@ export function DescriptionDisplay({
     );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     grid: {
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',

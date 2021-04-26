@@ -9,11 +9,11 @@ import {financialNum} from 'js/utils/numbers';
 import _ from 'lodash';
 import React from 'react';
 import {Column} from 'react-table-6';
-import {Stock} from 'stocks/defs';
+import {TStock} from 'stocks/defs';
 import {useStocksMap} from 'stocks/state';
 import {BalanceByLocationStock} from 'transactions/defs';
 
-type StockWithUnits = Stock & {units: Decimal; accounts: number; costBasis: Decimal};
+type StockWithUnits = TStock & {units: Decimal; accounts: number; costBasis: Decimal};
 
 export const StocksTable = ({
     stockHoldings,

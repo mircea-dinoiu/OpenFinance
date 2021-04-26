@@ -4,10 +4,10 @@ import {ButtonProgress} from 'app/loaders';
 
 import {ErrorSnackbar} from 'app/snackbars';
 import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
-import {TransactionForm} from 'transactions/defs';
 import {useBootstrap} from 'users/state';
 import {parseCrudError} from 'app/parseCrudError';
 import * as React from 'react';
+import {TransactionForm} from './form';
 
 type TypeProps = {
     formToModel: Function;

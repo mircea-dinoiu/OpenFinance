@@ -6,7 +6,7 @@ import {useAccounts} from 'accounts/state';
 import {findCurrencyById} from 'currencies/helpers';
 import {useCurrenciesMap} from 'currencies/state';
 import React from 'react';
-import {TransactionForm} from 'transactions/defs';
+import {TransactionForm} from './form';
 
 export const TransactionAmountFields = ({
     accountId,

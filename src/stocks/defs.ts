@@ -6,4 +6,4 @@ export enum StockType {
     CRYPTO = 'crypto',
 }
 
-export type Stock = {id: number; price: number; symbol: string; currency_id: number; type: StockType};
+export type TStock = {id: number; price: number; symbol: string; currency_id: number; type: StockType};

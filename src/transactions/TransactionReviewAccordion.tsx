@@ -2,7 +2,7 @@ import {Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, ListIte
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {formatCurrency} from 'app/formatters';
 import {ExpenseForm} from 'transactions/ExpenseForm';
-import {formToModel} from 'transactions/formToModel';
+import {formToModel} from 'transactions/form';
 import {modelToForm} from 'transactions/modelToForm';
 import {TransactionModel} from 'transactions/defs';
 import {TBootstrap} from 'users/defs';

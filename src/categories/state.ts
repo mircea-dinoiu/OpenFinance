@@ -4,7 +4,7 @@ import {bindToUpdateState} from 'app/state/bindToUpdateState';
 import {GlobalState} from 'app/state/defs';
 import {updateState} from 'app/state/updateState';
 import {makeUrl} from 'app/url';
-import {Categories} from 'categories/defs';
+import {TCategories} from 'categories/defs';
 import {useSelectedProject} from 'projects/state';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -13,7 +13,7 @@ export const useCategoriesReader = () => {
     const project = useSelectedProject();
 
     return async () => {
-        const r = await createXHR<Categories>({
+        const r = await createXHR<TCategories>({
             url: makeUrl(Api.categories, {projectId: project.id}),
         });
 

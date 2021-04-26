@@ -1,9 +1,9 @@
 import {TransactionModel} from 'transactions/defs';
-import {Currency, CurrencyMap} from 'currencies/defs';
+import {TCurrency, TCurrencyMap} from 'currencies/defs';
 
-export const findCurrencyById = (id: number, currencies: CurrencyMap): Currency => currencies[String(id)];
+export const findCurrencyById = (id: number, currencies: TCurrencyMap): TCurrency => currencies[String(id)];
 
-export const getCurrencyByISOCode = (ISOCode: string, currencies: CurrencyMap) =>
+export const getCurrencyByISOCode = (ISOCode: string, currencies: TCurrencyMap) =>
     Object.values(currencies).find((each) => each.iso_code === ISOCode);
 
 export const getItemCurrencyISOCode = ({
@@ -11,5 +11,5 @@ export const getItemCurrencyISOCode = ({
     currencies,
 }: {
     item: Pick<TransactionModel, 'money_location'>;
-    currencies: CurrencyMap;
+    currencies: TCurrencyMap;
 }) => currencies[item.money_location.currency_id].iso_code;

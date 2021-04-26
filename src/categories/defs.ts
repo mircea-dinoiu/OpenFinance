@@ -1,7 +1,7 @@
-export type Category = {
+export type TCategory = {
     id: number;
     name: string;
     color: string;
     expenses: number;
 };
-export type Categories = Category[];
+export type TCategories = TCategory[];

@@ -1,4 +1,4 @@
-import {Account, AccountStatus} from 'accounts/defs';
+import {TAccount, AccountStatus} from 'accounts/defs';
 import {Api} from 'app/Api';
 import {createXHR} from 'app/fetch';
 import {bindToUpdateState} from 'app/state/bindToUpdateState';
@@ -14,7 +14,7 @@ export const useAccountsReader = () => {
     const project = useSelectedProject();
 
     return async () => {
-        const r = await createXHR<Account>({
+        const r = await createXHR<TAccount>({
             url: makeUrl(Api.moneyLocations, {projectId: project.id}),
         });
 

@@ -1,4 +1,4 @@
-import {Property} from 'properties/defs';
+import {TProperty} from 'properties/defs';
 import {useProperties} from 'properties/state';
 import React from 'react';
 import {CardHeader, Paper, CardContent, Card} from '@material-ui/core';
@@ -50,13 +50,13 @@ export const PropertiesPaper = ({
     );
 };
 
-const NameCol: Column<Property> = {
+const NameCol: Column<TProperty> = {
     Header: 'Name',
     accessor: 'name',
     ...firstColumnStyles,
 };
 
-const ValueCol: Column<Property> = {
+const ValueCol: Column<TProperty> = {
     Header: 'Value',
     accessor: 'market_value',
     Cell: ({value, original}) => {
@@ -65,7 +65,7 @@ const ValueCol: Column<Property> = {
     ...numericColumnStyles,
 };
 
-const CostCol: Column<Property> = {
+const CostCol: Column<TProperty> = {
     Header: 'Cost',
     accessor: 'cost',
     Cell: ({value, original}) => {
@@ -74,7 +74,7 @@ const CostCol: Column<Property> = {
     ...numericColumnStyles,
 };
 
-const ChangeCol: Column<Property> = {
+const ChangeCol: Column<TProperty> = {
     Header: 'Change $',
     id: 'change',
     accessor: (p) => {
@@ -86,7 +86,7 @@ const ChangeCol: Column<Property> = {
     ...numericColumnStyles,
 };
 
-const ChangePercCol: Column<Property> = {
+const ChangePercCol: Column<TProperty> = {
     Header: 'Change %',
     id: 'changePerc',
     accessor: (p) => {

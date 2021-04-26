@@ -5,9 +5,7 @@ import * as React from 'react';
 
 export const DateDisplay = ({item}: {item: TransactionModel}) => {
     return (
-        <StyledDateDisplay
-            title={`Last updated: ${moment(item.updated_at).format('lll')}`}
-        >
+        <StyledDateDisplay title={`Last updated: ${moment(item.updated_at).format('lll')}`}>
             {moment(item.created_at).format('lll')}
         </StyledDateDisplay>
     );

@@ -8,9 +8,10 @@ import {ErrorSnackbar} from 'app/snackbars';
 import {isEqual} from 'lodash';
 import * as React from 'react';
 import {ReactNode, useEffect, useRef, useState} from 'react';
-import {TransactionForm, TransactionModel} from 'transactions/defs';
+import {TransactionModel} from 'transactions/defs';
 import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
 import {TUser} from 'users/defs';
+import {TransactionForm} from './form';
 
 type TypeProps = {
     user: TUser;

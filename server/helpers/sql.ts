@@ -13,7 +13,7 @@ const mapTextFilterToSQL = (ids, value) => {
 };
 
 const mapFlagsToSQL = (flags: Record<'Pending' | 'Deposit' | 'Recurrent' | 'Generated', 'no' | 'only'>) => {
-    const where: Record<string, null | string | Partial<Sequelize.WhereLogic>>[] = [];
+    const where: Record<string, Partial<Sequelize.WhereLogic>>[] = [];
 
     switch (flags.Pending) {
         case 'no':
@@ -25,7 +25,10 @@ const mapFlagsToSQL = (flags: Record<'Pending' | 'Deposit' | 'Recurrent' | 'Gene
             break;
         case 'only':
             where.push({
-                status: 'pending',
+                status: {
+                    // @ts-ignore
+                    $eq: 'pending',
+                },
             });
             break;
     }
@@ -50,12 +53,18 @@ const mapFlagsToSQL = (flags: Record<'Pending' | 'Deposit' | 'Recurrent' | 'Gene
     switch (flags.Recurrent) {
         case 'no':
             where.push({
-                repeat: null,
+                repeat: {
+                    // @ts-ignore
+                    $eq: null,
+                },
             });
             break;
         case 'only':
             where.push({
-                repeat: null,
+                repeat: {
+                    // @ts-ignore
+                    $ne: null,
+                },
             });
             break;
     }
@@ -63,12 +72,18 @@ const mapFlagsToSQL = (flags: Record<'Pending' | 'Deposit' | 'Recurrent' | 'Gene
     switch (flags.Generated) {
         case 'no':
             where.push({
-                repeat_link_id: null,
+                repeat_link_id: {
+                    // @ts-ignore
+                    $eq: null,
+                },
             });
             break;
         case 'only':
             where.push({
-                repeat_link_id: null,
+                repeat_link_id: {
+                    // @ts-ignore
+                    $ne: null,
+                },
             });
             break;
     }

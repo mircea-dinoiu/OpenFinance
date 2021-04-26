@@ -15,7 +15,7 @@ export const PendingReviewFlag = ({entity = 'Item'}) => {
 
     return (
         <span title={`${startCase(entity)} is pending`}>
-            <Warning style={ICON_STYLE} htmlColor={theme.palette.warning.main}/>
+            <Warning style={ICON_STYLE} htmlColor={theme.palette.warning.main} />
         </span>
     );
 };
@@ -25,7 +25,7 @@ export const RecurrentFlag = ({entity = 'Item'}) => {
 
     return (
         <span title={`Recurrent ${entity}`}>
-            <Cached style={ICON_STYLE} htmlColor={theme.palette.info.main}/>
+            <Cached style={ICON_STYLE} htmlColor={theme.palette.info.main} />
         </span>
     );
 };
@@ -35,7 +35,7 @@ export const GeneratedFlag = ({entity = 'Item'}) => {
 
     return (
         <span title={`Generated ${entity}`}>
-            <TrendingUp style={ICON_STYLE} htmlColor={theme.palette.error.main}/>
+            <TrendingUp style={ICON_STYLE} htmlColor={theme.palette.error.main} />
         </span>
     );
 };
@@ -45,7 +45,7 @@ export const DraftFlag = () => {
 
     return (
         <span title="Draft">
-            <IconDrafts style={ICON_STYLE} htmlColor={theme.palette.primary.main}/>
+            <IconDrafts style={ICON_STYLE} htmlColor={theme.palette.primary.main} />
         </span>
     );
 };

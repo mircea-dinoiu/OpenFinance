@@ -1,7 +1,8 @@
 import {useAccounts} from 'accounts/state';
 import moment from 'moment';
-import {TransactionForm, TransactionStatus} from 'transactions/defs';
+import {TransactionStatus} from 'transactions/defs';
 import {useUser} from 'users/state';
+import {TransactionForm} from './form';
 
 export const useTransactionFormDefaults = (): TransactionForm => {
     const user = useUser();

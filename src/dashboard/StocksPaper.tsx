@@ -1,5 +1,5 @@
 import {Card, CardContent, Checkbox, FormControl, FormControlLabel, FormLabel, Paper} from '@material-ui/core';
-import {Account} from 'accounts/defs';
+import {TAccount} from 'accounts/defs';
 import {useAccounts} from 'accounts/state';
 import {DashboardGridWithSidebar} from 'dashboard/DashboardGridWithSidebar';
 import {CurrencyFilter} from 'dashboard/filters/CurrencyFilter';
@@ -15,7 +15,7 @@ export const StocksPaper = ({
 }: {
     classes: {paper: string; cardHeader: string};
     accountOptions: Array<
-        Account & {
+        TAccount & {
             value: string;
             label: string;
         }

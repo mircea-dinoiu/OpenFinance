@@ -5,14 +5,14 @@ import {NumericValue} from 'app/formatters';
 import {useCardHeaderStyles} from 'transactions/styles';
 import {SummaryTotal} from 'transactions/SummaryTotal';
 import {SummaryModel} from 'transactions/defs';
-import {CurrencyMap} from 'currencies/defs';
+import {TCurrencyMap} from 'currencies/defs';
 import {sortBy} from 'lodash';
 import React, {ReactNode} from 'react';
 import {colors} from 'app/styles/colors';
 
 export const SummarySubCategory = <Ent,>(props: {
     excluded: {};
-    currencies: CurrencyMap;
+    currencies: TCurrencyMap;
     onToggleExcluded: (ids: string[]) => void;
     entities: Ent[];
     entityIdField: keyof Ent;

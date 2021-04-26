@@ -1,10 +1,10 @@
 import {Accounts} from 'accounts/defs';
-import {Categories} from 'categories/defs';
-import {Currencies} from 'currencies/defs';
-import {Inventory} from 'inventories/defs';
-import {Property} from 'properties/defs';
+import {TCategories} from 'categories/defs';
+import {TCurrencies} from 'currencies/defs';
+import {TInventory} from 'inventories/defs';
+import {TProperty} from 'properties/defs';
 import {Snackbar} from 'snackbars/defs';
-import {Stock} from 'stocks/defs';
+import {TStock} from 'stocks/defs';
 import {TBootstrap} from 'users/defs';
 import {Summary} from 'summary/state';
 
@@ -31,16 +31,16 @@ export type LazyLoadedStateWithFetch<D> = LazyLoadedState<D> & {
     fetch: () => Promise<void>;
 };
 export type GlobalState = {
-    currencies: Currencies;
+    currencies: TCurrencies;
     privacyToggle: boolean;
 
-    categories: Categories;
+    categories: TCategories;
     moneyLocations: Accounts;
     refreshWidgets: string;
     user: TBootstrap;
     snackbars: Snackbar[];
     summary: Summary;
-    stocks: Stock[];
-    inventories: Inventory[];
-    properties: LazyLoadedState<Property[]>;
+    stocks: TStock[];
+    inventories: TInventory[];
+    properties: LazyLoadedState<TProperty[]>;
 };

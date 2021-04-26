@@ -1,7 +1,7 @@
 import {Card, CardContent, Checkbox, FormControlLabel, Paper, Tab, Tabs} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Alert, AlertTitle} from '@material-ui/lab';
-import {Account, AccountType, AccountStatus} from 'accounts/defs';
+import {TAccount, AccountType, AccountStatus} from 'accounts/defs';
 import {useAccounts} from 'accounts/state';
 import {Api} from 'app/Api';
 import {createXHR} from 'app/fetch';
@@ -235,7 +235,7 @@ const getTotals = (
     return totals;
 };
 
-const getCostBasis = (cash: BalanceByLocation['cash'], account: Account) => {
+const getCostBasis = (cash: BalanceByLocation['cash'], account: TAccount) => {
     return cash.find((c) => c.money_location_id === account.id)?.sum ?? 0;
 };
 

@@ -1,5 +1,6 @@
-import {TransactionForm, TransactionModel, TransactionStatus} from 'transactions/defs';
+import {TransactionModel, TransactionStatus} from 'transactions/defs';
 import moment from 'moment';
+import {TransactionForm} from './form';
 
 export const modelToForm = (model: TransactionModel): TransactionForm => ({
     ...model,

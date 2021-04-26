@@ -23,11 +23,11 @@ import {TransactionAmountFields} from 'transactions/TransactionAmountFields';
 import {TransactionCategoriesField} from 'transactions/TransactionCategoriesField';
 import {TransactionNameField} from 'transactions/TransactionNameField';
 import {TransactionStockFields} from 'transactions/TransactionStockFields';
-import {TransactionForm, TransactionStatus} from 'transactions/defs';
-import {Account, Accounts, AccountType} from 'accounts/defs';
-import {Categories} from 'categories/defs';
-import {CurrencyMap} from 'currencies/defs';
-import {Inventory} from 'inventories/defs';
+import {TransactionStatus} from 'transactions/defs';
+import {TAccount, Accounts, AccountType} from 'accounts/defs';
+import {TCategories} from 'categories/defs';
+import {TCurrencyMap} from 'currencies/defs';
+import {TInventory} from 'inventories/defs';
 import {TBootstrap, TUser} from 'users/defs';
 import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from 'js/helpers/repeatedModels';
@@ -41,6 +41,7 @@ import {useInventories} from 'inventories/state';
 import {GlobalState} from 'app/state/defs';
 import {useSelectedProject} from 'projects/state';
 import {useEndDate} from 'app/dates/helpers';
+import {TransactionForm} from './form';
 
 const boxStyle = {
     padding: '10px 0',
@@ -54,11 +55,11 @@ type TypeOwnProps = {
 
 type Props = TypeOwnProps & {
     moneyLocations: Accounts;
-    currencies: CurrencyMap;
+    currencies: TCurrencyMap;
     endDate: string;
     user: TBootstrap;
-    categories: Categories;
-    inventories: Inventory[];
+    categories: TCategories;
+    inventories: TInventory[];
     users: TUser[];
 };
 
@@ -153,13 +154,13 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
     renderAccount() {
         return (
             <FormControl fullWidth={true}>
-                <Autocomplete<Account, false, true>
+                <Autocomplete<TAccount, false, true>
                     options={orderBy(this.props.moneyLocations, ['status', 'name'], ['desc', 'asc'])}
                     getOptionLabel={(o) => o.name}
                     disableClearable={true}
                     groupBy={(option) => option.status.toLocaleUpperCase()}
                     // @ts-ignore
-                    onChange={(e: unknown, value: Account) => this.setState({paymentMethod: value.id as number})}
+                    onChange={(e: unknown, value: TAccount) => this.setState({paymentMethod: value.id as number})}
                     value={this.props.moneyLocations.find((inv) => inv.id === this.state.paymentMethod)}
                     renderInput={(params) => <TextField {...params} label="Account" InputLabelProps={{shrink: true}} />}
                 />
@@ -170,10 +171,10 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
     renderInventory() {
         return (
             <FormControl fullWidth={true}>
-                <Autocomplete<Inventory>
+                <Autocomplete<TInventory>
                     options={this.props.inventories}
                     getOptionLabel={(o) => o.name}
-                    onChange={(e: unknown, value: Inventory | null) => this.setState({inventoryId: value?.id ?? null})}
+                    onChange={(e: unknown, value: TInventory | null) => this.setState({inventoryId: value?.id ?? null})}
                     value={this.props.inventories.find((inv) => inv.id === this.state.inventoryId)}
                     renderInput={(params) => (
                         <TextField {...params} label="Inventory" InputLabelProps={{shrink: true}} />
