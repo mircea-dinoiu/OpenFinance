@@ -1,7 +1,7 @@
 import {getInventoryModel} from '../models';
-import {BaseController} from './BaseController';
+import {CrudController} from '../CrudController';
 
-export class InventoryController extends BaseController {
+export class InventoryController extends CrudController {
     constructor() {
         super(getInventoryModel());
     }

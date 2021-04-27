@@ -1,7 +1,7 @@
-import {BaseController} from './BaseController';
+import {CrudController} from '../CrudController';
 import {getPropertyModel} from '../models';
 
-export class PropertyController extends BaseController {
+export class PropertyController extends CrudController {
     constructor() {
         super(getPropertyModel());
     }

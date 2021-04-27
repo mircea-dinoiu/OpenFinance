@@ -1,5 +1,5 @@
 import express from 'express';
-import {UserController} from '../controllers/UserController';
+import {UserController} from './controller';
 import passport from 'passport';
 import {validateAuth, validateGuest} from '../middlewares';
 

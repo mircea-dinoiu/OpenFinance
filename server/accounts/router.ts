@@ -1,5 +1,5 @@
 import express from 'express';
-import {AccountController} from '../controllers/AccountController';
+import {AccountController} from './controller';
 import {validateAuth, validateProject} from '../middlewares';
 
 export const createAccountsRouter = () => {

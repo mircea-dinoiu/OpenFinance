@@ -1,16 +1,16 @@
 import {isPlainObject} from 'lodash';
 import Sequelize from 'sequelize';
-import {Message as Messages} from '../Messages';
-import {Validator} from '../validators';
+import {Message as Messages} from './Messages';
+import {Validator} from './validators';
 import chalk from 'chalk';
-import logger from '../helpers/logger';
+import logger from './helpers/logger';
 import express from 'express';
 
 type ServiceType = {
     list: (req: express.Request) => Promise<{error: unknown; json: unknown}>;
 };
 
-export class BaseController {
+export class CrudController {
     updateValidationRules: Record<string, unknown[]>;
     createValidationRules: Record<string, unknown[]>;
     Service?: ServiceType;

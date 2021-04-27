@@ -1,5 +1,5 @@
 import {ExpenseService} from '../transactions/ExpenseService';
-import {SummaryReportService} from '../services/SummaryReportService';
+import {SummaryReportService} from './SummaryReportService';
 import {getUserModel, getCategoryModel, getAccountModel, getCurrencyModel} from '../models';
 import logger from '../helpers/logger';
 

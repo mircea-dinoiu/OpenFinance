@@ -1,5 +1,5 @@
 import express from 'express';
-import {ReportController} from '../controllers/ReportController';
+import {ReportController} from './controller';
 import {validateAuth, validateProject} from '../middlewares';
 import {mapStartDateToRawSql, mapEndDateToRawSql} from '../helpers/sql';
 import {flatten, groupBy} from 'lodash';

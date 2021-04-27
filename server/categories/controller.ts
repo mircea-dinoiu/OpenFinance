@@ -1,7 +1,7 @@
 import {getExpenseModel, getCategoryModel} from '../models';
-import {BaseController} from './BaseController';
+import {CrudController} from '../CrudController';
 
-export class CategoryController extends BaseController {
+export class CategoryController extends CrudController {
     constructor() {
         super(getCategoryModel());
         this.updateValidationRules = {

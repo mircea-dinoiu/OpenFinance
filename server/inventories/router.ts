@@ -1,5 +1,5 @@
 import express from 'express';
-import {InventoryController} from '../controllers/InventoryController';
+import {InventoryController} from './controller';
 import {validateAuth, validateProject, validatePayload} from '../middlewares';
 import {getInventoryModel} from '../models';
 

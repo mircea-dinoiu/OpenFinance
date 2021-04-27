@@ -1,6 +1,6 @@
-import {mapSearchToMatchAgainst} from '../../helpers/search';
+import {mapSearchToMatchAgainst} from '../helpers/search';
 import {QueryTypes} from 'sequelize';
-import {getDb} from '../../getDb';
+import {getDb} from '../getDb';
 
 export const getExpenseDescriptions = async (req, res) => {
     const query = req.query;

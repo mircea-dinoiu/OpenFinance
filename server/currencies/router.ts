@@ -1,5 +1,5 @@
 import express from 'express';
-import {CurrencyController} from '../controllers/CurrencyController';
+import {CurrencyController} from './controller';
 import {validateAuth} from '../middlewares';
 
 export const createCurrenciesRouter = () => {

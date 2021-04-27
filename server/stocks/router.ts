@@ -1,5 +1,5 @@
 import express from 'express';
-import {StocksController} from '../controllers/StocksController';
+import {StocksController} from './controller';
 import {validateAuth} from '../middlewares';
 
 export const createStocksRouter = () => {

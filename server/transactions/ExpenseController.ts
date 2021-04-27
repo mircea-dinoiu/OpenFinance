@@ -1,4 +1,4 @@
-import {BaseController} from '../controllers/BaseController';
+import {CrudController} from '../CrudController';
 import {ExpenseService} from './ExpenseService';
 import {pickOwnProperties} from '../helpers';
 import ofx from 'ofx';
@@ -16,7 +16,7 @@ import {
 } from '../models';
 import {FULL_DATE_FORMAT_TZ} from '../../src/app/dates/defs';
 
-export class ExpenseController extends BaseController {
+export class ExpenseController extends CrudController {
     constructor() {
         super(getExpenseModel(), ExpenseService);
 

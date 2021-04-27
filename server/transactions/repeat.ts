@@ -1,4 +1,4 @@
-import {getExpenseModel} from '../../models';
+import {getExpenseModel} from '../models';
 
 export const detachTransactions = async ({req, res}) => {
     const {ids} = req.body;

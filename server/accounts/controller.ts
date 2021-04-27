@@ -1,8 +1,8 @@
 import {getAccountModel, getCurrencyModel} from '../models';
-import {BaseController} from './BaseController';
+import {CrudController} from '../CrudController';
 import {pick} from 'lodash';
 
-export class AccountController extends BaseController {
+export class AccountController extends CrudController {
     constructor() {
         super(getAccountModel());
     }

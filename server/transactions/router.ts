@@ -1,9 +1,9 @@
 import express from 'express';
-import {ExpenseController} from '../transactions/ExpenseController';
+import {ExpenseController} from './ExpenseController';
 import {validateAuth, validateProject, validatePayload} from '../middlewares';
 import fileupload from 'express-fileupload';
-import {detachTransactions, skipTransactions} from './transactions/repeat';
-import {getExpenseDescriptions, getCategories} from './transactions/suggestions';
+import {detachTransactions, skipTransactions} from './repeat';
+import {getExpenseDescriptions, getCategories} from './suggestions';
 
 export const createTransactionsRouter = () => {
     const router = express.Router();

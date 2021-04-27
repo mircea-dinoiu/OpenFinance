@@ -1,7 +1,7 @@
-import {BaseController} from './BaseController';
+import {CrudController} from '../CrudController';
 import {getStockModel} from '../models';
 
-export class StocksController extends BaseController {
+export class StocksController extends CrudController {
     constructor() {
         super(getStockModel());
     }

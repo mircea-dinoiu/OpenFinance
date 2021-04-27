@@ -1,5 +1,5 @@
 // @ts-nocheck
-import {SummaryReportHelper} from '../helpers/SummaryReportHelper';
+import {SummaryReportHelper} from './SummaryReportHelper';
 import {extractIdsFromModel, extractUsersFromModel} from '../helpers';
 import {sortBy} from 'lodash';
 

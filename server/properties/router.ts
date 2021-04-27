@@ -1,11 +1,12 @@
 import express from 'express';
-import {CategoryController} from '../controllers/CategoryController';
+import {PropertyController} from './controller';
 import {validateAuth, validateProject, validatePayload} from '../middlewares';
-import {getCategoryModel} from '../models';
+import {getPropertyModel} from '../models';
 
-export const createCategoriesRouter = () => {
+export const createPropertiesRouter = () => {
     const router = express.Router();
-    const c = new CategoryController();
+    const c = new PropertyController();
+    const Model = getPropertyModel();
 
     router.get('/', [validateAuth, validateProject], async (req, res) => {
         c.list(req, res);
@@ -17,20 +18,20 @@ export const createCategoriesRouter = () => {
             validateAuth,
             validateProject,
             validatePayload({
-                ids: ['isRequired', ['isIdArray', getCategoryModel()]],
+                ids: ['isRequired', ['isIdArray', Model]],
             }),
         ],
         (req, res) => {
-            c.destroy(req, res);
+            // c.destroy(req, res);
         },
     );
 
     router.put('/', [validateAuth, validateProject], (req, res) => {
-        c.update(req, res);
+        // c.update(req, res);
     });
 
     router.post('/', [validateAuth, validateProject], (req, res) => {
-        c.create(req, res);
+        // c.create(req, res);
     });
 
     return router;
