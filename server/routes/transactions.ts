@@ -1,5 +1,5 @@
 import express from 'express';
-import {ExpenseController} from '../controllers/ExpenseController';
+import {ExpenseController} from '../transactions/ExpenseController';
 import {validateAuth, validateProject, validatePayload} from '../middlewares';
 import fileupload from 'express-fileupload';
 import {detachTransactions, skipTransactions} from './transactions/repeat';

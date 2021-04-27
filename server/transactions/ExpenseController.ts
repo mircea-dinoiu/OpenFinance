@@ -1,5 +1,5 @@
-import {BaseController} from './BaseController';
-import {ExpenseService} from '../services/ExpenseService';
+import {BaseController} from '../controllers/BaseController';
+import {ExpenseService} from './ExpenseService';
 import {pickOwnProperties} from '../helpers';
 import ofx from 'ofx';
 import moment from 'moment';
