@@ -1,8 +1,6 @@
 import {ShiftDateOption} from 'app/dates/defs';
 import {QueryParam} from 'app/QueryParam';
 import {IncludeOption} from 'include/defs';
-
-import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
 import {useQueryParamState} from 'app/url';
 
@@ -58,6 +56,13 @@ export const shiftDateBack = (date: string | Date, by: ShiftDateOption, times?: 
         .subtract(...getMomentArgsForDateShift(by, times))
         .toDate();
 
+export const endOfDayToISOString = (date = new Date(Date.now())) => {
+    const workingDate = new Date(date);
+
+    workingDate.setHours(23, 59, 59, 999);
+
+    return moment(workingDate).toISOString();
+};
 export const getInitialEndDate = (): string => {
     const date = new Date();
 

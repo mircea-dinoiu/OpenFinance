@@ -1,8 +1,8 @@
 import {QueryParam} from 'app/QueryParam';
 import {useQueryParamState} from 'app/url';
 import {IncludeOption} from 'include/defs';
-import {endOfDayToISOString} from 'js/utils/dates';
 import moment from 'moment';
+import {endOfDayToISOString} from '../app/dates/helpers';
 
 export const getEndDateBasedOnIncludePreference = (endDate: string, include: IncludeOption) => {
     if (include === IncludeOption.untilToday) {

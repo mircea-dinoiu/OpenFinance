@@ -1,5 +1,5 @@
 import moment, {MomentInput} from 'moment';
-import {RepeatOption} from '../defs';
+import {RepeatOption} from './RepeatOption';
 
 export const advanceRepeatDate = (
     model: {

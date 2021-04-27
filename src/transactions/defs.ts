@@ -1,4 +1,4 @@
-import {RepeatOption} from 'js/defs';
+import {RepeatOption} from './RepeatOption';
 
 type BalanceByLocationCash = {
     money_location_id: number;

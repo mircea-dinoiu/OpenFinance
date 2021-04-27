@@ -28,3 +28,4 @@ export const ShiftDateOptions: Array<{
     {value: ShiftDateOption.oneMonth, label: '1 month'},
     {value: ShiftDateOption.oneYear, label: '1 year'},
 ];
+export const FULL_DATE_FORMAT_TZ = 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]';

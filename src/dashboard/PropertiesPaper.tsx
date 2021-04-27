@@ -6,7 +6,7 @@ import HouseIcon from '@material-ui/icons/House';
 import {BaseTable} from 'app/BaseTable';
 import {Column} from 'react-table-6';
 import {NumericValue} from 'app/formatters';
-import {financialNum} from 'js/utils/numbers';
+import {financialNum} from 'app/numbers';
 import Decimal from 'decimal.js';
 import {locales} from 'app/locales';
 import {BigLoader} from 'app/loaders';

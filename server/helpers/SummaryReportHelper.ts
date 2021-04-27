@@ -1,5 +1,5 @@
 import {uniq, sortBy} from 'lodash';
-import {financialNum} from '../../src/js/utils/numbers';
+import {financialNum} from '../../src/app/numbers';
 
 const safeNum = financialNum;
 

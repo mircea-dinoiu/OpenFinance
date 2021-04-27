@@ -5,7 +5,7 @@ import {NumericValue} from 'app/formatters';
 import {locales} from 'app/locales';
 import {firstColumnStyles, numericColumnStyles} from 'app/styles/column';
 import Decimal from 'decimal.js';
-import {financialNum} from 'js/utils/numbers';
+import {financialNum} from 'app/numbers';
 import _ from 'lodash';
 import React from 'react';
 import {Column} from 'react-table-6';

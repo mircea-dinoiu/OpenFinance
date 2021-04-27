@@ -1,6 +1,6 @@
 import {NumericValue} from 'app/formatters';
 import {SummaryModel} from 'transactions/defs';
-import {financialNum} from 'js/utils/numbers';
+import {financialNum} from 'app/numbers';
 import groupBy from 'lodash/groupBy';
 import React from 'react';
 

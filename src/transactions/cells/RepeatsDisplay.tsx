@@ -1,5 +1,5 @@
 import {TransactionModel} from 'transactions/defs';
-import {advanceRepeatDate} from 'js/helpers/repeatedModels';
+import {advanceRepeatDate} from 'transactions/repeatedModels';
 import * as React from 'react';
 import {locales} from 'app/locales';
 

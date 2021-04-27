@@ -1,4 +1,4 @@
-import {RepeatOption} from 'js/defs';
+import {RepeatOption} from '../transactions/RepeatOption';
 
 export const locales = {
     stockTypes: {

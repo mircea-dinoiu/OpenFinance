@@ -3,11 +3,13 @@ import {isPlainObject} from 'lodash';
 import validatorLib from 'validator';
 import chalk from 'chalk';
 import logger from '../helpers/logger';
-import {PERC_MAX, PERC_MIN, RepeatOption} from '../../src/js/defs';
-import {sumArray} from '../../src/js/utils/numbers';
+import {sumArray} from '../../src/app/numbers';
 import {getExpenseModel} from '../models';
+import {RepeatOption} from '../../src/transactions/RepeatOption';
 
 const debug = process.env.DEBUG === 'true';
+const PERC_MIN = 0;
+const PERC_MAX = 100;
 
 const getIsArray = (value) => Array.isArray(value);
 

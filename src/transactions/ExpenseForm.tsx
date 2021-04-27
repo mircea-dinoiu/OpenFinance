@@ -29,9 +29,8 @@ import {TCategories} from 'categories/defs';
 import {TCurrencyMap} from 'currencies/defs';
 import {TInventory} from 'inventories/defs';
 import {TBootstrap, TUser} from 'users/defs';
-import {PERC_MAX, PERC_STEP, RepeatOption} from 'js/defs';
-import {advanceRepeatDate} from 'js/helpers/repeatedModels';
-import {sumArray} from 'js/utils/numbers';
+import {advanceRepeatDate} from 'transactions/repeatedModels';
+import {sumArray} from 'app/numbers';
 import {locales} from 'app/locales';
 import {sortBy, orderBy} from 'lodash';
 
@@ -42,6 +41,10 @@ import {GlobalState} from 'app/state/defs';
 import {useSelectedProject} from 'projects/state';
 import {useEndDate} from 'app/dates/helpers';
 import {TransactionForm} from './form';
+import {RepeatOption} from './RepeatOption';
+
+const PERC_STEP = 5;
+const PERC_MAX = 100;
 
 const boxStyle = {
     padding: '10px 0',

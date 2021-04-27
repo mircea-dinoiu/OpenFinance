@@ -1,8 +1,8 @@
 import {TransactionModel, TransactionStatus} from 'transactions/defs';
 import {TUser} from 'users/defs';
 import {MaterialUiPickersDate} from '@material-ui/pickers/typings/date';
-import {RepeatOption} from '../js/defs';
 import moment from 'moment';
+import {RepeatOption} from './RepeatOption';
 
 export type TransactionForm = {
     price: number;

@@ -1,5 +1,6 @@
 import path from 'path';
-import {PERC_MAX} from '../../src/js/defs';
+
+const PERC_MAX = 100;
 
 const basePath = (string = '') => path.join(__dirname, '../../', string);
 

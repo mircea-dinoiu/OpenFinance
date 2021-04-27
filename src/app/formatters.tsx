@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import {Tooltip} from 'app/Tooltip';
 import {useCopyTextWithConfirmation} from 'app/clipboardService';
 import Decimal from 'decimal.js';
-import {financialNum} from 'js/utils/numbers';
+import {financialNum} from 'app/numbers';
 import * as React from 'react';
 import {HTMLAttributes, ReactNode} from 'react';
 import {useCurrenciesMap} from 'currencies/state';
@@ -22,7 +22,13 @@ export const formatCurrency = (value: number, currency: string) => {
         style: 'currency',
         currency,
         minimumFractionDigits: 2,
-    }).format(decimal.mul(100).floor().div(100).toNumber());
+    }).format(
+        decimal
+            .mul(100)
+            .floor()
+            .div(100)
+            .toNumber(),
+    );
 };
 
 const useStyles = makeStyles((theme) => ({

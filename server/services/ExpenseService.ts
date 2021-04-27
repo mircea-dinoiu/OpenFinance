@@ -1,7 +1,6 @@
 import {pick} from 'lodash';
 import {Validator} from '../validators';
 import {sanitizeFilters, sanitizeSorters} from '../helpers';
-import {FULL_DATE_FORMAT_TZ} from '../../src/js/defs';
 import {
     mapStartDateToSQL,
     mapEndDateToSQL,
@@ -14,6 +13,7 @@ import {
 } from '../helpers/sql';
 import {getDb} from '../getDb';
 import {getExpenseModel} from '../models';
+import {FULL_DATE_FORMAT_TZ} from '../../src/app/dates/defs';
 
 export const ExpenseService = {
     async list(req) {

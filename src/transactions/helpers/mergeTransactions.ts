@@ -1,4 +1,4 @@
-import {sumArray} from 'js/utils/numbers';
+import {sumArray} from 'app/numbers';
 import {flatten, map, mapValues, uniq, uniqBy} from 'lodash';
 import {TransactionModel} from 'transactions/defs';
 
