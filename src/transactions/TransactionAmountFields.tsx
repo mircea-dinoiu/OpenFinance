@@ -45,7 +45,7 @@ export const TransactionAmountFields = ({
                 <TextField
                     {...fieldProps}
                     label="Quantity"
-                    value={Math.abs(quantity)}
+                    value={quantity}
                     onChange={(event) => onChangeQuantity((event.target.value as any) as number)}
                 />
                 <TextField
