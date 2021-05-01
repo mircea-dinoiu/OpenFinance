@@ -12,7 +12,7 @@ const mapTextFilterToSQL = (ids, value) => {
     return null;
 };
 
-const mapFlagsToSQL = (flags: Record<'Pending' | 'Deposit' | 'Recurrent' | 'Generated', 'no' | 'only'>) => {
+const mapFlagsToSQL = (flags: Record<'Pending' | 'Deposit' | 'Recurrent' | 'Generated', 'yes' | 'no' | 'only'>) => {
     const where: Record<string, Partial<Sequelize.WhereLogic>>[] = [];
 
     switch (flags.Pending) {
@@ -70,19 +70,22 @@ const mapFlagsToSQL = (flags: Record<'Pending' | 'Deposit' | 'Recurrent' | 'Gene
     }
 
     switch (flags.Generated) {
-        case 'no':
-            where.push({
-                repeat_link_id: {
-                    // @ts-ignore
-                    $eq: null,
-                },
-            });
+        case 'yes':
             break;
         case 'only':
             where.push({
                 repeat_link_id: {
                     // @ts-ignore
                     $ne: null,
+                },
+            });
+            break;
+        case 'no':
+        default:
+            where.push({
+                repeat_link_id: {
+                    // @ts-ignore
+                    $eq: null,
                 },
             });
             break;

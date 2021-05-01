@@ -17,16 +17,18 @@ const Subfilter = ({
     filter,
     name,
     onChange,
+    defaultValue = YES,
 }: {
     name: string;
     filter: Filter;
     onChange: (k: string, v: string) => void;
+    defaultValue?: string;
 }) => (
     <div>
         Display {name} Transactions
         <RadioGroup
             name={name}
-            value={(filter && filter.value && filter.value[name]) || YES}
+            value={(filter && filter.value && filter.value[name]) || defaultValue}
             style={{margin: '10px 0 0'}}
             onChange={(event: SyntheticEvent<HTMLInputElement>) => onChange(name, event.currentTarget.value)}
         >
@@ -74,7 +76,7 @@ export const DescriptionFilter = ({onChange, filter}: {onChange: (filter: Filter
                     <Subfilter onChange={handleChange} name={DEPOSIT} filter={filter} />
                     <Subfilter onChange={handleChange} name={PENDING} filter={filter} />
                     <Subfilter onChange={handleChange} name={RECURRENT} filter={filter} />
-                    <Subfilter onChange={handleChange} name={GENERATED} filter={filter} />
+                    <Subfilter onChange={handleChange} name={GENERATED} defaultValue={NO} filter={filter} />
                 </SubfilterGrid>
             </Menu>
 
