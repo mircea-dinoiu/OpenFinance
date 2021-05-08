@@ -1,4 +1,13 @@
-import {Button, DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
+import {
+    Button,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Popover,
+    PopoverProps,
+    DrawerProps,
+    Divider,
+} from '@material-ui/core';
 import {SmartDrawer} from 'app/drawers';
 import {ButtonProgress} from 'app/loaders';
 
@@ -11,45 +20,42 @@ import {ReactNode, useEffect, useRef, useState} from 'react';
 import {TransactionModel} from 'transactions/defs';
 import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
 import {TUser} from 'users/defs';
-import {TransactionForm} from './form';
+import {modelToForm, formToModel} from './form';
+import {ExpenseForm} from 'transactions/ExpenseForm';
+import {useUser} from 'users/state';
 
-type TypeProps = {
-    user: TUser;
+export type TransactionEditorProps = {
+    entityName: string;
     onRequestUpdate: (
         data: TransactionModel[],
     ) => Promise<{
         data: TransactionModel[];
     }>;
     items: TransactionModel[];
-    modelToForm: (model: TransactionModel) => TransactionForm;
-    formToModel: (form: TransactionForm, detail: {user: TUser}) => TransactionModel;
-    entityName: string;
-    formComponent: React.ComponentType<{
-        initialValues: TransactionForm;
-        onFormChange: (form: TransactionForm) => void;
-        onSubmit: () => void;
-    }>;
-    open: boolean;
-    onCancel: () => void;
+    onClose: () => void;
     onSave: () => void;
+    variant: 'drawer' | 'popover';
+    drawerProps?: Partial<DrawerProps>;
+    popoverProps?: Partial<PopoverProps>;
 };
 
-export const MainScreenEditDialog = (props: TypeProps) => {
+export const MainScreenEditDialog = ({drawerProps = {}, popoverProps = {}, ...props}: TransactionEditorProps) => {
     const [saving, setSaving] = useState(true);
     const [error, setError] = useState<ReactNode>(null);
-    const formData = useRef(props.items.map(props.modelToForm));
-    const initialData = useRef(props.items.map(props.modelToForm));
+    const formData = useRef(props.items.map(modelToForm));
+    const initialData = useRef(props.items.map(modelToForm));
     const formDefaults = useTransactionFormDefaults();
+    const user = useUser();
 
     const resetForm = () => {
         setSaving(false);
         setError(null);
-        formData.current = props.items.map(props.modelToForm);
-        initialData.current = props.items.map(props.modelToForm);
+        formData.current = props.items.map(modelToForm);
+        initialData.current = props.items.map(modelToForm);
     };
 
     const handleCancel = () => {
-        props.onCancel();
+        props.onClose();
         resetForm();
     };
 
@@ -82,16 +88,17 @@ export const MainScreenEditDialog = (props: TypeProps) => {
 
             await props.onRequestUpdate(
                 data.map((each) =>
-                    props.formToModel(
+                    formToModel(
                         {...each, ...updates},
                         {
-                            user: props.user,
+                            user,
                         },
                     ),
                 ),
             );
 
             props.onSave();
+            props.onClose();
         } catch (e) {
             if (e.response) {
                 setError(parseCrudError(e.response.data));
@@ -102,38 +109,62 @@ export const MainScreenEditDialog = (props: TypeProps) => {
 
         setSaving(false);
     };
+    const content = (
+        <>
+            <ExpenseForm
+                onFormChange={(nextFormData) => (formData.current[0] = nextFormData)}
+                initialValues={formData.current[0] ?? formDefaults}
+                onSubmit={save}
+            />
+            {error && <ErrorSnackbar message={error} />}
+        </>
+    );
+    const actions = (
+        <>
+            <Button
+                variant="outlined"
+                disabled={saving}
+                onClick={() => {
+                    handleCancel();
+                    resetForm();
+                }}
+                fullWidth={true}
+            >
+                Cancel
+            </Button>
+            <Button variant="contained" disabled={saving} color="primary" onClick={save} fullWidth={true}>
+                {saving ? <ButtonProgress /> : props.items.length === 1 ? 'Update' : 'Update Multiple'}
+            </Button>
+        </>
+    );
 
-    const Form = props.formComponent;
+    if (props.variant === 'drawer') {
+        return (
+            <SmartDrawer open={false} {...drawerProps} onClose={saving ? undefined : handleCancel}>
+                <DialogTitle>{`Edit ${props.entityName}${props.items.length === 1 ? '' : 's'}`}</DialogTitle>
+
+                <DialogContent dividers={true}>{content}</DialogContent>
+
+                <DialogActions>{actions}</DialogActions>
+            </SmartDrawer>
+        );
+    }
 
     return (
-        <SmartDrawer open={props.open} onClose={saving ? undefined : handleCancel}>
-            <DialogTitle>{`Edit ${props.entityName}${props.items.length === 1 ? '' : 's'}`}</DialogTitle>
-
-            <DialogContent dividers={true}>
-                <Form
-                    onFormChange={(nextFormData) => (formData.current[0] = nextFormData)}
-                    initialValues={formData.current[0] ?? formDefaults}
-                    onSubmit={save}
-                />
-                {error && <ErrorSnackbar message={error} />}
-            </DialogContent>
-
-            <DialogActions>
-                <Button
-                    variant="outlined"
-                    disabled={saving}
-                    onClick={() => {
-                        handleCancel();
-                        resetForm();
-                    }}
-                    fullWidth={true}
-                >
-                    Cancel
-                </Button>
-                <Button variant="contained" disabled={saving} color="primary" onClick={save} fullWidth={true}>
-                    {saving ? <ButtonProgress /> : props.items.length === 1 ? 'Update' : 'Update Multiple'}
-                </Button>
-            </DialogActions>
-        </SmartDrawer>
+        <Popover
+            open={Boolean(popoverProps.anchorEl)}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
+        >
+            {content}
+            <Divider />
+            {actions}
+        </Popover>
     );
 };

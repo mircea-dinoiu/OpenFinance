@@ -4,20 +4,15 @@ import {ButtonProgress} from 'app/loaders';
 
 import {ErrorSnackbar} from 'app/snackbars';
 import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
-import {useBootstrap} from 'users/state';
+import {useUser} from 'users/state';
 import {parseCrudError} from 'app/parseCrudError';
 import * as React from 'react';
-import {TransactionForm} from './form';
+import {formToModel} from 'transactions/form';
+import {ExpenseForm} from 'transactions/ExpenseForm';
 
 type TypeProps = {
-    formToModel: Function;
     entityName: string;
     onSave: () => void;
-    formComponent: React.ComponentType<{
-        initialValues: TransactionForm;
-        onFormChange: (form: TransactionForm) => void;
-        onSubmit: () => void;
-    }>;
     onRequestCreate: Function;
     onCancel: () => void;
     open: boolean;
@@ -26,7 +21,7 @@ type TypeProps = {
 export const MainScreenCreatorDialog = (props: TypeProps) => {
     const [saving, setSaving] = React.useState(false);
     const [error, setError] = React.useState<React.ReactNode>(null);
-    const user = useBootstrap();
+    const user = useUser();
     const formDefaults = useTransactionFormDefaults();
     const [formData, setFormData] = React.useState(useTransactionFormDefaults());
 
@@ -38,7 +33,7 @@ export const MainScreenCreatorDialog = (props: TypeProps) => {
 
         try {
             await props.onRequestCreate([
-                props.formToModel(data, {
+                formToModel(data, {
                     user,
                 }),
             ]);
@@ -57,14 +52,12 @@ export const MainScreenCreatorDialog = (props: TypeProps) => {
         }
     };
 
-    const Form = props.formComponent;
-
     return (
         <SmartDrawer open={props.open} onClose={saving ? undefined : props.onCancel}>
             <DialogTitle>{`Create ${props.entityName}`}</DialogTitle>
 
             <DialogContent dividers={true}>
-                <Form
+                <ExpenseForm
                     onFormChange={(nextFormData) => setFormData(nextFormData)}
                     initialValues={formDefaults}
                     onSubmit={save}

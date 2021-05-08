@@ -19,6 +19,7 @@ type TypeOnClick = () => any;
 
 export type TypeContextMenuItemsProps = {
     onClickEdit: TypeOnClick;
+    onClickEditField: TypeOnClick;
     onClickDelete: TypeOnClick;
     onClickDuplicate: TypeOnClick;
     onClickDetach: TypeOnClick;
@@ -35,6 +36,7 @@ export type TypeContextMenuItemsProps = {
 
 export function ContextMenuItems({
     onClickEdit,
+    onClickEditField,
     onClickDelete,
     onClickDuplicate,
     onClickDetach,
@@ -66,6 +68,12 @@ export function ContextMenuItems({
                     icon: CreateIcon,
                     text: selectedIdsLength === 1 ? 'Edit' : 'Edit Multiple',
                 },
+                /* {
+                    onClick: onClickEditField,
+                    disabled: disabledForZero,
+                    icon: CreateIcon,
+                    text: 'Edit Field',
+                },*/
                 {
                     onClick: onClickDuplicate,
                     disabled: disabledForZero,

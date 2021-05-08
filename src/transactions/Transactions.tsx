@@ -23,10 +23,9 @@ import {refreshWidgets as onRefreshWidgets} from 'refreshWidgets/state';
 
 import {BigLoader} from 'app/loaders';
 import {TProject} from 'projects/defs';
-import {ContextMenuItems} from 'transactions/ContextMenuItems';
+import {ContextMenuItems, TypeContextMenuItemsProps} from 'transactions/ContextMenuItems';
 import {Tooltip} from 'app/Tooltip';
 import {WeightDisplay} from 'transactions/cells/WeightDisplay';
-import {ExpenseForm} from 'transactions/ExpenseForm';
 import {ExpenseListItemContent} from 'transactions/ExpenseListItemContent';
 import {makeTransactionsColumns} from 'transactions/ExpenseTableColumns';
 import {getTrProps} from 'transactions/helpers/getTrProps';
@@ -34,7 +33,7 @@ import {mergeTransactions} from 'transactions/helpers/mergeTransactions';
 import {ImportTransactions} from 'transactions/ImportTransactions';
 import {MainScreenCreatorDialog} from 'transactions/MainScreenCreatorDialog';
 import {MainScreenDeleteDialog} from 'transactions/MainScreenDeleteDialog';
-import {MainScreenEditDialog} from 'transactions/MainScreenEditDialog';
+import {MainScreenEditDialog, TransactionEditorProps} from 'transactions/MainScreenEditDialog';
 import {MainScreenListGroup} from 'transactions/MainScreenListGroup';
 import {SplitAmountField} from 'transactions/SplitAmountField';
 import {StatsTable} from 'transactions/StatsTable';
@@ -104,11 +103,6 @@ type TypeState = {
 };
 
 const entityName = 'transaction';
-const crudProps = {
-    modelToForm,
-    formToModel,
-    formComponent: ExpenseForm,
-};
 
 class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     state: TypeState = {
@@ -151,6 +145,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.setState((state) => ({
             addModalOpen: !state.addModalOpen,
         }));
+
+    handleClickEditField = () => {
+        //alert('hello');
+    };
 
     handleDelete = async () => {
         this.handleToggleDeleteDialog();
@@ -563,7 +561,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.handleRequest({data}, Api.transactions, 'POST');
 
     sanitizeItem = (item: TransactionModel) =>
-        crudProps.formToModel(crudProps.modelToForm(item), {
+        formToModel(modelToForm(item), {
             user: this.props.user.user,
         });
 
@@ -631,10 +629,11 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     handleDetach = () => this.handleTransactionRepeat(Api.transactionsDetach);
     handleSkip = () => this.handleTransactionRepeat(Api.transactionsSkip);
 
-    getContextMenuItemsProps() {
+    getContextMenuItemsProps(): TypeContextMenuItemsProps {
         return {
             selectedIds: this.state.selectedIds,
             onClickEdit: this.handleToggleEditDialog,
+            onClickEditField: this.handleClickEditField,
             onClickDelete: this.handleToggleDeleteDialog,
             onClickDuplicate: this.handleDuplicate,
             onClickDetach: this.handleDetach,
@@ -742,8 +741,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     renderDialogs() {
-        const selectedItems = this.selectedItems;
-
         return (
             <>
                 <MainScreenCreatorDialog
@@ -755,7 +752,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     open={this.state.addModalOpen}
                     onRequestCreate={this.handleRequestCreate}
                     entityName={entityName}
-                    {...crudProps}
                 />
                 <MainScreenDeleteDialog
                     open={this.state.deleteDialogOpen}
@@ -765,20 +761,26 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     count={Object.values(this.state.selectedIds).filter(Boolean).length}
                 />
                 <MainScreenEditDialog
-                    open={this.state.editDialogOpen}
-                    items={selectedItems}
-                    onCancel={this.handleToggleEditDialog}
-                    onSave={() => {
-                        this.handleToggleEditDialog();
-                        this.props.dispatch(onRefreshWidgets());
+                    variant="drawer"
+                    drawerProps={{
+                        open: this.state.editDialogOpen,
                     }}
-                    entityName={entityName}
-                    onRequestUpdate={this.handleRequestUpdate}
-                    user={this.props.user.user}
-                    {...crudProps}
+                    onClose={this.handleToggleEditDialog}
+                    {...this.getTransactionEditorProps()}
                 />
             </>
         );
+    }
+
+    getTransactionEditorProps(): Pick<TransactionEditorProps, 'entityName' | 'items' | 'onSave' | 'onRequestUpdate'> {
+        return {
+            entityName,
+            items: this.selectedItems,
+            onSave: () => {
+                this.props.dispatch(onRefreshWidgets());
+            },
+            onRequestUpdate: this.handleRequestUpdate,
+        };
     }
 
     render() {
