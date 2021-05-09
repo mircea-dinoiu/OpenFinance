@@ -221,12 +221,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         });
     };
 
-    getSortedResults() {
-        return this.state.results;
-    }
-
     getGroupedResults() {
-        const results = this.getSortedResults();
+        const results = this.state.results;
 
         return groupBy(results, (each) => moment(each.created_at).format('YYYY-MM-DD'));
     }
@@ -701,7 +697,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         const params = this.props.params;
 
         if (this.props.isDesktop) {
-            const results = this.getSortedResults();
+            const results = this.state.results;
             const count = results.length;
 
             return (
