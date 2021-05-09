@@ -53,7 +53,9 @@ export const TransactionsEndDatePicker = () => {
                 }}
             >
                 {ShiftDateOptions.map((sdo) => (
-                    <MenuItem value={sdo.value}>{sdo.label}</MenuItem>
+                    <MenuItem key={sdo.value} value={sdo.value}>
+                        {sdo.label}
+                    </MenuItem>
                 ))}
             </Select>
         </div>
