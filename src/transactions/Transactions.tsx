@@ -122,7 +122,7 @@ const getTdProps = memoize(() => ({
     },
 }));
 
-class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
+class TransactionsInner extends PureComponent<TypeProps, TypeState> {
     state: TypeState = {
         results: [],
 
@@ -858,7 +858,7 @@ export const Transactions = (ownProps: TypeOwnProps) => {
                 <BigLoader />
             ) : (
                 <>
-                    <MainScreenListWrapped
+                    <TransactionsInner
                         {...stateProps}
                         {...ownProps}
                         endDate={endDate}
