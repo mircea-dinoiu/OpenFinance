@@ -18,6 +18,7 @@ import * as React from 'react';
 import {useStocksMap} from 'stocks/state';
 import {InventoryColumn} from 'transactions/columns/InventoryColumn';
 import {numericColumnStyles} from 'app/styles/column';
+import {EditableCell} from 'transactions/cells/EditableCell';
 
 export const makeTransactionsColumns = ({updateRecords}: {updateRecords: UpdateRecords}) => [
     QuantityCol,
@@ -44,7 +45,9 @@ const DescriptionColumn = {
     filterable: true,
     Filter: DescriptionFilter,
     Cell: ({original: item}: {original: TransactionModel}) => (
-        <DescriptionDisplay entity="transaction" item={item} accessor="item" />
+        <EditableCell field="description" id={item.id}>
+            <DescriptionDisplay entity="transaction" item={item} accessor="item" />
+        </EditableCell>
     ),
     accessor: 'item',
     minWidth: 300,
@@ -54,7 +57,11 @@ const CategoriesColumn = {
     Header: 'Categories',
     filterable: true,
     Filter: CategoriesFilter,
-    Cell: ({original: item}: {original: TransactionModel}) => <CategoriesDisplay item={item} />,
+    Cell: ({original: t}: {original: TransactionModel}) => (
+        <EditableCell id={t.id} field={'categories'}>
+            <CategoriesDisplay item={t} />
+        </EditableCell>
+    ),
     accessor: 'categories',
     sortable: false,
     minWidth: 300,
@@ -62,7 +69,11 @@ const CategoriesColumn = {
 
 const PersonsColumn = {
     Header: 'Person(s)',
-    Cell: ({original: item}: {original: TransactionModel}) => <PersonsDisplay item={item} />,
+    Cell: ({original: t}: {original: TransactionModel}) => (
+        <EditableCell id={t.id} field={'chargedPersons'}>
+            <PersonsDisplay item={t} />
+        </EditableCell>
+    ),
     Filter: UsersFilter,
     filterable: true,
     accessor: 'users',
@@ -131,8 +142,10 @@ const PriceCol = {
     sortable: true,
     filterable: true,
     id: 'price',
-    Cell: ({original: transaction}: {original: TransactionModel}) => (
-        <NumericValue value={transaction.price} currency={transaction.money_location.currency_id} />
+    Cell: ({original: t}: {original: TransactionModel}) => (
+        <EditableCell id={t.id} field={'price'}>
+            <NumericValue value={t.price} currency={t.money_location.currency_id} />
+        </EditableCell>
     ),
     width: 100,
     ...numericColumnStyles,

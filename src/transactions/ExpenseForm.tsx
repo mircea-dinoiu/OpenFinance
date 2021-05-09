@@ -34,7 +34,7 @@ import {sumArray} from 'app/numbers';
 import {locales} from 'app/locales';
 import {sortBy, orderBy} from 'lodash';
 
-import React, {PureComponent} from 'react';
+import React, {PureComponent, ReactNode} from 'react';
 import {useSelector} from 'react-redux';
 import {useInventories} from 'inventories/state';
 import {GlobalState} from 'app/state/defs';
@@ -42,18 +42,16 @@ import {useSelectedProject} from 'projects/state';
 import {useEndDate} from 'app/dates/helpers';
 import {TransactionForm} from './form';
 import {RepeatOption} from './RepeatOption';
+import {TTransactionsContext} from 'transactions/TransactionsContext';
 
 const PERC_STEP = 5;
 const PERC_MAX = 100;
-
-const boxStyle = {
-    padding: '10px 0',
-};
 
 type TypeOwnProps = {
     initialValues: TransactionForm;
     onFormChange: (form: TransactionForm) => void;
     onSubmit: () => void;
+    fieldToEdit?: TTransactionsContext['state']['fieldToEdit'];
 };
 
 type Props = TypeOwnProps & {
@@ -347,7 +345,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
 
         return (
             accountType === AccountType.BROKERAGE && (
-                <div style={boxStyle}>
+                <div>
                     <TransactionStockFields
                         values={{
                             stockId: this.state.stockId,
@@ -359,35 +357,49 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
         );
     }
 
+    renderField(field: TypeOwnProps['fieldToEdit'], children: ReactNode) {
+        const {fieldToEdit} = this.props;
+
+        if (!fieldToEdit || fieldToEdit === field) {
+            return children;
+        }
+
+        return null;
+    }
+
     render() {
+        const {fieldToEdit} = this.props;
+
         return (
-            <div
+            <ExpenseFormStyled
                 onKeyDown={(e) => {
                     if (e.ctrlKey && e.keyCode === 13 && this.props.onSubmit) {
                         this.props.onSubmit();
                     }
                 }}
             >
-                <div style={boxStyle}>
+                {this.renderField(
+                    'description',
                     <TransactionNameField
                         value={this.state.description}
                         onChange={(description) => this.setState({description: description})}
-                    />
-                </div>
-                <div style={boxStyle}>
+                    />,
+                )}
+                {this.renderField(
+                    'description',
                     <TextField
                         multiline
                         fullWidth={true}
                         label="Notes"
                         value={this.state.notes}
                         onChange={(e) => this.setState({notes: e.target.value})}
-                    />
-                </div>
-                <div style={boxStyle}>{this.renderAccount()}</div>
-                <div style={boxStyle}>{this.renderInventory()}</div>
-                <div style={boxStyle}>{this.renderSum()}</div>
+                    />,
+                )}
+                {this.renderField('paymentMethod', this.renderAccount())}
+                {this.renderField('inventoryId', this.renderInventory())}
+                {this.renderField('price', this.renderSum())}
                 {this.renderStockFields()}
-                <div style={boxStyle}>
+                {!fieldToEdit && (
                     <TextField
                         label="Weight (grams)"
                         InputLabelProps={{
@@ -406,22 +418,26 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
                             })
                         }
                     />
-                </div>
-                <div style={boxStyle}>{this.renderDateTime()}</div>
-                <div style={boxStyle}>
+                )}
+                {this.renderField('date', this.renderDateTime())}
+
+                {this.renderField(
+                    'categories',
                     <TransactionCategoriesField
                         values={this.state.categories}
                         description={this.state.description}
                         onChange={(categories) => this.setState({categories: categories})}
-                    />
-                </div>
-                <div style={boxStyle}>{this.renderChargedPersons()}</div>
-                <div style={boxStyle}>{this.renderRepeat()}</div>
-                <TypeStatusFlagsContainer>
-                    <div>{this.renderStatus()}</div>
-                    <div>{this.renderFlags()}</div>
-                </TypeStatusFlagsContainer>
-            </div>
+                    />,
+                )}
+                {this.renderField('chargedPersons', this.renderChargedPersons())}
+                {this.renderField('repeat', this.renderRepeat())}
+                {!fieldToEdit && (
+                    <TypeStatusFlagsContainer>
+                        <div>{this.renderStatus()}</div>
+                        <div>{this.renderFlags()}</div>
+                    </TypeStatusFlagsContainer>
+                )}
+            </ExpenseFormStyled>
         );
     }
 
@@ -485,7 +501,7 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
 }
 
 export const ExpenseForm = (ownProps: TypeOwnProps) => {
-    const stateProps = useSelector(({currencies, categories, moneyLocations, inventories, user}: GlobalState) => ({
+    const stateProps = useSelector(({currencies, categories, moneyLocations, user}: GlobalState) => ({
         currencies,
         categories,
         moneyLocations,
@@ -499,6 +515,13 @@ export const ExpenseForm = (ownProps: TypeOwnProps) => {
         <ExpenseFormWrapped {...ownProps} {...stateProps} inventories={inventories} endDate={endDate} users={users} />
     );
 };
+
+const ExpenseFormStyled = styled('div')(({theme}) => ({
+    minWidth: '300px',
+    display: 'grid',
+    gridGap: theme.spacing(2),
+    gridAutoFlow: 'row',
+}));
 
 const TypeStatusFlagsContainer = styled('div')(({theme}) => ({
     display: 'grid',

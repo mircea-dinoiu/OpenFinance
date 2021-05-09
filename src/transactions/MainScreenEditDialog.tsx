@@ -19,10 +19,10 @@ import * as React from 'react';
 import {ReactNode, useEffect, useRef, useState} from 'react';
 import {TransactionModel} from 'transactions/defs';
 import {useTransactionFormDefaults} from 'transactions/useTransactionFormDefaults';
-import {TUser} from 'users/defs';
 import {modelToForm, formToModel} from './form';
 import {ExpenseForm} from 'transactions/ExpenseForm';
 import {useUser} from 'users/state';
+import {TTransactionsContext} from 'transactions/TransactionsContext';
 
 export type TransactionEditorProps = {
     entityName: string;
@@ -33,10 +33,12 @@ export type TransactionEditorProps = {
     }>;
     items: TransactionModel[];
     onClose: () => void;
+    onClosed?: () => void;
     onSave: () => void;
     variant: 'drawer' | 'popover';
     drawerProps?: Partial<DrawerProps>;
     popoverProps?: Partial<PopoverProps>;
+    fieldToEdit?: TTransactionsContext['state']['fieldToEdit'];
 };
 
 export const MainScreenEditDialog = ({drawerProps = {}, popoverProps = {}, ...props}: TransactionEditorProps) => {
@@ -61,7 +63,7 @@ export const MainScreenEditDialog = ({drawerProps = {}, popoverProps = {}, ...pr
 
     useEffect(() => {
         resetForm();
-    }, [JSON.stringify(props.items)]);
+    }, [popoverProps.anchorEl, JSON.stringify(props.items)]);
 
     const getUpdates = () => {
         const updates = {};
@@ -110,17 +112,18 @@ export const MainScreenEditDialog = ({drawerProps = {}, popoverProps = {}, ...pr
         setSaving(false);
     };
     const content = (
-        <>
+        <DialogContent dividers={true}>
             <ExpenseForm
+                fieldToEdit={props.fieldToEdit}
                 onFormChange={(nextFormData) => (formData.current[0] = nextFormData)}
-                initialValues={formData.current[0] ?? formDefaults}
+                initialValues={props.items[0] ? modelToForm(props.items[0]) : formDefaults}
                 onSubmit={save}
             />
             {error && <ErrorSnackbar message={error} />}
-        </>
+        </DialogContent>
     );
     const actions = (
-        <>
+        <DialogActions>
             <Button
                 variant="outlined"
                 disabled={saving}
@@ -135,17 +138,19 @@ export const MainScreenEditDialog = ({drawerProps = {}, popoverProps = {}, ...pr
             <Button variant="contained" disabled={saving} color="primary" onClick={save} fullWidth={true}>
                 {saving ? <ButtonProgress /> : props.items.length === 1 ? 'Update' : 'Update Multiple'}
             </Button>
-        </>
+        </DialogActions>
     );
+
+    const onClose = saving ? undefined : handleCancel;
 
     if (props.variant === 'drawer') {
         return (
-            <SmartDrawer open={false} {...drawerProps} onClose={saving ? undefined : handleCancel}>
+            <SmartDrawer open={false} {...drawerProps} onClose={onClose}>
                 <DialogTitle>{`Edit ${props.entityName}${props.items.length === 1 ? '' : 's'}`}</DialogTitle>
 
-                <DialogContent dividers={true}>{content}</DialogContent>
+                {content}
 
-                <DialogActions>{actions}</DialogActions>
+                {actions}
             </SmartDrawer>
         );
     }
@@ -153,14 +158,16 @@ export const MainScreenEditDialog = ({drawerProps = {}, popoverProps = {}, ...pr
     return (
         <Popover
             open={Boolean(popoverProps.anchorEl)}
+            anchorEl={popoverProps.anchorEl}
             anchorOrigin={{
                 vertical: 'bottom',
-                horizontal: 'center',
+                horizontal: 'right',
             }}
             transformOrigin={{
                 vertical: 'top',
-                horizontal: 'center',
+                horizontal: 'right',
             }}
+            onClose={onClose}
         >
             {content}
             <Divider />

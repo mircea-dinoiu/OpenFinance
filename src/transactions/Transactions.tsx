@@ -51,7 +51,7 @@ import * as H from 'history';
 import _, {isEqual, range} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import React, {PureComponent, ReactNode, useMemo} from 'react';
+import React, {PureComponent, ReactNode, useMemo, useState} from 'react';
 import EventListener from 'react-event-listener';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -64,6 +64,11 @@ import {useEndDate} from 'app/dates/helpers';
 import {createXHR, HttpMethod} from 'app/fetch';
 import {scrollReachedBottom} from 'app/scroll';
 import {makeUrl} from 'app/url';
+import {
+    TransactionsContext,
+    TTransactionsContext,
+    TransactionsContextDefaultState,
+} from 'transactions/TransactionsContext';
 
 type TypeOwnProps = {};
 
@@ -83,13 +88,14 @@ type TypeProps = {
     moneyLocations: Accounts;
     user: TBootstrap;
     project: TProject;
+    transactionsState: TTransactionsContext['state'];
+    transactionsSetState: TTransactionsContext['setState'];
 } & TypeOwnProps;
 
 type TypeState = {
     firstLoad: boolean;
     results: TransactionModel[];
     loading: number;
-    selectedIds: number[];
 
     addModalOpen: boolean;
     editDialogOpen: boolean;
@@ -104,12 +110,17 @@ type TypeState = {
 
 const entityName = 'transaction';
 
+const getTdProps = () => ({
+    style: {
+        position: 'relative',
+    },
+});
+
 class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     state: TypeState = {
         firstLoad: true,
         results: [],
         loading: 0,
-        selectedIds: [],
         contextMenuDisplay: false,
         contextMenuTop: 0,
         contextMenuLeft: 0,
@@ -145,10 +156,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         this.setState((state) => ({
             addModalOpen: !state.addModalOpen,
         }));
-
-    handleClickEditField = () => {
-        //alert('hello');
-    };
 
     handleDelete = async () => {
         this.handleToggleDeleteDialog();
@@ -229,7 +236,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         });
     };
 
-    handleReceivedSelectedIds = (selectedIds: number[]) => this.setState({selectedIds});
+    handleReceivedSelectedIds = (selectedIds: number[]) =>
+        this.props.transactionsSetState({
+            selectedIds,
+        });
     handleChangeContextMenu = ({display, top = 0, left = 0}: {display: boolean; top?: number; left?: number}) =>
         this.setState({
             contextMenuDisplay: display,
@@ -240,7 +250,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     getTrProps = (state: any, rowInfo?: {original: TransactionModel}) =>
         rowInfo
             ? getTrProps({
-                  selectedIds: this.state.selectedIds,
+                  selectedIds: this.props.transactionsState.selectedIds,
                   onEdit: this.handleToggleEditDialog,
                   onReceiveSelectedIds: this.handleReceivedSelectedIds,
                   onChangeContextMenu: this.handleChangeContextMenu,
@@ -249,7 +259,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             : {};
 
     get selectedItems() {
-        return this.state.results.filter((r) => this.state.selectedIds.includes(r.id));
+        return this.state.results.filter((r) => this.props.transactionsState.selectedIds.includes(r.id));
     }
 
     computeAmount(transactions: TransactionModel[]) {
@@ -631,9 +641,8 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
     getContextMenuItemsProps(): TypeContextMenuItemsProps {
         return {
-            selectedIds: this.state.selectedIds,
+            selectedIds: this.props.transactionsState.selectedIds,
             onClickEdit: this.handleToggleEditDialog,
-            onClickEditField: this.handleClickEditField,
             onClickDelete: this.handleToggleDeleteDialog,
             onClickDuplicate: this.handleDuplicate,
             onClickDetach: this.handleDetach,
@@ -703,6 +712,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             data={results}
                             columns={this.columns}
                             getTrProps={this.getTrProps}
+                            getTdProps={getTdProps}
                         />
                     </div>
                     <Menu
@@ -716,6 +726,18 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     >
                         <ContextMenuItems {...this.getContextMenuItemsProps()} />
                     </Menu>
+
+                    <MainScreenEditDialog
+                        variant="popover"
+                        fieldToEdit={this.props.transactionsState.fieldToEdit}
+                        popoverProps={{
+                            anchorEl: this.props.transactionsState.editorAnchorEl,
+                        }}
+                        onClose={() => {
+                            this.props.transactionsSetState({editorAnchorEl: null});
+                        }}
+                        {...this.getTransactionEditorProps()}
+                    />
                 </Paper>
             );
         }
@@ -758,7 +780,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     onYes={this.handleDelete}
                     onNo={this.handleToggleDeleteDialog}
                     entityName={entityName}
-                    count={Object.values(this.state.selectedIds).filter(Boolean).length}
+                    count={Object.values(this.props.transactionsState.selectedIds).filter(Boolean).length}
                 />
                 <MainScreenEditDialog
                     variant="drawer"
@@ -827,6 +849,10 @@ export const Transactions = (ownProps: TypeOwnProps) => {
     const location = useLocation();
     const project = useSelectedProject();
     const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
+    const [transactionsState, setState] = useState<TTransactionsContext['state']>(TransactionsContextDefaultState);
+    const transactionsSetState: TTransactionsContext['setState'] = (values) => {
+        setState((prevState) => ({...prevState, ...values}));
+    };
 
     const params = useMemo(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -840,15 +866,24 @@ export const Transactions = (ownProps: TypeOwnProps) => {
     }, [location.search]);
 
     return (
-        <MainScreenListWrapped
-            {...stateProps}
-            {...ownProps}
-            endDate={endDate}
-            history={history}
-            dispatch={dispatch}
-            params={params}
-            project={project}
-            isDesktop={isLarge}
-        />
+        <TransactionsContext.Provider
+            value={{
+                state: transactionsState,
+                setState: transactionsSetState,
+            }}
+        >
+            <MainScreenListWrapped
+                {...stateProps}
+                {...ownProps}
+                endDate={endDate}
+                history={history}
+                dispatch={dispatch}
+                params={params}
+                project={project}
+                isDesktop={isLarge}
+                transactionsState={transactionsState}
+                transactionsSetState={transactionsSetState}
+            />
+        </TransactionsContext.Provider>
     );
 };
