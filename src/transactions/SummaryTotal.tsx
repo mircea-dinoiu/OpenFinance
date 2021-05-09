@@ -23,7 +23,7 @@ export const SummaryTotal = ({
                 });
 
                 return (
-                    <div>
+                    <div key={currencyId}>
                         <NumericValue
                             currency={Number(currencyId)}
                             value={financialNum(cashValue)}

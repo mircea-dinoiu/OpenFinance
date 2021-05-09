@@ -25,6 +25,7 @@
         ],
         "import/no-default-export": "warn",
         // turning this to warn/error will loop requests triggered by App.tsx
-        "react-hooks/exhaustive-deps": "off"
+        "react-hooks/exhaustive-deps": "off",
+        "react/jsx-key": "error"
     }
 }

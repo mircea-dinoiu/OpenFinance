@@ -59,8 +59,9 @@ export const Banking = ({
                                             }
                                         />
 
-                                        {Object.values(groupBy(accounts, 'currency_id')).map((data) => (
+                                        {Object.entries(groupBy(accounts, 'currency_id')).map(([cid, data]) => (
                                             <BaseTable
+                                                key={cid}
                                                 defaultSorted={[{id: 'value', desc: true}]}
                                                 className={cls.table}
                                                 data={data}

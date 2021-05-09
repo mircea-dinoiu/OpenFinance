@@ -27,6 +27,7 @@ export const CurrencyFilter = <Id extends number | string>({
                                     'iso_code',
                                 ).map((currency) => (
                                     <FormControlLabel
+                                        key={currency.id}
                                         value={String(currency.id)}
                                         control={<Radio />}
                                         label={currency.iso_code}

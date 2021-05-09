@@ -80,6 +80,7 @@ export const StocksPaper = ({
 
                                         return (
                                             <FormControlLabel
+                                                key={accountId}
                                                 control={
                                                     <Checkbox
                                                         checked={filteredAccounts.includes(accountId)}

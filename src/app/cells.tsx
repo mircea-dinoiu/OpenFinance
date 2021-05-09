@@ -78,7 +78,9 @@ export const CurrencyCell: TableCellRenderer = ({original: row, columnProps}) =>
                 }
             >
                 {options.map((o) => (
-                    <MenuItem value={o.id}>{o.iso_code}</MenuItem>
+                    <MenuItem key={o.id} value={o.id}>
+                        {o.iso_code}
+                    </MenuItem>
                 ))}
             </Select>
         );
@@ -112,7 +114,9 @@ export const StatusCell: TableCellRenderer = ({original: row, columnProps}) => {
             }
         >
             {options.map((o) => (
-                <MenuItem value={o.value}>{o.label}</MenuItem>
+                <MenuItem key={o.value} value={o.value}>
+                    {o.label}
+                </MenuItem>
             ))}
         </Select>
     ) : (
@@ -149,7 +153,9 @@ export const AccountTypeCell: TableCellRenderer = ({original: row, columnProps})
                 }
             >
                 {options.map((o) => (
-                    <MenuItem value={o.value}>{o.label}</MenuItem>
+                    <MenuItem key={o.value} value={o.value}>
+                        {o.label}
+                    </MenuItem>
                 ))}
             </Select>
         );

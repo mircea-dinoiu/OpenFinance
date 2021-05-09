@@ -51,7 +51,7 @@ export const SummarySubCategory = <Ent,>(props: {
             )}
             <ul className={cls.list}>
                 {items.map((each) => (
-                    <li className={cls.listItem}>
+                    <li key={each.reference} className={cls.listItem}>
                         <div>{renderDescription ? renderDescription(each) : each.description}</div>
                         <div>
                             <NumericValue value={each.cashValue} currency={Number(each.currencyId)} />

@@ -6,8 +6,8 @@ export const DashboardGridWithSidebar = ({sidebar, children}: {sidebar: ReactNod
 
     return (
         <Root sidebarCount={sidebars.length}>
-            {sidebars.map((sidebar) => (
-                <Sidebar>{sidebar}</Sidebar>
+            {sidebars.map((sidebar, i) => (
+                <Sidebar key={i}>{sidebar}</Sidebar>
             ))}
             <div>{children}</div>
         </Root>

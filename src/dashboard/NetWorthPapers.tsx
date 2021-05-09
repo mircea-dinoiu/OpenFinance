@@ -79,6 +79,7 @@ export const NetWorthPapers = ({
                                     <NetWorthTableRow label={'Debt'} value={valueDebt} currencyId={currencyId} />
                                     {inventories.map((inv) => (
                                         <NetWorthTableRow
+                                            key={inv.inventory_id}
                                             label={
                                                 <InventoryLabel>
                                                     <span>Inventory: {inv.name}</span>

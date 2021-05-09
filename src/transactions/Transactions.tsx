@@ -840,7 +840,7 @@ export const Transactions = (ownProps: TypeOwnProps) => {
         (values) => {
             setState((prevState) => ({
                 ...prevState,
-                ...(typeof values === 'function' ? values(prevState) : prevState),
+                ...(typeof values === 'function' ? values(prevState) : values),
             }));
         },
         [setState],

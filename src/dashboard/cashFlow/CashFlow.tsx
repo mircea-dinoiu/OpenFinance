@@ -143,7 +143,7 @@ export const CashFlow = () => {
             <CardContent>
                 <DashboardGridWithSidebar
                     sidebar={[
-                        <>
+                        <React.Fragment key={1}>
                             <Paper className={cls.dateContainer} variant="outlined">
                                 <DateSelector
                                     options={_.range(dateYear - 5, dateYear + 7).map((y) => ({
@@ -166,8 +166,8 @@ export const CashFlow = () => {
                             </Paper>
 
                             <CurrencyFilter ids={currencyIds} selected={currencyId} onChange={setCurrencyIdOverride} />
-                        </>,
-                        <Card variant="outlined" style={{height: '100%'}}>
+                        </React.Fragment>,
+                        <Card key={2} variant="outlined" style={{height: '100%'}}>
                             <CardContent>
                                 <FormGroup>
                                     <FormControlLabel
@@ -218,7 +218,7 @@ export const CashFlow = () => {
                                 </FormGroup>
                             </CardContent>
                         </Card>,
-                        <FormGroup>
+                        <FormGroup key={3}>
                             <ToggleButtonGroup
                                 orientation="vertical"
                                 value={chartDirection}
@@ -300,6 +300,7 @@ const DateSelector = <Value,>({
 
             return (
                 <ListItem
+                    key={o.value as any}
                     button
                     selected={isSelected}
                     onClick={() => {

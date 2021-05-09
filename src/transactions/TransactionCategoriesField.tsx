@@ -52,6 +52,7 @@ export const TransactionCategoriesField = ({
                     <em>Suggestions:</em>
                     {suggestedIds.map((sId) => (
                         <Chip
+                            key={sId}
                             color="secondary"
                             variant="outlined"
                             className={cls.chip}
@@ -65,7 +66,7 @@ export const TransactionCategoriesField = ({
     );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     suggestions: {
         marginTop: theme.spacing(2),
     },

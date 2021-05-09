@@ -55,7 +55,9 @@ export const TopBar = () => {
                                 value={selectedProject.id}
                             >
                                 {projects.map((p) => (
-                                    <MenuItem value={p.id}>{p.name}</MenuItem>
+                                    <MenuItem key={p.id} value={p.id}>
+                                        {p.name}
+                                    </MenuItem>
                                 ))}
                             </Select>
                         ) : (

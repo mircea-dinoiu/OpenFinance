@@ -19,7 +19,9 @@ export const IncludeDropdown = ({
             fullWidth={true}
         >
             {options.map((o) => (
-                <MenuItem value={o.value}>{o.label}</MenuItem>
+                <MenuItem key={o.value} value={o.value}>
+                    {o.label}
+                </MenuItem>
             ))}
         </Select>
     );

@@ -86,7 +86,7 @@ export function ContextMenuItems({
                     icon: FingerprintIcon,
                     text: 'Copy ID',
                 },
-                <Divider />,
+                null,
                 {
                     onClick: onClickDetach,
                     disabled: disabledForZero,
@@ -105,7 +105,7 @@ export function ContextMenuItems({
                     icon: MergeIcon,
                     text: 'Merge',
                 },
-                <Divider />,
+                null,
                 {
                     onClick: onClickDraft,
                     disabled: disabledForZero,
@@ -124,7 +124,7 @@ export function ContextMenuItems({
                     icon: UnlockIcon,
                     text: 'Change to Pending',
                 },
-                <Divider />,
+                null,
                 {
                     onClick: onClickHide,
                     disabled: disabledForZero,
@@ -138,8 +138,8 @@ export function ContextMenuItems({
                     text: 'Unarchive',
                 },
             ].map((opt, i) => {
-                if (React.isValidElement(opt)) {
-                    return opt;
+                if (opt === null) {
+                    return <Divider key={i} />;
                 }
 
                 const {onClick, disabled, icon, text} = opt as {
@@ -149,9 +149,7 @@ export function ContextMenuItems({
                     text: string;
                 };
 
-                return React.isValidElement(opt) ? (
-                    opt
-                ) : (
+                return (
                     <MenuItem
                         key={i}
                         onClick={() => {
