@@ -51,10 +51,9 @@ import * as H from 'history';
 import _, {isEqual, memoize, range} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import React, {PureComponent, ReactNode, useMemo, useState, useCallback} from 'react';
-import EventListener from 'react-event-listener';
+import React, {PureComponent, ReactNode, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {
     Filter,
     SortingRule,
@@ -69,13 +68,14 @@ import {useSelectedProject} from 'projects/state';
 import {useEndDate} from 'app/dates/helpers';
 
 import {createXHR, HttpMethod} from 'app/fetch';
-import {scrollReachedBottom} from 'app/scroll';
 import {makeUrl} from 'app/url';
 import {
     TransactionsContext,
     TTransactionsContext,
     TransactionsContextDefaultState,
 } from 'transactions/TransactionsContext';
+import {useTransactionsParams} from 'transactions/useTransactionsParams';
+import {TransactionsScrollListener} from 'transactions/TransactionsScrollListener';
 
 type TypeOwnProps = {};
 
@@ -100,9 +100,7 @@ type TypeProps = {
 } & TypeOwnProps;
 
 type TypeState = {
-    firstLoad: boolean;
     results: TransactionModel[];
-    loading: number;
 
     addModalOpen: boolean;
     editDialogOpen: boolean;
@@ -125,9 +123,8 @@ const getTdProps = memoize(() => ({
 
 class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     state: TypeState = {
-        firstLoad: true,
         results: [],
-        loading: 0,
+
         contextMenuDisplay: false,
         contextMenuTop: 0,
         contextMenuLeft: 0,
@@ -185,7 +182,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         page = this.props.params.page,
         pageSize = this.props.params.pageSize,
     } = {}) => {
-        if (this.state.loading) {
+        if (this.props.transactionsState.loading) {
             return;
         }
 
@@ -193,7 +190,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
         const {sorters, filters} = this.props.params;
 
-        this.setState((state) => ({loading: state.loading + 1}));
+        this.props.transactionsSetState((state) => ({loading: state.loading + 1}));
 
         const response = await createXHR<TransactionModel[]>({
             url: makeUrl(Api.transactions, {
@@ -218,11 +215,10 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         const json = response.data;
         const nextResults = page > 1 ? results.concat(json) : json;
 
-        this.setState((state) => ({
+        this.props.transactionsSetState((state) => ({firstLoad: false, loading: state.loading - 1}));
+        this.setState({
             results: nextResults,
-            firstLoad: false,
-            loading: state.loading - 1,
-        }));
+        });
     };
 
     getSortedResults() {
@@ -554,12 +550,12 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         );
 
     withLoading = <Fn extends Function>(fn: Fn) => async (...args: any[]) => {
-        this.setState((state) => ({loading: state.loading + 1}));
+        this.props.transactionsSetState((state) => ({loading: state.loading + 1}));
 
         const promise = fn(...args);
 
         promise.finally(() => {
-            this.setState((state) => ({loading: state.loading - 1}));
+            this.props.transactionsSetState((state) => ({loading: state.loading - 1}));
         });
 
         return await promise;
@@ -821,34 +817,13 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     }
 
     render() {
-        if (!this.props.isDesktop && this.state.firstLoad) {
-            return <BigLoader />;
-        }
-
         return (
             <div>
                 {this.renderContent()}
-                {this.state.loading > 0 && <LinearProgress />}
                 {this.renderDialogs()}
-
-                <EventListener target="window" onScroll={this.handleWindowScroll} />
             </div>
         );
     }
-
-    handleWindowScroll = () => {
-        if (!this.state.loading && scrollReachedBottom(document.scrollingElement as HTMLElement)) {
-            const {history} = this.props;
-            const {location} = history;
-            const searchParams = new URLSearchParams(location.search);
-
-            searchParams.set(QueryParam.page, String(this.props.params.page + 1));
-            this.props.history.replace({
-                ...location,
-                search: searchParams.toString(),
-            });
-        }
-    };
 }
 
 export const Transactions = (ownProps: TypeOwnProps) => {
@@ -861,27 +836,22 @@ export const Transactions = (ownProps: TypeOwnProps) => {
     const dispatch = useDispatch();
     const [endDate] = useEndDate();
     const history = useHistory();
-    const location = useLocation();
+
     const project = useSelectedProject();
     const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
     const [transactionsState, setState] = useState<TTransactionsContext['state']>(TransactionsContextDefaultState);
     const transactionsSetState: TTransactionsContext['setState'] = useCallback(
         (values) => {
-            setState((prevState) => ({...prevState, ...values}));
+            setState((prevState) => ({
+                ...prevState,
+                ...(typeof values === 'function' ? values(prevState) : prevState),
+            }));
         },
         [setState],
     );
+    const {loading, firstLoad} = transactionsState;
 
-    const params = useMemo(() => {
-        const searchParams = new URLSearchParams(location.search);
-
-        return {
-            pageSize: JSON.parse(searchParams.get(QueryParam.pageSize) as string) ?? 30,
-            page: JSON.parse(searchParams.get(QueryParam.page) as string) ?? 1,
-            sorters: JSON.parse(searchParams.get(QueryParam.sorters) as string) ?? [{id: 'created_at', desc: true}],
-            filters: JSON.parse(searchParams.get(QueryParam.filters) as string) ?? [],
-        };
-    }, [location.search]);
+    const params = useTransactionsParams();
 
     return (
         <TransactionsContext.Provider
@@ -890,18 +860,26 @@ export const Transactions = (ownProps: TypeOwnProps) => {
                 setState: transactionsSetState,
             }}
         >
-            <MainScreenListWrapped
-                {...stateProps}
-                {...ownProps}
-                endDate={endDate}
-                history={history}
-                dispatch={dispatch}
-                params={params}
-                project={project}
-                isDesktop={isLarge}
-                transactionsState={transactionsState}
-                transactionsSetState={transactionsSetState}
-            />
+            {!isLarge && firstLoad ? (
+                <BigLoader />
+            ) : (
+                <>
+                    <MainScreenListWrapped
+                        {...stateProps}
+                        {...ownProps}
+                        endDate={endDate}
+                        history={history}
+                        dispatch={dispatch}
+                        params={params}
+                        project={project}
+                        isDesktop={isLarge}
+                        transactionsState={transactionsState}
+                        transactionsSetState={transactionsSetState}
+                    />
+                    {loading > 0 && <LinearProgress />}
+                    <TransactionsScrollListener />
+                </>
+            )}
         </TransactionsContext.Provider>
     );
 };
