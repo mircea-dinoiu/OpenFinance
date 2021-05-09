@@ -48,14 +48,21 @@ import {Accounts} from 'accounts/defs';
 import {TCurrencyMap} from 'currencies/defs';
 import {TBootstrap} from 'users/defs';
 import * as H from 'history';
-import _, {isEqual, range} from 'lodash';
+import _, {isEqual, memoize, range} from 'lodash';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import React, {PureComponent, ReactNode, useMemo, useState} from 'react';
+import React, {PureComponent, ReactNode, useMemo, useState, useCallback} from 'react';
 import EventListener from 'react-event-listener';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
-import {Filter, SortingRule} from 'react-table-6';
+import {
+    Filter,
+    SortingRule,
+    FilteredChangeFunction,
+    PageChangeFunction,
+    PageSizeChangeFunction,
+    SortedChangeFunction,
+} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {GlobalState} from 'app/state/defs';
 import {useSelectedProject} from 'projects/state';
@@ -110,11 +117,11 @@ type TypeState = {
 
 const entityName = 'transaction';
 
-const getTdProps = () => ({
+const getTdProps = memoize(() => ({
     style: {
         position: 'relative',
     },
-});
+}));
 
 class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
     state: TypeState = {
@@ -682,6 +689,18 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         updateRecords: this.updateRecords,
     });
 
+    handleFilteredChange: FilteredChangeFunction = (value) => {
+        const filters = value.filter((f) => f.value != null);
+
+        this.setParam(QueryParam.filters, filters.length ? JSON.stringify(filters) : null);
+    };
+
+    handlePageChange: PageChangeFunction = (value) => this.setParam(QueryParam.page, (value + 1).toString());
+
+    handlePageSizeChange: PageSizeChangeFunction = (value) => this.setParam(QueryParam.pageSize, value.toString());
+
+    handleSortedChange: SortedChangeFunction = (value) => this.setParam(QueryParam.sorters, JSON.stringify(value));
+
     renderContent() {
         const params = this.props.params;
 
@@ -695,18 +714,14 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                     <div>
                         <BaseTable<TransactionModel>
                             filtered={params.filters}
-                            onFilteredChange={(value) => {
-                                const filters = value.filter((f) => f.value != null);
-
-                                this.setParam(QueryParam.filters, filters.length ? JSON.stringify(filters) : null);
-                            }}
+                            onFilteredChange={this.handleFilteredChange}
                             sorted={params.sorters}
-                            onSortedChange={(value) => this.setParam(QueryParam.sorters, JSON.stringify(value))}
+                            onSortedChange={this.handleSortedChange}
                             defaultSortDesc={true}
                             pageSize={params.pageSize}
-                            onPageSizeChange={(value) => this.setParam(QueryParam.pageSize, value.toString())}
+                            onPageSizeChange={this.handlePageSizeChange}
                             page={params.page - 1}
-                            onPageChange={(value) => this.setParam(QueryParam.page, (value + 1).toString())}
+                            onPageChange={this.handlePageChange}
                             pages={count >= params.pageSize ? params.page + 1 : params.page}
                             manual={true}
                             data={results}
@@ -850,9 +865,12 @@ export const Transactions = (ownProps: TypeOwnProps) => {
     const project = useSelectedProject();
     const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
     const [transactionsState, setState] = useState<TTransactionsContext['state']>(TransactionsContextDefaultState);
-    const transactionsSetState: TTransactionsContext['setState'] = (values) => {
-        setState((prevState) => ({...prevState, ...values}));
-    };
+    const transactionsSetState: TTransactionsContext['setState'] = useCallback(
+        (values) => {
+            setState((prevState) => ({...prevState, ...values}));
+        },
+        [setState],
+    );
 
     const params = useMemo(() => {
         const searchParams = new URLSearchParams(location.search);
