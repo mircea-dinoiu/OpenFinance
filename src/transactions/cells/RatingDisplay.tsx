@@ -4,17 +4,16 @@ import IconStarBorder from '@material-ui/icons/StarBorder';
 import {TransactionModel} from 'transactions/defs';
 import {range} from 'lodash';
 import * as React from 'react';
+import {useUpdateTransactions} from 'transactions/useUpdateTransactions';
 
 const Star = styled('span')({
     cursor: 'pointer',
 });
 
-export function RatingDisplay(props: {
-    item: TransactionModel;
-    updateRecords: (ids: number[], model: Partial<TransactionModel>) => void;
-}) {
+export function RatingDisplay(props: {item: TransactionModel}) {
     const value = props.item.favorite;
     const theme = useTheme();
+    const update = useUpdateTransactions();
 
     const handleClick = (rating: number) => (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
@@ -23,9 +22,9 @@ export function RatingDisplay(props: {
         const item = props.item;
 
         if (event.metaKey || event.ctrlKey) {
-            props.updateRecords([item.id], {favorite: 0});
+            update([item.id], {favorite: 0});
         } else {
-            props.updateRecords([item.id], {favorite: rating});
+            update([item.id], {favorite: rating});
         }
     };
 

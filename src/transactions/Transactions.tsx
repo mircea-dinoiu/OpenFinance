@@ -27,7 +27,7 @@ import {ContextMenuItems, TypeContextMenuItemsProps} from 'transactions/ContextM
 import {Tooltip} from 'app/Tooltip';
 import {WeightDisplay} from 'transactions/cells/WeightDisplay';
 import {ExpenseListItemContent} from 'transactions/ExpenseListItemContent';
-import {makeTransactionsColumns} from 'transactions/ExpenseTableColumns';
+import {TransactionsColumns} from 'transactions/ExpenseTableColumns';
 import {getTrProps} from 'transactions/helpers/getTrProps';
 import {mergeTransactions} from 'transactions/helpers/mergeTransactions';
 import {ImportTransactions} from 'transactions/ImportTransactions';
@@ -41,7 +41,7 @@ import {SummaryTotal} from 'transactions/SummaryTotal';
 import {TransactionsEndDatePicker} from 'transactions/TransactionsEndDatePicker';
 import {TransactionsMobileHeader} from 'transactions/TransactionsMobileHeader';
 import {formToModel, modelToForm} from 'transactions/form';
-import {TransactionModel, TransactionStatus, UpdateRecords} from 'transactions/defs';
+import {TransactionModel, TransactionStatus} from 'transactions/defs';
 import {Api} from 'app/Api';
 import {QueryParam} from 'app/QueryParam';
 import {Accounts} from 'accounts/defs';
@@ -67,7 +67,7 @@ import {GlobalState} from 'app/state/defs';
 import {useSelectedProject} from 'projects/state';
 import {useEndDate} from 'app/dates/helpers';
 
-import {createXHR, HttpMethod} from 'app/fetch';
+import {createXHR} from 'app/fetch';
 import {makeUrl} from 'app/url';
 import {
     TransactionsContext,
@@ -97,6 +97,7 @@ type TypeProps = {
     project: TProject;
     transactionsState: TTransactionsContext['state'];
     transactionsSetState: TTransactionsContext['setState'];
+    dispatchRequest: TTransactionsContext['dispatchRequest'];
 } & TypeOwnProps;
 
 type TypeState = {
@@ -528,7 +529,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
 
     handleCloseContextMenu = () => this.handleChangeContextMenu({display: false});
 
-    updateRecords: UpdateRecords = async (ids, data) => {
+    updateRecords = async (ids: number[], data: Partial<TransactionModel>) => {
         try {
             await this.handleRequestUpdate(ids.map((id) => ({id, ...data})));
 
@@ -545,29 +546,11 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
             data,
         );
 
-    withLoading = <Fn extends Function>(fn: Fn) => async (...args: any[]) => {
-        this.props.transactionsSetState((state) => ({loading: state.loading + 1}));
-
-        const promise = fn(...args);
-
-        promise.finally(() => {
-            this.props.transactionsSetState((state) => ({loading: state.loading - 1}));
-        });
-
-        return await promise;
-    };
-
-    handleRequest = this.withLoading(<D,>(data: D, api: string, method: HttpMethod) =>
-        createXHR({
-            url: makeUrl(api, {projectId: this.props.project.id}),
-            method,
-            data,
-        }),
-    );
-    handleRequestDelete = (ids: number[]) => this.handleRequest({ids}, Api.transactions, 'DELETE');
-    handleRequestUpdate = (data: Partial<TransactionModel>[]) => this.handleRequest({data}, Api.transactions, 'PUT');
+    handleRequestDelete = (ids: number[]) => this.props.dispatchRequest({ids}, Api.transactions, 'DELETE');
+    handleRequestUpdate = (data: Partial<TransactionModel>[]) =>
+        this.props.dispatchRequest({data}, Api.transactions, 'PUT');
     handleRequestCreate = (data: Omit<TransactionModel, 'id'>[]) =>
-        this.handleRequest({data}, Api.transactions, 'POST');
+        this.props.dispatchRequest({data}, Api.transactions, 'POST');
 
     sanitizeItem = (item: TransactionModel) =>
         formToModel(modelToForm(item), {
@@ -630,7 +613,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         }, [] as number[]);
 
         if (ids.length) {
-            await this.handleRequest({ids}, api, 'POST');
+            await this.props.dispatchRequest({ids}, api, 'POST');
 
             this.props.dispatch(onRefreshWidgets());
         }
@@ -677,10 +660,6 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
         });
     }
 
-    columns = makeTransactionsColumns({
-        updateRecords: this.updateRecords,
-    });
-
     handleFilteredChange: FilteredChangeFunction = (value) => {
         const filters = value.filter((f) => f.value != null);
 
@@ -717,7 +696,7 @@ class MainScreenListWrapped extends PureComponent<TypeProps, TypeState> {
                             pages={count >= params.pageSize ? params.page + 1 : params.page}
                             manual={true}
                             data={results}
-                            columns={this.columns}
+                            columns={TransactionsColumns}
                             getTrProps={this.getTrProps}
                             getTdProps={getTdProps}
                         />
@@ -848,12 +827,31 @@ export const Transactions = (ownProps: TypeOwnProps) => {
     const {loading, firstLoad} = transactionsState;
 
     const params = useTransactionsParams();
+    const dispatchRequest: TTransactionsContext['dispatchRequest'] = useCallback(
+        (data, api, method) => {
+            transactionsSetState((state) => ({loading: state.loading + 1}));
+
+            const promise = createXHR({
+                url: makeUrl(api, {projectId: project.id}),
+                method,
+                data,
+            });
+
+            promise.finally(() => {
+                transactionsSetState((state) => ({loading: state.loading - 1}));
+            });
+
+            return promise;
+        },
+        [project.id],
+    );
 
     return (
         <TransactionsContext.Provider
             value={{
                 state: transactionsState,
                 setState: transactionsSetState,
+                dispatchRequest,
             }}
         >
             {!isLarge && firstLoad ? (
@@ -871,6 +869,7 @@ export const Transactions = (ownProps: TypeOwnProps) => {
                         isDesktop={isLarge}
                         transactionsState={transactionsState}
                         transactionsSetState={transactionsSetState}
+                        dispatchRequest={dispatchRequest}
                     />
                     {loading > 0 && <LinearProgress />}
                     <TransactionsScrollListener />

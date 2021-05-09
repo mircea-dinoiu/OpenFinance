@@ -93,4 +93,3 @@ export type TransactionModel = {
     stock_id: number | null;
     inventory_id: number | null;
 };
-export type UpdateRecords = (ids: number[], data: Partial<TransactionModel>) => Promise<void>;

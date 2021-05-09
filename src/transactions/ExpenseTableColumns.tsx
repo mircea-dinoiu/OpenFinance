@@ -13,32 +13,12 @@ import {CategoriesDisplay} from 'transactions/cells/CategoriesDisplay';
 import {PersonsDisplay} from 'transactions/cells/PersonsDisplay';
 import {RatingDisplay} from 'transactions/cells/RatingDisplay';
 import {WeightDisplay} from 'transactions/cells/WeightDisplay';
-import {TransactionModel, UpdateRecords} from 'transactions/defs';
+import {TransactionModel} from 'transactions/defs';
 import * as React from 'react';
 import {useStocksMap} from 'stocks/state';
 import {InventoryColumn} from 'transactions/columns/InventoryColumn';
 import {numericColumnStyles} from 'app/styles/column';
 import {EditableCell} from 'transactions/cells/EditableCell';
-
-export const makeTransactionsColumns = ({updateRecords}: {updateRecords: UpdateRecords}) => [
-    QuantityCol,
-    PriceCol,
-    AmountColumn,
-    DescriptionColumn,
-    StockSymbolCol,
-    DateTimeColumn,
-    CategoriesColumn,
-    AccountColumn,
-    PersonsColumn,
-    InventoryColumn,
-    RepeatColumn,
-    {
-        ...RatingColumn,
-        getProps: () => ({updateRecords}),
-    },
-    WeightColumn,
-    PricePerWeightColumn,
-];
 
 const DescriptionColumn = {
     Header: 'Description',
@@ -88,17 +68,7 @@ const RatingColumn = {
     Header: 'Rating',
     filterable: true,
     sortable: true,
-    Cell: ({
-        original: item,
-        columnProps,
-    }: {
-        original: TransactionModel;
-        columnProps: {
-            rest: {
-                updateRecords: UpdateRecords;
-            };
-        };
-    }) => <RatingDisplay item={item} updateRecords={columnProps.rest.updateRecords} />,
+    Cell: ({original: t}: {original: TransactionModel}) => <RatingDisplay item={t} />,
     accessor: 'favorite',
     //
     width: 120,
@@ -163,3 +133,20 @@ const StockSymbolCol = {
     },
     ...numericColumnStyles,
 };
+
+export const TransactionsColumns = [
+    QuantityCol,
+    PriceCol,
+    AmountColumn,
+    DescriptionColumn,
+    StockSymbolCol,
+    DateTimeColumn,
+    CategoriesColumn,
+    AccountColumn,
+    PersonsColumn,
+    InventoryColumn,
+    RepeatColumn,
+    RatingColumn,
+    WeightColumn,
+    PricePerWeightColumn,
+];

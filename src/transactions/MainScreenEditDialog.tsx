@@ -26,11 +26,7 @@ import {TTransactionsContext} from 'transactions/TransactionsContext';
 
 export type TransactionEditorProps = {
     entityName: string;
-    onRequestUpdate: (
-        data: TransactionModel[],
-    ) => Promise<{
-        data: TransactionModel[];
-    }>;
+    onRequestUpdate: (data: TransactionModel[]) => Promise<unknown>;
     items: TransactionModel[];
     onClose: () => void;
     onClosed?: () => void;

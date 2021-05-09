@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import {TransactionForm} from 'transactions/form';
+import {HttpMethod} from 'app/fetch';
 
 type TTransactionsContextState = {
     fieldToEdit: null | keyof TransactionForm;
@@ -18,6 +19,7 @@ type TTransactionsContextSetState = (
 export type TTransactionsContext = {
     state: TTransactionsContextState;
     setState: TTransactionsContextSetState;
+    dispatchRequest: <D>(data: D, api: string, method: HttpMethod) => Promise<unknown>;
 };
 
 export const TransactionsContextDefaultState: TTransactionsContextState = {
@@ -31,6 +33,7 @@ export const TransactionsContextDefaultState: TTransactionsContextState = {
 export const TransactionsContext = React.createContext<TTransactionsContext>({
     state: TransactionsContextDefaultState,
     setState: () => {},
+    dispatchRequest: () => Promise.resolve(),
 });
 
 export const useTransactionsContext = () => useContext(TransactionsContext);
