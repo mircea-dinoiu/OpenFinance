@@ -39,6 +39,8 @@ export const EditableCell = ({
 };
 
 const EditableCellStyled = styled('div')((props) => ({
+    width: '100%',
+    height: '100%',
     '&:hover .edit': {
         display: 'flex',
     },
