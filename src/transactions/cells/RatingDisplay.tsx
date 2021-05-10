@@ -29,7 +29,7 @@ export function RatingDisplay(props: {item: TransactionModel}) {
     };
 
     return (
-        <span title="Hold CTRL/CMD to remove rating">
+        <div style={{height: '20px'}} title="Hold CTRL/CMD to remove rating">
             {range(1, 6).map((rating) => (
                 <Star key={rating} onClick={handleClick(rating)}>
                     {React.createElement(rating <= value ? IconStar : IconStarBorder, {
@@ -41,6 +41,6 @@ export function RatingDisplay(props: {item: TransactionModel}) {
                     })}
                 </Star>
             ))}
-        </span>
+        </div>
     );
 }

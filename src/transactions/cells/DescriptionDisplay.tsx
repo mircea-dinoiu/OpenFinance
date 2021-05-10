@@ -1,9 +1,7 @@
-import {Card, CardContent} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Flags} from 'transactions/MainScreenFlags';
 import {TransactionModel} from 'transactions/defs';
 import * as React from 'react';
-import ReactMarkdown from 'react-markdown';
 
 export function DescriptionDisplay({
     item,
@@ -14,50 +12,22 @@ export function DescriptionDisplay({
     accessor: keyof TransactionModel;
     entity: string;
 }) {
-    const flags = <Flags entity={entity} item={item} />;
     const cls = useStyles();
 
     return (
-        <>
-            <div className={cls.grid}>
-                <span>{flags}</span>
-                <span>{item[accessor]}</span>
-            </div>
-            {item.notes && (
-                <Card variant="outlined" className={cls.card}>
-                    <CardContent className={cls.cardContent}>
-                        <ReactMarkdown linkTarget="_blank">{item.notes}</ReactMarkdown>
-                    </CardContent>
-                </Card>
-            )}
-        </>
+        <div className={cls.grid}>
+            <Flags entity={entity} item={item} />
+            <span style={{flexGrow: 1}}>{item[accessor]}</span>
+        </div>
     );
 }
 
 const useStyles = makeStyles((theme) => ({
     grid: {
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
+        display: 'flex',
+        flexDirection: 'row',
         gridGap: theme.spacing(1),
+        alignItems: 'center',
         whiteSpace: 'nowrap',
-    },
-    card: {
-        marginTop: theme.spacing(1),
-    },
-    cardContent: {
-        '&, &:last-child': {
-            padding: theme.spacing(1),
-        },
-        '& p': {
-            margin: 0,
-        },
-        '& ul': {
-            paddingLeft: theme.spacing(3),
-            margin: 0,
-        },
-        '& a:link, a:visited': {
-            color: theme.palette.warning.main,
-        },
-        whiteSpace: 'break-spaces',
     },
 }));

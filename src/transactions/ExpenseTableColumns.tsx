@@ -76,6 +76,7 @@ export const TransactionsColumns: Column[] = [
 
             return item.stock_id ? stocksMap.get(item.stock_id)?.symbol : null;
         },
+        width: 110,
         ...numericColumnStyles,
     },
     {
@@ -175,7 +176,7 @@ export const TransactionsColumns: Column[] = [
         //
         headerStyle: {textAlign: 'center'},
         style: {textAlign: 'center'},
-        width: 170,
+        width: 300,
     },
     {
         Header: 'Rating',

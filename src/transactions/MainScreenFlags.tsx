@@ -1,4 +1,4 @@
-import {useTheme} from '@material-ui/core';
+import {useTheme, Popover} from '@material-ui/core';
 import Cached from '@material-ui/icons/Cached';
 import IconUpload from '@material-ui/icons/CloudUpload';
 import IconDrafts from '@material-ui/icons/Drafts';
@@ -7,16 +7,23 @@ import Warning from '@material-ui/icons/Warning';
 import {TransactionModel, TransactionStatus} from 'transactions/defs';
 import startCase from 'lodash/startCase';
 import * as React from 'react';
+import {useState} from 'react';
+import ReactMarkdown from 'react-markdown';
+import {styled} from '@material-ui/core/styles';
+import IconNotes from '@material-ui/icons/Notes';
 
-const ICON_STYLE = {height: 20, width: 20};
+const IconContainer = styled('div')({
+    height: '20px',
+    width: '20px',
+});
 
 export const PendingReviewFlag = ({entity = 'Item'}) => {
     const theme = useTheme();
 
     return (
-        <span title={`${startCase(entity)} is pending`}>
-            <Warning style={ICON_STYLE} htmlColor={theme.palette.warning.main} />
-        </span>
+        <IconContainer title={`${startCase(entity)} is pending`}>
+            <Warning htmlColor={theme.palette.warning.main} />
+        </IconContainer>
     );
 };
 
@@ -24,9 +31,9 @@ export const RecurrentFlag = ({entity = 'Item'}) => {
     const theme = useTheme();
 
     return (
-        <span title={`Recurrent ${entity}`}>
-            <Cached style={ICON_STYLE} htmlColor={theme.palette.info.main} />
-        </span>
+        <IconContainer title={`Recurrent ${entity}`}>
+            <Cached htmlColor={theme.palette.info.main} />
+        </IconContainer>
     );
 };
 
@@ -34,9 +41,9 @@ export const GeneratedFlag = ({entity = 'Item'}) => {
     const theme = useTheme();
 
     return (
-        <span title={`Generated ${entity}`}>
-            <TrendingUp style={ICON_STYLE} htmlColor={theme.palette.error.main} />
-        </span>
+        <IconContainer title={`Generated ${entity}`}>
+            <TrendingUp htmlColor={theme.palette.error.main} />
+        </IconContainer>
     );
 };
 
@@ -44,24 +51,84 @@ export const DraftFlag = () => {
     const theme = useTheme();
 
     return (
-        <span title="Draft">
-            <IconDrafts style={ICON_STYLE} htmlColor={theme.palette.primary.main} />
-        </span>
+        <IconContainer title="Draft">
+            <IconDrafts htmlColor={theme.palette.primary.main} />
+        </IconContainer>
     );
 };
 
 export const ImportFlag = () => (
-    <span title="This transaction was imported">
-        <IconUpload style={ICON_STYLE} />
-    </span>
+    <IconContainer title="This transaction was imported">
+        <IconUpload />
+    </IconContainer>
 );
 
+export const NotesFlag = ({notes}: {notes: string}) => {
+    const [anchorEl, setAnchorEl] = useState<any>(null);
+
+    return (
+        <>
+            <IconContainer title="Notes">
+                <IconNotes
+                    style={{cursor: 'pointer'}}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setAnchorEl(e.currentTarget);
+                    }}
+                />
+            </IconContainer>
+            <Popover
+                onClose={() => setAnchorEl(null)}
+                open={!!anchorEl}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+            >
+                <NotesContent>
+                    <ReactMarkdown linkTarget="_blank">{notes}</ReactMarkdown>
+                </NotesContent>
+            </Popover>
+        </>
+    );
+};
+
+const NotesContent = styled('div')(({theme}) => ({
+    width: '300px',
+    padding: theme.spacing(2),
+    '&:last-child': {
+        padding: theme.spacing(1),
+    },
+    '& p': {
+        margin: 0,
+    },
+    '& ul': {
+        paddingLeft: theme.spacing(3),
+        margin: 0,
+    },
+    '& a:link, a:visited': {
+        color: theme.palette.warning.main,
+    },
+    whiteSpace: 'break-spaces',
+}));
+
 export const Flags = ({item, entity}: {item: TransactionModel; entity: string}) => (
-    <>
+    <FlagsStyled>
         {item.fitid !== null && <ImportFlag />}
         {item.status === TransactionStatus.draft && <DraftFlag />}
         {item.status === TransactionStatus.pending && <PendingReviewFlag entity={entity} />}
         {item.repeat != null && <RecurrentFlag entity={entity} />}
         {item.repeat_link_id !== null && <GeneratedFlag entity={entity} />}
-    </>
+        {item.notes && <NotesFlag notes={item.notes} />}
+    </FlagsStyled>
 );
+
+const FlagsStyled = styled('div')({
+    display: 'flex',
+    flexDirection: 'row',
+});

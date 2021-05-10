@@ -14,14 +14,11 @@ export const RepeatsDisplay = ({item}: {item: TransactionModel}) => {
 
     return ro > 1 ? (
         <>
-            Every {item.repeat_factor} {repeatsText}
-            <div>
-                {ro} times{' '}
-                {'until ' +
-                    advanceRepeatDate(item, ro - 1)
-                        .toDate()
-                        .toLocaleDateString()}
-            </div>
+            Every {item.repeat_factor} {repeatsText} {locales.mdash} {ro} times{' '}
+            {'until ' +
+                advanceRepeatDate(item, ro - 1)
+                    .toDate()
+                    .toLocaleDateString()}
         </>
     ) : (
         <>Final Transaction</>
