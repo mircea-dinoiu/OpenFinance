@@ -1,6 +1,5 @@
 import {Box, CardHeader, Checkbox, useTheme} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
-import clsx from 'clsx';
+import {makeStyles, styled, Theme} from '@material-ui/core/styles';
 import {NumericValue} from 'app/formatters';
 import {useCardHeaderStyles} from 'transactions/styles';
 import {SummaryTotal} from 'transactions/SummaryTotal';
@@ -51,7 +50,7 @@ export const SummarySubCategory = <Ent,>(props: {
             )}
             <ul className={cls.list}>
                 {items.map((each) => (
-                    <li key={each.reference} className={cls.listItem}>
+                    <ListItem key={each.reference}>
                         <div>{renderDescription ? renderDescription(each) : each.description}</div>
                         <div>
                             <NumericValue value={each.cashValue} currency={Number(each.currencyId)} />
@@ -62,9 +61,9 @@ export const SummarySubCategory = <Ent,>(props: {
                             onChange={() => props.onToggleExcluded([each.reference])}
                             color="default"
                         />
-                    </li>
+                    </ListItem>
                 ))}
-                <li className={clsx(cls.listItem, cls.listItemTotal)}>
+                <ListItem isTotal={true}>
                     <div>TOTAL</div>
                     <div style={{textAlign: 'right'}}>
                         <SummaryTotal summaryItems={items} excludedRecord={props.excluded} />
@@ -77,11 +76,24 @@ export const SummarySubCategory = <Ent,>(props: {
                             color="default"
                         />
                     </div>
-                </li>
+                </ListItem>
             </ul>
         </Box>
     );
 };
+
+const ListItem = styled('li')((props: {isTotal?: boolean; theme: Theme}) => ({
+    display: 'grid',
+    gridTemplateColumns: '1fr auto auto',
+    gridGap: props.theme.spacing(1),
+    borderBottom: `1px solid ${colors.borderSecondary}`,
+    padding: props.theme.spacing(1, 0),
+    alignItems: 'center',
+    '&:hover': {
+        backgroundColor: colors.hover,
+    },
+    ...(props.isTotal ? {backgroundColor: colors.tableFoot, fontWeight: 500} : {}),
+}));
 
 const useStyles = makeStyles((theme) => ({
     checkbox: {
@@ -90,20 +102,5 @@ const useStyles = makeStyles((theme) => ({
     list: {
         padding: 0,
         margin: 0,
-    },
-    listItem: {
-        display: 'grid',
-        gridTemplateColumns: '1fr auto auto',
-        gridGap: theme.spacing(1),
-        borderBottom: `1px solid ${colors.borderSecondary}`,
-        padding: theme.spacing(1, 0),
-        alignItems: 'center',
-        '&:hover': {
-            backgroundColor: colors.hover,
-        },
-    },
-    listItemTotal: {
-        backgroundColor: colors.tableFoot,
-        fontWeight: 500,
     },
 }));

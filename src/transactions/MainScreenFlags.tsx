@@ -101,9 +101,6 @@ export const NotesFlag = ({notes}: {notes: string}) => {
 const NotesContent = styled('div')(({theme}) => ({
     width: '300px',
     padding: theme.spacing(2),
-    '&:last-child': {
-        padding: theme.spacing(1),
-    },
     '& p': {
         margin: 0,
     },
@@ -118,17 +115,12 @@ const NotesContent = styled('div')(({theme}) => ({
 }));
 
 export const Flags = ({item, entity}: {item: TransactionModel; entity: string}) => (
-    <FlagsStyled>
+    <>
         {item.fitid !== null && <ImportFlag />}
         {item.status === TransactionStatus.draft && <DraftFlag />}
         {item.status === TransactionStatus.pending && <PendingReviewFlag entity={entity} />}
         {item.repeat != null && <RecurrentFlag entity={entity} />}
         {item.repeat_link_id !== null && <GeneratedFlag entity={entity} />}
         {item.notes && <NotesFlag notes={item.notes} />}
-    </FlagsStyled>
+    </>
 );
-
-const FlagsStyled = styled('div')({
-    display: 'flex',
-    flexDirection: 'row',
-});

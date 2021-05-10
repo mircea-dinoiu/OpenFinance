@@ -1,5 +1,4 @@
-import {makeStyles, styled} from '@material-ui/core/styles';
-import clsx from 'clsx';
+import {styled} from '@material-ui/core/styles';
 import {AccountDisplayById} from 'transactions/cells/AccountDisplayById';
 import {AmountDisplay} from 'transactions/cells/AmountDisplay';
 import {DateDisplay} from 'transactions/cells/DateDisplay';
@@ -9,25 +8,23 @@ import {PersonsDisplay} from 'transactions/cells/PersonsDisplay';
 import {Flags} from 'transactions/MainScreenFlags';
 import {TransactionModel} from 'transactions/defs';
 import * as React from 'react';
+import {Theme} from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
-    expenseListItemContent: {
-        display: 'grid',
-        gridGap: theme.spacing(1),
-        alignItems: 'center',
-        gridTemplateAreas: `
-        'description description persons'
-        'amount amount ml'
-`,
-    },
-    expenseListItemContentExpanded: {
-        gridTemplateAreas: `
+const ExpenseListItemContentStyled = styled('div')(({theme, isExpanded}: {theme: Theme; isExpanded?: boolean}) => ({
+    display: 'grid',
+    gridGap: theme.spacing(1),
+    alignItems: 'center',
+    gridTemplateAreas: isExpanded
+        ? `
         'description description persons'
         'amount amount ml'
         'date date repeats'
         'categories categories categories'
+`
+        : `
+        'description description persons'
+        'amount amount ml'
 `,
-    },
 }));
 
 const DescriptionContainer = styled('div')({gridArea: 'description'});
@@ -55,7 +52,6 @@ const RepeatsContainer = styled('div')({textAlign: 'right', gridArea: 'repeats'}
 const CategoriesContainer = styled('div')({gridArea: 'categories'});
 
 export const ExpenseListItemContent = ({item, expanded}: {item: TransactionModel; expanded?: boolean}) => {
-    const cls = useStyles();
     const personsDisplay = <PersonsDisplay item={item} />;
     const descriptionDisplay = item.item;
     const flags = <Flags entity="transaction" item={item} />;
@@ -65,7 +61,7 @@ export const ExpenseListItemContent = ({item, expanded}: {item: TransactionModel
     const repeatsDisplay = <RepeatsDisplay item={item} />;
 
     return (
-        <div className={clsx(cls.expenseListItemContent, expanded && cls.expenseListItemContentExpanded)}>
+        <ExpenseListItemContentStyled isExpanded={expanded}>
             <DescriptionContainer>{descriptionDisplay}</DescriptionContainer>
             <PersonsContainer>{personsDisplay}</PersonsContainer>
             <AmountContainer>
@@ -81,6 +77,6 @@ export const ExpenseListItemContent = ({item, expanded}: {item: TransactionModel
                     <CategoriesContainer>{categoriesDisplay}</CategoriesContainer>
                 </>
             )}
-        </div>
+        </ExpenseListItemContentStyled>
     );
 };
