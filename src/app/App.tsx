@@ -75,7 +75,7 @@ const AppWrapped = () => {
                     <Route
                         exact={true}
                         strict={false}
-                        path={[paths.home, paths.dashboard, paths.transactions]}
+                        path={Object.values(paths).filter((p) => p !== paths.login)}
                         component={AppLoggedIn}
                     />
                 </Switch>

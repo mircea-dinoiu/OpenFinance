@@ -7,7 +7,7 @@ import {useRouteMatch} from 'react-router-dom';
 export const useProjects = (): TProject[] => useSelector((s: GlobalState) => s.user?.projects ?? []);
 
 export const useSelectedProject = (): TProject => {
-    const match = useRouteMatch<{id: string}>([paths.dashboard, paths.transactions]);
+    const match = useRouteMatch<{id: string}>(Object.values(paths).filter((p) => p.startsWith('/p/')));
     const id = match?.params.id;
     const projects = useProjects();
 
