@@ -19,7 +19,7 @@ export const CreditAprCol: Column<CashAccount> = {
 
 export const CreditBalanceCol: Column<CashAccount> = {
     Header: 'Balance',
-    accessor: (r) => r.total ? -r.total: 0,
+    accessor: (r) => (r.total ? -r.total : 0),
     id: 'balance',
     Cell: ({original, value}: {original: CashAccount; value: number}) => {
         return <NumericValue currency={original.currency_id} value={value} />;
@@ -41,9 +41,10 @@ export const CreditAvailableCol: Column<CashAccount> = {
 
 export const CreditUsageCol: Column<CashAccount> = {
     Header: 'Usage',
-    accessor: (r) => Math.round((-r.total / (r.credit_limit ?? 0)) * 100),
+    accessor: (r) => (r.credit_limit ? Math.round((-r.total / (r.credit_limit ?? 0)) * 100) : null),
     id: 'usage',
-    Cell: ({original, value}: {original: CashAccount; value: number}) => <BalanceProgress progress={value} />,
+    Cell: ({original, value}: {original: CashAccount; value: number | null}) =>
+        value === null ? value : <BalanceProgress progress={value} />,
     getProps: () => ({style: {position: 'relative'}}),
     Footer: ({
         data,
@@ -58,8 +59,9 @@ export const CreditUsageCol: Column<CashAccount> = {
 
         const totalBalance = data.reduce((acc, d) => acc + d.balance, 0);
         const totalLimit = data.reduce((acc, d) => acc + (d._original.credit_limit ?? 0), 0);
+        const progress = Math.round((totalBalance / totalLimit) * 100);
 
-        return <BalanceProgress progress={Math.round((totalBalance / totalLimit) * 100)} />;
+        return progress !== Infinity && <BalanceProgress progress={progress} />;
     },
     ...numericColumnStyles,
 };
@@ -68,7 +70,7 @@ export const CreditLimitCol: Column<CashAccount> = {
     Header: 'Credit Limit',
     accessor: 'credit_limit',
     Cell: ({original, value}: {original: CashAccount; value: number}) => {
-        return <NumericValue currency={original.currency_id} value={value} />;
+        return value != null && <NumericValue currency={original.currency_id} value={value} />;
     },
     Footer: makeTotalFooter(),
     ...numericColumnStyles,
@@ -85,7 +87,7 @@ const BalanceProgress = ({progress}: {progress: number}) => {
     );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     values: {
         display: 'grid',
         gridTemplateColumns: '1fr auto',
