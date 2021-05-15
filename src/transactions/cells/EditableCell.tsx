@@ -5,6 +5,8 @@ import {TransactionForm} from 'transactions/form';
 import {useTransactionsContext} from 'transactions/TransactionsContext';
 import {Paper} from '@material-ui/core';
 
+const enable = false;
+
 export const EditableCell = ({
     children,
     id,
@@ -14,6 +16,11 @@ export const EditableCell = ({
     id: number;
     field: keyof TransactionForm;
 }) => {
+    if (!enable) {
+        return children;
+    }
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const tc = useTransactionsContext();
 
     return (
