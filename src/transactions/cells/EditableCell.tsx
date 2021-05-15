@@ -17,7 +17,7 @@ export const EditableCell = ({
     field: keyof TransactionForm;
 }) => {
     if (!enable) {
-        return children;
+        return <>{children}</>;
     }
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
