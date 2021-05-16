@@ -1,32 +1,33 @@
 import {Dialog, DialogContent} from '@material-ui/core';
-import {TextFieldCell} from 'app/cells';
-import {TableWithInlineEditing} from 'app/TableWithInlineEditing';
 import {Api} from 'app/Api';
 import {TCategory} from 'categories/defs';
 import React from 'react';
 import {useCategories, useCategoriesReader} from 'categories/state';
+import {EditableDataGrid} from 'app/EditableDataGrid';
+import {DialogTitleWithClose} from 'app/DialogTitleWithClose';
 
 export const CategoriesDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) => {
     const rows = useCategories();
     const refresh = useCategoriesReader();
 
     return (
-        <Dialog open={isOpen} onClose={onClose} fullWidth={true}>
+        <Dialog open={isOpen} onClose={onClose} fullScreen={true}>
+            <DialogTitleWithClose title="Manage Categories" onClose={onClose} />
             <DialogContent>
-                <TableWithInlineEditing<TCategory>
-                    data={rows}
+                <EditableDataGrid<TCategory>
+                    rows={rows}
                     api={Api.categories}
-                    editableFields={['name']}
                     onRefresh={refresh}
-                    defaultSorted={[{id: 'name', desc: false}]}
+                    sortModel={[{field: 'name', sort: 'asc'}]}
                     allowDelete={true}
                     columns={[
                         {
-                            Header: 'Name',
-                            accessor: 'name',
-                            Cell: TextFieldCell,
+                            headerName: 'Name',
+                            field: 'name',
+                            editable: true,
+                            flex: 2,
                         },
-                        {accessor: 'expenses', Header: 'Transaction Count'},
+                        {field: 'expenses', headerName: 'Transaction Count', flex: 1},
                     ]}
                 />
             </DialogContent>

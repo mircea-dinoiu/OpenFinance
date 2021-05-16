@@ -12,7 +12,7 @@ export const TopBarMoreMenu = () => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
     const [categoriesIsOpen, setCategoriesIsOpen] = useState<boolean | null>(null);
-    const [accountsIsOpen, setAccountsIsOpen] = useState<boolean | null>(null);
+    const [accountsIsOpen, setAccountsIsOpen] = useState<boolean | null>(true);
 
     const makeCloseHandler = (fn?: () => void) => () => {
         fn?.();

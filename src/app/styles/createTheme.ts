@@ -28,6 +28,11 @@ export const createTheme = () => {
             borderRadius: 0,
         },
         palette,
+        props: {
+            MuiTextField: {
+                variant: 'outlined',
+            },
+        },
         overrides: {
             MuiCssBaseline: {
                 '@global': {
@@ -44,6 +49,9 @@ export const createTheme = () => {
                     },
                     '*': {
                         outline: 'none !important',
+                    },
+                    '.MuiDataGrid-main > :first-child': {
+                        display: 'none',
                     },
                 },
             },

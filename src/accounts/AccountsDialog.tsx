@@ -1,87 +1,98 @@
 import {Dialog, DialogContent} from '@material-ui/core';
-import {AccountTypeCell, CurrencyCell, NumberFieldCell, StatusCell, TextFieldCell, UrlCell} from 'app/cells';
-import {TableWithInlineEditing} from 'app/TableWithInlineEditing';
+import {renderUrlCell} from 'app/UrlCell';
 import {Api} from 'app/Api';
 import {TAccount} from 'accounts/defs';
 import React from 'react';
 import {useAccounts, useAccountsReader} from 'accounts/state';
+import {EditableDataGrid} from 'app/EditableDataGrid';
+import {DialogTitleWithClose} from 'app/DialogTitleWithClose';
+import {renderCurrencyCell, renderCurrencyEditCell} from 'currencies/CurrencyCell';
+import {renderAccountStatusCell, renderAccountStatusEditCell} from 'accounts/AccountStatusCell';
+import {renderAccountTypeEditCell} from 'accounts/AccountTypeCell';
 
 export const AccountsDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) => {
     const rows = useAccounts();
     const refresh = useAccountsReader();
 
     return (
-        <Dialog open={isOpen} onClose={onClose} fullWidth={true} maxWidth={false}>
+        <Dialog open={isOpen} onClose={onClose} fullScreen={true}>
+            <DialogTitleWithClose title="Manage Accounts" onClose={onClose} />
             <DialogContent>
-                <TableWithInlineEditing<TAccount>
-                    data={rows}
+                <EditableDataGrid<TAccount>
+                    rows={rows}
                     api={Api.moneyLocations}
-                    editableFields={[
-                        'name',
-                        'type',
-                        'status',
-                        'currency_id',
-                        'credit_limit',
-                        'credit_apr',
-                        'credit_minpay',
-                        'credit_dueday',
-                    ]}
                     onRefresh={refresh}
                     allowDelete={false}
-                    defaultSorted={[
-                        {id: 'status', desc: true},
-                        {id: 'name', desc: false},
+                    sortModel={[
+                        {field: 'status', sort: 'desc'},
+                        {field: 'name', sort: 'asc'},
                     ]}
                     columns={[
                         {
-                            accessor: 'name',
-                            Header: 'Name',
-                            Cell: TextFieldCell,
+                            field: 'name',
+                            headerName: 'Name',
+                            editable: true,
+                            flex: 2,
                         },
                         {
-                            accessor: 'status',
-                            Header: 'Status',
-                            Cell: StatusCell,
+                            field: 'status',
+                            headerName: 'Status',
+                            renderCell: renderAccountStatusCell,
+                            renderEditCell: renderAccountStatusEditCell,
+                            width: 120,
+                            editable: true,
+                            headerAlign: 'center',
+                        },
+                        {
+                            field: 'currency_id',
+                            headerName: 'Currency',
+                            renderCell: renderCurrencyCell,
+                            renderEditCell: renderCurrencyEditCell,
                             width: 100,
+                            align: 'center',
+                            headerAlign: 'center',
+                            editable: true,
                         },
                         {
-                            accessor: 'currency',
-                            Header: 'Currency',
-                            Cell: CurrencyCell,
-                            width: 100,
-                            style: {
-                                textAlign: 'center',
-                            },
+                            field: 'url',
+                            headerName: 'URL',
+                            renderCell: renderUrlCell,
+                            flex: 2,
                         },
                         {
-                            accessor: 'url',
-                            Header: 'URL',
-                            Cell: UrlCell,
+                            field: 'type',
+                            headerName: 'Type',
+                            renderEditCell: renderAccountTypeEditCell,
+                            editable: true,
+                            width: 150,
                         },
                         {
-                            accessor: 'type',
-                            Header: 'Type',
-                            Cell: AccountTypeCell,
+                            field: 'credit_limit',
+                            headerName: 'Credit Limit',
+                            type: 'number',
+                            editable: true,
+                            flex: 1,
                         },
                         {
-                            accessor: 'credit_limit',
-                            Header: 'Credit Limit',
-                            Cell: NumberFieldCell,
+                            field: 'credit_apr',
+                            headerName: 'Credit APR',
+                            type: 'number',
+                            editable: true,
+                            flex: 1,
                         },
                         {
-                            accessor: 'credit_apr',
-                            Header: 'Credit APR',
-                            Cell: NumberFieldCell,
+                            field: 'credit_minpay',
+                            headerName: 'Credit Minimum Payment',
+                            type: 'number',
+                            editable: true,
+                            flex: 1,
                         },
                         {
-                            accessor: 'credit_minpay',
-                            Header: 'Credit Minimum Payment',
-                            Cell: NumberFieldCell,
-                        },
-                        {
-                            accessor: 'credit_dueday',
-                            Header: 'Credit Due Day',
-                            Cell: NumberFieldCell,
+                            field: 'credit_dueday',
+                            headerName: 'Credit Due Day',
+                            type: 'number',
+                            editable: true,
+                            flex: 1,
                         },
                     ]}
                 />
