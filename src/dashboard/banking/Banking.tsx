@@ -1,4 +1,4 @@
-import {Button, CardHeader, Paper} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
 import IconCash from '@material-ui/icons/LocalAtm';
@@ -11,6 +11,7 @@ import {PaymentPlanDialog} from 'dashboard/PaymentPlanDialog';
 import {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {AccountType} from 'accounts/defs';
+import {DashboardAccordion} from 'dashboard/DashboardAccordion';
 
 export const Banking = ({
     classes: cls,
@@ -31,7 +32,7 @@ export const Banking = ({
         <>
             <>
                 {liquidWithTotal.length > 0 && (
-                    <Paper className={cls.paper} data-testid="liquid">
+                    <div data-testid="liquid">
                         {[
                             // Specifically hide 0 balance accounts for cash, not for the others though
                             {
@@ -47,18 +48,9 @@ export const Banking = ({
                                 accounts: liquidWithTotal.filter((a) => a.type === AccountType.SAVINGS),
                             },
                         ].map(
-                            ({title, accounts}) =>
+                            ({title, accounts}, index) =>
                                 accounts.length > 0 && (
-                                    <section>
-                                        <CardHeader
-                                            className={cls.cardHeader}
-                                            title={
-                                                <>
-                                                    <IconCash /> {title}
-                                                </>
-                                            }
-                                        />
-
+                                    <DashboardAccordion key={index} headerTitle={title} headerIcon={<IconCash />}>
                                         {Object.entries(groupBy(accounts, 'currency_id')).map(([cid, data]) => (
                                             <BaseTable
                                                 key={cid}
@@ -68,14 +60,14 @@ export const Banking = ({
                                                 columns={[NameCol, ValueCol]}
                                             />
                                         ))}
-                                    </section>
+                                    </DashboardAccordion>
                                 ),
                         )}
-                    </Paper>
+                    </div>
                 )}
 
                 {creditWithTotal.concat(loanWithTotal).length > 0 && (
-                    <Paper className={cls.paper} data-testid="credit">
+                    <div data-testid="credit">
                         {paymentPlanDialogIsOpen && (
                             <PaymentPlanDialog
                                 open={true}
@@ -92,12 +84,17 @@ export const Banking = ({
                             {
                                 items: creditWithTotal,
                                 getTitle: () => (
-                                    <div style={{display: 'flex'}}>
-                                        <span style={{flexGrow: 1}}>Credit Cards</span>
+                                    <div
+                                        style={{display: 'grid', alignItems: 'center', gridTemplateColumns: '1fr auto'}}
+                                    >
+                                        <span>Credit Cards</span>
                                         <Button
                                             color="primary"
                                             variant="contained"
-                                            onClick={() => setPaymentPlanDialogIsOpen(true)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setPaymentPlanDialogIsOpen(true);
+                                            }}
                                         >
                                             Payment Plan for Loans and Credit Cards
                                         </Button>
@@ -106,17 +103,12 @@ export const Banking = ({
                                 Icon: IconCredit,
                             },
                         ].map((group) =>
-                            Object.values(groupBy(group.items, 'currency_id')).map((data) => (
-                                <>
-                                    <CardHeader
-                                        className={cls.cardHeader}
-                                        title={
-                                            <>
-                                                {React.createElement(group.Icon)}
-                                                <span>{group.getTitle()}</span>
-                                            </>
-                                        }
-                                    />
+                            Object.values(groupBy(group.items, 'currency_id')).map((data, index) => (
+                                <DashboardAccordion
+                                    key={index}
+                                    headerIcon={React.createElement(group.Icon)}
+                                    headerTitle={group.getTitle()}
+                                >
                                     <BaseTable
                                         defaultSorted={[{id: 'balance', desc: true}]}
                                         className={cls.table}
@@ -130,10 +122,10 @@ export const Banking = ({
                                             CreditAprCol,
                                         ]}
                                     />
-                                </>
+                                </DashboardAccordion>
                             )),
                         )}
-                    </Paper>
+                    </div>
                 )}
 
                 {brokerageWithTotal.length > 0 && (

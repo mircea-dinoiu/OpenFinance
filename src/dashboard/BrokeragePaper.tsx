@@ -7,6 +7,7 @@ import {BrokerageAccount} from 'dashboard/defs';
 import {CurrencyFilter} from 'dashboard/filters/CurrencyFilter';
 import {groupBy} from 'lodash';
 import React, {useState} from 'react';
+import {DashboardAccordion} from 'dashboard/DashboardAccordion';
 
 export const BrokeragePaper = ({
     classes,
@@ -20,15 +21,7 @@ export const BrokeragePaper = ({
     const [currencyId, setCurrencyId] = useState(currencyIds[0]);
 
     return (
-        <Paper className={classes.paper} data-testid="brokerage">
-            <CardHeader
-                className={classes.cardHeader}
-                title={
-                    <>
-                        <IconStock /> Investment Accounts
-                    </>
-                }
-            />
+        <DashboardAccordion data-testid="brokerage" headerTitle="Investment Accounts" headerIcon={<IconStock />}>
             <DashboardGridWithSidebar
                 sidebar={
                     <>
@@ -40,9 +33,9 @@ export const BrokeragePaper = ({
                     defaultSorted={[{id: 'name', desc: false}]}
                     className={classes.table}
                     data={brokerageWithTotalGroupedByCurrencyId[currencyId]}
-                    columns={ [NameCol, ValueCol, CostBasisCol, RoiCol, RoiPercCol]}
+                    columns={[NameCol, ValueCol, CostBasisCol, RoiCol, RoiPercCol]}
                 />
             </DashboardGridWithSidebar>
-        </Paper>
+        </DashboardAccordion>
     );
 };
