@@ -12,6 +12,7 @@ import {groupBy} from 'lodash';
 import React, {useState} from 'react';
 import {AccountType} from 'accounts/defs';
 import {DashboardAccordion} from 'dashboard/DashboardAccordion';
+import {styled} from '@material-ui/core/styles';
 
 export const Banking = ({
     classes: cls,
@@ -84,9 +85,7 @@ export const Banking = ({
                             {
                                 items: creditWithTotal,
                                 getTitle: () => (
-                                    <div
-                                        style={{display: 'grid', alignItems: 'center', gridTemplateColumns: '1fr auto'}}
-                                    >
+                                    <CreditCardsTitle>
                                         <span>Credit Cards</span>
                                         <Button
                                             color="primary"
@@ -98,7 +97,7 @@ export const Banking = ({
                                         >
                                             Payment Plan for Loans and Credit Cards
                                         </Button>
-                                    </div>
+                                    </CreditCardsTitle>
                                 ),
                                 Icon: IconCredit,
                             },
@@ -135,3 +134,10 @@ export const Banking = ({
         </>
     );
 };
+
+const CreditCardsTitle = styled('div')((props) => ({
+    display: 'grid',
+    alignItems: 'center',
+    gridTemplateColumns: '1fr auto',
+    gridGap: props.theme.spacing(1),
+}));

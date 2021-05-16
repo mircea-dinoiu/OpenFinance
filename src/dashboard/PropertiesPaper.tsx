@@ -5,12 +5,12 @@ import {CardHeader, Paper, CardContent, Card} from '@material-ui/core';
 import HouseIcon from '@material-ui/icons/House';
 import {BaseTable} from 'app/BaseTable';
 import {Column} from 'react-table-6';
-import {NumericValue} from 'app/formatters';
 import {financialNum} from 'app/numbers';
 import Decimal from 'decimal.js';
 import {locales} from 'app/locales';
 import {BigLoader} from 'app/loaders';
-import {firstColumnStyles, numericColumnStyles} from 'app/styles/column';
+import {firstColumnStyles} from 'app/styles/column';
+import {createNumericColumn} from 'app/createNumericColumn';
 
 export const PropertiesPaper = ({
     classes,
@@ -56,50 +56,46 @@ const NameCol: Column<TProperty> = {
     ...firstColumnStyles,
 };
 
-const ValueCol: Column<TProperty> = {
+const ValueCol = createNumericColumn<TProperty>({
     Header: 'Value',
     accessor: 'market_value',
-    Cell: ({value, original}) => {
-        return <NumericValue currency={original.currency_id} value={value} colorize={true} />;
-    },
-    ...numericColumnStyles,
-};
+});
 
-const CostCol: Column<TProperty> = {
-    Header: 'Cost',
-    accessor: 'cost',
-    Cell: ({value, original}) => {
-        return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+const CostCol = createNumericColumn<TProperty>(
+    {
+        Header: 'Cost',
+        accessor: 'cost',
     },
-    ...numericColumnStyles,
-};
+    {
+        colorize: false,
+    },
+);
 
-const ChangeCol: Column<TProperty> = {
+const ChangeCol = createNumericColumn<TProperty>({
     Header: 'Change $',
     id: 'change',
     accessor: (p) => {
         return new Decimal(p.market_value).minus(p.cost).toNumber();
     },
-    Cell: ({value, original}) => {
-        return <NumericValue colorize={true} currency={original.currency_id} value={value} />;
-    },
-    ...numericColumnStyles,
-};
+});
 
-const ChangePercCol: Column<TProperty> = {
-    Header: 'Change %',
-    id: 'changePerc',
-    accessor: (p) => {
-        const value = new Decimal(p.market_value);
+const ChangePercCol = createNumericColumn<TProperty>(
+    {
+        Header: 'Change %',
+        id: 'changePerc',
+        accessor: (p) => {
+            const value = new Decimal(p.market_value);
 
-        return financialNum(
-            value
-                .minus(p.cost)
-                .div(p.cost)
-                .times(100)
-                .toNumber(),
-        );
+            return financialNum(
+                value
+                    .minus(p.cost)
+                    .div(p.cost)
+                    .times(100)
+                    .toNumber(),
+            );
+        },
     },
-    Cell: ({value}) => <NumericValue colorize={true} value={value} after="%" />,
-    ...numericColumnStyles,
-};
+    {
+        after: '%',
+    },
+);

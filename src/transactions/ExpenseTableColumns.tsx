@@ -47,12 +47,11 @@ export const TransactionsColumns: Column[] = [
     },
     {
         Header: 'Amount',
-        Cell: ({original: item}: {original: TransactionModel}) => <AmountDisplay item={item} />,
+        Cell: ({original: item}: {original: TransactionModel}) => <AmountDisplay item={item} isExpanded={true} />,
         accessor: 'sum',
         //
         width: 100,
-        headerStyle: {textAlign: 'right'},
-        style: {textAlign: 'right'},
+        ...numericColumnStyles,
     },
     {
         Header: 'Description',

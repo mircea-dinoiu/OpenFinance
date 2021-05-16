@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {BaseTable} from 'app/BaseTable';
 import {NumericValue} from 'app/formatters';
 import {locales} from 'app/locales';
-import {firstColumnStyles, numericColumnStyles} from 'app/styles/column';
+import {firstColumnStyles} from 'app/styles/column';
 import Decimal from 'decimal.js';
 import {financialNum} from 'app/numbers';
 import _ from 'lodash';
@@ -12,6 +12,7 @@ import {Column} from 'react-table-6';
 import {TStock} from 'stocks/defs';
 import {useStocksMap} from 'stocks/state';
 import {BalanceByLocationStock} from 'transactions/defs';
+import {createNumericColumn} from 'app/createNumericColumn';
 
 type StockWithUnits = TStock & {units: Decimal; accounts: number; costBasis: Decimal};
 
@@ -95,7 +96,7 @@ const SymbolCol: Column<StockWithUnits> = {
     ...firstColumnStyles,
 };
 
-const ValueCol: Column<StockWithUnits> = {
+const ValueCol = createNumericColumn<StockWithUnits>({
     Header: 'Value',
     id: 'value',
     accessor: (sh) => sh.units.mul(sh.price).toNumber(),
@@ -103,31 +104,31 @@ const ValueCol: Column<StockWithUnits> = {
         return original.units.isZero() ? (
             locales.mdash
         ) : (
-            <NumericValue currency={original.currency_id} value={value} colorize={false} />
+            <NumericValue currency={original.currency_id} value={value} isExpanded={true} />
         );
     },
-    ...numericColumnStyles,
-};
-const makePercCol: (total: number) => Column<StockWithUnits> = _.memoize((total) => ({
-    Header: 'Allocation',
-    id: 'allocation',
-    accessor: (sh) =>
-        sh.units
-            .mul(sh.price)
-            .div(total)
-            .mul(100)
-            .toNumber(),
-    Cell: ({value, original}) => {
-        return original.units.isZero() ? (
-            locales.mdash
-        ) : (
-            <NumericValue colorize={false} value={financialNum(value)} after="%" />
-        );
-    },
-    ...numericColumnStyles,
-}));
+});
+const makePercCol: (total: number) => Column<StockWithUnits> = _.memoize((total) =>
+    createNumericColumn({
+        Header: 'Allocation',
+        id: 'allocation',
+        accessor: (sh) =>
+            sh.units
+                .mul(sh.price)
+                .div(total)
+                .mul(100)
+                .toNumber(),
+        Cell: ({value, original}) => {
+            return original.units.isZero() ? (
+                locales.mdash
+            ) : (
+                <NumericValue isExpanded={true} value={financialNum(value)} after="%" />
+            );
+        },
+    }),
+);
 
-const CostPerShareCol: Column<StockWithUnits> = {
+const CostPerShareCol = createNumericColumn<StockWithUnits>({
     Header: 'Cost Per Share',
     id: 'costPerShare',
     accessor: (sh) => sh.costBasis.div(sh.units).toNumber(),
@@ -135,13 +136,12 @@ const CostPerShareCol: Column<StockWithUnits> = {
         return original.units.isZero() ? (
             locales.mdash
         ) : (
-            <NumericValue currency={original.currency_id} value={value} colorize={false} />
+            <NumericValue currency={original.currency_id} value={value} isExpanded={true} />
         );
     },
-    ...numericColumnStyles,
-};
+});
 
-const CostBasisCol: Column<StockWithUnits> = {
+const CostBasisCol = createNumericColumn<StockWithUnits>({
     Header: 'Cost Basis',
     id: 'costTotal',
     accessor: (sh) => sh.costBasis,
@@ -149,13 +149,12 @@ const CostBasisCol: Column<StockWithUnits> = {
         return original.units.isZero() ? (
             locales.mdash
         ) : (
-            <NumericValue currency={original.currency_id} value={value} colorize={false} />
+            <NumericValue currency={original.currency_id} value={value} isExpanded={true} />
         );
     },
-    ...numericColumnStyles,
-};
+});
 
-const RoiCol: Column<StockWithUnits> = {
+const RoiCol = createNumericColumn<StockWithUnits>({
     Header: 'Gain / Loss $',
     id: 'roi',
     accessor: (sh) =>
@@ -163,13 +162,9 @@ const RoiCol: Column<StockWithUnits> = {
             .times(sh.price)
             .minus(sh.costBasis)
             .toNumber(),
-    Cell: ({value, original}) => {
-        return <NumericValue colorize={true} currency={original.currency_id} value={value} />;
-    },
-    ...numericColumnStyles,
-};
+});
 
-const RoiPercCol: Column<StockWithUnits> = {
+const RoiPercCol = createNumericColumn<StockWithUnits>({
     Header: 'Gain / Loss %',
     id: 'roiPerc',
     accessor: (sh) => {
@@ -184,25 +179,29 @@ const RoiPercCol: Column<StockWithUnits> = {
         );
     },
     Cell: ({value, original}) =>
-        original.units.isZero() ? locales.mdash : <NumericValue colorize={true} value={value} after="%" />,
-    ...numericColumnStyles,
-};
+        original.units.isZero() ? (
+            locales.mdash
+        ) : (
+            <NumericValue isExpanded={true} colorize={true} value={value} after="%" />
+        ),
+});
 
-const StocksQuantityCol: Column<StockWithUnits> = {
+const StocksQuantityCol = createNumericColumn<StockWithUnits>({
     Header: 'Quantity',
     accessor: 'units',
-    Cell: ({value, original}) => (original.units.isZero() ? locales.mdash : <NumericValue value={value.toNumber()} />),
-    ...numericColumnStyles,
-};
+    Cell: ({value, original}) =>
+        original.units.isZero() ? locales.mdash : <NumericValue value={value.toNumber()} isExpanded={true} />,
+});
 
-const MarketPriceCol: Column<StockWithUnits> = {
-    Header: 'Market Price',
-    accessor: 'price',
-    Cell: ({value, original}) => {
-        return <NumericValue currency={original.currency_id} value={value} colorize={false} />;
+const MarketPriceCol = createNumericColumn<StockWithUnits>(
+    {
+        Header: 'Market Price',
+        accessor: 'price',
     },
-    ...numericColumnStyles,
-};
+    {
+        colorize: false,
+    },
+);
 
 const useStyles = makeStyles((theme) => ({
     table: {

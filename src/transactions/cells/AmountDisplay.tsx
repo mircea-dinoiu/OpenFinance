@@ -6,8 +6,10 @@ import {useCurrenciesMap} from 'currencies/state';
 
 export const AmountDisplay = ({
     item,
+    isExpanded,
 }: {
     item: Pick<TransactionModel, 'price' | 'money_location' | 'quantity' | 'stock_id'>;
+    isExpanded?: boolean;
 }) => {
     const currencies = useCurrenciesMap();
     const currencyISOCode = getItemCurrencyISOCode({
@@ -15,5 +17,12 @@ export const AmountDisplay = ({
         currencies,
     });
 
-    return <NumericValue colorize={true} value={item.price * item.quantity} currency={currencyISOCode} />;
+    return (
+        <NumericValue
+            isExpanded={isExpanded}
+            colorize={true}
+            value={item.price * item.quantity}
+            currency={currencyISOCode}
+        />
+    );
 };

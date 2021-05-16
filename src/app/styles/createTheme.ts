@@ -24,6 +24,9 @@ export const createTheme = () => {
     };
 
     const theme = createMuiTheme({
+        shape: {
+            borderRadius: 0,
+        },
         palette,
         overrides: {
             MuiCssBaseline: {

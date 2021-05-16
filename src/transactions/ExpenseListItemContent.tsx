@@ -31,16 +31,13 @@ const DescriptionContainer = styled('div')({gridArea: 'description'});
 
 const PersonsContainer = styled('div')({gridArea: 'persons', textAlign: 'right'});
 
-const AmountContainer = styled('div')({
+const AmountContainer = styled('div')((props) => ({
     gridArea: 'amount',
     fontSize: '1rem',
     lineHeight: '20px',
     display: 'flex',
     flexDirection: 'row',
-});
-
-const FlagsContainer = styled('div')(({theme}) => ({
-    marginLeft: theme.spacing(2),
+    gridGap: props.theme.spacing(1),
 }));
 
 const MlContainer = styled('div')({textAlign: 'right', gridArea: 'ml'});
@@ -66,7 +63,7 @@ export const ExpenseListItemContent = ({item, expanded}: {item: TransactionModel
             <PersonsContainer>{personsDisplay}</PersonsContainer>
             <AmountContainer>
                 <AmountDisplay item={item} />
-                <FlagsContainer>{flags}</FlagsContainer>
+                {flags}
             </AmountContainer>
             <MlContainer>{moneyLocationDisplay}</MlContainer>
 

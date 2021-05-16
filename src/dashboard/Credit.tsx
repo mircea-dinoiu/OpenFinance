@@ -1,12 +1,12 @@
 import {LinearProgress} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {CashAccount} from 'dashboard/defs';
-import {NumericValue} from 'app/formatters';
 import {locales} from 'app/locales';
 import React from 'react';
 import {Column} from 'react-table-6';
 import {numericColumnStyles} from 'app/styles/column';
 import {makeTotalFooter} from 'dashboard/makeTotalFooter';
+import {createNumericColumn} from 'app/createNumericColumn';
 
 export const CreditAprCol: Column<CashAccount> = {
     Header: locales.apr,
@@ -17,27 +17,29 @@ export const CreditAprCol: Column<CashAccount> = {
     ...numericColumnStyles,
 };
 
-export const CreditBalanceCol: Column<CashAccount> = {
-    Header: 'Balance',
-    accessor: (r) => (r.total ? -r.total : 0),
-    id: 'balance',
-    Cell: ({original, value}: {original: CashAccount; value: number}) => {
-        return <NumericValue currency={original.currency_id} value={value} />;
+export const CreditBalanceCol = createNumericColumn<CashAccount>(
+    {
+        Header: 'Balance',
+        accessor: (r) => (r.total ? -r.total : 0),
+        id: 'balance',
+        Footer: makeTotalFooter(),
     },
-    Footer: makeTotalFooter(),
-    ...numericColumnStyles,
-};
+    {
+        colorize: false,
+    },
+);
 
-export const CreditAvailableCol: Column<CashAccount> = {
-    Header: 'Available',
-    accessor: (r) => (r.credit_limit ?? 0) + r.total,
-    id: 'available',
-    Cell: ({original, value}: {original: CashAccount; value: number}) => {
-        return <NumericValue currency={original.currency_id} value={value} />;
+export const CreditAvailableCol = createNumericColumn<CashAccount>(
+    {
+        Header: 'Available',
+        accessor: (r) => (r.credit_limit ?? 0) + r.total,
+        id: 'available',
+        Footer: makeTotalFooter(),
     },
-    Footer: makeTotalFooter(),
-    ...numericColumnStyles,
-};
+    {
+        colorize: false,
+    },
+);
 
 export const CreditUsageCol: Column<CashAccount> = {
     Header: 'Usage',
@@ -66,15 +68,16 @@ export const CreditUsageCol: Column<CashAccount> = {
     ...numericColumnStyles,
 };
 
-export const CreditLimitCol: Column<CashAccount> = {
-    Header: 'Credit Limit',
-    accessor: 'credit_limit',
-    Cell: ({original, value}: {original: CashAccount; value: number}) => {
-        return value != null && <NumericValue currency={original.currency_id} value={value} />;
+export const CreditLimitCol = createNumericColumn<CashAccount>(
+    {
+        Header: 'Credit Limit',
+        accessor: 'credit_limit',
+        Footer: makeTotalFooter(),
     },
-    Footer: makeTotalFooter(),
-    ...numericColumnStyles,
-};
+    {
+        colorize: false,
+    },
+);
 
 const BalanceProgress = ({progress}: {progress: number}) => {
     const cls = useStyles();
