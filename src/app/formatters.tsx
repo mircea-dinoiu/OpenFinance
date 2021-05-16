@@ -34,29 +34,44 @@ const NumericValueStyled = styled('span')(
         privacyToggle,
         value,
         theme,
-        isExpanded,
+        variant,
     }: {
         colorize: boolean;
         privacyToggle: boolean;
         value: number;
         theme: Theme;
-        isExpanded: boolean;
+        variant: NumericValueVariant;
     }) => {
         const style = {
             cursor: 'grabbing',
             fontWeight: 500,
         };
+        const spacingFactor = variant === 'gridCell' ? 2 : 1;
+        const padding = theme.spacing(0, spacingFactor);
 
-        if (isExpanded) {
+        if (variant === 'tableCell') {
             Object.assign(style, {
                 display: 'flex',
-                width: `calc(100% + 2 * ${theme.spacing(1)}px)`,
-                height: `calc(100% + 2 * ${theme.spacing(1)}px)`,
+                width: `calc(100% + 2 * ${theme.spacing(spacingFactor)}px)`,
+                height: `calc(100% + 2 * ${theme.spacing(spacingFactor)}px)`,
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'flex-end',
-                margin: theme.spacing(-1, 0, 0, -1),
-                padding: theme.spacing(0, 1),
+                margin: theme.spacing(-spacingFactor, -spacingFactor, 0, -spacingFactor),
+                padding,
+            });
+        }
+
+        if (variant === 'gridCell') {
+            Object.assign(style, {
+                display: 'flex',
+                width: `calc(100% + 2 * ${theme.spacing(spacingFactor)}px)`,
+                height: `100%`,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                margin: theme.spacing(0, -spacingFactor, 0, -spacingFactor),
+                padding,
             });
         }
 
@@ -66,14 +81,14 @@ const NumericValueStyled = styled('span')(
                     ? {
                           background: theme.palette.success.main + '99',
                           color: theme.palette.success.contrastText,
-                          padding: theme.spacing(0, 1),
+                          padding,
                       }
                     : {}),
                 ...(value < 0
                     ? {
                           background: theme.palette.error.main + '99',
                           color: theme.palette.error.contrastText,
-                          padding: theme.spacing(0, 1),
+                          padding,
                       }
                     : {}),
             });
@@ -83,20 +98,22 @@ const NumericValueStyled = styled('span')(
     },
 );
 
+type NumericValueVariant = 'gridCell' | 'tableCell' | 'inline';
+
 export const NumericValue = ({
     currency: currencyFromProps,
     value,
     colorize = false,
     before,
     after,
-    isExpanded = false,
+    variant = 'inline',
 }: {
     currency?: string | number;
     value: number;
     colorize?: boolean;
     before?: ReactNode;
     after?: ReactNode;
-    isExpanded?: boolean;
+    variant?: NumericValueVariant;
 }) => {
     const currencies = useCurrenciesMap();
     const currency = typeof currencyFromProps === 'number' ? currencies[currencyFromProps].iso_code : currencyFromProps;
@@ -105,7 +122,7 @@ export const NumericValue = ({
     const valueToDisplay = currency ? formatCurrency(value, currency) : value;
     const inner = (
         <NumericValueStyled
-            isExpanded={isExpanded}
+            variant={variant}
             colorize={colorize}
             privacyToggle={privacyToggle}
             value={value}

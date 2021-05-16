@@ -10,7 +10,8 @@ import Decimal from 'decimal.js';
 import {locales} from 'app/locales';
 import {BigLoader} from 'app/loaders';
 import {firstColumnStyles} from 'app/styles/column';
-import {createNumericColumn} from 'app/createNumericColumn';
+import {createNumericColumn, createNumericColumnX} from 'app/createNumericColumn';
+import {XGrid, GridColDef} from '@material-ui/x-grid';
 
 export const PropertiesPaper = ({
     classes,
@@ -45,45 +46,53 @@ export const PropertiesPaper = ({
                 }
             />
 
-            <BaseTable data={properties as any} columns={[NameCol, ValueCol, CostCol, ChangeCol, ChangePercCol]} />
+            <XGrid
+                autoHeight={true}
+                rows={properties}
+                columns={[NameCol, ValueCol, CostCol, ChangeCol, ChangePercCol]}
+            />
         </Paper>
     );
 };
 
-const NameCol: Column<TProperty> = {
-    Header: 'Name',
-    accessor: 'name',
-    ...firstColumnStyles,
+const NameCol: GridColDef = {
+    headerName: 'Name',
+    field: 'name',
+    flex: 1,
 };
 
-const ValueCol = createNumericColumn<TProperty>({
-    Header: 'Value',
-    accessor: 'market_value',
+const ValueCol = createNumericColumnX<TProperty>({
+    headerName: 'Value',
+    field: 'market_value',
 });
 
-const CostCol = createNumericColumn<TProperty>(
+const CostCol = createNumericColumnX<TProperty>(
     {
-        Header: 'Cost',
-        accessor: 'cost',
+        headerName: 'Cost',
+        field: 'cost',
     },
     {
         colorize: false,
     },
 );
 
-const ChangeCol = createNumericColumn<TProperty>({
-    Header: 'Change $',
-    id: 'change',
-    accessor: (p) => {
+const ChangeCol = createNumericColumnX<TProperty>({
+    headerName: 'Change $',
+    field: 'change',
+    valueGetter: (params) => {
+        const p = params.row as TProperty;
+
         return new Decimal(p.market_value).minus(p.cost).toNumber();
     },
 });
 
-const ChangePercCol = createNumericColumn<TProperty>(
+const ChangePercCol = createNumericColumnX<TProperty>(
     {
-        Header: 'Change %',
-        id: 'changePerc',
-        accessor: (p) => {
+        headerName: 'Change %',
+        field: 'changePerc',
+        valueGetter: (params) => {
+            const p = params.row as TProperty;
+
             const value = new Decimal(p.market_value);
 
             return financialNum(

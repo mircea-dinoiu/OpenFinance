@@ -51,7 +51,7 @@ export const RoiPercCol = createNumericColumn<BrokerageAccount>(
             return (
                 <NumericValue
                     colorize={true}
-                    isExpanded={true}
+                    variant="tableCell"
                     value={financialNum(((total - costBasis) / costBasis) * 100)}
                     after="%"
                     before="Total: "

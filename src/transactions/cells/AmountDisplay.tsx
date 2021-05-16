@@ -19,7 +19,7 @@ export const AmountDisplay = ({
 
     return (
         <NumericValue
-            isExpanded={isExpanded}
+            variant={isExpanded ? 'tableCell' : undefined}
             colorize={true}
             value={item.price * item.quantity}
             currency={currencyISOCode}

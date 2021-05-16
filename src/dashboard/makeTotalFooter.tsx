@@ -11,7 +11,7 @@ export const makeTotalFooter = ({colorize}: {colorize?: boolean} = {}) => ({
 }) => {
     return data[0] ? (
         <NumericValue
-            isExpanded={true}
+            variant="tableCell"
             colorize={colorize}
             // eslint-disable-next-line no-underscore-dangle
             currency={Number(data[0]._original.currency_id)}

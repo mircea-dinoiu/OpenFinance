@@ -104,7 +104,7 @@ const ValueCol = createNumericColumn<StockWithUnits>({
         return original.units.isZero() ? (
             locales.mdash
         ) : (
-            <NumericValue currency={original.currency_id} value={value} isExpanded={true} />
+            <NumericValue currency={original.currency_id} value={value} variant="tableCell" />
         );
     },
 });
@@ -122,7 +122,7 @@ const makePercCol: (total: number) => Column<StockWithUnits> = _.memoize((total)
             return original.units.isZero() ? (
                 locales.mdash
             ) : (
-                <NumericValue isExpanded={true} value={financialNum(value)} after="%" />
+                <NumericValue variant="tableCell" value={financialNum(value)} after="%" />
             );
         },
     }),
@@ -136,7 +136,7 @@ const CostPerShareCol = createNumericColumn<StockWithUnits>({
         return original.units.isZero() ? (
             locales.mdash
         ) : (
-            <NumericValue currency={original.currency_id} value={value} isExpanded={true} />
+            <NumericValue currency={original.currency_id} value={value} variant="tableCell" />
         );
     },
 });
@@ -149,7 +149,7 @@ const CostBasisCol = createNumericColumn<StockWithUnits>({
         return original.units.isZero() ? (
             locales.mdash
         ) : (
-            <NumericValue currency={original.currency_id} value={value} isExpanded={true} />
+            <NumericValue currency={original.currency_id} value={value} variant="tableCell" />
         );
     },
 });
@@ -182,7 +182,7 @@ const RoiPercCol = createNumericColumn<StockWithUnits>({
         original.units.isZero() ? (
             locales.mdash
         ) : (
-            <NumericValue isExpanded={true} colorize={true} value={value} after="%" />
+            <NumericValue variant="tableCell" colorize={true} value={value} after="%" />
         ),
 });
 
@@ -190,7 +190,7 @@ const StocksQuantityCol = createNumericColumn<StockWithUnits>({
     Header: 'Quantity',
     accessor: 'units',
     Cell: ({value, original}) =>
-        original.units.isZero() ? locales.mdash : <NumericValue value={value.toNumber()} isExpanded={true} />,
+        original.units.isZero() ? locales.mdash : <NumericValue value={value.toNumber()} variant="tableCell" />,
 });
 
 const MarketPriceCol = createNumericColumn<StockWithUnits>(
