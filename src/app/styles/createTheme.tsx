@@ -70,6 +70,9 @@ export const createTheme = () => {
                     '.positionRelative': {
                         position: 'relative',
                     },
+                    '.opacityHalf': {
+                        opacity: 0.5,
+                    },
                     // Data Grid
                     '.MuiDataGrid-main > :first-child': {
                         display: 'none',

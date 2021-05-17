@@ -1,18 +1,16 @@
 import {Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {BaseTable} from 'app/BaseTable';
 import {NumericValue} from 'app/formatters';
 import {locales} from 'app/locales';
-import {firstColumnStyles} from 'app/styles/column';
 import Decimal from 'decimal.js';
 import {financialNum} from 'app/numbers';
 import _ from 'lodash';
 import React from 'react';
-import {Column} from 'react-table-6';
 import {TStock} from 'stocks/defs';
 import {useStocksMap} from 'stocks/state';
 import {BalanceByLocationStock} from 'transactions/defs';
-import {createNumericColumn} from 'app/createNumericColumn';
+import {createNumericColumnX} from 'app/createNumericColumn';
+import {XGrid, GridColDef} from '@material-ui/x-grid';
 
 type StockWithUnits = TStock & {units: Decimal; accounts: number; costBasis: Decimal};
 
@@ -55,11 +53,14 @@ export const StocksTable = ({
             <div>
                 {Object.entries(_.groupBy(tableRows, 'type')).map(([stockType, tableRowsOfType]) => (
                     <>
-                        <Typography variant="h6">&nbsp;{locales.stockTypes[stockType]}</Typography>
-                        <BaseTable
-                            data={tableRowsOfType}
+                        <Typography variant="h6" paragraph={true}>
+                            &nbsp;{locales.stockTypes[stockType]}
+                        </Typography>
+                        <XGrid
+                            autoHeight={true}
                             className={cls.table}
-                            defaultSorted={[{id: 'symbol', desc: false}]}
+                            rows={tableRowsOfType}
+                            sortModel={[{field: 'symbol', sort: 'asc'}]}
                             columns={[
                                 SymbolCol,
                                 StocksQuantityCol,
@@ -75,13 +76,12 @@ export const StocksTable = ({
                                         .toNumber(),
                                 ),
                             ]}
-                            getTrProps={(finalState: any, rowInfo: any) => {
-                                return {
-                                    style: {
-                                        opacity: rowInfo.original.units.isZero() ? 0.5 : 1,
-                                    },
-                                };
+                            getRowClassName={(params) => {
+                                const {units} = params.row as StockWithUnits;
+
+                                return units.isZero() ? 'opacityHalf' : '';
                             }}
+                            hideFooter={true}
                         />
                     </>
                 ))}
@@ -90,84 +90,92 @@ export const StocksTable = ({
     );
 };
 
-const SymbolCol: Column<StockWithUnits> = {
-    Header: 'Symbol',
-    accessor: 'symbol',
-    ...firstColumnStyles,
+const SymbolCol: GridColDef = {
+    headerName: 'Symbol',
+    field: 'symbol',
+    flex: 1,
 };
 
-const ValueCol = createNumericColumn<StockWithUnits>({
-    Header: 'Value',
-    id: 'value',
-    accessor: (sh) => sh.units.mul(sh.price).toNumber(),
-    Cell: ({value, original}) => {
-        return original.units.isZero() ? (
-            locales.mdash
-        ) : (
-            <NumericValue currency={original.currency_id} value={value} variant="tableCell" />
-        );
+const renderAmountCell: GridColDef['renderCell'] = ({value, row}) => {
+    const original = row as StockWithUnits;
+
+    return original.units.isZero() ? (
+        <>{locales.mdash}</>
+    ) : (
+        <NumericValue currency={original.currency_id} value={value as number} variant="gridCell" />
+    );
+};
+
+const ValueCol = createNumericColumnX<StockWithUnits>({
+    headerName: 'Value',
+    field: 'value',
+    valueGetter: (params) => {
+        const sh = params.row as StockWithUnits;
+
+        return sh.units.mul(sh.price).toNumber();
     },
+    renderCell: renderAmountCell,
 });
-const makePercCol: (total: number) => Column<StockWithUnits> = _.memoize((total) =>
-    createNumericColumn({
-        Header: 'Allocation',
-        id: 'allocation',
-        accessor: (sh) =>
-            sh.units
+const makePercCol: (total: number) => GridColDef = _.memoize((total) =>
+    createNumericColumnX<StockWithUnits>({
+        headerName: 'Allocation',
+        field: 'allocation',
+        valueGetter: (params) => {
+            const sh = params.row as StockWithUnits;
+
+            return sh.units
                 .mul(sh.price)
                 .div(total)
                 .mul(100)
-                .toNumber(),
-        Cell: ({value, original}) => {
+                .toNumber();
+        },
+        renderCell: ({value, row}) => {
+            const original = row as StockWithUnits;
+
             return original.units.isZero() ? (
-                locales.mdash
+                <>{locales.mdash}</>
             ) : (
-                <NumericValue variant="tableCell" value={financialNum(value)} after="%" />
+                <NumericValue variant="gridCell" value={financialNum(value as number)} after="%" />
             );
         },
     }),
 );
 
-const CostPerShareCol = createNumericColumn<StockWithUnits>({
-    Header: 'Cost Per Share',
-    id: 'costPerShare',
-    accessor: (sh) => sh.costBasis.div(sh.units).toNumber(),
-    Cell: ({value, original}) => {
-        return original.units.isZero() ? (
-            locales.mdash
-        ) : (
-            <NumericValue currency={original.currency_id} value={value} variant="tableCell" />
-        );
+const CostPerShareCol = createNumericColumnX<StockWithUnits>({
+    headerName: 'Cost Per Share',
+    field: 'costPerShare',
+    valueGetter: (params) => {
+        const sh = params.row as StockWithUnits;
+
+        return sh.costBasis.div(sh.units).toNumber();
     },
+    renderCell: renderAmountCell,
 });
 
-const CostBasisCol = createNumericColumn<StockWithUnits>({
-    Header: 'Cost Basis',
-    id: 'costTotal',
-    accessor: (sh) => sh.costBasis,
-    Cell: ({value, original}) => {
-        return original.units.isZero() ? (
-            locales.mdash
-        ) : (
-            <NumericValue currency={original.currency_id} value={value} variant="tableCell" />
-        );
-    },
+const CostBasisCol = createNumericColumnX<StockWithUnits>({
+    headerName: 'Cost Basis',
+    field: 'costBasis',
+    renderCell: renderAmountCell,
 });
 
-const RoiCol = createNumericColumn<StockWithUnits>({
-    Header: 'Gain / Loss $',
-    id: 'roi',
-    accessor: (sh) =>
-        sh.units
+const RoiCol = createNumericColumnX<StockWithUnits>({
+    headerName: 'Gain / Loss $',
+    field: 'roi',
+    valueGetter: ({row}) => {
+        const sh = row as StockWithUnits;
+
+        return sh.units
             .times(sh.price)
             .minus(sh.costBasis)
-            .toNumber(),
+            .toNumber();
+    },
 });
 
-const RoiPercCol = createNumericColumn<StockWithUnits>({
-    Header: 'Gain / Loss %',
-    id: 'roiPerc',
-    accessor: (sh) => {
+const RoiPercCol = createNumericColumnX<StockWithUnits>({
+    headerName: 'Gain / Loss %',
+    field: 'roiPerc',
+    valueGetter: ({row}) => {
+        const sh = row as StockWithUnits;
         const value = sh.units.mul(sh.price);
 
         return financialNum(
@@ -178,25 +186,32 @@ const RoiPercCol = createNumericColumn<StockWithUnits>({
                 .toNumber(),
         );
     },
-    Cell: ({value, original}) =>
-        original.units.isZero() ? (
-            locales.mdash
+    renderCell: ({value, row}) => {
+        const original = row as StockWithUnits;
+
+        return original.units.isZero() ? (
+            <>{locales.mdash}</>
         ) : (
-            <NumericValue variant="tableCell" colorize={true} value={value} after="%" />
+            <NumericValue variant="gridCell" colorize={true} value={value as number} after="%" />
+        );
+    },
+});
+
+const StocksQuantityCol = createNumericColumnX<StockWithUnits>({
+    headerName: 'Quantity',
+    field: 'units',
+    renderCell: ({row: original, value}) =>
+        original.units.isZero() ? (
+            <>{locales.mdash}</>
+        ) : (
+            <NumericValue value={(value as Decimal).toNumber()} variant="gridCell" />
         ),
 });
 
-const StocksQuantityCol = createNumericColumn<StockWithUnits>({
-    Header: 'Quantity',
-    accessor: 'units',
-    Cell: ({value, original}) =>
-        original.units.isZero() ? locales.mdash : <NumericValue value={value.toNumber()} variant="tableCell" />,
-});
-
-const MarketPriceCol = createNumericColumn<StockWithUnits>(
+const MarketPriceCol = createNumericColumnX<StockWithUnits>(
     {
-        Header: 'Market Price',
-        accessor: 'price',
+        headerName: 'Market Price',
+        field: 'price',
     },
     {
         colorize: false,
