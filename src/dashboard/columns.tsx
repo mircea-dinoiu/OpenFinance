@@ -5,13 +5,25 @@ import React from 'react';
 import {Column} from 'react-table-6';
 import {firstColumnStyles} from 'app/styles/column';
 import {makeTotalFooter} from 'dashboard/makeTotalFooter';
-import {createNumericColumn} from 'app/createNumericColumn';
+import {createNumericColumn, createNumericColumnX} from 'app/createNumericColumn';
+import {GridColDef} from '@material-ui/x-grid';
 
 export const NameCol: Column<CashAccount> = {
     accessor: 'name',
     Header: 'Name',
     ...firstColumnStyles,
 };
+
+export const NameColX: GridColDef = {
+    field: 'name',
+    headerName: 'Name',
+    flex: 1,
+};
+
+export const ValueColX = createNumericColumnX<CashAccount>({
+    headerName: 'Value',
+    field: 'total',
+});
 
 export const ValueCol = createNumericColumn<CashAccount>(
     {

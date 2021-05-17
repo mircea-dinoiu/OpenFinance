@@ -4,15 +4,17 @@ import IconCredit from '@material-ui/icons/CreditCard';
 import IconCash from '@material-ui/icons/LocalAtm';
 import {BaseTable} from 'app/BaseTable';
 import {BrokeragePaper} from 'dashboard/BrokeragePaper';
-import {NameCol, ValueCol} from 'dashboard/columns';
+import {NameCol, ValueCol, NameColX, ValueColX} from 'dashboard/columns';
 import {CreditAprCol, CreditAvailableCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'dashboard/defs';
 import {PaymentPlanDialog} from 'dashboard/PaymentPlanDialog';
 import {groupBy} from 'lodash';
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {AccountType} from 'accounts/defs';
 import {DashboardAccordion} from 'dashboard/DashboardAccordion';
 import {styled} from '@material-ui/core/styles';
+import {XGrid} from '@material-ui/x-grid';
+import {TotalFooter} from '../makeTotalFooter';
 
 export const Banking = ({
     classes: cls,
@@ -53,13 +55,7 @@ export const Banking = ({
                                 accounts.length > 0 && (
                                     <DashboardAccordion key={index} headerTitle={title} headerIcon={<IconCash />}>
                                         {Object.entries(groupBy(accounts, 'currency_id')).map(([cid, data]) => (
-                                            <BaseTable
-                                                key={cid}
-                                                defaultSorted={[{id: 'value', desc: true}]}
-                                                className={cls.table}
-                                                data={data}
-                                                columns={[NameCol, ValueCol]}
-                                            />
+                                            <LiquidGrid key={cid} rows={data} cls={cls} />
                                         ))}
                                     </DashboardAccordion>
                                 ),
@@ -132,6 +128,25 @@ export const Banking = ({
                 )}
             </>
         </>
+    );
+};
+
+const LiquidGrid = ({rows, cls}: {rows: CashAccount[]; cls: Record<string, string>}) => {
+    const Footer = useMemo(() => {
+        return () => <TotalFooter rows={rows} />;
+    }, [JSON.stringify(rows)]);
+
+    return (
+        <XGrid
+            autoHeight={true}
+            sortModel={[{field: 'total', sort: 'desc'}]}
+            className={cls.table}
+            rows={rows}
+            columns={[NameColX, ValueColX]}
+            components={{
+                Footer,
+            }}
+        />
     );
 };
 

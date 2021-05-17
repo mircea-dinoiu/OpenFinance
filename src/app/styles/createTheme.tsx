@@ -68,6 +68,10 @@ export const createTheme = () => {
                     '.MuiDataGrid-main > :first-child': {
                         display: 'none',
                     },
+                    '.MuiDataGridFilterForm-root': {
+                        gridGap: '8px',
+                        alignItems: 'flex-end',
+                    },
                 },
             },
             MuiSlider: {
