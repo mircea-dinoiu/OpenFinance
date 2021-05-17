@@ -1,6 +1,7 @@
 import {amber, blueGrey, lightGreen, red} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
 import {PaletteOptions} from '@material-ui/core/styles/createPalette';
+import {colors} from './colors';
 
 export const createTheme = () => {
     const palette: PaletteOptions = {
@@ -71,6 +72,9 @@ export const createTheme = () => {
                     '.MuiDataGridFilterForm-root': {
                         gridGap: '8px',
                         alignItems: 'flex-end',
+                    },
+                    '.MuiDataGrid-footer': {
+                        background: colors.tableFoot,
                     },
                 },
             },
