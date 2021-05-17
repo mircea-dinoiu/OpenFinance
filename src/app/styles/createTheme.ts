@@ -1,6 +1,7 @@
 import {amber, blueGrey, lightGreen, red} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
 import {PaletteOptions} from '@material-ui/core/styles/createPalette';
+import '@material-ui/lab/themeAugmentation';
 
 export const createTheme = () => {
     const palette: PaletteOptions = {
