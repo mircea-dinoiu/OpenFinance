@@ -1,5 +1,4 @@
 import {BrokerageAccount, CashAccount} from 'dashboard/defs';
-import {NumericValue} from 'app/formatters';
 import {financialNum} from 'app/numbers';
 import React from 'react';
 import {Column} from 'react-table-6';
@@ -39,39 +38,31 @@ export const ValueCol = createNumericColumn<CashAccount>(
         colorize: false,
     },
 );
-export const CostBasisCol = createNumericColumn<BrokerageAccount>(
+export const CostBasisCol = createNumericColumnX<BrokerageAccount>(
     {
-        Header: 'Cost Basis',
-        accessor: 'costBasis',
-        Footer: makeTotalFooter(),
+        headerName: 'Cost Basis',
+        field: 'costBasis',
     },
     {colorize: false},
 );
-export const RoiCol = createNumericColumn<BrokerageAccount>({
-    Header: 'ROI',
-    id: 'roi',
-    accessor: (a) => a.total - a.costBasis,
-    Footer: makeTotalFooter({colorize: true}),
+export const RoiCol = createNumericColumnX<BrokerageAccount>({
+    headerName: 'ROI',
+    field: 'roi',
+    valueGetter: (params) => {
+        const a = params.row as BrokerageAccount;
+
+        return a.total - a.costBasis;
+    },
 });
 
-export const RoiPercCol = createNumericColumn<BrokerageAccount>(
+export const RoiPercCol = createNumericColumnX<BrokerageAccount>(
     {
-        Header: 'ROI%',
-        id: 'roiPerc',
-        accessor: (a) => financialNum(((a.total - a.costBasis) / a.costBasis) * 100),
-        Footer: ({data, column}: {data: {_original: BrokerageAccount}[]; column: {id: string}}) => {
-            const costBasis = data.reduce((acc, row) => acc + row._original.costBasis, 0);
-            const total = data.reduce((acc, row) => acc + row._original.total, 0);
+        headerName: 'ROI%',
+        field: 'roiPerc',
+        valueGetter: (params) => {
+            const a = params.row as BrokerageAccount;
 
-            return (
-                <NumericValue
-                    colorize={true}
-                    variant="tableCell"
-                    value={financialNum(((total - costBasis) / costBasis) * 100)}
-                    after="%"
-                    before="Total: "
-                />
-            );
+            return financialNum(((a.total - a.costBasis) / a.costBasis) * 100);
         },
     },
     {

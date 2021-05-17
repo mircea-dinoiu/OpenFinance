@@ -64,6 +64,7 @@ export const CreditUsageCol: GridColDef = {
     },
     align: 'right',
     headerAlign: 'right',
+    flex: 1,
 };
 
 export const CreditLimitCol = createNumericColumnX<CashAccount>(

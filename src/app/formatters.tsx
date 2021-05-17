@@ -2,7 +2,7 @@ import {useCopyTextWithConfirmation} from 'app/clipboardService';
 import Decimal from 'decimal.js';
 import {financialNum} from 'app/numbers';
 import * as React from 'react';
-import {HTMLAttributes, ReactNode, CSSProperties} from 'react';
+import {HTMLAttributes, ReactNode} from 'react';
 import {useCurrenciesMap} from 'currencies/state';
 import {usePrivacyToggle} from 'privacyToggle/state';
 import {styled, Theme} from '@material-ui/core';
@@ -94,11 +94,17 @@ const NumericValueStyled = styled('span')(
             });
         }
 
+        if (variant === 'gridFooter' && style.hasOwnProperty('color')) {
+            Object.assign(style, {
+                margin: theme.spacing(0, -spacingFactor, 0, 0),
+            });
+        }
+
         return style;
     },
 );
 
-type NumericValueVariant = 'gridCell' | 'tableCell' | 'inline';
+type NumericValueVariant = 'gridCell' | 'gridFooter' | 'tableCell' | 'inline';
 
 export const NumericValue = ({
     currency: currencyFromProps,

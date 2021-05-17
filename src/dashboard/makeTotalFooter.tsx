@@ -29,6 +29,7 @@ const FooterContainer = styled(GridFooterContainer)((props) => ({
     padding: props.theme.spacing(1, 2),
     gridGap: props.theme.spacing(1),
     flexDirection: 'column',
+    minHeight: 'auto !important',
 }));
 
 export const useGridFooter = ({rows, columns}: {rows: CashAccount[]; columns: FooterColumn[]}) => {
@@ -47,6 +48,7 @@ export const useGridFooter = ({rows, columns}: {rows: CashAccount[]; columns: Fo
                             return (
                                 <NumericValue
                                     key={index}
+                                    variant="gridFooter"
                                     colorize={c.colorize}
                                     currency={Number(first.currency_id)}
                                     before={`${c.headerName}: `}
