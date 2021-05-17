@@ -66,6 +66,11 @@ export const createTheme = () => {
                     '*': {
                         outline: 'none !important',
                     },
+
+                    '.positionRelative': {
+                        position: 'relative',
+                    },
+                    // Data Grid
                     '.MuiDataGrid-main > :first-child': {
                         display: 'none',
                     },
@@ -75,9 +80,6 @@ export const createTheme = () => {
                     },
                     '.MuiDataGrid-footer': {
                         background: colors.tableFoot,
-                    },
-                    '.positionRelative': {
-                        position: 'relative',
                     },
                 },
             },
@@ -89,6 +91,12 @@ export const createTheme = () => {
             MuiChip: {
                 root: {
                     borderRadius: 0,
+                },
+            },
+            // @ts-ignore
+            MuiDataGrid: {
+                root: {
+                    borderColor: colors.borderSecondary,
                 },
             },
         },
