@@ -166,7 +166,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'grid',
         gridAutoFlow: 'column',
         gridGap: theme.spacing(1),
-        marginBottom: theme.spacing(1),
         justifyItems: 'center',
         [theme.breakpoints.up('lg')]: {
             alignItems: 'center',

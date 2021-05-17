@@ -15,7 +15,6 @@ export const DateDisplay = ({item}: {item: TransactionModel}) => {
 };
 
 const StyledDateDisplay = styled('span')(({theme}) => ({
-    fontSize: '1rem',
     [theme.breakpoints.up('lg')]: {
         color: 'inherit',
     },

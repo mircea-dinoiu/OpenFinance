@@ -316,12 +316,7 @@ class TransactionsInner extends PureComponent<TypeProps, TypeState> {
                                     splitAmount: event.target.value,
                                 });
                             }}
-                            margin="normal"
-                            variant="outlined"
                             InputProps={{
-                                style: {
-                                    height: '32px',
-                                },
                                 endAdornment: (
                                     <InputAdornment position="end">
                                         <IconButton

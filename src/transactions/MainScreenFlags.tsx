@@ -14,7 +14,6 @@ import IconNotes from '@material-ui/icons/Notes';
 
 const IconContainer = styled('div')({
     height: '20px',
-    width: '20px',
 });
 
 export const PendingReviewFlag = ({entity = 'Item'}) => {

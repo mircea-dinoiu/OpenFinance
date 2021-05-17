@@ -14,7 +14,7 @@ export const Classes = {
 
 const ReactTableStyled = styled(ReactTable)((props: {theme: Theme; isScrollable: boolean}) => ({
     '&.ReactTable.ReactTable': {
-        fontSize: '1rem',
+        fontSize: '0.875rem',
         border: '0 !important',
         overflowX: 'auto',
         width: '100%',
@@ -93,6 +93,7 @@ export const TableHeaderTop = styled('div')((props: {columnCount: number; theme:
     gridGap: props.theme.spacing(2),
     gridTemplateColumns: `repeat(${props.columnCount}, max-content)`,
     alignItems: 'center',
+    marginBottom: props.theme.spacing(1),
 }));
 
 export function BaseTable<D>(props: Partial<TableProps<D>>) {

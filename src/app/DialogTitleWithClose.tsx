@@ -1,4 +1,4 @@
-import {DialogTitle, IconButton, Dialog} from '@material-ui/core';
+import {DialogTitle, Fab} from '@material-ui/core';
 import IconClose from '@material-ui/icons/Close';
 import React from 'react';
 import {styled} from '@material-ui/core/styles';
@@ -8,9 +8,9 @@ export const DialogTitleWithClose = ({title, onClose}: {title: string; onClose: 
         <DialogTitle>
             <TitleGrid>
                 <div>{title}</div>
-                <IconButton onClick={onClose} edge={'end'}>
+                <Fab onClick={onClose}>
                     <IconClose />
-                </IconButton>
+                </Fab>
             </TitleGrid>
         </DialogTitle>
     );

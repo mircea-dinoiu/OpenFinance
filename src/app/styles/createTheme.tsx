@@ -1,7 +1,6 @@
 import {amber, blueGrey, lightGreen, red} from '@material-ui/core/colors';
 import {createMuiTheme} from '@material-ui/core/styles';
 import {PaletteOptions} from '@material-ui/core/styles/createPalette';
-import '@material-ui/lab/themeAugmentation';
 
 export const createTheme = () => {
     const palette: PaletteOptions = {
@@ -40,7 +39,13 @@ export const createTheme = () => {
             },
             MuiButton: {
                 variant: 'contained',
-                size: 'small',
+            },
+            MuiFab: {
+                color: 'primary',
+            },
+            // @ts-ignore
+            MuiDataGrid: {
+                density: 'compact',
             },
         },
         overrides: {
@@ -48,7 +53,7 @@ export const createTheme = () => {
                 '@global': {
                     'html, body, #root': {
                         minHeight: '100%',
-                        fontSize: '14px',
+                        fontSize: '16px',
                     },
                     body: {
                         fontFamily: 'Roboto, sans-serif',
