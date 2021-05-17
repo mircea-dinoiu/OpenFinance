@@ -120,7 +120,7 @@ export const Dashboard = () => {
     return (
         <div className={cls.root}>
             <div>
-                <Paper className={cls.paper}>
+                <Paper className={cls.paper + ' ' + cls.topWidget}>
                     <TransactionsEndDatePicker />
 
                     <IncludeDropdown
@@ -264,6 +264,11 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         marginBottom: theme.spacing(1),
         maxWidth: '100vw',
+    },
+    topWidget: {
+        display: 'flex',
+        flexDirection: 'column',
+        gridGap: theme.spacing(1),
     },
     cardHeader: {
         paddingTop: 0,
