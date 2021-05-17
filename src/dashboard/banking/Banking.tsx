@@ -4,17 +4,16 @@ import IconCredit from '@material-ui/icons/CreditCard';
 import IconCash from '@material-ui/icons/LocalAtm';
 import {BaseTable} from 'app/BaseTable';
 import {BrokeragePaper} from 'dashboard/BrokeragePaper';
-import {NameCol, ValueCol, NameColX, ValueColX} from 'dashboard/columns';
+import {NameCol} from 'dashboard/columns';
 import {CreditAprCol, CreditAvailableCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'dashboard/defs';
 import {PaymentPlanDialog} from 'dashboard/PaymentPlanDialog';
 import {groupBy} from 'lodash';
-import React, {useState, useMemo} from 'react';
+import React, {useState} from 'react';
 import {AccountType} from 'accounts/defs';
 import {DashboardAccordion} from 'dashboard/DashboardAccordion';
 import {styled} from '@material-ui/core/styles';
-import {XGrid} from '@material-ui/x-grid';
-import {TotalFooter} from '../makeTotalFooter';
+import {LiquidGrid} from './LiquidGrid';
 
 export const Banking = ({
     classes: cls,
@@ -128,25 +127,6 @@ export const Banking = ({
                 )}
             </>
         </>
-    );
-};
-
-const LiquidGrid = ({rows, cls}: {rows: CashAccount[]; cls: Record<string, string>}) => {
-    const Footer = useMemo(() => {
-        return () => <TotalFooter rows={rows} />;
-    }, [JSON.stringify(rows)]);
-
-    return (
-        <XGrid
-            autoHeight={true}
-            sortModel={[{field: 'total', sort: 'desc'}]}
-            className={cls.table}
-            rows={rows}
-            columns={[NameColX, ValueColX]}
-            components={{
-                Footer,
-            }}
-        />
     );
 };
 

@@ -20,10 +20,13 @@ export const NameColX: GridColDef = {
     flex: 1,
 };
 
-export const ValueColX = createNumericColumnX<CashAccount>({
-    headerName: 'Value',
-    field: 'total',
-});
+export const ValueColX = createNumericColumnX<CashAccount>(
+    {
+        headerName: 'Value',
+        field: 'total',
+    },
+    {colorize: false},
+);
 
 export const ValueCol = createNumericColumn<CashAccount>(
     {
