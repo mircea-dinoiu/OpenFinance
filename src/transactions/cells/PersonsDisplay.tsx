@@ -27,7 +27,6 @@ export const PersonAvatar = styled(Avatar)({
 
 const PersonsDisplayStyled = styled('div')({
     display: 'flex',
-    borderRadius: '5px',
     overflow: 'hidden',
 });
 

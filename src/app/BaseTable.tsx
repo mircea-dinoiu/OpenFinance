@@ -79,14 +79,13 @@ const ReactTableStyled = styled(ReactTable)((props: {theme: Theme; isScrollable:
 }));
 
 export const TableHeader = styled('div')((props) => ({
-    padding: props.theme.spacing(0, 1, 1),
+    padding: props.theme.spacing(1),
     fontSize: '1rem',
     borderBottom: `1px solid ${colors.tableHeaderBorder}`,
     position: 'sticky',
     top: stickyHeaderHeight,
     zIndex: 1,
     background: colors.tableHeaderBg,
-    borderRadius: '4px',
 }));
 
 export const TableHeaderTop = styled('div')((props: {columnCount: number; theme: Theme}) => ({

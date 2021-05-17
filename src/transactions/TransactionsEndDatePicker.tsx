@@ -1,4 +1,4 @@
-import {FormLabel, IconButton, Menu, MenuItem as MenuItem2, MenuItem, Select} from '@material-ui/core';
+import {FormLabel, IconButton, Menu, MenuItem as MenuItem2, MenuItem, Select, InputAdornment} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconArrowBack from '@material-ui/icons/ArrowBack';
 import IconArrowForward from '@material-ui/icons/ArrowForward';
@@ -33,32 +33,20 @@ export const TransactionsEndDatePicker = () => {
         });
     };
 
-    const handleShiftBack = () => {
-        setDate(shiftDateBack(endDate, endDateIncrement));
-    };
-    const handleShiftForward = () => {
-        setDate(shiftDateForward(endDate, endDateIncrement));
-    };
-
     const renderEndDateIntervalSelect = () => (
-        <div
-            style={{
-                marginRight: 12,
+        <Select
+            fullWidth={true}
+            value={endDateIncrement}
+            onChange={(e) => {
+                setEndDateIncrement(e.target.value as ShiftDateOption);
             }}
         >
-            <Select
-                value={endDateIncrement}
-                onChange={(e) => {
-                    setEndDateIncrement(e.target.value as ShiftDateOption);
-                }}
-            >
-                {ShiftDateOptions.map((sdo) => (
-                    <MenuItem key={sdo.value} value={sdo.value}>
-                        {sdo.label}
-                    </MenuItem>
-                ))}
-            </Select>
-        </div>
+            {ShiftDateOptions.map((sdo) => (
+                <MenuItem key={sdo.value} value={sdo.value}>
+                    {sdo.label}
+                </MenuItem>
+            ))}
+        </Select>
     );
 
     const handleCloseShiftMenu = () => {
@@ -67,8 +55,12 @@ export const TransactionsEndDatePicker = () => {
 
     const renderShiftBack = () => (
         <IconButton
+            size="small"
             title={`Shift back ${ShiftDateOption[endDateIncrement]}`}
-            onClick={handleShiftBack}
+            onClick={(e) => {
+                e.stopPropagation();
+                setDate(shiftDateBack(endDate, endDateIncrement));
+            }}
             className={cls.button}
         >
             <IconArrowBack />
@@ -77,9 +69,12 @@ export const TransactionsEndDatePicker = () => {
 
     const renderShiftForward = () => (
         <IconButton
-            style={{float: 'left'}}
+            size="small"
             title={`Shift forward ${ShiftDateOption[endDateIncrement]}`}
-            onClick={handleShiftForward}
+            onClick={(e) => {
+                e.stopPropagation();
+                setDate(shiftDateForward(endDate, endDateIncrement));
+            }}
             className={cls.button}
         >
             <IconArrowForward />
@@ -87,12 +82,7 @@ export const TransactionsEndDatePicker = () => {
     );
 
     const renderShiftMenu = () => (
-        <Menu
-            open={showShiftMenu}
-            anchorEl={shiftMenuAnchor}
-            style={{marginTop: 29, marginLeft: -49}}
-            onClose={handleCloseShiftMenu}
-        >
+        <Menu open={showShiftMenu} anchorEl={shiftMenuAnchor} onClose={handleCloseShiftMenu}>
             <ShiftMenu>
                 <div>
                     <FormLabel component="legend">Previous</FormLabel>
@@ -136,42 +126,47 @@ export const TransactionsEndDatePicker = () => {
 
     return (
         user && (
-            <div className={cls.root}>
-                {renderShiftBack()}
-                <DatePicker
-                    variant="inline"
-                    style={{
-                        width: '85px',
-                    }}
-                    format={'L'}
-                    value={endDate ? moment(endDate).toDate() : null}
-                    onChange={(date) => {
-                        setEndDate(endOfDayToISOString(date as any));
-                    }}
-                    onContextMenu={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
+            <>
+                <div className={cls.root}>
+                    <DatePicker
+                        fullWidth={true}
+                        variant="inline"
+                        format={'L'}
+                        value={endDate ? moment(endDate).toDate() : null}
+                        onChange={(date) => {
+                            setEndDate(endOfDayToISOString(date as any));
+                        }}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">{renderShiftBack()}</InputAdornment>,
+                            endAdornment: <InputAdornment position="start">{renderShiftForward()}</InputAdornment>,
+                        }}
+                        onContextMenu={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
 
-                        setShowShiftMenu(true);
-                        setShiftMenuAnchor(event.currentTarget);
-                    }}
-                />
+                            setShowShiftMenu(true);
+                            setShiftMenuAnchor(event.currentTarget);
+                        }}
+                    />
+
+                    {renderEndDateIntervalSelect()}
+                </div>
                 {renderShiftMenu()}
-                {renderShiftForward()}
-                {renderEndDateIntervalSelect()}
-            </div>
+            </>
         )
     );
 };
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        [theme.breakpoints.down('sm')]: {paddingTop: 0, paddingBottom: 0},
-        [theme.breakpoints.only('md')]: {paddingTop: 0, paddingBottom: 0},
+        // [theme.breakpoints.down('sm')]: {paddingTop: 0, paddingBottom: 0},
+        // [theme.breakpoints.only('md')]: {paddingTop: 0, paddingBottom: 0},
     },
     root: {
         display: 'grid',
-        gridTemplateColumns: 'auto 1fr auto 1fr',
+        gridAutoFlow: 'column',
+        gridGap: theme.spacing(1),
+        marginBottom: theme.spacing(1),
         justifyItems: 'center',
         [theme.breakpoints.up('lg')]: {
             alignItems: 'center',

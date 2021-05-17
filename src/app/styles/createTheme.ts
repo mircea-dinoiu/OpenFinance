@@ -31,6 +31,15 @@ export const createTheme = () => {
         props: {
             MuiTextField: {
                 variant: 'outlined',
+                size: 'small',
+            },
+            MuiSelect: {
+                variant: 'outlined',
+                margin: 'dense',
+            },
+            MuiButton: {
+                variant: 'contained',
+                size: 'small',
             },
         },
         overrides: {
@@ -58,6 +67,11 @@ export const createTheme = () => {
             MuiSlider: {
                 valueLabel: {
                     zIndex: 'auto',
+                },
+            },
+            MuiChip: {
+                root: {
+                    borderRadius: 0,
                 },
             },
         },

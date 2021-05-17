@@ -9,6 +9,7 @@ import {
     Paper,
     Theme,
     useMediaQuery,
+    TextField,
 } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
@@ -35,7 +36,6 @@ import {MainScreenCreatorDialog} from 'transactions/MainScreenCreatorDialog';
 import {MainScreenDeleteDialog} from 'transactions/MainScreenDeleteDialog';
 import {MainScreenEditDialog, TransactionEditorProps} from 'transactions/MainScreenEditDialog';
 import {MainScreenListGroup} from 'transactions/MainScreenListGroup';
-import {SplitAmountField} from 'transactions/SplitAmountField';
 import {StatsTable} from 'transactions/StatsTable';
 import {SummaryTotal} from 'transactions/SummaryTotal';
 import {TransactionsEndDatePicker} from 'transactions/TransactionsEndDatePicker';
@@ -307,7 +307,7 @@ class TransactionsInner extends PureComponent<TypeProps, TypeState> {
                         />
                     </>
                     <>
-                        <SplitAmountField
+                        <TextField
                             error={isNaN(this.parseSplitAmount(this.state.splitAmount))}
                             placeholder="Split or Reduce"
                             value={this.state.splitAmount}
