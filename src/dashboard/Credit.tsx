@@ -3,83 +3,80 @@ import {makeStyles} from '@material-ui/core/styles';
 import {CashAccount} from 'dashboard/defs';
 import {locales} from 'app/locales';
 import React from 'react';
-import {Column} from 'react-table-6';
-import {numericColumnStyles} from 'app/styles/column';
-import {makeTotalFooter} from 'dashboard/makeTotalFooter';
-import {createNumericColumn} from 'app/createNumericColumn';
+import {createNumericColumnX} from 'app/createNumericColumn';
+import {GridColDef} from '@material-ui/x-grid';
 
-export const CreditAprCol: Column<CashAccount> = {
-    Header: locales.apr,
-    accessor: 'credit_apr',
-    Cell: ({original: a, value}: {original: CashAccount; value: number | null}) => {
-        return typeof value === 'number' ? value + '%' : null;
+export const CreditAprCol: GridColDef = {
+    headerName: locales.apr,
+    field: 'credit_apr',
+    renderCell: (params) => {
+        const value = params.value as number | null;
+
+        return <>{typeof value === 'number' ? value + '%' : null}</>;
     },
-    ...numericColumnStyles,
+    headerAlign: 'right',
+    align: 'right',
 };
 
-export const CreditBalanceCol = createNumericColumn<CashAccount>(
-    {
-        Header: 'Balance',
-        accessor: (r) => (r.total ? -r.total : 0),
-        id: 'balance',
-        Footer: makeTotalFooter(),
-    },
-    {
-        colorize: false,
-    },
-);
-
-export const CreditAvailableCol = createNumericColumn<CashAccount>(
-    {
-        Header: 'Available',
-        accessor: (r) => (r.credit_limit ?? 0) + r.total,
-        id: 'available',
-        Footer: makeTotalFooter(),
-    },
-    {
-        colorize: false,
-    },
-);
-
-export const CreditUsageCol: Column<CashAccount> = {
-    Header: 'Usage',
-    accessor: (r) => (r.credit_limit ? Math.round((-r.total / (r.credit_limit ?? 0)) * 100) : null),
-    id: 'usage',
-    Cell: ({original, value}: {original: CashAccount; value: number | null}) =>
-        value === null ? value : <BalanceProgress progress={value} />,
-    getProps: () => ({style: {position: 'relative'}}),
-    Footer: ({
-        data,
-        column,
-    }: {
-        data: {_original: CashAccount; balance: number; credit_limit: number}[];
-        column: {id: string};
-    }) => {
-        if (!data[0]) {
-            return null;
-        }
-
-        const totalBalance = data.reduce((acc, d) => acc + d.balance, 0);
-        const totalLimit = data.reduce((acc, d) => acc + (d._original.credit_limit ?? 0), 0);
-        const progress = Math.round((totalBalance / totalLimit) * 100);
-
-        return progress !== Infinity && <BalanceProgress progress={progress} />;
-    },
-    ...numericColumnStyles,
+export const mapCashAccountToBalance = (r: CashAccount) => {
+    return r.total ? -r.total : 0;
 };
 
-export const CreditLimitCol = createNumericColumn<CashAccount>(
+export const CreditBalanceCol = createNumericColumnX<CashAccount>(
     {
-        Header: 'Credit Limit',
-        accessor: 'credit_limit',
-        Footer: makeTotalFooter(),
+        headerName: 'Balance',
+        valueGetter: (params) => mapCashAccountToBalance(params.row as CashAccount),
+        field: 'balance',
     },
     {
         colorize: false,
     },
 );
 
-const BalanceProgress = ({progress}: {progress: number}) => {
+export const CreditAvailableCol = createNumericColumnX<CashAccount>(
+    {
+        headerName: 'Available',
+        valueGetter: (params) => {
+            const r = params.row as CashAccount;
+
+            return (r.credit_limit ?? 0) + r.total;
+        },
+        field: 'available',
+    },
+    {
+        colorize: false,
+    },
+);
+
+export const CreditUsageCol: GridColDef = {
+    headerName: 'Usage',
+    valueGetter: (params) => {
+        const r = params.row as CashAccount;
+
+        return r.credit_limit ? Math.round((-r.total / (r.credit_limit ?? 0)) * 100) : null;
+    },
+    field: 'usage',
+    cellClassName: 'positionRelative',
+    renderCell: (params) => {
+        const value = params.value as number | null;
+
+        return <>{value === null ? value : <BalanceProgress progress={value} />}</>;
+    },
+    align: 'right',
+    headerAlign: 'right',
+};
+
+export const CreditLimitCol = createNumericColumnX<CashAccount>(
+    {
+        headerName: 'Credit Limit',
+        field: 'credit_limit',
+    },
+    {
+        colorize: false,
+    },
+);
+
+export const BalanceProgress = ({progress}: {progress: number}) => {
     const cls = useStyles();
 
     return (

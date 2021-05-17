@@ -2,10 +2,7 @@ import {Button} from '@material-ui/core';
 import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
 import IconCash from '@material-ui/icons/LocalAtm';
-import {BaseTable} from 'app/BaseTable';
 import {BrokeragePaper} from 'dashboard/BrokeragePaper';
-import {NameCol} from 'dashboard/columns';
-import {CreditAprCol, CreditAvailableCol, CreditBalanceCol, CreditLimitCol, CreditUsageCol} from 'dashboard/Credit';
 import {BrokerageAccount, CashAccount} from 'dashboard/defs';
 import {PaymentPlanDialog} from 'dashboard/PaymentPlanDialog';
 import {groupBy} from 'lodash';
@@ -14,6 +11,7 @@ import {AccountType} from 'accounts/defs';
 import {DashboardAccordion} from 'dashboard/DashboardAccordion';
 import {styled} from '@material-ui/core/styles';
 import {LiquidGrid} from './LiquidGrid';
+import {CreditGrid} from './CreditGrid';
 
 export const Banking = ({
     classes: cls,
@@ -54,7 +52,7 @@ export const Banking = ({
                                 accounts.length > 0 && (
                                     <DashboardAccordion key={index} headerTitle={title} headerIcon={<IconCash />}>
                                         {Object.entries(groupBy(accounts, 'currency_id')).map(([cid, data]) => (
-                                            <LiquidGrid key={cid} rows={data} cls={cls} />
+                                            <LiquidGrid key={cid} rows={data} className={cls.table} />
                                         ))}
                                     </DashboardAccordion>
                                 ),
@@ -103,19 +101,7 @@ export const Banking = ({
                                     headerIcon={React.createElement(group.Icon)}
                                     headerTitle={group.getTitle()}
                                 >
-                                    <BaseTable
-                                        defaultSorted={[{id: 'balance', desc: true}]}
-                                        className={cls.table}
-                                        data={data}
-                                        columns={[
-                                            NameCol,
-                                            CreditBalanceCol,
-                                            CreditAvailableCol,
-                                            CreditLimitCol,
-                                            CreditUsageCol,
-                                            CreditAprCol,
-                                        ]}
-                                    />
+                                    <CreditGrid rows={data} className={cls.table} />
                                 </DashboardAccordion>
                             )),
                         )}

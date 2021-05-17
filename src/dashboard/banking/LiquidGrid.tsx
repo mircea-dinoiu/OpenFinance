@@ -1,20 +1,20 @@
 import {CashAccount} from '../defs';
-import React, {useMemo} from 'react';
-import {XGrid, GridFooterContainer} from '@material-ui/x-grid';
+import React from 'react';
+import {XGrid} from '@material-ui/x-grid';
 import {NameColX, ValueColX} from '../columns';
-import {NumericValue} from '../../app/formatters';
-import {styled} from '@material-ui/core/styles';
+import {useGridFooter} from '../makeTotalFooter';
 
-export const LiquidGrid = ({rows, cls}: {rows: CashAccount[]; cls: Record<string, string>}) => {
-    const Footer = useMemo(() => {
-        return () => <TotalFooter rows={rows} />;
-    }, [JSON.stringify(rows)]);
+export const LiquidGrid = ({rows, className}: {rows: CashAccount[]; className?: string}) => {
+    const Footer = useGridFooter({
+        rows,
+        columns: [ValueColX],
+    });
 
     return (
         <XGrid
             autoHeight={true}
             sortModel={[{field: 'total', sort: 'desc'}]}
-            className={cls.table}
+            className={className}
             rows={rows}
             columns={[NameColX, ValueColX]}
             components={{
@@ -23,25 +23,3 @@ export const LiquidGrid = ({rows, cls}: {rows: CashAccount[]; cls: Record<string
         />
     );
 };
-
-const TotalFooter = ({rows, colorize = false}: {rows: CashAccount[]; colorize?: boolean}) => {
-    const [first] = rows;
-
-    return (
-        first && (
-            <FooterContainer>
-                <NumericValue
-                    colorize={colorize}
-                    currency={Number(first.currency_id)}
-                    before="Total: "
-                    value={rows.reduce((acc, row) => acc + row.total, 0)}
-                />
-            </FooterContainer>
-        )
-    );
-};
-
-const FooterContainer = styled(GridFooterContainer)((props) => ({
-    justifyContent: 'flex-end !important',
-    padding: props.theme.spacing(0, 2),
-}));

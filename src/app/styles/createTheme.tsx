@@ -76,6 +76,9 @@ export const createTheme = () => {
                     '.MuiDataGrid-footer': {
                         background: colors.tableFoot,
                     },
+                    '.positionRelative': {
+                        position: 'relative',
+                    },
                 },
             },
             MuiSlider: {
