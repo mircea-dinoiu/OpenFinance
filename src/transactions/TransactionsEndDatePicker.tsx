@@ -1,5 +1,5 @@
 import {FormLabel, IconButton, Menu, MenuItem as MenuItem2, MenuItem, Select, InputAdornment} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
+import {styled} from '@material-ui/core/styles';
 import IconArrowBack from '@material-ui/icons/ArrowBack';
 import IconArrowForward from '@material-ui/icons/ArrowForward';
 import {DatePicker} from '@material-ui/pickers';
@@ -20,7 +20,6 @@ export const TransactionsEndDatePicker = () => {
     const [showShiftMenu, setShowShiftMenu] = React.useState(false);
     const [shiftMenuAnchor, setShiftMenuAnchor] = React.useState<HTMLDivElement | null>(null);
     const user = useBootstrap();
-    const cls = useStyles();
 
     const setDate = (date: Date) => {
         const searchParams = new URLSearchParams(location.search);
@@ -61,7 +60,6 @@ export const TransactionsEndDatePicker = () => {
                 e.stopPropagation();
                 setDate(shiftDateBack(endDate, endDateIncrement));
             }}
-            className={cls.button}
         >
             <IconArrowBack />
         </IconButton>
@@ -75,7 +73,6 @@ export const TransactionsEndDatePicker = () => {
                 e.stopPropagation();
                 setDate(shiftDateForward(endDate, endDateIncrement));
             }}
-            className={cls.button}
         >
             <IconArrowForward />
         </IconButton>
@@ -127,7 +124,7 @@ export const TransactionsEndDatePicker = () => {
     return (
         user && (
             <>
-                <div className={cls.root}>
+                <Container>
                     <DatePicker
                         fullWidth={true}
                         variant="inline"
@@ -150,25 +147,22 @@ export const TransactionsEndDatePicker = () => {
                     />
 
                     {renderEndDateIntervalSelect()}
-                </div>
+                </Container>
                 {renderShiftMenu()}
             </>
         )
     );
 };
 
-const useStyles = makeStyles((theme) => ({
-    button: {
-        // [theme.breakpoints.down('sm')]: {paddingTop: 0, paddingBottom: 0},
-        // [theme.breakpoints.only('md')]: {paddingTop: 0, paddingBottom: 0},
+const Container = styled('div')(({theme}) => ({
+    display: 'grid',
+    gridAutoFlow: 'column',
+    gridGap: theme.spacing(1),
+    justifyItems: 'center',
+    '& input': {
+        textAlign: 'center',
     },
-    root: {
-        display: 'grid',
-        gridAutoFlow: 'column',
-        gridGap: theme.spacing(1),
-        justifyItems: 'center',
-        [theme.breakpoints.up('lg')]: {
-            alignItems: 'center',
-        },
+    [theme.breakpoints.up('lg')]: {
+        alignItems: 'center',
     },
 }));
