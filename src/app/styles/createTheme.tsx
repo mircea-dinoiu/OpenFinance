@@ -84,6 +84,9 @@ export const createTheme = () => {
                     '.MuiDataGrid-footer': {
                         background: colors.tableFoot,
                     },
+                    '.MuiDataGrid-columnsContainer': {
+                        background: colors.tableHeaderBg,
+                    },
                 },
             },
             MuiSlider: {

@@ -6,9 +6,9 @@ export const colors = {
     tableHighlight: blueGrey[600],
     borderSecondary: blueGrey[700],
     borderPrimary: blueGrey[600],
-    tableFoot: blueGrey[700],
-    tableHeaderBorder: blueGrey[700],
-    tableHeaderBg: blueGrey[800],
+    tableFoot: '#303e45',
+    tableHeaderBorder: blueGrey[600],
+    tableHeaderBg: blueGrey[700],
     personAvatarBg: blueGrey[700],
     tooltipBg: blueGrey[800],
 };
