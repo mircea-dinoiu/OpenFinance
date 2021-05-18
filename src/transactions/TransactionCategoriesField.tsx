@@ -35,7 +35,7 @@ export const TransactionCategoriesField = ({
     const cls = useStyles();
 
     return (
-        <>
+        <div>
             <Autocomplete<typeof options[0], true>
                 renderInput={(params) => <TextField {...params} label="Categories" InputLabelProps={{shrink: true}} />}
                 ChipProps={{
@@ -62,7 +62,7 @@ export const TransactionCategoriesField = ({
                     ))}
                 </div>
             )}
-        </>
+        </div>
     );
 };
 
