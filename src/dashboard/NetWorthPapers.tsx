@@ -58,7 +58,7 @@ export const NetWorthPapers = ({
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="right">
-                                            <Typography variant="h4">
+                                            <Typography variant="h6">
                                                 <NumericValue currency={currencyId} value={total} />
                                             </Typography>
                                         </TableCell>
