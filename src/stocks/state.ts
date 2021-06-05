@@ -24,9 +24,7 @@ export const stocksReducer = createReducer<TStock[]>([], {
 
 const receiveStocks = createAction<TStock[]>(Action.received);
 
-export const fetchStocks = (params: {update?: boolean} = Object.freeze({})) => async (
-    dispatch: Dispatch<{type: string; payload: unknown}>,
-) => {
+export const fetchStocks = (params: {date: string}) => async (dispatch: Dispatch<{type: string; payload: unknown}>) => {
     const response = await createXHR<TStock[]>({
         url: makeUrl(Api.stocks, params),
     });

@@ -26,6 +26,9 @@ import {TBootstrap} from 'users/defs';
 
 import {Login} from 'users/Login';
 import {useBootstrap, useUsersWithActions} from 'users/state';
+import {useEndDate} from './dates/helpers';
+import moment from 'moment';
+import {formatYMD} from './dates/formatYMD';
 
 const AppWrapped = () => {
     const dispatch = useDispatch();
@@ -35,6 +38,8 @@ const AppWrapped = () => {
     const readCategories = useCategoriesReader();
     const readAccounts = useAccountsReader();
     const selectedProject = useSelectedProject();
+    const [endDate] = useEndDate();
+    const date = formatYMD(moment.min(moment(), moment(endDate)).toDate());
 
     const fetchUser = async () => {
         try {
@@ -49,23 +54,23 @@ const AppWrapped = () => {
         }
     };
 
-    const fetchRequirements = async () => {
-        dispatch(fetchCurrencies());
-        dispatch(fetchStocks());
-
-        readCategories();
-        readAccounts();
-    };
-
     React.useEffect(() => {
         fetchUser();
     }, []);
 
     React.useEffect(() => {
         if (users) {
-            fetchRequirements();
+            dispatch(fetchCurrencies());
+            dispatch(
+                fetchStocks({
+                    date,
+                }),
+            );
+
+            readCategories();
+            readAccounts();
         }
-    }, [users, selectedProject?.id]);
+    }, [users, date, selectedProject?.id]);
 
     return (
         <>
