@@ -7,7 +7,7 @@ module.exports = (sequelize, types) =>
             type: types.STRING,
             price: types.FLOAT,
             currency_id: types.INTEGER,
-            manual_pricing: types.BOOLEAN,
+            pricing_method: types.STRING,
         },
         {
             underscored: true,

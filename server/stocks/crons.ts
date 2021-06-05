@@ -1,24 +1,25 @@
 import {getStockModel, getExpenseModel} from '../models';
 import logger from '../helpers/logger';
 import yf from 'yahoo-finance';
+import {StockPricingMethod} from '../../src/stocks/defs';
 
 export const updateStocks = async () => {
     const models = await getStockModel().findAll({
         where: {
-            manual_pricing: false,
+            pricing_method: {
+                $ne: StockPricingMethod.MANUAL,
+            },
         },
     });
 
     models.forEach(async (model) => {
-        let data;
-
-        try {
-            data = await yf.quote({symbol: model.symbol, modules: ['price']});
-        } catch (e) {
+        if (model.pricing_method === StockPricingMethod.INFER) {
             inferStockPriceFromTransactions(model);
 
             return;
         }
+
+        const data = await yf.quote({symbol: model.symbol, modules: ['price']});
 
         const {regularMarketPrice: price} = data.price;
 
