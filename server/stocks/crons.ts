@@ -1,9 +1,10 @@
-import {getStockModel, getExpenseModel, getStockPriceModel} from '../models';
+import {getStockModel, getStockPriceModel} from '../models';
 import logger from '../helpers/logger';
 import yf from 'yahoo-finance';
 import {StockPricingMethod, TStock, TStockPrice} from '../../src/stocks/defs';
-import sequelize from 'sequelize';
+import sequelize, {QueryTypes} from 'sequelize';
 import {formatYMD} from '../../src/app/dates/formatYMD';
+import {getDb} from '../getDb';
 
 export const updateStocks = async () => {
     const models = await getStockModel().findAll({
@@ -27,8 +28,8 @@ export const updateStocks = async () => {
 
         const {regularMarketPrice: price} = data.price;
 
-        if (price == null) {
-            logger.error('Incorrect Price (', price, ') for', model.symbol);
+        if (typeof price !== 'number') {
+            logger.error('StockPrices', '[YAHOO]', 'Incorrect Price (', price, ') for', model.symbol);
 
             return;
         }
@@ -51,11 +52,11 @@ const updateStockPrice = async (model: sequelize.Model<TStock>, {dated, price}: 
 
     if (stockPrice) {
         if (stockPrice.price !== price) {
-            logger.log('YAHOO', `Updating ${model.symbol} price: ${model.price} → ${price}`);
+            logger.log('StockPrices', `Updating ${model.symbol} price: ${stockPrice.price} →`, price);
             stockPrice.update({price});
         }
     } else {
-        logger.log('YAHOO', `Creating ${model.symbol} price: ${model.price} → ${price}`);
+        logger.log('StockPrices', `Creating ${model.symbol} price:`, price);
         stockPriceModel.create({
             stock_id: model.id,
             dated,
@@ -65,12 +66,22 @@ const updateStockPrice = async (model: sequelize.Model<TStock>, {dated, price}: 
 };
 
 const inferStockPriceFromTransactions = async (stock, dated) => {
-    const transaction = await getExpenseModel().findOne({
-        where: {
-            stock_id: stock.id,
+    const sql = getDb();
+    const [transaction] = await sql.query(
+        `
+        SELECT expenses.price 
+        FROM expenses 
+        WHERE expenses.stock_id = :queryStockId
+        ORDER BY ABS(DATEDIFF(:queryDate, expenses.created_at)) ASC, expenses.price DESC LIMIT 1
+    `,
+        {
+            replacements: {
+                queryStockId: stock.id,
+                queryDate: dated,
+            },
+            type: QueryTypes.SELECT,
         },
-        order: [['created_at', 'DESC']],
-    });
+    );
 
     if (transaction) {
         const price = transaction.price;
@@ -80,6 +91,10 @@ const inferStockPriceFromTransactions = async (stock, dated) => {
             price,
         });
     } else {
-        logger.log('Stocks', `Unable to price ${stock.symbol}`);
+        logger.log(
+            'StockPrices',
+            '[INFER]',
+            `Unable to price ${stock.symbol}. Reason: no transactions using this stock symbol`,
+        );
     }
 };
