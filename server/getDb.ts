@@ -1,6 +1,4 @@
 import Sequelize from 'sequelize';
-import logger from './helpers/logger';
-import chalk from 'chalk';
 
 let db: Sequelize.Sequelize;
 
@@ -19,7 +17,7 @@ export const getDb = () => {
             logging:
                 process.env.DEBUG === 'true'
                     ? (...args) => {
-                          logger.log('SQL', ...args.map((arg) => chalk.cyan(arg)));
+                          // logger.log('SQL', ...args.map((arg) => chalk.cyan(arg)));
                       }
                     : false,
         });

@@ -10,5 +10,9 @@ export const createStocksRouter = () => {
         c.list(req, res);
     });
 
+    router.post('/backfill-prices', validateAuth, async (req, res) => {
+        c.backfillPrices(req, res);
+    });
+
     return router;
 };
