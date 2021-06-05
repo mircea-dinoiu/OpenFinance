@@ -62,9 +62,6 @@ const updateStockPrice = async (model: sequelize.Model<TStock>, {dated, price}: 
             price,
         });
     }
-
-    // TODO remove
-    model.update({price});
 };
 
 const inferStockPriceFromTransactions = async (stock, dated) => {
