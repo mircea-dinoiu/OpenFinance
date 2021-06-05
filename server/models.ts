@@ -6,7 +6,7 @@ import {TUser} from '../src/users/defs';
 import {TCategory} from '../src/categories/defs';
 import {TCurrency} from '../src/currencies/defs';
 import {TransactionModel} from '../src/transactions/defs';
-import {TStock} from '../src/stocks/defs';
+import {TStock, TStockPrice} from '../src/stocks/defs';
 import {TProperty} from '../src/properties/defs';
 import {TAccount} from '../src/accounts/defs';
 import {TInventory} from '../src/inventories/defs';
@@ -39,6 +39,7 @@ const getModels = memoize(() => {
         MoneyLocation: importModel('accounts/model.js'),
         Property: importModel('properties/model.js'),
         Stock: importModel('stocks/model.js'),
+        StockPrice: importModel('stockPrices/model.js'),
         User: importModel('users/model.js'),
     };
 
@@ -56,4 +57,5 @@ export const getExpenseModel = (): Sequelize.Model<TransactionModel, unknown> =>
 export const getInventoryModel = (): Sequelize.Model<TInventory, unknown> => getModels().Inventory;
 export const getPropertyModel = (): Sequelize.Model<TProperty, unknown> => getModels().Property;
 export const getStockModel = (): Sequelize.Model<TStock, unknown> => getModels().Stock;
+export const getStockPriceModel = (): Sequelize.Model<TStockPrice, unknown> => getModels().StockPrice;
 export const getUserModel = (): Sequelize.Model<TUser, unknown> => getModels().User;

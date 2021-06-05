@@ -1,6 +1,6 @@
 import {Classes} from 'app/BaseTable';
-import {formatYMD} from 'app/dates/helpers';
 import {TransactionModel} from 'transactions/defs';
+import {formatYMD} from '../../app/dates/formatYMD';
 
 const today = formatYMD(new Date());
 

@@ -1,7 +1,9 @@
-import {getStockModel, getExpenseModel} from '../models';
+import {getStockModel, getExpenseModel, getStockPriceModel} from '../models';
 import logger from '../helpers/logger';
 import yf from 'yahoo-finance';
-import {StockPricingMethod} from '../../src/stocks/defs';
+import {StockPricingMethod, TStock, TStockPrice} from '../../src/stocks/defs';
+import sequelize from 'sequelize';
+import {formatYMD} from '../../src/app/dates/formatYMD';
 
 export const updateStocks = async () => {
     const models = await getStockModel().findAll({
@@ -12,9 +14,11 @@ export const updateStocks = async () => {
         },
     });
 
+    const dated = formatYMD(new Date());
+
     models.forEach(async (model) => {
         if (model.pricing_method === StockPricingMethod.INFER) {
-            inferStockPriceFromTransactions(model);
+            inferStockPriceFromTransactions(model, dated);
 
             return;
         }
@@ -29,14 +33,41 @@ export const updateStocks = async () => {
             return;
         }
 
-        if (model.price !== price) {
-            logger.log('YAHOO', `Updating ${model.symbol} price: ${model.price} → ${price}`);
-            model.update({price});
-        }
+        updateStockPrice(model, {
+            dated,
+            price,
+        });
     });
 };
 
-const inferStockPriceFromTransactions = async (stock) => {
+const updateStockPrice = async (model: sequelize.Model<TStock>, {dated, price}: Omit<TStockPrice, 'stock_id'>) => {
+    const stockPriceModel = getStockPriceModel();
+    const stockPrice = await stockPriceModel.find({
+        where: {
+            stock_id: model.id,
+            dated,
+        },
+    });
+
+    if (stockPrice) {
+        if (stockPrice.price !== price) {
+            logger.log('YAHOO', `Updating ${model.symbol} price: ${model.price} → ${price}`);
+            stockPrice.update({price});
+        }
+    } else {
+        logger.log('YAHOO', `Creating ${model.symbol} price: ${model.price} → ${price}`);
+        stockPriceModel.create({
+            stock_id: model.id,
+            dated,
+            price,
+        });
+    }
+
+    // TODO remove
+    model.update({price});
+};
+
+const inferStockPriceFromTransactions = async (stock, dated) => {
     const transaction = await getExpenseModel().findOne({
         where: {
             stock_id: stock.id,
@@ -47,12 +78,10 @@ const inferStockPriceFromTransactions = async (stock) => {
     if (transaction) {
         const price = transaction.price;
 
-        if (price === stock.price) {
-            return;
-        }
-
-        logger.log('Stocks', `Updating ${stock.symbol} price ${stock.price} → ${price}`);
-        stock.update({price});
+        updateStockPrice(stock, {
+            dated,
+            price,
+        });
     } else {
         logger.log('Stocks', `Unable to price ${stock.symbol}`);
     }

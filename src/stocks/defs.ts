@@ -20,3 +20,9 @@ export type TStock = {
     type: StockType;
     pricing_method: StockPricingMethod;
 };
+
+export type TStockPrice = {
+    stock_id: number;
+    dated: string;
+    price: number;
+};

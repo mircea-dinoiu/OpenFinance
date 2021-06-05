@@ -71,8 +71,6 @@ export const getInitialEndDate = (): string => {
     return endOfDayToISOString(date);
 };
 
-export const formatYMD = (date: Date | number = new Date()) => moment(date).format('YYYY-MM-DD');
-
 export const useEndDate = () => {
     return useQueryParamState(QueryParam.endDate, getInitialEndDate());
 };
