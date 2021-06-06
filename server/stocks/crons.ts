@@ -48,7 +48,7 @@ export const updateStocks = async () => {
 
 const updateStockPrice = async (model: sequelize.Model<TStock>, {dated, price}: Omit<TStockPrice, 'stock_id'>) => {
     const stockPriceModel = getStockPriceModel();
-    const stockPrice = await stockPriceModel.find({
+    const stockPrice = await stockPriceModel.findOne({
         where: {
             stock_id: model.id,
             dated,
@@ -58,7 +58,16 @@ const updateStockPrice = async (model: sequelize.Model<TStock>, {dated, price}: 
     if (stockPrice) {
         if (stockPrice.price !== price) {
             logger.log('StockPrices', `Updating ${model.symbol} price: ${stockPrice.price} →`, price);
-            stockPrice.update({price});
+            // TODO should add PK instead of rerunning where
+            stockPriceModel.update(
+                {price},
+                {
+                    where: {
+                        stock_id: model.id,
+                        dated,
+                    },
+                },
+            );
         }
     } else {
         logger.log('StockPrices', `Creating ${model.symbol} price:`, price);
