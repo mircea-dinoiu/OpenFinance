@@ -33,7 +33,6 @@ import {useRefreshWidgets} from 'refreshWidgets/state';
 import {useStockPrices} from 'stocks/state';
 import {summaryAssign, SummaryKey} from 'summary/state';
 import {BalanceByLocation} from 'transactions/defs';
-import {TransactionsEndDatePicker} from 'transactions/TransactionsEndDatePicker';
 
 enum DashboardTab {
     accounts = 'accounts',
@@ -121,8 +120,6 @@ export const Dashboard = () => {
         <div className={cls.root}>
             <div>
                 <Paper className={cls.paper + ' ' + cls.topWidget}>
-                    <TransactionsEndDatePicker />
-
                     <IncludeDropdown
                         value={include}
                         onChange={(value) => {

@@ -1,18 +1,30 @@
-import {MoreVert as MoreVertIcon} from '@material-ui/icons';
+import {MoreVert as IconMoreVert, ExitToApp as IconExitToApp, List as IconList} from '@material-ui/icons';
 import {Api} from 'app/Api';
 import {useUsersWithActions} from 'users/state';
 import React, {useState} from 'react';
-import {IconButton, MenuItem, Menu, Checkbox} from '@material-ui/core';
+import {
+    IconButton,
+    MenuItem,
+    Menu,
+    Checkbox,
+    ListItemSecondaryAction,
+    ListItemText,
+    useMediaQuery,
+    Theme,
+} from '@material-ui/core';
 import {usePrivacyToggle} from 'privacyToggle/state';
 import {CategoriesDialog} from 'categories/CategoriesDialog';
 import {AccountsDialog} from 'accounts/AccountsDialog';
 import {createXHR} from 'app/fetch';
+import {TTopBarTab} from './TTopBarTab';
+import {Link} from 'react-router-dom';
 
-export const TopBarMoreMenu = () => {
+export const TopBarMoreMenu = ({tabs}: {tabs: TTopBarTab[]}) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
     const [categoriesIsOpen, setCategoriesIsOpen] = useState<boolean | null>(null);
     const [accountsIsOpen, setAccountsIsOpen] = useState<boolean | null>(null);
+    const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
     const makeCloseHandler = (fn?: () => void) => () => {
         fn?.();
@@ -26,14 +38,40 @@ export const TopBarMoreMenu = () => {
                     setAnchorEl(event.currentTarget);
                 }}
             >
-                <MoreVertIcon />
+                <IconMoreVert />
             </IconButton>
             <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={makeCloseHandler(() => {})}>
-                <MenuItem onClick={makeCloseHandler(() => setPrivacyToggle(!privacyToggle))}>
-                    Privacy Mode <Checkbox color="primary" checked={privacyToggle} />
+                {!isLarge &&
+                    tabs.map((tab) => (
+                        <Link style={{color: 'inherit', textDecoration: 'none'}} key={tab.url} to={tab.url}>
+                            <MenuItem>
+                                <ListItemText primary={tab.label} />
+                                <ListItemSecondaryAction>{tab.icon ?? <IconList />}</ListItemSecondaryAction>
+                            </MenuItem>
+                        </Link>
+                    ))}
+
+                <MenuItem onClick={makeCloseHandler(() => setCategoriesIsOpen(true))}>
+                    <ListItemText primary="Categories" />
+                    <ListItemSecondaryAction>
+                        <IconList />
+                    </ListItemSecondaryAction>
                 </MenuItem>
-                <MenuItem onClick={makeCloseHandler(() => setCategoriesIsOpen(true))}>Manage Categories</MenuItem>
-                <MenuItem onClick={makeCloseHandler(() => setAccountsIsOpen(true))}>Manage Accounts</MenuItem>
+
+                <MenuItem onClick={makeCloseHandler(() => setAccountsIsOpen(true))}>
+                    <ListItemText primary="Accounts" />
+                    <ListItemSecondaryAction>
+                        <IconList />
+                    </ListItemSecondaryAction>
+                </MenuItem>
+
+                <MenuItem onClick={makeCloseHandler(() => setPrivacyToggle(!privacyToggle))}>
+                    <ListItemText primary="Privacy Mode" />
+                    <ListItemSecondaryAction>
+                        <Checkbox color="primary" checked={privacyToggle} style={{padding: 0}} />
+                    </ListItemSecondaryAction>
+                </MenuItem>
+
                 <Logout onClick={makeCloseHandler()} />
             </Menu>
 
@@ -67,7 +105,10 @@ const Logout = ({onClick}: {onClick: () => void}) => {
                 onClick();
             }}
         >
-            Logout
+            <ListItemText primary="Logout" />
+            <ListItemSecondaryAction>
+                <IconExitToApp />
+            </ListItemSecondaryAction>
         </MenuItem>
     );
 };

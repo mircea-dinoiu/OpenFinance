@@ -21,8 +21,6 @@ import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {BaseTable, TableHeader, TableHeaderTop} from 'app/BaseTable';
 import {refreshWidgets as onRefreshWidgets} from 'refreshWidgets/state';
-
-import {BigLoader} from 'app/loaders';
 import {TProject} from 'projects/defs';
 import {ContextMenuItems, TypeContextMenuItemsProps} from 'transactions/ContextMenuItems';
 import {Tooltip} from 'app/Tooltip';
@@ -38,7 +36,6 @@ import {MainScreenEditDialog, TransactionEditorProps} from 'transactions/MainScr
 import {MainScreenListGroup} from 'transactions/MainScreenListGroup';
 import {StatsTable} from 'transactions/StatsTable';
 import {SummaryTotal} from 'transactions/SummaryTotal';
-import {TransactionsEndDatePicker} from 'transactions/TransactionsEndDatePicker';
 import {TransactionsMobileHeader} from 'transactions/TransactionsMobileHeader';
 import {formToModel, modelToForm} from 'transactions/form';
 import {TransactionModel, TransactionStatus} from 'transactions/defs';
@@ -291,8 +288,7 @@ class TransactionsInner extends PureComponent<TypeProps, TypeState> {
 
         return (
             <TableHeader>
-                <TableHeaderTop columnCount={7}>
-                    <TransactionsEndDatePicker />
+                <TableHeaderTop columnCount={6}>
                     <>
                         <FormControlLabel
                             control={
@@ -819,7 +815,7 @@ export const Transactions = (ownProps: TypeOwnProps) => {
         },
         [setState],
     );
-    const {loading, firstLoad} = transactionsState;
+    const {loading} = transactionsState;
 
     const params = useTransactionsParams();
     const dispatchRequest: TTransactionsContext['dispatchRequest'] = useCallback(
@@ -849,27 +845,21 @@ export const Transactions = (ownProps: TypeOwnProps) => {
                 dispatchRequest,
             }}
         >
-            {!isLarge && firstLoad ? (
-                <BigLoader />
-            ) : (
-                <>
-                    <TransactionsInner
-                        {...stateProps}
-                        {...ownProps}
-                        endDate={endDate}
-                        history={history}
-                        dispatch={dispatch}
-                        params={params}
-                        project={project}
-                        isDesktop={isLarge}
-                        transactionsState={transactionsState}
-                        transactionsSetState={transactionsSetState}
-                        dispatchRequest={dispatchRequest}
-                    />
-                    {loading > 0 && <LinearProgress />}
-                    <TransactionsScrollListener />
-                </>
-            )}
+            <TransactionsInner
+                {...stateProps}
+                {...ownProps}
+                endDate={endDate}
+                history={history}
+                dispatch={dispatch}
+                params={params}
+                project={project}
+                isDesktop={isLarge}
+                transactionsState={transactionsState}
+                transactionsSetState={transactionsSetState}
+                dispatchRequest={dispatchRequest}
+            />
+            {loading > 0 && <LinearProgress />}
+            <TransactionsScrollListener />
         </TransactionsContext.Provider>
     );
 };
