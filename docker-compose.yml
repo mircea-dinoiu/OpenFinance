@@ -5,6 +5,7 @@ services:
       dockerfile: server/Dockerfile
     volumes:
       - ./server/:/financial/server
+      - ./.env/:/financial/.env
       - ./src/:/financial/src
       - ./package.json:/financial/package.json
       - ./yarn.lock:/financial/yarn.lock
