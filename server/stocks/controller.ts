@@ -24,11 +24,11 @@ export class StocksController extends CrudController {
         const rows = await sql.query(
             `
                 SELECT 
+                    (SELECT stock_prices.price FROM stock_prices WHERE stock_prices.stock_id = stocks.id ORDER BY ABS(DATEDIFF(:queryDate, stock_prices.dated)) ASC, stock_prices.price DESC LIMIT 1) AS price,
                     stocks.currency_id, 
                     stocks.id, 
                     stocks.symbol, 
-                    stocks.type, 
-                    (SELECT stock_prices.price FROM stock_prices WHERE stock_prices.stock_id = stocks.id ORDER BY ABS(DATEDIFF(:queryDate, stock_prices.dated)) ASC, stock_prices.price DESC LIMIT 1) AS price
+                    stocks.type 
                 FROM stocks 
                 ORDER BY symbol ASC;
             `,
