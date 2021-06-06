@@ -15,7 +15,7 @@ export const updateStocks = async () => {
         },
     });
 
-    const dated = formatYMD(new Date());
+    const dated = formatYMD();
 
     models.forEach(async (model) => {
         if (model.pricing_method === StockPricingMethod.INFER) {
@@ -26,7 +26,12 @@ export const updateStocks = async () => {
 
         const data = await yf.quote({symbol: model.symbol, modules: ['price']});
 
-        const {regularMarketPrice: price} = data.price;
+        const {regularMarketPrice: price, regularMarketTime} = data.price;
+        const quoteDate = formatYMD(regularMarketTime);
+
+        if (dated !== quoteDate) {
+            return;
+        }
 
         if (typeof price !== 'number') {
             logger.error('StockPrices', '[YAHOO]', 'Incorrect Price (', price, ') for', model.symbol);
