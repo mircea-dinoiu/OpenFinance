@@ -1,13 +1,21 @@
 import {Validator} from './validators';
 import {QueryTypes} from 'sequelize';
 import {getDb} from './getDb';
+import {Request, Response, NextFunction} from 'express';
 
 export const validateAuth = (req, res, next) => {
     if (req.user) {
         next();
     } else {
-        res.status(401);
-        res.json('You are not logged in.');
+        res.sendStatus(401);
+    }
+};
+
+export const validateAdmin = (req: Request, res: Response, next: NextFunction) => {
+    if (req.user && req.user.is_admin) {
+        next();
+    } else {
+        res.sendStatus(401);
     }
 };
 

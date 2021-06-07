@@ -12,6 +12,7 @@ module.exports = (sequelize, types) =>
             password: types.STRING,
             first_name: types.STRING,
             last_name: types.STRING,
+            is_admin: types.BOOLEAN,
         },
         {
             underscored: true,
