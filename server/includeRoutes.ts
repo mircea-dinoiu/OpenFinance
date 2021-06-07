@@ -8,9 +8,11 @@ import {createCategoriesRouter} from './categories/router';
 import {createUsersRouter} from './users/router';
 import {createAccountsRouter} from './accounts/router';
 import {createHtmlRouter} from './html/router';
+import {createAdminRouter} from './admin/router';
 
 export const includeRoutes = (app) => {
     Object.entries({
+        '/api/admin': createAdminRouter(),
         '/api/transactions': createTransactionsRouter(),
         '/api/reports': createReportsRouter(),
         '/api/currencies': createCurrenciesRouter(),

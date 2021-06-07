@@ -1,6 +1,6 @@
 import express from 'express';
 import {StocksController} from './controller';
-import {validateAuth, validateAdmin} from '../middlewares';
+import {validateAuth} from '../middlewares';
 
 export const createStocksRouter = () => {
     const router = express.Router();
@@ -8,10 +8,6 @@ export const createStocksRouter = () => {
 
     router.get('/', validateAuth, async (req, res) => {
         c.list(req, res);
-    });
-
-    router.post('/backfill-prices', validateAdmin, async (req, res) => {
-        c.backfillPrices(req, res);
     });
 
     return router;
