@@ -1,41 +1,32 @@
-import {mapSearchToMatchAgainst} from '../helpers/search';
-import {QueryTypes} from 'sequelize';
+import Sequelize, {QueryTypes} from 'sequelize';
 import {getDb} from '../getDb';
+import {getExpenseModel} from '../models';
+import {mapSearchKeywordToWheres, mapSearchKeywordToLiteralWheres} from '../helpers/mapSearchKeywordToWheres';
+import {mapSearchToWords} from '../helpers/mapSearchToWords';
 
 export const getExpenseDescriptions = async (req, res) => {
     const query = req.query;
+    const expenseModel = getExpenseModel();
 
-    res.json({
-        suggestions: await getDb().query(
-            `
-SELECT
-   item,
-   COUNT(item) as usages 
-FROM
-   expenses 
-WHERE
-   (:search = '' OR MATCH(expenses.item) AGAINST(:search IN BOOLEAN MODE))
-   AND project_id = :projectId 
-GROUP BY
-   item 
-ORDER BY
-   usages DESC LIMIT 10`,
-            {
-                replacements: {
-                    endDate: query.end_date,
-                    projectId: req.projectId,
-                    search: mapSearchToMatchAgainst(query.search),
-                },
-                type: QueryTypes.SELECT,
-            },
-        ),
+    const suggestions = await expenseModel.findAll({
+        attributes: ['item', [Sequelize.fn('COUNT', Sequelize.col('item')), 'usages']],
+        where: {
+            $and: [{project_id: req.projectId}, ...mapSearchKeywordToWheres(query.search, ['item'])],
+        },
+        limit: 10,
+        group: 'item',
+        order: [[Sequelize.literal('usages'), 'DESC']] as any,
     });
+
+    return res.json({suggestions});
 };
 
 export const getCategories = async (req, res) => {
     const search = req.query.search;
+    const words = mapSearchToWords(search);
 
-    if ('string' === typeof search && search.trim().length) {
+    if (words.length) {
+        const wheres = mapSearchKeywordToLiteralWheres(search, 'expenses.item');
         const row = await getDb().query(
             `
 SELECT DISTINCT
@@ -46,12 +37,10 @@ FROM
       category_expense 
       ON category_expense.expense_id = expenses.id 
 WHERE
-   project_id = :projectId 
-   AND MATCH(expenses.item) AGAINST(:search IN BOOLEAN MODE)`,
+   project_id = :projectId AND ${wheres}`,
             {
                 replacements: {
                     projectId: req.projectId,
-                    search: mapSearchToMatchAgainst(search),
                 },
                 type: QueryTypes.SELECT,
             },

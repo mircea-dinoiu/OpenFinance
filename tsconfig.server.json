@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES5",
+    "lib": [
+      "ESNext"
+    ],
     "strict": true,
     "noEmit": true,
     "noImplicitAny": false,

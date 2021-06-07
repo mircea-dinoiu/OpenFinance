@@ -87,15 +87,18 @@ module.exports = (sequelize, types) => {
 
                     if (values.userBlameMap) {
                         values.users = extractUsersFromModel(this);
+                        delete values.userIds;
+                        delete values.userBlameMap;
                     }
 
-                    values.categories = extractIdsFromModel(this, 'categoryIds');
+                    if (values.hasOwnProperty('categoryIds')) {
+                        values.categories = extractIdsFromModel(this, 'categoryIds');
+                        delete values.categoryIds;
+                    }
 
-                    delete values.userIds;
-                    delete values.userBlameMap;
-                    delete values.categoryIds;
-
-                    values.hidden = Boolean(values.hidden);
+                    if (values.hasOwnProperty('hidden')) {
+                        values.hidden = Boolean(values.hidden);
+                    }
 
                     return values;
                 },

@@ -4,7 +4,6 @@ import {sanitizeFilters, sanitizeSorters} from '../helpers';
 import {
     mapStartDateToSQL,
     mapEndDateToSQL,
-    mapTextFilterToSQL,
     mapFlagsToSQL,
     mapSortersToSQL,
     mapInputToLimitSQL,
@@ -14,6 +13,7 @@ import {
 import {getDb} from '../getDb';
 import {getExpenseModel} from '../models';
 import {FULL_DATE_FORMAT_TZ} from '../../src/app/dates/defs';
+import {mapSearchKeywordToWheres} from '../helpers/mapSearchKeywordToWheres';
 
 export const ExpenseService = {
     async list(req) {
@@ -46,7 +46,9 @@ export const ExpenseService = {
             sanitizeFilters(input.filters).forEach(({id, value}) => {
                 switch (id) {
                     case 'item':
-                        where.push(mapTextFilterToSQL(['item', 'notes'], value.text));
+                        if (value.text) {
+                            mapSearchKeywordToWheres(value.text, ['item', 'notes']).map((w) => where.push(w));
+                        }
                         where.push(mapFlagsToSQL(value));
                         break;
                     case 'categories':

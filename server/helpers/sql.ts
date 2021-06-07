@@ -1,16 +1,4 @@
 import Sequelize from 'sequelize';
-import {mapSearchToMatchAgainst} from './search';
-import {getDb} from '../getDb';
-
-const mapTextFilterToSQL = (ids, value) => {
-    if (value && value.trim()) {
-        return Sequelize.literal(
-            `MATCH(${ids.join()}) AGAINST(${getDb().escape(mapSearchToMatchAgainst(value))} IN BOOLEAN MODE)`,
-        );
-    }
-
-    return null;
-};
 
 const mapFlagsToSQL = (flags: Record<'Pending' | 'Deposit' | 'Recurrent' | 'Generated', 'yes' | 'no' | 'only'>) => {
     const where: Record<string, Partial<Sequelize.WhereLogic>>[] = [];
@@ -211,6 +199,5 @@ export {
     mapEntityFilterToWhereSQL,
     mapStartDateToSQL,
     mapEndDateToSQL,
-    mapTextFilterToSQL,
     mapFlagsToSQL,
 };
