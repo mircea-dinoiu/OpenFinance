@@ -8,7 +8,7 @@ export const mapSearchKeywordToWheres = (kw: string, cols: string[]) => {
     const words = mapSearchToWords(kw);
 
     return words.map((w) => {
-        const concat = cols.length > 1 ? Sequelize.fn('concat', ...mapColsToConcatArgs(cols)) : cols[0];
+        const concat = cols.length > 1 ? Sequelize.fn('concat', ...mapColsToConcatArgs(cols)) : Sequelize.col(cols[0]);
 
         return Sequelize.where(Sequelize.fn('lower', concat), {
             $like: `%${w.toLowerCase()}%`,
