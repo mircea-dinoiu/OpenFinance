@@ -14,6 +14,7 @@ import {shiftDateBack, shiftDateForward} from 'app/dates/helpers';
 import {makeUrl} from 'app/url';
 import {TransactionsEndDatePicker} from '../../transactions/TransactionsEndDatePicker';
 import {TTopBarTab} from './TTopBarTab';
+import {QueryParam} from '../QueryParam';
 
 const MAX_TIMES = 10;
 
@@ -33,8 +34,8 @@ export const TopBar = () => {
     const searchParams = new URLSearchParams(location.search);
     const persistentSearchParams = _.pickBy(
         {
-            endDate: searchParams.get('endDate'),
-            endDateIncrement: searchParams.get('endDateIncrement'),
+            [QueryParam.endDate]: searchParams.get(QueryParam.endDate),
+            [QueryParam.includePending]: searchParams.get(QueryParam.includePending),
         },
         _.identity,
     );

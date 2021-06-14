@@ -74,7 +74,3 @@ export const getInitialEndDate = (): string => {
 export const useEndDate = () => {
     return useQueryParamState(QueryParam.endDate, getInitialEndDate());
 };
-
-export const useEndDateIncrement = () => {
-    return useQueryParamState<ShiftDateOption>('endDateIncrement', ShiftDateOption.oneWeek);
-};
