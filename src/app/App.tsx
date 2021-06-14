@@ -11,17 +11,15 @@ import {createTheme} from 'app/styles/createTheme';
 import {TopBar} from 'app/topBar/TopBar';
 import {useCategoriesReader} from 'categories/state';
 import {fetchCurrencies} from 'currencies/state';
-import {Dashboard} from 'dashboard/Dashboard';
 import {paths} from 'app/paths';
 import 'normalize.css';
 import {useSelectedProject} from 'projects/state';
-import React, {useMemo, useState} from 'react';
+import React, {Suspense, useMemo, useState} from 'react';
 import {hot} from 'react-hot-loader/root';
 import {useDispatch} from 'react-redux';
 import {generatePath, HashRouter, Redirect, Route, Switch} from 'react-router-dom';
 import {useSnackbars} from 'snackbars/state';
 import {fetchStocks} from 'stocks/state';
-import {Transactions} from 'transactions/Transactions';
 import {TBootstrap} from 'users/defs';
 
 import {Login} from 'users/Login';
@@ -29,6 +27,10 @@ import {useBootstrap, useUsersWithActions} from 'users/state';
 import {useEndDate} from './dates/helpers';
 import moment from 'moment';
 import {formatYMD} from './dates/formatYMD';
+import {BigLoader} from './loaders';
+
+const Dashboard = React.lazy(() => import('dashboard'));
+const Transactions = React.lazy(() => import('transactions'));
 
 const AppWrapped = () => {
     const dispatch = useDispatch();
@@ -119,8 +121,20 @@ const AppLoggedIn = () => {
                     }}
                 >
                     <Switch>
-                        <Route path={paths.dashboard} component={Dashboard} />
-                        <Route path={paths.transactions} component={Transactions} />
+                        <Route path={paths.dashboard}>
+                            {() => (
+                                <Suspense fallback={<BigLoader />}>
+                                    <Dashboard />
+                                </Suspense>
+                            )}
+                        </Route>
+                        <Route path={paths.transactions}>
+                            {() => (
+                                <Suspense fallback={<BigLoader />}>
+                                    <Transactions />
+                                </Suspense>
+                            )}
+                        </Route>
                         <Redirect
                             exact={true}
                             from={paths.home}
