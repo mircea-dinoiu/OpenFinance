@@ -1,9 +1,20 @@
 import {useLocation} from 'react-router-dom';
 import {useMemo} from 'react';
 import {QueryParam} from 'app/QueryParam';
+import {useEndDate} from '../app/dates/helpers';
+import {SortingRule, Filter} from 'react-table-6';
+
+export type TransactionsParams = {
+    pageSize: number;
+    page: number;
+    sorters: SortingRule[];
+    filters: Filter[];
+    endDate: string;
+};
 
 export const useTransactionsParams = () => {
     const location = useLocation();
+    const [endDate] = useEndDate();
 
     return useMemo(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -18,6 +29,7 @@ export const useTransactionsParams = () => {
                 },
             ],
             filters: JSON.parse(searchParams.get(QueryParam.filters) as string) ?? [],
+            endDate,
         };
-    }, [location.search]);
+    }, [location.search, endDate]);
 };

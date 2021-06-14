@@ -51,18 +51,10 @@ import moment from 'moment';
 import React, {PureComponent, ReactNode, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import {
-    Filter,
-    SortingRule,
-    FilteredChangeFunction,
-    PageChangeFunction,
-    PageSizeChangeFunction,
-    SortedChangeFunction,
-} from 'react-table-6';
+import {FilteredChangeFunction, PageChangeFunction, PageSizeChangeFunction, SortedChangeFunction} from 'react-table-6';
 import {Dispatch} from 'redux';
 import {GlobalState} from 'app/state/defs';
 import {useSelectedProject} from 'projects/state';
-import {useEndDate} from 'app/dates/helpers';
 
 import {createXHR} from 'app/fetch';
 import {makeUrl} from 'app/url';
@@ -71,20 +63,14 @@ import {
     TTransactionsContext,
     TransactionsContextDefaultState,
 } from 'transactions/TransactionsContext';
-import {useTransactionsParams} from 'transactions/useTransactionsParams';
+import {useTransactionsParams, TransactionsParams} from 'transactions/useTransactionsParams';
 import {TransactionsScrollListener} from 'transactions/TransactionsScrollListener';
 
 type TypeOwnProps = {};
 
 type TypeProps = {
     history: H.History;
-    params: {
-        pageSize: number;
-        page: number;
-        sorters: SortingRule[];
-        filters: Filter[];
-    };
-    endDate: string;
+    params: TransactionsParams;
     isDesktop: boolean;
     currencies: TCurrencyMap;
     refreshWidgets: string;
@@ -142,8 +128,6 @@ class TransactionsInner extends PureComponent<TypeProps, TypeState> {
     componentDidUpdate(prevProps: TypeProps) {
         if (prevProps.refreshWidgets !== this.props.refreshWidgets) {
             this.refresh();
-        } else if (prevProps.endDate !== this.props.endDate) {
-            this.refresh();
         } else if (!isEqual(prevProps.params, this.props.params)) {
             this.loadMore();
         }
@@ -192,7 +176,7 @@ class TransactionsInner extends PureComponent<TypeProps, TypeState> {
 
         const response = await createXHR<TransactionModel[]>({
             url: makeUrl(Api.transactions, {
-                end_date: this.props.endDate,
+                end_date: this.props.params.endDate,
                 page,
                 limit: pageSize,
                 sorters: JSON.stringify(sorters),
@@ -800,9 +784,7 @@ export const Transactions = (ownProps: TypeOwnProps) => {
         user,
     }));
     const dispatch = useDispatch();
-    const [endDate] = useEndDate();
     const history = useHistory();
-
     const project = useSelectedProject();
     const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
     const [transactionsState, setState] = useState<TTransactionsContext['state']>(TransactionsContextDefaultState);
@@ -848,7 +830,6 @@ export const Transactions = (ownProps: TypeOwnProps) => {
             <TransactionsInner
                 {...stateProps}
                 {...ownProps}
-                endDate={endDate}
                 history={history}
                 dispatch={dispatch}
                 params={params}
