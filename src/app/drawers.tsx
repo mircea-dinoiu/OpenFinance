@@ -11,7 +11,7 @@ export const SmartDrawer = ({
     open: boolean;
     children: ReactNode;
 }) => {
-    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'), {noSsr: true});
     const cls = useSmartDrawerStyles();
 
     return (

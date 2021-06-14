@@ -65,6 +65,7 @@ import {
 } from 'transactions/TransactionsContext';
 import {useTransactionsParams, TransactionsParams} from 'transactions/useTransactionsParams';
 import {TransactionsScrollListener} from 'transactions/TransactionsScrollListener';
+import {useIsDesktop} from '../app/useIsDesktop';
 
 type TypeOwnProps = {};
 
@@ -786,7 +787,7 @@ export const Transactions = (ownProps: TypeOwnProps) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const project = useSelectedProject();
-    const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
+    const isDesktop = useIsDesktop();
     const [transactionsState, setState] = useState<TTransactionsContext['state']>(TransactionsContextDefaultState);
     const transactionsSetState: TTransactionsContext['setState'] = useCallback(
         (values) => {
@@ -834,7 +835,7 @@ export const Transactions = (ownProps: TypeOwnProps) => {
                 dispatch={dispatch}
                 params={params}
                 project={project}
-                isDesktop={isLarge}
+                isDesktop={isDesktop}
                 transactionsState={transactionsState}
                 transactionsSetState={transactionsSetState}
                 dispatchRequest={dispatchRequest}

@@ -2,29 +2,21 @@ import {MoreVert as IconMoreVert, ExitToApp as IconExitToApp, List as IconList} 
 import {Api} from 'app/Api';
 import {useUsersWithActions} from 'users/state';
 import React, {useState} from 'react';
-import {
-    IconButton,
-    MenuItem,
-    Menu,
-    Checkbox,
-    ListItemSecondaryAction,
-    ListItemText,
-    useMediaQuery,
-    Theme,
-} from '@material-ui/core';
+import {IconButton, MenuItem, Menu, Checkbox, ListItemSecondaryAction, ListItemText} from '@material-ui/core';
 import {usePrivacyToggle} from 'privacyToggle/state';
 import {CategoriesDialog} from 'categories/CategoriesDialog';
 import {AccountsDialog} from 'accounts/AccountsDialog';
 import {createXHR} from 'app/fetch';
 import {TTopBarTab} from './TTopBarTab';
 import {Link} from 'react-router-dom';
+import {useIsDesktop} from '../useIsDesktop';
 
 export const TopBarMoreMenu = ({tabs}: {tabs: TTopBarTab[]}) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
     const [categoriesIsOpen, setCategoriesIsOpen] = useState<boolean | null>(null);
     const [accountsIsOpen, setAccountsIsOpen] = useState<boolean | null>(null);
-    const isLarge = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
+    const isDesktop = useIsDesktop();
 
     const makeCloseHandler = (fn?: () => void) => () => {
         fn?.();
@@ -41,7 +33,7 @@ export const TopBarMoreMenu = ({tabs}: {tabs: TTopBarTab[]}) => {
                 <IconMoreVert />
             </IconButton>
             <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={makeCloseHandler(() => {})}>
-                {!isLarge &&
+                {!isDesktop &&
                     tabs.map((tab) => (
                         <Link style={{color: 'inherit', textDecoration: 'none'}} key={tab.url} to={tab.url}>
                             <MenuItem>
