@@ -1,5 +1,5 @@
-import {RepeatOption} from 'js/defs';
 import {advanceRepeatDate} from './repeatedModels';
+import {RepeatOption} from './RepeatOption';
 
 xdescribe('#advanceRepeatDate()', () => {
     describe('When repeat is twice monthly', () => {

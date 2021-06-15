@@ -1,5 +1,6 @@
-import {ShiftDateOption} from 'defs';
-import {formatYMD, shiftDateForward} from 'app/dates/helpers';
+import {formatYMD} from './formatYMD';
+import {shiftDateForward} from './helpers';
+import {ShiftDateOption} from './defs';
 
 describe('#shiftDateForward()', () => {
     it('should default times to 1', () => {
