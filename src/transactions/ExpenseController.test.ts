@@ -1,4 +1,4 @@
-import ExpenseController from './ExpenseController';
+import {ExpenseController} from '../../server/transactions/ExpenseController';
 
 describe('#sanitizeCreateValues()', () => {
     it('should pick properties that do not need sanitizing', async () => {
