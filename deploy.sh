@@ -1,5 +1,3 @@
-echo '- Checking out...'
-git checkout master
 echo '- Pulling latest master...'
 git pull origin master
 echo '- Installing missing node_modules...'
