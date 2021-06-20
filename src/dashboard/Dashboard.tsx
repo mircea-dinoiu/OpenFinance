@@ -29,7 +29,7 @@ import {useSelectedProject} from 'projects/state';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {generatePath, useParams, useLocation} from 'react-router-dom';
-import {useRefreshWidgets} from 'refreshWidgets/state';
+import {useRefreshToken} from 'refreshWidgets/state';
 import {useStockPrices} from 'stocks/state';
 import {summaryAssign, SummaryKey} from 'summary/state';
 import {BalanceByLocation} from 'transactions/defs';
@@ -49,7 +49,7 @@ export const Dashboard = () => {
     const accounts = useAccounts();
     const accountsByType = _.groupBy(accounts, 'type');
     const [data, setData] = React.useState<BalanceByLocation | null>(null);
-    const refreshWidgets = useRefreshWidgets();
+    const refreshWidgets = useRefreshToken();
     const dispatch = useDispatch();
     const [includePending, setIncludePending] = useIncludePending();
     const [include, setInclude] = useInclude();

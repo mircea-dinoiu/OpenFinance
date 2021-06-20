@@ -1,6 +1,7 @@
-import {AppBar, MenuItem, Select, Tab, Tabs, Toolbar, Typography} from '@material-ui/core';
+import {AppBar, MenuItem, Select, Tab, Tabs, Toolbar, Typography, IconButton} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import IconHome from '@material-ui/icons/Home';
+import IconRefresh from '@material-ui/icons/Refresh';
 import {ShiftDateOption} from 'app/dates/defs';
 import {TabLink} from 'app/TabLink';
 import {TopBarMoreMenu} from 'app/topBar/TopBarMoreMenu';
@@ -15,6 +16,8 @@ import {makeUrl} from 'app/url';
 import {TransactionsEndDatePicker} from '../../transactions/TransactionsEndDatePicker';
 import {TTopBarTab} from './TTopBarTab';
 import {QueryParam} from '../QueryParam';
+import {refreshTokenAction} from '../../refreshWidgets/state';
+import {useDispatch} from 'react-redux';
 
 const MAX_TIMES = 10;
 
@@ -27,6 +30,7 @@ export const getShiftForwardOptions = (date: string, by: ShiftDateOption): Date[
 export const TopBar = () => {
     const history = useHistory();
     const location = useLocation();
+    const dispatch = useDispatch();
     const selectedProject = useSelectedProject();
     const match = useRouteMatch();
     const projects = useProjects();
@@ -53,6 +57,10 @@ export const TopBar = () => {
             icon: null,
         },
     ];
+
+    const handleRefresh = () => {
+        dispatch(refreshTokenAction());
+    };
 
     return (
         <>
@@ -98,6 +106,9 @@ export const TopBar = () => {
                         }}
                     >
                         <div style={{float: 'right', display: 'flex'}}>
+                            <IconButton onClick={handleRefresh}>
+                                <IconRefresh />
+                            </IconButton>
                             <TopBarMoreMenu tabs={tabs} />
                         </div>
                     </div>
