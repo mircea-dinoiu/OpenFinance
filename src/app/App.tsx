@@ -65,14 +65,18 @@ const AppWrapped = () => {
     React.useEffect(() => {
         if (users) {
             dispatch(fetchCurrencies());
+            readCategories();
+            readAccounts();
+        }
+    }, [refreshToken, users, selectedProject?.id]);
+
+    React.useEffect(() => {
+        if (users) {
             dispatch(
                 fetchStocks({
                     date,
                 }),
             );
-
-            readCategories();
-            readAccounts();
         }
     }, [refreshToken, users, date, selectedProject?.id]);
 
