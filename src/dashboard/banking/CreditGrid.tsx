@@ -5,8 +5,8 @@ import {
     CreditUsageCol,
     CreditAprCol,
     CreditBalanceCol,
-    BalanceProgress,
     mapCashAccountToBalance,
+    CreditBalanceChangeCol,
 } from '../Credit';
 import React from 'react';
 import {CashAccount} from '../defs';
@@ -39,7 +39,15 @@ export const CreditGrid = ({rows, className}: {rows: CashAccount[]; className?: 
             className={className}
             autoHeight={true}
             sortModel={[{field: 'balance', sort: 'desc'}]}
-            columns={[NameColX, CreditBalanceCol, CreditAvailableCol, CreditLimitCol, CreditUsageCol, CreditAprCol]}
+            columns={[
+                NameColX,
+                CreditBalanceCol,
+                CreditBalanceChangeCol,
+                CreditAvailableCol,
+                CreditLimitCol,
+                CreditUsageCol,
+                CreditAprCol,
+            ]}
             rows={rows}
             components={{Footer}}
         />
