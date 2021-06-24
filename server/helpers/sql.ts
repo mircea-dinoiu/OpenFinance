@@ -24,14 +24,14 @@ const mapFlagsToSQL = (flags: Record<'Pending' | 'Deposit' | 'Recurrent' | 'Gene
     switch (flags.Deposit) {
         case 'no':
             where.push({
-                price: {
+                quantity: {
                     $lt: 0,
                 },
             });
             break;
         case 'only':
             where.push({
-                price: {
+                quantity: {
                     $gt: 0,
                 },
             });
