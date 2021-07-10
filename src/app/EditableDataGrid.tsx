@@ -27,13 +27,17 @@ export const EditableDataGrid = <D extends {id: number}>({
         setDeletingId(null);
         setLoading(true);
 
-        await createXHR({
-            url: makeUrl(api, {projectId: project.id}),
-            method: 'DELETE',
-            data: {
-                ids: [deletingId],
-            },
-        });
+        try {
+            await createXHR({
+                url: makeUrl(api, {projectId: project.id}),
+                method: 'DELETE',
+                data: {
+                    ids: [deletingId],
+                },
+            });
+        } catch (e) {
+            // noop
+        }
 
         await onRefresh();
         setLoading(false);

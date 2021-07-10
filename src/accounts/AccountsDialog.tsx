@@ -57,6 +57,7 @@ export const AccountsDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () 
                             field: 'url',
                             headerName: 'URL',
                             renderCell: renderUrlCell,
+                            editable: true,
                             flex: 2,
                         },
                         {

@@ -9,6 +9,7 @@ export class AccountController extends CrudController {
     updateValidationRules = {
         id: ['isRequired', ['isId', getAccountModel()]],
         name: ['sometimes', 'isRequired', 'isString'],
+        url: ['sometimes', 'isString'],
         status: ['sometimes', 'isRequired', 'isAccountStatus'],
         type: ['sometimes', 'isRequired', 'isAccountType'],
         currency_id: ['sometimes', 'isRequired', ['isId', getCurrencyModel()]],
@@ -19,6 +20,7 @@ export class AccountController extends CrudController {
     };
     createValidationRules = {
         name: ['isRequired', 'isString'],
+        url: ['sometimes', 'isString'],
         status: ['isRequired', 'isAccountStatus'],
         type: ['isRequired', 'isAccountType'],
         currency: ['isRequired', ['isId', getCurrencyModel()]],
@@ -40,26 +42,16 @@ export class AccountController extends CrudController {
             'credit_dueday',
         );
 
-        if (record.hasOwnProperty('name')) {
-            values.name = record.name.trim();
+        for (const field of ['name', 'url']) {
+            if (typeof record[field] === 'string') {
+                values[field] = record[field].trim();
+            }
         }
 
         return values;
     }
 
     sanitizeCreateValues(record) {
-        return {
-            ...pick(
-                record,
-                'status',
-                'type',
-                'currency_id',
-                'credit_limit',
-                'credit_apr',
-                'credit_minpay',
-                'credit_dueday',
-            ),
-            name: record.name.trim(),
-        };
+        return this.sanitizeUpdateValues(record);
     }
 }
