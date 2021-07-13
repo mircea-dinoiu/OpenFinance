@@ -54,6 +54,7 @@ const updateStockPrice = async (model: sequelize.Model<TStock>, {dated, price}: 
             dated,
         },
     });
+    const sql = getDb();
 
     if (stockPrice) {
         if (stockPrice.price !== price) {
@@ -66,6 +67,20 @@ const updateStockPrice = async (model: sequelize.Model<TStock>, {dated, price}: 
                         stock_id: model.id,
                         dated,
                     },
+                },
+            );
+
+            sql.query(
+                `UPDATE expenses 
+                        SET quantity = ROUND(price * quantity / :price, 6), price = :price 
+                        WHERE stock_id = :stockId AND status = 'pending' AND created_at >= :createdAt`,
+                {
+                    replacements: {
+                        stockId: model.id,
+                        price,
+                        createdAt: dated,
+                    },
+                    type: QueryTypes.UPDATE,
                 },
             );
         }
