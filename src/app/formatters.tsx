@@ -22,7 +22,7 @@ export const formatCurrency = (value: number, currency: string) => {
     }).format(
         decimal
             .mul(100)
-            .floor()
+            .round()
             .div(100)
             .toNumber(),
     );
