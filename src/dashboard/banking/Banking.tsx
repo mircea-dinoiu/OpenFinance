@@ -2,7 +2,7 @@ import {Button} from '@material-ui/core';
 import IconLoan from '@material-ui/icons/AccountBalance';
 import IconCredit from '@material-ui/icons/CreditCard';
 import IconCash from '@material-ui/icons/LocalAtm';
-import {BrokeragePaper} from 'dashboard/BrokeragePaper';
+import {InvestmentAccountsPaper} from 'dashboard/InvestmentAccountsPaper';
 import {BrokerageAccount, CashAccount} from 'dashboard/defs';
 import {PaymentPlanDialog} from 'dashboard/PaymentPlanDialog';
 import {groupBy} from 'lodash';
@@ -109,7 +109,7 @@ export const Banking = ({
                 )}
 
                 {brokerageWithTotal.length > 0 && (
-                    <BrokeragePaper classes={cls} brokerageWithTotal={brokerageWithTotal} />
+                    <InvestmentAccountsPaper classes={cls} brokerageWithTotal={brokerageWithTotal} />
                 )}
             </>
         </>

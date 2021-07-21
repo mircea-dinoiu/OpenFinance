@@ -1,5 +1,5 @@
 import IconStock from '@material-ui/icons/TrendingUp';
-import {CostBasisCol, RoiCol, RoiPercCol, NameColX, ValueColX} from 'dashboard/columns';
+import {CostBasisCol, RoiCol, RoiPercCol, NameColX, ValueColX, makeAllocationCol} from 'dashboard/columns';
 import {DashboardGridWithSidebar} from 'dashboard/DashboardGridWithSidebar';
 import {BrokerageAccount} from 'dashboard/defs';
 import {CurrencyFilter} from 'dashboard/filters/CurrencyFilter';
@@ -10,8 +10,9 @@ import {XGrid} from '@material-ui/x-grid';
 import {useGridFooter} from './makeTotalFooter';
 import {NumericValue} from '../app/formatters';
 import {financialNum} from '../app/numbers';
+import Decimal from 'decimal.js';
 
-export const BrokeragePaper = ({
+export const InvestmentAccountsPaper = ({
     classes,
     brokerageWithTotal,
 }: {
@@ -68,7 +69,14 @@ export const BrokeragePaper = ({
                     className={classes.table}
                     autoHeight={true}
                     rows={rows}
-                    columns={[NameColX, ValueColX, CostBasisCol, RoiCol, RoiPercCol]}
+                    columns={[
+                        NameColX,
+                        ValueColX,
+                        CostBasisCol,
+                        RoiCol,
+                        RoiPercCol,
+                        makeAllocationCol(rows.reduce((acc, r) => acc.plus(r.total), new Decimal(0))),
+                    ]}
                     components={{Footer}}
                 />
             </DashboardGridWithSidebar>
