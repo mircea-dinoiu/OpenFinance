@@ -226,13 +226,20 @@ export class ExpenseController extends CrudController {
         const {file} = req.files;
 
         const data = ofx.parse(file.data.toString());
+        const accountId = Number(req.query.accountId);
+        const projectId = req.projectId;
+        const account = await getAccountModel().findOne({where: {id: accountId, project_id: projectId}});
+
+        if (!account) {
+            return res.sendStatus(400);
+        }
 
         const transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN.map(
             ({DTPOSTED, TRNAMT, FITID, NAME}) => {
                 const sum = Number(TRNAMT);
 
                 return {
-                    money_location_id: Number(req.query.accountId),
+                    money_location_id: accountId,
                     project_id: req.projectId,
                     fitid: FITID,
                     item: NAME,
@@ -243,7 +250,7 @@ export class ExpenseController extends CrudController {
                         .parseZone()
                         .toISOString(),
                     users: {
-                        [req.user.id]: 100,
+                        [account.owner_id ?? req.user.id]: 100,
                     },
                 };
             },
