@@ -6,7 +6,6 @@ import {Theme, TextField} from '@material-ui/core';
 import {styled} from '@material-ui/core/styles';
 import {PaletteColor} from '@material-ui/core/styles/createPalette';
 import {Autocomplete} from '@material-ui/lab';
-import {TCurrency} from 'currencies/defs';
 
 export const renderAccountStatusCell = (params: GridCellParams) => {
     const status = params.value as AccountStatus;
