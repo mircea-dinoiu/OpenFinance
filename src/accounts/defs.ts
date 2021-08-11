@@ -19,6 +19,7 @@ export type TAccount = {
     name: string;
     status: AccountStatus;
     type: AccountType;
+    owner_id: number | null;
     credit_limit: number | null;
     credit_apr: number | null;
     credit_minpay: number | null;

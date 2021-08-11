@@ -1,4 +1,4 @@
-import {getAccountModel, getCurrencyModel} from '../models';
+import {getAccountModel, getCurrencyModel, getUserModel} from '../models';
 import {CrudController} from '../CrudController';
 import {pick} from 'lodash';
 
@@ -13,6 +13,7 @@ export class AccountController extends CrudController {
         status: ['sometimes', 'isRequired', 'isAccountStatus'],
         type: ['sometimes', 'isRequired', 'isAccountType'],
         currency_id: ['sometimes', 'isRequired', ['isId', getCurrencyModel()]],
+        // todo owner_id
         credit_limit: ['sometimes', 'isRequired', 'isInt', 'isHigherThanZero'],
         credit_apr: ['sometimes', 'isRequired', 'isFloat', 'isPositive'],
         credit_minpay: ['sometimes', 'isRequired', 'isFloat', 'isHigherThanZero'],
@@ -24,6 +25,7 @@ export class AccountController extends CrudController {
         status: ['isRequired', 'isAccountStatus'],
         type: ['isRequired', 'isAccountType'],
         currency: ['isRequired', ['isId', getCurrencyModel()]],
+        // todo owner_id
         credit_limit: ['sometimes', 'isRequired', 'isInt', 'isHigherThanZero'],
         credit_apr: ['sometimes', 'isRequired', 'isFloat', 'isPositive'],
         credit_minpay: ['sometimes', 'isRequired', 'isFloat', 'isHigherThanZero'],
