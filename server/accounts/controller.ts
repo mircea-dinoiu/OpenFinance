@@ -7,7 +7,7 @@ export class AccountController extends CrudController {
         super(getAccountModel());
     }
     updateValidationRules = {
-        id: ['isRequired', ['isId', getAccountModel()]],
+        id: ['isRequired', ['isProjectBasedId', getAccountModel()]],
         name: ['sometimes', 'isRequired', 'isString'],
         url: ['sometimes', 'isString'],
         status: ['sometimes', 'isRequired', 'isAccountStatus'],
@@ -24,7 +24,7 @@ export class AccountController extends CrudController {
         url: ['sometimes', 'isString'],
         status: ['isRequired', 'isAccountStatus'],
         type: ['isRequired', 'isAccountType'],
-        currency: ['isRequired', ['isId', getCurrencyModel()]],
+        currency_id: ['isRequired', ['isId', getCurrencyModel()]],
         // todo owner_id
         credit_limit: ['sometimes', 'isRequired', 'isInt', 'isHigherThanZero'],
         credit_apr: ['sometimes', 'isRequired', 'isFloat', 'isPositive'],

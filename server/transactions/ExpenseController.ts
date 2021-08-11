@@ -31,7 +31,7 @@ export class ExpenseController extends CrudController {
             favorite: ['sometimes', 'isInt'],
             hidden: ['sometimes', 'isBool'],
             created_at: ['sometimes', 'isRequired', ['isDateFormat', FULL_DATE_FORMAT_TZ]],
-            money_location_id: ['sometimes', ['isId', getAccountModel()]],
+            money_location_id: ['sometimes', ['isProjectBasedId', getAccountModel()]],
             status: ['sometimes', 'isRequired', 'isStatusValue'],
             users: ['sometimes', 'isRequired', ['isPercentageObject', getUserModel()]],
             categories: ['sometimes', ['isIdArray', getCategoryModel()]],
@@ -41,7 +41,7 @@ export class ExpenseController extends CrudController {
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
             stock_id: ['sometimes', ['isId', getStockModel()]],
-            inventory_id: ['sometimes', ['isId', getInventoryModel()]],
+            inventory_id: ['sometimes', ['isProjectBasedId', getInventoryModel()]],
 
             weight: ['sometimes', 'isPositive', 'isInt'],
         };
@@ -55,7 +55,7 @@ export class ExpenseController extends CrudController {
             hidden: ['sometimes', 'isBool'],
             users: ['isRequired', ['isPercentageObject', getUserModel()]],
             created_at: ['sometimes', 'isRequired', ['isDateFormat', FULL_DATE_FORMAT_TZ]],
-            money_location_id: ['isRequired', ['isId', getAccountModel()]],
+            money_location_id: ['isRequired', ['isProjectBasedId', getAccountModel()]],
             status: ['sometimes', 'isRequired', 'isStatusValue'],
             fitid: ['sometimes', 'isRequired', 'isString'],
             categories: ['sometimes', ['isIdArray', getCategoryModel()]],
@@ -65,7 +65,7 @@ export class ExpenseController extends CrudController {
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
             stock_id: ['sometimes', ['isId', getStockModel()]],
-            inventory_id: ['sometimes', ['isId', getInventoryModel()]],
+            inventory_id: ['sometimes', ['isProjectBasedId', getInventoryModel()]],
 
             weight: ['sometimes', 'isPositive', 'isInt'],
         };

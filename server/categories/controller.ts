@@ -5,7 +5,7 @@ export class CategoryController extends CrudController {
     constructor() {
         super(getCategoryModel());
         this.updateValidationRules = {
-            id: ['isRequired', ['isId', getCategoryModel()]],
+            id: ['isRequired', ['isProjectBasedId', getCategoryModel()]],
             name: ['sometimes', 'isRequired', 'isString'],
             color: ['sometimes', 'isString'],
         };
