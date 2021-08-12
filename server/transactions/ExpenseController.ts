@@ -15,6 +15,7 @@ import {
     getStockModel,
 } from '../models';
 import {FULL_DATE_FORMAT_TZ} from '../../src/app/dates/defs';
+import {isPlainObject} from 'lodash';
 
 export class ExpenseController extends CrudController {
     constructor() {
@@ -234,30 +235,42 @@ export class ExpenseController extends CrudController {
             return res.sendStatus(400);
         }
 
-        const transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN.map(
-            ({DTPOSTED, TRNAMT, FITID, NAME}) => {
-                const sum = Number(TRNAMT);
+        const transactions = mapOfxToTransactions(data).map(({DTPOSTED, TRNAMT, FITID, NAME}) => {
+            const sum = Number(TRNAMT);
 
-                return {
-                    money_location_id: accountId,
-                    project_id: req.projectId,
-                    fitid: FITID,
-                    item: NAME,
-                    status: 'pending',
-                    price: Math.abs(sum),
-                    quantity: sum < 0 ? -1 : 1,
-                    created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
-                        .parseZone()
-                        .toISOString(),
-                    users: {
-                        [account.owner_id ?? req.user.id]: 100,
-                    },
-                };
-            },
-        );
+            return {
+                money_location_id: accountId,
+                project_id: req.projectId,
+                fitid: FITID,
+                item: NAME,
+                status: 'pending',
+                price: Math.abs(sum),
+                quantity: sum < 0 ? -1 : 1,
+                created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
+                    .parseZone()
+                    .toISOString(),
+                users: {
+                    [account.owner_id ?? req.user.id]: 100,
+                },
+            };
+        });
 
         return res.json({
             transactions,
         });
     }
 }
+
+const mapOfxToTransactions = (data) => {
+    if (data?.BANKTRANLIST) {
+        return data.BANKTRANLIST.STMTTRN;
+    }
+
+    if (isPlainObject(data)) {
+        return Object.values(data).reduce((acc: any[], each) => {
+            return acc.concat(mapOfxToTransactions(each));
+        }, []);
+    }
+
+    return [];
+};

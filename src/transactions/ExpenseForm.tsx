@@ -517,7 +517,8 @@ export const ExpenseForm = (ownProps: TypeOwnProps) => {
 };
 
 const ExpenseFormStyled = styled('div')(({theme}) => ({
-    width: 'min(100vw, 700px)',
+    width: '100%',
+    maxWidth: 'min(100vw, 700px)',
     display: 'grid',
     gridGap: theme.spacing(2),
     gridAutoFlow: 'row',
