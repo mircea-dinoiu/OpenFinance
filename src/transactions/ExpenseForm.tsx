@@ -7,14 +7,13 @@ import {
     FormLabel,
     InputAdornment,
     List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
     ListSubheader,
     Radio,
     RadioGroup,
-    Slider,
     TextField,
+    ListItem,
+    ListItemAvatar,
+    Divider,
 } from '@material-ui/core';
 import {styled} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
@@ -30,7 +29,6 @@ import {TCurrencyMap} from 'currencies/defs';
 import {TInventory} from 'inventories/defs';
 import {TBootstrap, TUser} from 'users/defs';
 import {advanceRepeatDate} from 'transactions/repeatedModels';
-import {sumArray} from 'app/numbers';
 import {locales} from 'app/locales';
 import {sortBy, orderBy} from 'lodash';
 
@@ -43,9 +41,6 @@ import {useEndDate} from 'app/dates/helpers';
 import {TransactionForm} from './form';
 import {RepeatOption} from './RepeatOption';
 import {TTransactionsContext} from 'transactions/TransactionsContext';
-
-const PERC_STEP = 5;
-const PERC_MAX = 100;
 
 type TypeOwnProps = {
     initialValues: TransactionForm;
@@ -62,46 +57,6 @@ type Props = TypeOwnProps & {
     categories: TCategories;
     inventories: TInventory[];
     users: TUser[];
-};
-
-export const setChargedPersonValueFactory = (
-    id: string,
-    value: number,
-    {
-        userIdsStringified,
-        adjust = true,
-    }: {
-        userIdsStringified: string[];
-        adjust?: boolean;
-    },
-) => (prevState: Partial<State>) => {
-    const step = PERC_STEP;
-    const nextChargedPersons: Record<number, number> = {
-        ...userIdsStringified.reduce((acc, idString) => {
-            acc[idString] = 0;
-
-            return acc;
-        }, {}),
-        ...prevState.chargedPersons,
-        [id]: value,
-    };
-
-    if (adjust) {
-        let diffToMax;
-
-        while ((diffToMax = PERC_MAX - sumArray(Object.values(nextChargedPersons)))) {
-            for (const key in nextChargedPersons) {
-                if (key !== id) {
-                    nextChargedPersons[key] += diffToMax > 0 ? step : -step;
-                    break;
-                }
-            }
-        }
-    }
-
-    return {
-        chargedPersons: nextChargedPersons,
-    };
 };
 
 const FormControlLabelInline = styled(FormControlLabel)({
@@ -192,53 +147,62 @@ class ExpenseFormWrapped extends PureComponent<Props, State> {
 
         const sortedUsers = sortBy(this.props.users, (each) => each.full_name);
         const {chargedPersons} = this.state;
-        const step = PERC_STEP;
-        const userIdsStringified = sortedUsers.map((user) => String(user.id));
 
         return (
             <List
                 subheader={
                     <ListSubheader disableGutters={true} disableSticky={true}>
-                        Distribution per Person
+                        Person(s)
                     </ListSubheader>
                 }
-                disablePadding={true}
-                dense={true}
             >
                 {sortedUsers.map((user) => {
-                    const id = String(user.id);
-
                     return (
-                        <ListItem key={id} disableGutters={true}>
-                            <ListItemAvatar>
-                                <Avatar style={{margin: 0}} alt={user.full_name} src={user.avatar} />
-                            </ListItemAvatar>
-
-                            <Slider
-                                value={chargedPersons[id] || 0}
-                                valueLabelFormat={(value) => `${value}%`}
-                                step={step}
-                                marks={true}
-                                onChange={(event, value) =>
-                                    this.setState(
-                                        setChargedPersonValueFactory(id, value as number, {
-                                            userIdsStringified,
-                                        }),
-                                    )
+                        <>
+                            <ListItem
+                                key={user.id}
+                                button
+                                selected={chargedPersons[user.id] === 100}
+                                onClick={() =>
+                                    this.setState({
+                                        chargedPersons: sortedUsers.reduce((acc, u) => {
+                                            return {
+                                                ...acc,
+                                                [u.id]: user.id === u.id ? 100 : 0,
+                                            };
+                                        }, {}),
+                                    })
                                 }
-                                valueLabelDisplay="on"
-                            />
-
-                            <ListItemText
-                                style={{
-                                    textAlign: 'right',
-                                }}
                             >
+                                <ListItemAvatar>
+                                    <Avatar alt={user.full_name} src={user.avatar} />
+                                </ListItemAvatar>
                                 {user.full_name}
-                            </ListItemText>
-                        </ListItem>
+                            </ListItem>
+                            <Divider variant="inset" component="li" />
+                        </>
                     );
                 })}
+                <ListItem
+                    button
+                    selected={Object.values(chargedPersons).every((v) => v !== 100)}
+                    onClick={() =>
+                        this.setState({
+                            chargedPersons: sortedUsers.reduce((acc, u) => {
+                                return {
+                                    ...acc,
+                                    [u.id]: 100 / sortedUsers.length,
+                                };
+                            }, {}),
+                        })
+                    }
+                >
+                    <ListItemAvatar>
+                        <></>
+                    </ListItemAvatar>
+                    All
+                </ListItem>
+                <br />
             </List>
         );
     }
