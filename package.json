@@ -99,7 +99,7 @@
     "ci": "run-p --aggregate-output test-server test-client lint-all",
     "build": "rm -rf build && react-scripts build && mv build/index.html build/app.html",
     "dev": "react-scripts start",
-    "start": "TS_NODE_PROJECT=tsconfig.server.json ts-node server/index.ts",
+    "start": "TS_NODE_PROJECT=tsconfig.server.json ts-node-transpile-only server/index.ts",
     "test": "react-scripts test",
     "test-related": "react-scripts test --findRelatedTests",
     "test-ci": "react-scripts test --watchAll=false",
