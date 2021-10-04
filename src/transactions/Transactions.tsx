@@ -538,6 +538,7 @@ class TransactionsInner extends PureComponent<TypeProps, TypeState> {
 
         // @ts-ignore
         delete copy.id;
+        copy.fitid = null;
 
         return copy;
     };
