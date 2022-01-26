@@ -1,5 +1,5 @@
 import expressSession from 'express-session';
-import {getDb} from './getDb';
+import {getDb} from '../getDb';
 
 export const includeSession = (app) => {
     if (!process.env.SESSION_SECRET) {

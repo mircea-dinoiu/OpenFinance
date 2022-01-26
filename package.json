@@ -77,6 +77,7 @@
     "express-async-errors": "^3.1.1",
     "express-fileupload": "^1.1.7-alpha.4",
     "express-session": "^1.15.6",
+    "ical-generator": "^3.2.0",
     "lodash": "^4.17.11",
     "md5": "^2.2.1",
     "moment": "^2.22.2",
@@ -96,7 +97,7 @@
     "yahoo-finance": "^0.3.6"
   },
   "scripts": {
-    "ci": "run-p --aggregate-output test-server test-client lint-all",
+    "ci": "run-p --aggregate-output test-ci lint-all",
     "build": "rm -rf build && react-scripts build && mv build/index.html build/app.html",
     "dev": "react-scripts start",
     "start": "TS_NODE_PROJECT=tsconfig.server.json ts-node-transpile-only server/index.ts",

@@ -1,7 +1,7 @@
 import express from 'express';
 import {UserController} from './controller';
 import passport from 'passport';
-import {validateAuth, validateGuest} from '../middlewares';
+import {validateAuth, validateGuest, validatePayload} from '../middlewares';
 
 export const createUsersRouter = () => {
     const router = express.Router();
@@ -56,6 +56,18 @@ export const createUsersRouter = () => {
     router.put('/password/set', validateAuth, (req, res) => {
         c.passwordSet({req, res});
     });
+
+    router.post(
+        '/app-password/create',
+        validateAuth,
+        validatePayload({
+            password: ['isRequired', 'isString'],
+            name: ['isRequired', 'isString'],
+        }),
+        (req, res) => {
+            c.createAppPassword({req, res});
+        },
+    );
 
     return router;
 };

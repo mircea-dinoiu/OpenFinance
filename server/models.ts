@@ -12,6 +12,8 @@ import {TAccount} from '../src/accounts/defs';
 import {TInventory} from '../src/inventories/defs';
 import assert from 'assert';
 import * as fs from 'fs';
+import {TProject} from '../src/projects/defs';
+import {TAppPassword} from '../src/appPasswords/defs';
 
 type ModelType = Sequelize.Model<any, any> & {
     tableName: string;
@@ -38,9 +40,11 @@ const getModels = memoize(() => {
         Inventory: importModel('inventories/model.js'),
         MoneyLocation: importModel('accounts/model.js'),
         Property: importModel('properties/model.js'),
+        Project: importModel('projects/model.js'),
         Stock: importModel('stocks/model.js'),
         StockPrice: importModel('stockPrices/model.js'),
         User: importModel('users/model.js'),
+        AppPassword: importModel('appPasswords/model.js'),
     };
 
     Object.keys(models).forEach((modelName) => {
@@ -56,6 +60,8 @@ export const getCurrencyModel = (): Sequelize.Model<TCurrency, unknown> => getMo
 export const getExpenseModel = (): Sequelize.Model<TransactionModel, unknown> => getModels().Expense;
 export const getInventoryModel = (): Sequelize.Model<TInventory, unknown> => getModels().Inventory;
 export const getPropertyModel = (): Sequelize.Model<TProperty, unknown> => getModels().Property;
+export const getProjectModel = (): Sequelize.Model<TProject, unknown> => getModels().Project;
 export const getStockModel = (): Sequelize.Model<TStock, unknown> => getModels().Stock;
 export const getStockPriceModel = (): Sequelize.Model<TStockPrice, unknown> => getModels().StockPrice;
 export const getUserModel = (): Sequelize.Model<TUser, unknown> => getModels().User;
+export const getAppPasswordModel = (): Sequelize.Model<TAppPassword, unknown> => getModels().AppPassword;
