@@ -33,6 +33,7 @@ export const getCalendar = async (req, res) => {
         attributes: ['id', 'item', 'created_at', 'notes'],
         where: Sequelize.and(
             Sequelize.where(Sequelize.col('project_id'), {$eq: projectId}),
+            Sequelize.where(Sequelize.col('hidden'), {$eq: false}),
             Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('created_at')), {
                 $eq: year,
             }),
