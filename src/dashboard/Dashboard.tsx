@@ -29,10 +29,13 @@ import {useSelectedProject} from 'projects/state';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {generatePath, useParams, useLocation} from 'react-router-dom';
-import {useRefreshWidgets} from 'refreshWidgets/state';
+import {useRefreshToken} from 'refreshWidgets/state';
 import {useStockPrices} from 'stocks/state';
 import {summaryAssign, SummaryKey} from 'summary/state';
 import {BalanceByLocation} from 'transactions/defs';
+import {useEndDate, endOfDayToISOString} from '../app/dates/helpers';
+import moment from 'moment';
+import {CashAccount} from './defs';
 
 enum DashboardTab {
     accounts = 'accounts',
@@ -48,40 +51,66 @@ export const Dashboard = () => {
     const cls = useStyles();
     const accounts = useAccounts();
     const accountsByType = _.groupBy(accounts, 'type');
-    const [data, setData] = React.useState<BalanceByLocation | null>(null);
-    const refreshWidgets = useRefreshWidgets();
+    const [endDate] = useEndDate();
+
+    const refreshToken = useRefreshToken();
     const dispatch = useDispatch();
     const [includePending, setIncludePending] = useIncludePending();
     const [include, setInclude] = useInclude();
-    const reportQueryParams = useDashboardQueryParams();
+
     const selectedProject = useSelectedProject();
-    const url = makeUrl(Api.reports.balanceByLocation, reportQueryParams);
     const stockPrices = useStockPrices();
 
     const {tab = Object.values(DashboardTab)[0]} = useParams<{tab: DashboardTab}>();
     const tabIndex = Object.values(DashboardTab).indexOf(tab as DashboardTab);
 
+    const [currentBalance, setCurrentBalance] = React.useState<BalanceByLocation | null>(null);
+    const currentBalanceQuery = useDashboardQueryParams({
+        endDate,
+    });
+    const currentBalanceUrl = makeUrl(Api.reports.balanceByLocation, currentBalanceQuery);
+
+    const [compareBalance, setCompareBalance] = React.useState<BalanceByLocation | null>(null);
+    const compareBalanceQuery = useDashboardQueryParams({
+        // Start of the month
+        endDate: endOfDayToISOString(
+            moment(endDate)
+                .date(0)
+                .toDate(),
+        ),
+    });
+    const compareBalanceUrl = makeUrl(Api.reports.balanceByLocation, compareBalanceQuery);
+
     React.useEffect(() => {
         createXHR<BalanceByLocation>({
-            url,
+            url: currentBalanceUrl,
         }).then((response) => {
             dispatch(summaryAssign(SummaryKey.BALANCE_BY_ACCOUNT, response.data as any));
-            setData(response.data);
+            setCurrentBalance(response.data);
         });
-    }, [dispatch, refreshWidgets, url]);
+    }, [dispatch, refreshToken, currentBalanceUrl]);
 
-    if (!data) {
+    React.useEffect(() => {
+        createXHR<BalanceByLocation>({
+            url: compareBalanceUrl,
+        }).then((response) => {
+            setCompareBalance(response.data);
+        });
+    }, [dispatch, refreshToken, compareBalanceUrl]);
+
+    if (!currentBalance || !compareBalance) {
         return <BigLoader />;
     }
 
     const handleToggleIncludePending = () => {
         setIncludePending(!includePending);
     };
-    const getLiquidAccountsOfType = (type: AccountType) => {
+    const getLiquidAccountsOfType = (type: AccountType): CashAccount[] => {
         return (accountsByType[type] ?? [])
             .map((a) => ({
                 ...a,
-                total: getCostBasis(data.cash, a),
+                total: getCostBasis(currentBalance.cash, a),
+                totalCompare: getCostBasis(compareBalance.cash, a),
             }))
             .filter((a) => a.total !== 0 || a.status !== AccountStatus.CLOSED);
     };
@@ -104,17 +133,19 @@ export const Dashboard = () => {
 
     const brokerageWithTotal = (accountsByType[AccountType.BROKERAGE] ?? [])
         .map((a) => {
-            const stocks = data.stocks.filter((ds) => ds.money_location_id === a.id);
+            const stocks = currentBalance.stocks.filter((ds) => ds.money_location_id === a.id);
+            const total = getStockValue(stocks, stockPrices);
 
             return {
                 ...a,
-                costBasis: getCostBasis(data.cash, a),
-                total: getStockValue(stocks, stockPrices),
+                costBasis: getCostBasis(currentBalance.cash, a),
+                total,
+                totalCompare: total,
                 stocks,
             };
         })
         .filter((a) => a.total !== 0);
-    const accountOptions = getAccountOptions({stocks: data.stocks, accounts});
+    const accountOptions = getAccountOptions({stocks: currentBalance.stocks, accounts});
 
     return (
         <div className={cls.root}>
@@ -136,7 +167,7 @@ export const Dashboard = () => {
 
                 <NetWorthPapers
                     className={cls.paper}
-                    inventoriesByCurrencyId={_.groupBy(data.inventories, 'currency_id')}
+                    inventoriesByCurrencyId={_.groupBy(currentBalance.inventories, 'currency_id')}
                     liquidByCurrencyId={getTotals(liquidWithTotal)}
                     investmentsByCurrencyId={getTotals(brokerageWithTotal)}
                     debtByCurrencyId={getTotals([...creditWithTotal, ...loanWithTotal])}
@@ -195,7 +226,7 @@ export const Dashboard = () => {
                 {tab === DashboardTab.investing && (
                     <>
                         {brokerageWithTotal.length > 0 ? (
-                            <StocksPaper classes={cls} accountOptions={accountOptions} stocks={data.stocks} />
+                            <StocksPaper classes={cls} accountOptions={accountOptions} stocks={currentBalance.stocks} />
                         ) : (
                             <Card>
                                 <CardContent>{locales.nothingToSeeHereYet}</CardContent>
@@ -208,12 +239,12 @@ export const Dashboard = () => {
 
                 {tab === DashboardTab.userReports && (
                     <Paper className={cls.paper}>
-                        <UsersTab reportQueryParams={reportQueryParams} />
+                        <UsersTab reportQueryParams={currentBalanceQuery} />
                     </Paper>
                 )}
                 {tab === DashboardTab.categoryReports && (
                     <Paper className={cls.paper}>
-                        <CategoriesTab reportQueryParams={reportQueryParams} />
+                        <CategoriesTab reportQueryParams={currentBalanceQuery} />
                     </Paper>
                 )}
             </div>

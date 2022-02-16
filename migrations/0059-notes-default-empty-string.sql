@@ -1,0 +1,1 @@
+ALTER TABLE expenses MODIFY notes TEXT NOT NULL DEFAULT '';

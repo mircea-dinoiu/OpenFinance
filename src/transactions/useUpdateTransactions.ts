@@ -2,7 +2,7 @@ import {useTransactionsContext} from 'transactions/TransactionsContext';
 import {useDispatch} from 'react-redux';
 import {TransactionModel} from 'transactions/defs';
 import {Api} from 'app/Api';
-import {refreshWidgets as onRefreshWidgets} from 'refreshWidgets/state';
+import {refreshTokenAction as onRefreshWidgets} from 'refreshWidgets/state';
 
 export const useUpdateTransactions = () => {
     const tc = useTransactionsContext();

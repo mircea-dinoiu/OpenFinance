@@ -25,6 +25,15 @@ import {Column} from 'react-table-6';
 
 export const TransactionsColumns: Column[] = [
     {
+        Header: 'ID',
+        sortable: false,
+        filterable: true,
+        accessor: 'id',
+        width: 100,
+        show: false,
+        ...numericColumnStyles,
+    },
+    {
         Header: 'Qty',
         sortable: true,
         filterable: true,

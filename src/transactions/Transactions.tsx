@@ -20,7 +20,7 @@ import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox'
 import IconStar from '@material-ui/icons/Star';
 import IconStarBorder from '@material-ui/icons/StarBorder';
 import {BaseTable, TableHeader, TableHeaderTop} from 'app/BaseTable';
-import {refreshWidgets as onRefreshWidgets} from 'refreshWidgets/state';
+import {refreshTokenAction as onRefreshWidgets} from 'refreshWidgets/state';
 import {TProject} from 'projects/defs';
 import {ContextMenuItems, TypeContextMenuItemsProps} from 'transactions/ContextMenuItems';
 import {Tooltip} from 'app/Tooltip';
@@ -538,6 +538,7 @@ class TransactionsInner extends PureComponent<TypeProps, TypeState> {
 
         // @ts-ignore
         delete copy.id;
+        copy.fitid = null;
 
         return copy;
     };

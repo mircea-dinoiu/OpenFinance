@@ -1,4 +1,4 @@
-import {getAccountModel, getCurrencyModel} from '../models';
+import {getAccountModel, getCurrencyModel, getUserModel} from '../models';
 import {CrudController} from '../CrudController';
 import {pick} from 'lodash';
 
@@ -7,11 +7,13 @@ export class AccountController extends CrudController {
         super(getAccountModel());
     }
     updateValidationRules = {
-        id: ['isRequired', ['isId', getAccountModel()]],
+        id: ['isRequired', ['isProjectBasedId', getAccountModel()]],
         name: ['sometimes', 'isRequired', 'isString'],
+        url: ['sometimes', 'isString'],
         status: ['sometimes', 'isRequired', 'isAccountStatus'],
         type: ['sometimes', 'isRequired', 'isAccountType'],
         currency_id: ['sometimes', 'isRequired', ['isId', getCurrencyModel()]],
+        // todo owner_id
         credit_limit: ['sometimes', 'isRequired', 'isInt', 'isHigherThanZero'],
         credit_apr: ['sometimes', 'isRequired', 'isFloat', 'isPositive'],
         credit_minpay: ['sometimes', 'isRequired', 'isFloat', 'isHigherThanZero'],
@@ -19,9 +21,11 @@ export class AccountController extends CrudController {
     };
     createValidationRules = {
         name: ['isRequired', 'isString'],
+        url: ['sometimes', 'isString'],
         status: ['isRequired', 'isAccountStatus'],
         type: ['isRequired', 'isAccountType'],
-        currency: ['isRequired', ['isId', getCurrencyModel()]],
+        currency_id: ['isRequired', ['isId', getCurrencyModel()]],
+        // todo owner_id
         credit_limit: ['sometimes', 'isRequired', 'isInt', 'isHigherThanZero'],
         credit_apr: ['sometimes', 'isRequired', 'isFloat', 'isPositive'],
         credit_minpay: ['sometimes', 'isRequired', 'isFloat', 'isHigherThanZero'],
@@ -40,26 +44,16 @@ export class AccountController extends CrudController {
             'credit_dueday',
         );
 
-        if (record.hasOwnProperty('name')) {
-            values.name = record.name.trim();
+        for (const field of ['name', 'url']) {
+            if (typeof record[field] === 'string') {
+                values[field] = record[field].trim();
+            }
         }
 
         return values;
     }
 
     sanitizeCreateValues(record) {
-        return {
-            ...pick(
-                record,
-                'status',
-                'type',
-                'currency_id',
-                'credit_limit',
-                'credit_apr',
-                'credit_minpay',
-                'credit_dueday',
-            ),
-            name: record.name.trim(),
-        };
+        return this.sanitizeUpdateValues(record);
     }
 }

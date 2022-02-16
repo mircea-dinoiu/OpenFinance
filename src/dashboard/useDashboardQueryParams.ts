@@ -1,18 +1,13 @@
-import {
-    getEndDateBasedOnIncludePreference,
-    useInclude,
-    useIncludePending,
-} from 'include/helpers';
+import {getEndDateBasedOnIncludePreference, useInclude, useIncludePending} from 'include/helpers';
 import {TransactionStatus} from 'transactions/defs';
 import identity from 'lodash/identity';
 import pickBy from 'lodash/pickBy';
 import {useSelectedProject} from 'projects/state';
-import {getStartDate, useEndDate} from 'app/dates/helpers';
+import {getStartDate} from 'app/dates/helpers';
 
-export const useDashboardQueryParams = () => {
+export const useDashboardQueryParams = ({endDate}: {endDate: string}) => {
     const [includePending] = useIncludePending();
     const [include] = useInclude();
-    const [endDate] = useEndDate();
     const project = useSelectedProject();
 
     return new URLSearchParams({

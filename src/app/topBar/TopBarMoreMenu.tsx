@@ -10,12 +10,14 @@ import {createXHR} from 'app/fetch';
 import {TTopBarTab} from './TTopBarTab';
 import {Link} from 'react-router-dom';
 import {useIsDesktop} from '../useIsDesktop';
+import {AppPasswordsDialog} from '../../appPasswords/AppPasswordsDialog';
 
 export const TopBarMoreMenu = ({tabs}: {tabs: TTopBarTab[]}) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const [privacyToggle, setPrivacyToggle] = usePrivacyToggle();
     const [categoriesIsOpen, setCategoriesIsOpen] = useState<boolean | null>(null);
     const [accountsIsOpen, setAccountsIsOpen] = useState<boolean | null>(null);
+    const [appPasswordsIsOpen, setAppPasswordsIsOpen] = useState<boolean | null>(null);
     const isDesktop = useIsDesktop();
 
     const makeCloseHandler = (fn?: () => void) => () => {
@@ -57,6 +59,13 @@ export const TopBarMoreMenu = ({tabs}: {tabs: TTopBarTab[]}) => {
                     </ListItemSecondaryAction>
                 </MenuItem>
 
+                <MenuItem onClick={makeCloseHandler(() => setAppPasswordsIsOpen(true))}>
+                    <ListItemText primary="App Passwords" />
+                    <ListItemSecondaryAction>
+                        <IconList />
+                    </ListItemSecondaryAction>
+                </MenuItem>
+
                 <MenuItem onClick={makeCloseHandler(() => setPrivacyToggle(!privacyToggle))}>
                     <ListItemText primary="Privacy Mode" />
                     <ListItemSecondaryAction>
@@ -72,6 +81,9 @@ export const TopBarMoreMenu = ({tabs}: {tabs: TTopBarTab[]}) => {
             )}
             {accountsIsOpen !== null && (
                 <AccountsDialog isOpen={accountsIsOpen} onClose={() => setAccountsIsOpen(false)} />
+            )}
+            {appPasswordsIsOpen !== null && (
+                <AppPasswordsDialog isOpen={appPasswordsIsOpen} onClose={() => setAppPasswordsIsOpen(false)} />
             )}
         </div>
     );

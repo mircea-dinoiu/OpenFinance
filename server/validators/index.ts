@@ -61,6 +61,21 @@ const isId = async (id, Model) => {
     return Boolean(await Model.find({where: {id}}));
 };
 
+const isProjectBasedId = async (id, Model, opts) => {
+    if (!getIsInt(id)) {
+        return false;
+    }
+
+    return Boolean(
+        await Model.findOne({
+            where: {
+                id,
+                project_id: opts.req.projectId,
+            },
+        }),
+    );
+};
+
 const validator = {
     ...validatorLib,
     isInt: getIsInt,
@@ -68,6 +83,7 @@ const validator = {
     isArray: getIsArray,
     isDateFormat: (value, format) => moment(value, format).isValid(),
     isId,
+    isProjectBasedId,
     isTransactionId: async (id, opts) => {
         return isTransactionIdArray([id], opts);
     },

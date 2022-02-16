@@ -15,6 +15,7 @@ import {
     getStockModel,
 } from '../models';
 import {FULL_DATE_FORMAT_TZ} from '../../src/app/dates/defs';
+import {isPlainObject} from 'lodash';
 
 export class ExpenseController extends CrudController {
     constructor() {
@@ -31,7 +32,7 @@ export class ExpenseController extends CrudController {
             favorite: ['sometimes', 'isInt'],
             hidden: ['sometimes', 'isBool'],
             created_at: ['sometimes', 'isRequired', ['isDateFormat', FULL_DATE_FORMAT_TZ]],
-            money_location_id: ['sometimes', ['isId', getAccountModel()]],
+            money_location_id: ['sometimes', ['isProjectBasedId', getAccountModel()]],
             status: ['sometimes', 'isRequired', 'isStatusValue'],
             users: ['sometimes', 'isRequired', ['isPercentageObject', getUserModel()]],
             categories: ['sometimes', ['isIdArray', getCategoryModel()]],
@@ -41,7 +42,7 @@ export class ExpenseController extends CrudController {
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
             stock_id: ['sometimes', ['isId', getStockModel()]],
-            inventory_id: ['sometimes', ['isId', getInventoryModel()]],
+            inventory_id: ['sometimes', ['isProjectBasedId', getInventoryModel()]],
 
             weight: ['sometimes', 'isPositive', 'isInt'],
         };
@@ -55,7 +56,7 @@ export class ExpenseController extends CrudController {
             hidden: ['sometimes', 'isBool'],
             users: ['isRequired', ['isPercentageObject', getUserModel()]],
             created_at: ['sometimes', 'isRequired', ['isDateFormat', FULL_DATE_FORMAT_TZ]],
-            money_location_id: ['isRequired', ['isId', getAccountModel()]],
+            money_location_id: ['isRequired', ['isProjectBasedId', getAccountModel()]],
             status: ['sometimes', 'isRequired', 'isStatusValue'],
             fitid: ['sometimes', 'isRequired', 'isString'],
             categories: ['sometimes', ['isIdArray', getCategoryModel()]],
@@ -65,7 +66,7 @@ export class ExpenseController extends CrudController {
             repeat_factor: ['sometimes', 'isInt', 'isNotZero'],
 
             stock_id: ['sometimes', ['isId', getStockModel()]],
-            inventory_id: ['sometimes', ['isId', getInventoryModel()]],
+            inventory_id: ['sometimes', ['isProjectBasedId', getInventoryModel()]],
 
             weight: ['sometimes', 'isPositive', 'isInt'],
         };
@@ -226,31 +227,50 @@ export class ExpenseController extends CrudController {
         const {file} = req.files;
 
         const data = ofx.parse(file.data.toString());
+        const accountId = Number(req.query.accountId);
+        const projectId = req.projectId;
+        const account = await getAccountModel().findOne({where: {id: accountId, project_id: projectId}});
 
-        const transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN.map(
-            ({DTPOSTED, TRNAMT, FITID, NAME}) => {
-                const sum = Number(TRNAMT);
+        if (!account) {
+            return res.sendStatus(400);
+        }
 
-                return {
-                    money_location_id: Number(req.query.accountId),
-                    project_id: req.projectId,
-                    fitid: FITID,
-                    item: NAME,
-                    status: 'pending',
-                    price: Math.abs(sum),
-                    quantity: sum < 0 ? -1 : 1,
-                    created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
-                        .parseZone()
-                        .toISOString(),
-                    users: {
-                        [req.user.id]: 100,
-                    },
-                };
-            },
-        );
+        const transactions = mapOfxToTransactions(data).map(({DTPOSTED, TRNAMT, FITID, NAME}) => {
+            const sum = Number(TRNAMT);
+
+            return {
+                money_location_id: accountId,
+                project_id: req.projectId,
+                fitid: FITID,
+                item: NAME,
+                status: 'pending',
+                price: Math.abs(sum),
+                quantity: sum < 0 ? -1 : 1,
+                created_at: moment(DTPOSTED, 'YYYYMMDDHHmmss')
+                    .parseZone()
+                    .toISOString(),
+                users: {
+                    [account.owner_id ?? req.user.id]: 100,
+                },
+            };
+        });
 
         return res.json({
             transactions,
         });
     }
 }
+
+const mapOfxToTransactions = (data) => {
+    if (data?.BANKTRANLIST) {
+        return data.BANKTRANLIST.STMTTRN;
+    }
+
+    if (isPlainObject(data)) {
+        return Object.values(data).reduce((acc: any[], each) => {
+            return acc.concat(mapOfxToTransactions(each));
+        }, []);
+    }
+
+    return [];
+};

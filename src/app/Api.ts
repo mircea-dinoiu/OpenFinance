@@ -22,5 +22,6 @@ export const Api = {
         list: '/api/users',
         logout: '/api/users/logout',
         login: '/api/users/login',
+        appPasswordCreate: '/api/users/app-password/create',
     },
 };

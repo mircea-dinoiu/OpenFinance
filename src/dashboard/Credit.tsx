@@ -18,8 +18,10 @@ export const CreditAprCol: GridColDef = {
     align: 'right',
 };
 
+const mapTotalToBalance = (total: number) => (total ? -total : 0);
+
 export const mapCashAccountToBalance = (r: CashAccount) => {
-    return r.total ? -r.total : 0;
+    return mapTotalToBalance(r.total);
 };
 
 export const CreditBalanceCol = createNumericColumnX<CashAccount>(
@@ -30,6 +32,24 @@ export const CreditBalanceCol = createNumericColumnX<CashAccount>(
     },
     {
         colorize: false,
+    },
+);
+
+export const CreditBalanceChangeCol = createNumericColumnX<CashAccount>(
+    {
+        headerName: 'Change (1mo)',
+        valueGetter: (params) => {
+            const r = params.row as CashAccount;
+
+            const nextBalance = r.total;
+            const prevBalance = r.totalCompare;
+
+            return nextBalance - prevBalance;
+        },
+        field: 'balanceChange',
+    },
+    {
+        colorize: true,
     },
 );
 

@@ -9,6 +9,7 @@ import {DialogTitleWithClose} from 'app/DialogTitleWithClose';
 import {renderCurrencyCell, renderCurrencyEditCell} from 'currencies/CurrencyCell';
 import {renderAccountStatusCell, renderAccountStatusEditCell} from 'accounts/AccountStatusCell';
 import {renderAccountTypeEditCell} from 'accounts/AccountTypeCell';
+import {renderAccountOwnerCell} from './AccountOwnerCell';
 
 export const AccountsDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) => {
     const rows = useAccounts();
@@ -57,6 +58,7 @@ export const AccountsDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () 
                             field: 'url',
                             headerName: 'URL',
                             renderCell: renderUrlCell,
+                            editable: true,
                             flex: 2,
                         },
                         {
@@ -65,6 +67,12 @@ export const AccountsDialog = ({isOpen, onClose}: {isOpen: boolean; onClose: () 
                             renderEditCell: renderAccountTypeEditCell,
                             editable: true,
                             width: 150,
+                        },
+                        {
+                            field: 'owner_id',
+                            headerName: 'Owner',
+                            renderCell: renderAccountOwnerCell,
+                            flex: 1,
                         },
                         {
                             field: 'credit_limit',

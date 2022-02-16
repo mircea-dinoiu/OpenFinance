@@ -3,6 +3,8 @@ import _ from 'lodash';
 import md5 from 'md5';
 import bcrypt from 'bcrypt';
 import {getDb} from '../getDb';
+import crypto from 'crypto';
+import {getAppPasswordModel} from '../models';
 
 const MIN_PASSWORD_LENGTH = 20;
 const SALT_ROUNDS = 10;
@@ -43,11 +45,7 @@ export class UserController {
             return res.sendStatus(400);
         }
 
-        const prevPasswordIsValid = await bcrypt.compare(
-            prevPassword,
-            // legacy password support
-            req.user.password.replace(/^\$2y(.+)$/i, '$2a$1'),
-        );
+        const prevPasswordIsValid = await bcrypt.compare(prevPassword, req.user.password);
 
         if (!prevPasswordIsValid) {
             return res.sendStatus(400);
@@ -60,5 +58,27 @@ export class UserController {
         });
 
         res.sendStatus(200);
+    }
+
+    async createAppPassword({req, res}) {
+        const {password, name} = req.body;
+
+        const passwordIsValid = await bcrypt.compare(password, req.user.password);
+
+        if (!passwordIsValid) {
+            return res.sendStatus(400);
+        }
+
+        const appPassword = crypto.randomBytes(MIN_PASSWORD_LENGTH).toString('hex');
+        const appPasswordHashed = await bcrypt.hash(appPassword, SALT_ROUNDS);
+        const AppPasswordModel = getAppPasswordModel();
+
+        await AppPasswordModel.create({
+            name,
+            password: appPasswordHashed,
+            user_id: req.user.id,
+        });
+
+        res.json(appPassword);
     }
 }

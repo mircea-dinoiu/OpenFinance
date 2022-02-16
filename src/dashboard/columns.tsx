@@ -1,17 +1,10 @@
 import {BrokerageAccount, CashAccount} from 'dashboard/defs';
 import {financialNum} from 'app/numbers';
 import React from 'react';
-import {Column} from 'react-table-6';
-import {firstColumnStyles} from 'app/styles/column';
-import {makeTotalFooter} from 'dashboard/makeTotalFooter';
-import {createNumericColumn, createNumericColumnX} from 'app/createNumericColumn';
+import {createNumericColumnX} from 'app/createNumericColumn';
 import {GridColDef} from '@material-ui/x-grid';
-
-export const NameCol: Column<CashAccount> = {
-    accessor: 'name',
-    Header: 'Name',
-    ...firstColumnStyles,
-};
+import Decimal from 'decimal.js';
+import {memoize} from 'lodash';
 
 export const NameColX: GridColDef = {
     field: 'name',
@@ -27,17 +20,6 @@ export const ValueColX = createNumericColumnX<CashAccount>(
     {colorize: false},
 );
 
-export const ValueCol = createNumericColumn<CashAccount>(
-    {
-        Header: 'Value',
-        id: 'value',
-        accessor: 'total',
-        Footer: makeTotalFooter(),
-    },
-    {
-        colorize: false,
-    },
-);
 export const CostBasisCol = createNumericColumnX<BrokerageAccount>(
     {
         headerName: 'Cost Basis',
@@ -69,4 +51,25 @@ export const RoiPercCol = createNumericColumnX<BrokerageAccount>(
         colorize: true,
         after: '%',
     },
+);
+
+export const makeAllocationCol: (total: Decimal) => GridColDef = memoize((total) =>
+    createNumericColumnX<BrokerageAccount>(
+        {
+            headerName: 'Allocation',
+            field: 'allocation',
+            valueGetter: (params) => {
+                const r = params.row as BrokerageAccount;
+
+                return new Decimal(r.total)
+                    .div(total)
+                    .mul(100)
+                    .toNumber();
+            },
+        },
+        {
+            after: '%',
+            colorize: false,
+        },
+    ),
 );

@@ -4,6 +4,7 @@ import {validateAuth, validateProject, validatePayload} from '../middlewares';
 import fileupload from 'express-fileupload';
 import {detachTransactions, skipTransactions} from './repeat';
 import {getExpenseDescriptions, getCategories} from './suggestions';
+import {getCalendar} from './calendar';
 
 export const createTransactionsRouter = () => {
     const router = express.Router();
@@ -97,6 +98,24 @@ export const createTransactionsRouter = () => {
         ],
         (req, res) => {
             getExpenseDescriptions(req, res);
+        },
+    );
+
+    router.get(
+        '/calendar',
+        [
+            validatePayload(
+                {
+                    email: ['isRequired', 'isString'],
+                    password: ['isRequired', 'isString'],
+                    year: ['isRequired', 'isInt'],
+                    projectId: ['isRequired', 'isInt'],
+                },
+                'query',
+            ),
+        ],
+        (req, res) => {
+            getCalendar(req, res);
         },
     );
 

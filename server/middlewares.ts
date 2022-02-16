@@ -2,8 +2,9 @@ import {Validator} from './validators';
 import {QueryTypes} from 'sequelize';
 import {getDb} from './getDb';
 import {Request, Response, NextFunction} from 'express';
+import {getUserHasProjectAccess} from './projects/getUserHasProjectAccess';
 
-export const validateAuth = (req, res, next) => {
+export const validateAuth = (req: Request, res: Response, next: NextFunction) => {
     if (req.user) {
         next();
     } else {
@@ -19,21 +20,13 @@ export const validateAdmin = (req: Request, res: Response, next: NextFunction) =
     }
 };
 
-export const validateProject = async (req, res, next) => {
+export const validateProject = async (req: Request, res: Response, next: NextFunction) => {
     if (req.query.projectId) {
-        const results = await getDb().query(
-            `select * from project_user where project_id = :projectId AND user_id = :userId;`,
-            {
-                replacements: {
-                    userId: req.user.id,
-                    projectId: Number(req.query.projectId),
-                },
-                type: QueryTypes.SELECT,
-            },
-        );
+        const projectId = Number(req.query.projectId);
+        const project = await getUserHasProjectAccess(req.user.id, projectId);
 
-        if (results.length) {
-            req.projectId = Number(req.query.projectId);
+        if (project) {
+            req.projectId = projectId;
             next();
         } else {
             res.status(404);
@@ -45,7 +38,7 @@ export const validateProject = async (req, res, next) => {
     }
 };
 
-export const validatePayload = (rules, type = 'body') => (req, res, next) => {
+export const validatePayload = (rules, type = 'body') => (req: Request, res: Response, next: NextFunction) => {
     const validator = new Validator(req[type], rules, {req});
 
     validator.passes().then((passed) => {
@@ -58,7 +51,7 @@ export const validatePayload = (rules, type = 'body') => (req, res, next) => {
     });
 };
 
-export const validateGuest = (req, res, next) => {
+export const validateGuest = (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
         next();
     } else {

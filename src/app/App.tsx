@@ -28,6 +28,7 @@ import {useEndDate} from './dates/helpers';
 import moment from 'moment';
 import {formatYMD} from './dates/formatYMD';
 import {BigLoader} from './loaders';
+import {useRefreshToken} from '../refreshWidgets/state';
 
 const Dashboard = React.lazy(() => import('dashboard'));
 const Transactions = React.lazy(() => import('transactions'));
@@ -42,6 +43,7 @@ const AppWrapped = () => {
     const selectedProject = useSelectedProject();
     const [endDate] = useEndDate();
     const date = formatYMD(moment.min(moment(), moment(endDate)).toDate());
+    const refreshToken = useRefreshToken();
 
     const fetchUser = async () => {
         try {
@@ -63,16 +65,20 @@ const AppWrapped = () => {
     React.useEffect(() => {
         if (users) {
             dispatch(fetchCurrencies());
+            readCategories();
+            readAccounts();
+        }
+    }, [refreshToken, users, selectedProject?.id]);
+
+    React.useEffect(() => {
+        if (users) {
             dispatch(
                 fetchStocks({
                     date,
                 }),
             );
-
-            readCategories();
-            readAccounts();
         }
-    }, [users, date, selectedProject?.id]);
+    }, [refreshToken, users, date, selectedProject?.id]);
 
     return (
         <>
