@@ -12,20 +12,28 @@ const PrivateValue = (props: HTMLAttributes<HTMLSpanElement>) => <span {...props
 export const formatNumber = (value: number) =>
     new Intl.NumberFormat(undefined, {minimumFractionDigits: 2}).format(financialNum(value));
 
-export const formatCurrency = (value: number, currency: string) => {
+const DEFAULT_DECIMAL_PLACES = 2;
+
+const roundDecimals = (value: number, places: number) => {
+    if (places === Infinity) {
+        return value;
+    }
+
     const decimal = new Decimal(value);
 
+    return decimal
+        .mul(10 ** places)
+        .round()
+        .div(10 ** places)
+        .toNumber();
+};
+
+export const formatCurrency = (value: number, currency: string, decimalPlaces: number = DEFAULT_DECIMAL_PLACES) => {
     return new Intl.NumberFormat(undefined, {
         style: 'currency',
         currency,
-        minimumFractionDigits: 2,
-    }).format(
-        decimal
-            .mul(100)
-            .round()
-            .div(100)
-            .toNumber(),
-    );
+        minimumFractionDigits: decimalPlaces,
+    }).format(roundDecimals(value, decimalPlaces));
 };
 
 const NumericValueStyled = styled('span')(
@@ -113,6 +121,7 @@ export const NumericValue = ({
     before,
     after,
     variant = 'inline',
+    decimalPlaces = DEFAULT_DECIMAL_PLACES,
 }: {
     currency?: string | number;
     value: number;
@@ -120,12 +129,13 @@ export const NumericValue = ({
     before?: ReactNode;
     after?: ReactNode;
     variant?: NumericValueVariant;
+    decimalPlaces?: number;
 }) => {
     const currencies = useCurrenciesMap();
     const currency = typeof currencyFromProps === 'number' ? currencies[currencyFromProps].iso_code : currencyFromProps;
     const copyText = useCopyTextWithConfirmation();
     const [privacyToggle] = usePrivacyToggle();
-    const valueToDisplay = currency ? formatCurrency(value, currency) : value;
+    const valueToDisplay = currency ? formatCurrency(value, currency, decimalPlaces) : value;
     const inner = (
         <NumericValueStyled
             variant={variant}
@@ -134,7 +144,7 @@ export const NumericValue = ({
             value={value}
             onClick={(e) => {
                 e.stopPropagation();
-                copyText(value);
+                copyText(roundDecimals(value, decimalPlaces));
             }}
         >
             {privacyToggle ? (

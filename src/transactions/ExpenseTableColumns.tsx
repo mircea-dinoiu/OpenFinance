@@ -37,7 +37,10 @@ export const TransactionsColumns: Column[] = [
         Header: 'Qty',
         sortable: true,
         filterable: true,
-        accessor: 'quantity',
+        id: 'quantity',
+        Cell: ({original: t}: {original: TransactionModel}) => (
+            <NumericValue value={t.quantity} decimalPlaces={Infinity} />
+        ),
         width: 100,
         ...numericColumnStyles,
     },
